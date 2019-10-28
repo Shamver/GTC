@@ -12,7 +12,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
-### rewire 사용시 필수 설정
+### `rewire 사용시 필수 설정`
 
 {project-name}/node-modules/babel-preset-react-app 경로의
 create.js 파일 133번째 줄 false 값을 { legacy: true } 로 변경하면
