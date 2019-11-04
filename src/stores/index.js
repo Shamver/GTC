@@ -1,4 +1,4 @@
-import HomeStore from './HomeStore'
+import HomeStore from './HomeStore';
 
 export default {
   HomeStore,

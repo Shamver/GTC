@@ -2,8 +2,8 @@ import { observable, action } from 'mobx';
 
 class HomeStore {
   @observable home = {
-    title: "TITLE",
-    text: "TEXT",
+    title: 'TITLE',
+    text: 'TEXT',
   };
 
   @action onChangeText = (valText) => {

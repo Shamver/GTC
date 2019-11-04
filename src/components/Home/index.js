@@ -1,13 +1,11 @@
 import React from 'react';
+import { inject, observer } from 'mobx-react';
 import HomeTemplate from './HomeTemplate';
 
-import { inject, observer } from 'mobx-react';
 
-const Home = ({title, text}) => {
-  return <HomeTemplate title={title} text={text} />;
-};
+const Home = ({ title, text }) => <HomeTemplate title={title} text={text} />;
 
-export default inject(({HomeStore}) => ({
+export default inject(({ HomeStore }) => ({
   title: HomeStore.home.title,
   text: HomeStore.home.text,
 }))(observer(Home));
