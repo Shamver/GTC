@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 
-class HomeStore {
+class HeaderStore {
   @observable home = {
     title: 'TITLE',
     text: 'TEXT',
@@ -15,4 +15,4 @@ class HomeStore {
   };
 }
 
-export default new HomeStore();
+export default new HeaderStore();

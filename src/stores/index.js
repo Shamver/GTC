@@ -1,5 +1,5 @@
-import HomeStore from './HomeStore';
+import HeaderStore from './HeaderStore';
 
 export default {
-  HomeStore,
+  HeaderStore,
 };
