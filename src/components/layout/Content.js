@@ -51,7 +51,7 @@ const Content = () => (
           </MenuCol>
           <MenuCol xs={12}>
             <MenuTop>
-              <FontAwesomeIcon icon={faGlobeAsia} />&nbsp;&nbsp; 자유 게시판
+              <FontAwesomeIcon icon={faGlobeAsia} />&nbsp;&nbsp; 자유 게시판 
             </MenuTop>
           </MenuCol>
         </MenuWrapper>
