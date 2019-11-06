@@ -3,21 +3,43 @@ import styled from 'styled-components';
 import Header from './components/layout/Header';
 import Content from './components/layout/Content';
 
-const Container = styled.div`
-  padding : 0 400px;
+const ContainerWrapper = styled.div`
   background-color: rgb(243, 242, 240);
-  @media (max-width: 1400px) {
-    padding : 0;
+`;
+
+const Container = styled.div`
+  max-width: none !important;
+  margin-right: auto;
+  margin-left: auto;
+
+  
+  @media (min-width: 0px) {
+      width: 100%;
   }
+  
+  @media (min-width: 768px) {
+      width: 690px;
+  }
+
+  @media (min-width: 992px) {
+      width: 910px;
+  }
+  
+  @media (min-width: 1200px) {
+      width: 1100px;
+  }
+  
   
   height : 100vh;
 `;
 
 const App = () => (
-  <Container>
-    <Header />
-    <Content />
-  </Container>
+  <ContainerWrapper>
+    <Container>
+      <Header />
+      <Content />
+    </Container>
+  </ContainerWrapper>
 
 );
 
