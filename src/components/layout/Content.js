@@ -1,6 +1,6 @@
 import React from 'react';
 
 const Content = () => (
-  <div>ㅎㅇ</div>
+  <div></div>
 );
 export default Content;
