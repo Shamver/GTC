@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   InputGroup, InputGroupAddon, Button, Input,
   Container, Row, Col, Badge,
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
-import { faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faStar, faPen } from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import avatar from '../../resources/images/avatar.png';
@@ -29,6 +30,7 @@ const InH1 = styled.h1`
 
 const HeaderWrapper = styled.div`
   padding : 5px;
+  height : 136px;
 `;
 
 const NavLine = styled.hr`
@@ -170,6 +172,7 @@ const Header = () => {
             </ColCenter>
             <ColNoP>
               <SpanRight>
+                <Link to="/tempPost"><FontAwesomeIcon icon={faPen} /></Link>
                 <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
                   <DropdownToggleC caret>
                     <FontAwesomeIcon icon={faEnvelope} />

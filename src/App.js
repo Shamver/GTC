@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Row, Col } from 'reactstrap';
 import Header from './components/layout/Header';
 import Content from './components/layout/Content';
+import Category from './components/layout/Category';
 
 const ContainerWrapper = styled.div`
   background-color: rgb(243, 242, 240);
@@ -33,11 +35,22 @@ const Container = styled.div`
   height : 100vh;
 `;
 
+const UnderSection = styled(Row)`
+  margin : 0 !important;
+`;
+
 const App = () => (
   <ContainerWrapper>
     <Container>
       <Header />
-      <Content />
+      <UnderSection>
+        <Col>
+          <Category />
+        </Col>
+        <Col xs="10">
+          <Content />
+        </Col>
+      </UnderSection>
     </Container>
   </ContainerWrapper>
 
