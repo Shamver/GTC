@@ -6,10 +6,13 @@ import {
   Container, Row, Col, Badge,
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
-import { faSearch, faStar, faPen, faList } from '@fortawesome/free-solid-svg-icons';
+import {
+  faSearch, faStar, faPen, faList,
+} from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import avatar from '../../resources/images/avatar.png';
+import logo from '../../resources/images/logo.png';
 
 const InputGroupWrapper = styled.div`
   width : 250px;
@@ -122,12 +125,18 @@ const DropdownItem30 = styled(DropdownItem)`
   padding-bottom : 0px;
 `;
 
+const Logo = styled.img`
+  width : 100px;
+`;
+
 const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
   return (
     <HeaderWrapper>
-      <InH1>GTC</InH1>
+      <InH1>
+        <Logo src={logo} alt="" />
+      </InH1>
       <InputGroupWrapper>
         <InputGroupA>
           <Input placeholder="GTC 검색" />
