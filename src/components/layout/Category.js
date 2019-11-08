@@ -5,7 +5,7 @@ import {
   Container, Row, Col, Badge,
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
-import { faFlag, faList, faGlobeAsia } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock, faQuestion, faComments, faAt } from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -26,25 +26,69 @@ const MenuRow = styled(Row)`
 `;
 
 const MenuDiv = styled.div`
-  padding: 2px 10px;
+  padding: 3px 13px;
+  font-weight: 300;
+`;
+
+const MenuRowTop = styled(MenuRow)`
+  background-color: #DC3545;
+`;
+
+const MenuDivTop = styled(MenuDiv)`
+  font-weight: bold; 
+  color: white;
+`;
+
+const FaiPink = styled(FontAwesomeIcon)`
+  color: #f57c73;
 `;
 
 const Category = () => (
   <MainContainer>
     <MenuWrapper>
+      <MenuRowTop>
+        <MenuDivTop>
+          <FontAwesomeIcon icon={faBars} className="fa-fw" />&nbsp;&nbsp; GTC 전체 메뉴
+        </MenuDivTop>
+      </MenuRowTop>
       <MenuRow>
         <MenuDiv>
-          <FontAwesomeIcon icon={faFlag} />&nbsp;&nbsp; 공지사항
+          <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
         </MenuDiv>
       </MenuRow>
       <MenuRow>
         <MenuDiv>
-          <FontAwesomeIcon icon={faList} />&nbsp;&nbsp; 전체글 보기
+          <FaiPink icon={faList} className="fa-fw" />&nbsp;&nbsp; 전체글 보기
         </MenuDiv>
       </MenuRow>
       <MenuRow>
         <MenuDiv>
-          <FontAwesomeIcon icon={faGlobeAsia} />&nbsp;&nbsp; 자유 게시판
+          <FaiPink icon={faGlobeAsia} className="fa-fw" />&nbsp;&nbsp; 자유 게시판
+        </MenuDiv>
+      </MenuRow>
+      <MenuRow>
+        <MenuDiv>
+          <FaiPink icon={faTshirt} className="fa-fw" />&nbsp;&nbsp; 아이템 거래
+        </MenuDiv>
+      </MenuRow>
+      <MenuRow>
+        <MenuDiv>
+          <FaiPink icon={faLock} className="fa-fw" />&nbsp;&nbsp; 월드락 거래
+        </MenuDiv>
+      </MenuRow>
+      <MenuRow>
+        <MenuDiv>
+          <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
+        </MenuDiv>
+      </MenuRow>
+      <MenuRow>
+        <MenuDiv>
+          <FaiPink icon={faQuestion} className="fa-fw" />&nbsp;&nbsp; 자주 묻는 질문
+        </MenuDiv>
+      </MenuRow>
+      <MenuRow>
+        <MenuDiv>
+          <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
         </MenuDiv>
       </MenuRow>
     </MenuWrapper>
