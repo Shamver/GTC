@@ -13,6 +13,8 @@ class HeaderStore {
 
     this.home.text = home.text;
   };
+
+
 }
 
 export default new HeaderStore();

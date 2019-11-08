@@ -6,7 +6,7 @@ import {
   Container, Row, Col, Badge,
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
-import { faSearch, faStar, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faStar, faPen, faList } from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import avatar from '../../resources/images/avatar.png';
@@ -93,6 +93,18 @@ const TextContainer = styled(Container)`
 
 const DropdownIn = styled(Dropdown)`
   display : inline;
+  
+  & .dropdown-item:active {
+    color: #fff !important;
+    text-decoration: none !important;
+    background-color: #DC3545 !important;
+  }
+  
+   & .dropdown-item:focus {
+    color: #fff !important;
+    text-decoration: none !important;
+    background-color: #DC3545 !important;
+  }
 `;
 
 const SpanRight = styled.span`
@@ -173,6 +185,8 @@ const Header = () => {
             <ColNoP>
               <SpanRight>
                 <Link to="/tempPost"><FontAwesomeIcon icon={faPen} /></Link>
+                &nbsp;&nbsp;&nbsp;
+                <Link to="/tempBoard"><FontAwesomeIcon icon={faList} /></Link>
                 <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
                   <DropdownToggleC caret>
                     <FontAwesomeIcon icon={faEnvelope} />

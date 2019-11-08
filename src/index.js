@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 ReactDOM.render((
   <Provider
     HeaderStore={stores.HeaderStore}
+    ContentStore={stores.ContentStore}
   >
     <Router history={history}>
       <App/>
