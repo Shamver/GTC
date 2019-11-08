@@ -13,14 +13,6 @@ const MainContainer = styled(Container)`
   padding : 0px !important;
 `;
 
-const MainRow = styled(Row)`
-  
-`;
-
-const MenuContainerCol = styled(Col)`
-  border : 1px solid green;
-`;
-
 const MenuWrapper = styled(Row)`
   border : 1px solid red;
   margin : 0 !important;
@@ -33,24 +25,30 @@ const MenuRow = styled(Row)`
   width : 100%;
 `;
 
-const MenuTop = styled.div`
-
+const MenuDiv = styled.div`
+  padding: 2px 10px;
 `;
 
-const Content = () => (
+const Category = () => (
   <MainContainer>
     <MenuWrapper>
       <MenuRow>
-        <FontAwesomeIcon icon={faFlag} />&nbsp;&nbsp; 공지사항
+        <MenuDiv>
+          <FontAwesomeIcon icon={faFlag} />&nbsp;&nbsp; 공지사항
+        </MenuDiv>
       </MenuRow>
       <MenuRow>
-        <FontAwesomeIcon icon={faList} />&nbsp;&nbsp; 전체글 보기
+        <MenuDiv>
+          <FontAwesomeIcon icon={faList} />&nbsp;&nbsp; 전체글 보기
+        </MenuDiv>
       </MenuRow>
       <MenuRow>
-        <FontAwesomeIcon icon={faGlobeAsia} />&nbsp;&nbsp; 자유 게시판
+        <MenuDiv>
+          <FontAwesomeIcon icon={faGlobeAsia} />&nbsp;&nbsp; 자유 게시판
+        </MenuDiv>
       </MenuRow>
     </MenuWrapper>
   </MainContainer>
 );
 
-export default Content;
+export default Category;
