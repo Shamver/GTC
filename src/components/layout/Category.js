@@ -5,7 +5,9 @@ import {
   Container, Row, Col, Badge,
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
-import { faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock, faQuestion, faComments, faAt } from '@fortawesome/free-solid-svg-icons';
+import {
+  faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock, faQuestion, faComments, faAt,
+} from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
