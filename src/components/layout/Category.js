@@ -14,15 +14,19 @@ const MainContainer = styled(Container)`
 `;
 
 const MenuWrapper = styled(Row)`
-  border : 1px solid red;
   margin : 0 !important;
 `;
 
 const MenuRow = styled(Row)`
   padding: 0px 0px;
   margin : 0 !important;
-  border : 1px solid black;
   width : 100%;
+  margin-bottom: 3px !important;
+  transition: all 0.2s;
+  &:hover {
+    background-color: #ffd7d4;
+    cursor: pointer;
+  }
 `;
 
 const MenuDiv = styled.div`
@@ -32,6 +36,10 @@ const MenuDiv = styled.div`
 
 const MenuRowTop = styled(MenuRow)`
   background-color: #DC3545;
+  &:hover {
+    background-color: #DC3545;
+    cursor: default;
+  }
 `;
 
 const MenuDivTop = styled(MenuDiv)`
