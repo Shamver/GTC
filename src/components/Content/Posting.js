@@ -42,7 +42,7 @@ const PostingHeader = styled(Row)`
   padding : 10px 0px;
 `;
 
-const Posting = ({ ContentStore }) => {
+const Posting = ({ ContentStore, UtilStore }) => {
   const [text, setText] = useState('');
   const [title, setTitle] = useState('');
   const handleChangeText = (value) => setText(value);
@@ -92,9 +92,10 @@ const Posting = ({ ContentStore }) => {
           <FontAwesomeIcon icon={faPen} />
           &nbsp;쓰기
         </RightButton>
+        <RightButton onClick={UtilStore.toggleAlert}/>
       </PostingFooter>
     </PostingWrapper>
   );
 };
 
-export default inject('ContentStore')(Posting);
+export default inject('ContentStore','UtilStore')(Posting);

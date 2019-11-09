@@ -12,9 +12,10 @@ ReactDOM.render((
   <Provider
     HeaderStore={stores.HeaderStore}
     ContentStore={stores.ContentStore}
+    UtilStore={stores.UtilStore}
   >
     <Router history={history}>
-      <App/>
+      <App />
     </Router>
   </Provider>
 ), document.getElementById('root'));
