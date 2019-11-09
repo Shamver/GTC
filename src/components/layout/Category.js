@@ -21,7 +21,11 @@ const MenuWrapper = styled(Row)`
   margin : 0 !important;
 `;
 
-const MenuRow = styled(Link)`
+const MenuLink = styled(Link)`
+
+`;
+
+const MenuRow = styled(Row)`
   padding: 0px 0px;
   margin : 0 !important;
   width : 100%;
