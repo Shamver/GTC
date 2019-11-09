@@ -11,6 +11,8 @@ import {
 import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { Link } from 'react-router-dom';
+
 const MainContainer = styled(Container)`
   padding : 0px !important;
 `;
@@ -19,7 +21,7 @@ const MenuWrapper = styled(Row)`
   margin : 0 !important;
 `;
 
-const MenuRow = styled(Row)`
+const MenuRow = styled(Link)`
   padding: 0px 0px;
   margin : 0 !important;
   width : 100%;
