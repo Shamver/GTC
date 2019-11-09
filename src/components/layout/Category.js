@@ -23,7 +23,17 @@ const MenuWrapper = styled(Row)`
 
 const MenuLink = styled(Link)`
   color: black;
-  
+  padding: 0px 0px;
+  margin : 0 !important;
+  width : 100%;
+  margin-bottom: 3px !important;
+  transition: all 0.2s;
+  &:hover {
+    background-color: #ffd7d4;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+  }
 `;
 
 const MenuRow = styled(Row)`
@@ -68,48 +78,46 @@ const Category = () => (
           <FontAwesomeIcon icon={faBars} className="fa-fw" />&nbsp;&nbsp; GTC 전체 메뉴
         </MenuDivTop>
       </MenuRowTop>
-      <MenuRow>
-        <MenuLink to="/notice">
-          <MenuDiv>
-            <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
-          </MenuDiv>
-        </MenuLink>
-      </MenuRow>
-      <MenuRow>
+      <MenuLink to="/notice">
+        <MenuDiv>
+          <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
+        </MenuDiv>
+      </MenuLink>
+      <MenuLink to="/notice">
         <MenuDiv>
           <FaiPink icon={faList} className="fa-fw" />&nbsp;&nbsp; 전체글 보기
         </MenuDiv>
-      </MenuRow>
-      <MenuRow>
+      </MenuLink>
+      <MenuLink to="/notice">
         <MenuDiv>
           <FaiPink icon={faGlobeAsia} className="fa-fw" />&nbsp;&nbsp; 자유 게시판
         </MenuDiv>
-      </MenuRow>
-      <MenuRow>
+      </MenuLink>
+      <MenuLink to="/notice">
         <MenuDiv>
           <FaiPink icon={faTshirt} className="fa-fw" />&nbsp;&nbsp; 아이템 거래
         </MenuDiv>
-      </MenuRow>
-      <MenuRow>
+      </MenuLink>
+      <MenuLink to="/notice">
         <MenuDiv>
           <FaiPink icon={faLock} className="fa-fw" />&nbsp;&nbsp; 월드락 거래
         </MenuDiv>
-      </MenuRow>
-      <MenuRow>
+      </MenuLink>
+      <MenuLink to="/notice">
         <MenuDiv>
           <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
         </MenuDiv>
-      </MenuRow>
-      <MenuRow>
+      </MenuLink>
+      <MenuLink to="/notice">
         <MenuDiv>
           <FaiPink icon={faQuestion} className="fa-fw" />&nbsp;&nbsp; 자주 묻는 질문
         </MenuDiv>
-      </MenuRow>
-      <MenuRow>
+      </MenuLink>
+      <MenuLink to="/notice">
         <MenuDiv>
           <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
         </MenuDiv>
-      </MenuRow>
+      </MenuLink>
     </MenuWrapper>
   </MainContainer>
 );
