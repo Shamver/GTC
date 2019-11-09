@@ -22,7 +22,8 @@ const MenuWrapper = styled(Row)`
 `;
 
 const MenuLink = styled(Link)`
-
+  color: black;
+  
 `;
 
 const MenuRow = styled(Row)`
@@ -68,9 +69,11 @@ const Category = () => (
         </MenuDivTop>
       </MenuRowTop>
       <MenuRow>
-        <MenuDiv>
-          <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
-        </MenuDiv>
+        <MenuLink to="/notice">
+          <MenuDiv>
+            <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
+          </MenuDiv>
+        </MenuLink>
       </MenuRow>
       <MenuRow>
         <MenuDiv>
