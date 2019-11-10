@@ -5,14 +5,15 @@ import Posting from '../Content/Posting';
 import PostList from '../Content/PostList';
 import Alert from '../util/Alert';
 
-const Content = ({ history }) => (
-  <Switch>
-    <Route exact path="/" history={history} render={() => <Main />} />
-    <Route exact path="/tempPost" history={history} render={() => <Posting />} />
-    <Route exact path="/tempBoard" history={history} render={() => <PostList />} />
+const Content = () => (
+  <>
+    <Switch>
+      <Route exact path="/" render={() => <Main />} />
+      <Route exact path="/tempPost" render={() => <Posting />} />
+      <Route exact path="/tempBoard" render={() => <PostList />} />
+    </Switch>
     <Alert />
-  </Switch>
-
+  </>
 );
 
 export default Content;

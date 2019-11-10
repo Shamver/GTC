@@ -1,20 +1,8 @@
-import { observable, action } from 'mobx';
+import { observable } from 'mobx';
 
 class HeaderStore {
-  @observable home = {
-    title: 'TITLE',
-    text: 'TEXT',
-  };
-
-  @action onChangeText = (valText) => {
-    const { home } = this;
-
-    home.text = valText;
-
-    this.home.text = home.text;
-  };
-
-
+  @observable title = '';
+  @observable text = '';
 }
 
 export default new HeaderStore();

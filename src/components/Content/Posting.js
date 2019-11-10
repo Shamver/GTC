@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import styled from 'styled-components';
@@ -8,8 +8,8 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { faChartBar } from '@fortawesome/free-regular-svg-icons';
-import axios from 'axios';
 import { inject, observer } from 'mobx-react';
+import * as PropTypes from 'prop-types';
 
 const PostingWrapper = styled.div`
   background-color : white;
@@ -43,26 +43,7 @@ const PostingHeader = styled(Row)`
 `;
 
 const Posting = ({ ContentStore, UtilStore }) => {
-  const [text, setText] = useState('');
-  const [title, setTitle] = useState('');
-  const handleChangeText = (value) => setText(value);
-  const handleChangeTitle = (value) => setTitle(value);
-  const AddPost = ({ history }) => {
-    axios.post('api/addPost', {
-      board: 'FREE',
-      category: 'ALL',
-      title,
-      writer: 'admin',
-      content: text,
-      depth: 1,
-    })
-      .then((response) => {
-        if (response.data) {
-          ContentStore.history_.push('/tempBoard');
-        }
-      })
-      .catch((response) => { console.log(response); });
-  };
+  const { post } = ContentStore;
 
   return (
     <PostingWrapper>
@@ -73,10 +54,10 @@ const Posting = ({ ContentStore, UtilStore }) => {
           </CustomCheckbox>
         </Col>
         <Col>
-          <Input id="exampleEmail" placeholder="제목을 입력해주세요..." onChange={handleChangeTitle} />
+          <Input value={post.title} placeholder="제목을 입력해주세요..." onChange={ContentStore.onChangeValue} name="title" />
         </Col>
       </PostingHeader>
-      <ReactQuill value={text} onChange={handleChangeText} />
+      <ReactQuill value={post.text} onChange={ContentStore.onChangeValue} name="text" />
       <PostingFooter>
         <CustomCheckbox type="checkbox" id="exampleCustomCheckbox" label="댓글 허용" />
         <CustomCheckbox type="checkbox" id="exampleCustomCheckbox2" label="비밀글" />
@@ -88,14 +69,36 @@ const Posting = ({ ContentStore, UtilStore }) => {
           <FontAwesomeIcon icon={faChartBar} />
           &nbsp;설문 추가
         </MarginButton>
-        <RightButton color="danger" onClick={AddPost}>
+        <RightButton color="danger" onClick={ContentStore.addPost}>
           <FontAwesomeIcon icon={faPen} />
           &nbsp;쓰기
         </RightButton>
-        <RightButton onClick={UtilStore.toggleAlert}/>
+        <RightButton onClick={() => {UtilStore.toggleAlert('')}}>
+          알림
+        </RightButton>
       </PostingFooter>
     </PostingWrapper>
   );
 };
 
-export default inject('ContentStore','UtilStore')(Posting);
+Posting.propTypes = {
+  ContentStore: PropTypes.shape({
+    post: PropTypes.shape({
+      title: PropTypes.string,
+      text: PropTypes.string,
+    }),
+    onChangeValue: PropTypes.func,
+    addPost: PropTypes.func,
+  }),
+  UtilStore: PropTypes.shape({
+    toggleAlert: PropTypes.func,
+  }),
+};
+
+
+Posting.defaultProps = {
+  ContentStore: null,
+  UtilStore: null,
+};
+
+export default inject('ContentStore', 'UtilStore')(observer(Posting));

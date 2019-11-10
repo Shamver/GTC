@@ -3,7 +3,10 @@ import { observable, action } from 'mobx';
 class UtilStore {
   @observable alertToggle = false;
 
-  @action ToggleAlert = () => {
+  @observable text = '';
+
+  @action toggleAlert = (text) => {
+    this.text = text;
     this.alertToggle = !this.alertToggle;
   }
 }
