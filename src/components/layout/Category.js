@@ -89,37 +89,37 @@ const Category = () => (
           <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/notice">
+      <MenuLink to="/all">
         <MenuDiv>
           <FaiPink icon={faList} className="fa-fw" />&nbsp;&nbsp; 전체글 보기
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/notice">
+      <MenuLink to="/free">
         <MenuDiv>
           <FaiPink icon={faGlobeAsia} className="fa-fw" />&nbsp;&nbsp; 자유 게시판
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/notice">
+      <MenuLink to="/trade">
         <MenuDiv>
           <FaiPink icon={faTshirt} className="fa-fw" />&nbsp;&nbsp; 아이템 거래
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/notice">
+      <MenuLink to="/cash">
         <MenuDiv>
           <FaiPink icon={faLock} className="fa-fw" />&nbsp;&nbsp; 월드락 거래
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/notice">
+      <MenuLink to="/qna">
         <MenuDiv>
           <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/notice">
+      <MenuLink to="/faq">
         <MenuDiv>
           <FaiPink icon={faQuestion} className="fa-fw" />&nbsp;&nbsp; 자주 묻는 질문
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/notice">
+      <MenuLink to="/consult">
         <MenuDiv>
           <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
         </MenuDiv>
