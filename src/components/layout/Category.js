@@ -11,6 +11,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { inject, observer } from 'mobx-react';
 import * as PropTypes from 'prop-types';
 
+import history from '../../history';
+
 const MainContainer = styled(Container)`
   padding : 0px !important;
   border-bottom: 2px solid #ebeae8;
@@ -32,7 +34,7 @@ const MenuLink = styled.div`
   border-bottom : 1px solid #e6e6e6;
   
   background-color: ${
-  (props) => (props.active ? '#ffd7d4' : '#fff')
+  (props) => (props.active || props.firstActive ? '#ffd7d4' : '#fff')
 }
   
   &:hover {
@@ -100,6 +102,7 @@ const FaiPink = styled(FontAwesomeIcon)`
 
 const Category = ({ CategoryStore }) => {
   const { category } = CategoryStore;
+  const categoryActive = history.location.pathname;
 
   return (
     <MainContainer>
@@ -109,42 +112,42 @@ const Category = ({ CategoryStore }) => {
             <FontAwesomeIcon icon={faBars} className="fa-fw" />&nbsp;&nbsp; GTC 전체 메뉴
           </MenuDivTop>
         </MenuRowTop>
-        <MenuLink active={category.active === 'notice'} onClick={() => CategoryStore.onActive('notice')}>
+        <MenuLink fistActive={category.active === 'notice'} active={categoryActive === '/notice'} onClick={() => CategoryStore.onActive('notice')}>
           <MenuDiv>
             <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
           </MenuDiv>
         </MenuLink>
-        <MenuLink active={category.active === 'all'} onClick={() => CategoryStore.onActive('all')}>
+        <MenuLink fistActive={category.active === 'all'} active={categoryActive === '/all'} onClick={() => CategoryStore.onActive('all')}>
           <MenuDiv>
             <FaiPink icon={faList} className="fa-fw" />&nbsp;&nbsp; 전체글 보기
           </MenuDiv>
         </MenuLink>
-        <MenuLink active={category.active === 'free'} onClick={() => CategoryStore.onActive('free')}>
+        <MenuLink fistActive={category.active === 'free'} active={categoryActive === '/free'} onClick={() => CategoryStore.onActive('free')}>
           <MenuDiv>
             <FaiPink icon={faGlobeAsia} className="fa-fw" />&nbsp;&nbsp; 자유 게시판
           </MenuDiv>
         </MenuLink>
-        <MenuLink active={category.active === 'trade'} onClick={() => CategoryStore.onActive('trade')}>
+        <MenuLink fistActive={category.active === 'trade'} active={categoryActive === '/trade'} onClick={() => CategoryStore.onActive('trade')}>
           <MenuDiv>
             <FaiPink icon={faTshirt} className="fa-fw" />&nbsp;&nbsp; 아이템 거래
           </MenuDiv>
         </MenuLink>
-        <MenuLink active={category.active === 'cash'} onClick={() => CategoryStore.onActive('cash')}>
+        <MenuLink fistActive={category.active === 'cash'} active={categoryActive === '/cash'} onClick={() => CategoryStore.onActive('cash')}>
           <MenuDiv>
             <FaiPink icon={faLock} className="fa-fw" />&nbsp;&nbsp; 월드락 거래
           </MenuDiv>
         </MenuLink>
-        <MenuLink active={category.active === 'qna'} onClick={() => CategoryStore.onActive('qna')}>
+        <MenuLink fistActive={category.active === 'qna'} active={categoryActive === '/qna'} onClick={() => CategoryStore.onActive('qna')}>
           <MenuDiv>
             <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
           </MenuDiv>
         </MenuLink>
-        <MenuLink active={category.active === 'faq'} onClick={() => CategoryStore.onActive('faq')}>
+        <MenuLink fistActive={category.active === 'faq'} active={categoryActive === '/faq'} onClick={() => CategoryStore.onActive('faq')}>
           <MenuDiv>
             <FaiPink icon={faQuestion} className="fa-fw" />&nbsp;&nbsp; 자주 묻는 질문
           </MenuDiv>
         </MenuLink>
-        <MenuLink active={category.active === 'consult'} onClick={() => CategoryStore.onActive('consult')}>
+        <MenuLink fistActive={category.active === 'consult'} active={categoryActive === '/consult'} onClick={() => CategoryStore.onActive('consult')}>
           <MenuDiv>
             <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
           </MenuDiv>

@@ -3,7 +3,7 @@ import history from '../history';
 
 class CategoryStore {
   @observable category = {
-    active: history,
+    active: history.location,
   };
 
   @action onActive = (target) => {
