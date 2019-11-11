@@ -20,7 +20,7 @@
     "express": "^5.0.0-alpha.7",
     "history": "^4.10.1",
     "http-proxy-middleware": "^0.20.0",
-    "jquery": "^1.9.1",
+    "jquery": "^3.4.0",
     "mariadb": "^2.1.2",
     "mobx": "^4.3.1",
     "mobx-react": "^5.0.0",
