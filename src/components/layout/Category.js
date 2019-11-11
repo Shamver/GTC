@@ -1,14 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
-  InputGroup, InputGroupAddon, Button, Input,
-  Container, Row, Col, Badge,
-  Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
+  Container, Row,
 } from 'reactstrap';
 import {
   faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock, faQuestion, faComments, faAt,
 } from '@fortawesome/free-solid-svg-icons';
-import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Link } from 'react-router-dom';
