@@ -13,6 +13,7 @@ ReactDOM.render((
     HeaderStore={stores.HeaderStore}
     ContentStore={stores.ContentStore}
     UtilStore={stores.UtilStore}
+    CategoryStore={stores.CategoryStore}
   >
     <Router history={history}>
       <App />
