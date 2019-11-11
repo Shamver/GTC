@@ -73,9 +73,6 @@ const Posting = ({ ContentStore, UtilStore }) => {
           <FontAwesomeIcon icon={faPen} />
           &nbsp;쓰기
         </RightButton>
-        <RightButton onClick={() => {UtilStore.toggleAlert('')}}>
-          알림
-        </RightButton>
       </PostingFooter>
     </PostingWrapper>
   );
