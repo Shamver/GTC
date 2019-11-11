@@ -83,6 +83,9 @@ const InnerContainer = styled(Container)`
   margin : 0 !important;
   padding : 0 3px !important;
   height : 40px;
+  max-width : none !important;
+  border-bottom: 2px solid #ebeae8;
+  border-right: 2px solid #ebeae8;
 `;
 
 const TextContainer = styled(Container)`

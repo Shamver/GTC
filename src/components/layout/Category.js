@@ -15,10 +15,13 @@ import { Link } from 'react-router-dom';
 
 const MainContainer = styled(Container)`
   padding : 0px !important;
+  border-bottom: 2px solid #ebeae8;
+  border-right: 2px solid #ebeae8;
 `;
 
 const MenuWrapper = styled(Row)`
   margin : 0 !important;
+  background-color :white;
 `;
 
 const MenuLink = styled(Link)`
@@ -26,8 +29,9 @@ const MenuLink = styled(Link)`
   padding: 0px 0px;
   margin : 0 !important;
   width : 100%;
-  margin-bottom: 3px !important;
+  margin-bottom: 0px !important;
   transition: all 0.2s;
+  border-bottom : 1px solid #e6e6e6;
   &:hover {
     background-color: #ffd7d4;
     cursor: pointer;
@@ -55,6 +59,8 @@ const MenuDiv = styled.div`
 
 const MenuRowTop = styled(MenuRow)`
   background-color: #DC3545;
+  padding : 2.5px 0px !important;
+  margin : 0px !important;
   &:hover {
     background-color: #DC3545;
     cursor: default;

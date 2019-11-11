@@ -39,17 +39,21 @@ const UnderSection = styled(Row)`
   margin : 0 !important;
 `;
 
+const P5Col = styled(Col)`
+  padding : 0 10px 0 5px !important;
+`;
+
 const App = () => (
   <ContainerWrapper>
     <Container>
       <Header />
       <UnderSection>
-        <Col>
+        <P5Col>
           <Category />
-        </Col>
-        <Col xs="10">
+        </P5Col>
+        <P5Col xs="10">
           <Content />
-        </Col>
+        </P5Col>
       </UnderSection>
     </Container>
   </ContainerWrapper>
