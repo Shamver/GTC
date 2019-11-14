@@ -8,7 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const MainContainer = styled(Container)`
   padding : 0px !important;
@@ -21,7 +21,7 @@ const MenuWrapper = styled(Row)`
   background-color :white;
 `;
 
-const MenuLink = styled(Link)`
+const MenuLink = styled(NavLink)`
   color: black;
   padding: 0px 0px;
   margin : 0 !important;
@@ -34,6 +34,10 @@ const MenuLink = styled(Link)`
     cursor: pointer;
     text-decoration: none;
     color: black;
+  }
+  
+  &.active {
+    background-color : #ffd7d4;
   }
 `;
 
@@ -51,7 +55,6 @@ const MenuRow = styled(Row)`
 
 const MenuDiv = styled.div`
   padding: 3px 13px;
-  font-weight: 300;
 `;
 
 const MenuRowTop = styled(MenuRow)`
@@ -81,42 +84,42 @@ const Category = () => (
           <FontAwesomeIcon icon={faBars} className="fa-fw" />&nbsp;&nbsp; GTC 전체 메뉴
         </MenuDivTop>
       </MenuRowTop>
-      <MenuLink to="/notice">
+      <MenuLink to="/notice" activeClassName="active">
         <MenuDiv>
           <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/all">
+      <MenuLink to="/all" activeClassName="active">
         <MenuDiv>
           <FaiPink icon={faList} className="fa-fw" />&nbsp;&nbsp; 전체글 보기
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/free">
+      <MenuLink to="/free" activeClassName="active">
         <MenuDiv>
           <FaiPink icon={faGlobeAsia} className="fa-fw" />&nbsp;&nbsp; 자유 게시판
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/trade">
+      <MenuLink to="/trade" activeClassName="active">
         <MenuDiv>
           <FaiPink icon={faTshirt} className="fa-fw" />&nbsp;&nbsp; 아이템 거래
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/cash">
+      <MenuLink to="/cash" activeClassName="active">
         <MenuDiv>
           <FaiPink icon={faLock} className="fa-fw" />&nbsp;&nbsp; 월드락 거래
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/qna">
+      <MenuLink to="/qna" activeClassName="active">
         <MenuDiv>
           <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/faq">
+      <MenuLink to="/faq" activeClassName="active">
         <MenuDiv>
           <FaiPink icon={faQuestion} className="fa-fw" />&nbsp;&nbsp; 자주 묻는 질문
         </MenuDiv>
       </MenuLink>
-      <MenuLink to="/consult">
+      <MenuLink to="/consult" activeClassName="active">
         <MenuDiv>
           <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
         </MenuDiv>

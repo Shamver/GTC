@@ -9,6 +9,8 @@ class ContentStore {
     text: '',
   };
 
+  @observable history = history;
+
   @action addPost = () => {
     axios.post('api/addPost', {
       board: 'FREE',
