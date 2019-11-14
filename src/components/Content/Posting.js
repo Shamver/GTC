@@ -8,8 +8,9 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { faChartBar } from '@fortawesome/free-regular-svg-icons';
-import { inject, observer } from 'mobx-react';
+import { observer } from 'mobx-react';
 import * as PropTypes from 'prop-types';
+import { useStores } from '../../stores/useStores';
 
 const PostingWrapper = styled.div`
   background-color : white;
@@ -42,7 +43,8 @@ const PostingHeader = styled(Row)`
   padding : 10px 0px;
 `;
 
-const Posting = ({ ContentStore, UtilStore }) => {
+const Posting = () => {
+  const { ContentStore } = useStores();
   const { post } = ContentStore;
 
   return (
@@ -98,4 +100,4 @@ Posting.defaultProps = {
   UtilStore: null,
 };
 
-export default inject('ContentStore', 'UtilStore')(observer(Posting));
+export default (observer(Posting));

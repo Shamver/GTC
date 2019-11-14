@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import {
   Button, Modal, ModalHeader, ModalBody, ModalFooter,
@@ -20,7 +20,7 @@ const Alert = () => {
         </ModalFooter>
       </Modal>
     </div>
-  )
+  );
 };
 
 Alert.propTypes = {
