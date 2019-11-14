@@ -1,11 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
-import { Router } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import stores from './stores';
-import history from './history';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 ReactDOM.render((
@@ -14,8 +13,8 @@ ReactDOM.render((
     ContentStore={stores.ContentStore}
     UtilStore={stores.UtilStore}
   >
-    <Router history={history}>
-      <App />
+    <Router>
+      <Route path="/" render={() => (<div>dsa</div>)} />
     </Router>
   </Provider>
 ), document.getElementById('root'));

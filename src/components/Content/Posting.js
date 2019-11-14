@@ -43,6 +43,10 @@ const PostingHeader = styled(Row)`
   padding : 10px 0px;
 `;
 
+const SelectInput = styled(Input)`
+  margin-bottom : 10px;
+`;
+
 const Posting = () => {
   const { ContentStore } = useStores();
   const { post } = ContentStore;
@@ -50,6 +54,16 @@ const Posting = () => {
   return (
     <PostingWrapper>
       <PostingHeader>
+        <Col xs="12">
+          <SelectInput type="select" name="select" id="exampleSelect">
+            <option>공지사항</option>
+            <option>자유 게시판</option>
+            <option>아이템 거래</option>
+            <option>월드락 거래</option>
+            <option>신고 게시판</option>
+            <option>질문 & 답변</option>
+          </SelectInput>
+        </Col>
         <Col xs="2">
           <CustomCheckbox type="select" id="exampleCustomSelect" name="customSelect">
             <option value="FREE">자유</option>

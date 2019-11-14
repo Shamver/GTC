@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import {
   faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock, faQuestion, faComments, faAt,
+  faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -107,6 +108,11 @@ const Category = () => (
       <MenuLink to="/cash" activeClassName="active">
         <MenuDiv>
           <FaiPink icon={faLock} className="fa-fw" />&nbsp;&nbsp; 월드락 거래
+        </MenuDiv>
+      </MenuLink>
+      <MenuLink to="/crime" activeClassName="active">
+        <MenuDiv>
+          <FaiPink icon={faExclamationTriangle} className="fa-fw" />&nbsp;&nbsp; 신고 게시판
         </MenuDiv>
       </MenuLink>
       <MenuLink to="/qna" activeClassName="active">

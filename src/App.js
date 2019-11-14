@@ -30,8 +30,6 @@ const Container = styled.div`
   @media (min-width: 1200px) {
       width: 1200px;
   }
-  
-  
   height : 100vh;
 `;
 
@@ -43,6 +41,10 @@ const P5Col = styled(Col)`
   padding : 0 10px 0 5px !important;
 `;
 
+const P5Col2 = styled(Col)`
+  padding : 0 5px 0 0px !important;
+`;
+
 const App = () => (
   <ContainerWrapper>
     <Container>
@@ -51,13 +53,12 @@ const App = () => (
         <P5Col>
           <Category />
         </P5Col>
-        <P5Col xs="10">
+        <P5Col2 xs="10">
           <Content />
-        </P5Col>
+        </P5Col2>
       </UnderSection>
     </Container>
   </ContainerWrapper>
-
 );
 
 export default App;
