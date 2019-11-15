@@ -6,12 +6,10 @@ import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { useStores } from '../../stores/useStores';
 
 const FreeBoard = () => {
-  const { ContentStore } = useStores();
-  console.log(ContentStore.history);
-  ContentStore.history.back();
+  const { RouteStore } = useStores();
   return (
     <div>
-      <Link to={`${ContentStore.history.match.url}/post`}>
+      <Link to={`${RouteStore.location.pathname}/post`}>
         <Button color="danger">
           <FontAwesomeIcon icon={faPen} />
           &nbsp;글 쓰기

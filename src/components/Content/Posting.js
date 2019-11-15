@@ -47,21 +47,45 @@ const SelectInput = styled(Input)`
   margin-bottom : 10px;
 `;
 
-const Posting = () => {
+const Posting = (props) => {
   const { ContentStore } = useStores();
   const { post } = ContentStore;
+  const { params } = props.match;
+
+  const options = [{
+    value: 'notice',
+    name: '공지사항',
+  }, {
+    value: 'free',
+    name: '자유 게시판',
+  }, {
+    value: 'trade',
+    name: '아이템 거래',
+  }, {
+    value: 'cash',
+    name: '월드락 거래',
+  }, {
+    value: 'crime',
+    name: '신고게시판',
+  }, {
+    value: 'qna',
+    name: '질문 & 답변',
+  }];
+  const optionList = options.map((data) => (
+    <option
+      value={data.value}
+      key={data.value}
+    >
+      {data.name}
+    </option>
+  ));
 
   return (
     <PostingWrapper>
       <PostingHeader>
         <Col xs="12">
-          <SelectInput type="select" name="select" id="exampleSelect">
-            <option>공지사항</option>
-            <option>자유 게시판</option>
-            <option>아이템 거래</option>
-            <option>월드락 거래</option>
-            <option>신고 게시판</option>
-            <option>질문 & 답변</option>
+          <SelectInput type="select" name="select" id="exampleSelect" value={params.board}>
+            {optionList}
           </SelectInput>
         </Col>
         <Col xs="2">
@@ -107,7 +131,6 @@ Posting.propTypes = {
     toggleAlert: PropTypes.func,
   }),
 };
-
 
 Posting.defaultProps = {
   ContentStore: null,

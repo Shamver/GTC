@@ -7,10 +7,11 @@ class RouteStore {
 
   @observable history = {};
 
-  @action setRoute(location, match, history) {
+  @action setRoute = (location, match, history) => {
     this.location = location;
     this.match = match;
     this.history = history;
   }
 }
+
 export default new RouteStore();

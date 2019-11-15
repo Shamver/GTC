@@ -12,9 +12,10 @@ ReactDOM.render((
     HeaderStore={stores.HeaderStore}
     ContentStore={stores.ContentStore}
     UtilStore={stores.UtilStore}
+    RouteStore={stores.RouteStore}
   >
     <Router>
-      <Route path="/" render={() => (<div>dsa</div>)} />
+      <Route component={App} />
     </Router>
   </Provider>
 ), document.getElementById('root'));

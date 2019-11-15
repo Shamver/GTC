@@ -1,15 +1,13 @@
 import { action, observable } from 'mobx';
 import axios from 'axios';
-import history from '../history';
 import UtilStore from './UtilStore';
+import RouteStore from './RouteStore';
 
 class ContentStore {
   @observable post = {
     title: '',
     text: '',
   };
-
-  @observable history = history;
 
   @action addPost = () => {
     axios.post('api/addPost', {
@@ -22,7 +20,8 @@ class ContentStore {
     })
       .then((response) => {
         if (response.data) {
-          history.push('/tempBoard');
+          RouteStore.history.push('/tempBoard');
+          console.log(RouteStore.match);
           UtilStore.toggleAlert('글이 정상적으로 등록되었습니다.');
           this.post = {
             title: '',
