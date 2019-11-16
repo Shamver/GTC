@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import styled from 'styled-components';
@@ -49,43 +49,24 @@ const SelectInput = styled(Input)`
 
 const Posting = (props) => {
   const { ContentStore } = useStores();
-  const { post } = ContentStore;
-  const { params } = props.match;
+  let { post } = ContentStore;
+  const { match } = props;
+  const { params } = match;
 
-  const options = [{
-    value: 'notice',
-    name: '공지사항',
-  }, {
-    value: 'free',
-    name: '자유 게시판',
-  }, {
-    value: 'trade',
-    name: '아이템 거래',
-  }, {
-    value: 'cash',
-    name: '월드락 거래',
-  }, {
-    value: 'crime',
-    name: '신고게시판',
-  }, {
-    value: 'qna',
-    name: '질문 & 답변',
-  }];
-  const optionList = options.map((data) => (
-    <option
-      value={data.value}
-      key={data.value}
-    >
-      {data.name}
-    </option>
-  ));
+
+  useEffect(() => {
+    ContentStore.setPostBoard(params);
+    ContentStore.setPostBoardOptions();
+    post = ContentStore.post;
+    console.log(post.board);
+  }, ['']);
 
   return (
     <PostingWrapper>
       <PostingHeader>
         <Col xs="12">
-          <SelectInput type="select" name="select" id="exampleSelect" value={params.board}>
-            {optionList}
+          <SelectInput type="select" name="board" value={post.board} onChange={ContentStore.onChangeValue}>
+            {ContentStore.optionList}
           </SelectInput>
         </Col>
         <Col xs="2">
@@ -123,6 +104,7 @@ Posting.propTypes = {
     post: PropTypes.shape({
       title: PropTypes.string,
       text: PropTypes.string,
+      board: PropTypes.string,
     }),
     onChangeValue: PropTypes.func,
     addPost: PropTypes.func,
@@ -130,6 +112,9 @@ Posting.propTypes = {
   UtilStore: PropTypes.shape({
     toggleAlert: PropTypes.func,
   }),
+  match: PropTypes.shape({
+    params: PropTypes.object,
+  }).isRequired,
 };
 
 Posting.defaultProps = {

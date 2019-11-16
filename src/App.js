@@ -32,7 +32,7 @@ const Container = styled.div`
   @media (min-width: 1200px) {
       width: 1200px;
   }
-  height : 100vh;
+  min-height : 100vh;
 `;
 
 const UnderSection = styled(Row)`
