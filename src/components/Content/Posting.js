@@ -58,7 +58,6 @@ const Posting = (props) => {
     ContentStore.setPostBoard(params);
     ContentStore.setPostBoardOptions();
     post = ContentStore.post;
-    console.log(post.board);
   }, ['']);
 
   return (
