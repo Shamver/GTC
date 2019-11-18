@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import {
   InputGroup, InputGroupAddon, Button, Input,
@@ -7,12 +6,14 @@ import {
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import {
-  faSearch, faStar, faPen, faList,
+  faSearch, faStar, faSignInAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import avatar from '../../resources/images/avatar.png';
+// import avatar from '../../resources/images/avatar.png';
+import { observer } from 'mobx-react';
 import logo from '../../resources/images/logo.png';
+import useStores from '../../stores/useStores';
 
 const InputGroupWrapper = styled.div`
   width : 250px;
@@ -117,9 +118,9 @@ const SpanRight = styled.span`
   float : right;
 `;
 
-const Avatar = styled.img`
-  width : 28px;
-`;
+// const Avatar = styled.img`
+//   width : 28px;
+// `;
 
 const DropdownItem30 = styled(DropdownItem)`
   height : 27px;
@@ -135,6 +136,7 @@ const Logo = styled.img`
 const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const { UtilStore } = useStores();
   return (
     <HeaderWrapper>
       <InH1>
@@ -196,12 +198,9 @@ const Header = () => {
             </ColCenter>
             <ColNoP>
               <SpanRight>
-                <Link to="/tempPost"><FontAwesomeIcon icon={faPen} /></Link>
-                &nbsp;&nbsp;&nbsp;
-                <Link to="/tempBoard"><FontAwesomeIcon icon={faList} /></Link>
                 <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
                   <DropdownToggleC caret>
-                    <FontAwesomeIcon icon={faEnvelope} />
+                    <FontAwesomeIcon icon={faEnvelope} /> 메신저
                   </DropdownToggleC>
                   <DropdownMenu>
                     <DropdownItem30>채팅</DropdownItem30>
@@ -209,8 +208,8 @@ const Header = () => {
                   </DropdownMenu>
                 </DropdownIn>
                 <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                  <DropdownToggleC caret>
-                    <Avatar src={avatar} />
+                  <DropdownToggleC caret onClick={UtilStore.toggleSign}>
+                    <FontAwesomeIcon icon={faSignInAlt} /> 로그인
                   </DropdownToggleC>
                   <DropdownMenu>
                     <DropdownItem30>새로운 알림(0개)</DropdownItem30>
@@ -232,4 +231,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default observer(Header);

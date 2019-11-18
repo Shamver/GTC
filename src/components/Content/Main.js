@@ -18,7 +18,7 @@ const PostList = styled.div`
   margin-bottom : 20px;
 `;
 
-const Content = () => (
+const Main = () => (
   <Row>
     <Col xs="6">
       <Texth5>커뮤니티 자유게시판 <ArrowIcon icon={faChevronRight} /></Texth5>
@@ -33,4 +33,4 @@ const Content = () => (
   </Row>
 );
 
-export default Content;
+export default Main;

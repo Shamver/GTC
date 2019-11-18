@@ -1,6 +1,5 @@
-import { observable } from 'mobx';
-
 class HeaderStore {
+
 
 }
 

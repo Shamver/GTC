@@ -5,13 +5,12 @@ import {
 } from 'reactstrap';
 import {
   faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock, faQuestion, faComments, faAt,
+  faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { observer } from 'mobx-react';
+import { NavLink } from 'react-router-dom';
 
-import { inject, observer } from 'mobx-react';
-import * as PropTypes from 'prop-types';
-
-import history from '../../history';
 
 const MainContainer = styled(Container)`
   padding : 0px !important;
@@ -24,7 +23,7 @@ const MenuWrapper = styled(Row)`
   background-color :white;
 `;
 
-const MenuLink = styled.div`
+const MenuLink = styled(NavLink)`
   color: black;
   padding: 2px 0px;
   margin : 0 !important;
@@ -33,33 +32,14 @@ const MenuLink = styled.div`
   transition: all 0.18s;
   border-bottom : 1px solid #e6e6e6;
   
-  background-color: ${
-  (props) => (props.active || props.firstActive ? '#ffd7d4' : '#fff')
-}
-  
   &:hover {
     background-color: #ffc8c4;
     cursor: pointer;
     text-decoration: none;
     color: black;
   }
-  
-  &:active {
-    animation: bgcolor 3s;
-    -webkit-animation: bgcolor 3s;
-    
-    @keyframes bgcolor {
-      0% {background-color: #ffc8c4;}
-      40% {background-color: #ff8b82;}
-      80% {background-color: #ff2c1c;}
-      100% {background-color: #ffd7d4;}
-    }
-    @-webkit-keyframes bgcolor {
-      0% {background-color: #ffc8c4;}
-      40% {background-color: #ff8b82;}
-      80% {background-color: #ff2c1c;}
-      100% {background-color: #ffd7d4;}
-    }
+  &.active {
+    background-color : #ffd7d4;
   }
 `;
 
@@ -76,8 +56,7 @@ const MenuRow = styled(Row)`
 `;
 
 const MenuDiv = styled.div`
-  padding: 2px 12px;
-  font-weight: 300;
+  padding: 3px 13px;
 `;
 
 const MenuRowTop = styled(MenuRow)`
@@ -100,74 +79,61 @@ const FaiPink = styled(FontAwesomeIcon)`
   color: #f57c73;
 `;
 
-const Category = ({ CategoryStore }) => {
-  const { category } = CategoryStore;
-  const categoryActive = history.location.pathname;
+const Category = () => (
+  <MainContainer>
+    <MenuWrapper>
+      <MenuRowTop>
+        <MenuDivTop>
+          <FontAwesomeIcon icon={faBars} className="fa-fw" />&nbsp;&nbsp; GTC 전체 메뉴
+        </MenuDivTop>
+      </MenuRowTop>
+      <MenuLink to="/notice" activeClassName="active">
+        <MenuDiv>
+          <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
+        </MenuDiv>
+      </MenuLink>
+      <MenuLink to="/all" activeClassName="active">
+        <MenuDiv>
+          <FaiPink icon={faList} className="fa-fw" />&nbsp;&nbsp; 전체글 보기
+        </MenuDiv>
+      </MenuLink>
+      <MenuLink to="/free" activeClassName="active">
+        <MenuDiv>
+          <FaiPink icon={faGlobeAsia} className="fa-fw" />&nbsp;&nbsp; 자유 게시판
+        </MenuDiv>
+      </MenuLink>
+      <MenuLink to="/trade" activeClassName="active">
+        <MenuDiv>
+          <FaiPink icon={faTshirt} className="fa-fw" />&nbsp;&nbsp; 아이템 거래
+        </MenuDiv>
+      </MenuLink>
+      <MenuLink to="/cash" activeClassName="active">
+        <MenuDiv>
+          <FaiPink icon={faLock} className="fa-fw" />&nbsp;&nbsp; 월드락 거래
+        </MenuDiv>
+      </MenuLink>
+      <MenuLink to="/crime" activeClassName="active">
+        <MenuDiv>
+          <FaiPink icon={faExclamationTriangle} className="fa-fw" />&nbsp;&nbsp; 신고 게시판
+        </MenuDiv>
+      </MenuLink>
+      <MenuLink to="/qna" activeClassName="active">
+        <MenuDiv>
+          <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
+        </MenuDiv>
+      </MenuLink>
+      <MenuLink to="/faq" activeClassName="active">
+        <MenuDiv>
+          <FaiPink icon={faQuestion} className="fa-fw" />&nbsp;&nbsp; 자주 묻는 질문
+        </MenuDiv>
+      </MenuLink>
+      <MenuLink to="/consult" activeClassName="active">
+        <MenuDiv>
+          <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
+        </MenuDiv>
+      </MenuLink>
+    </MenuWrapper>
+  </MainContainer>
+);
 
-  return (
-    <MainContainer>
-      <MenuWrapper>
-        <MenuRowTop>
-          <MenuDivTop>
-            <FontAwesomeIcon icon={faBars} className="fa-fw" />&nbsp;&nbsp; GTC 전체 메뉴
-          </MenuDivTop>
-        </MenuRowTop>
-        <MenuLink fistActive={category.active === 'notice'} active={categoryActive === '/notice'} onClick={() => CategoryStore.onActive('notice')}>
-          <MenuDiv>
-            <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink fistActive={category.active === 'all'} active={categoryActive === '/all'} onClick={() => CategoryStore.onActive('all')}>
-          <MenuDiv>
-            <FaiPink icon={faList} className="fa-fw" />&nbsp;&nbsp; 전체글 보기
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink fistActive={category.active === 'free'} active={categoryActive === '/free'} onClick={() => CategoryStore.onActive('free')}>
-          <MenuDiv>
-            <FaiPink icon={faGlobeAsia} className="fa-fw" />&nbsp;&nbsp; 자유 게시판
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink fistActive={category.active === 'trade'} active={categoryActive === '/trade'} onClick={() => CategoryStore.onActive('trade')}>
-          <MenuDiv>
-            <FaiPink icon={faTshirt} className="fa-fw" />&nbsp;&nbsp; 아이템 거래
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink fistActive={category.active === 'cash'} active={categoryActive === '/cash'} onClick={() => CategoryStore.onActive('cash')}>
-          <MenuDiv>
-            <FaiPink icon={faLock} className="fa-fw" />&nbsp;&nbsp; 월드락 거래
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink fistActive={category.active === 'qna'} active={categoryActive === '/qna'} onClick={() => CategoryStore.onActive('qna')}>
-          <MenuDiv>
-            <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink fistActive={category.active === 'faq'} active={categoryActive === '/faq'} onClick={() => CategoryStore.onActive('faq')}>
-          <MenuDiv>
-            <FaiPink icon={faQuestion} className="fa-fw" />&nbsp;&nbsp; 자주 묻는 질문
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink fistActive={category.active === 'consult'} active={categoryActive === '/consult'} onClick={() => CategoryStore.onActive('consult')}>
-          <MenuDiv>
-            <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
-          </MenuDiv>
-        </MenuLink>
-      </MenuWrapper>
-    </MainContainer>
-  );
-};
-
-Category.propTypes = {
-  CategoryStore: PropTypes.shape({
-    category: PropTypes.shape({
-      active: PropTypes.string,
-    }),
-    onActive: PropTypes.func,
-  }),
-};
-
-Category.defaultProps = {
-  CategoryStore: null,
-};
-
-export default inject('CategoryStore')(observer(Category));
+export default observer(Category);
