@@ -11,7 +11,7 @@ class ContentStore {
     text: '',
   };
 
-  @observable options = [{
+  @observable boards = [{
     value: 'notice',
     name: '공지사항',
   }, {
@@ -31,10 +31,10 @@ class ContentStore {
     name: '질문 & 답변',
   }];
 
-  @observable optionList;
+  @observable boardList;
 
   @action addPost = () => {
-    axios.post('api/addPost', {
+    axios.post('/api/addPost', {
       board: 'FREE',
       category: 'ALL',
       title: this.post.title,
@@ -56,7 +56,6 @@ class ContentStore {
   };
 
   @action onChangeValue = (event) => {
-    console.log(event);
     if (typeof event === 'string') {
       this.post = {
         ...this.post,
@@ -75,7 +74,7 @@ class ContentStore {
   };
 
   @action setPostBoardOptions = () => {
-    this.optionList = this.options.map((data) => (
+    this.boardList = this.boards.map((data) => (
       <option
         value={data.value}
         key={data.value}

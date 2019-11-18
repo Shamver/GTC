@@ -11,7 +11,9 @@ import {
 import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import avatar from '../../resources/images/avatar.png';
+import { observer } from 'mobx-react';
 import logo from '../../resources/images/logo.png';
+import useStores from '../../stores/useStores';
 
 const InputGroupWrapper = styled.div`
   width : 250px;
@@ -134,6 +136,7 @@ const Logo = styled.img`
 const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const { UtilStore } = useStores();
   return (
     <HeaderWrapper>
       <InH1>
@@ -205,7 +208,7 @@ const Header = () => {
                   </DropdownMenu>
                 </DropdownIn>
                 <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                  <DropdownToggleC caret>
+                  <DropdownToggleC caret onClick={UtilStore.toggleSign}>
                     <FontAwesomeIcon icon={faSignInAlt} /> 로그인
                   </DropdownToggleC>
                   <DropdownMenu>
@@ -228,4 +231,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default observer(Header);

@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import styled from 'styled-components';
 import {
@@ -10,13 +9,15 @@ import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { faChartBar } from '@fortawesome/free-regular-svg-icons';
 import { observer } from 'mobx-react';
 import * as PropTypes from 'prop-types';
-import { useStores } from '../../stores/useStores';
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import useStores from '../../stores/useStores';
 
 const PostingWrapper = styled.div`
   background-color : white;
   padding : 14px;
   
-  & .ql-container {
+  & .ck-content {
     height : 500px;
     font-family: 'NanumSquareRound',sans-serif !important;
   }
@@ -49,27 +50,25 @@ const SelectInput = styled(Input)`
 
 const Posting = (props) => {
   const { ContentStore } = useStores();
-  let { post } = ContentStore;
+  const { post } = ContentStore;
   const { match } = props;
   const { params } = match;
 
-
   useEffect(() => {
-    ContentStore.setPostBoard(params);
+    ContentStore.setPostBoard(params.board);
     ContentStore.setPostBoardOptions();
-    post = ContentStore.post;
-  }, ['']);
+  }, [ContentStore, params.board]);
 
   return (
     <PostingWrapper>
       <PostingHeader>
         <Col xs="12">
           <SelectInput type="select" name="board" value={post.board} onChange={ContentStore.onChangeValue}>
-            {ContentStore.optionList}
+            {ContentStore.boardList}
           </SelectInput>
         </Col>
         <Col xs="2">
-          <CustomCheckbox type="select" id="exampleCustomSelect" name="customSelect">
+          <CustomCheckbox type="select" id="bpCategory">
             <option value="FREE">자유</option>
           </CustomCheckbox>
         </Col>
@@ -77,11 +76,18 @@ const Posting = (props) => {
           <Input value={post.title} placeholder="제목을 입력해주세요..." onChange={ContentStore.onChangeValue} name="title" />
         </Col>
       </PostingHeader>
-      <ReactQuill value={post.text} onChange={ContentStore.onChangeValue} name="text" />
+      <CKEditor
+        editor={ClassicEditor}
+        data={post.text}
+        onChange={(event, editor) => {
+          const data = editor.getData();
+          ContentStore.onChangeValue(data);
+        }}
+      />
       <PostingFooter>
-        <CustomCheckbox type="checkbox" id="exampleCustomCheckbox" label="댓글 허용" />
-        <CustomCheckbox type="checkbox" id="exampleCustomCheckbox2" label="비밀글" />
-        <CustomCheckbox type="checkbox" id="exampleCustomCheckbox3" label="비밀 댓글 허용" />
+        <CustomCheckbox type="checkbox" id="bpReplyAllow" label="댓글 허용" />
+        <CustomCheckbox type="checkbox" id="bpSecret" label="비밀글" />
+        <CustomCheckbox type="checkbox" id="bpSecretReplyAllow" label="비밀 댓글 허용" />
       </PostingFooter>
       <PostingFooter>
         <MarginButton color="secondary">작성취소</MarginButton>
@@ -105,20 +111,20 @@ Posting.propTypes = {
       text: PropTypes.string,
       board: PropTypes.string,
     }),
+    setPostBoard: PropTypes.func,
+    setPostBoardOptions: PropTypes.func,
     onChangeValue: PropTypes.func,
     addPost: PropTypes.func,
-  }),
-  UtilStore: PropTypes.shape({
-    toggleAlert: PropTypes.func,
+    boardList: PropTypes.array,
   }),
   match: PropTypes.shape({
-    params: PropTypes.object,
+    params: PropTypes.shape({
+    }),
   }).isRequired,
 };
 
 Posting.defaultProps = {
   ContentStore: null,
-  UtilStore: null,
 };
 
-export default (observer(Posting));
+export default observer(Posting);

@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import Header from './components/layout/Header';
 import Content from './components/layout/Content';
 import Category from './components/layout/Category';
-import { useStores } from './stores/useStores';
+import useStores from './stores/useStores';
 
 const ContainerWrapper = styled.div`
   background-color: rgb(243, 242, 240);
@@ -50,9 +50,6 @@ const P5Col2 = styled(Col)`
 const App = ({ location, match, history }) => {
   const { RouteStore } = useStores();
   RouteStore.setRoute(location, match, history);
-  useEffect(() => {
-
-  });
 
   return (
     <ContainerWrapper>

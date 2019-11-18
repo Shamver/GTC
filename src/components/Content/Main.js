@@ -18,7 +18,7 @@ const PostList = styled.div`
   margin-bottom : 20px;
 `;
 
-const Main = ({ history }) => (
+const Main = () => (
   <Row>
     <Col xs="6">
       <Texth5>커뮤니티 자유게시판 <ArrowIcon icon={faChevronRight} /></Texth5>

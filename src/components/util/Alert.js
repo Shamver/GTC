@@ -4,7 +4,7 @@ import {
   Button, Modal, ModalHeader, ModalBody, ModalFooter,
 } from 'reactstrap';
 import * as Proptypes from 'prop-types';
-import { useStores } from '../../stores/useStores';
+import useStores from '../../stores/useStores';
 
 const Alert = () => {
   const { UtilStore } = useStores();
@@ -26,7 +26,6 @@ const Alert = () => {
 Alert.propTypes = {
   UtilStore: Proptypes.shape({
     alertToggle: Proptypes.bool,
-    toggleAlert: Proptypes.func,
     text: Proptypes.string,
   }),
 };
