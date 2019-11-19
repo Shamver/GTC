@@ -21,6 +21,7 @@ const MainContainer = styled(Container)`
 const MenuWrapper = styled(Row)`
   margin : 0 !important;
   background-color :white;
+  font-size : 15px;
 `;
 
 const MenuLink = styled(NavLink)`
@@ -63,7 +64,7 @@ const MenuRowTop = styled(MenuRow)`
   background-color: #DC3545;
   padding : 2.5px 0px !important;
   margin : 0px !important;
-  margin-bottom: 1px !important;
+  margin-bottom: 0px !important;
   &:hover {
     background-color: #DC3545;
     cursor: default;
@@ -73,10 +74,19 @@ const MenuRowTop = styled(MenuRow)`
 const MenuDivTop = styled(MenuDiv)`
   font-weight: bold; 
   color: white;
+  height : 32px;
 `;
 
 const FaiPink = styled(FontAwesomeIcon)`
   color: #f57c73;
+`;
+
+const TopText = styled.span`
+  vertical-align : text-top;
+`;
+
+const TopIcon = styled(FontAwesomeIcon)`
+  vertical-align : text-bottom;
 `;
 
 const Category = () => (
@@ -84,7 +94,8 @@ const Category = () => (
     <MenuWrapper>
       <MenuRowTop>
         <MenuDivTop>
-          <FontAwesomeIcon icon={faBars} className="fa-fw" />&nbsp;&nbsp; GTC 전체 메뉴
+          <TopIcon icon={faBars} className="fa-fw" />&nbsp;&nbsp;
+          <TopText>GTC 전체 메뉴</TopText>
         </MenuDivTop>
       </MenuRowTop>
       <MenuLink to="/notice" activeClassName="active">
