@@ -117,10 +117,9 @@ const Sign = () => {
           <div>
             <Deform>
               <RegisterForm className={UtilStore.signDisplay ? 'disable' : 'enable'}>
-                <FormInput type="text" placeholder="아이디" />
+                <FormInput type="text" placeholder="이메일 주소" />
                 <FormInput type="password" placeholder="비밀번호" />
                 <FormInput type="text" placeholder="이름" />
-                <FormInput type="text" placeholder="이메일 주소" />
                 <FormInputWithText type="text" placeholder="전화번호" />
                 <FormTextLeft>
                   GTC는 한 전화번호 명의로 하나의 계정만 생성할 수 있습니다. <br />
