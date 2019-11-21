@@ -3,6 +3,7 @@ import ContentStore from './ContentStore';
 import UtilStore from './UtilStore';
 import CategoryStore from './CategoryStore';
 import RouteStore from './RouteStore';
+import UserStore from './UserStore';
 
 export default {
   HeaderStore,
@@ -10,4 +11,5 @@ export default {
   UtilStore,
   CategoryStore,
   RouteStore,
+  UserStore,
 };

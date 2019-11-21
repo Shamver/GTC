@@ -1,7 +1,7 @@
 import React from 'react';
 import { observer } from 'mobx-react';
 import {
-  Modal, ModalHeader, ModalBody, FormText,
+  Modal, ModalHeader, ModalBody, FormText, Input,
 } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
@@ -27,6 +27,21 @@ const FormInput = styled.input`
   padding: 15px;
   box-sizing: border-box;
   font-size: 14px;
+`;
+
+const FormSelect = styled(Input)`
+  outline: 0 !important;
+  background: #f2f2f2 !important;
+  width: 100% !important;
+  border: 0 !important;
+  margin: 0 0 15px !important;
+  height : auto !important;
+  padding: 15px !important;
+  box-sizing: border-box !important;
+  font-size: 14px !important;
+  
+  &:focus {
+    outline: 0 !important;
 `;
 
 const FormInputWithText = styled(FormInput)`
@@ -108,7 +123,7 @@ const FormTextLeft = styled(FormText)`
 `;
 
 const Sign = () => {
-  const { UtilStore } = useStores();
+  const { UtilStore, UserStore } = useStores();
   return (
     <div>
       <Modal isOpen={UtilStore.signToggle} toggle={UtilStore.toggleSign}>
@@ -117,23 +132,43 @@ const Sign = () => {
           <div>
             <Deform>
               <RegisterForm className={UtilStore.signDisplay ? 'disable' : 'enable'}>
-                <FormInput type="text" placeholder="아이디" />
+                <FormInputWithText type="email" placeholder="이메일" />
+                <FormTextLeft>
+                  5~20자의 영문 소문자, 숫자와 특수기호(_),(-)만 사용 가능합니다.
+                </FormTextLeft>
                 <FormInput type="password" placeholder="비밀번호" />
-                <FormInput type="text" placeholder="이름" />
-                <FormInput type="text" placeholder="이메일 주소" />
+                <FormInputWithText type="password" placeholder="비밀번호 확인" />
+                <FormTextLeft>
+                  8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.
+                </FormTextLeft>
+                <FormInputWithText type="text" placeholder="이름" />
+                <FormTextLeft>
+                  실명을 입력해주세요.
+                </FormTextLeft>
+                <FormInputWithText type="text" placeholder="닉네임" />
+                <FormTextLeft>
+                  GTC에서 보여질 닉네임을 적어주세요.
+                </FormTextLeft>
                 <FormInputWithText type="text" placeholder="전화번호" />
                 <FormTextLeft>
                   GTC는 한 전화번호 명의로 하나의 계정만 생성할 수 있습니다. <br />
                   -를 빼고 입력해주세요. ex) 01012345678
                 </FormTextLeft>
-                <FormInput type="text" placeholder="생년월일" />
-                <FormInput type="text" placeholder="성별" />
+                <FormInputWithText type="date" />
+                <FormTextLeft>
+                  생년월일을 입력해주세요.
+                </FormTextLeft>
+                <FormSelect type="select">
+                  <option>성별 선택</option>
+                  <option>남자</option>
+                  <option>여자</option>
+                </FormSelect>
                 <FormInputWithText type="text" placeholder="그로우토피아 닉네임" />
                 <FormTextLeft>
                   가장 많이 사용하는 그로우토피아 닉네임을 적어주세요.
                   <br /> 거래 중 해당 닉네임으로 인증이 안될시 거래에 문제가 생길 수 있습니다.
                 </FormTextLeft>
-                <FormButton type="button">가입</FormButton>
+                <FormButton type="button" onClick={UserStore.register}>가입</FormButton>
                 <Message>계정이 있으신가요? &nbsp;
                   <MessageInner onClick={UtilStore.changeSign}>
                     로그인
@@ -163,6 +198,10 @@ Sign.propTypes = {
   UtilStore: Proptypes.shape({
     alertToggle: Proptypes.bool,
     text: Proptypes.string,
+    signDisplay: Proptypes.bool,
+    toggleSign: Proptypes.func,
+    signToggle: Proptypes.bool,
+    changeSign: Proptypes.func,
   }),
 };
 
