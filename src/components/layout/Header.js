@@ -14,6 +14,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import avatar from '../../resources/images/avatar.png';
 import logo from '../../resources/images/logo.png';
 
+import { observer } from 'mobx-react';
+import { useStores } from '../../stores/useStores';
+
+
 const InputGroupWrapper = styled.div`
   width : 250px;
   display : inline-block;
@@ -132,9 +136,12 @@ const Logo = styled.img`
   width : 100px;
 `;
 
-const Header = () => {
+const Header = observer(() => {
+  const { HeaderStore } = useStores();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const { onActive, dropdown } = HeaderStore;
+
   return (
     <HeaderWrapper>
       <InH1>
@@ -155,8 +162,8 @@ const Header = () => {
         <InnerContainer>
           <RowNoP>
             <ColNoP>
-              <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggleC caret>
+              <DropdownIn isOpen={dropdown.lately} toggle={onActive}>
+                <DropdownToggleC name="lately" caret>
                   <FontAwesomeIcon icon={faClock} /> 최근
                 </DropdownToggleC>
                 <DropdownMenu>
@@ -165,8 +172,8 @@ const Header = () => {
                   <DropdownItem30>룩삼</DropdownItem30>
                 </DropdownMenu>
               </DropdownIn>
-              <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggleC caret>
+              <DropdownIn isOpen={dropdown.favorite} toggle={onActive}>
+                <DropdownToggleC name="favorite" caret>
                   <FontAwesomeIcon icon={faStar} /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
@@ -175,8 +182,8 @@ const Header = () => {
                   <DropdownItem30>룩삼</DropdownItem30>
                 </DropdownMenu>
               </DropdownIn>
-              <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggleC caret>
+              <DropdownIn isOpen={dropdown.smile} toggle={onActive}>
+                <DropdownToggleC name="smile" caret>
                   <FontAwesomeIcon icon={faSmile} />
                 </DropdownToggleC>
                 <DropdownMenu>
@@ -199,8 +206,8 @@ const Header = () => {
                 <Link to="/tempPost"><FontAwesomeIcon icon={faPen} /></Link>
                 &nbsp;&nbsp;&nbsp;
                 <Link to="/tempBoard"><FontAwesomeIcon icon={faList} /></Link>
-                <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                  <DropdownToggleC caret>
+                <DropdownIn isOpen={dropdown.mail} toggle={onActive}>
+                  <DropdownToggleC name="mail" caret>
                     <FontAwesomeIcon icon={faEnvelope} />
                   </DropdownToggleC>
                   <DropdownMenu>
@@ -208,8 +215,8 @@ const Header = () => {
                     <DropdownItem30>쪽지</DropdownItem30>
                   </DropdownMenu>
                 </DropdownIn>
-                <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                  <DropdownToggleC caret>
+                <DropdownIn isOpen={dropdown.avatar} toggle={onActive}>
+                  <DropdownToggleC name="avatar" caret>
                     <Avatar src={avatar} />
                   </DropdownToggleC>
                   <DropdownMenu>
@@ -230,6 +237,6 @@ const Header = () => {
       </HeaderNavBarWrapper>
     </HeaderWrapper>
   );
-};
+});
 
 export default Header;
