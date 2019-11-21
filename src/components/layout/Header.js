@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
   InputGroup, InputGroupAddon, Button, Input,
@@ -6,14 +6,17 @@ import {
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import {
-  faSearch, faStar, faSignInAlt,
+  faSearch, faStar, faSignInAlt, faPen, faList,
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import avatar from '../../resources/images/avatar.png';
 import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
+
 import logo from '../../resources/images/logo.png';
 import useStores from '../../stores/useStores';
+
 
 const InputGroupWrapper = styled.div`
   width : 250px;
@@ -133,10 +136,10 @@ const Logo = styled.img`
   width : 100px;
 `;
 
-const Header = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
-  const { UtilStore } = useStores();
+const Header = observer(() => {
+  const { HeaderStore, UtilStore } = useStores();
+  const { onActive, dropdown } = HeaderStore;
+
   return (
     <HeaderWrapper>
       <InH1>
@@ -157,8 +160,8 @@ const Header = () => {
         <InnerContainer>
           <RowNoP>
             <ColNoP>
-              <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggleC caret>
+              <DropdownIn isOpen={dropdown.lately} toggle={onActive}>
+                <DropdownToggleC name="lately" caret>
                   <FontAwesomeIcon icon={faClock} /> 최근
                 </DropdownToggleC>
                 <DropdownMenu>
@@ -167,8 +170,8 @@ const Header = () => {
                   <DropdownItem30>룩삼</DropdownItem30>
                 </DropdownMenu>
               </DropdownIn>
-              <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggleC caret>
+              <DropdownIn isOpen={dropdown.favorite} toggle={onActive}>
+                <DropdownToggleC name="favorite" caret>
                   <FontAwesomeIcon icon={faStar} /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
@@ -177,8 +180,8 @@ const Header = () => {
                   <DropdownItem30>룩삼</DropdownItem30>
                 </DropdownMenu>
               </DropdownIn>
-              <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggleC caret>
+              <DropdownIn isOpen={dropdown.smile} toggle={onActive}>
+                <DropdownToggleC name="smile" caret>
                   <FontAwesomeIcon icon={faSmile} />
                 </DropdownToggleC>
                 <DropdownMenu>
@@ -198,17 +201,20 @@ const Header = () => {
             </ColCenter>
             <ColNoP>
               <SpanRight>
-                <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                  <DropdownToggleC caret>
-                    <FontAwesomeIcon icon={faEnvelope} /> 메신저
+                <Link to="/tempPost"><FontAwesomeIcon icon={faPen} /></Link>
+                &nbsp;&nbsp;&nbsp;
+                <Link to="/tempBoard"><FontAwesomeIcon icon={faList} /></Link>
+                <DropdownIn isOpen={dropdown.mail} toggle={onActive}>
+                  <DropdownToggleC name="mail" caret>
+                    <FontAwesomeIcon icon={faEnvelope} />
                   </DropdownToggleC>
                   <DropdownMenu>
                     <DropdownItem30>채팅</DropdownItem30>
                     <DropdownItem30>쪽지</DropdownItem30>
                   </DropdownMenu>
                 </DropdownIn>
-                <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                  <DropdownToggleC caret onClick={UtilStore.toggleSign}>
+                <DropdownIn isOpen={dropdown.login} toggle={onActive}>
+                  <DropdownToggleC name="login" caret onClick={UtilStore.toggleSign}>
                     <FontAwesomeIcon icon={faSignInAlt} /> 로그인
                   </DropdownToggleC>
                   <DropdownMenu>
@@ -229,6 +235,6 @@ const Header = () => {
       </HeaderNavBarWrapper>
     </HeaderWrapper>
   );
-};
+});
 
-export default observer(Header);
+export default Header;
