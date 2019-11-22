@@ -132,13 +132,46 @@ const DropdownItem30 = styled(DropdownItem)`
   padding-bottom : 0px;
 `;
 
+const DropdownItemTitle = styled(DropdownItem30)`
+  margin: 2px 0px 5px 0px !important;
+`;
+
 const Logo = styled.img`
   width : 100px;
 `;
 
+const ProfileNick = styled.span`
+  font-size: 15px !important;
+  font-weight: 700;
+`;
+
+const ProfileId = styled.span`
+  font-size: 11px !important;
+  color: gray;
+  margin-left: 5px;
+  padding-left: 5px;
+  border-left: 1px solid gray;
+`
+
 const Header = observer(() => {
   const { HeaderStore, UtilStore } = useStores();
   const { onActive, dropdown } = HeaderStore;
+
+  const user = {
+    id: 'thisIsId',
+    nickname: '닉네임',
+    profile_url: '../../resources/images/avatar.png',
+    point: 2424,
+  };
+
+  const arlet = [
+    {
+      title: '알림1',
+    },
+    {
+      title: '알림2',
+    },
+  ];
 
   return (
     <HeaderWrapper>
@@ -149,7 +182,7 @@ const Header = observer(() => {
         <InputGroupA>
           <Input placeholder="GTC 검색" />
           <InputGroupAddon addonType="append">
-            <Button color="danger">
+            <Button color="danger" onClick={UtilStore.toggleSign}>
               <FontAwesomeIcon icon={faSearch} />
             </Button>
           </InputGroupAddon>
@@ -201,9 +234,6 @@ const Header = observer(() => {
             </ColCenter>
             <ColNoP>
               <SpanRight>
-                <Link to="/tempPost"><FontAwesomeIcon icon={faPen} /></Link>
-                &nbsp;&nbsp;&nbsp;
-                <Link to="/tempBoard"><FontAwesomeIcon icon={faList} /></Link>
                 <DropdownIn isOpen={dropdown.mail} toggle={onActive}>
                   <DropdownToggleC name="mail" caret>
                     <FontAwesomeIcon icon={faEnvelope} />
@@ -218,11 +248,18 @@ const Header = observer(() => {
                     <Avatar src={avatar} />
                   </DropdownToggleC>
                   <DropdownMenu>
-                    <DropdownItem30>새로운 알림(0개)</DropdownItem30>
-                    <DropdownItem30>배진영</DropdownItem30>
-                    <DropdownItem30>199 포인트</DropdownItem30>
+                    <DropdownItemTitle>
+                      <ProfileNick>{user.nickname}</ProfileNick>
+
+                      <ProfileId>{user.id}</ProfileId>
+                    </DropdownItemTitle>
+                    <DropdownItem30>새로운 알림 ({arlet.length} 개)</DropdownItem30>
+                    <DropdownItem30>내 정보 관리</DropdownItem30>
+                    <DropdownItem30>{user.point} 포인트</DropdownItem30>
                     <DropdownItem30 divider />
-                    <DropdownItem30>설정</DropdownItem30>
+                    <Link to="/settings">
+                      <DropdownItem30>설정</DropdownItem30>
+                    </Link>
                     <DropdownItem30>글보관함</DropdownItem30>
                     <DropdownItem30>아이콘보관함</DropdownItem30>
                     <DropdownItem30>로그아웃</DropdownItem30>
