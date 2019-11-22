@@ -6,13 +6,13 @@ import {
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import {
-  faSearch, faStar, faSignInAlt, faPen, faList,
+  faSearch, faStar, faPen, faList,
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import avatar from '../../resources/images/avatar.png';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
+import avatar from '../../resources/images/avatar.png';
 
 import logo from '../../resources/images/logo.png';
 import useStores from '../../stores/useStores';
@@ -121,9 +121,9 @@ const SpanRight = styled.span`
   float : right;
 `;
 
-// const Avatar = styled.img`
-//   width : 28px;
-// `;
+const Avatar = styled.img`
+  width : 28px;
+`;
 
 const DropdownItem30 = styled(DropdownItem)`
   height : 27px;
@@ -213,9 +213,9 @@ const Header = observer(() => {
                     <DropdownItem30>쪽지</DropdownItem30>
                   </DropdownMenu>
                 </DropdownIn>
-                <DropdownIn isOpen={dropdown.login} toggle={onActive}>
-                  <DropdownToggleC name="login" caret onClick={UtilStore.toggleSign}>
-                    <FontAwesomeIcon icon={faSignInAlt} /> 로그인
+                <DropdownIn isOpen={dropdown.avatar} toggle={onActive}>
+                  <DropdownToggleC name="avatar" caret>
+                    <Avatar src={avatar} />
                   </DropdownToggleC>
                   <DropdownMenu>
                     <DropdownItem30>새로운 알림(0개)</DropdownItem30>
