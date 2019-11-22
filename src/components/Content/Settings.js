@@ -6,6 +6,8 @@ import classnames from 'classnames';
 
 // import useStores from '../../stores/useStores';
 
+// reactstrap에서 빼온 컴포넌트들 스타일드로 다 구분하여 만들기.
+
 const Settings = () => {
   const [activeTab, setActiveTab] = useState('1');
 
