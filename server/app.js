@@ -15,10 +15,12 @@ app.use(bodyParser.json());
 
 const api = require('./routes/index.js');
 const postApi = require('./routes/PostRouter.js');
+const userApi = require('./routes/UserRouter.js');
 
 app.use(bodyParser.json());
 app.use('/api', api);
 app.use('/api', postApi);
+app.use('/api', userApi);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

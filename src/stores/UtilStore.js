@@ -10,7 +10,7 @@ class UtilStore {
   @observable text = '';
 
   @action toggleAlert = (text) => {
-    this.text = text;
+    if (text && typeof text === 'string') this.text = text;
     this.alertToggle = !this.alertToggle;
   };
 

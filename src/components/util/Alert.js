@@ -10,13 +10,13 @@ const Alert = () => {
   const { UtilStore } = useStores();
   return (
     <div>
-      <Modal isOpen={UtilStore.alertToggle} toggle={() => { UtilStore.toggleAlert(''); }}>
-        <ModalHeader toggle={() => { UtilStore.toggleAlert(''); }}>알림</ModalHeader>
+      <Modal isOpen={UtilStore.alertToggle} toggle={UtilStore.toggleAlert}>
+        <ModalHeader toggle={UtilStore.toggleAlert}>알림</ModalHeader>
         <ModalBody>
           {UtilStore.text}
         </ModalBody>
         <ModalFooter>
-          <Button color="secondary" onClick={() => { UtilStore.toggleAlert(''); }}>닫기</Button>
+          <Button color="secondary" onClick={UtilStore.toggleAlert}>닫기</Button>
         </ModalFooter>
       </Modal>
     </div>
@@ -27,6 +27,7 @@ Alert.propTypes = {
   UtilStore: Proptypes.shape({
     alertToggle: Proptypes.bool,
     text: Proptypes.string,
+    toggleAlert: Proptypes.func,
   }),
 };
 

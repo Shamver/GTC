@@ -21,8 +21,8 @@ const Content = () => (
       {/* <Route exact path="/tempBoard" render={() => <PostList />} /> */}
       <Route exact path="/free" render={() => <Contents.FreeBoard />} />
     </Switch>
-    <Route path="/" render={() => <Alert />} />
-    <Route path="/" render={() => <Sign />} />
+    <Alert />
+    <Sign />
   </BorderedDiv>
 );
 
