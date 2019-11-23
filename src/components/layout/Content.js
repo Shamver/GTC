@@ -18,7 +18,6 @@ const Content = () => (
     <Switch>
       <Route exact path="/" render={() => <Main />} />
       <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
-      {/* <Route exact path="/tempBoard" render={() => <PostList />} /> */}
       <Route exact path="/free" render={() => <Contents.FreeBoard />} />
     </Switch>
     <Alert />
