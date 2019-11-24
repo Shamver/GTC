@@ -123,7 +123,6 @@ const FormTextLeft = styled(FormText)`
 `;
 
 const ModalNoScroll = styled(Modal)`
-    
 `;
 
 const Sign = () => {
