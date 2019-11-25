@@ -59,6 +59,7 @@ const Posting = (props) => {
     ContentStore.setPostBoardOptions();
   }, [ContentStore, params.board]);
 
+
   return (
     <PostingWrapper>
       <PostingHeader>
