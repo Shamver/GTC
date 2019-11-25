@@ -40,4 +40,39 @@ router.post('/register', (req, res) => {
   });
 });
 
+router.post('/login', (req, res) => {
+  const data = req.body;
+  const query = `SELECT U_EMAIL AS email, U_NAME AS name, U_GT_NICKNAME AS gtNickname, U_NICKNAME AS nickname FROM GTC_USER
+    WHERE U_EMAIL='${data.email}'
+    AND U_PASSWORD='${data.password}'`;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+    if (rows.length >= 1) {
+      req.session.user = {
+        email: rows[0].email,
+        name: rows[0].name,
+        nickname: rows[0].nickname,
+        gtNickname: rows[0].gtNickname,
+      };
+      res.send(rows);
+    } else {
+      res.send(rows);
+    }
+  });
+});
+
+router.post('/sessionCheck', (req, res) => {
+  if (req.session.user) {
+    res.send({
+      type: 'LOGGED',
+      userInfo: req.session.user,
+    });
+  } else {
+    res.send({
+      type: 'NO_SESSION',
+    });
+  }
+});
+
 module.exports = router;

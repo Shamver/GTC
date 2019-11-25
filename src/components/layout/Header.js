@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
   InputGroup, InputGroupAddon, Button, Input,
@@ -6,12 +6,13 @@ import {
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import {
-  faSearch, faStar, faSignInAlt,
+  faSearch, faStar, faSignInAlt, faUserPlus, faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
+import { faClock, faSmile } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import avatar from '../../resources/images/avatar.png';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
 import logo from '../../resources/images/logo.png';
 import useStores from '../../stores/useStores';
 
@@ -133,10 +134,50 @@ const Logo = styled.img`
   width : 100px;
 `;
 
+const LoginButton = styled(Button)`
+  background-color : rgba(0,0,0,0) !important;
+  color : black !important;
+  border : 0 !important;
+  
+  &:focus {
+    outline : 0 !important;
+    box-shadow : none !important;
+  }
+`;
+
+const HeaderSessionComp = observer(() => {
+  const { UserStore, UtilStore } = useStores();
+  useEffect(() => {
+  }, [UserStore.userSessionData]);
+  if (!UserStore.userSessionData) {
+    return (
+      <>
+        <LoginButton onClick={UtilStore.toggleSign}>
+          <FontAwesomeIcon icon={faSignInAlt} />
+          &nbsp;
+          로그인
+        </LoginButton>
+        <LoginButton onClick={UtilStore.toggleSign}>
+          <FontAwesomeIcon icon={faUserPlus} />
+          &nbsp;
+          회원가입
+        </LoginButton>
+      </>
+    );
+  }
+
+  return (
+    <LoginButton>
+      <FontAwesomeIcon icon={faSignOutAlt} />
+      &nbsp;
+      로그아웃
+    </LoginButton>
+  );
+});
+
 const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const toggle = () => setDropdownOpen((prevState) => !prevState);
-  const { UtilStore } = useStores();
   return (
     <HeaderWrapper>
       <InH1>
@@ -198,30 +239,31 @@ const Header = () => {
             </ColCenter>
             <ColNoP>
               <SpanRight>
-                <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                  <DropdownToggleC caret>
-                    <FontAwesomeIcon icon={faEnvelope} /> 메신저
-                  </DropdownToggleC>
-                  <DropdownMenu>
-                    <DropdownItem30>채팅</DropdownItem30>
-                    <DropdownItem30>쪽지</DropdownItem30>
-                  </DropdownMenu>
-                </DropdownIn>
-                <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                  <DropdownToggleC caret onClick={UtilStore.toggleSign}>
-                    <FontAwesomeIcon icon={faSignInAlt} /> 로그인
-                  </DropdownToggleC>
-                  <DropdownMenu>
-                    <DropdownItem30>새로운 알림(0개)</DropdownItem30>
-                    <DropdownItem30>배진영</DropdownItem30>
-                    <DropdownItem30>199 포인트</DropdownItem30>
-                    <DropdownItem30 divider />
-                    <DropdownItem30>설정</DropdownItem30>
-                    <DropdownItem30>글보관함</DropdownItem30>
-                    <DropdownItem30>아이콘보관함</DropdownItem30>
-                    <DropdownItem30>로그아웃</DropdownItem30>
-                  </DropdownMenu>
-                </DropdownIn>
+                {/* <DropdownIn isOpen={dropdownOpen} toggle={toggle}> */}
+                {/*  <DropdownToggleC caret> */}
+                {/*    <FontAwesomeIcon icon={faEnvelope} /> 메신저 */}
+                {/*  </DropdownToggleC> */}
+                {/*  <DropdownMenu> */}
+                {/*    <DropdownItem30>채팅</DropdownItem30> */}
+                {/*    <DropdownItem30>쪽지</DropdownItem30> */}
+                {/*  </DropdownMenu> */}
+                {/* </DropdownIn> */}
+                {/* <DropdownIn isOpen={dropdownOpen} toggle={toggle}> */}
+                {/*  <DropdownToggleC caret onClick={UtilStore.toggleSign}> */}
+                {/*    <FontAwesomeIcon icon={faSignInAlt} /> 로그인 */}
+                {/*  </DropdownToggleC> */}
+                {/*  <DropdownMenu> */}
+                {/*    <DropdownItem30>새로운 알림(0개)</DropdownItem30> */}
+                {/*    <DropdownItem30>배진영</DropdownItem30> */}
+                {/*    <DropdownItem30>199 포인트</DropdownItem30> */}
+                {/*    <DropdownItem30 divider /> */}
+                {/*    <DropdownItem30>설정</DropdownItem30> */}
+                {/*    <DropdownItem30>글보관함</DropdownItem30> */}
+                {/*    <DropdownItem30>아이콘보관함</DropdownItem30> */}
+                {/*    <DropdownItem30>로그아웃</DropdownItem30> */}
+                {/*  </DropdownMenu> */}
+                {/* </DropdownIn> */}
+                <HeaderSessionComp />
               </SpanRight>
             </ColNoP>
           </RowNoP>
@@ -229,6 +271,12 @@ const Header = () => {
       </HeaderNavBarWrapper>
     </HeaderWrapper>
   );
+};
+
+HeaderSessionComp.propTypes = {
+  UserStore: Proptypes.shape({
+    userSessionData: Proptypes.object,
+  }),
 };
 
 export default observer(Header);

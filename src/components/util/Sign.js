@@ -159,8 +159,8 @@ const Sign = () => {
               </FormTextLeft>
               <FormSelect type="select" onChange={UserStore.onRegisterChangeValue} name="gender">
                 <option value="">성별 선택</option>
-                <option value="male">남자</option>
-                <option value="female">여자</option>
+                <option value="MALE">남자</option>
+                <option value="FEMALE">여자</option>
               </FormSelect>
               <FormInputWithText type="text" onChange={UserStore.onRegisterChangeValue} name="gtNickname" placeholder="그로우토피아 닉네임" />
               <FormTextLeft>
@@ -175,9 +175,9 @@ const Sign = () => {
               </Message>
             </RegisterForm>
             <LoginForm className={UtilStore.signDisplay ? 'enable' : 'disable'}>
-              <FormInput type="text" placeholder="아이디" />
-              <FormInput type="password" placeholder="비밀번호" />
-              <FormButton type="button">로그인</FormButton>
+              <FormInput type="text" name="email" onChange={UserStore.onLoginChangeValue} placeholder="이메일" />
+              <FormInput type="password" name="password" onChange={UserStore.onLoginChangeValue} placeholder="비밀번호" />
+              <FormButton type="button" onClick={UserStore.login}>로그인</FormButton>
               <Message>
                 계정이 없으신가요? &nbsp;
                 <MessageInner onClick={UtilStore.changeSign}>
@@ -203,6 +203,8 @@ Sign.propTypes = {
   }),
   UserStore: Proptypes.shape({
     onRegisterChangeValue: Proptypes.func,
+    onLoginChangeValue: Proptypes.func,
+    login: Proptypes.func,
   }),
 };
 
