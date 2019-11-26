@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  TabContent, TabPane, Nav, NavItem, NavLink, Card, Button, CardTitle, CardText, Row, Col,
+  TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Table, Input, Button,
 } from 'reactstrap';
 import classnames from 'classnames';
 import styled from 'styled-components';
@@ -22,12 +22,50 @@ const NavLinkBtn = styled(NavLink)`
   
   &.active {
     cursor: default;
+    background-color: #dbdbdb !important;
+    border: 0.5px solid #c9c9c9 !important;
   }
 `;
+
+const CheckboxTh = styled.th`
+  text-align: center; /* center checkbox horizontally */
+  vertical-align: middle; /* center checkbox vertically */
+`;
+
+const ListTable = styled(Table)`
+  border: 1px solid #c9c9c9 !important;
+`;
+
+const TableBody = (data) => (
+  <tr>
+    <CheckboxTh scope="row">
+      <Input type="checkbox" name={data.id} />
+    </CheckboxTh>
+    <td>{data.name}</td>
+    <td>{data.date}</td>
+  </tr>
+);
 
 const Settings = () => {
   const { SettingStore } = useStores();
   const { activeTab } = SettingStore;
+
+  const tempData = {
+    ignoreLists: [
+      {
+        id: 1,
+        name: 'holy Bible',
+        date: '20191234',
+      },
+      {
+        id: 2,
+        name: 'SSSHIT',
+        date: '20124823',
+      },
+    ],
+  };
+
+  const TableData = tempData.ignoreLists.map((v) => (TableBody(v)));
 
   return (
     <div>
@@ -50,19 +88,43 @@ const Settings = () => {
             즐겨찾기 목록
           </NavLinkBtn>
         </NavItem>
+        <NavItem>
+          <NavLinkBtn
+            className={classnames({ active: activeTab === 'closeAccount' })}
+            onClick={SettingStore.onActive}
+            name="closeAccount"
+          >
+            회원탈퇴
+          </NavLinkBtn>
+        </NavItem>
       </Nav>
       <TabContent activeTab={activeTab}>
         <TabPane tabId="ignore">
-          <Row>
-            <Col sm="12">
-              <h4>차단 목록 탭이야</h4>
-            </Col>
-          </Row>
+          <ListTable size="sm">
+            <thead>
+              <tr>
+                <th>선택</th>
+                <th>차단 닉네임</th>
+                <th>차단 일자</th>
+              </tr>
+            </thead>
+            <tbody>
+              {TableData}
+            </tbody>
+          </ListTable>
+          <Button color="danger">삭제하기</Button>
         </TabPane>
         <TabPane tabId="favorite">
           <Row>
             <Col sm="12">
               <h4>즐겨찾기 목록 탭이야</h4>
+            </Col>
+          </Row>
+        </TabPane>
+        <TabPane tabId="closeAccount">
+          <Row>
+            <Col sm="12">
+              <h4>회원탈퇴 탭이야</h4>
             </Col>
           </Row>
         </TabPane>
