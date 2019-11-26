@@ -19,6 +19,7 @@ const Content = () => (
       <Route exact path="/" render={() => <Main />} />
       <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
       <Route exact path="/free" render={() => <Contents.FreeBoard />} />
+      <Route exact path="/posts/:postId" render={() => <Contents.FreeBoard />} />
     </Switch>
     <Alert />
     <Sign />
