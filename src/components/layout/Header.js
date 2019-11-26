@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {
   InputGroup, InputGroupAddon, Button, Input,
@@ -6,15 +6,16 @@ import {
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import {
-  faSearch, faStar, faSignInAlt, faUserPlus, faSignOutAlt,
+  faSearch, faStar, faSignInAlt, faUserPlus, faSignOutAlt, faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import avatar from '../../resources/images/avatar.png';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
+import avatar from '../../resources/images/avatar.png';
 import logo from '../../resources/images/logo.png';
 import useStores from '../../stores/useStores';
+
 
 const InputGroupWrapper = styled.div`
   width : 250px;
@@ -81,6 +82,10 @@ const DropdownToggleC = styled(DropdownToggle)`
   }
 `;
 
+const AvatarDropdownToggleC = styled(DropdownToggleC)`
+  padding : 5px 13px 7px 3px !important;
+`;
+
 const InnerContainer = styled(Container)`
   margin : 0 !important;
   padding : 0 3px !important;
@@ -119,9 +124,9 @@ const SpanRight = styled.span`
   float : right;
 `;
 
-// const Avatar = styled.img`
-//   width : 28px;
-// `;
+const Avatar = styled.img`
+  width : 28px;
+`;
 
 const DropdownItem30 = styled(DropdownItem)`
   height : 27px;
@@ -146,7 +151,7 @@ const LoginButton = styled(Button)`
 `;
 
 const HeaderSessionComp = observer(() => {
-  const { UserStore, UtilStore } = useStores();
+  const { UserStore, UtilStore, HeaderStore } = useStores();
   useEffect(() => {
   }, [UserStore.userSessionData]);
   if (!UserStore.userSessionData) {
@@ -166,18 +171,43 @@ const HeaderSessionComp = observer(() => {
     );
   }
 
+  const { onActive, dropdown } = HeaderStore;
   return (
-    <LoginButton onClick={UserStore.logout}>
-      <FontAwesomeIcon icon={faSignOutAlt} />
-      &nbsp;
-      로그아웃
-    </LoginButton>
+    <>
+      <DropdownIn isOpen={dropdown.mail} toggle={onActive}>
+        <DropdownToggleC name="mail" caret>
+          <FontAwesomeIcon icon={faEnvelope} />
+        </DropdownToggleC>
+        <DropdownMenu>
+          <DropdownItem30>채팅</DropdownItem30>
+          <DropdownItem30>쪽지</DropdownItem30>
+        </DropdownMenu>
+      </DropdownIn>
+      <DropdownIn isOpen={dropdown.avatar} toggle={onActive}>
+        <AvatarDropdownToggleC name="avatar" caret>
+          <Avatar src={avatar} />
+        </AvatarDropdownToggleC>
+        <DropdownMenu>
+          <DropdownItem30>새로운 알림(0개)</DropdownItem30>
+          <DropdownItem30>배진영</DropdownItem30>
+          <DropdownItem30>199 포인트</DropdownItem30>
+          <DropdownItem30 divider />
+          <DropdownItem30>설정</DropdownItem30>
+          <DropdownItem30>글보관함</DropdownItem30>
+          <DropdownItem30>아이콘보관함</DropdownItem30>
+          <DropdownItem30 onClick={UserStore.logout}>
+            <FontAwesomeIcon icon={faSignOutAlt} />
+            &nbsp; 로그아웃
+          </DropdownItem30>
+        </DropdownMenu>
+      </DropdownIn>
+    </>
   );
 });
 
 const Header = () => {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
+  const { HeaderStore } = useStores();
+  const { onActive, dropdown } = HeaderStore;
   return (
     <HeaderWrapper>
       <InH1>
@@ -198,8 +228,8 @@ const Header = () => {
         <InnerContainer>
           <RowNoP>
             <ColNoP>
-              <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggleC caret>
+              <DropdownIn isOpen={dropdown.lately} toggle={onActive}>
+                <DropdownToggleC name="lately" caret>
                   <FontAwesomeIcon icon={faClock} /> 최근
                 </DropdownToggleC>
                 <DropdownMenu>
@@ -208,8 +238,8 @@ const Header = () => {
                   <DropdownItem30>룩삼</DropdownItem30>
                 </DropdownMenu>
               </DropdownIn>
-              <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggleC caret>
+              <DropdownIn isOpen={dropdown.favorite} toggle={onActive}>
+                <DropdownToggleC name="favorite" caret>
                   <FontAwesomeIcon icon={faStar} /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
@@ -218,8 +248,8 @@ const Header = () => {
                   <DropdownItem30>룩삼</DropdownItem30>
                 </DropdownMenu>
               </DropdownIn>
-              <DropdownIn isOpen={dropdownOpen} toggle={toggle}>
-                <DropdownToggleC caret>
+              <DropdownIn isOpen={dropdown.smile} toggle={onActive}>
+                <DropdownToggleC name="smile" caret>
                   <FontAwesomeIcon icon={faSmile} />
                 </DropdownToggleC>
                 <DropdownMenu>
@@ -239,30 +269,6 @@ const Header = () => {
             </ColCenter>
             <ColNoP>
               <SpanRight>
-                {/* <DropdownIn isOpen={dropdownOpen} toggle={toggle}> */}
-                {/*  <DropdownToggleC caret> */}
-                {/*    <FontAwesomeIcon icon={faEnvelope} /> 메신저 */}
-                {/*  </DropdownToggleC> */}
-                {/*  <DropdownMenu> */}
-                {/*    <DropdownItem30>채팅</DropdownItem30> */}
-                {/*    <DropdownItem30>쪽지</DropdownItem30> */}
-                {/*  </DropdownMenu> */}
-                {/* </DropdownIn> */}
-                {/* <DropdownIn isOpen={dropdownOpen} toggle={toggle}> */}
-                {/*  <DropdownToggleC caret onClick={UtilStore.toggleSign}> */}
-                {/*    <FontAwesomeIcon icon={faSignInAlt} /> 로그인 */}
-                {/*  </DropdownToggleC> */}
-                {/*  <DropdownMenu> */}
-                {/*    <DropdownItem30>새로운 알림(0개)</DropdownItem30> */}
-                {/*    <DropdownItem30>배진영</DropdownItem30> */}
-                {/*    <DropdownItem30>199 포인트</DropdownItem30> */}
-                {/*    <DropdownItem30 divider /> */}
-                {/*    <DropdownItem30>설정</DropdownItem30> */}
-                {/*    <DropdownItem30>글보관함</DropdownItem30> */}
-                {/*    <DropdownItem30>아이콘보관함</DropdownItem30> */}
-                {/*    <DropdownItem30>로그아웃</DropdownItem30> */}
-                {/*  </DropdownMenu> */}
-                {/* </DropdownIn> */}
                 <HeaderSessionComp />
               </SpanRight>
             </ColNoP>
