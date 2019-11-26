@@ -6,9 +6,9 @@ import {
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import {
-  faSearch, faStar, faSignInAlt, faUserPlus, faSignOutAlt, faEnvelope,
+  faSearch, faStar, faSignInAlt, faUserPlus, faSignOutAlt,
 } from '@fortawesome/free-solid-svg-icons';
-import { faClock, faSmile } from '@fortawesome/free-regular-svg-icons';
+import { faClock, faSmile, faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
