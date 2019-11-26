@@ -12,10 +12,10 @@ import { faClock, faSmile } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import avatar from '../../resources/images/avatar.png';
 import logo from '../../resources/images/logo.png';
 import useStores from '../../stores/useStores';
-
 
 const InputGroupWrapper = styled.div`
   width : 250px;
@@ -83,7 +83,7 @@ const DropdownToggleC = styled(DropdownToggle)`
 `;
 
 const AvatarDropdownToggleC = styled(DropdownToggleC)`
-  padding : 5px 13px 7px 3px !important;
+  padding : 5px 13px 7px 10px !important;
 `;
 
 const InnerContainer = styled(Container)`
@@ -126,6 +126,7 @@ const SpanRight = styled.span`
 
 const Avatar = styled.img`
   width : 28px;
+  border-radius: 3px;
 `;
 
 const DropdownItem30 = styled(DropdownItem)`
@@ -210,9 +211,11 @@ const Header = () => {
   const { onActive, dropdown } = HeaderStore;
   return (
     <HeaderWrapper>
-      <InH1>
-        <Logo src={logo} alt="" />
-      </InH1>
+      <Link to="/">
+        <InH1>
+          <Logo src={logo} alt="" />
+        </InH1>
+      </Link>
       <InputGroupWrapper>
         <InputGroupA>
           <Input placeholder="GTC 검색" />
