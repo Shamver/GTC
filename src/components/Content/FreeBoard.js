@@ -19,4 +19,4 @@ const FreeBoard = () => {
   );
 };
 
-export default FreeBoard; ㅁ
+export default FreeBoard;

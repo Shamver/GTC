@@ -167,7 +167,7 @@ const HeaderSessionComp = observer(() => {
   }
 
   return (
-    <LoginButton>
+    <LoginButton onClick={UserStore.logout}>
       <FontAwesomeIcon icon={faSignOutAlt} />
       &nbsp;
       로그아웃
@@ -276,6 +276,7 @@ const Header = () => {
 HeaderSessionComp.propTypes = {
   UserStore: Proptypes.shape({
     userSessionData: Proptypes.object,
+    logout: Proptypes.func,
   }),
 };
 

@@ -75,4 +75,11 @@ router.post('/sessionCheck', (req, res) => {
   }
 });
 
+router.post('/logout', (req, res) => {
+  delete req.session.user;
+  res.send({
+    type: 'LOGOUT',
+  });
+});
+
 module.exports = router;

@@ -64,13 +64,29 @@ class UserStore {
     return true;
   };
 
+  @action logout = () => {
+    axios.post('/api/logout', {})
+      .then((response) => {
+        if (response.data.type === 'LOGOUT') {
+          UtilStore.toggleAlert('로그아웃이 완료되었습니다.');
+          this.sessionCheck();
+        }
+      })
+      .catch((response) => { console.log(response); });
+
+    return true;
+  };
+
   @action sessionCheck = () => {
     axios.post('/api/sessionCheck', {})
       .then((response) => {
         if (response.data) {
           if (response.data.type === 'LOGGED') {
             this.userSessionData = response.data.userInfo;
+          } else {
+            this.userSessionData = '';
           }
+
         }
       })
       .catch((response) => { console.log(response); });
