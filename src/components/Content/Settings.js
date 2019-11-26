@@ -4,6 +4,9 @@ import {
 } from 'reactstrap';
 import classnames from 'classnames';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
+
+import useStores from '../../stores/useStores';
 
 // import useStores from '../../stores/useStores';
 
@@ -16,65 +19,50 @@ const NavLinkBtn = styled(NavLink)`
   &:hover {
     cursor: pointer;
   }
-  &.active, &:hover {
+  
+  &.active {
     cursor: default;
   }
 `;
 
 const Settings = () => {
-  const [activeTab, setActiveTab] = useState('1');
-
-  const toggle = (tab) => {
-    if (activeTab !== tab) setActiveTab(tab);
-  }
+  const { SettingStore } = useStores();
+  const { activeTab } = SettingStore;
 
   return (
     <div>
       <Nav tabs>
         <NavItem>
           <NavLinkBtn
-            className={classnames({ active: activeTab === '1' })}
-            onClick={() => { toggle('1'); }}
+            className={classnames({ active: activeTab === 'ignore' })}
+            onClick={SettingStore.onActive}
+            name="ignore"
           >
-            Tab1
+            차단 목록
           </NavLinkBtn>
         </NavItem>
         <NavItem>
           <NavLinkBtn
-            className={classnames({ active: activeTab === '2' })}
-            onClick={() => { toggle('2'); }}
+            className={classnames({ active: activeTab === 'favorite' })}
+            onClick={SettingStore.onActive}
+            name="favorite"
           >
-            Moar Tabs
+            즐겨찾기 목록
           </NavLinkBtn>
         </NavItem>
       </Nav>
       <TabContent activeTab={activeTab}>
-        <TabPane tabId="1">
+        <TabPane tabId="ignore">
           <Row>
             <Col sm="12">
-              <h4>Tab 1 Contents</h4>
+              <h4>차단 목록 탭이야</h4>
             </Col>
           </Row>
         </TabPane>
-        <TabPane tabId="2">
+        <TabPane tabId="favorite">
           <Row>
-            <Col sm="6">
-              <Card body>
-                <CardTitle>Special Title Treatment</CardTitle>
-                <CardText>
-                  With supporting text below as a natural lead-in to additional content.
-                </CardText>
-                <Button>Go somewhere</Button>
-              </Card>
-            </Col>
-            <Col sm="6">
-              <Card body>
-                <CardTitle>Special Title Treatment</CardTitle>
-                <CardText>
-                  With supporting text below as a natural lead-in to additional content.
-                </CardText>
-                <Button>Go somewhere</Button>
-              </Card>
+            <Col sm="12">
+              <h4>즐겨찾기 목록 탭이야</h4>
             </Col>
           </Row>
         </TabPane>
@@ -83,4 +71,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default observer(Settings);
