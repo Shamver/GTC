@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'reactstrap';
 import * as Proptypes from 'prop-types';
+import { observer } from 'mobx-react';
 import Header from './components/layout/Header';
 import Content from './components/layout/Content';
 import Category from './components/layout/Category';
@@ -48,9 +49,9 @@ const P5Col2 = styled(Col)`
 `;
 
 const App = ({ location, match, history }) => {
-  const { RouteStore } = useStores();
+  const { RouteStore, UserStore } = useStores();
   RouteStore.setRoute(location, match, history);
-
+  UserStore.sessionCheck();
   return (
     <ContainerWrapper>
       <Container>
@@ -72,6 +73,18 @@ App.propTypes = {
   location: Proptypes.shape({}).isRequired,
   match: Proptypes.shape({}).isRequired,
   history: Proptypes.shape({}).isRequired,
+  RouteStore: Proptypes.shape({
+    setRoute: Proptypes.func,
+  }),
+  UserStore: Proptypes.shape({
+    sessionCheck: Proptypes.func,
+  }),
 };
 
-export default App;
+App.defaultProps = {
+  RouteStore: null,
+  UserStore: null,
+};
+
+
+export default observer(App);
