@@ -1,4 +1,7 @@
 import { observable, action } from 'mobx';
+import axios from 'axios';
+import RouteStore from "./RouteStore";
+import UtilStore from "./UtilStore";
 
 class SettingStore {
   @observable activeTab = 'ignore';
@@ -23,6 +26,24 @@ class SettingStore {
 
     this.ignoreList = tempData;
   });
+
+  // @action getDateIgnore = () => {
+  //   axios.post('/api/setting/getIgnore', {
+  //     user_id: 1,
+  //   })
+  //     .then((response) => {
+  //       if (response.data) {
+  //         RouteStore.history.push('/free');
+  //         UtilStore.toggleAlert('글이 정상적으로 등록되었습니다.');
+  //         this.post = {
+  //           title: '',
+  //           text: '',
+  //         };
+  //       }
+  //     })
+  //     .catch((response) => { console.log(response); });
+  // };
+
 
   @action onActive = ((e) => {
     const { name } = e.target;
