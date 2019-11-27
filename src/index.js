@@ -15,6 +15,7 @@ ReactDOM.render((
     CategoryStore={stores.CategoryStore}
     RouteStore={stores.RouteStore}
     UserStore={stores.UserStore}
+    SettingStore={stores.SettingStore}
   >
     <Router>
       <Route component={App} />

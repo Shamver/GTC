@@ -209,6 +209,7 @@ const HeaderSessionComp = observer(() => {
 const Header = () => {
   const { HeaderStore } = useStores();
   const { onActive, dropdown } = HeaderStore;
+
   return (
     <HeaderWrapper>
       <Link to="/">

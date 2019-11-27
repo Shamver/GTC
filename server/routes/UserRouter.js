@@ -12,6 +12,7 @@ router.post('/register', (req, res) => {
     WHERE U_TEL='${data.tel}'
     or U_EMAIL='${data.email}'`;
 
+  console.log(query);
   conn.query(query, (err, rows) => {
     if (err) throw err;
     if (rows[0].count && rows[0].count >= 1) {
@@ -31,6 +32,7 @@ router.post('/register', (req, res) => {
         sysdate()
         )
       `;
+
       conn.query(query, (err2, rows2) => {
         if (err2) throw err2;
         console.log(rows2);
