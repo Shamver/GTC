@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import {
-  TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Table, Input, Button,
+  TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Table, Input, Button, Container
 } from 'reactstrap';
 import classnames from 'classnames';
 import styled from 'styled-components';
@@ -10,9 +10,11 @@ import useStores from '../../stores/useStores';
 
 // import useStores from '../../stores/useStores';
 
-// reactstrap에서 빼온 컴포넌트들 스타일드로 다 구분하여 만들기.
+//
 
-// 20191126 hover, active 구분해서 커서 나오게 수정.
+const MainContainer = styled(Container)`
+  background-color: white;
+`;
 
 const NavLinkBtn = styled(NavLink)`
   
@@ -36,10 +38,10 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
-const TableBody = (data) => (
-  <tr>
+const TableBody = (data, onChangeIgnore) => (
+  <tr key={data.id}>
     <CheckboxTh scope="row">
-      <Input type="checkbox" name={data.id} />
+      <Input type="checkbox" name={data.id} onClick={onChangeIgnore} />
     </CheckboxTh>
     <td>{data.name}</td>
     <td>{data.date}</td>
@@ -47,28 +49,22 @@ const TableBody = (data) => (
 );
 
 const Settings = () => {
-  const { SettingStore } = useStores();
-  const { activeTab } = SettingStore;
+  const { SettingStore, UtilStore } = useStores();
+  const {
+    activeTab, ignoreList, onChangeIgnore, getDataIgnore, onDeleteIgnore
+  } = SettingStore;
+  const {
+    toggleAlert
+  } = UtilStore;
 
-  const tempData = {
-    ignoreLists: [
-      {
-        id: 1,
-        name: 'holy Bible',
-        date: '20191234',
-      },
-      {
-        id: 2,
-        name: 'SSSHIT',
-        date: '20124823',
-      },
-    ],
-  };
+  useEffect(() => {
+    getDataIgnore();
+  }, [])
 
-  const TableData = tempData.ignoreLists.map((v) => (TableBody(v)));
+  const TableData = ignoreList.map((v) => (TableBody(v, onChangeIgnore)));
 
   return (
-    <div>
+    <MainContainer>
       <Nav tabs>
         <NavItem>
           <NavLinkBtn
@@ -112,7 +108,7 @@ const Settings = () => {
               {TableData}
             </tbody>
           </ListTable>
-          <Button color="danger">삭제하기</Button>
+          <Button color="danger" onClick={onDeleteIgnore}>삭제하기</Button>
         </TabPane>
         <TabPane tabId="favorite">
           <Row>
@@ -129,7 +125,7 @@ const Settings = () => {
           </Row>
         </TabPane>
       </TabContent>
-    </div>
+    </MainContainer>
   );
 };
 

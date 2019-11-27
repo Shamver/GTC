@@ -1,15 +1,52 @@
 import { observable, action } from 'mobx';
 
 class SettingStore {
-    @observable activeTab = 'ignore';
+  @observable activeTab = 'ignore';
 
-    @action onActive = ((e) => {
-      const { name } = e.target;
+  @observable ignoreList = [];
 
-      if (this.activeTab !== name) {
-        this.activeTab = name;
-      }
-    });
+  @action getDataIgnore = (() => {
+    const tempData = [
+      {
+        id: 1,
+        name: 'holy Bible',
+        date: '20191234',
+        checked: false,
+      },
+      {
+        id: 2,
+        name: 'SSSHIT',
+        date: '20124823',
+        checked: false,
+      },
+    ];
+
+    this.ignoreList = tempData;
+  });
+
+  @action onActive = ((e) => {
+    const { name } = e.target;
+
+    if (this.activeTab !== name) {
+      this.activeTab = name;
+    }
+  });
+
+  @action onChangeIgnore = ((e) => {
+    const { name } = e.target;
+
+    this.ignoreList = this.ignoreList.map(
+      (data) => (data.id === Number.parseInt(name, 10)
+        ? { ...data, checked: !data.checked }
+        : data),
+    );
+  });
+
+  @action onDeleteIgnore = (() => {
+    this.ignoreList = this.ignoreList.filter((item) => item.checked === false);
+
+
+  });
 }
 
 export default new SettingStore();
