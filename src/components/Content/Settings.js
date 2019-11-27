@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Table, Input, Button, Container
+  TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Table, CustomInput, Button, Container,
 } from 'reactstrap';
 import classnames from 'classnames';
 import styled from 'styled-components';
@@ -29,9 +29,10 @@ const NavLinkBtn = styled(NavLink)`
   }
 `;
 
-const CheckboxTh = styled.th`
-  text-align: center; /* center checkbox horizontally */
-  vertical-align: middle; /* center checkbox vertically */
+const TableTh = styled.th`
+`;
+
+const TableTd = styled.td`
 `;
 
 const ListTable = styled(Table)`
@@ -40,11 +41,11 @@ const ListTable = styled(Table)`
 
 const TableBody = (data, onChangeIgnore) => (
   <tr key={data.id}>
-    <CheckboxTh scope="row">
-      <Input type="checkbox" name={data.id} onClick={onChangeIgnore} />
-    </CheckboxTh>
-    <td>{data.name}</td>
-    <td>{data.date}</td>
+    <TableTh scope="row">
+      <CustomInput type="checkbox" id={data.id} name={data.id} onClick={onChangeIgnore} />
+    </TableTh>
+    <TableTd>{data.name}</TableTd>
+    <TableTd>{data.date}</TableTd>
   </tr>
 );
 
@@ -96,12 +97,12 @@ const Settings = () => {
       </Nav>
       <TabContent activeTab={activeTab}>
         <TabPane tabId="ignore">
-          <ListTable size="sm">
+          <ListTable size="sm" bordered>
             <thead>
               <tr>
-                <th>선택</th>
-                <th>차단 닉네임</th>
-                <th>차단 일자</th>
+                <TableTh>선택</TableTh>
+                <TableTh>차단 닉네임</TableTh>
+                <TableTh>차단 일자</TableTh>
               </tr>
             </thead>
             <tbody>
