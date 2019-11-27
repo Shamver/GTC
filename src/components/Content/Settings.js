@@ -51,10 +51,10 @@ const TableBody = (data, onChangeIgnore) => (
 const Settings = () => {
   const { SettingStore, UtilStore } = useStores();
   const {
-    activeTab, ignoreList, onChangeIgnore, getDataIgnore, onDeleteIgnore
+    activeTab, ignoreList, onChangeIgnore, getDataIgnore, onDeleteIgnore,
   } = SettingStore;
   const {
-    toggleAlert
+    toggleConfirmAlert,
   } = UtilStore;
 
   useEffect(() => {
@@ -108,7 +108,7 @@ const Settings = () => {
               {TableData}
             </tbody>
           </ListTable>
-          <Button color="danger" onClick={onDeleteIgnore}>삭제하기</Button>
+          <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', onDeleteIgnore); }}>삭제하기</Button>
         </TabPane>
         <TabPane tabId="favorite">
           <Row>

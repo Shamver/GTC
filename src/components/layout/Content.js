@@ -6,6 +6,7 @@ import Posting from '../Content/Posting';
 // import PostList from '../Content/PostList';
 import Alert from '../util/Alert';
 import Sign from '../util/Sign';
+import ConfirmAlert from '../util/ConfirmAlert';
 import Contents from '../Content';
 
 const BorderedDiv = styled.div`
@@ -24,6 +25,7 @@ const Content = () => (
     </Switch>
     <Route path="/" render={() => <Alert />} />
     <Route path="/" render={() => <Sign />} />
+    <Route path="/" render={() => <ConfirmAlert />} />
   </BorderedDiv>
 );
 
