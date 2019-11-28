@@ -1,7 +1,8 @@
 import { observable, action } from 'mobx';
-import axios from 'axios';
-import RouteStore from "./RouteStore";
-import UtilStore from "./UtilStore";
+import UserStore from './UserStore';
+// import axios from 'axios';
+// import RouteStore from "./RouteStore";
+// import UtilStore from "./UtilStore";
 
 class SettingStore {
   @observable activeTab = 'ignore';
@@ -23,6 +24,8 @@ class SettingStore {
         checked: false,
       },
     ];
+
+    console.log(UserStore.userSessionData);
 
     this.ignoreList = tempData;
   });

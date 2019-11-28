@@ -136,6 +136,23 @@ const DropdownItem30 = styled(DropdownItem)`
   padding-bottom : 0px;
 `;
 
+const DropdownItemTitle = styled(DropdownItem30)`
+  margin: 2px 0px 5px 0px !important;
+`;
+
+const ProfileNick = styled.span`
+  font-size: 15px !important;
+  font-weight: 700;
+`;
+
+const ProfileId = styled.span`
+  font-size: 11px !important;
+  color: gray;
+  margin-left: 5px;
+  padding-left: 5px;
+  border-left: 1px solid gray;
+`
+
 const Logo = styled.img`
   width : 100px;
 `;
@@ -189,11 +206,18 @@ const HeaderSessionComp = observer(() => {
           <Avatar src={avatar} />
         </AvatarDropdownToggleC>
         <DropdownMenu>
-          <DropdownItem30>새로운 알림(0개)</DropdownItem30>
-          <DropdownItem30>배진영</DropdownItem30>
-          <DropdownItem30>199 포인트</DropdownItem30>
+          <DropdownItemTitle>
+            <ProfileNick>닉네임</ProfileNick>
+
+            <ProfileId>thisIsId</ProfileId>
+          </DropdownItemTitle>
+          <DropdownItem30>새로운 알림 ({1} 개)</DropdownItem30>
+          <DropdownItem30>내 정보 관리</DropdownItem30>
+          <DropdownItem30>{10} 포인트</DropdownItem30>
           <DropdownItem30 divider />
-          <DropdownItem30>설정</DropdownItem30>
+          <Link to="/settings">
+            <DropdownItem30>설정</DropdownItem30>
+          </Link>
           <DropdownItem30>글보관함</DropdownItem30>
           <DropdownItem30>아이콘보관함</DropdownItem30>
           <DropdownItem30 onClick={UserStore.logout}>

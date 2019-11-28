@@ -44,7 +44,7 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   const data = req.body;
-  const query = `SELECT U_EMAIL AS email, U_NAME AS name, U_GT_NICKNAME AS gtNickname, U_NICKNAME AS nickname FROM GTC_USER
+  const query = `SELECT U_ID AS id, U_EMAIL AS email, U_NAME AS name, U_GT_NICKNAME AS gtNickname, U_NICKNAME AS nickname FROM GTC_USER
     WHERE U_EMAIL='${data.email}'
     AND U_PASSWORD='${data.password}'`;
 
@@ -52,6 +52,7 @@ router.post('/login', (req, res) => {
     if (err) throw err;
     if (rows.length >= 1) {
       req.session.user = {
+        id: rows[0].id,
         email: rows[0].email,
         name: rows[0].name,
         nickname: rows[0].nickname,
