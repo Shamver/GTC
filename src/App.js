@@ -45,7 +45,7 @@ const P5Col = styled(Col)`
 `;
 
 const P5Col2 = styled(Col)`
-  padding : 0 5px 0 0px !important;
+  padding : 0 5px 0 5px !important;
 `;
 
 const App = ({ location, match, history }) => {

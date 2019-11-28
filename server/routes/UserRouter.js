@@ -35,8 +35,9 @@ router.post('/register', (req, res) => {
 
       conn.query(query, (err2, rows2) => {
         if (err2) throw err2;
-        console.log(rows2);
-        res.send(rows2);
+        if (rows2.affectedRows >= 1) {
+          res.send(rows2.affectedRows);
+        }
       });
     }
   });
