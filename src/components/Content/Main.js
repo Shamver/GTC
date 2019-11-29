@@ -30,6 +30,10 @@ const Main = () => (
     <Col xs="12">
       <Texth5>공지사항 <ArrowIcon icon={faChevronRight} /></Texth5>
     </Col>
+    <Col xs="6">
+      <Texth5>거래 게시판 <ArrowIcon icon={faChevronRight} /></Texth5>
+      <PostList />
+    </Col>
   </Row>
 );
 
