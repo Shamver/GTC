@@ -1,8 +1,8 @@
 import { observable, action } from 'mobx';
+import axios from 'axios';
 import UserStore from './UserStore';
-// import axios from 'axios';
-// import RouteStore from "./RouteStore";
-// import UtilStore from "./UtilStore";
+import RouteStore from "./RouteStore";
+import UtilStore from './UtilStore';
 
 class SettingStore {
   @observable activeTab = 'ignore';
@@ -10,24 +10,20 @@ class SettingStore {
   @observable ignoreList = [];
 
   @action getDataIgnore = (() => {
-    const tempData = [
-      {
-        id: 1,
-        name: 'holy Bible',
-        date: '20191234',
-        checked: false,
-      },
-      {
-        id: 2,
-        name: 'SSSHIT',
-        date: '20124823',
-        checked: false,
-      },
-    ];
-
-    console.log(UserStore.userSessionData);
-
-    this.ignoreList = tempData;
+    if (UserStore.userSessionData === undefined) {
+      UtilStore.toggleAlert('로그인 후 이용해주세요.');
+      RouteStore.history.push('/');
+    } else {
+      axios.post('/api/setting/getignore', {
+        user_id: UserStore.userSessionData.id,
+      })
+        .then((response) => {
+          if (response.data) {
+            this.ignoreList = response.data;
+          }
+        })
+        .catch((response) => { console.log(response); });
+    }
   });
 
   // @action getDateIgnore = () => {
