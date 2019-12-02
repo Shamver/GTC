@@ -44,7 +44,7 @@ const TableBody = (data, onChangeIgnore) => (
     <TableTh scope="row">
       <CustomInput type="checkbox" id={data.id} name={data.id} onClick={onChangeIgnore} />
     </TableTh>
-    <TableTd>{data.name}</TableTd>
+    <TableTd>{data.nickname}</TableTd>
     <TableTd>{data.date}</TableTd>
   </tr>
 );

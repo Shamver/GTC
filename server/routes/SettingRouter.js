@@ -7,8 +7,10 @@ const conn = db.init();
 
 router.post('/getignore', (req, res) => {
   const data = req.body;
-  const query = `SELECT ID AS id, FROM_ID AS f_id, TARGET_ID AS t_id, DATE AS date FROM GTC_USER_IGNORE
-    WHERE FROM_ID='${data.user_id}'`;
+  const query = `SELECT GUI.ID AS id, GUI.FROM_ID AS f_id, GUI.TARGET_ID AS t_id, GUI.DATE AS date, GU.U_NICKNAME AS nickname FROM GTC_USER_IGNORE GUI LEFT JOIN GTC_USER GU
+    ON GUI.TARGET_ID = GU.U_ID
+    WHERE GUI.FROM_ID='${data.user_id}';
+    `;
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
