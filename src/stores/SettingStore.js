@@ -17,6 +17,7 @@ class SettingStore {
       axios.get('/api/setting/ignore', {
         params: {
           user_id: UserStore.userSessionData.id,
+          access_token: 1234,
         },
       })
         .then((response) => {
