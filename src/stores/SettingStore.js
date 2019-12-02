@@ -14,8 +14,10 @@ class SettingStore {
       UtilStore.toggleAlert('로그인 후 이용해주세요.');
       RouteStore.history.push('/');
     } else {
-      axios.post('/api/setting/getignore', {
-        user_id: UserStore.userSessionData.id,
+      axios.get('/api/setting/ignore', {
+        params: {
+          user_id: UserStore.userSessionData.id,
+        },
       })
         .then((response) => {
           if (response.data) {
@@ -49,7 +51,7 @@ class SettingStore {
     const list = this.ignoreList.filter((item) => item.checked === true).map((v) => (v.id));
 
     if (list.length !== 0) {
-      axios.post('/api/setting/removeignore', {
+      axios.delete('/api/setting/ignore', {
         list,
       })
         .then(() => {
