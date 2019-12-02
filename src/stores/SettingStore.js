@@ -56,6 +56,10 @@ class SettingStore {
           this.getDataIgnore();
         })
         .catch((response) => { console.log(response); });
+    } else {
+      setTimeout(() => { // 딜레이를 안 주면 텍스트 할당이 안됨.. 대안 찾기.
+        UtilStore.toggleAlert('아무것도 선택되지 않았습니다.');
+      }, 100);
     }
   });
 }

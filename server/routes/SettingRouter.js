@@ -31,6 +31,7 @@ router.post('/removeignore', (req, res) => {
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
+    console.log(rows);
     if (rows.length >= 1) {
       res.send(200);
     } else {
