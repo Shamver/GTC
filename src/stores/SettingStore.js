@@ -26,23 +26,6 @@ class SettingStore {
     }
   });
 
-  // @action getDateIgnore = () => {
-  //   axios.post('/api/setting/getIgnore', {
-  //     user_id: 1,
-  //   })
-  //     .then((response) => {
-  //       if (response.data) {
-  //         RouteStore.history.push('/free');
-  //         UtilStore.toggleAlert('글이 정상적으로 등록되었습니다.');
-  //         this.post = {
-  //           title: '',
-  //           text: '',
-  //         };
-  //       }
-  //     })
-  //     .catch((response) => { console.log(response); });
-  // };
-
 
   @action onActive = ((e) => {
     const { name } = e.target;
@@ -63,9 +46,17 @@ class SettingStore {
   });
 
   @action onDeleteIgnore = (() => {
-    this.ignoreList = this.ignoreList.filter((item) => item.checked === false);
+    const list = this.ignoreList.filter((item) => item.checked === true).map((v) => (v.id));
 
-
+    if (list.length !== 0) {
+      axios.post('/api/setting/removeignore', {
+        list,
+      })
+        .then(() => {
+          this.getDataIgnore();
+        })
+        .catch((response) => { console.log(response); });
+    }
   });
 }
 

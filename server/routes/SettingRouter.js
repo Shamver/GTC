@@ -9,7 +9,7 @@ router.post('/getignore', (req, res) => {
   const data = req.body;
   const query = `SELECT GUI.ID AS id, GUI.FROM_ID AS f_id, GUI.TARGET_ID AS t_id, GUI.DATE AS date, GU.U_NICKNAME AS nickname FROM GTC_USER_IGNORE GUI LEFT JOIN GTC_USER GU
     ON GUI.TARGET_ID = GU.U_ID
-    WHERE GUI.FROM_ID='${data.user_id}';
+    WHERE GUI.FROM_ID='${data.user_id}'
     `;
 
   conn.query(query, (err, rows) => {
@@ -18,6 +18,23 @@ router.post('/getignore', (req, res) => {
       res.send(rows);
     } else {
       res.send(rows);
+    }
+  });
+});
+
+router.post('/removeignore', (req, res) => {
+  const data = req.body;
+
+  const query = `DELETE FROM GTC_USER_IGNORE
+    WHERE ID IN (${data.list.join()})
+  `;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+    if (rows.length >= 1) {
+      res.send(200);
+    } else {
+      res.send(404);
     }
   });
 });
