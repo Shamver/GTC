@@ -44,7 +44,7 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   const data = req.body;
-  const query = `SELECT U_ID AS id, U_EMAIL AS email, U_NAME AS name, U_GT_NICKNAME AS gtNickname, U_NICKNAME AS nickname FROM GTC_USER
+  const query = `SELECT ID AS id, EMAIL AS email, NAME AS name, GT_NICKNAME AS gtNickname, NICKNAME AS nickname FROM GTC_USER
     WHERE U_EMAIL='${data.email}'
     AND U_PASSWORD='${data.password}'`;
 
