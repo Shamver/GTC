@@ -39,5 +39,40 @@ router.delete('/ignore', (req, res) => {
   });
 });
 
+// 나중에 해당 포스트 제목 받아오는 쿼리도 넣어야 함.
+router.get('/favorite', (req, res) => {
+  const query = `SELECT GUFP.ID AS id, GUFP.USER_ID AS f_id, GUFP.POST_ID AS nickname, date_format(GUFP.DATE, '%Y년 %m월 %d일 %H시 %i분 %s초') AS date FROM GTC_USER_FAVORITE_POST GUFP LEFT JOIN GTC_USER GU
+    ON GUFP.USER_ID = GU.U_ID
+    WHERE GUFP.USER_ID='${req.query.user_id}'
+    `;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+    if (rows.length >= 1) {
+      res.send(rows);
+    } else {
+      res.send(rows);
+    }
+  });
+});
+
+router.delete('/favorite', (req, res) => {
+  const data = req.body;
+
+  const query = `DELETE FROM GTC_USER_FAVORITE_POST
+    WHERE ID IN (${data.list.join()})
+  `;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+    console.log(rows);
+    if (rows.length >= 1) {
+      res.send(200);
+    } else {
+      res.send(404);
+    }
+  });
+});
+
 
 module.exports = router;
