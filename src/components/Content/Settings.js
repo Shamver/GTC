@@ -64,6 +64,8 @@ const Settings = () => {
 
   const TableData = ignoreList.map((v) => (TableBody(v, onChangeIgnore)));
 
+  console.log(TableData);
+
   return (
     <MainContainer>
       <Nav tabs>
@@ -106,7 +108,13 @@ const Settings = () => {
               </tr>
             </thead>
             <tbody>
-              {TableData}
+              {TableData.length === 0 ? (
+                <tr>
+                  <td colSpan={3}>
+                  차단한 유저가 없습니다.
+                  </td>
+                </tr>
+              ) : TableData}
             </tbody>
           </ListTable>
           <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', onDeleteIgnore); }}>삭제하기</Button>

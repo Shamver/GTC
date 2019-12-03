@@ -17,7 +17,6 @@ class SettingStore {
       axios.get('/api/setting/ignore', {
         params: {
           user_id: UserStore.userSessionData.id,
-          access_token: 1234,
         },
       })
         .then((response) => {
@@ -53,7 +52,9 @@ class SettingStore {
 
     if (list.length !== 0) {
       axios.delete('/api/setting/ignore', {
-        list,
+        data: {
+          list,
+        },
       })
         .then(() => {
           this.getDataIgnore();

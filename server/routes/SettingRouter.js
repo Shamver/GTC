@@ -5,14 +5,10 @@ const db = require('../db_con')();
 
 const conn = db.init();
 
-router.post('/ignore', (req, res) => {
-  const data = req.body;
-
-  console.log(req.query);
-
+router.get('/ignore', (req, res) => {
   const query = `SELECT GUI.ID AS id, GUI.FROM_ID AS f_id, GUI.TARGET_ID AS t_id, date_format(GUI.DATE, '%Y년 %m월 %d일 %H시 %i분 %s초') AS date, GU.U_NICKNAME AS nickname FROM GTC_USER_IGNORE GUI LEFT JOIN GTC_USER GU
     ON GUI.TARGET_ID = GU.U_ID
-    WHERE GUI.FROM_ID='${data.user_id}'
+    WHERE GUI.FROM_ID='${req.query.user_id}'
     `;
 
   conn.query(query, (err, rows) => {
