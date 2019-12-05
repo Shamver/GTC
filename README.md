@@ -20,3 +20,27 @@ You will also see any lint errors in the console.
 create.js 파일 133번째 줄 false 값을 { legacy: true } 로 변경하면
 mobx에서 사용하는 방식의 데코레이터를 사용할 수 있음.
 + 현재 rewired 패키지를 통해 필요없어짐.
+
+## 사용한 기술 스택 및 라이브러리, 프레임워크
+
+- react
+- code-splitting
+- express
+- mobx
+- react-router
+- styled-components
+- reactstrap
+- material-ui
+- axios
+- SPA
+- react-hooks
+- mysql
+- prop-types
+- nodeJs
+- es6
+- es-lint (airbnb)
+- customize-cra
+- babel
+- webpack
+- http-proxy-middleware
+- npm-run-all
