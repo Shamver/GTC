@@ -45,8 +45,8 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
   const data = req.body;
   const query = `SELECT ID AS id, EMAIL AS email, NAME AS name, GT_NICKNAME AS gtNickname, NICKNAME AS nickname FROM GTC_USER
-    WHERE U_EMAIL='${data.email}'
-    AND U_PASSWORD='${data.password}'`;
+    WHERE EMAIL='${data.email}'
+    AND PASSWORD='${data.password}'`;
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
