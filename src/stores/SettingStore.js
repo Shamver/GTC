@@ -1,7 +1,4 @@
 import { observable, action } from 'mobx';
-import axios from 'axios';
-import RouteStore from "./RouteStore";
-import UtilStore from "./UtilStore";
 
 class SettingStore {
   @observable activeTab = 'ignore';

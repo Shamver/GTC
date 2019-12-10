@@ -2,7 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 const db = require('../db_con')();
 
@@ -14,7 +14,6 @@ router.post('/register', (req, res) => {
     WHERE U_TEL='${data.tel}'
     or U_EMAIL='${data.email}'`;
 
-  console.log(query);
   conn.query(query, (err, rows) => {
     if (err) throw err;
     if (rows[0].count && rows[0].count >= 1) {
@@ -47,6 +46,7 @@ router.post('/register', (req, res) => {
 
 router.post('/login', (req, res) => {
   const data = req.body;
+  const secret = req.app.get('jwt-secret');
   const query = `SELECT U_EMAIL AS email, U_NAME AS name, U_GT_NICKNAME AS gtNickname, U_NICKNAME AS nickname FROM GTC_USER
     WHERE U_EMAIL='${data.email}'
     AND U_PASSWORD='${data.password}'`;
@@ -54,34 +54,32 @@ router.post('/login', (req, res) => {
   conn.query(query, (err, rows) => {
     if (err) throw err;
     if (rows.length >= 1) {
-
       // req.session.user = {
       //   email: rows[0].email,
       //   name: rows[0].name,
       //   nickname: rows[0].nickname,
       //   gtNickname: rows[0].gtNickname,
       // };
-
       jwt.sign(
         {
-          _id: rows[0]._id,
-          username: rows[0].name,
-          admin: user.admin
+          _id: rows[0].email,
+          username: rows[0].nickname,
         },
         secret,
         {
           expiresIn: '7d',
-          issuer: 'velopert.com',
-          subject: 'userInfo'
-        }, (err, token) => {
-          if (err) reject(err)
-          resolve(token)
-        }
-      )
-
-      res.send(rows);
+          issuer: 'GTC',
+          subject: 'userInfo',
+        }, (err2, token) => {
+          if (err2) throw (err2);
+          res.json({
+            message: 'logged in successfully',
+            token,
+          });
+        },
+      );
     } else {
-      res.send(rows);
+      throw new Error('login failed');
     }
   });
 });

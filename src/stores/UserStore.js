@@ -50,13 +50,14 @@ class UserStore {
     axios.post('/api/login', this.loginData)
       .then((response) => {
         if (response.data) {
-          if (response.data.length === 1) {
-            UtilStore.toggleAlert('로그인이 완료되었습니다.');
-            UtilStore.toggleSign();
-            this.sessionCheck();
-          } else {
-            UtilStore.toggleAlert('이메일이나 비밀번호가 올바르지 않습니다.');
-          }
+          // if (response.data.length === 1) {
+          //   UtilStore.toggleAlert('로그인이 완료되었습니다.');
+          //   UtilStore.toggleSign();
+          //   this.sessionCheck();
+          // } else {
+          //   UtilStore.toggleAlert('이메일이나 비밀번호가 올바르지 않습니다.');
+          // }
+          console.log(response.data);
         }
       })
       .catch((response) => { console.log(response); });
