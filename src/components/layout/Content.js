@@ -6,6 +6,7 @@ import Posting from '../Content/Posting';
 // import PostList from '../Content/PostList';
 import Alert from '../util/Alert';
 import Sign from '../util/Sign';
+import ConfirmAlert from '../util/ConfirmAlert';
 import Contents from '../Content';
 
 const BorderedDiv = styled.div`
@@ -19,9 +20,12 @@ const Content = () => (
       <Route exact path="/" render={() => <Main />} />
       <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
       <Route exact path="/free" render={() => <Contents.FreeBoard />} />
+      <Route exact path="/settings" render={() => <Contents.Settings />} />
+      <Route exact path="/posts/:postId" render={() => <Contents.FreeBoard />} />
     </Switch>
     <Alert />
     <Sign />
+    <ConfirmAlert />
   </BorderedDiv>
 );
 

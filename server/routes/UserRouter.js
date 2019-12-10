@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const jwt = require('jsonwebtoken')
+
 const db = require('../db_con')();
 
 const conn = db.init();
@@ -12,6 +14,7 @@ router.post('/register', (req, res) => {
     WHERE U_TEL='${data.tel}'
     or U_EMAIL='${data.email}'`;
 
+  console.log(query);
   conn.query(query, (err, rows) => {
     if (err) throw err;
     if (rows[0].count && rows[0].count >= 1) {
@@ -31,10 +34,12 @@ router.post('/register', (req, res) => {
         sysdate()
         )
       `;
+
       conn.query(query, (err2, rows2) => {
         if (err2) throw err2;
-        console.log(rows2);
-        res.send(rows2);
+        if (rows2.affectedRows >= 1) {
+          res.send(rows2.affectedRows);
+        }
       });
     }
   });
@@ -49,12 +54,31 @@ router.post('/login', (req, res) => {
   conn.query(query, (err, rows) => {
     if (err) throw err;
     if (rows.length >= 1) {
-      req.session.user = {
-        email: rows[0].email,
-        name: rows[0].name,
-        nickname: rows[0].nickname,
-        gtNickname: rows[0].gtNickname,
-      };
+
+      // req.session.user = {
+      //   email: rows[0].email,
+      //   name: rows[0].name,
+      //   nickname: rows[0].nickname,
+      //   gtNickname: rows[0].gtNickname,
+      // };
+
+      jwt.sign(
+        {
+          _id: rows[0]._id,
+          username: rows[0].name,
+          admin: user.admin
+        },
+        secret,
+        {
+          expiresIn: '7d',
+          issuer: 'velopert.com',
+          subject: 'userInfo'
+        }, (err, token) => {
+          if (err) reject(err)
+          resolve(token)
+        }
+      )
+
       res.send(rows);
     } else {
       res.send(rows);

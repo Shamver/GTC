@@ -4,6 +4,7 @@ import UtilStore from './UtilStore';
 import CategoryStore from './CategoryStore';
 import RouteStore from './RouteStore';
 import UserStore from './UserStore';
+import SettingStore from './SettingStore';
 
 export default {
   HeaderStore,
@@ -12,4 +13,5 @@ export default {
   CategoryStore,
   RouteStore,
   UserStore,
+  SettingStore,
 };
