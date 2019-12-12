@@ -75,7 +75,7 @@ const Settings = () => {
       <Nav tabs>
         <NavItem>
           <NavLinkBtn
-            className={classnames({ active: activeTab === 'ignore' })}
+            className={activeTab === 'ignore' ? 'active' : ''}
             onClick={SettingStore.onActive}
             name="ignore"
           >
@@ -84,7 +84,7 @@ const Settings = () => {
         </NavItem>
         <NavItem>
           <NavLinkBtn
-            className={classnames({ active: activeTab === 'favorite' })}
+            className={activeTab === 'favorite' ? 'active' : ''}
             onClick={SettingStore.onActive}
             name="favorite"
           >
@@ -93,7 +93,7 @@ const Settings = () => {
         </NavItem>
         <NavItem>
           <NavLinkBtn
-            className={classnames({ active: activeTab === 'closeAccount' })}
+            className={activeTab === 'closeAccount' ? 'active' : ''}
             onClick={SettingStore.onActive}
             name="closeAccount"
           >
