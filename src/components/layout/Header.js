@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import KakaoLogin from 'react-kakao-login';
 import avatar from '../../resources/images/avatar.png';
 import logo from '../../resources/images/logo.png';
 import useStores from '../../stores/useStores';
@@ -151,23 +152,59 @@ const LoginButton = styled(Button)`
   }
 `;
 
+
+const KakaoSign = () => {
+  const { UserStore, UtilStore } = useStores();
+  return (
+    <KakaoLogin
+      jsKey="575cf711a7fc002194a3cc8994b5fb82"
+      onSuccess={(result) => UserStore.login(result.profile.kakao_account.email)}
+      onFailure={() => UtilStore.alertToggle('카카오 로그인에 실패하였습니다.')}
+      render={(props) => (
+        <>
+          <LoginButton onClick={props.onClick}>
+            <FontAwesomeIcon icon={faSignInAlt} />
+            &nbsp;
+            로그인
+          </LoginButton>
+        </>
+      )}
+      getProfile
+    />
+  );
+};
+
+const KakaoRegister = () => {
+  const { UtilStore } = useStores();
+
+  return (
+    <KakaoLogin
+      jsKey="575cf711a7fc002194a3cc8994b5fb82"
+      onSuccess={(result) => UtilStore.toggleSign(result)}
+      onFailure={(result) => console.log(result)}
+      render={(props) => (
+        <>
+          <LoginButton onClick={props.onClick}>
+            <FontAwesomeIcon icon={faUserPlus} />
+            &nbsp;
+            회원가입
+          </LoginButton>
+        </>
+      )}
+      getProfile
+    />
+  );
+};
+
 const HeaderSessionComp = observer(() => {
-  const { UserStore, UtilStore, HeaderStore } = useStores();
+  const { UserStore, HeaderStore } = useStores();
   useEffect(() => {
-  }, [UserStore.userSessionData]);
-  if (!UserStore.userSessionData) {
+  }, [UserStore.userData]);
+  if (!UserStore.userData) {
     return (
       <>
-        <LoginButton onClick={UtilStore.toggleSign}>
-          <FontAwesomeIcon icon={faSignInAlt} />
-          &nbsp;
-          로그인
-        </LoginButton>
-        <LoginButton onClick={UtilStore.toggleSign}>
-          <FontAwesomeIcon icon={faUserPlus} />
-          &nbsp;
-          회원가입
-        </LoginButton>
+        <KakaoSign />
+        <KakaoRegister />
       </>
     );
   }

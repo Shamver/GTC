@@ -14,19 +14,18 @@ class UserStore {
     gtNickname: '',
   };
 
-  @observable loginData = {
-    email: '',
-    password: '',
-  };
+  @observable userData;
 
-  @observable userSessionData;
+  @action setRegisterData = (data) => {
+    this.registerData.email = data.profile.kakao_account.email;
+  };
 
   @action register = () => {
     if (!this.registerValidationCheck()) {
       return false;
     }
 
-    axios.post('/api/register', this.registerData)
+    axios.post('/api/auth/register', this.registerData)
       .then((response) => {
         if (response.data) {
           if (response.data[0] && response.data[0].count === 1) {
@@ -42,22 +41,15 @@ class UserStore {
     return true;
   };
 
-  @action login = () => {
-    if (!this.loginValidationCheck()) {
-      return false;
-    }
-
-    axios.post('/api/login', this.loginData)
+  @action login = (email) => {
+    axios.post('/api/auth/login', { email })
       .then((response) => {
         if (response.data) {
-          // if (response.data.length === 1) {
-          //   UtilStore.toggleAlert('로그인이 완료되었습니다.');
-          //   UtilStore.toggleSign();
-          //   this.sessionCheck();
-          // } else {
-          //   UtilStore.toggleAlert('이메일이나 비밀번호가 올바르지 않습니다.');
-          // }
-          console.log(response.data);
+          UtilStore.toggleAlert(response.data.MESSAGE);
+          if (response.data.LOGIN_SUCCESS) {
+            this.userTokenData = response.data.token;
+            this.cookieCheck();
+          }
         }
       })
       .catch((response) => { console.log(response); });
@@ -66,11 +58,11 @@ class UserStore {
   };
 
   @action logout = () => {
-    axios.post('/api/logout', {})
+    axios.post('/api/auth/logout', {})
       .then((response) => {
         if (response.data.type === 'LOGOUT') {
           UtilStore.toggleAlert('로그아웃이 완료되었습니다.');
-          this.sessionCheck();
+          this.cookieCheck();
         }
       })
       .catch((response) => { console.log(response); });
@@ -78,19 +70,16 @@ class UserStore {
     return true;
   };
 
-  @action sessionCheck = () => {
-    axios.post('/api/sessionCheck', {})
+  @action cookieCheck = () => {
+    axios.get('/api/auth/check', {})
       .then((response) => {
-        if (response.data) {
-          if (response.data.type === 'LOGGED') {
-            this.userSessionData = response.data.userInfo;
-          } else {
-            this.userSessionData = '';
-          }
-
+        if (response.data.success) {
+          this.userData = response.data.info;
+        } else {
+          this.userData = null;
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((err) => { console.log(err); });
 
     return true;
   };
@@ -162,21 +151,6 @@ class UserStore {
 
     return true;
   };
-
-  loginValidationCheck() {
-    // email
-    if (!this.loginData.email.trim()) {
-      UtilStore.toggleAlert('이메일을 입력해주세요.');
-      return false;
-    }
-
-    // password
-    if (!this.loginData.password.trim()) {
-      UtilStore.toggleAlert('비밀번호를 입력해주세요.');
-      return false;
-    }
-    return true;
-  }
 }
 
 export default new UserStore();

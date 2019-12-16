@@ -1,15 +1,9 @@
 import { observable, action } from 'mobx';
 
 class RouteStore {
-  @observable location = {};
-
-  @observable match = {};
-
   @observable history = {};
 
-  @action setRoute = (location, match, history) => {
-    this.location = location;
-    this.match = match;
+  @action setRoute = (history) => {
     this.history = history;
   }
 }

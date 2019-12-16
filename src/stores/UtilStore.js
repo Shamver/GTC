@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import UserStore from "./UserStore";
 
 class UtilStore {
   @observable alertToggle = false;
@@ -22,9 +23,13 @@ class UtilStore {
     this.text = text;
     this.callbackFunc = func;
     this.confirmAlertToggle = !this.confirmAlertToggle;
-  }
+  };
 
-  @action toggleSign = () => {
+  @action toggleSign = (result) => {
+    if (result.profile) {
+      UserStore.setRegisterData(result);
+    }
+
     this.signToggle = !this.signToggle;
   };
 

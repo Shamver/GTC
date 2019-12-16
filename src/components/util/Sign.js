@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
+
 import useStores from '../../stores/useStores';
 
 const Form = styled.form`
@@ -93,18 +94,6 @@ const RegisterForm = styled(Form)`
   }
 `;
 
-const LoginForm = styled(Form)`
-  &.disable {
-    height : 0px;
-    visibility: hidden;
-    opacity: 0;
-  }
-  &.enable {
-    opacity: 1;
-    visibility: visible;
-  }
-`;
-
 const ModalBodyNoPadding = styled(ModalBody)`
   padding : 0 !important;
   background-color : white !important
@@ -129,12 +118,12 @@ const Sign = () => {
   const { UtilStore, UserStore } = useStores();
   return (
     <ModalNoScroll isOpen={UtilStore.signToggle} toggle={UtilStore.toggleSign}>
-      <ModalHeaderBack toggle={UtilStore.toggleSign}><b>{UtilStore.signDisplay ? '로그인' : '회원가입'}</b></ModalHeaderBack>
+      <ModalHeaderBack toggle={UtilStore.toggleSign}><b>회원가입</b></ModalHeaderBack>
       <ModalBodyNoPadding>
         <div>
           <Deform>
-            <RegisterForm className={UtilStore.signDisplay ? 'disable' : 'enable'}>
-              <FormInput type="text" onChange={UserStore.onRegisterChangeValue} name="email" placeholder="이메일" />
+            <RegisterForm>
+              <FormInput type="text" onChange={UserStore.onRegisterChangeValue} name="email" placeholder="이메일" readOnly />
               <FormInput type="password" onChange={UserStore.onRegisterChangeValue} name="password" placeholder="비밀번호" />
               <FormInputWithText type="password" placeholder="비밀번호 확인" />
               <FormTextLeft>
@@ -174,17 +163,6 @@ const Sign = () => {
                 </MessageInner>
               </Message>
             </RegisterForm>
-            <LoginForm className={UtilStore.signDisplay ? 'enable' : 'disable'}>
-              <FormInput type="text" name="email" onChange={UserStore.onLoginChangeValue} placeholder="이메일" />
-              <FormInput type="password" name="password" onChange={UserStore.onLoginChangeValue} placeholder="비밀번호" />
-              <FormButton type="button" onClick={UserStore.login}>로그인</FormButton>
-              <Message>
-                계정이 없으신가요? &nbsp;
-                <MessageInner onClick={UtilStore.changeSign}>
-                계정 생성
-                </MessageInner>
-              </Message>
-            </LoginForm>
           </Deform>
         </div>
       </ModalBodyNoPadding>
