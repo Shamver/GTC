@@ -1,5 +1,7 @@
 class CategoryStore {
-
+  constructor(root) {
+    this.root = root;
+  }
 }
 
-export default new CategoryStore();
+export default CategoryStore;

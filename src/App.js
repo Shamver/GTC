@@ -48,10 +48,10 @@ const P5Col2 = styled(Col)`
   padding : 0 5px 0 5px !important;
 `;
 
-const App = ({ location, match, history }) => {
+const App = ({ history }) => {
   const { RouteStore, UserStore } = useStores();
-  RouteStore.setRoute(location, match, history);
-  UserStore.sessionCheck();
+  RouteStore.setRoute(history);
+  UserStore.cookieCheck();
   return (
     <ContainerWrapper>
       <Container>
