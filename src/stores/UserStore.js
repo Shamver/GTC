@@ -49,14 +49,8 @@ class UserStore {
     axios.post('/api/auth/register', this.registerData)
       .then((response) => {
         if (response.data) {
-<<<<<<< HEAD
-          console.log(response.data);
-          if (response.data[0] && response.data[0].count && response.data[0].count === 1) {
-            UtilStore.toggleAlert('동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.');
-=======
           if (response.data[0] && response.data[0].count === 1) {
             this.root.UtilStore.toggleAlert('동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.');
->>>>>>> origin/develop
           } else {
             this.root.UtilStore.toggleAlert('가입이 완료되었습니다.');
             this.root.UtilStore.toggleSign();
