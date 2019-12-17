@@ -1,14 +1,18 @@
 import { observable, action } from 'mobx';
+<<<<<<< HEAD
 import axios from 'axios';
 import UserStore from './UserStore';
 import RouteStore from './RouteStore';
 import UtilStore from './UtilStore';
+=======
+>>>>>>> origin/develop
 
 class SettingStore {
   @observable activeTab = 'ignore';
 
   @observable ignoreList = [];
 
+<<<<<<< HEAD
   @observable favoriteList = [];
 
   @action getDataIgnore = (() => {
@@ -29,6 +33,30 @@ class SettingStore {
         .catch((response) => { console.log(response); });
     }
   });
+=======
+  constructor(root) {
+    this.root = root;
+  }
+
+  @action getDataIgnore = () => {
+    const tempData = [
+      {
+        id: 1,
+        name: 'holy Bible',
+        date: '20191234',
+        checked: false,
+      },
+      {
+        id: 2,
+        name: 'SSSHIT',
+        date: '20124823',
+        checked: false,
+      },
+    ];
+
+    this.ignoreList = tempData;
+  };
+>>>>>>> origin/develop
 
   @action getDataFavorite = (() => {
     if (UserStore.userSessionData !== undefined) {
@@ -76,6 +104,7 @@ class SettingStore {
   });
 
   @action onDeleteIgnore = (() => {
+<<<<<<< HEAD
     const list = this.ignoreList.filter((item) => item.checked === true).map((v) => (v.id));
 
     if (list.length !== 0) {
@@ -113,7 +142,10 @@ class SettingStore {
         UtilStore.toggleAlert('아무것도 선택되지 않았습니다.');
       }, 100);
     }
+=======
+    this.ignoreList = this.ignoreList.filter((item) => item.checked === false);
+>>>>>>> origin/develop
   });
 }
 
-export default new SettingStore();
+export default SettingStore;

@@ -27,3 +27,5 @@ yarn-error.log*
 
 # Properties
 /server/config/db-config.json
+/server/config/jwt-config.json
+/src/config/jwt-config.json

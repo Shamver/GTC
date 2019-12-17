@@ -64,7 +64,7 @@ const Settings = () => {
   useEffect(() => {
     getDataIgnore();
     getDataFavorite();
-  }, [])
+  }, []);
 
   const IgnoreTableData = ignoreList.map((v) => (TableBody('ignore', v, onChangeIgnore)));
   const FavoriteTableData = favoriteList.map((v) => (TableBody('favorite', v, onChangeFavorite)));
@@ -74,7 +74,7 @@ const Settings = () => {
       <Nav tabs>
         <NavItem>
           <NavLinkBtn
-            className={activeTab === 'ignore' ? 'active' : ''}
+            className={{ active: activeTab === 'ignore' }}
             onClick={SettingStore.onActive}
             name="ignore"
           >
@@ -83,7 +83,7 @@ const Settings = () => {
         </NavItem>
         <NavItem>
           <NavLinkBtn
-            className={activeTab === 'favorite' ? 'active' : ''}
+            className={{ active: activeTab === 'favorite' }}
             onClick={SettingStore.onActive}
             name="favorite"
           >
@@ -92,7 +92,7 @@ const Settings = () => {
         </NavItem>
         <NavItem>
           <NavLinkBtn
-            className={activeTab === 'closeAccount' ? 'active' : ''}
+            className={{ active: activeTab === 'closeAccount' }}
             onClick={SettingStore.onActive}
             name="closeAccount"
           >

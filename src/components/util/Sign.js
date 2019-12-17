@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
+
 import useStores from '../../stores/useStores';
 
 const Form = styled.form`
@@ -69,31 +70,7 @@ const Deform = styled.div`
   }
 `;
 
-const Message = styled.p`
-  margin: 15px 0 0;
-  color: #b3b3b3;
-  font-size: 12px;
-`;
-
-const MessageInner = styled.a`
-  color: #DC3545 !important;
-  text-decoration: none;
-  cursor: pointer;
-`;
-
 const RegisterForm = styled(Form)`
-  &.disable {
-    height : 0px;
-    visibility: hidden;
-    opacity: 0;
-  }
-  &.enable {
-    opacity: 1;
-    visibility: visible;
-  }
-`;
-
-const LoginForm = styled(Form)`
   &.disable {
     height : 0px;
     visibility: hidden;
@@ -122,29 +99,32 @@ const FormTextLeft = styled(FormText)`
   margin : 0 0 15px;
 `;
 
-const ModalNoScroll = styled(Modal)`
+const AccentText = styled.span`
+  color : red !important;
 `;
 
 const Sign = () => {
   const { UtilStore, UserStore } = useStores();
   return (
-    <ModalNoScroll isOpen={UtilStore.signToggle} toggle={UtilStore.toggleSign}>
-      <ModalHeaderBack toggle={UtilStore.toggleSign}><b>{UtilStore.signDisplay ? '로그인' : '회원가입'}</b></ModalHeaderBack>
+    <Modal isOpen={UtilStore.signToggle} toggle={UtilStore.toggleSign}>
+      <ModalHeaderBack toggle={UtilStore.toggleSign}><b>회원가입</b></ModalHeaderBack>
       <ModalBodyNoPadding>
         <div>
           <Deform>
-            <RegisterForm className={UtilStore.signDisplay ? 'disable' : 'enable'}>
-              <FormInput type="text" onChange={UserStore.onRegisterChangeValue} name="email" placeholder="이메일" />
-              <FormInput type="password" onChange={UserStore.onRegisterChangeValue} name="password" placeholder="비밀번호" />
-              <FormInputWithText type="password" placeholder="비밀번호 확인" />
-              <FormTextLeft>
-                8~16자 영문 대 소문자, 숫자, 특수문자(필수)를 사용하세요.
-              </FormTextLeft>
+            <RegisterForm>
+              <FormInput type="text" onChange={UserStore.onRegisterChangeValue} value={UserStore.registerData.email} name="email" placeholder="이메일" readOnly />
               <FormInputWithText type="text" onChange={UserStore.onRegisterChangeValue} name="name" placeholder="이름" />
               <FormTextLeft>
-                실명을 입력해주세요.
+                실명을 입력해주세요. <br />
+                <AccentText>(실명 미 입력시 추후 사이트에서 밴 당할 우려가 있습니다.)</AccentText>
               </FormTextLeft>
-              <FormInputWithText type="text" onChange={UserStore.onRegisterChangeValue} name="nickname" placeholder="닉네임" />
+              <FormInputWithText
+                type="text"
+                onChange={UserStore.onRegisterChangeValue}
+                name="nickname"
+                placeholder="닉네임"
+                value={UserStore.registerData.nickname}
+              />
               <FormTextLeft>
                 GTC에서 보여질 닉네임을 적어주세요.
               </FormTextLeft>
@@ -153,42 +133,31 @@ const Sign = () => {
                 GTC는 한 전화번호 명의로 하나의 계정만 생성할 수 있습니다. <br />
                 -를 빼고 입력해주세요. ex) 01012345678
               </FormTextLeft>
-              <FormInputWithText type="date" onChange={UserStore.onRegisterChangeValue} name="birth" />
+              <FormInputWithText type="date" onChange={UserStore.onRegisterChangeValue} name="birth" value={UserStore.registerData.birth} />
               <FormTextLeft>
                 생년월일을 입력해주세요.
               </FormTextLeft>
-              <FormSelect type="select" onChange={UserStore.onRegisterChangeValue} name="gender">
+              <FormSelect type="select" onChange={UserStore.onRegisterChangeValue} name="gender" value={UserStore.registerData.gender}>
                 <option value="">성별 선택</option>
-                <option value="MALE">남자</option>
-                <option value="FEMALE">여자</option>
+                <option value="male">남자</option>
+                <option value="female">여자</option>
               </FormSelect>
-              <FormInputWithText type="text" onChange={UserStore.onRegisterChangeValue} name="gtNickname" placeholder="그로우토피아 닉네임" />
+              <FormInputWithText
+                type="text"
+                onChange={UserStore.onRegisterChangeValue}
+                name="gtNickname"
+                placeholder="그로우토피아 닉네임"
+              />
               <FormTextLeft>
                 가장 많이 사용하는 그로우토피아 닉네임을 적어주세요.
-                <br /> 거래 중 해당 닉네임으로 인증이 안될시 거래에 문제가 생길 수 있습니다.
+                <br /> <AccentText>거래 중 해당 닉네임으로 인증이 안될시 거래에 문제가 생길 수 있습니다.</AccentText>
               </FormTextLeft>
-              <FormButton type="button" onClick={UserStore.register}>가입</FormButton>
-              <Message>계정이 있으신가요? &nbsp;
-                <MessageInner onClick={UtilStore.changeSign}>
-                  로그인
-                </MessageInner>
-              </Message>
+              <FormButton type="button" onClick={UserStore.registerCheck}>가입</FormButton>
             </RegisterForm>
-            <LoginForm className={UtilStore.signDisplay ? 'enable' : 'disable'}>
-              <FormInput type="text" name="email" onChange={UserStore.onLoginChangeValue} placeholder="이메일" />
-              <FormInput type="password" name="password" onChange={UserStore.onLoginChangeValue} placeholder="비밀번호" />
-              <FormButton type="button" onClick={UserStore.login}>로그인</FormButton>
-              <Message>
-                계정이 없으신가요? &nbsp;
-                <MessageInner onClick={UtilStore.changeSign}>
-                계정 생성
-                </MessageInner>
-              </Message>
-            </LoginForm>
           </Deform>
         </div>
       </ModalBodyNoPadding>
-    </ModalNoScroll>
+    </Modal>
   );
 };
 
@@ -205,6 +174,7 @@ Sign.propTypes = {
     onRegisterChangeValue: Proptypes.func,
     onLoginChangeValue: Proptypes.func,
     login: Proptypes.func,
+    registerCheck: Proptypes.func,
   }),
 };
 
