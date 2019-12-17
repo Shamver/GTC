@@ -17,6 +17,7 @@ import KakaoLogin from 'react-kakao-login';
 import avatar from '../../resources/images/avatar.png';
 import logo from '../../resources/images/logo.png';
 import useStores from '../../stores/useStores';
+import { jsKey } from '../../config/kakao-config';
 
 const InputGroupWrapper = styled.div`
   width : 250px;
@@ -157,7 +158,7 @@ const KakaoSign = () => {
   const { UserStore, UtilStore } = useStores();
   return (
     <KakaoLogin
-      jsKey="575cf711a7fc002194a3cc8994b5fb82"
+      jsKey={jsKey}
       onSuccess={(result) => UserStore.login(result.profile.kakao_account.email)}
       onFailure={() => UtilStore.alertToggle('카카오 로그인에 실패하였습니다.')}
       render={(props) => (
@@ -179,7 +180,7 @@ const KakaoRegister = () => {
 
   return (
     <KakaoLogin
-      jsKey="575cf711a7fc002194a3cc8994b5fb82"
+      jsKey={jsKey}
       onSuccess={(result) => UtilStore.toggleSign(result)}
       onFailure={(result) => console.log(result)}
       render={(props) => (

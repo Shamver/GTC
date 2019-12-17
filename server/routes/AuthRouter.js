@@ -12,8 +12,8 @@ const conn = db.init();
 router.post('/register', (req, res) => {
   const data = req.body;
   let query = `SELECT COUNT(*) AS count FROM GTC_USER
-    WHERE U_TEL='${data.tel}'
-    or U_EMAIL='${data.email}'`;
+    WHERE TEL='${data.tel}'
+    or EMAIL='${data.email}'`;
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
@@ -22,16 +22,16 @@ router.post('/register', (req, res) => {
     } else {
       // 겹치는 명의가 없는 경우에는 유저 insert
       query = `INSERT INTO GTC_USER VALUES(
-        (SELECT * FROM (SELECT IFNULL(MAX(U_ID)+1,1) FROM GTC_USER) as temp),
+        (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_USER) as temp),
         '${data.email}',
-        '${data.password}',
         '${data.name}',
         '${data.nickname}',
         '${data.tel}',
         '${data.birth}',
-        '${data.gender}',
+        '${data.gender.toUpperCase()}',
         '${data.gtNickname}',
-        sysdate()
+        sysdate(),
+        null
         )
       `;
 

@@ -10,21 +10,23 @@ const ConfirmAlert = () => {
   const { UtilStore } = useStores();
   return (
     <div>
-      <Modal isOpen={UtilStore.confirmAlertToggle} toggle={() => { UtilStore.toggleConfirmAlert(''); }}>
-        <ModalHeader toggle={() => { UtilStore.toggleConfirmAlert(''); }}>확인 요청</ModalHeader>
+      <Modal isOpen={UtilStore.confirmAlertToggle} toggle={UtilStore.toggleConfirmAlert}>
+        <ModalHeader toggle={UtilStore.toggleConfirmAlert}>확인 요청</ModalHeader>
         <ModalBody>
-          {UtilStore.text}
+          {
+            UtilStore.text.split('\n').map((line) => (<span key={line}>{line}<br /></span>))
+          }
         </ModalBody>
         <ModalFooter>
           <Button
             color="primary"
             onClick={() => {
               UtilStore.callbackFunc();
-              UtilStore.toggleConfirmAlert('');
+              UtilStore.toggleConfirmAlert();
             }}
           >네
           </Button>
-          <Button color="secondary" onClick={() => { UtilStore.toggleConfirmAlert(''); }}>아니오</Button>
+          <Button color="secondary" onClick={UtilStore.toggleConfirmAlert}>아니오</Button>
         </ModalFooter>
       </Modal>
     </div>
@@ -34,6 +36,7 @@ const ConfirmAlert = () => {
 ConfirmAlert.propTypes = {
   UtilStore: Proptypes.shape({
     confirmAlertToggle: Proptypes.bool,
+    toggleConfirmAlert: Proptypes.func,
     text: Proptypes.string,
   }),
 };
