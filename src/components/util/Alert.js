@@ -13,7 +13,9 @@ const Alert = () => {
       <Modal isOpen={UtilStore.alertToggle} toggle={UtilStore.toggleAlert}>
         <ModalHeader toggle={UtilStore.toggleAlert}>알림</ModalHeader>
         <ModalBody>
-          {UtilStore.text}
+          {
+            UtilStore.text.split('\n').map((line) => (<span key={line}>{line}<br /></span>))
+          }
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={UtilStore.toggleAlert}>닫기</Button>

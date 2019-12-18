@@ -1,14 +1,15 @@
 import { observable, action } from 'mobx';
-import axios from 'axios';
-import RouteStore from "./RouteStore";
-import UtilStore from "./UtilStore";
 
 class SettingStore {
   @observable activeTab = 'ignore';
 
   @observable ignoreList = [];
 
-  @action getDataIgnore = (() => {
+  constructor(root) {
+    this.root = root;
+  }
+
+  @action getDataIgnore = () => {
     const tempData = [
       {
         id: 1,
@@ -25,7 +26,7 @@ class SettingStore {
     ];
 
     this.ignoreList = tempData;
-  });
+  };
 
   // @action getDateIgnore = () => {
   //   axios.post('/api/setting/getIgnore', {
@@ -65,9 +66,7 @@ class SettingStore {
 
   @action onDeleteIgnore = (() => {
     this.ignoreList = this.ignoreList.filter((item) => item.checked === false);
-
-
   });
 }
 
-export default new SettingStore();
+export default SettingStore;

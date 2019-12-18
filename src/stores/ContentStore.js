@@ -1,8 +1,6 @@
 import { action, observable } from 'mobx';
 import axios from 'axios';
 import React from 'react';
-import UtilStore from './UtilStore';
-import RouteStore from './RouteStore';
 
 class ContentStore {
   @observable post = {
@@ -33,6 +31,10 @@ class ContentStore {
 
   @observable boardList;
 
+  constructor(root) {
+    this.root = root;
+  }
+
   @action addPost = () => {
     axios.post('/api/addPost', {
       board: 'FREE',
@@ -44,8 +46,8 @@ class ContentStore {
     })
       .then((response) => {
         if (response.data) {
-          RouteStore.history.push('/free');
-          UtilStore.toggleAlert('글이 정상적으로 등록되었습니다.');
+          this.root.RouteStore.history.push('/free');
+          this.root.UtilStore.toggleAlert('글이 정상적으로 등록되었습니다.');
           this.post = {
             title: '',
             text: '',
@@ -85,4 +87,5 @@ class ContentStore {
   };
 }
 
-export default new ContentStore();
+export default ContentStore;
+

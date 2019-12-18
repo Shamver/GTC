@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import {
   TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Table, CustomInput, Button, Container,
 } from 'reactstrap';
-import classnames from 'classnames';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
@@ -69,7 +68,7 @@ const Settings = () => {
       <Nav tabs>
         <NavItem>
           <NavLinkBtn
-            className={classnames({ active: activeTab === 'ignore' })}
+            className={{ active: activeTab === 'ignore' }}
             onClick={SettingStore.onActive}
             name="ignore"
           >
@@ -78,7 +77,7 @@ const Settings = () => {
         </NavItem>
         <NavItem>
           <NavLinkBtn
-            className={classnames({ active: activeTab === 'favorite' })}
+            className={{ active: activeTab === 'favorite' }}
             onClick={SettingStore.onActive}
             name="favorite"
           >
@@ -87,7 +86,7 @@ const Settings = () => {
         </NavItem>
         <NavItem>
           <NavLinkBtn
-            className={classnames({ active: activeTab === 'closeAccount' })}
+            className={{ active: activeTab === 'closeAccount' }}
             onClick={SettingStore.onActive}
             name="closeAccount"
           >

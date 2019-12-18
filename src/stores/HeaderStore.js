@@ -10,6 +10,11 @@ class HeaderStore {
     login: false,
   };
 
+
+  constructor(root) {
+    this.root = root;
+  }
+
   @action onActive = (target) => {
     const keys = Object.keys(this.dropdown);
 
@@ -33,4 +38,4 @@ class HeaderStore {
   };
 }
 
-export default new HeaderStore();
+export default HeaderStore;

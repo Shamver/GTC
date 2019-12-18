@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
-import useStores from '../../stores/useStores';
+import * as Proptypes from 'prop-types';
 
 const RightLink = styled(Link)`
   float : right;
@@ -50,14 +50,13 @@ const PostTitle = styled(Link)`
   }
 `;
 
-const FreeBoard = () => {
-  const { RouteStore } = useStores();
+const FreeBoard = ({ location }) => {
   return (
     <BoardWrapper>
       <TableWrapper>
         <TableHead>
           <InlineH3>자유 게시판 </InlineH3>
-          <RightLink to={`${RouteStore.location.pathname}/post`}>
+          <RightLink to={`${location.pathname}/post`}>
             <Button color="danger" size="sm">
               <FontAwesomeIcon icon={faPen} />
               &nbsp;&nbsp;글 쓰기
@@ -108,6 +107,12 @@ const FreeBoard = () => {
     </BoardWrapper>
 
   );
+};
+
+FreeBoard.propTypes = {
+  location: Proptypes.shape({
+    pathname: Proptypes.string,
+  }).isRequired,
 };
 
 export default FreeBoard;
