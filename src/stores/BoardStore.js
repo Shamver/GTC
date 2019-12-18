@@ -2,7 +2,7 @@ import { action, observable } from 'mobx';
 import axios from 'axios';
 import React from 'react';
 
-class ContentStore {
+class BoardStore {
   @observable post = {
     board: '',
     title: '',
@@ -85,7 +85,16 @@ class ContentStore {
       </option>
     ));
   };
+
+  @action getBoardPostList = (board) => {
+    axios.post('/api/getPost', { board })
+      .then((response) => {
+        if (response.data) {
+          console.log(response.data);
+        }
+      })
+      .catch((response) => { console.log(response); });
+  }
 }
 
-export default ContentStore;
-
+export default BoardStore;

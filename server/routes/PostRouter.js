@@ -29,4 +29,15 @@ router.post('/addPost', (req, res) => {
   });
 });
 
+router.post('/getPost', (req, res) => {
+  const data = req.body;
+  const query = `SELECT * FROM GTC_BOARD_POST 
+    WHERE B_ID = '${data.board.replace('/', '')}'`;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+    res.send(rows);
+  });
+});
+
 module.exports = router;

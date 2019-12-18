@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 ReactDOM.render((
   <Provider
     HeaderStore={stores.HeaderStore}
-    ContentStore={stores.ContentStore}
+    BoardStore={stores.BoardStore}
     UtilStore={stores.UtilStore}
     CategoryStore={stores.CategoryStore}
     RouteStore={stores.RouteStore}

@@ -6,6 +6,7 @@ import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
+import useStores from '../../stores/useStores';
 
 const RightLink = styled(Link)`
   float : right;
@@ -51,6 +52,8 @@ const PostTitle = styled(Link)`
 `;
 
 const FreeBoard = ({ location }) => {
+  const { BoardStore } = useStores();
+  BoardStore.getBoardPostList(location.pathname);
   return (
     <BoardWrapper>
       <TableWrapper>
@@ -113,6 +116,13 @@ FreeBoard.propTypes = {
   location: Proptypes.shape({
     pathname: Proptypes.string,
   }).isRequired,
+  BoardStore: Proptypes.shape({
+    getBoardPostList: Proptypes.func,
+  }),
+};
+
+FreeBoard.defaultProps = {
+  BoardStore: null,
 };
 
 export default FreeBoard;

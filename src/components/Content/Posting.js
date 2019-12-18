@@ -49,23 +49,22 @@ const SelectInput = styled(Input)`
 `;
 
 const Posting = (props) => {
-  const { ContentStore } = useStores();
-  const { post } = ContentStore;
+  const { BoardStore } = useStores();
+  const { post } = BoardStore;
   const { match } = props;
   const { params } = match;
 
   useEffect(() => {
-    ContentStore.setPostBoard(params.board);
-    ContentStore.setPostBoardOptions();
-  }, [ContentStore, params.board]);
-
+    BoardStore.setPostBoard(params.board);
+    BoardStore.setPostBoardOptions();
+  }, [BoardStore, params.board]);
 
   return (
     <PostingWrapper>
       <PostingHeader>
         <Col xs="12">
-          <SelectInput type="select" name="board" value={post.board} onChange={ContentStore.onChangeValue}>
-            {ContentStore.boardList}
+          <SelectInput type="select" name="board" value={post.board} onChange={BoardStore.onChangeValue}>
+            {BoardStore.boardList}
           </SelectInput>
         </Col>
         <Col xs="2">
@@ -74,7 +73,7 @@ const Posting = (props) => {
           </CustomCheckbox>
         </Col>
         <Col>
-          <Input value={post.title} placeholder="제목을 입력해주세요..." onChange={ContentStore.onChangeValue} name="title" />
+          <Input value={post.title} placeholder="제목을 입력해주세요..." onChange={BoardStore.onChangeValue} name="title" />
         </Col>
       </PostingHeader>
       <CKEditor
@@ -82,7 +81,7 @@ const Posting = (props) => {
         data={post.text}
         onChange={(event, editor) => {
           const data = editor.getData();
-          ContentStore.onChangeValue(data);
+          BoardStore.onChangeValue(data);
         }}
       />
       <PostingFooter>
@@ -96,7 +95,7 @@ const Posting = (props) => {
           <FontAwesomeIcon icon={faChartBar} />
           &nbsp;설문 추가
         </MarginButton>
-        <RightButton color="danger" onClick={ContentStore.addPost}>
+        <RightButton color="danger" onClick={BoardStore.addPost}>
           <FontAwesomeIcon icon={faPen} />
           &nbsp;쓰기
         </RightButton>
@@ -120,6 +119,7 @@ Posting.propTypes = {
   }),
   match: PropTypes.shape({
     params: PropTypes.shape({
+      board: PropTypes.string,
     }),
   }).isRequired,
 };
