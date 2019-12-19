@@ -1,7 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
 import UserStore from './UserStore';
-import RouteStore from './RouteStore';
 import UtilStore from './UtilStore';
 
 class SettingStore {
@@ -16,13 +15,16 @@ class SettingStore {
   }
 
   @action getDataIgnore = (() => {
-    if (UserStore.userSessionData === undefined) {
-      UtilStore.toggleAlert('로그인 후 이용해주세요.');
-      RouteStore.history.push('/');
+    const { toggleAlert } = this.root.UtilStore;
+    const { userSessionData } = this.root.UserStore;
+    const { history } = this.root.RouteStore;
+    if (userSessionData === undefined) {
+      toggleAlert('로그인 후 이용해주세요.');
+      history.push('/');
     } else {
       axios.get('/api/setting/ignore', {
         params: {
-          user_id: UserStore.userSessionData.id,
+          user_id: userSessionData.id,
         },
       })
         .then((response) => {
