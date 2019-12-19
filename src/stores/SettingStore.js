@@ -8,6 +8,7 @@ class SettingStore {
   @observable activeTab = 'ignore';
 
   @observable ignoreList = [];
+
   @observable favoriteList = [];
 
   @action getDataIgnore = (() => {
