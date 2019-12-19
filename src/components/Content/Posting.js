@@ -85,9 +85,9 @@ const Posting = (props) => {
         }}
       />
       <PostingFooter>
-        <CustomCheckbox type="checkbox" id="bpReplyAllow" label="댓글 허용" />
-        <CustomCheckbox type="checkbox" id="bpSecret" label="비밀글" />
-        <CustomCheckbox type="checkbox" id="bpSecretReplyAllow" label="비밀 댓글 허용" />
+        <CustomCheckbox type="checkbox" id="bpReplyAllow" name="" label="댓글 허용" />
+        <CustomCheckbox type="checkbox" id="bpSecret" name="" label="비밀글" />
+        <CustomCheckbox type="checkbox" id="bpSecretReplyAllow" name="" label="비밀 댓글 허용" />
       </PostingFooter>
       <PostingFooter>
         <MarginButton color="secondary">작성취소</MarginButton>

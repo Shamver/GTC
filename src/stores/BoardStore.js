@@ -31,6 +31,10 @@ class BoardStore {
 
   @observable boardList;
 
+  @observable boardPostList = {
+    '/free': [],
+  };
+
   constructor(root) {
     this.root = root;
   }
@@ -91,6 +95,10 @@ class BoardStore {
       .then((response) => {
         if (response.data) {
           console.log(response.data);
+          this.boardPostList = {
+            ...this.boardPostList,
+            [board]: response.data,
+          };
         }
       })
       .catch((response) => { console.log(response); });

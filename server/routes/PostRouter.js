@@ -9,18 +9,17 @@ const conn = db.init();
 router.post('/addPost', (req, res) => {
   const data = req.body;
   const query = `INSERT INTO GTC_BOARD_POST
-    (BP_ID, B_ID, BC_ID, BP_ID_REPLY, BP_TITLE, BP_WRITER, BP_DATE, BP_VIEWS, BP_CONTENT, BP_DEPTH)
     VALUES(
-    (SELECT * FROM (SELECT IFNULL(MAX(BP_ID)+1,1) FROM GTC_BOARD_POST) as temp),
+    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_POST) as temp),
     '${data.board}',
     '${data.category}',
     null,
     '${data.title}',
-    1,
+    '${data.writer}',
     sysdate(),
     0,
     '${data.content}',
-    ${data.depth}
+     ${data.depth}
     )`;
 
   conn.query(query, (err) => {
