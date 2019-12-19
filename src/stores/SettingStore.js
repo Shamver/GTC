@@ -37,10 +37,11 @@ class SettingStore {
   });
 
   @action getDataFavorite = (() => {
-    if (UserStore.userSessionData !== undefined) {
+    const { userSessionData } = this.root.UserStore;
+    if (userSessionData !== undefined) {
       axios.get('/api/setting/favorite', {
         params: {
-          user_id: UserStore.userSessionData.id,
+          user_id: userSessionData.id,
         },
       })
         .then((response) => {
@@ -82,6 +83,7 @@ class SettingStore {
   });
 
   @action onDeleteIgnore = (() => {
+    const { toggleAlert } = this.root.UtilStore;
     const list = this.ignoreList.filter((item) => item.checked === true).map((v) => (v.id));
 
     if (list.length !== 0) {
@@ -96,12 +98,13 @@ class SettingStore {
         .catch((response) => { console.log(response); });
     } else {
       setTimeout(() => { // 딜레이를 안 주면 텍스트 할당이 안됨.. 대안 찾기.
-        UtilStore.toggleAlert('아무것도 선택되지 않았습니다.');
+        toggleAlert('아무것도 선택되지 않았습니다.');
       }, 100);
     }
   });
 
   @action onDeleteFavorite = (() => {
+    const { toggleAlert } = this.root.UtilStore;
     const list = this.favoriteList.filter((item) => item.checked === true).map((v) => (v.id));
 
     if (list.length !== 0) {
@@ -116,7 +119,7 @@ class SettingStore {
         .catch((response) => { console.log(response); });
     } else {
       setTimeout(() => { // 딜레이를 안 주면 텍스트 할당이 안됨.. 대안 찾기.
-        UtilStore.toggleAlert('아무것도 선택되지 않았습니다.');
+        toggleAlert('아무것도 선택되지 않았습니다.');
       }, 100);
     }
   });
