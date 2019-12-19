@@ -11,6 +11,10 @@ class SettingStore {
 
   @observable favoriteList = [];
 
+  constructor(root) {
+    this.root = root;
+  }
+
   @action getDataIgnore = (() => {
     if (UserStore.userSessionData === undefined) {
       UtilStore.toggleAlert('로그인 후 이용해주세요.');
