@@ -14,8 +14,10 @@ class SettingStore {
 
   @action getDataIgnore = (() => {
     const { toggleAlert } = this.root.UtilStore;
-    const { userSessionData } = this.root.UserStore;
+    const { userSessionData, userData } = this.root.UserStore;
     const { history } = this.root.RouteStore;
+
+    console.log(userData);
     if (userSessionData === undefined) {
       toggleAlert('로그인 후 이용해주세요.');
       history.push('/');
