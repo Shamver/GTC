@@ -2,11 +2,26 @@ const express = require('express');
 
 const router = express.Router();
 
+const authMiddleware = require('../middleware/auth');
+
 const db = require('../db_con')();
 
 const conn = db.init();
 
-router.post('/addPost', (req, res) => {
+router.get('/post', (req, res) => {
+  const data = req.query;
+  const query = `SELECT * FROM GTC_BOARD_POST 
+    WHERE B_ID = '${data.board.replace('/', '')}'`;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+    res.send(rows);
+  });
+});
+
+
+router.use('/post', authMiddleware);
+router.post('/post', (req, res) => {
   const data = req.body;
   const query = `INSERT INTO GTC_BOARD_POST
     VALUES(
@@ -19,7 +34,10 @@ router.post('/addPost', (req, res) => {
     sysdate(),
     0,
     '${data.content}',
-     ${data.depth}
+     ${data.depth},
+     '${data.secret}',
+     '${data.secretReplyAllow}',
+     '${data.replyAllow}'
     )`;
 
   conn.query(query, (err) => {
@@ -27,16 +45,4 @@ router.post('/addPost', (req, res) => {
     res.send(true);
   });
 });
-
-router.post('/getPost', (req, res) => {
-  const data = req.body;
-  const query = `SELECT * FROM GTC_BOARD_POST 
-    WHERE B_ID = '${data.board.replace('/', '')}'`;
-
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
-    res.send(rows);
-  });
-});
-
 module.exports = router;

@@ -68,9 +68,10 @@ const Posting = (props) => {
           </SelectInput>
         </Col>
         <Col xs="2">
-          <CustomCheckbox type="select" id="bpCategory">
+          <SelectInput type="select" name="category" value={post.category} onChange={BoardStore.onChangeValue}>
             <option value="FREE">자유</option>
-          </CustomCheckbox>
+            <option value="TALK">잡담</option>
+          </SelectInput>
         </Col>
         <Col>
           <Input value={post.title} placeholder="제목을 입력해주세요..." onChange={BoardStore.onChangeValue} name="title" />
@@ -85,9 +86,9 @@ const Posting = (props) => {
         }}
       />
       <PostingFooter>
-        <CustomCheckbox type="checkbox" id="bpReplyAllow" name="" label="댓글 허용" />
-        <CustomCheckbox type="checkbox" id="bpSecret" name="" label="비밀글" />
-        <CustomCheckbox type="checkbox" id="bpSecretReplyAllow" name="" label="비밀 댓글 허용" />
+        <CustomCheckbox type="checkbox" id="ReplyAllow" name="replyAllow" value="Y" label="댓글 허용" />
+        <CustomCheckbox type="checkbox" id="Secret" name="secret" value="Y" label="비밀글" />
+        <CustomCheckbox type="checkbox" id="SecretReplyAllow" name="secretReplyAllow" value="Y" label="비밀 댓글 허용" />
       </PostingFooter>
       <PostingFooter>
         <MarginButton color="secondary">작성취소</MarginButton>

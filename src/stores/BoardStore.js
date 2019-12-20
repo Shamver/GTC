@@ -5,27 +5,32 @@ import React from 'react';
 class BoardStore {
   @observable post = {
     board: '',
+    category: '',
     title: '',
     text: '',
+    depth: '',
+    secret: '',
+    replyAllow: '',
+    secretReplyAllow: '',
   };
 
   @observable boards = [{
-    value: 'notice',
+    value: 'NOTICE',
     name: '공지사항',
   }, {
-    value: 'free',
+    value: 'FREE',
     name: '자유 게시판',
   }, {
-    value: 'trade',
+    value: 'TRADE',
     name: '아이템 거래',
   }, {
-    value: 'cash',
+    value: 'CASH',
     name: '월드락 거래',
   }, {
-    value: 'crime',
+    value: 'CRIME',
     name: '신고게시판',
   }, {
-    value: 'qna',
+    value: 'Q&A',
     name: '질문 & 답변',
   }];
 
@@ -40,13 +45,16 @@ class BoardStore {
   }
 
   @action addPost = () => {
-    axios.post('/api/addPost', {
-      board: 'FREE',
-      category: 'ALL',
+    axios.post('/api/board/post', {
+      board: this.post.board,
+      category: this.post.category,
       title: this.post.title,
       writer: 'admin',
       content: this.post.text,
       depth: 1,
+      secret: this.post.secret,
+      replyAllow: this.post.replyAllow,
+      secretReplyAllow: this.post.secretReplyAllow,
     })
       .then((response) => {
         if (response.data) {
@@ -73,6 +81,7 @@ class BoardStore {
         [event.target.name]: event.target.value,
       };
     }
+    console.log(this.post.category);
   };
 
   @action setPostBoard = (board) => {
@@ -91,7 +100,7 @@ class BoardStore {
   };
 
   @action getBoardPostList = (board) => {
-    axios.post('/api/getPost', { board })
+    axios.get('/api/board/post', { params: { board } })
       .then((response) => {
         if (response.data) {
           console.log(response.data);
