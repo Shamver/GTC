@@ -14,17 +14,16 @@ class SettingStore {
 
   @action getDataIgnore = (() => {
     const { toggleAlert } = this.root.UtilStore;
-    const { userSessionData, userData } = this.root.UserStore;
+    const { userData } = this.root.UserStore;
     const { history } = this.root.RouteStore;
 
-    console.log(userData);
-    if (userSessionData === undefined) {
+    if (userData === undefined) {
       toggleAlert('로그인 후 이용해주세요.');
       history.push('/');
     } else {
       axios.get('/api/setting/ignore', {
         params: {
-          user_id: userSessionData.id,
+          user_id: userData.id,
         },
       })
         .then((response) => {
@@ -37,11 +36,11 @@ class SettingStore {
   });
 
   @action getDataFavorite = (() => {
-    const { userSessionData } = this.root.UserStore;
-    if (userSessionData !== undefined) {
+    const { userData } = this.root.UserStore;
+    if (userData !== undefined) {
       axios.get('/api/setting/favorite', {
         params: {
-          user_id: userSessionData.id,
+          user_id: userData.id,
         },
       })
         .then((response) => {

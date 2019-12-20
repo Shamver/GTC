@@ -49,6 +49,7 @@ router.post('/login', (req, res) => {
   const data = req.body;
   const secret = req.app.get('jwt-secret');
   const query = `SELECT EMAIL AS email
+    , ID AS id
     , NAME AS name
     , GT_NICKNAME AS gtNickname
     , NICKNAME AS nickname 
@@ -67,6 +68,7 @@ router.post('/login', (req, res) => {
       jwt.sign(
         {
           _id: rows[0].email,
+          id: rows[0].id,
           username: rows[0].nickname,
         },
         secret,
