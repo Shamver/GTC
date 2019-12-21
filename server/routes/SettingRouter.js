@@ -6,8 +6,8 @@ const db = require('../db_con')();
 const conn = db.init();
 
 router.get('/ignore', (req, res) => {
-  const query = `SELECT GUI.ID AS id, GUI.FROM_ID AS f_id, GUI.TARGET_ID AS t_id, date_format(GUI.DATE, '%Y년 %m월 %d일 %H시 %i분 %s초') AS date, GU.U_NICKNAME AS nickname FROM GTC_USER_IGNORE GUI LEFT JOIN GTC_USER GU
-    ON GUI.TARGET_ID = GU.U_ID
+  const query = `SELECT GUI.ID AS id, GUI.FROM_ID AS f_id, GUI.TARGET_ID AS t_id, date_format(GUI.DATE, '%Y년 %m월 %d일 %H시 %i분 %s초') AS date, GU.NICKNAME AS nickname FROM GTC_USER_IGNORE GUI LEFT JOIN GTC_USER GU
+    ON GUI.TARGET_ID = GU.ID
     WHERE GUI.FROM_ID='${req.query.user_id}'
     `;
 
@@ -42,7 +42,7 @@ router.delete('/ignore', (req, res) => {
 // 나중에 해당 포스트 제목 받아오는 쿼리도 넣어야 함.
 router.get('/favorite', (req, res) => {
   const query = `SELECT GUFP.ID AS id, GUFP.USER_ID AS f_id, GUFP.POST_ID AS nickname, date_format(GUFP.DATE, '%Y년 %m월 %d일 %H시 %i분 %s초') AS date FROM GTC_USER_FAVORITE_POST GUFP LEFT JOIN GTC_USER GU
-    ON GUFP.USER_ID = GU.U_ID
+    ON GUFP.USER_ID = GU.ID
     WHERE GUFP.USER_ID='${req.query.user_id}'
     `;
 
