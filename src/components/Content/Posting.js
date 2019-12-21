@@ -69,12 +69,13 @@ const Posting = (props) => {
         </Col>
         <Col xs="2">
           <SelectInput type="select" name="category" value={post.category} onChange={BoardStore.onChangeValue}>
+            <option value="">선택</option>
             <option value="FREE">자유</option>
             <option value="TALK">잡담</option>
           </SelectInput>
         </Col>
         <Col>
-          <Input value={post.title} placeholder="제목을 입력해주세요..." onChange={BoardStore.onChangeValue} name="title" />
+          <Input value={post.title} name="title" placeholder="제목을 입력해주세요..." onChange={BoardStore.onChangeValue} />
         </Col>
       </PostingHeader>
       <CKEditor
@@ -86,9 +87,9 @@ const Posting = (props) => {
         }}
       />
       <PostingFooter>
-        <CustomCheckbox type="checkbox" id="ReplyAllow" name="replyAllow" value="Y" label="댓글 허용" />
-        <CustomCheckbox type="checkbox" id="Secret" name="secret" value="Y" label="비밀글" />
-        <CustomCheckbox type="checkbox" id="SecretReplyAllow" name="secretReplyAllow" value="Y" label="비밀 댓글 허용" />
+        <CustomCheckbox type="checkbox" id="ReplyAllow" name="replyAllow" value="Y" label="댓글 허용" onChange={BoardStore.onChangeValue} />
+        <CustomCheckbox type="checkbox" id="Secret" name="secret" value="Y" label="비밀글" onChange={BoardStore.onChangeValue} />
+        <CustomCheckbox type="checkbox" id="SecretReplyAllow" name="secretReplyAllow" value="Y" label="비밀 댓글 허용" onChange={BoardStore.onChangeValue} />
       </PostingFooter>
       <PostingFooter>
         <MarginButton color="secondary">작성취소</MarginButton>

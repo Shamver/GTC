@@ -59,14 +59,14 @@ const PostList = observer(({ location }) => {
   }, []);
 
   return BoardStore.boardPostList[location.pathname].map((data) => (
-    <tr height="35">
-      <CenterTd>1</CenterTd>
-      <MiddleTd>
+    <tr height="35" id={data.id}>
+      <CenterTd>{data.id}</CenterTd>
+      <MiddleTd width="700">
         <FontAwesomeIcon icon={faCommentDots} /> &nbsp;
-        <PostTitle to="/dsa">[타르코프] 전문 신입 스트리머 땡포룻입니다 라이브 중입니다</PostTitle>
+        <PostTitle to={`/${data.id}`}>{data.title}</PostTitle>
       </MiddleTd>
-      <CenterTd>땡포릇</CenterTd>
-      <CenterTd>10:51</CenterTd>
+      <CenterTd>{data.writer}</CenterTd>
+      <CenterTd>{data.date}</CenterTd>
     </tr>
   ));
 });

@@ -38,6 +38,11 @@ class BoardStore {
 
   @observable boardPostList = {
     '/free': [],
+    '/trade': [],
+    '/notice': [],
+    '/cash': [],
+    '/qna': [],
+    '/crime': [],
   };
 
   constructor(root) {
@@ -81,11 +86,10 @@ class BoardStore {
         [event.target.name]: event.target.value,
       };
     }
-    console.log(this.post.category);
   };
 
   @action setPostBoard = (board) => {
-    this.post.board = board;
+    this.post.board = board.toUpperCase();
   };
 
   @action setPostBoardOptions = () => {
@@ -103,7 +107,6 @@ class BoardStore {
     axios.get('/api/board/post', { params: { board } })
       .then((response) => {
         if (response.data) {
-          console.log(response.data);
           this.boardPostList = {
             ...this.boardPostList,
             [board]: response.data,
