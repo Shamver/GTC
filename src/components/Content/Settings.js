@@ -154,6 +154,7 @@ const Settings = () => {
           <p>
             <CustomCheckbox type="checkbox" id="1" name="name" /> 위 내용을 충분히 이해했으며, 회원탈퇴를 진행하겠습니다.
           </p>
+          체크박스 체크유무 확인하도록 해야함.
           <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', () => { console.log('여기 넣을 함수 구현'); }); }}>회원탈퇴</Button>
         </TabPane>
       </TabContent>
