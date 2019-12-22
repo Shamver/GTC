@@ -115,6 +115,16 @@ class BoardStore {
       })
       .catch((response) => { console.log(response); });
   }
+
+  @action getPost = (id) => {
+    axios.get(`/api/board/post/${id}`, {})
+      .then((response) => {
+        if (response.data) {
+          console.log(response.data);
+        }
+      })
+      .catch((response) => { console.log(response); });
+  }
 }
 
 export default BoardStore;

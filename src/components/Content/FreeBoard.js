@@ -59,11 +59,11 @@ const PostList = observer(({ location }) => {
   }, []);
 
   return BoardStore.boardPostList[location.pathname].map((data) => (
-    <tr height="35" id={data.id}>
+    <tr height="35" key={data.id}>
       <CenterTd>{data.id}</CenterTd>
       <MiddleTd width="700">
         <FontAwesomeIcon icon={faCommentDots} /> &nbsp;
-        <PostTitle to={`/${data.id}`}>{data.title}</PostTitle>
+        <PostTitle to={`/post/${data.id}`}>{data.title}</PostTitle>
       </MiddleTd>
       <CenterTd>{data.writer}</CenterTd>
       <CenterTd>{data.date}</CenterTd>

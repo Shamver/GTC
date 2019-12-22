@@ -16,7 +16,8 @@ router.get('/post', (req, res) => {
         , P.DEPTH AS depth
         , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
     FROM GTC_BOARD_POST P 
-    WHERE B_ID = '${data.board.replace('/', '')}'`;
+    WHERE B_ID = '${data.board.replace('/', '')}'
+    ORDER BY P.DATE DESC`;
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
@@ -48,6 +49,26 @@ router.post('/post', (req, res) => {
   conn.query(query, (err) => {
     if (err) throw err;
     res.send(true);
+  });
+});
+
+router.get('/post/:id', (req, res) => {
+  const query = `SELECT P.ID AS id
+        , B_ID AS board
+        , BC_ID AS category
+        , P.TITLE AS title
+        , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = 1) AS writer
+        , P.DEPTH AS depth
+        , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
+        , P.SECRET as secret
+        , P.SECRET_REPLY_ALLOW as secretReplyAllow
+        , P.REPLY_ALLOW as replyAllow
+    FROM GTC_BOARD_POST P 
+    WHERE ID = ${req.params.id}`;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+    res.send(rows);
   });
 });
 module.exports = router;
