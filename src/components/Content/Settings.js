@@ -38,6 +38,11 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
+const CustomCheckbox = styled(CustomInput)`
+  display : inline !important;
+  margin-right : 10px;
+`;
+
 const TableBody = (title, data, onClickEvent) => (
   <tr key={title + data.id}>
     <TableTh scope="row">
@@ -144,11 +149,12 @@ const Settings = () => {
           <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', onDeleteFavorite); }}>삭제하기</Button>
         </TabPane>
         <TabPane tabId="closeAccount">
-          <Row>
-            <Col sm="12">
-              <h4>회원탈퇴 탭이야</h4>
-            </Col>
-          </Row>
+          <p><b>회원 탈퇴시 유의사항</b></p>
+          <p>유의사항 및 약관 내용</p>
+          <br />
+          <CustomCheckbox type="checkbox" id="1" name="name" /> 위 내용을 충분히 이해했으며, 회원탈퇴를 진행하겠습니다.
+          <br />
+          <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?'); }}>회원탈퇴</Button>
         </TabPane>
       </TabContent>
     </MainContainer>
