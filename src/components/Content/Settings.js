@@ -38,11 +38,6 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
-const CustomCheckbox = styled(CustomInput)`
-  display : inline !important;
-  margin-right : 10px;
-`;
-
 const TableBody = (title, data, onClickEvent) => (
   <tr key={title + data.id}>
     <TableTh scope="row">
@@ -60,7 +55,7 @@ const Settings = () => {
   const { SettingStore, UtilStore } = useStores();
   const {
     activeTab, ignoreList, favoriteList, onChangeIgnore, onChangeFavorite, getDataIgnore,
-    onDeleteIgnore, onDeleteFavorite, getDataFavorite,
+    onDeleteIgnore, onDeleteFavorite, getDataFavorite, onClickWithdrawal, isCheckedWithdrawal,
   } = SettingStore;
   const {
     toggleConfirmAlert,
@@ -151,11 +146,26 @@ const Settings = () => {
         <TabPane tabId="closeAccount">
           <p><b>회원 탈퇴시 유의사항</b></p>
           <p>유의사항 및 약관 내용</p>
-          <p>
-            <CustomCheckbox type="checkbox" id="1" name="name" /> 위 내용을 충분히 이해했으며, 회원탈퇴를 진행하겠습니다.
-          </p>
-          체크박스 체크유무 확인하도록 해야함.
-          <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', () => { console.log('여기 넣을 함수 구현'); }); }}>회원탈퇴</Button>
+          <CustomInput
+            type="checkbox"
+            id="withdrawalIsChecked"
+            name="withdrawalIsChecked"
+            onClick={onClickWithdrawal}
+            label="위 내용을 충분히 이해했으며, 회원탈퇴를 진행하겠습니다."
+          />
+          <br />
+          <Button
+            color="danger"
+            onClick={() => {
+              isCheckedWithdrawal(() => {
+                toggleConfirmAlert('정말 삭제하시겠어요?', () => {
+                  console.log('여기 넣을 함수 구현');
+                });
+              });
+            }}
+          >
+            회원탈퇴
+          </Button>
         </TabPane>
       </TabContent>
     </MainContainer>

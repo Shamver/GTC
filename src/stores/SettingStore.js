@@ -8,6 +8,8 @@ class SettingStore {
 
   @observable favoriteList = [];
 
+  @observable withdrawalIsChecked = false;
+
   constructor(root) {
     this.root = root;
   }
@@ -122,6 +124,18 @@ class SettingStore {
       }, 100);
     }
   });
+
+  @action onClickWithdrawal = (() => {
+    this.withdrawalIsChecked = !this.withdrawalIsChecked;
+  })
+
+  @action isCheckedWithdrawal = ((next) => {
+    if (this.withdrawalIsChecked) {
+      next();
+    } else {
+      this.root.UtilStore.toggleAlert('내용 확인란에 체크를 해주셔야 합니다.');
+    }
+  })
 }
 
 export default SettingStore;
