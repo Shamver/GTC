@@ -9,9 +9,9 @@ class BoardStore {
     title: '',
     text: '',
     depth: '',
-    secret: '',
-    replyAllow: '',
-    secretReplyAllow: '',
+    secret: 'N',
+    replyAllow: 'N',
+    secretReplyAllow: 'N',
   };
 
   @observable boards = [{
@@ -66,8 +66,14 @@ class BoardStore {
           this.root.RouteStore.history.push('/free');
           this.root.UtilStore.toggleAlert('글이 정상적으로 등록되었습니다.');
           this.post = {
+            board: '',
+            category: '',
             title: '',
             text: '',
+            depth: '',
+            secret: 'N',
+            replyAllow: 'N',
+            secretReplyAllow: 'N',
           };
         }
       })
@@ -75,10 +81,16 @@ class BoardStore {
   };
 
   @action onChangeValue = (event) => {
+    console.log(event);
     if (typeof event === 'string') {
       this.post = {
         ...this.post,
         text: event,
+      };
+    } else if (this.post[event.target.name] === 'Y') {
+      this.post = {
+        ...this.post,
+        [event.target.name]: 'N',
       };
     } else {
       this.post = {
