@@ -22,7 +22,7 @@ class UtilStore {
     this.alertToggle = !this.alertToggle;
   };
 
-  @action toggleConfirmAlert = (text = '', func = undefined) => {
+  @action toggleConfirmAlert = (text = '', func = () => {}) => {
     this.text = text;
     this.callbackFunc = func;
     this.confirmAlertToggle = !this.confirmAlertToggle;
