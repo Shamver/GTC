@@ -22,8 +22,8 @@ class UtilStore {
     this.alertToggle = !this.alertToggle;
   };
 
-  @action toggleConfirmAlert = (text = '', func = () => {}) => {
-    this.text = text;
+  @action toggleConfirmAlert = (text, func = () => {}) => {
+    if (text && typeof text === 'string') this.text = text;
     this.callbackFunc = func;
     this.confirmAlertToggle = !this.confirmAlertToggle;
   };
