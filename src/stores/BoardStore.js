@@ -50,6 +50,10 @@ class BoardStore {
   }
 
   @action addPost = () => {
+    if (!this.postValidationCheck()) {
+      return false;
+    }
+
     axios.post('/api/board/post', {
       board: this.post.board,
       category: this.post.category,
@@ -78,10 +82,11 @@ class BoardStore {
         }
       })
       .catch((response) => { console.log(response); });
+
+    return true;
   };
 
   @action onChangeValue = (event) => {
-    console.log(event);
     if (typeof event === 'string') {
       this.post = {
         ...this.post,
@@ -137,6 +142,34 @@ class BoardStore {
       })
       .catch((response) => { console.log(response); });
   }
+
+  postValidationCheck = () => {
+    // board
+    if (!this.post.board) {
+      this.root.UtilStore.toggleAlert('게시판을 선택해주세요.');
+      return false;
+    }
+
+    // category
+    if (!this.post.category) {
+      this.root.UtilStore.toggleAlert('카테고리를 선택해주세요.');
+      return false;
+    }
+
+    // title
+    if (!this.post.title.trim()) {
+      this.root.UtilStore.toggleAlert('제목을 입력해주세요.');
+      return false;
+    }
+
+    // text
+    if (!this.post.text.trim()) {
+      this.root.UtilStore.toggleAlert('내용을 입력해주세요.');
+      return false;
+    }
+
+    return true;
+  };
 }
 
 export default BoardStore;
