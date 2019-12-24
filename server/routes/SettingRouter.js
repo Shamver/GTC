@@ -74,5 +74,16 @@ router.delete('/favorite', (req, res) => {
   });
 });
 
+router.delete('/withdrawal', (req, res) => {
+  const data = req.body;
+
+  const query = `
+  
+  `;
+
+  // conn.query();
+
+  res.send(200);
+});
 
 module.exports = router;

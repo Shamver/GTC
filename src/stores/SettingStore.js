@@ -135,7 +135,24 @@ class SettingStore {
     } else {
       this.root.UtilStore.toggleAlert('내용 확인란에 체크를 해주셔야 합니다.');
     }
-  })
+  });
+
+  @action withdrawal = (() => {
+    const { userData } = this.root.UserStore;
+    if (userData !== undefined) {
+      axios.get('/api/setting/favorite', {
+        params: {
+          user_id: userData.id,
+        },
+      })
+        .then((response) => {
+          if (response.data) {
+            this.favoriteList = response.data;
+          }
+        })
+        .catch((response) => { console.log(response); });
+    }
+  });
 }
 
 export default SettingStore;
