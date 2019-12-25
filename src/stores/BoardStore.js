@@ -53,12 +53,13 @@ class BoardStore {
     if (!this.postValidationCheck()) {
       return false;
     }
+    console.log( this.root.UserStore.userData);
 
     axios.post('/api/board/post', {
       board: this.post.board,
       category: this.post.category,
       title: this.post.title,
-      writer: 'admin',
+      writer: this.root.UserStore.userData.id,
       content: this.post.text,
       depth: 1,
       secret: this.post.secret,

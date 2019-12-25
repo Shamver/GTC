@@ -12,7 +12,7 @@ router.get('/post', (req, res) => {
   const data = req.query;
   const query = `SELECT P.ID AS id
         , P.TITLE AS title
-        , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = 1) AS writer
+        , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
         , P.DEPTH AS depth
         , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
     FROM GTC_BOARD_POST P 
