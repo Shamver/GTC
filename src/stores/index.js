@@ -1,5 +1,5 @@
 import HeaderStore from './HeaderStore';
-import ContentStore from './ContentStore';
+import BoardStore from './BoardStore';
 import UtilStore from './UtilStore';
 import CategoryStore from './CategoryStore';
 import RouteStore from './RouteStore';
@@ -9,7 +9,7 @@ import SettingStore from './SettingStore';
 class RootStore {
   constructor() {
     this.HeaderStore = new HeaderStore(this);
-    this.ContentStore = new ContentStore(this);
+    this.BoardStore = new BoardStore(this);
     this.UtilStore = new UtilStore(this);
     this.CategoryStore = new CategoryStore(this);
     this.RouteStore = new RouteStore(this);

@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 const api = require('./routes/index.js');
-const postApi = require('./routes/PostRouter.js');
+const boardApi = require('./routes/BoardRouter.js');
 const authApi = require('./routes/AuthRouter.js');
 const userApi = require('./routes/UserRouter.js');
 
@@ -20,7 +20,9 @@ app.use(bodyParser.json());
 app.set('jwt-secret', jwtConfig.secret);
 
 app.use('/api', api);
-app.use('/api', postApi);
+
+
+app.use('/api/board', boardApi);
 
 app.use('/api/auth', authApi);
 

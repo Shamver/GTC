@@ -49,32 +49,33 @@ const SelectInput = styled(Input)`
 `;
 
 const Posting = (props) => {
-  const { ContentStore } = useStores();
-  const { post } = ContentStore;
+  const { BoardStore } = useStores();
+  const { post } = BoardStore;
   const { match } = props;
   const { params } = match;
 
   useEffect(() => {
-    ContentStore.setPostBoard(params.board);
-    ContentStore.setPostBoardOptions();
-  }, [ContentStore, params.board]);
-
+    BoardStore.setPostBoard(params.board);
+    BoardStore.setPostBoardOptions();
+  }, [BoardStore, params.board]);
 
   return (
     <PostingWrapper>
       <PostingHeader>
         <Col xs="12">
-          <SelectInput type="select" name="board" value={post.board} onChange={ContentStore.onChangeValue}>
-            {ContentStore.boardList}
+          <SelectInput type="select" name="board" value={post.board} onChange={BoardStore.onChangeValue}>
+            {BoardStore.boardList}
           </SelectInput>
         </Col>
         <Col xs="2">
-          <CustomCheckbox type="select" id="bpCategory">
+          <SelectInput type="select" name="category" value={post.category} onChange={BoardStore.onChangeValue}>
+            <option value="">선택</option>
             <option value="FREE">자유</option>
-          </CustomCheckbox>
+            <option value="TALK">잡담</option>
+          </SelectInput>
         </Col>
         <Col>
-          <Input value={post.title} placeholder="제목을 입력해주세요..." onChange={ContentStore.onChangeValue} name="title" />
+          <Input value={post.title} name="title" placeholder="제목을 입력해주세요..." onChange={BoardStore.onChangeValue} />
         </Col>
       </PostingHeader>
       <CKEditor
@@ -82,13 +83,13 @@ const Posting = (props) => {
         data={post.text}
         onChange={(event, editor) => {
           const data = editor.getData();
-          ContentStore.onChangeValue(data);
+          BoardStore.onChangeValue(data);
         }}
       />
       <PostingFooter>
-        <CustomCheckbox type="checkbox" id="bpReplyAllow" label="댓글 허용" />
-        <CustomCheckbox type="checkbox" id="bpSecret" label="비밀글" />
-        <CustomCheckbox type="checkbox" id="bpSecretReplyAllow" label="비밀 댓글 허용" />
+        <CustomCheckbox type="checkbox" id="replyAllow" name="replyAllow" value="Y" label="댓글 허용" onChange={BoardStore.onChangeValue} />
+        <CustomCheckbox type="checkbox" id="secret" name="secret" value="Y" label="비밀글" onChange={BoardStore.onChangeValue} />
+        <CustomCheckbox type="checkbox" id="secretReplyAllow" name="secretReplyAllow" value="Y" label="비밀 댓글 허용" onChange={BoardStore.onChangeValue} />
       </PostingFooter>
       <PostingFooter>
         <MarginButton color="secondary">작성취소</MarginButton>
@@ -96,7 +97,7 @@ const Posting = (props) => {
           <FontAwesomeIcon icon={faChartBar} />
           &nbsp;설문 추가
         </MarginButton>
-        <RightButton color="danger" onClick={ContentStore.addPost}>
+        <RightButton color="danger" onClick={BoardStore.addPost}>
           <FontAwesomeIcon icon={faPen} />
           &nbsp;쓰기
         </RightButton>
@@ -120,6 +121,7 @@ Posting.propTypes = {
   }),
   match: PropTypes.shape({
     params: PropTypes.shape({
+      board: PropTypes.string,
     }),
   }).isRequired,
 };

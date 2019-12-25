@@ -3,8 +3,6 @@ import { Switch, Route } from 'react-router';
 import styled from 'styled-components';
 import Main from '../Content/Main';
 import Posting from '../Content/Posting';
-import FreeBoard from '../Content/FreeBoard';
-// import PostList from '../Content/PostList';
 import Alert from '../util/Alert';
 import Sign from '../util/Sign';
 import ConfirmAlert from '../util/ConfirmAlert';
@@ -22,6 +20,7 @@ const Content = () => (
       <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
       <Route exact path="/free" render={({ location }) => <Contents.FreeBoard location={location} />} />
       <Route exact path="/settings" render={() => <Contents.Settings />} />
+      <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
     </Switch>
     <Alert />
     <Sign />
