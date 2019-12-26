@@ -57,7 +57,7 @@ const FreeBoard = () => {
       <TableWrapper>
         <TableHead>
           <InlineH3>자유 게시판 </InlineH3>
-          <RightLink to={`${RouteStore.location.pathname}/post`}>
+          <RightLink to={`${RouteStore.history.location.pathname}/post`}>
             <Button color="danger" size="sm">
               <FontAwesomeIcon icon={faPen} />
               &nbsp;&nbsp;글 쓰기

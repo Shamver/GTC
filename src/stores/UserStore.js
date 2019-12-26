@@ -78,12 +78,16 @@ class UserStore {
     return true;
   };
 
-  @action logout = (text = '로그아웃이 완료되었습니다.') => {
+  @action logout = (e, text = '로그아웃이 완료되었습니다.') => {
+    const { history } = this.root.RouteStore;
     axios.post('/api/auth/logout', {})
       .then((response) => {
         if (response.data.type === 'LOGOUT') {
           this.root.UtilStore.toggleAlert(text);
           this.cookieCheck();
+          if (history.location.pathname === '/settings') {
+            history.push('/');
+          }
         }
       })
       .catch((response) => { console.log(response); });
