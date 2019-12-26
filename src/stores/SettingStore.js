@@ -25,7 +25,7 @@ class SettingStore {
     } else {
       axios.get('/api/setting/ignore', {
         params: {
-          user_id: userData.id,
+          userId: userData.id,
         },
       })
         .then((response) => {
@@ -42,7 +42,7 @@ class SettingStore {
     if (userData !== undefined) {
       axios.get('/api/setting/favorite', {
         params: {
-          user_id: userData.id,
+          userId: userData.id,
         },
       })
         .then((response) => {
@@ -140,14 +140,14 @@ class SettingStore {
   @action withdrawal = (() => {
     const { userData } = this.root.UserStore;
     if (userData !== undefined) {
-      axios.get('/api/setting/favorite', {
-        params: {
-          user_id: userData.id,
+      axios.delete('/api/setting/withdrawal', {
+        data: {
+          userId: userData.id,
         },
       })
         .then((response) => {
           if (response.data) {
-            this.favoriteList = response.data;
+            this.root.UtilStore.toggleAlert('성공적으로 탈퇴되었습니다.');
           }
         })
         .catch((response) => { console.log(response); });

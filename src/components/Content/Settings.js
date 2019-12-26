@@ -55,7 +55,7 @@ const Settings = () => {
   const { SettingStore, UtilStore } = useStores();
   const {
     activeTab, ignoreList, favoriteList, onChangeIgnore, onChangeFavorite, getDataIgnore,
-    onDeleteIgnore, onDeleteFavorite, getDataFavorite, onClickWithdrawal, isCheckedWithdrawal,
+    onDeleteIgnore, onDeleteFavorite, getDataFavorite, onClickWithdrawal, isCheckedWithdrawal, withdrawal
   } = SettingStore;
   const {
     toggleConfirmAlert,
@@ -159,7 +159,7 @@ const Settings = () => {
             onClick={() => {
               isCheckedWithdrawal(() => {
                 toggleConfirmAlert('정말 삭제하시겠어요?', () => {
-                  console.log('여기 넣을 함수 구현');
+                  withdrawal();
                 });
               });
             }}
