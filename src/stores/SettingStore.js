@@ -138,7 +138,9 @@ class SettingStore {
   });
 
   @action withdrawal = (() => {
-    const { userData } = this.root.UserStore;
+    const { userData, logout } = this.root.UserStore;
+    const { history } = this.root.RouteStore;
+
     if (userData !== undefined) {
       axios.delete('/api/setting/withdrawal', {
         data: {
@@ -147,7 +149,8 @@ class SettingStore {
       })
         .then((response) => {
           if (response.data) {
-            this.root.UtilStore.toggleAlert('성공적으로 탈퇴되었습니다.');
+            logout('성공적으로 탈퇴되었습니다.');
+            history.push('/');
           }
         })
         .catch((response) => { console.log(response); });
