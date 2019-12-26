@@ -149,7 +149,7 @@ class SettingStore {
       })
         .then((response) => {
           if (response.data) {
-            logout('성공적으로 탈퇴되었습니다.');
+            logout('성공적으로 탈퇴되었습니다.\n30일 이후에 재가입이 가능합니다.\n감사합니다.');
             history.push('/');
           }
         })
