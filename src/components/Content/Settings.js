@@ -55,7 +55,8 @@ const Settings = () => {
   const { SettingStore, UtilStore } = useStores();
   const {
     activeTab, ignoreList, favoriteList, onChangeIgnore, onChangeFavorite, getDataIgnore,
-    onDeleteIgnore, onDeleteFavorite, getDataFavorite, onClickWithdrawal, isCheckedWithdrawal, withdrawal
+    onDeleteIgnore, onDeleteFavorite, getDataFavorite, onClickWithdrawal, isCheckedWithdrawal,
+    withdrawal, onActive,
   } = SettingStore;
   const {
     toggleConfirmAlert,
@@ -74,8 +75,8 @@ const Settings = () => {
       <Nav tabs>
         <NavItem>
           <NavLinkBtn
-            className={{ active: activeTab === 'ignore' }}
-            onClick={SettingStore.onActive}
+            className={(activeTab === 'ignore' ? 'active' : '')}
+            onClick={onActive}
             name="ignore"
           >
             차단 목록
@@ -83,8 +84,8 @@ const Settings = () => {
         </NavItem>
         <NavItem>
           <NavLinkBtn
-            className={{ active: activeTab === 'favorite' }}
-            onClick={SettingStore.onActive}
+            className={(activeTab === 'favorite' ? 'active' : '')}
+            onClick={onActive}
             name="favorite"
           >
             즐겨찾기 목록
@@ -92,9 +93,9 @@ const Settings = () => {
         </NavItem>
         <NavItem>
           <NavLinkBtn
-            className={{ active: activeTab === 'closeAccount' }}
-            onClick={SettingStore.onActive}
-            name="closeAccount"
+            className={(activeTab === 'withdrawal' ? 'active' : '')}
+            onClick={onActive}
+            name="withdrawal"
           >
             회원탈퇴
           </NavLinkBtn>
@@ -143,9 +144,14 @@ const Settings = () => {
           </ListTable>
           <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', onDeleteFavorite); }}>삭제하기</Button>
         </TabPane>
-        <TabPane tabId="closeAccount">
+        <TabPane tabId="withdrawal">
           <p><b>회원 탈퇴시 유의사항</b></p>
-          <p>유의사항 및 약관 내용</p>
+          <div>
+            <p>1. 탈퇴 후, 30일 동안 재가입이 불가능하며 당연히 로그인도 불가능합니다.</p>
+            <p>2. 탈퇴일을 기준으로 30일 이후에 재가입이 가능합니다.</p>
+            <p>3. 탈퇴일 기준 30일 이후에는 개인정보와 관련된 데이터가 모두 삭제됩니다.</p>
+          </div>
+          <br />
           <CustomInput
             type="checkbox"
             id="withdrawalIsChecked"
