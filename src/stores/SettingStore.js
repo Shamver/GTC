@@ -1,49 +1,58 @@
 import { observable, action } from 'mobx';
+import axios from 'axios';
 
 class SettingStore {
   @observable activeTab = 'ignore';
 
   @observable ignoreList = [];
 
+  @observable favoriteList = [];
+
+  @observable withdrawalIsChecked = false;
+
   constructor(root) {
     this.root = root;
   }
 
-  @action getDataIgnore = () => {
-    const tempData = [
-      {
-        id: 1,
-        name: 'holy Bible',
-        date: '20191234',
-        checked: false,
-      },
-      {
-        id: 2,
-        name: 'SSSHIT',
-        date: '20124823',
-        checked: false,
-      },
-    ];
+  @action getDataIgnore = (() => {
+    const { toggleAlert } = this.root.UtilStore;
+    const { userData } = this.root.UserStore;
+    const { history } = this.root.RouteStore;
 
-    this.ignoreList = tempData;
-  };
+    if (userData === undefined) {
+      toggleAlert('로그인 후 이용해주세요.');
+      history.push('/');
+    } else {
+      axios.get('/api/setting/ignore', {
+        params: {
+          userId: userData.id,
+        },
+      })
+        .then((response) => {
+          if (response.data) {
+            this.ignoreList = response.data;
+          }
+        })
+        .catch((response) => { console.log(response); });
+    }
+  });
 
-  // @action getDateIgnore = () => {
-  //   axios.post('/api/setting/getIgnore', {
-  //     user_id: 1,
-  //   })
-  //     .then((response) => {
-  //       if (response.data) {
-  //         RouteStore.history.push('/free');
-  //         UtilStore.toggleAlert('글이 정상적으로 등록되었습니다.');
-  //         this.post = {
-  //           title: '',
-  //           text: '',
-  //         };
-  //       }
-  //     })
-  //     .catch((response) => { console.log(response); });
-  // };
+  @action getDataFavorite = (() => {
+    const { userData } = this.root.UserStore;
+    if (userData !== undefined) {
+      axios.get('/api/setting/favorite', {
+        params: {
+          userId: userData.id,
+        },
+      })
+        .then((response) => {
+          if (response.data) {
+            this.favoriteList = response.data;
+          }
+        })
+        .catch((response) => { console.log(response); });
+    }
+  });
 
 
   @action onActive = ((e) => {
@@ -64,8 +73,88 @@ class SettingStore {
     );
   });
 
+  @action onChangeFavorite = ((e) => {
+    const { name } = e.target;
+
+    this.favoriteList = this.favoriteList.map(
+      (data) => (data.id === Number.parseInt(name, 10)
+        ? { ...data, checked: !data.checked }
+        : data),
+    );
+  });
+
   @action onDeleteIgnore = (() => {
-    this.ignoreList = this.ignoreList.filter((item) => item.checked === false);
+    const { toggleAlert } = this.root.UtilStore;
+    const list = this.ignoreList.filter((item) => item.checked === true).map((v) => (v.id));
+
+    if (list.length !== 0) {
+      axios.delete('/api/setting/ignore', {
+        data: {
+          list,
+        },
+      })
+        .then(() => {
+          this.getDataIgnore();
+        })
+        .catch((response) => { console.log(response); });
+    } else {
+      setTimeout(() => { // 딜레이를 안 주면 텍스트 할당이 안됨.. 대안 찾기.
+        toggleAlert('아무것도 선택되지 않았습니다.');
+      }, 100);
+    }
+  });
+
+  @action onDeleteFavorite = (() => {
+    const { toggleAlert } = this.root.UtilStore;
+    const list = this.favoriteList.filter((item) => item.checked === true).map((v) => (v.id));
+
+    if (list.length !== 0) {
+      axios.delete('/api/setting/favorite', {
+        data: {
+          list,
+        },
+      })
+        .then(() => {
+          this.getDataFavorite();
+        })
+        .catch((response) => { console.log(response); });
+    } else {
+      setTimeout(() => { // 딜레이를 안 주면 텍스트 할당이 안됨.. 대안 찾기.
+        toggleAlert('아무것도 선택되지 않았습니다.');
+      }, 100);
+    }
+  });
+
+  @action onClickWithdrawal = (() => {
+    this.withdrawalIsChecked = !this.withdrawalIsChecked;
+  })
+
+  @action isCheckedWithdrawal = ((next) => {
+    if (this.withdrawalIsChecked) {
+      next();
+    } else {
+      this.root.UtilStore.toggleAlert('내용 확인란에 체크를 해주셔야 합니다.');
+    }
+  });
+
+  @action withdrawal = (() => {
+    const { userData, logout } = this.root.UserStore;
+    const { history } = this.root.RouteStore;
+
+    if (userData !== undefined) {
+      axios.delete('/api/setting/withdrawal', {
+        data: {
+          userId: userData.id,
+        },
+      })
+        .then((response) => {
+          if (response.data) {
+            logout({}, '성공적으로 탈퇴되었습니다.\n30일 이후에 재가입이 가능합니다.\n감사합니다.');
+            history.push('/');
+          }
+        })
+        .catch((response) => { console.log(response); });
+    }
   });
 }
 

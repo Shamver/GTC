@@ -14,6 +14,7 @@ const api = require('./routes/index.js');
 const boardApi = require('./routes/BoardRouter.js');
 const authApi = require('./routes/AuthRouter.js');
 const userApi = require('./routes/UserRouter.js');
+const settingApi = require('./routes/SettingRouter.js');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -28,6 +29,7 @@ app.use('/api/auth', authApi);
 
 app.use('/api/user', authMiddleware);
 app.use('/api/user', userApi);
+app.use('/api/setting', settingApi);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

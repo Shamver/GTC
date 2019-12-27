@@ -54,6 +54,7 @@ router.post('/login', (req, res) => {
     , NAME AS name
     , GT_NICKNAME AS gtNickname
     , NICKNAME AS nickname 
+    , DELETED_DATE AS deletedDate
     FROM GTC_USER
     WHERE EMAIL='${data.email}'`;
 
@@ -66,25 +67,33 @@ router.post('/login', (req, res) => {
       //   nickname: rows[0].nickname,
       //   gtNickname: rows[0].gtNickname,
       // };
-      jwt.sign(
-        {
-          id: rows[0].id,
-          username: rows[0].nickname,
-        },
-        secret,
-        {
-          expiresIn: '7d',
-          issuer: 'GTC',
-          subject: 'userInfo',
-        }, (err2, token) => {
-          if (err2) throw (err2);
-          res.cookie('authToken', token, { httpOnly: true });
-          res.json({
-            LOGIN_SUCCESS: true,
-            MESSAGE: '로그인이 완료되었습니다.',
-          });
-        },
-      );
+      if (rows[0].deletedDate === null) {
+        jwt.sign(
+          {
+            _id: rows[0].email,
+            id: rows[0].id,
+            username: rows[0].nickname,
+          },
+          secret,
+          {
+            expiresIn: '7d',
+            issuer: 'GTC',
+            subject: 'userInfo',
+          }, (err2, token) => {
+            if (err2) throw (err2);
+            res.cookie('authToken', token, { httpOnly: true });
+            res.json({
+              LOGIN_SUCCESS: true,
+              MESSAGE: '로그인이 완료되었습니다.',
+            });
+          },
+        );
+      } else {
+        res.send({
+          LOGIN_SUCCESS: false,
+          MESSAGE: '해당 아이디는 회원탈퇴 상태입니다.\n탈퇴일로부터 30일이 지난 후에 재가입해주세요.',
+        });
+      }
     } else {
       res.send({
         LOGIN_SUCCESS: false,
