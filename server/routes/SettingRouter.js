@@ -32,7 +32,6 @@ router.delete('/ignore', (req, res) => {
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
-    console.log(rows);
     if (rows.length >= 1) {
       res.send(200);
     } else {
@@ -69,7 +68,6 @@ router.delete('/favorite', (req, res) => {
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
-    console.log(rows);
     if (rows.length >= 1) {
       res.send(200);
     } else {
@@ -89,7 +87,6 @@ router.delete('/withdrawal', (req, res) => {
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
-    console.log(rows);
     if (rows.length > 0) {
       res.send(200);
     } else {
