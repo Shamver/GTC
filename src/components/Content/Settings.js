@@ -1,15 +1,11 @@
 import React, { useEffect } from 'react';
 import {
-  TabContent, TabPane, Nav, NavItem, NavLink, Row, Col, Table, CustomInput, Button, Container,
+  TabContent, TabPane, Nav, NavItem, NavLink, Table, CustomInput, Button, Container,
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
 import useStores from '../../stores/useStores';
-
-// import useStores from '../../stores/useStores';
-
-//
 
 const MainContainer = styled(Container)`
   background-color: white;
