@@ -2,6 +2,9 @@ import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
+import { Container, Button } from 'reactstrap';
+import { faClock, faCommentDots, faEye } from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useStores from '../../stores/useStores';
 
 const PostWrapper = styled.div`
@@ -24,6 +27,19 @@ const NavLine = styled.hr`
   margin-bottom : 0;
 `;
 
+const InnerContainer = styled(Container)`
+  margin : 0 !important;
+  padding : 0 3px !important;
+  height : 40px;
+  max-width : none !important;
+  background: #f6f6f6;
+`;
+
+const PostViewWrapper = styled.div`
+  border-left: 1px solid #f1f1f1;
+  border-right: 1px solid #f1f1f1;
+`;
+
 const PostView = ({ match }) => {
   const { BoardStore } = useStores();
   useEffect(() => {
@@ -39,7 +55,25 @@ const PostView = ({ match }) => {
         <br />
         {BoardStore.postView.writer}
         <NavLine />
-
+        <PostViewWrapper>
+          <InnerContainer>
+            <span>
+              <FontAwesomeIcon icon={faClock} /> &nbsp;
+              7시간 전
+            </span>
+            <span>
+              <FontAwesomeIcon icon={faEye} /> 0
+              <FontAwesomeIcon icon={faCommentDots} /> 0
+            </span>
+          </InnerContainer>
+          ㅎㅇㅎㅇㅎㅇㅎ
+          <InnerContainer>
+            <Button size="sm">목록</Button>
+            <Button size="sm">신고</Button>
+            <Button size="sm">스크랩</Button>
+          </InnerContainer>
+        </PostViewWrapper>
+        댓글
       </ViewWrapper>
     </PostWrapper>
   );
