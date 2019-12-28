@@ -4,11 +4,20 @@ import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { Container, Button } from 'reactstrap';
 import { faClock, faCommentDots, faEye } from '@fortawesome/free-regular-svg-icons';
+import { faCommentDots as faCommentDotss, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CKEditor from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import useStores from '../../stores/useStores';
+import CurrentBoard from './CurrentBoard';
 
 const PostWrapper = styled.div`
   background-color : white;
+  
+  & .ck-content {
+    height : 100px;
+    font-family: 'NanumSquareRound',sans-serif !important;
+  }
 `;
 
 const ViewWrapper = styled.div`
@@ -47,35 +56,51 @@ const PostView = ({ match }) => {
   }, []);
 
   return (
-    <PostWrapper>
-      <ViewWrapper>
-        <MarginlessH3>{BoardStore.postView.boardName}</MarginlessH3>
-        <br />
-        {BoardStore.postView.category} | {BoardStore.postView.title}
-        <br />
-        {BoardStore.postView.writer}
-        <NavLine />
-        <PostViewWrapper>
-          <InnerContainer>
-            <span>
-              <FontAwesomeIcon icon={faClock} /> &nbsp;
-              7시간 전
-            </span>
-            <span>
-              <FontAwesomeIcon icon={faEye} /> 0
-              <FontAwesomeIcon icon={faCommentDots} /> 0
-            </span>
-          </InnerContainer>
-          ㅎㅇㅎㅇㅎㅇㅎ
-          <InnerContainer>
-            <Button size="sm">목록</Button>
-            <Button size="sm">신고</Button>
-            <Button size="sm">스크랩</Button>
-          </InnerContainer>
-        </PostViewWrapper>
-        댓글
-      </ViewWrapper>
-    </PostWrapper>
+    <>
+      <PostWrapper>
+        <ViewWrapper>
+          <MarginlessH3>{BoardStore.postView.boardName}</MarginlessH3>
+          <br />
+          {BoardStore.postView.category} | {BoardStore.postView.title}
+          <br />
+          {BoardStore.postView.writer}
+          <NavLine />
+          <PostViewWrapper>
+            <InnerContainer>
+              <span>
+                <FontAwesomeIcon icon={faClock} /> &nbsp;
+                7시간 전
+              </span>
+              <span>
+                <FontAwesomeIcon icon={faEye} /> 0
+                <FontAwesomeIcon icon={faCommentDots} /> 0
+              </span>
+            </InnerContainer>
+            ㅎㅇㅎㅇㅎㅇㅎ
+            <InnerContainer>
+              <Button size="sm">목록</Button>
+              <Button size="sm">신고</Button>
+              <Button size="sm">스크랩</Button>
+            </InnerContainer>
+          </PostViewWrapper>
+          <FontAwesomeIcon icon={faCommentDotss} /> 댓글 0개
+          <CKEditor
+            editor={ClassicEditor}
+            data={BoardStore.replyText}
+            onChange={(event, editor) => {
+              const data = editor.getData();
+              BoardStore.onChangeValue(data);
+            }}
+          />
+          <Button size="sm">
+            <FontAwesomeIcon icon={faPen} />
+            &nbsp;
+            댓글 쓰기
+          </Button>
+        </ViewWrapper>
+      </PostWrapper>
+      <CurrentBoard />
+    </>
   );
 };
 
@@ -88,6 +113,7 @@ PostView.propTypes = {
     postView: Proptypes.shape({
       boardName: Proptypes.string,
     }),
+    replyText: Proptypes.string,
   }),
 };
 

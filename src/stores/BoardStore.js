@@ -16,6 +16,8 @@ class BoardStore {
 
   @observable postView = {};
 
+  @observable replyText = '';
+
   @observable boards = [{
     value: 'NOTICE',
     name: '공지사항',
