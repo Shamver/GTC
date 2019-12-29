@@ -52,13 +52,14 @@ const PostTitle = styled(Link)`
   }
 `;
 
-const PostList = observer(({ location }) => {
+const PostList = observer(({ pathname }) => {
   const { BoardStore } = useStores();
   useEffect(() => {
-    BoardStore.getBoardPostList(location.pathname);
+    BoardStore.getBoardPostList(pathname);
+    BoardStore.setCurrentBoard(pathname);
   }, []);
 
-  return BoardStore.boardPostList[location.pathname].map((data) => (
+  return BoardStore.boardPostList[pathname].map((data) => (
     <tr height="35" key={data.id}>
       <CenterTd>{data.id}</CenterTd>
       <MiddleTd width="700">
@@ -77,12 +78,12 @@ PostList.propTypes = {
   }).isRequired,
 };
 
-const FreeBoard = ({ location }) => (
+const FreeBoard = ({ pathname }) => (
   <BoardWrapper>
     <TableWrapper>
       <TableHead>
         <InlineH3>자유 게시판 </InlineH3>
-        <RightLink to={`${location.pathname}/post`}>
+        <RightLink to={`${pathname}/post`}>
           <Button color="danger" size="sm">
             <FontAwesomeIcon icon={faPen} />
             &nbsp;&nbsp;글 쓰기
@@ -91,7 +92,7 @@ const FreeBoard = ({ location }) => (
       </TableHead>
       <ManginessTable bordered hover size="sm">
         <tbody>
-          <PostList location={location} />
+          <PostList pathname={pathname} />
         </tbody>
       </ManginessTable>
     </TableWrapper>
@@ -99,11 +100,10 @@ const FreeBoard = ({ location }) => (
 );
 
 FreeBoard.propTypes = {
-  location: Proptypes.shape({
-    pathname: Proptypes.string,
-  }).isRequired,
+  pathname: Proptypes.string.isRequired,
   BoardStore: Proptypes.shape({
     getBoardPostList: Proptypes.func,
+    setCurrentBoard: Proptypes.func,
   }),
 };
 

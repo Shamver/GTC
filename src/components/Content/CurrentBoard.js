@@ -1,12 +1,19 @@
 import React from 'react';
 import useStores from '../../stores/useStores';
+import FreeBoard from './FreeBoard';
 
 const CurrentBoard = () => {
   const { BoardStore } = useStores();
-  return (
-    <>
+  const { currentBoard } = BoardStore;
 
-    </>
+  if (currentBoard === '/free') {
+    return (
+      <FreeBoard pathname="/free" />
+    );
+  }
+
+  return (
+    <FreeBoard pathname="/free" />
   );
 };
 

@@ -49,9 +49,15 @@ class BoardStore {
     '/crime': [],
   };
 
+  @observable currentBoard;
+
   constructor(root) {
     this.root = root;
   }
+
+  @action setCurrentBoard = (currentBoard) => {
+    this.currentBoard = currentBoard;
+  };
 
   @action addPost = () => {
     if (!this.postValidationCheck()) {

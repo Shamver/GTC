@@ -57,6 +57,7 @@ router.get('/post/:id', (req, res) => {
         , B_ID AS board
         , if(B_ID = 'FREE','자유게시판','그외') as boardName
         , BC_ID AS category
+        , if(BC_ID = 'FREE','자유','그외') as categoryName
         , P.TITLE AS title
         , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = 1) AS writer
         , P.DEPTH AS depth
