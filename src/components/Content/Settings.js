@@ -59,7 +59,7 @@ const Settings = () => {
 
   useEffect(() => {
     getDataIgnore();
-  }, []);
+  }, [getDataIgnore]);
 
   const TableData = ignoreList.map((v) => (TableBody(v, onChangeIgnore)));
 

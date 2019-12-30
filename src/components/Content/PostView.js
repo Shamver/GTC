@@ -10,6 +10,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import renderHTML from 'react-render-html';
 import useStores from '../../stores/useStores';
 import CurrentBoard from './CurrentBoard';
 
@@ -37,7 +38,7 @@ const MarginlessH3 = styled.h4`
   margin : 0px;
   font-weight: bold;
   border-bottom : 1px solid #e6e6e6;
-  padding-bottom : 2px;
+  padding-bottom : 4px;
 `;
 
 const NavLine = styled.hr`
@@ -112,7 +113,7 @@ const PostView = ({ match }) => {
   const { BoardStore } = useStores();
   useEffect(() => {
     BoardStore.getPost(match.params.id);
-  }, []);
+  }, [match.params.id, BoardStore]);
 
   return (
     <>
@@ -133,20 +134,16 @@ const PostView = ({ match }) => {
           <PostViewWrapper>
             <InnerContainer>
               <span>
-                <FontAwesomeIcon icon={faClock} /> 7시간 전
+                <FontAwesomeIcon icon={faClock} /> {BoardStore.postView.date}
               </span>
               <RightSpan>
                 <FontAwesomeIcon icon={faCommentDots} /> 0
                 &nbsp;
-                <FontAwesomeIcon icon={faEye} /> 0
+                <FontAwesomeIcon icon={faEye} /> {BoardStore.postView.views}
               </RightSpan>
             </InnerContainer>
             <ContentWrapper>
-              우선 4는 근본 프랭크가 다시 주인공을 맡지만 그냥 좀비만 잡는 개똥망 게임이 되버려서 비추천드림 <br />
-
-              만약 데드라이징 3까지 하실거면 스토리 이해를 위해 데드라이징 2를 하시는게 좋고 <br />
-
-              데드라이징 2에서 끝내실거면 근본 프랭크가 주인공으로 나오고, 2에서 여러가지 개편 된 데드라이징 2 오프더레코드하샘 <br />
+              {renderHTML(`${BoardStore.postView.content}`)}
             </ContentWrapper>
             <InnerFooterContainer>
               <Button outline color="secondary" size="sm">
@@ -197,13 +194,16 @@ const PostView = ({ match }) => {
 
 PostView.propTypes = {
   match: Proptypes.shape({
-    params: Proptypes.object,
+    params: Proptypes.shape({
+      id: Proptypes.string,
+    }),
   }).isRequired,
   BoardStore: Proptypes.shape({
     getPost: Proptypes.func,
     postView: Proptypes.shape({
       boardName: Proptypes.string,
       categoryName: Proptypes.string,
+      views: Proptypes.string,
     }),
     replyText: Proptypes.string,
   }),

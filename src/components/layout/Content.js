@@ -25,7 +25,9 @@ const Content = () => (
     <Alert />
     <Sign />
     <ConfirmAlert />
+    <br />
   </BorderedDiv>
+
 );
 
 
