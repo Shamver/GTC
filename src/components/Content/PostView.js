@@ -109,6 +109,16 @@ const RightButton = styled(Button)`
   float : right;
 `;
 
+const ReplyInHeader = styled.div`
+  background: #f7f7f7;
+  border-bottom: 1px solid #efefef;
+  padding: 0.4em 0.5em;
+`;
+
+const ReplyInContent = styled.div`
+  padding: 0.7em;
+`;
+
 const PostView = ({ match }) => {
   const { BoardStore } = useStores();
   useEffect(() => {
@@ -185,6 +195,12 @@ const PostView = ({ match }) => {
             &nbsp;
             댓글 쓰기
           </RightButton>
+          <ReplyInHeader>
+            댓글헤더
+          </ReplyInHeader>
+          <ReplyInContent>
+            본문
+          </ReplyInContent>
         </ViewWrapper>
       </PostWrapper>
       <CurrentBoard />
