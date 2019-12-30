@@ -256,7 +256,9 @@ const HeaderSessionComp = observer(() => {
           <Link to="/settings">
             <DropdownItem30>설정</DropdownItem30>
           </Link>
-          <DropdownItem30>글보관함</DropdownItem30>
+          <Link to="/postlocker">
+            <DropdownItem30>글보관함</DropdownItem30>
+          </Link>
           <DropdownItem30>아이콘보관함</DropdownItem30>
           <DropdownItem30 onClick={UserStore.logout}>
             <FontAwesomeIcon icon={faSignOutAlt} />
