@@ -61,7 +61,7 @@ const Settings = () => {
   useEffect(() => {
     getDataIgnore();
     getDataFavorite();
-  }, []);
+  }, [getDataIgnore]);
 
   const IgnoreTableData = ignoreList.map((v) => (TableBody('ignore', v, onChangeIgnore)));
   const FavoriteTableData = favoriteList.map((v) => (TableBody('favorite', v, onChangeFavorite)));
