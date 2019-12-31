@@ -4,15 +4,59 @@ import axios from 'axios';
 class PostLockerStore {
   @observable activeTab = 'myPost';
 
-  @observable ignoreList = [];
+  @observable postList = [];
 
-  @observable favoriteList = [];
-
-  @observable withdrawalIsChecked = false;
+  @observable replyList = [];
 
   constructor(root) {
     this.root = root;
   }
+
+  @action getDataPost = (() => {
+    const { toggleAlert } = this.root.UtilStore;
+    const { userData } = this.root.UserStore;
+    const { history } = this.root.RouteStore;
+
+    if (userData === undefined) {
+      toggleAlert('로그인 후 이용해주세요.');
+      history.push('/');
+    } else {
+      axios.get('/api/postlocker/post', {
+        params: {
+          userId: userData.id,
+        },
+      })
+        .then((response) => {
+          if (response.data) {
+            this.postList = response.data;
+          }
+        })
+        .catch((response) => { console.log(response); });
+    }
+  });
+
+  @action getDataReply = (() => {
+    const { toggleAlert } = this.root.UtilStore;
+    const { userData } = this.root.UserStore;
+    const { history } = this.root.RouteStore;
+
+    if (userData === undefined) {
+      toggleAlert('로그인 후 이용해주세요.');
+      history.push('/');
+    } else {
+      axios.get('/api/postlocker/reply', {
+        params: {
+          userId: userData.id,
+        },
+      })
+        .then((response) => {
+          if (response.data) {
+            this.replyList = response.data;
+          }
+        })
+        .catch((response) => { console.log(response); });
+    }
+  });
 
   @action getDataIgnore = (() => {
     const { toggleAlert } = this.root.UtilStore;

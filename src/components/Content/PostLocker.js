@@ -4,34 +4,42 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
+import renderHTML from 'react-render-html';
 
 import { Link } from 'react-router-dom';
 import useStores from '../../stores/useStores';
 
 const MainContainer = styled(Container)`
   background-color: white;
+  padding: 14px !important;
 `;
 
 const NavLinkBtn = styled(NavLink)`
+  padding: 10px 15px !important;
+  border: 1px solid transparent !important;
+  margin-right: 2px;
   
   &:hover {
     cursor: pointer;
+    border-color: #eee #eee #ddd;
+    background-color: #eee;
   }
   
   &.active {
     cursor: default;
-    background-color: #dbdbdb !important;
-    border: 0.5px solid #c9c9c9 !important;
+    border: 1px solid #c9c9c9 !important;
+    border-bottom-color: transparent !important;
   }
 `;
 
 const TableTr = styled.tr`
   height: 30px;
-`
+`;
 
 const TableTh = styled.th`
   vertical-align: middle !important;
   width: ${(props) => props.width}%;
+  padding: 8px !important;
 `;
 
 const TableTd = styled.td`
@@ -40,19 +48,24 @@ const TableTd = styled.td`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  padding: 8px !important;
 `;
 
 const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
+const DeleteBtn = styled(Button)`
+  margin: -5px 0 !important;
+`;
+
 const MyPostTableBody = (title, data) => (
-  <TableTr key={title + data.id}>
+  <TableTr key={title + data.postId}>
     <TableTd scope="row">
-      <b>{data.id}</b>
+      <b>{data.postId}</b>
     </TableTd>
     <TableTd>
-      <Link to={`/post/${data.id}`}>
+      <Link to={`/post/${data.postId}`}>
         {data.postTitle}
       </Link>
     </TableTd>
@@ -66,14 +79,14 @@ const MyPostTableBody = (title, data) => (
 );
 
 const MyReplyTableBody = (title, data) => (
-  <TableTr key={title + data.id}>
+  <TableTr key={title + data.postId}>
     <TableTd>
-      <Link to={`/post/${data.id}#${data.replyId}`}>
+      <Link to={`/post/${data.postId}#${data.replyId}`}>
         {data.postTitle}
       </Link>
     </TableTd>
     <TableTd>
-      {data.replyText}
+      {renderHTML(data.replyContent)}
     </TableTd>
     <TableTd>
       {data.replyDate}
@@ -84,7 +97,7 @@ const MyReplyTableBody = (title, data) => (
 const ScrapTableBody = (title, data, onClickEvent) => (
   <TableTr key={title + data.id}>
     <TableTd>
-      <b>{data.id}</b>
+      <b>{data.postId}</b>
     </TableTd>
     <TableTd>
       <Link to={`/post/${data.id}`}>
@@ -98,9 +111,9 @@ const ScrapTableBody = (title, data, onClickEvent) => (
       {data.postViews}
     </TableTd>
     <TableTd>
-      <Button color="danger" size="sm" onClick={onClickEvent}>
+      <DeleteBtn color="danger" size="sm" onClick={onClickEvent}>
         삭제
-      </Button>
+      </DeleteBtn>
     </TableTd>
   </TableTr>
 );
@@ -108,30 +121,28 @@ const ScrapTableBody = (title, data, onClickEvent) => (
 const PostLocker = () => {
   const { PostLockerStore, UtilStore } = useStores();
   const {
-    activeTab, onActive, onDeleteScrap,
+    activeTab, postList, replyList,
+    onActive, onDeleteScrap,
+    getDataPost, getDataReply,
   } = PostLockerStore;
   const {
     toggleConfirmAlert,
   } = UtilStore;
 
   useEffect(() => {
-
+    getDataPost();
   }, []);
-
-  const myPostList = [
-    {
-      id: 32877163,
-      postTitle: '오늘 쥐스타 인벤, 상황정리 짤',
-      postDate: '2019-11-17 15:29:03',
-      postViews: 2223,
-    },
-  ];
 
   const myReplyList = [
     {
-      id: 32877163,
+      postId: 32877163,
       postTitle: '오늘 쥐스타 인벤, 상황정리 짤',
-      replyText: 'ㄹㅇ ㅋㅋ',
+      replyContent: `
+        <p>1번째 줄</p>
+        <p>2번째 줄@@ㅁㄴㅇㅁㄴㅇㅁㄴ</p>
+        <p>3번째 줄</p>
+        <p>4번째 줄~~~~~~~</p>
+      `,
       replyDate: '2019-11-17 15:31:23',
       replyId: 123,
     },
@@ -139,14 +150,14 @@ const PostLocker = () => {
 
   const scrapList = [
     {
-      id: 32877163,
+      postId: 32877163,
       postTitle: '오늘 쥐스타 인벤, 상황정리 짤',
       postDate: '2019-11-17 15:29:03',
       postViews: 2223,
     },
   ];
 
-  const MyPostTableData = myPostList.map((v) => (MyPostTableBody('myPost', v)));
+  const MyPostTableData = postList.map((v) => (MyPostTableBody('myPost', v)));
   const MyReplyTableData = myReplyList.map((v) => (MyReplyTableBody('myReply', v)));
   const ScrapTableData = scrapList.map((v) => (ScrapTableBody('scrap', v, onDeleteScrap)));
 
@@ -186,18 +197,18 @@ const PostLocker = () => {
           <ListTable size="sm" bordered>
             <thead>
               <tr>
-                <TableTh width={15}>번호</TableTh>
-                <TableTh width={50}>제목</TableTh>
+                <TableTh width={10}>번호</TableTh>
+                <TableTh width={60}>제목</TableTh>
                 <TableTh width={20}>작성일</TableTh>
-                <TableTh width={15}>조회수</TableTh>
+                <TableTh width={10}>조회수</TableTh>
               </tr>
             </thead>
             <tbody>
               {MyPostTableData.length === 0 ? (
                 <tr>
-                  <td colSpan={3}>
+                  <TableTd colSpan={3}>
                     작성한 글이 없습니다.
-                  </td>
+                  </TableTd>
                 </tr>
               ) : MyPostTableData}
             </tbody>
@@ -215,9 +226,9 @@ const PostLocker = () => {
             <tbody>
               {MyReplyTableData.length === 0 ? (
                 <tr>
-                  <td colSpan={3}>
+                  <TableTd colSpan={3}>
                     작성한 댓글이 없습니다.
-                  </td>
+                  </TableTd>
                 </tr>
               ) : MyReplyTableData}
             </tbody>
@@ -237,9 +248,9 @@ const PostLocker = () => {
             <tbody>
               {ScrapTableData.length === 0 ? (
                 <tr>
-                  <td colSpan={3}>
+                  <TableTd colSpan={3}>
                     스크랩한 게시물이 없습니다.
-                  </td>
+                  </TableTd>
                 </tr>
               ) : ScrapTableData}
             </tbody>
