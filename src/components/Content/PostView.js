@@ -13,6 +13,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import renderHTML from 'react-render-html';
 import useStores from '../../stores/useStores';
 import CurrentBoard from './CurrentBoard';
+import Reply from './Reply'
 
 const PostWrapper = styled.div`
   background-color : white;
@@ -109,15 +110,6 @@ const RightButton = styled(Button)`
   float : right;
 `;
 
-const ReplyInHeader = styled.div`
-  background: #f7f7f7;
-  border-bottom: 1px solid #efefef;
-  padding: 0.4em 0.5em;
-`;
-
-const ReplyInContent = styled.div`
-  padding: 0.7em;
-`;
 
 const PostView = ({ match }) => {
   const { BoardStore } = useStores();
@@ -178,6 +170,9 @@ const PostView = ({ match }) => {
               <FontAwesomeIcon icon={faCommentDots} /> 댓글 0개
             </ReplyH5>
           </ReplyHeader>
+          <Reply />
+          <Reply />
+          <Reply />
           <CKEditorCustom
             editor={ClassicEditor}
             data={BoardStore.replyText}
@@ -195,12 +190,6 @@ const PostView = ({ match }) => {
             &nbsp;
             댓글 쓰기
           </RightButton>
-          <ReplyInHeader>
-            댓글헤더
-          </ReplyInHeader>
-          <ReplyInContent>
-            본문
-          </ReplyInContent>
         </ViewWrapper>
       </PostWrapper>
       <CurrentBoard />

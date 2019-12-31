@@ -59,7 +59,7 @@ router.get('/post/:id', (req, res) => {
         , BC_ID AS category
         , if(BC_ID = 'FREE','자유','그외') as categoryName
         , P.TITLE AS title
-        , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = 1) AS writer
+        , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
         , P.DEPTH AS depth
         , CASE WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
                     WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE,DATE, SYSDATE()),'분 전')
