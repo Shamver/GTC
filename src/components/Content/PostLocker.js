@@ -94,7 +94,7 @@ const MyReplyTableBody = (title, data) => (
   </TableTr>
 );
 
-const ScrapTableBody = (title, data, onClickEvent) => (
+const FavoriteTableBody = (title, data, onClickEvent) => (
   <TableTr key={title + data.id}>
     <TableTd>
       <b>{data.postId}</b>
@@ -121,9 +121,9 @@ const ScrapTableBody = (title, data, onClickEvent) => (
 const PostLocker = () => {
   const { PostLockerStore, UtilStore } = useStores();
   const {
-    activeTab, postList, replyList,
-    onActive, onDeleteScrap,
-    getDataPost, getDataReply,
+    activeTab, postList, replyList, favoriteList,
+    onActive, onDeleteFavorite,
+    getDataPost, getDataReply, getDataFavorite,
   } = PostLockerStore;
   const {
     toggleConfirmAlert,
@@ -131,6 +131,8 @@ const PostLocker = () => {
 
   useEffect(() => {
     getDataPost();
+    getDataReply();
+    getDataFavorite();
   }, []);
 
   const myReplyList = [
@@ -148,18 +150,9 @@ const PostLocker = () => {
     },
   ];
 
-  const scrapList = [
-    {
-      postId: 32877163,
-      postTitle: '오늘 쥐스타 인벤, 상황정리 짤',
-      postDate: '2019-11-17 15:29:03',
-      postViews: 2223,
-    },
-  ];
-
   const MyPostTableData = postList.map((v) => (MyPostTableBody('myPost', v)));
-  const MyReplyTableData = myReplyList.map((v) => (MyReplyTableBody('myReply', v)));
-  const ScrapTableData = scrapList.map((v) => (ScrapTableBody('scrap', v, onDeleteScrap)));
+  const MyReplyTableData = replyList.map((v) => (MyReplyTableBody('myReply', v)));
+  const FavoriteTableData = favoriteList.map((v) => (FavoriteTableBody('favorite', v, onDeleteFavorite)));
 
   return (
     <MainContainer>
@@ -188,7 +181,7 @@ const PostLocker = () => {
             onClick={onActive}
             name="scrap"
           >
-            스크랩
+            즐겨찾은 게시물
           </NavLinkBtn>
         </NavItem>
       </Nav>
@@ -206,7 +199,7 @@ const PostLocker = () => {
             <tbody>
               {MyPostTableData.length === 0 ? (
                 <tr>
-                  <TableTd colSpan={3}>
+                  <TableTd colSpan={4}>
                     작성한 글이 없습니다.
                   </TableTd>
                 </tr>
@@ -246,13 +239,13 @@ const PostLocker = () => {
               </tr>
             </thead>
             <tbody>
-              {ScrapTableData.length === 0 ? (
+              {FavoriteTableData.length === 0 ? (
                 <tr>
-                  <TableTd colSpan={3}>
-                    스크랩한 게시물이 없습니다.
+                  <TableTd colSpan={5}>
+                    즐겨찾기한 게시물이 없습니다.
                   </TableTd>
                 </tr>
-              ) : ScrapTableData}
+              ) : FavoriteTableData}
             </tbody>
           </ListTable>
         </TabPane>

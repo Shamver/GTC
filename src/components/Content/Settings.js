@@ -9,25 +9,40 @@ import useStores from '../../stores/useStores';
 
 const MainContainer = styled(Container)`
   background-color: white;
+  padding: 14px !important;
 `;
 
 const NavLinkBtn = styled(NavLink)`
+  padding: 10px 15px !important;
+  border: 1px solid transparent !important;
+  margin-right: 2px;
   
   &:hover {
     cursor: pointer;
+    border-color: #eee #eee #ddd;
+    background-color: #eee;
   }
   
   &.active {
     cursor: default;
-    background-color: #dbdbdb !important;
-    border: 0.5px solid #c9c9c9 !important;
+    border: 1px solid #c9c9c9 !important;
+    border-bottom-color: transparent !important;
   }
 `;
 
 const TableTh = styled.th`
+  vertical-align: middle !important;
+  width: ${(props) => props.width}%;
+  padding: 8px !important;
 `;
 
 const TableTd = styled.td`
+  vertical-align: middle !important;
+  width: ${(props) => props.width}%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 8px !important;
 `;
 
 const ListTable = styled(Table)`
@@ -40,7 +55,6 @@ const TableBody = (title, data, onClickEvent) => (
       <CustomInput type="checkbox" id={title + data.id} name={data.id} onClick={onClickEvent} />
     </TableTh>
     <TableTd>
-      { title === 'favorite' ? '나중에 글 제목도 넣어야 함. 글 ID: ' : '' }
       { data.nickname }
     </TableTd>
     <TableTd>{data.date}</TableTd>
@@ -50,8 +64,8 @@ const TableBody = (title, data, onClickEvent) => (
 const Settings = () => {
   const { SettingStore, UtilStore } = useStores();
   const {
-    activeTab, ignoreList, favoriteList, onChangeIgnore, onChangeFavorite, getDataIgnore,
-    onDeleteIgnore, onDeleteFavorite, getDataFavorite, onClickWithdrawal, isCheckedWithdrawal,
+    activeTab, ignoreList, onChangeIgnore, getDataIgnore,
+    onDeleteIgnore, onClickWithdrawal, isCheckedWithdrawal,
     withdrawal, onActive,
   } = SettingStore;
   const {
@@ -60,11 +74,9 @@ const Settings = () => {
 
   useEffect(() => {
     getDataIgnore();
-    getDataFavorite();
   }, []);
 
   const IgnoreTableData = ignoreList.map((v) => (TableBody('ignore', v, onChangeIgnore)));
-  const FavoriteTableData = favoriteList.map((v) => (TableBody('favorite', v, onChangeFavorite)));
 
   return (
     <MainContainer>
@@ -76,15 +88,6 @@ const Settings = () => {
             name="ignore"
           >
             차단 목록
-          </NavLinkBtn>
-        </NavItem>
-        <NavItem>
-          <NavLinkBtn
-            className={(activeTab === 'favorite' ? 'active' : '')}
-            onClick={onActive}
-            name="favorite"
-          >
-            즐겨찾기 목록
           </NavLinkBtn>
         </NavItem>
         <NavItem>
@@ -117,28 +120,9 @@ const Settings = () => {
               ) : IgnoreTableData}
             </tbody>
           </ListTable>
-          <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', onDeleteIgnore); }}>삭제하기</Button>
-        </TabPane>
-        <TabPane tabId="favorite">
-          <ListTable size="sm" bordered>
-            <thead>
-              <tr>
-                <TableTh>선택</TableTh>
-                <TableTh>즐겨찾기한 게시물</TableTh>
-                <TableTh>즐겨찾기한 날짜</TableTh>
-              </tr>
-            </thead>
-            <tbody>
-              {FavoriteTableData.length === 0 ? (
-                <tr>
-                  <td colSpan={3}>
-                    즐겨찾기한 게시물이 없습니다.
-                  </td>
-                </tr>
-              ) : FavoriteTableData}
-            </tbody>
-          </ListTable>
-          <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', onDeleteFavorite); }}>삭제하기</Button>
+          {IgnoreTableData.length === 0 ? '' : (
+            <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', onDeleteIgnore); }}>삭제하기</Button>
+          )}
         </TabPane>
         <TabPane tabId="withdrawal">
           <p><b>회원 탈퇴시 유의사항</b></p>

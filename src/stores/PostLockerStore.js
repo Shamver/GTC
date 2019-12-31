@@ -8,6 +8,8 @@ class PostLockerStore {
 
   @observable replyList = [];
 
+  @observable favoriteList = [];
+
   constructor(root) {
     this.root = root;
   }
@@ -84,7 +86,7 @@ class PostLockerStore {
   @action getDataFavorite = (() => {
     const { userData } = this.root.UserStore;
     if (userData !== undefined) {
-      axios.get('/api/setting/favorite', {
+      axios.get('/api/postlocker/favorite', {
         params: {
           userId: userData.id,
         },
@@ -117,16 +119,6 @@ class PostLockerStore {
     );
   });
 
-  @action onChangeFavorite = ((e) => {
-    const { name } = e.target;
-
-    this.favoriteList = this.favoriteList.map(
-      (data) => (data.id === Number.parseInt(name, 10)
-        ? { ...data, checked: !data.checked }
-        : data),
-    );
-  });
-
   @action onDeleteIgnore = (() => {
     const { toggleAlert } = this.root.UtilStore;
     const list = this.ignoreList.filter((item) => item.checked === true).map((v) => (v.id));
@@ -148,16 +140,13 @@ class PostLockerStore {
     }
   });
 
-  @action onDeleteScrap = ((e) => {
-    console.log('삭제해 스크랩!!');
-  })
-
+  // 배열 아닌 단일로 수정 필요
   @action onDeleteFavorite = (() => {
     const { toggleAlert } = this.root.UtilStore;
     const list = this.favoriteList.filter((item) => item.checked === true).map((v) => (v.id));
 
     if (list.length !== 0) {
-      axios.delete('/api/setting/favorite', {
+      axios.delete('/api/postlocker/favorite', {
         data: {
           list,
         },
