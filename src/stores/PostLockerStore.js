@@ -60,29 +60,6 @@ class PostLockerStore {
     }
   });
 
-  @action getDataIgnore = (() => {
-    const { toggleAlert } = this.root.UtilStore;
-    const { userData } = this.root.UserStore;
-    const { history } = this.root.RouteStore;
-
-    if (userData === undefined) {
-      toggleAlert('로그인 후 이용해주세요.');
-      history.push('/');
-    } else {
-      axios.get('/api/setting/ignore', {
-        params: {
-          userId: userData.id,
-        },
-      })
-        .then((response) => {
-          if (response.data) {
-            this.ignoreList = response.data;
-          }
-        })
-        .catch((response) => { console.log(response); });
-    }
-  });
-
   @action getDataFavorite = (() => {
     const { userData } = this.root.UserStore;
     if (userData !== undefined) {
@@ -119,79 +96,18 @@ class PostLockerStore {
     );
   });
 
-  @action onDeleteIgnore = (() => {
-    const { toggleAlert } = this.root.UtilStore;
-    const list = this.ignoreList.filter((item) => item.checked === true).map((v) => (v.id));
+  @action onDeleteFavorite = ((e) => {
+    const { name } = e.target;
 
-    if (list.length !== 0) {
-      axios.delete('/api/setting/ignore', {
-        data: {
-          list,
-        },
+    axios.delete('/api/postlocker/favorite', {
+      data: {
+        name,
+      },
+    })
+      .then(() => {
+        this.getDataFavorite();
       })
-        .then(() => {
-          this.getDataIgnore();
-        })
-        .catch((response) => { console.log(response); });
-    } else {
-      setTimeout(() => { // 딜레이를 안 주면 텍스트 할당이 안됨.. 대안 찾기.
-        toggleAlert('아무것도 선택되지 않았습니다.');
-      }, 100);
-    }
-  });
-
-  // 배열 아닌 단일로 수정 필요
-  @action onDeleteFavorite = (() => {
-    const { toggleAlert } = this.root.UtilStore;
-    const list = this.favoriteList.filter((item) => item.checked === true).map((v) => (v.id));
-
-    if (list.length !== 0) {
-      axios.delete('/api/postlocker/favorite', {
-        data: {
-          list,
-        },
-      })
-        .then(() => {
-          this.getDataFavorite();
-        })
-        .catch((response) => { console.log(response); });
-    } else {
-      setTimeout(() => { // 딜레이를 안 주면 텍스트 할당이 안됨.. 대안 찾기.
-        toggleAlert('아무것도 선택되지 않았습니다.');
-      }, 100);
-    }
-  });
-
-  @action onClickWithdrawal = (() => {
-    this.withdrawalIsChecked = !this.withdrawalIsChecked;
-  })
-
-  @action isCheckedWithdrawal = ((next) => {
-    if (this.withdrawalIsChecked) {
-      next();
-    } else {
-      this.root.UtilStore.toggleAlert('내용 확인란에 체크를 해주셔야 합니다.');
-    }
-  });
-
-  @action withdrawal = (() => {
-    const { userData, logout } = this.root.UserStore;
-    const { history } = this.root.RouteStore;
-
-    if (userData !== undefined) {
-      axios.delete('/api/setting/withdrawal', {
-        data: {
-          userId: userData.id,
-        },
-      })
-        .then((response) => {
-          if (response.data) {
-            logout({}, '성공적으로 탈퇴되었습니다.\n30일 이후에 재가입이 가능합니다.\n감사합니다.');
-            history.push('/');
-          }
-        })
-        .catch((response) => { console.log(response); });
-    }
+      .catch((response) => { console.log(response); });
   });
 }
 

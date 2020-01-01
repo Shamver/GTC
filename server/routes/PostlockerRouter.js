@@ -23,6 +23,7 @@ router.get('/post', (req, res) => {
   });
 });
 
+// 줄 길어지는거나 도배한거 어떻게 하냐.. 처리해야함.
 router.get('/reply', (req, res) => {
   const { userId } = req.query;
 
@@ -33,7 +34,6 @@ router.get('/reply', (req, res) => {
     `;
 
   conn.query(query, (err, rows) => {
-    // 댓글 콘텐츠는 3줄에서 끊기로
     if (err) throw err;
     if (rows.length >= 1) {
       res.send(rows);
@@ -43,12 +43,11 @@ router.get('/reply', (req, res) => {
   });
 });
 
-// 나중에 해당 포스트 제목 받아오는 쿼리도 넣어야 함.
 router.get('/favorite', (req, res) => {
   const { userId } = req.query;
 
-  const query = `SELECT GUFP.ID AS id, GUFP.USER_ID AS f_id, GUFP.POST_ID AS nickname, date_format(GUFP.DATE, '%Y년 %m월 %d일 %H시 %i분 %s초') AS date FROM GTC_USER_FAVORITE_POST GUFP LEFT JOIN GTC_USER GU
-    ON GUFP.USER_ID = GU.ID
+  const query = `SELECT GUFP.ID AS favoriteId, GBP.TITLE AS postTitle, GUFP.POST_ID AS postId, date_format(GUFP.DATE, '%Y-%m-%d %H:%i:%s') AS date FROM GTC_USER_FAVORITE_POST GUFP LEFT JOIN GTC_BOARD_POST GBP
+    ON GUFP.POST_ID = GBP.ID
     WHERE GUFP.USER_ID='${userId}'
     `;
 
@@ -62,12 +61,14 @@ router.get('/favorite', (req, res) => {
   });
 });
 
-// 배열아닌 단일로 수정 필요(settings -> postlocker 옮겨짐)
+// const query = `DELETE FROM GTC_USER_FAVORITE_POST
+//     WHERE ID IN (${data.list.join()})
+//   `; 복수 선택
 router.delete('/favorite', (req, res) => {
   const data = req.body;
 
   const query = `DELETE FROM GTC_USER_FAVORITE_POST
-    WHERE ID IN (${data.list.join()})
+    WHERE ID='${data.name}'
   `;
 
   conn.query(query, (err, rows) => {

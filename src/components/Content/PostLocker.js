@@ -85,7 +85,7 @@ const MyReplyTableBody = (title, data) => (
         {data.postTitle}
       </Link>
     </TableTd>
-    <TableTd>
+    <TableTd width={60}>
       {renderHTML(data.replyContent)}
     </TableTd>
     <TableTd>
@@ -111,7 +111,7 @@ const FavoriteTableBody = (title, data, onClickEvent) => (
       {data.postViews}
     </TableTd>
     <TableTd>
-      <DeleteBtn color="danger" size="sm" onClick={onClickEvent}>
+      <DeleteBtn name={data.favoriteId} color="danger" size="sm" onClick={onClickEvent}>
         삭제
       </DeleteBtn>
     </TableTd>
