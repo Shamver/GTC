@@ -27,7 +27,7 @@ router.get('/post', (req, res) => {
 router.get('/reply', (req, res) => {
   const { userId } = req.query;
 
-  const query = `SELECT GBP.ID AS postId, GBP.TITLE AS postTitle, GBR.ID AS replyId, GBR.CONTENT AS replyContent, GBR.DATE
+  const query = `SELECT GBP.ID AS postId, GBP.TITLE AS postTitle, GBR.ID AS replyId, GBR.CONTENT AS replyContent, date_format(GBR.DATE, '%Y-%m-%d %H:%i:%s') AS replyDate
     FROM GTC_BOARD_POST GBP LEFT JOIN GTC_BOARD_REPLY GBR
     ON GBP.ID = GBR.BP_ID
     WHERE GBR.WRITER = ${userId}
