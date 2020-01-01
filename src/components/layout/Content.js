@@ -18,7 +18,7 @@ const Content = () => (
     <Switch>
       <Route exact path="/" render={() => <Main />} />
       <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
-      <Route exact path="/free" render={({ location }) => <Contents.FreeBoard location={location} />} />
+      <Route exact path="/free" render={({ location }) => <Contents.FreeBoard pathname={location.pathname} />} />
       <Route exact path="/settings" render={() => <Contents.Settings />} />
       <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
       <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
@@ -26,7 +26,9 @@ const Content = () => (
     <Alert />
     <Sign />
     <ConfirmAlert />
+    <br />
   </BorderedDiv>
+
 );
 
 

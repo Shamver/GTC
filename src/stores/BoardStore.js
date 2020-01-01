@@ -14,6 +14,10 @@ class BoardStore {
     secretReplyAllow: 'N',
   };
 
+  @observable postView = {};
+
+  @observable replyText = '';
+
   @observable boards = [{
     value: 'NOTICE',
     name: '공지사항',
@@ -45,16 +49,20 @@ class BoardStore {
     '/crime': [],
   };
 
+  @observable currentBoard;
+
   constructor(root) {
     this.root = root;
   }
+
+  @action setCurrentBoard = (currentBoard) => {
+    this.currentBoard = currentBoard;
+  };
 
   @action addPost = () => {
     if (!this.postValidationCheck()) {
       return false;
     }
-    console.log( this.root.UserStore.userData);
-
     axios.post('/api/board/post', {
       board: this.post.board,
       category: this.post.category,
@@ -138,7 +146,9 @@ class BoardStore {
     axios.get(`/api/board/post/${id}`, {})
       .then((response) => {
         if (response.data) {
-          console.log(response.data);
+          const [post] = response.data;
+          this.postView = post;
+          console.log(post);
         }
       })
       .catch((response) => { console.log(response); });
