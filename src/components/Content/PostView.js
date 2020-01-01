@@ -13,7 +13,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import renderHTML from 'react-render-html';
 import useStores from '../../stores/useStores';
 import CurrentBoard from './CurrentBoard';
-import Reply from './Reply'
+import Reply from './Reply';
 
 const PostWrapper = styled.div`
   background-color : white;
@@ -115,6 +115,7 @@ const PostView = ({ match }) => {
   const { BoardStore } = useStores();
   useEffect(() => {
     BoardStore.getPost(match.params.id);
+    BoardStore.setReplyBpId(match.params.id);
   }, [match.params.id, BoardStore]);
 
   return (
@@ -181,11 +182,11 @@ const PostView = ({ match }) => {
             }}
             onChange={(event, editor) => {
               const data = editor.getData();
-              BoardStore.onChangeValue(data);
+              BoardStore.onChangeReplyValue(data);
             }}
             placeholder="내용을 작성해주세요."
           />
-          <RightButton color="info" size="sm">
+          <RightButton color="info" size="sm" onClick={BoardStore.addReply}>
             <FontAwesomeIcon icon={faPen} />
             &nbsp;
             댓글 쓰기
@@ -210,7 +211,10 @@ PostView.propTypes = {
       categoryName: Proptypes.string,
       views: Proptypes.string,
     }),
+    addReply: Proptypes.func,
     replyText: Proptypes.string,
+    setReplyBpId: Proptypes.func,
+    onChangeReplyValue: Proptypes.func,
   }),
 };
 

@@ -89,4 +89,40 @@ router.get('/post/:id', (req, res) => {
     });
   });
 });
+
+
+router.post('/reply', (req, res) => {
+  const data = req.body;
+  let query = `INSERT INTO GTC_BOARD_REPLY (
+      ID,
+      BP_ID,
+      ID_REPLY,
+      WRITER,
+      DATE,
+      CONTENT,
+      DEPTH
+    ) VALUES (
+      (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_REPLY) as temp),
+      ${data.bpId},
+      null, 
+      '${data.writer}', 
+      sysdate(), 
+      '${data.text}',
+      0
+    );
+  `;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+    query = `UPDATE GTC_BOARD_POST
+        SET VIEWS = VIEWS + 1
+        WHERE ID = ${req.params.id}`;
+
+    // 정상적으로 조회가 되었다면 조회수 +1
+    conn.query(query, (err2) => {
+      if (err2) throw err2;
+      res.send(rows);
+    });
+  });
+});
 module.exports = router;

@@ -14,9 +14,12 @@ class BoardStore {
     secretReplyAllow: 'N',
   };
 
-  @observable postView = {};
+  @observable reply = {
+    text: '',
+    bpId: '',
+  };
 
-  @observable replyText = '';
+  @observable postView = {};
 
   @observable boards = [{
     value: 'NOTICE',
@@ -63,6 +66,7 @@ class BoardStore {
     if (!this.postValidationCheck()) {
       return false;
     }
+
     axios.post('/api/board/post', {
       board: this.post.board,
       category: this.post.category,
@@ -95,7 +99,40 @@ class BoardStore {
     return true;
   };
 
+  @action addReply = () => {
+    if (!this.replyValidationCheck()) {
+      return false;
+    }
+
+    axios.post('/api/board/reply', {
+      text: this.reply.text,
+      writer: this.root.UserStore.userData.id,
+      bpId: this.reply.bpId,
+    })
+      .then((response) => {
+        if (response.data) {
+          this.root.UtilStore.toggleAlert('댓글이 정상적으로 등록되었습니다.');
+          this.reply = {
+            text: '',
+          };
+        }
+      })
+      .catch((response) => { console.log(response); });
+
+    return true;
+  };
+
+  replyValidationCheck = () => {
+    if (!this.reply.text.trim()) {
+      this.root.UtilStore.toggleAlert('댓글 내용을 입력해주세요.');
+      return false;
+    }
+
+    return true;
+  };
+
   @action onChangeValue = (event) => {
+    console.log(event);
     if (typeof event === 'string') {
       this.post = {
         ...this.post,
@@ -114,8 +151,19 @@ class BoardStore {
     }
   };
 
+  @action onChangeReplyValue = (text) => {
+    this.reply = {
+      ...this.reply,
+      text,
+    };
+  };
+
   @action setPostBoard = (board) => {
     this.post.board = board.toUpperCase();
+  };
+
+  @action setReplyBpId = (bpId) => {
+    this.reply.bpId = bpId;
   };
 
   @action setPostBoardOptions = () => {
@@ -140,7 +188,7 @@ class BoardStore {
         }
       })
       .catch((response) => { console.log(response); });
-  }
+  };
 
   @action getPost = (id) => {
     axios.get(`/api/board/post/${id}`, {})
@@ -148,11 +196,10 @@ class BoardStore {
         if (response.data) {
           const [post] = response.data;
           this.postView = post;
-          console.log(post);
         }
       })
       .catch((response) => { console.log(response); });
-  }
+  };
 
   postValidationCheck = () => {
     // board

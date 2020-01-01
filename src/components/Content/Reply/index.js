@@ -63,21 +63,21 @@ const Reply = () => (
       </ReplyInContent>
     </ReplyWrapper>
 
-    <ReplyLayout>
-      <Link href="#"><ReplyDepthIcon icon={faShare} /></Link>
-      <ReplyWrapper>
-        <ReplyInHeader>
-          <AvatarImg src={avatar} />
-          <ReplyWriter> 그림일기 </ReplyWriter> (글쓴이)
-          <span className="replyOption"> 좋아요  · 대댓글 ·  29분 전  ·  수정  · 신고 #</span>
-        </ReplyInHeader>
-        <ReplyInContent>
-          개창렬ㅇㅈ 얍얍프리미엄으로삼
-          <br />
-          저 밑에보니 인터넷으로 곽으로된거 4400원에 사셨네 ㅋㅋ
-        </ReplyInContent>
-      </ReplyWrapper>
-    </ReplyLayout>
+    {/*<ReplyLayout>*/}
+    {/*  <Link href="#"><ReplyDepthIcon icon={faShare} /></Link>*/}
+    {/*  <ReplyWrapper>*/}
+    {/*    <ReplyInHeader>*/}
+    {/*      <AvatarImg src={avatar} />*/}
+    {/*      <ReplyWriter> 그림일기 </ReplyWriter> (글쓴이)*/}
+    {/*      <span className="replyOption"> 좋아요  · 대댓글 ·  29분 전  ·  수정  · 신고 #</span>*/}
+    {/*    </ReplyInHeader>*/}
+    {/*    <ReplyInContent>*/}
+    {/*      개창렬ㅇㅈ 얍얍프리미엄으로삼*/}
+    {/*      <br />*/}
+    {/*      저 밑에보니 인터넷으로 곽으로된거 4400원에 사셨네 ㅋㅋ*/}
+    {/*    </ReplyInContent>*/}
+    {/*  </ReplyWrapper>*/}
+    {/*</ReplyLayout>*/}
   </>
 );
 
