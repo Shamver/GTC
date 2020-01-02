@@ -249,7 +249,9 @@ const HeaderSessionComp = observer(() => {
 
             <ProfileId>thisIsId</ProfileId>
           </DropdownItemTitle>
-          <DropdownItem30>새로운 알림 ({1} 개)</DropdownItem30>
+          <Link to="/newalert">
+            <DropdownItem30>새로운 알림 ({1} 개)</DropdownItem30>
+          </Link>
           <DropdownItem30>내 정보 관리</DropdownItem30>
           <DropdownItem30>{10} 포인트</DropdownItem30>
           <DropdownItem30 divider />
