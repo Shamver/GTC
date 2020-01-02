@@ -90,10 +90,10 @@ router.get('/post/:id', (req, res) => {
   });
 });
 
-
+router.use('/reply', authMiddleware);
 router.post('/reply', (req, res) => {
   const data = req.body;
-  let query = `INSERT INTO GTC_BOARD_REPLY (
+  const query = `INSERT INTO GTC_BOARD_REPLY (
       ID,
       BP_ID,
       ID_REPLY,
@@ -112,17 +112,32 @@ router.post('/reply', (req, res) => {
     );
   `;
 
+  conn.query(query, (err) => {
+    if (err) throw err;
+    res.send(true);
+  });
+});
+
+router.get('/reply', (req, res) => {
+  const data = req.query;
+  const query = `SELECT 
+    ID AS id
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = WRITER) AS writer
+    , CASE WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
+        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE,DATE, SYSDATE()),'분 전')
+        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR,DATE, SYSDATE()),'시간 전')
+        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY,DATE, SYSDATE()),'일 전')
+        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH,DATE, SYSDATE()),'달 전')
+       ELSE CONCAT(TIMESTAMPDIFF(YEAR,DATE, SYSDATE()),'년 전')
+    END  as date
+    , CONTENT as content
+    , DEPTH as depth
+    FROM GTC_BOARD_REPLY
+  WHERE BP_ID = '${data.bpId}'`;
+
   conn.query(query, (err, rows) => {
     if (err) throw err;
-    query = `UPDATE GTC_BOARD_POST
-        SET VIEWS = VIEWS + 1
-        WHERE ID = ${req.params.id}`;
-
-    // 정상적으로 조회가 되었다면 조회수 +1
-    conn.query(query, (err2) => {
-      if (err2) throw err2;
-      res.send(rows);
-    });
+    res.send(rows);
   });
 });
 module.exports = router;

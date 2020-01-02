@@ -110,6 +110,16 @@ const RightButton = styled(Button)`
   float : right;
 `;
 
+const ReplyList = observer(({ bpId }) => {
+  const { BoardStore } = useStores();
+  useEffect(() => {
+    BoardStore.getReply(bpId);
+  }, [BoardStore.getReply, bpId]);
+
+  return BoardStore.postReplyList.map((data) => (
+    <Reply data={data} />
+  ));
+});
 
 const PostView = ({ match }) => {
   const { BoardStore } = useStores();
@@ -171,14 +181,11 @@ const PostView = ({ match }) => {
               <FontAwesomeIcon icon={faCommentDots} /> 댓글 0개
             </ReplyH5>
           </ReplyHeader>
-          <Reply />
-          <Reply />
-          <Reply />
+          <ReplyList bpId={match.params.id} />
           <CKEditorCustom
             editor={ClassicEditor}
-            data={BoardStore.replyText}
-            onInit={(editor) => {
-              console.log(editor);
+            data={BoardStore.reply.text}
+            onInit={() => {
             }}
             onChange={(event, editor) => {
               const data = editor.getData();
@@ -206,15 +213,19 @@ PostView.propTypes = {
   }).isRequired,
   BoardStore: Proptypes.shape({
     getPost: Proptypes.func,
+    getReply: Proptypes.func,
     postView: Proptypes.shape({
       boardName: Proptypes.string,
       categoryName: Proptypes.string,
       views: Proptypes.string,
     }),
     addReply: Proptypes.func,
-    replyText: Proptypes.string,
     setReplyBpId: Proptypes.func,
     onChangeReplyValue: Proptypes.func,
+    reply: Proptypes.shape({
+      text: Proptypes.string,
+    }),
+    postReplyList: Proptypes.array,
   }),
 };
 

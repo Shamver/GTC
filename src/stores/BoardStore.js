@@ -52,6 +52,8 @@ class BoardStore {
     '/crime': [],
   };
 
+  @observable postReplyList = [];
+
   @observable currentBoard;
 
   constructor(root) {
@@ -114,7 +116,9 @@ class BoardStore {
           this.root.UtilStore.toggleAlert('댓글이 정상적으로 등록되었습니다.');
           this.reply = {
             text: '',
+            bpId: this.reply.bpId,
           };
+          this.getReply(this.reply.bpId);
         }
       })
       .catch((response) => { console.log(response); });
@@ -132,7 +136,6 @@ class BoardStore {
   };
 
   @action onChangeValue = (event) => {
-    console.log(event);
     if (typeof event === 'string') {
       this.post = {
         ...this.post,
@@ -196,6 +199,21 @@ class BoardStore {
         if (response.data) {
           const [post] = response.data;
           this.postView = post;
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
+
+  @action getReply = (id) => {
+    axios.get('/api/board/reply/', {
+      params: {
+        bpId: id,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          console.log(response.data);
+          this.postReplyList = response.data;
         }
       })
       .catch((response) => { console.log(response); });
