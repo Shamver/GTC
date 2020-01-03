@@ -212,7 +212,6 @@ class BoardStore {
     })
       .then((response) => {
         if (response.data) {
-          console.log(response.data);
           this.postReplyList = response.data;
         }
       })

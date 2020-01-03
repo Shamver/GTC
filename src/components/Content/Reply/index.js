@@ -3,9 +3,12 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { faShare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import avatar from '../../../resources/images/anonymous.png';
 import * as Proptypes from 'prop-types';
 import renderHTML from 'react-render-html';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import CKEditor from '@ckeditor/ckeditor5-react';
+import avatar from '../../../resources/images/anonymous.png';
+import useStores from '../../../stores/useStores';
 
 const ReplyInHeader = styled.div`
   background: #f7f7f7;
@@ -48,47 +51,69 @@ const ReplyLayout = styled.div`
 const ReplyDepthIcon = styled(FontAwesomeIcon)`
   margin : 8px;
 `;
+const ReplyAnswer = ({ depth }) => {
+  if (depth > 1) {
+    return (
+      <Link to="#">
+        <ReplyDepthIcon icon={faShare} />
+      </Link>
+    );
+  }
+  return (<></>);
+};
 
+ReplyAnswer.propTypes = {
+  depth: Proptypes.string.isRequired,
+};
 
 const Reply = ({ data }) => {
-  console.log(data);
+  const { BoardStore } = useStores();
   return (
-    <>
+    <ReplyLayout>
+      <ReplyAnswer depth={data.depth} />
       <ReplyWrapper>
         <ReplyInHeader>
           <AvatarImg src={avatar} />
-          <ReplyWriter> {data.writer} </ReplyWriter> (글쓴이)
-          <span className="replyOption"> 좋아요  · 대댓글 ·  29분 전  ·  수정  · 신고 #</span>
+          <ReplyWriter> {data.writer} </ReplyWriter> {/* (글쓴이) 구현되어야함. */}
+          <span className="replyOption">
+            <Link to="#">좋아요</Link>
+            &nbsp;·&nbsp;
+            <Link to="#">대댓글</Link>
+            &nbsp;·&nbsp;
+            {data.date}
+            &nbsp;·&nbsp;
+            {/* <Link to="#">수정</Link>
+            &nbsp;·&nbsp; */} {/* (글쓴이) 와 마찬가지로 */}
+            <Link to="#">신고 #</Link>
+          </span>
         </ReplyInHeader>
         <ReplyInContent>
           {renderHTML(`${data.content}`)}
         </ReplyInContent>
-      </ReplyWrapper>
+        <CKEditor
+          editor={ClassicEditor}
+          data={BoardStore.reply.text}
+          onInit={() => {
+          }}
+          onChange={(event, editor) => {
+            const data1 = editor.getData();
+            BoardStore.onChangeReplyValue(data1);
+          }}
+          placeholder="내용을 작성해주세요."
+        />
 
-      {/*<ReplyLayout>*/}
-      {/*  <Link href="#"><ReplyDepthIcon icon={faShare} /></Link>*/}
-      {/*  <ReplyWrapper>*/}
-      {/*    <ReplyInHeader>*/}
-      {/*      <AvatarImg src={avatar} />*/}
-      {/*      <ReplyWriter> 그림일기 </ReplyWriter> (글쓴이)*/}
-      {/*      <span className="replyOption"> 좋아요  · 대댓글 ·  29분 전  ·  수정  · 신고 #</span>*/}
-      {/*    </ReplyInHeader>*/}
-      {/*    <ReplyInContent>*/}
-      {/*      개창렬ㅇㅈ 얍얍프리미엄으로삼*/}
-      {/*      <br />*/}
-      {/*      저 밑에보니 인터넷으로 곽으로된거 4400원에 사셨네 ㅋㅋ*/}
-      {/*    </ReplyInContent>*/}
-      {/*  </ReplyWrapper>*/}
-      {/*</ReplyLayout>*/}
-    </>
-  );
+      </ReplyWrapper>
+    </ReplyLayout>
+  )
 };
 
 Reply.propTypes = {
   data: Proptypes.shape({
     writer: Proptypes.string,
     content: Proptypes.string,
+    depth: Proptypes.string,
+    date: Proptypes.string,
   }).isRequired,
-}
+};
 
 export default Reply;

@@ -133,7 +133,8 @@ router.get('/reply', (req, res) => {
     , CONTENT as content
     , DEPTH as depth
     FROM GTC_BOARD_REPLY
-  WHERE BP_ID = '${data.bpId}'`;
+  WHERE BP_ID = '${data.bpId}'
+  ORDER BY DATE DESC`;
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
