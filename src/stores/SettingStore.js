@@ -65,7 +65,10 @@ class SettingStore {
 
   @action onDeleteIgnore = (() => {
     const { toggleAlert } = this.root.UtilStore;
-    const list = this.ignoreList.filter((item) => item.checked === true).map((v) => (v.id));
+    const list = this.ignoreList.filter((item) => item.checked === true).map((v) => ({
+      f_id: v.f_id,
+      t_id: v.t_id,
+    }));
 
     if (list.length !== 0) {
       axios.delete('/api/setting/ignore', {

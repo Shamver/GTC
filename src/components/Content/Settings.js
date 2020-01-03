@@ -4,6 +4,8 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt, faExclamationTriangle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
 import useStores from '../../stores/useStores';
 
@@ -47,6 +49,22 @@ const TableTd = styled.td`
 
 const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
+`;
+
+const WithdrawalWrapper = styled.div`
+  padding-top: 8px;
+`;
+
+const Hr = styled.hr`
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #eee;
+  margin-left: 0px;
+`;
+
+const P = styled.p`
+  color: #c00;
 `;
 
 const TableBody = (title, data, onClickEvent) => (
@@ -121,37 +139,51 @@ const Settings = () => {
             </tbody>
           </ListTable>
           {IgnoreTableData.length === 0 ? '' : (
-            <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', onDeleteIgnore); }}>삭제하기</Button>
+            <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', onDeleteIgnore); }}>
+              <FontAwesomeIcon icon={faTrashAlt} />  삭제하기
+            </Button>
           )}
         </TabPane>
         <TabPane tabId="withdrawal">
-          <p><b>회원 탈퇴시 유의사항</b></p>
-          <div>
-            <p>1. 탈퇴 후, 30일 동안 재가입이 불가능하며 당연히 로그인도 불가능합니다.</p>
-            <p>2. 탈퇴일을 기준으로 30일 이후에 재가입이 가능합니다.</p>
-            <p>3. 탈퇴일 기준 30일 이후에는 개인정보와 관련된 데이터가 모두 삭제됩니다.</p>
-          </div>
-          <br />
-          <CustomInput
-            type="checkbox"
-            id="withdrawalIsChecked"
-            name="withdrawalIsChecked"
-            onClick={onClickWithdrawal}
-            label="위 내용을 충분히 이해했으며, 회원탈퇴를 진행하겠습니다."
-          />
-          <br />
-          <Button
-            color="danger"
-            onClick={() => {
-              isCheckedWithdrawal(() => {
-                toggleConfirmAlert('정말 삭제하시겠어요?', () => {
-                  withdrawal();
+          <WithdrawalWrapper>
+            <h3>GTC 회원탈퇴 안내</h3>
+            <Hr width={120} />
+            <div>
+              <P>
+                <FontAwesomeIcon icon={faExclamationTriangle} /> 회원탈퇴를 신청하기 전에 안내 사항을 꼭 확인해 주세요.
+              </P>
+              <p>
+                <FontAwesomeIcon icon={faExclamationCircle} /> 탈퇴 후, 30일 동안 재가입이 불가능하며 당연히 로그인도 불가능합니다.
+              </p>
+              <p>
+                <FontAwesomeIcon icon={faExclamationCircle} /> 탈퇴일을 기준으로 30일 이후에 재가입이 가능합니다.
+              </p>
+              <p>
+                <FontAwesomeIcon icon={faExclamationCircle} /> 탈퇴일 기준 30일 이후에는 개인정보와 관련된 데이터가 모두 삭제됩니다.
+              </p>
+            </div>
+            <Hr width={120} />
+            <CustomInput
+              type="checkbox"
+              id="withdrawalIsChecked"
+              name="withdrawalIsChecked"
+              onClick={onClickWithdrawal}
+              label="위 내용을 충분히 이해했으며, 회원탈퇴를 진행하겠습니다."
+            />
+            <br />
+            <Button
+              color="danger"
+              onClick={() => {
+                isCheckedWithdrawal(() => {
+                  toggleConfirmAlert('정말 삭제하시겠어요?', () => {
+                    withdrawal();
+                  });
                 });
-              });
-            }}
-          >
-            회원탈퇴
-          </Button>
+              }}
+            >
+              <FontAwesomeIcon icon={faTrashAlt} /> 회원탈퇴
+            </Button>
+          </WithdrawalWrapper>
         </TabPane>
       </TabContent>
     </MainContainer>
