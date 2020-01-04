@@ -8,6 +8,8 @@ import { observer } from 'mobx-react';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { Link } from 'react-router-dom';
+
 import useStores from '../../stores/useStores';
 
 const MainContainer = styled(Container)`
@@ -74,7 +76,7 @@ const AlertActionBox = styled.div`
   text-align: right;
 `;
 
-const Atag = styled.a`
+const LinkC = styled(Link)`
   display: block;
   text-decoration: none !important;
   color: #666 !important;
@@ -91,11 +93,55 @@ const DeleteA = styled.a`
   padding: 4px 8px;
 `;
 
+const AlertData = (data, onClickEvent) => (
+  <AlertWrapper>
+    <AlertBox>
+      <LinkC to={`/post/${data.postId}#${data.replyId}`}>
+        <strong>{data.replyName}</strong>님이 <strong>{data.postTitle}</strong>에 새&nbsp;
+        {data.type === 'reply' ? '댓글' : '대댓글'}을 달았습니다:&nbsp;
+        {data.replyContent}
+      </LinkC>
+      <DateSpan>{data.replyDate}</DateSpan>
+    </AlertBox>
+    <AlertActionBox>
+      <DeleteA onClick={onClickEvent}>
+        <FontAwesomeIcon icon={faTimes} />
+      </DeleteA>
+    </AlertActionBox>
+  </AlertWrapper>
+);
+
+// 알림의 종류는 새 댓글, 새 대댓글만 우선
 const NewAlert = () => {
   const {} = useStores();
 
   useEffect(() => {
   }, []);
+
+  const data = [
+    {
+      replyName: '인욱쿤',
+      postId: 1,
+      postTitle: '인벤 앞 한 장 정리 짤',
+      replyId: 1,
+      replyContent: '표정 곱창났네 ㅋㅋ',
+      replyDate: '2달 전',
+      type: 'reply',
+    },
+    {
+      replyName: '인욱쿤',
+      postId: 2,
+      postTitle: '인벤 앞 한 장 정리 짤',
+      replyId: 1,
+      replyContent: '표정 곱창났네 ㅋㅋ',
+      replyDate: '2달 전',
+      type: 'rereply',
+    },
+  ];
+
+  const Alerts = data.map((v) => (AlertData(v, () => { console.log('!'); })));
+
+  console.log(Alerts);
 
   return (
     <MainContainer>
@@ -106,23 +152,11 @@ const NewAlert = () => {
         </FlexDiv>
         <ReadAll>
           <ReadAllButton>
-						모두 읽음 처리
+            모두 읽음 처리
           </ReadAllButton>
         </ReadAll>
       </NotifyHeader>
-      <AlertWrapper>
-        <AlertBox>
-          <Atag href="#">
-            <strong>인욱쿤</strong>님이 <strong>인벤 앞 한 장 정리 짤</strong>에 새 댓글을 달았습니다: 표정 곱창났네 ㅋㅋ
-          </Atag>
-          <DateSpan>2달 전</DateSpan>
-        </AlertBox>
-        <AlertActionBox>
-          <DeleteA href="#">
-            <FontAwesomeIcon icon={faTimes} />
-          </DeleteA>
-        </AlertActionBox>
-      </AlertWrapper>
+      {Alerts}
     </MainContainer>
   );
 };
