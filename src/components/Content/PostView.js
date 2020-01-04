@@ -112,51 +112,63 @@ const RightButton = styled(Button)`
 
 const ReplyList = observer(({ bpId }) => {
   const { BoardStore } = useStores();
-  useEffect(() => {
-    BoardStore.getReply(bpId);
-  }, [BoardStore.getReply, bpId]);
+  const { getReply, postReplyList } = BoardStore;
 
-  return BoardStore.postReplyList.map((data) => (
-    <Reply data={data} />
+  useEffect(() => {
+    getReply(bpId);
+  }, [getReply, bpId, BoardStore]);
+
+  return postReplyList.map((data) => (
+    <Reply key={data.id} data={data} />
   ));
 });
 
 const PostView = ({ match }) => {
   const { BoardStore } = useStores();
+  const {
+    getPost, setReplyBpId, onChangeReplyValue, postView, reply, addReply,
+  } = BoardStore;
+  const {
+    boardName, categoryName, title, writer, date, views, content,
+  } = postView;
+  const { text } = reply;
+  const { params } = match;
+  const { id } = params;
+
   useEffect(() => {
-    BoardStore.getPost(match.params.id);
-    BoardStore.setReplyBpId(match.params.id);
-  }, [match.params.id, BoardStore]);
+    getPost(id);
+    setReplyBpId(id);
+  }, [id, BoardStore]);
 
   return (
     <>
       <PostWrapper>
         <ViewWrapper>
-          <MarginlessH3>{BoardStore.postView.boardName}</MarginlessH3>
+          <MarginlessH3>{boardName}</MarginlessH3>
           <br />
           <CategoryAndTitle>
             <Category>
-              {BoardStore.postView.categoryName}
+              {categoryName}
             </Category>
             <Title>
-              {BoardStore.postView.title}
+              {title}
             </Title>
           </CategoryAndTitle>
-          <b>{BoardStore.postView.writer}</b>님
+          <b>{writer}</b>님
           <NavLine />
           <PostViewWrapper>
             <InnerContainer>
               <span>
-                <FontAwesomeIcon icon={faClock} /> {BoardStore.postView.date}
+                <FontAwesomeIcon icon={faClock} /> {date}
               </span>
               <RightSpan>
                 <FontAwesomeIcon icon={faCommentDots} /> 0
                 &nbsp;
-                <FontAwesomeIcon icon={faEye} /> {BoardStore.postView.views}
+                <FontAwesomeIcon icon={faEye} /> {views}
               </RightSpan>
             </InnerContainer>
             <ContentWrapper>
-              {renderHTML(`${BoardStore.postView.content}`)}
+              {renderHTML(`${content}`)}
             </ContentWrapper>
             <InnerFooterContainer>
               <Button outline color="secondary" size="sm">
@@ -184,16 +196,16 @@ const PostView = ({ match }) => {
           <ReplyList bpId={match.params.id} />
           <CKEditorCustom
             editor={ClassicEditor}
-            data={BoardStore.reply.text}
+            data={text}
             onInit={() => {
             }}
             onChange={(event, editor) => {
               const data = editor.getData();
-              BoardStore.onChangeReplyValue(data);
+              onChangeReplyValue(data);
             }}
             placeholder="내용을 작성해주세요."
           />
-          <RightButton color="info" size="sm" onClick={BoardStore.addReply}>
+          <RightButton color="info" size="sm" onClick={addReply}>
             <FontAwesomeIcon icon={faPen} />
             &nbsp;
             댓글 쓰기
@@ -210,27 +222,11 @@ PostView.propTypes = {
     params: Proptypes.shape({
       id: Proptypes.string,
     }),
-  }).isRequired,
-  BoardStore: Proptypes.shape({
-    getPost: Proptypes.func,
-    getReply: Proptypes.func,
-    postView: Proptypes.shape({
-      boardName: Proptypes.string,
-      categoryName: Proptypes.string,
-      views: Proptypes.string,
-    }),
-    addReply: Proptypes.func,
-    setReplyBpId: Proptypes.func,
-    onChangeReplyValue: Proptypes.func,
-    reply: Proptypes.shape({
-      text: Proptypes.string,
-    }),
-    postReplyList: Proptypes.array,
   }),
 };
 
 PostView.defaultProps = {
-  BoardStore: null,
+  match: null,
 };
 
 export default observer(PostView);

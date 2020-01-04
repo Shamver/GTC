@@ -125,12 +125,14 @@ const AbsolDiv = styled.div`
 
 const PostList = observer(({ pathname }) => {
   const { BoardStore } = useStores();
+  const { getBoardPostList, setCurrentBoard, boardPostList } = BoardStore;
+
   useEffect(() => {
-    BoardStore.getBoardPostList(pathname);
-    BoardStore.setCurrentBoard(pathname);
+    getBoardPostList(pathname);
+    setCurrentBoard(pathname);
   }, [pathname, BoardStore]);
 
-  return BoardStore.boardPostList[pathname].map((data) => (
+  return boardPostList[pathname].map((data) => (
     <tr height="35" key={data.id}>
       <CenterTd>{data.id}</CenterTd>
       <CenterTd>{data.categoryName}</CenterTd>
@@ -161,11 +163,17 @@ const FreeBoard = ({ pathname }) => (
         </RightLink>
       </TableHead>
       <InnerTableHeader>
-        <th>
-          <td><NavLink to="/free"><FontAwesomeIcon icon={faHome} /></NavLink></td>
-          <td><NavLink to="/a">자유</NavLink></td>
-          <td><NavLink to="/a">잡담</NavLink></td>
-        </th>
+        <thead>
+          <tr>
+            <th>
+              <NavLink to="/free">
+                <FontAwesomeIcon icon={faHome} />
+              </NavLink>
+            </th>
+            <th><NavLink to="/a">자유</NavLink></th>
+            <th><NavLink to="/a">잡담</NavLink></th>
+          </tr>
+        </thead>
       </InnerTableHeader>
       <ManginessTable bordered hover size="sm">
         <tbody>
@@ -218,14 +226,6 @@ const FreeBoard = ({ pathname }) => (
 
 FreeBoard.propTypes = {
   pathname: Proptypes.string.isRequired,
-  BoardStore: Proptypes.shape({
-    getBoardPostList: Proptypes.func,
-    setCurrentBoard: Proptypes.func,
-  }),
-};
-
-FreeBoard.defaultProps = {
-  BoardStore: null,
 };
 
 export default FreeBoard;

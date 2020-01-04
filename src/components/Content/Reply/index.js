@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { faShare } from '@fortawesome/free-solid-svg-icons';
+import { faShare, faPen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Proptypes from 'prop-types';
 import renderHTML from 'react-render-html';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CKEditor from '@ckeditor/ckeditor5-react';
+import { Button } from 'reactstrap';
 import avatar from '../../../resources/images/anonymous.png';
 import useStores from '../../../stores/useStores';
 
@@ -51,10 +52,15 @@ const ReplyLayout = styled.div`
 const ReplyDepthIcon = styled(FontAwesomeIcon)`
   margin : 8px;
 `;
+
+const RightButton = styled(Button)`
+  float : right;
+`;
+
 const ReplyAnswer = ({ depth }) => {
   if (depth > 1) {
     return (
-      <Link to="#">
+      <Link to="/">
         <ReplyDepthIcon icon={faShare} />
       </Link>
     );
@@ -63,11 +69,12 @@ const ReplyAnswer = ({ depth }) => {
 };
 
 ReplyAnswer.propTypes = {
-  depth: Proptypes.string.isRequired,
+  depth: Proptypes.number.isRequired,
 };
 
 const Reply = ({ data }) => {
   const { BoardStore } = useStores();
+  const { onChangeReplyValue } = BoardStore;
   return (
     <ReplyLayout>
       <ReplyAnswer depth={data.depth} />
@@ -76,42 +83,47 @@ const Reply = ({ data }) => {
           <AvatarImg src={avatar} />
           <ReplyWriter> {data.writer} </ReplyWriter> {/* (글쓴이) 구현되어야함. */}
           <span className="replyOption">
-            <Link to="#">좋아요</Link>
+            <Link to="/">좋아요</Link>
             &nbsp;·&nbsp;
-            <Link to="#">대댓글</Link>
+            <Link to="/">대댓글</Link>
             &nbsp;·&nbsp;
             {data.date}
             &nbsp;·&nbsp;
             {/* <Link to="#">수정</Link>
             &nbsp;·&nbsp; */} {/* (글쓴이) 와 마찬가지로 */}
-            <Link to="#">신고 #</Link>
+            <Link to="/">신고 #</Link>
           </span>
         </ReplyInHeader>
         <ReplyInContent>
           {renderHTML(`${data.content}`)}
+          <CKEditor
+            editor={ClassicEditor}
+            data={BoardStore.reply.text}
+            onInit={() => {
+            }}
+            onChange={(event, editor) => {
+              const ReplyContent = editor.getData();
+              onChangeReplyValue(ReplyContent);
+            }}
+            placeholder="내용을 작성해주세요."
+          />
+          <Button size="sm" outline>취소</Button>
+          <RightButton size="sm" color="info">
+            <FontAwesomeIcon icon={faPen} />
+              &nbsp;
+             댓글 쓰기
+          </RightButton>
         </ReplyInContent>
-        <CKEditor
-          editor={ClassicEditor}
-          data={BoardStore.reply.text}
-          onInit={() => {
-          }}
-          onChange={(event, editor) => {
-            const data1 = editor.getData();
-            BoardStore.onChangeReplyValue(data1);
-          }}
-          placeholder="내용을 작성해주세요."
-        />
-
       </ReplyWrapper>
     </ReplyLayout>
-  )
+  );
 };
 
 Reply.propTypes = {
   data: Proptypes.shape({
     writer: Proptypes.string,
     content: Proptypes.string,
-    depth: Proptypes.string,
+    depth: Proptypes.number,
     date: Proptypes.string,
   }).isRequired,
 };
