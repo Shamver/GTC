@@ -61,6 +61,9 @@ const AlertWrapper = styled.div`
   border-bottom: 1px solid #dddfe2;
   display: flex;
   width: 100%;
+  &.noRead {
+    background-color: #edf2fa;
+  }
   
   &:hover {
     background: linear-gradient(rgba(29,33,41,.04),rgba(29,33,41,.04));
@@ -90,11 +93,15 @@ const DateSpan = styled.span`
 const DeleteA = styled.a`
   color: #333;
   text-decoration: none;
-  padding: 4px 8px;
+  padding: 6px 8px 4px 8px;
+  &:hover {
+    cursor: pointer;
+    background-color: #eaefec;
+  }
 `;
 
 const AlertData = (data, onClickEvent) => (
-  <AlertWrapper>
+  <AlertWrapper className={(data.readed ? '' : 'noRead')}>
     <AlertBox>
       <LinkC to={`/post/${data.postId}#${data.replyId}`}>
         <strong>{data.replyName}</strong>님이 <strong>{data.postTitle}</strong>에 새&nbsp;
@@ -104,7 +111,7 @@ const AlertData = (data, onClickEvent) => (
       <DateSpan>{data.replyDate}</DateSpan>
     </AlertBox>
     <AlertActionBox>
-      <DeleteA onClick={onClickEvent}>
+      <DeleteA onClick={onClickEvent} name={`${data.id}`}>
         <FontAwesomeIcon icon={faTimes} />
       </DeleteA>
     </AlertActionBox>
@@ -113,35 +120,15 @@ const AlertData = (data, onClickEvent) => (
 
 // 알림의 종류는 새 댓글, 새 대댓글만 우선
 const NewAlert = () => {
-  const {} = useStores();
+  const { NewAlertStore } = useStores();
+
+  const { getDataAlert, onDeleteAlert, onDeleteAlertAll, alertList } = NewAlertStore;
 
   useEffect(() => {
+    getDataAlert();
   }, []);
 
-  const data = [
-    {
-      replyName: '인욱쿤',
-      postId: 1,
-      postTitle: '인벤 앞 한 장 정리 짤',
-      replyId: 1,
-      replyContent: '표정 곱창났네 ㅋㅋ',
-      replyDate: '2달 전',
-      type: 'reply',
-    },
-    {
-      replyName: '인욱쿤',
-      postId: 2,
-      postTitle: '인벤 앞 한 장 정리 짤',
-      replyId: 1,
-      replyContent: '표정 곱창났네 ㅋㅋ',
-      replyDate: '2달 전',
-      type: 'rereply',
-    },
-  ];
-
-  const Alerts = data.map((v) => (AlertData(v, () => { console.log('!'); })));
-
-  console.log(Alerts);
+  const Alerts = alertList.map((v) => (AlertData(v, onDeleteAlert)));
 
   return (
     <MainContainer>
@@ -151,7 +138,7 @@ const NewAlert = () => {
           <Hr width={120} />
         </FlexDiv>
         <ReadAll>
-          <ReadAllButton>
+          <ReadAllButton onClick={onDeleteAlertAll}>
             모두 읽음 처리
           </ReadAllButton>
         </ReadAll>

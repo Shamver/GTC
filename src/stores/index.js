@@ -6,6 +6,7 @@ import RouteStore from './RouteStore';
 import UserStore from './UserStore';
 import SettingStore from './SettingStore';
 import PostLockerStore from './PostLockerStore';
+import NewAlertStore from './NewAlertStore';
 
 class RootStore {
   constructor() {
@@ -17,6 +18,7 @@ class RootStore {
     this.UserStore = new UserStore(this);
     this.SettingStore = new SettingStore(this);
     this.PostLockerStore = new PostLockerStore(this);
+    this.NewAlertStore = new NewAlertStore(this);
   }
 }
 
