@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { faShare, faPen } from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +8,7 @@ import renderHTML from 'react-render-html';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import { Button } from 'reactstrap';
+import { observer } from 'mobx-react';
 import avatar from '../../../resources/images/anonymous.png';
 import useStores from '../../../stores/useStores';
 
@@ -50,7 +51,7 @@ const ReplyLayout = styled.div`
 `;
 
 const ReplyDepthIcon = styled(FontAwesomeIcon)`
-  margin : 8px;
+  margin: ${(props) => ((props.depth - 1) * 8)}px; 
 `;
 
 const RightButton = styled(Button)`
@@ -61,7 +62,7 @@ const ReplyAnswer = ({ depth }) => {
   if (depth > 1) {
     return (
       <Link to="/">
-        <ReplyDepthIcon icon={faShare} />
+        <ReplyDepthIcon icon={faShare} depth={depth} />
       </Link>
     );
   }
@@ -72,9 +73,48 @@ ReplyAnswer.propTypes = {
   depth: Proptypes.number.isRequired,
 };
 
+const ReplyEdit = observer(({ id }) => {
+  const { BoardStore } = useStores();
+  const {
+    onChangeReplyValue, reply, replyEditId, setReplyEditId, addReply,
+  } = BoardStore;
+  const { text } = reply;
+
+  if (replyEditId === id) {
+    return (
+      <>
+        <CKEditor
+          editor={ClassicEditor}
+          data={text}
+          onInit={() => {}}
+          onChange={(event, editor) => {
+            const ReplyContent = editor.getData();
+            onChangeReplyValue(ReplyContent);
+          }}
+          placeholder="내용을 작성해주세요."
+        />
+
+        <Button size="sm" outline onClick={() => { setReplyEditId(0); }}>취소</Button>
+        <RightButton size="sm" color="info" onClick={addReply}>
+          <FontAwesomeIcon icon={faPen} />
+          &nbsp;
+          댓글 쓰기
+        </RightButton>
+      </>
+    );
+  }
+  return (<></>);
+});
+
+ReplyEdit.propTypes = {
+  id: Proptypes.number.isRequired,
+};
+
+
 const Reply = ({ data }) => {
   const { BoardStore } = useStores();
-  const { onChangeReplyValue } = BoardStore;
+  const { setReplyEditId } = BoardStore;
+
   return (
     <ReplyLayout>
       <ReplyAnswer depth={data.depth} />
@@ -85,34 +125,18 @@ const Reply = ({ data }) => {
           <span className="replyOption">
             <Link to="/">좋아요</Link>
             &nbsp;·&nbsp;
-            <Link to="/">대댓글</Link>
-            &nbsp;·&nbsp;
+            <Link onClick={() => { setReplyEditId(data.id); }}>대댓글</Link>
+          &nbsp;·&nbsp;
             {data.date}
             &nbsp;·&nbsp;
             {/* <Link to="#">수정</Link>
             &nbsp;·&nbsp; */} {/* (글쓴이) 와 마찬가지로 */}
-            <Link to="/">신고 #</Link>
+            <Link to="/#">신고 #</Link>
           </span>
         </ReplyInHeader>
         <ReplyInContent>
           {renderHTML(`${data.content}`)}
-          <CKEditor
-            editor={ClassicEditor}
-            data={BoardStore.reply.text}
-            onInit={() => {
-            }}
-            onChange={(event, editor) => {
-              const ReplyContent = editor.getData();
-              onChangeReplyValue(ReplyContent);
-            }}
-            placeholder="내용을 작성해주세요."
-          />
-          <Button size="sm" outline>취소</Button>
-          <RightButton size="sm" color="info">
-            <FontAwesomeIcon icon={faPen} />
-              &nbsp;
-             댓글 쓰기
-          </RightButton>
+          <ReplyEdit id={data.id} />
         </ReplyInContent>
       </ReplyWrapper>
     </ReplyLayout>
@@ -121,6 +145,7 @@ const Reply = ({ data }) => {
 
 Reply.propTypes = {
   data: Proptypes.shape({
+    id: Proptypes.number,
     writer: Proptypes.string,
     content: Proptypes.string,
     depth: Proptypes.number,

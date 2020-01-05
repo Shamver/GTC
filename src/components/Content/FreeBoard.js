@@ -126,24 +126,28 @@ const AbsolDiv = styled.div`
 const PostList = observer(({ pathname }) => {
   const { BoardStore } = useStores();
   const { getBoardPostList, setCurrentBoard, boardPostList } = BoardStore;
-
   useEffect(() => {
     getBoardPostList(pathname);
     setCurrentBoard(pathname);
-  }, [pathname, BoardStore]);
+  }, [pathname, getBoardPostList, setCurrentBoard]);
 
-  return boardPostList[pathname].map((data) => (
-    <tr height="35" key={data.id}>
-      <CenterTd>{data.id}</CenterTd>
-      <CenterTd>{data.categoryName}</CenterTd>
-      <MiddleTd width="700">
-        <FontAwesomeIcon icon={faCommentDots} /> &nbsp;
-        <PostTitle to={`/post/${data.id}`}>{data.title}</PostTitle>
-      </MiddleTd>
-      <CenterTdWriter>{data.writer}</CenterTdWriter>
-      <CenterTd>{data.date}</CenterTd>
-    </tr>
-  ));
+  return boardPostList[pathname].map((data) => {
+    const {
+      id, title, writer, date, categoryName,
+    } = data;
+    return (
+      <tr height="35" key={data.id}>
+        <CenterTd>{id}</CenterTd>
+        <CenterTd>{categoryName}</CenterTd>
+        <MiddleTd width="700">
+          <FontAwesomeIcon icon={faCommentDots} /> &nbsp;
+          <PostTitle to={`/post/${id}`}>{title}</PostTitle>
+        </MiddleTd>
+        <CenterTdWriter>{writer}</CenterTdWriter>
+        <CenterTd>{date}</CenterTd>
+      </tr>
+    );
+  });
 });
 
 PostList.propTypes = {
@@ -163,17 +167,17 @@ const FreeBoard = ({ pathname }) => (
         </RightLink>
       </TableHead>
       <InnerTableHeader>
-        <thead>
+        <tbody>
           <tr>
-            <th>
+            <td>
               <NavLink to="/free">
                 <FontAwesomeIcon icon={faHome} />
               </NavLink>
-            </th>
-            <th><NavLink to="/a">자유</NavLink></th>
-            <th><NavLink to="/a">잡담</NavLink></th>
+            </td>
+            <td><NavLink to="/a">자유</NavLink></td>
+            <td><NavLink to="/a">잡담</NavLink></td>
           </tr>
-        </thead>
+        </tbody>
       </InnerTableHeader>
       <ManginessTable bordered hover size="sm">
         <tbody>

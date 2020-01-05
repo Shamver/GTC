@@ -61,7 +61,7 @@ const Posting = (props) => {
   useEffect(() => {
     setPostBoard(board);
     setPostBoardOptions();
-  }, [BoardStore, board]);
+  }, [BoardStore, board, setPostBoard, setPostBoardOptions]);
 
   return (
     <PostingWrapper>

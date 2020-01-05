@@ -104,11 +104,11 @@ router.post('/reply', (req, res) => {
     ) VALUES (
       (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_REPLY) as temp),
       ${data.bpId},
-      null, 
+      ${data.replyId},
       '${data.writer}', 
       sysdate(), 
       '${data.text}',
-      0
+      (SELECT * FROM (SELECT IFNULL(MIN(DEPTH) + 1,1) FROM GTC_BOARD_REPLY WHERE ID = ${data.replyId}) as temp)
     );
   `;
 

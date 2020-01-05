@@ -19,6 +19,8 @@ class BoardStore {
     bpId: '',
   };
 
+  @observable replyEditId;
+
   @observable postView = {};
 
   @observable boards = [{
@@ -59,6 +61,10 @@ class BoardStore {
   constructor(root) {
     this.root = root;
   }
+
+  @action setReplyEditId = (id) => {
+    this.replyEditId = id;
+  };
 
   @action setCurrentBoard = (currentBoard) => {
     this.currentBoard = currentBoard;
@@ -110,6 +116,7 @@ class BoardStore {
       text: this.reply.text,
       writer: this.root.UserStore.userData.id,
       bpId: this.reply.bpId,
+      replyId: this.replyEditId,
     })
       .then((response) => {
         if (response.data) {
@@ -119,6 +126,7 @@ class BoardStore {
             bpId: this.reply.bpId,
           };
           this.getReply(this.reply.bpId);
+          this.setReplyEditId(0);
         }
       })
       .catch((response) => { console.log(response); });

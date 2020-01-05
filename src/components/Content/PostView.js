@@ -123,22 +123,53 @@ const ReplyList = observer(({ bpId }) => {
   ));
 });
 
+const ReplyEdit = observer(() => {
+  const { BoardStore } = useStores();
+  const {
+    onChangeReplyValue, reply, replyEditId, addReply,
+  } = BoardStore;
+  const { text } = reply;
+
+  if (replyEditId === 0) {
+    return (
+      <>
+        <CKEditorCustom
+          editor={ClassicEditor}
+          data={text}
+          onInit={() => {}}
+          onChange={(event, editor) => {
+            const ReplyContent = editor.getData();
+            onChangeReplyValue(ReplyContent);
+          }}
+          placeholder="내용을 작성해주세요."
+        />
+        <RightButton size="sm" color="info" onClick={addReply}>
+          <FontAwesomeIcon icon={faPen} />
+          &nbsp;
+          댓글 쓰기
+        </RightButton>
+      </>
+    );
+  }
+  return (<></>);
+});
+
 const PostView = ({ match }) => {
   const { BoardStore } = useStores();
   const {
-    getPost, setReplyBpId, onChangeReplyValue, postView, reply, addReply,
+    getPost, setReplyBpId, postView, setReplyEditId,
   } = BoardStore;
   const {
     boardName, categoryName, title, writer, date, views, content,
   } = postView;
-  const { text } = reply;
   const { params } = match;
   const { id } = params;
 
   useEffect(() => {
+    setReplyEditId(0);
     getPost(id);
     setReplyBpId(id);
-  }, [id, BoardStore]);
+  }, [id, BoardStore, getPost, setReplyBpId, setReplyEditId]);
 
   return (
     <>
@@ -194,22 +225,7 @@ const PostView = ({ match }) => {
             </ReplyH5>
           </ReplyHeader>
           <ReplyList bpId={match.params.id} />
-          <CKEditorCustom
-            editor={ClassicEditor}
-            data={text}
-            onInit={() => {
-            }}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              onChangeReplyValue(data);
-            }}
-            placeholder="내용을 작성해주세요."
-          />
-          <RightButton color="info" size="sm" onClick={addReply}>
-            <FontAwesomeIcon icon={faPen} />
-            &nbsp;
-            댓글 쓰기
-          </RightButton>
+          <ReplyEdit />
         </ViewWrapper>
       </PostWrapper>
       <CurrentBoard />

@@ -12,7 +12,6 @@ const MainContainer = styled(Container)`
 `;
 
 const NavLinkBtn = styled(NavLink)`
-  
   &:hover {
     cursor: pointer;
   }
