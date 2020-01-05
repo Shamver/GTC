@@ -79,10 +79,13 @@ const AlertActionBox = styled.div`
   text-align: right;
 `;
 
-const LinkC = styled(Link)`
+const LinkA = styled(Link)`
   display: block;
   text-decoration: none !important;
   color: #666 !important;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const DateSpan = styled.span`
@@ -100,18 +103,18 @@ const DeleteA = styled.a`
   }
 `;
 
-const AlertData = (data, onClickEvent) => (
+const AlertData = (data, onLink, onDelete) => (
   <AlertWrapper className={(data.readed ? '' : 'noRead')}>
     <AlertBox>
-      <LinkC to={`/post/${data.postId}#${data.replyId}`}>
+      <LinkA to={`/post/${data.postId}#${data.replyId}`} name={`${data.id}`} onClick={onLink}>
         <strong>{data.replyName}</strong>님이 <strong>{data.postTitle}</strong>에 새&nbsp;
         {data.type === 'reply' ? '댓글' : '대댓글'}을 달았습니다:&nbsp;
         {data.replyContent}
-      </LinkC>
+      </LinkA>
       <DateSpan>{data.replyDate}</DateSpan>
     </AlertBox>
     <AlertActionBox>
-      <DeleteA onClick={onClickEvent} name={`${data.id}`}>
+      <DeleteA onClick={onDelete} name={`${data.id}`}>
         <FontAwesomeIcon icon={faTimes} />
       </DeleteA>
     </AlertActionBox>
@@ -122,13 +125,15 @@ const AlertData = (data, onClickEvent) => (
 const NewAlert = () => {
   const { NewAlertStore } = useStores();
 
-  const { getDataAlert, onDeleteAlert, onDeleteAlertAll, alertList } = NewAlertStore;
+  const {
+    getDataAlert, onDeleteAlert, onLink, onDeleteAlertAll, alertList,
+  } = NewAlertStore;
 
   useEffect(() => {
     getDataAlert();
   }, []);
 
-  const Alerts = alertList.map((v) => (AlertData(v, onDeleteAlert)));
+  const Alerts = alertList.map((v) => (AlertData(v, onLink, onDeleteAlert)));
 
   return (
     <MainContainer>

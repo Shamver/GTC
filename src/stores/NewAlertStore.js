@@ -55,8 +55,13 @@ class NewAlertStore {
     }
   });
 
+  @action onLink = ((e) => {
+    const { history } = this.root.RouteStore;
+
+    console.log(e.currentTarget.name);
+  });
+
   @action onDeleteAlert = ((e) => {
-    console.log(e.currentTarget);
     axios.delete('/api/user/alert', {
       data: {
         type: 'one',
