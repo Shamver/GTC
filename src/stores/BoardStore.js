@@ -117,6 +117,7 @@ class BoardStore {
       writer: this.root.UserStore.userData.id,
       bpId: this.reply.bpId,
       replyId: this.replyEditId === 0 ? null : this.replyEditId,
+      depth: this.replyEditId === 0 ? 1 : 2,
     })
       .then((response) => {
         if (response.data) {
