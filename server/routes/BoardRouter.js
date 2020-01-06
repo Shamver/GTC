@@ -104,7 +104,7 @@ router.post('/reply', (req, res) => {
     ) VALUES (
       (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_REPLY) as temp),
       ${data.bpId},
-      ${data.replyId},
+      IFNULL(${data.replyId},(SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_REPLY) as temp)),
       '${data.writer}', 
       sysdate(), 
       '${data.text}',
@@ -134,7 +134,7 @@ router.get('/reply', (req, res) => {
     , DEPTH as depth
     FROM GTC_BOARD_REPLY
   WHERE BP_ID = '${data.bpId}'
-  ORDER BY DATE DESC`;
+  ORDER BY DATE ASC`;
 
   conn.query(query, (err, rows) => {
     if (err) throw err;

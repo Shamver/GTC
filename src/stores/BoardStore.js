@@ -116,7 +116,7 @@ class BoardStore {
       text: this.reply.text,
       writer: this.root.UserStore.userData.id,
       bpId: this.reply.bpId,
-      replyId: this.replyEditId,
+      replyId: this.replyEditId === 0 ? null : this.replyEditId,
     })
       .then((response) => {
         if (response.data) {
