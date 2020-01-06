@@ -104,7 +104,7 @@ const DeleteA = styled.a`
 `;
 
 const AlertData = (data, onLink, onDelete) => (
-  <AlertWrapper className={(data.readed ? '' : 'noRead')}>
+  <AlertWrapper className={(data.readed === 'Y' ? '' : 'noRead')}>
     <AlertBox>
       <LinkA to={`/post/${data.postId}#${data.replyId}`} name={`${data.id}`} onClick={onLink}>
         <strong>{data.replyName}</strong>님이 <strong>{data.postTitle}</strong>에 새&nbsp;

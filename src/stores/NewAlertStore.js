@@ -24,31 +24,7 @@ class NewAlertStore {
       })
         .then((response) => {
           if (response.data) {
-            // this.alertList = response.data;
-            this.alertList = [
-              {
-                id: 1,
-                replyName: '인욱쿤1',
-                postId: 1,
-                postTitle: '인벤 앞 한 장 정리 짤',
-                replyId: 1,
-                replyContent: '표정 곱창났네 ㅋㅋ',
-                replyDate: '2달 전',
-                type: 'reply',
-                readed: false,
-              },
-              {
-                id: 0,
-                replyName: '인욱쿤2',
-                postId: 2,
-                postTitle: '인벤 앞 한 장 정리 짤',
-                replyId: 1,
-                replyContent: '표정 곱창났네 ㅋㅋ',
-                replyDate: '2달 전',
-                type: 'rereply',
-                readed: true,
-              },
-            ];
+            this.alertList = response.data;
           }
         })
         .catch((response) => { console.log(response); });
@@ -56,9 +32,13 @@ class NewAlertStore {
   });
 
   @action onLink = ((e) => {
-    const { history } = this.root.RouteStore;
+    axios.put('/api/user/alert', {
+      id: e.currentTarget.name,
+    })
+      .then(() => {
 
-    console.log(e.currentTarget.name);
+      })
+      .catch((response) => { console.log(response); });
   });
 
   @action onDeleteAlert = ((e) => {
