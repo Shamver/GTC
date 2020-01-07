@@ -33,7 +33,7 @@ class NewAlertStore {
 
   @action onLink = ((e) => {
     axios.put('/api/user/alert', {
-      id: e.currentTarget.name,
+      id: [e.currentTarget.name],
     })
       .then(() => {
 
@@ -44,7 +44,6 @@ class NewAlertStore {
   @action onDeleteAlert = ((e) => {
     axios.delete('/api/user/alert', {
       data: {
-        type: 'one',
         id: e.currentTarget.name,
       },
     })
@@ -54,11 +53,9 @@ class NewAlertStore {
       .catch((response) => { console.log(response); });
   });
 
-  @action onDeleteAlertAll = (() => {
-    axios.delete('/api/user/alert', {
-      data: {
-        type: 'all',
-      },
+  @action onReadAlertAll = (() => {
+    axios.put('/api/user/alert', {
+      id: this.alertList.map((v) => v.id),
     })
       .then(() => {
         this.getDataAlert();

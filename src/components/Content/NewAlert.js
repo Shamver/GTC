@@ -103,11 +103,16 @@ const DeleteA = styled.a`
   }
 `;
 
+const StrongSpan = styled.span`
+  font-weight: 750;
+`;
+
 const AlertData = (data, onLink, onDelete) => (
   <AlertWrapper className={(data.readed === 'Y' ? '' : 'noRead')}>
     <AlertBox>
       <LinkA to={`/post/${data.postId}#${data.replyId}`} name={`${data.id}`} onClick={onLink}>
-        <strong>{data.replyName}</strong>님이 <strong>{data.postTitle}</strong>에 새&nbsp;
+        <StrongSpan>{data.replyName}</StrongSpan>님이 <StrongSpan>{data.postTitle}</StrongSpan>
+        에 새&nbsp;
         {data.type === 'reply' ? '댓글' : '대댓글'}을 달았습니다:&nbsp;
         {data.replyContent}
       </LinkA>
@@ -123,11 +128,15 @@ const AlertData = (data, onLink, onDelete) => (
 
 // 알림의 종류는 새 댓글, 새 대댓글만 우선
 const NewAlert = () => {
-  const { NewAlertStore } = useStores();
+  const { NewAlertStore, UtilStore } = useStores();
 
   const {
-    getDataAlert, onDeleteAlert, onLink, onDeleteAlertAll, alertList,
+    getDataAlert, onDeleteAlert, onLink, onReadAlertAll, alertList,
   } = NewAlertStore;
+
+  const {
+    toggleConfirmAlert,
+  } = UtilStore;
 
   useEffect(() => {
     getDataAlert();
@@ -143,7 +152,7 @@ const NewAlert = () => {
           <Hr width={120} />
         </FlexDiv>
         <ReadAll>
-          <ReadAllButton onClick={onDeleteAlertAll}>
+          <ReadAllButton onClick={() => { toggleConfirmAlert('모두 읽음 처리 하시겠습니까?', onReadAlertAll); }}>
             모두 읽음 처리
           </ReadAllButton>
         </ReadAll>
