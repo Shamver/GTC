@@ -9,7 +9,7 @@ class NewAlertStore {
   }
 
   @action getDataAlert = (() => {
-    const { toggleAlert } = this.root.UtilStore;
+    const { toggleAlert, setLoading } = this.root.UtilStore;
     const { userData } = this.root.UserStore;
     const { history } = this.root.RouteStore;
 
@@ -25,6 +25,7 @@ class NewAlertStore {
         .then((response) => {
           if (response.data) {
             this.alertList = response.data;
+            setLoading(false);
           }
         })
         .catch((response) => { console.log(response); });

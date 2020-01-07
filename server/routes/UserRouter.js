@@ -35,7 +35,9 @@ router.get('/alert', (req, res) => {
   conn.query(query, (err, rows) => {
     if (err) throw err;
     if (rows.length >= 1) {
-      res.send(rows.reverse());
+      setTimeout(() => {
+        res.send(rows.reverse());
+      }, 500);
     } else {
       res.send(rows);
     }

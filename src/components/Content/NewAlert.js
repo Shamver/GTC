@@ -9,6 +9,8 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Link } from 'react-router-dom';
+import Loading from '../util/Loading';
+
 
 import useStores from '../../stores/useStores';
 
@@ -135,15 +137,24 @@ const NewAlert = () => {
   } = NewAlertStore;
 
   const {
-    toggleConfirmAlert,
+    toggleConfirmAlert, loading, setLoading,
   } = UtilStore;
 
   useEffect(() => {
     getDataAlert();
+
+    return () => {
+      setLoading(true);
+    };
   }, []);
 
   const Alerts = alertList.map((v) => (AlertData(v, onLink, onDeleteAlert)));
 
+  if (loading) {
+    return (
+      <Loading />
+    );
+  }
   return (
     <MainContainer>
       <NotifyHeader>
