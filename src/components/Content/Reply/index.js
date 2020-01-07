@@ -112,8 +112,10 @@ ReplyEdit.propTypes = {
 
 
 const Reply = ({ data }) => {
-  const { BoardStore } = useStores();
+  const { BoardStore, UserStore } = useStores();
   const { setReplyEditId } = BoardStore;
+  const { userData } = UserStore;
+  const { id } = userData;
 
   return (
     <ReplyLayout>
@@ -121,7 +123,8 @@ const Reply = ({ data }) => {
       <ReplyWrapper>
         <ReplyInHeader>
           <AvatarImg src={avatar} />
-          <ReplyWriter> {data.writer} </ReplyWriter> {/* (글쓴이) 구현되어야함. */}
+          <ReplyWriter> {data.writer} </ReplyWriter>
+          { id === data.idWriter ? '(글쓴이)' : ''}
           <span className="replyOption">
             <Link to="/">좋아요</Link>
             &nbsp;·&nbsp;
@@ -130,11 +133,12 @@ const Reply = ({ data }) => {
             {data.date}
             &nbsp;·&nbsp;
             {/* <Link to="#">수정</Link>
-            &nbsp;·&nbsp; */} {/* (글쓴이) 와 마찬가지로 */}
+            &nbsp;·&nbsp;  {/* (글쓴이) 와 마찬가지로 */}
             <Link to="/#">신고 #</Link>
           </span>
         </ReplyInHeader>
         <ReplyInContent>
+          <Link>{data.replyWriterName ? `@${data.replyWriterName}` : ''}</Link>
           {renderHTML(`${data.content}`)}
           <ReplyEdit id={data.id} />
         </ReplyInContent>
@@ -146,10 +150,12 @@ const Reply = ({ data }) => {
 Reply.propTypes = {
   data: Proptypes.shape({
     id: Proptypes.number,
+    idWriter : Proptypes.number,
     writer: Proptypes.string,
     content: Proptypes.string,
     depth: Proptypes.number,
     date: Proptypes.string,
+    replyWriterName: Proptypes.string,
   }).isRequired,
 };
 

@@ -97,14 +97,16 @@ router.post('/reply', (req, res) => {
       ID,
       BP_ID,
       ID_REPLY,
+      ID_UPPER,
       WRITER,
       DATE,
       CONTENT,
       DEPTH
     ) VALUES (
-      (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_REPLY) as temp),
+      (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp),
       ${data.bpId},
-      IFNULL(${data.replyId},(SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_REPLY) as temp)),
+      IFNULL(${data.replyId}, (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
+      IFNULL((SELECT ID_UPPER FROM (SELECT MIN(ID_UPPER) AS ID_UPPER FROM GTC_BOARD_REPLY WHERE ID = ${data.replyId}) as temp),(SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
       '${data.writer}', 
       sysdate(), 
       '${data.text}',
@@ -122,6 +124,9 @@ router.get('/reply', (req, res) => {
   const data = req.query;
   const query = `SELECT 
     A.ID AS id
+    , A.ID_REPLY AS idReply
+    , A.ID_UPPER AS idUpper
+    , A.WRITER AS idWriter
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = A.WRITER) AS writer
     , CASE WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
         WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE,A.DATE, SYSDATE()),'분 전')
@@ -130,12 +135,15 @@ router.get('/reply', (req, res) => {
         WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH,A.DATE, SYSDATE()),'달 전')
        ELSE CONCAT(TIMESTAMPDIFF(YEAR,A.DATE, SYSDATE()),'년 전')
     END  as date
-    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = B.WRITER) AS replyWriterName
+    , CASE WHEN B.DEPTH >= 2 THEN (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = B.WRITER) 
+        ELSE NULL 
+        END AS replyWriterName
     , A.CONTENT as content
     , A.DEPTH as depth
     FROM GTC_BOARD_REPLY A, GTC_BOARD_REPLY B
-  WHERE BP_ID = '${data.bpId}'
-  ORDER BY DATE ASC`;
+  WHERE A.BP_ID = '${data.bpId}'
+  AND B.ID = A.ID_REPLY
+  ORDER BY A.ID_UPPER, A.ID`;
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
