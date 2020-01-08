@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { faShare, faPen } from '@fortawesome/free-solid-svg-icons';
+import { faShare, faPen, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Proptypes from 'prop-types';
 import renderHTML from 'react-render-html';
@@ -56,6 +56,14 @@ const ReplyDepthIcon = styled(FontAwesomeIcon)`
 
 const RightButton = styled(Button)`
   float : right;
+`;
+
+const SpanLikeLink = styled.span`
+  color: #337ab7;
+  cursor : pointer;
+  &:hover {
+    color: #23527c;
+  }
 `;
 
 const ReplyAnswer = ({ depth }) => {
@@ -113,7 +121,7 @@ ReplyEdit.propTypes = {
 
 const Reply = ({ data }) => {
   const { BoardStore, UserStore } = useStores();
-  const { setReplyEditId } = BoardStore;
+  const { setReplyEditId, likeReply } = BoardStore;
   const { userData } = UserStore;
   const { id } = userData;
 
@@ -126,19 +134,21 @@ const Reply = ({ data }) => {
           <ReplyWriter> {data.writer} </ReplyWriter>
           { id === data.idWriter ? '(글쓴이)' : ''}
           <span className="replyOption">
-            <Link to="/">좋아요</Link>
+            <SpanLikeLink onClick={() => likeReply(data.id)}>
+              { !data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
+            </SpanLikeLink>
             &nbsp;·&nbsp;
-            <Link onClick={() => { setReplyEditId(data.id); }}>대댓글</Link>
-          &nbsp;·&nbsp;
+            <SpanLikeLink onClick={() => setReplyEditId(data.id)}>대댓글</SpanLikeLink>
+             &nbsp;·&nbsp;
             {data.date}
             &nbsp;·&nbsp;
             {/* <Link to="#">수정</Link>
             &nbsp;·&nbsp;  {/* (글쓴이) 와 마찬가지로 */}
-            <Link to="/#">신고 #</Link>
+            <SpanLikeLink>신고 #</SpanLikeLink>
           </span>
         </ReplyInHeader>
         <ReplyInContent>
-          <Link>{data.replyWriterName ? `@${data.replyWriterName}` : ''}</Link>
+          <SpanLikeLink>{data.replyWriterName ? `@${data.replyWriterName}` : ''}</SpanLikeLink>
           {renderHTML(`${data.content}`)}
           <ReplyEdit id={data.id} />
         </ReplyInContent>
@@ -150,7 +160,8 @@ const Reply = ({ data }) => {
 Reply.propTypes = {
   data: Proptypes.shape({
     id: Proptypes.number,
-    idWriter : Proptypes.number,
+    idWriter: Proptypes.number,
+    likeCount: Proptypes.number,
     writer: Proptypes.string,
     content: Proptypes.string,
     depth: Proptypes.number,

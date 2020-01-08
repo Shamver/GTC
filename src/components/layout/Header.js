@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
   InputGroup, InputGroupAddon, Button, Input,
@@ -153,7 +153,7 @@ const ProfileId = styled.span`
   margin-left: 5px;
   padding-left: 5px;
   border-left: 1px solid gray;
-`
+`;
 
 const Logo = styled.img`
   width : 100px;
@@ -192,14 +192,18 @@ const KakaoSign = () => {
   );
 };
 
+KakaoSign.propTypes = {
+  onClick: Proptypes.func.isRequired,
+};
+
 const KakaoRegister = () => {
   const { UtilStore } = useStores();
+  const { toggleSign } = UtilStore;
 
   return (
     <KakaoLogin
       jsKey={jsKey}
-      onSuccess={(result) => UtilStore.toggleSign(result)}
-      onFailure={(result) => console.log(result)}
+      onSuccess={(result) => toggleSign(result)}
       render={(props) => (
         <>
           <LoginButton onClick={props.onClick}>
@@ -214,11 +218,15 @@ const KakaoRegister = () => {
   );
 };
 
+KakaoRegister.propTypes = {
+  onClick: Proptypes.func.isRequired,
+};
+
 const HeaderSessionComp = observer(() => {
   const { UserStore, HeaderStore } = useStores();
-  useEffect(() => {
-  }, [UserStore.userData]);
-  if (!UserStore.userData) {
+  const { userData } = UserStore;
+
+  if (!userData) {
     return (
       <>
         <KakaoSign />

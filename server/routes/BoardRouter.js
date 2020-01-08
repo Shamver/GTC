@@ -140,6 +140,7 @@ router.get('/reply', (req, res) => {
         END AS replyWriterName
     , A.CONTENT as content
     , A.DEPTH as depth
+    , (SELECT COUNT(*) FROM GTC_BOARD_REPLY_LIKE WHERE ID = A.ID) AS likeCount
     FROM GTC_BOARD_REPLY A, GTC_BOARD_REPLY B
   WHERE A.BP_ID = '${data.bpId}'
   AND B.ID = A.ID_REPLY
@@ -148,6 +149,35 @@ router.get('/reply', (req, res) => {
   conn.query(query, (err, rows) => {
     if (err) throw err;
     res.send(rows);
+  });
+});
+
+// 댓글 좋아요
+router.use('/reply/like', authMiddleware);
+router.post('/reply/like', (req, res) => {
+  const data = req.body;
+  let query = `SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY_LIKE
+    WHERE ID=${data.id}
+    AND U_ID=${data.uId}`;
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+
+    // 이미 해당 댓글에 해당 유저가 좋아요를 누름.
+    if (rows[0].count === 1) {
+      res.send(2);
+    } else {
+      query = `INSERT INTO GTC_BOARD_REPLY_LIKE
+        VALUES (
+          ${data.id},
+          ${data.uId}
+        )`;
+
+      conn.query(query, (err2) => {
+        if (err2) throw err2;
+
+        res.send(1);
+      });
+    }
   });
 });
 module.exports = router;

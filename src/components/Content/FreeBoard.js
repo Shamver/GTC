@@ -155,77 +155,78 @@ PostList.propTypes = {
 };
 
 const FreeBoard = ({ pathname }) => (
-  <BoardWrapper>
-    <TableWrapper>
-      <TableHead>
-        <MarginlessH3>자유게시판</MarginlessH3>
-        <RightLink to={`${pathname}/post`}>
-          <Button color="danger" size="sm">
-            <FontAwesomeIcon icon={faPen} />
-            &nbsp;&nbsp;글 쓰기
-          </Button>
-        </RightLink>
-      </TableHead>
-      <InnerTableHeader>
-        <tbody>
-          <tr>
-            <td>
-              <NavLink to="/free">
-                <FontAwesomeIcon icon={faHome} />
-              </NavLink>
-            </td>
-            <td><NavLink to="/a">자유</NavLink></td>
-            <td><NavLink to="/a">잡담</NavLink></td>
-          </tr>
-        </tbody>
-      </InnerTableHeader>
-      <ManginessTable bordered hover size="sm">
-        <tbody>
-          <PostList pathname={pathname} />
-        </tbody>
-      </ManginessTable>
-      <AbsolDiv>
-        <AbsoluteLeftLink to={`${pathname}/post`}>
-          <Button outline color="warning" size="sm">
-            <FontAwesomeIcon icon={faStar} />
-            &nbsp;&nbsp;인기 글
-          </Button>
-        </AbsoluteLeftLink>
-        <AbsoluteRightLink to={`${pathname}/post`}>
-          <Button color="danger" size="sm">
-            <FontAwesomeIcon icon={faPen} />
-            &nbsp;&nbsp;글 쓰기
-          </Button>
-        </AbsoluteRightLink>
-      </AbsolDiv>
-      <PaginationCustom>
-        <PaginationItem active>
-          <PaginationLink href="#">
-            1
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">
-            2
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">
-            3
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">
-            4
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink next href="#" />
-        </PaginationItem>
-      </PaginationCustom>
-    </TableWrapper>
-    <br />
-  </BoardWrapper>
+  <>
+    <BoardWrapper>
+      <TableWrapper>
+        <TableHead>
+          <MarginlessH3>자유게시판</MarginlessH3>
+          <RightLink to={`${pathname}/post`}>
+            <Button color="danger" size="sm">
+              <FontAwesomeIcon icon={faPen} />
+              &nbsp;&nbsp;글 쓰기
+            </Button>
+          </RightLink>
+        </TableHead>
+        <InnerTableHeader>
+          <tbody>
+            <tr>
+              <td>
+                <NavLink to="/free">
+                  <FontAwesomeIcon icon={faHome} />
+                </NavLink>
+              </td>
+              <td><NavLink to="/a">자유</NavLink></td>
+              <td><NavLink to="/a">잡담</NavLink></td>
+            </tr>
+          </tbody>
+        </InnerTableHeader>
+        <ManginessTable bordered hover size="sm">
+          <tbody>
+            <PostList pathname={pathname} />
+          </tbody>
+        </ManginessTable>
+        <AbsolDiv>
+          <AbsoluteLeftLink to={`${pathname}/post`}>
+            <Button outline color="warning" size="sm">
+              <FontAwesomeIcon icon={faStar} />
+              &nbsp;&nbsp;인기 글
+            </Button>
+          </AbsoluteLeftLink>
+          <AbsoluteRightLink to={`${pathname}/post`}>
+            <Button color="danger" size="sm">
+              <FontAwesomeIcon icon={faPen} />
+              &nbsp;&nbsp;글 쓰기
+            </Button>
+          </AbsoluteRightLink>
+        </AbsolDiv>
+        <PaginationCustom>
+          <PaginationItem active>
+            <PaginationLink href="#">
+              1
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">
+              2
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">
+              3
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">
+              4
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink next href="#" />
+          </PaginationItem>
+        </PaginationCustom>
+      </TableWrapper>
+    </BoardWrapper>
+  </>
 );
 
 FreeBoard.propTypes = {

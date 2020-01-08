@@ -1,6 +1,7 @@
 import { action, observable } from 'mobx';
 import axios from 'axios';
 import React from 'react';
+import { toast } from 'react-toastify';
 
 class BoardStore {
   @observable post = {
@@ -121,7 +122,7 @@ class BoardStore {
     })
       .then((response) => {
         if (response.data) {
-          this.root.UtilStore.toggleAlert('댓글이 정상적으로 등록되었습니다.');
+          toast.success('😊 댓글이 정상적으로 등록되었어요!');
           this.reply = {
             text: '',
             bpId: this.reply.bpId,
@@ -133,6 +134,21 @@ class BoardStore {
       .catch((response) => { console.log(response); });
 
     return true;
+  };
+
+  @action likeReply = (replyId) => {
+    axios.post('/api/board/reply/like', {
+      id: replyId,
+      uId: this.root.UserStore.userData.id,
+    })
+      .then((response) => {
+        if (response.data === 1) {
+          toast.success('😳 댓글이 좋아요!');
+        } else if (response.data === 2) {
+          toast.error('😳 당신은 이미 이 댓글을 좋아해요!');
+        }
+      })
+      .catch((response) => { console.log(response); });
   };
 
   replyValidationCheck = () => {
