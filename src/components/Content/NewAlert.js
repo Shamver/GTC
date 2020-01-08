@@ -83,15 +83,17 @@ const AlertActionBox = styled.div`
 
 const LinkA = styled(Link)`
   display: block;
+  font-size: 0.9rem;
   text-decoration: none !important;
   color: #666 !important;
+  overflow: hidden !important;
   &:hover {
     cursor: pointer;
   }
 `;
 
 const DateSpan = styled.span`
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: #a9a;
 `;
 
@@ -110,7 +112,7 @@ const StrongSpan = styled.span`
 `;
 
 const AlertData = (data, onLink, onDelete) => (
-  <AlertWrapper className={(data.readed === 'Y' ? '' : 'noRead')}>
+  <AlertWrapper className={(data.isRead === 'Y' ? '' : 'noRead')}>
     <AlertBox>
       <LinkA to={`/post/${data.postId}#${data.replyId}`} name={`${data.id}`} onClick={onLink}>
         <StrongSpan>{data.replyName}</StrongSpan>님이 <StrongSpan>{data.postTitle}</StrongSpan>
@@ -168,7 +170,7 @@ const NewAlert = () => {
           </ReadAllButton>
         </ReadAll>
       </NotifyHeader>
-      {Alerts}
+      {Alerts.length === 0 ? '새로운 알림이 없습니다.' : Alerts}
     </MainContainer>
   );
 };

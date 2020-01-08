@@ -8,7 +8,7 @@ class NewAlertStore {
     this.root = root;
   }
 
-  @action getDataAlert = (() => {
+  @action getDataAlert = ((updateYN = 'N') => {
     const { toggleAlert, setLoading } = this.root.UtilStore;
     const { userData } = this.root.UserStore;
     const { history } = this.root.RouteStore;
@@ -19,6 +19,7 @@ class NewAlertStore {
     } else {
       axios.get('/api/user/alert', {
         params: {
+          updateYN,
           userId: userData.id,
         },
       })
@@ -49,7 +50,7 @@ class NewAlertStore {
       },
     })
       .then(() => {
-        this.getDataAlert();
+        this.getDataAlert('Y');
       })
       .catch((response) => { console.log(response); });
   });
@@ -59,7 +60,7 @@ class NewAlertStore {
       id: this.alertList.map((v) => v.id),
     })
       .then(() => {
-        this.getDataAlert();
+        this.getDataAlert('Y');
       })
       .catch((response) => { console.log(response); });
   });

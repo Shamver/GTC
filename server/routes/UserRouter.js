@@ -8,11 +8,13 @@ const db = require('../db_con')();
 
 const conn = db.init();
 
+const filter = require('../middleware/content');
+
 router.get('/alert', (req, res) => {
-  const { userId } = req.query;
+  const { userId, updateYN } = req.query;
 
   const query = `
-    SELECT GUA.ID AS id, GUA.TYPE AS type, GUA.READED AS readed,
+    SELECT GUA.ID AS id, GUA.TYPE AS type, GUA.READ_YN AS isRead,
     GBP.ID AS postId, GBP.TITLE AS postTitle,
     GBR.ID AS replyId, GBR.CONTENT AS replyContent,
     CASE WHEN GBR.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
@@ -28,16 +30,24 @@ router.get('/alert', (req, res) => {
     GBR.ID = GUA.REPLY_ID and
     GU.ID = GBR.WRITER and
     GBP.WRITER = ${userId} and
-    GUA.NOSHOW = 'N' and
-    TIMESTAMPDIFF(minute, date_format(GUA.READED_DATE, '%Y-%m-%d %H:%i'), date_format(sysdate(), '%Y-%m-%d %H:%i')) < 1441
+    GUA.SHOW_YN = 'Y' and
+    TIMESTAMPDIFF(minute, date_format(GUA.READ_DATE, '%Y-%m-%d %H:%i'), date_format(sysdate(), '%Y-%m-%d %H:%i')) < 1441
     `;
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
     if (rows.length >= 1) {
-      setTimeout(() => {
-        res.send(rows.reverse());
-      }, 500);
+      const returnRows = rows.map((v) => ({
+        ...v,
+        replyContent: filter(v.replyContent),
+      }));
+      if (updateYN === 'Y') {
+        res.send(returnRows.reverse());
+      } else {
+        setTimeout(() => {
+          res.send(returnRows.reverse());
+        }, 500);
+      }
     } else {
       res.send(rows);
     }
@@ -49,7 +59,7 @@ router.put('/alert', (req, res) => {
 
   const query = `
     UPDATE GTC_USER_ALERT
-    SET READED = 'Y', READED_DATE = sysdate()
+    SET READ_YN = 'Y', READ_DATE = sysdate()
     WHERE id in (${id.join()})
   `;
 
@@ -68,7 +78,7 @@ router.delete('/alert', (req, res) => {
 
   const query = `
     UPDATE GTC_USER_ALERT
-    SET NOSHOW = 'Y'
+    SET SHOW_YN = 'N'
     WHERE id = ${id}
   `;
 

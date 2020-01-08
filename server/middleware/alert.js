@@ -13,7 +13,7 @@ const alertMiddleware = (req, res, next) => {
     '${postId}',
     '${replyId}',
     '${type}',
-    'N',
+    'Y',
     null
     )`;
 
