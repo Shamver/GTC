@@ -5,6 +5,7 @@ import CategoryStore from './CategoryStore';
 import RouteStore from './RouteStore';
 import UserStore from './UserStore';
 import SettingStore from './SettingStore';
+import ReplyStore from './ReplyStore';
 
 class RootStore {
   constructor() {
@@ -15,6 +16,7 @@ class RootStore {
     this.RouteStore = new RouteStore(this);
     this.UserStore = new UserStore(this);
     this.SettingStore = new SettingStore(this);
+    this.ReplyStore = new ReplyStore(this);
   }
 }
 

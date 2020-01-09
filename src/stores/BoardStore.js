@@ -20,7 +20,7 @@ class BoardStore {
     bpId: '',
   };
 
-  @observable replyEditId;
+  @observable replyEditId = 0;
 
   @observable postView = {};
 
@@ -65,6 +65,7 @@ class BoardStore {
 
   @action setReplyEditId = (id) => {
     this.replyEditId = id;
+    console.log(id);
   };
 
   @action setCurrentBoard = (currentBoard) => {
@@ -90,7 +91,7 @@ class BoardStore {
       .then((response) => {
         if (response.data) {
           this.root.RouteStore.history.push('/free');
-          this.root.UtilStore.toggleAlert('글이 정상적으로 등록되었습니다.');
+          toast.success('😊 포스팅이 등록되었어요!');
           this.post = {
             board: '',
             category: '',
@@ -143,9 +144,9 @@ class BoardStore {
     })
       .then((response) => {
         if (response.data === 1) {
-          toast.success('😳 댓글이 좋아요!');
+          toast.success('😳 해당 댓글 좋아요 완료!');
         } else if (response.data === 2) {
-          toast.error('😳 당신은 이미 이 댓글을 좋아해요!');
+          toast.error('😳 이미 해당 댓글을 좋아합니다. ㅠㅠ');
         }
       })
       .catch((response) => { console.log(response); });

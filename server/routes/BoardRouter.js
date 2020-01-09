@@ -126,6 +126,7 @@ router.get('/reply', (req, res) => {
     A.ID AS id
     , A.ID_REPLY AS idReply
     , A.ID_UPPER AS idUpper
+    , C.WRITER AS idPostWriter
     , A.WRITER AS idWriter
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = A.WRITER) AS writer
     , CASE WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
@@ -141,10 +142,21 @@ router.get('/reply', (req, res) => {
     , A.CONTENT as content
     , A.DEPTH as depth
     , (SELECT COUNT(*) FROM GTC_BOARD_REPLY_LIKE WHERE ID = A.ID) AS likeCount
-    FROM GTC_BOARD_REPLY A, GTC_BOARD_REPLY B
+    FROM GTC_BOARD_REPLY A, GTC_BOARD_REPLY B, GTC_BOARD_POST C
   WHERE A.BP_ID = '${data.bpId}'
   AND B.ID = A.ID_REPLY
+  AND C.ID = A.BP_ID
   ORDER BY A.ID_UPPER, A.ID`;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+    res.send(rows);
+  });
+});
+
+router.put('/reply', (req, res) => {
+  const data = req.query;
+  const query = `UPDATE `;
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
@@ -180,4 +192,5 @@ router.post('/reply/like', (req, res) => {
     }
   });
 });
+
 module.exports = router;

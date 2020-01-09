@@ -66,6 +66,41 @@ const SpanLikeLink = styled.span`
   }
 `;
 
+const Writer = styled.span`
+  font-size: 12px;
+  color : #aaa;
+`;
+
+const ReplyModify = ({ content }) => {
+  const { BoardStore, ReplyStore } = useStores();
+  const { onChangeReplyValue } = BoardStore;
+  const { modifyReply, modifyMode } = ReplyStore;
+
+  return (
+    <>
+      <CKEditor
+        editor={ClassicEditor}
+        data={content}
+        onInit={() => {}}
+        onChange={(event, editor) => {
+          const ReplyContent = editor.getData();
+          onChangeReplyValue(ReplyContent);
+        }}
+      />
+      <Button size="sm" outline onClick={() => modifyMode(0)}>취소</Button>
+      <RightButton size="sm" color="info" onClick={modifyReply}>
+        <FontAwesomeIcon icon={faPen} />
+        &nbsp;
+        댓글 수정
+      </RightButton>
+    </>
+  );
+};
+
+ReplyModify.propTypes = {
+  content: Proptypes.string.isRequired,
+};
+
 const ReplyAnswer = ({ depth }) => {
   if (depth > 1) {
     return (
@@ -102,7 +137,7 @@ const ReplyEdit = observer(({ id }) => {
           placeholder="내용을 작성해주세요."
         />
 
-        <Button size="sm" outline onClick={() => { setReplyEditId(0); }}>취소</Button>
+        <Button size="sm" outline onClick={() => setReplyEditId(0)}>취소</Button>
         <RightButton size="sm" color="info" onClick={addReply}>
           <FontAwesomeIcon icon={faPen} />
           &nbsp;
@@ -120,10 +155,10 @@ ReplyEdit.propTypes = {
 
 
 const Reply = ({ data }) => {
-  const { BoardStore, UserStore } = useStores();
+  const { BoardStore, UserStore, ReplyStore } = useStores();
   const { setReplyEditId, likeReply } = BoardStore;
+  const { modifyMode, modifyModeId } = ReplyStore;
   const { userData } = UserStore;
-  const { id } = userData;
 
   return (
     <ReplyLayout>
@@ -132,8 +167,18 @@ const Reply = ({ data }) => {
         <ReplyInHeader>
           <AvatarImg src={avatar} />
           <ReplyWriter> {data.writer} </ReplyWriter>
-          { id === data.idWriter ? '(글쓴이)' : ''}
+          { data.idPostWriter === data.idWriter ? (<Writer>(글쓴이)</Writer>) : ''}
           <span className="replyOption">
+            { userData.id === data.idWriter
+              ? (
+                <>
+                  <SpanLikeLink onClick={() => modifyMode(data.id)}>수정</SpanLikeLink>
+                  &nbsp;·&nbsp;
+                  <SpanLikeLink>삭제</SpanLikeLink>
+                  &nbsp;·&nbsp;
+                </>
+              )
+              : '' }
             <SpanLikeLink onClick={() => likeReply(data.id)}>
               { !data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
             </SpanLikeLink>
@@ -149,7 +194,9 @@ const Reply = ({ data }) => {
         </ReplyInHeader>
         <ReplyInContent>
           <SpanLikeLink>{data.replyWriterName ? `@${data.replyWriterName}` : ''}</SpanLikeLink>
-          {renderHTML(`${data.content}`)}
+          { modifyModeId === data.id
+            ? (<ReplyModify content={data.content} />)
+            : renderHTML(`${data.content}`)}
           <ReplyEdit id={data.id} />
         </ReplyInContent>
       </ReplyWrapper>
@@ -161,6 +208,7 @@ Reply.propTypes = {
   data: Proptypes.shape({
     id: Proptypes.number,
     idWriter: Proptypes.number,
+    idPostWriter: Proptypes.number,
     likeCount: Proptypes.number,
     writer: Proptypes.string,
     content: Proptypes.string,
@@ -170,4 +218,4 @@ Reply.propTypes = {
   }).isRequired,
 };
 
-export default Reply;
+export default observer(Reply);

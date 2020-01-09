@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 class UserStore {
   @observable registerData = {
@@ -66,7 +67,7 @@ class UserStore {
     axios.post('/api/auth/login', { email })
       .then((response) => {
         if (response.data) {
-          this.root.UtilStore.toggleAlert(response.data.MESSAGE);
+          toast.success(response.data.MESSAGE);
           if (response.data.LOGIN_SUCCESS) {
             this.userTokenData = response.data.token;
             this.cookieCheck();
@@ -78,12 +79,12 @@ class UserStore {
     return true;
   };
 
-  @action logout = (e, text = '로그아웃이 완료되었습니다.') => {
+  @action logout = (e, text = '😊 로그아웃 완료!') => {
     const { history } = this.root.RouteStore;
     axios.post('/api/auth/logout', {})
       .then((response) => {
         if (response.data.type === 'LOGOUT') {
-          this.root.UtilStore.toggleAlert(text);
+          toast.success(text);
           this.cookieCheck();
           if (history.location.pathname === '/settings') {
             history.push('/');
