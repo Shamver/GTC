@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
 
-class UserIgnoreStore {
+class IgnoreStore {
   @observable activeTab = 'ignore';
 
   @observable ignoreList = [];
@@ -98,4 +98,4 @@ class UserIgnoreStore {
   });
 }
 
-export default UserIgnoreStore;
+export default IgnoreStore;

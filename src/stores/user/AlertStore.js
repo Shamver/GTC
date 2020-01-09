@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
 
-class UserAlertStore {
+class AlertStore {
   @observable alertList = [];
 
   constructor(root) {
@@ -66,4 +66,4 @@ class UserAlertStore {
   });
 }
 
-export default UserAlertStore;
+export default AlertStore;

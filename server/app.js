@@ -16,10 +16,10 @@ const userApi2 = require('./routes/UserRouter.js');
 
 const boardPostApi = require('./routes/board/BoardPostRouter');
 
-const userApi = require('./routes/user/UserRouter');
-const userAlertApi = require('./routes/user/UserAlertRouter');
-const userIgnoreApi = require('./routes/user/UserIgnoreRouter');
-const userFavoritePostApi = require('./routes/user/UserFavoritePostRouter');
+const userApi = require('./routes/user/Router');
+const userAlertApi = require('./routes/user/AlertRouter');
+const userIgnoreApi = require('./routes/user/IgnoreRouter');
+const userFavoritePostApi = require('./routes/user/FavoritePostRouter');
 
 app.use(cookieParser());
 app.use(bodyParser.json());

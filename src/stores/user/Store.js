@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
 
-class UserStore {
+class Store {
   @observable withdrawalIsChecked = false;
 
   @action withdrawal = (() => {
@@ -25,4 +25,4 @@ class UserStore {
   });
 }
 
-export default UserStore;
+export default Store;
