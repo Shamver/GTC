@@ -33,7 +33,7 @@ class AlertStore {
     }
   });
 
-  @action onLink = ((e) => {
+  @action onClickAlert = ((e) => {
     axios.put('/api/user/alert', {
       id: [e.currentTarget.name],
     })

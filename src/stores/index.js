@@ -4,9 +4,15 @@ import UtilStore from './UtilStore';
 import CategoryStore from './CategoryStore';
 import RouteStore from './RouteStore';
 import UserStore from './UserStore';
-import SettingStore from './SettingStore';
-import PostLockerStore from './PostLockerStore';
-import NewAlertStore from './NewAlertStore';
+
+import UserAlertStore from './user/AlertStore';
+import UserFavoritePostStore from './user/FavoritePostStore';
+import UserIgnoreStore from './user/IgnoreStore';
+import UserStore2 from './user/UserStore';
+
+import PostLockerStore from './postlocker/PostLockerStore';
+
+import SettingStore from './setting/SettingStore';
 
 class RootStore {
   constructor() {
@@ -16,9 +22,12 @@ class RootStore {
     this.CategoryStore = new CategoryStore(this);
     this.RouteStore = new RouteStore(this);
     this.UserStore = new UserStore(this);
-    this.SettingStore = new SettingStore(this);
+    this.UserAlertStore = new UserAlertStore(this);
+    this.UserFavoritePostStore = new UserFavoritePostStore(this);
+    this.UserIgnoreStore = new UserIgnoreStore(this);
+    this.UserStore2 = new UserStore2(this);
     this.PostLockerStore = new PostLockerStore(this);
-    this.NewAlertStore = new NewAlertStore(this);
+    this.SettingStore = new SettingStore(this);
   }
 }
 

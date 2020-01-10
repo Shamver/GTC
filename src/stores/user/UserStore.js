@@ -1,8 +1,12 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
 
-class Store {
+class UserStore {
   @observable withdrawalIsChecked = false;
+
+  constructor(root) {
+    this.root = root;
+  }
 
   @action withdrawal = (() => {
     const { userData, logout } = this.root.UserStore;
@@ -23,6 +27,18 @@ class Store {
         .catch((response) => { console.log(response); });
     }
   });
+
+  @action onClickWithdrawal = (() => {
+    this.withdrawalIsChecked = !this.withdrawalIsChecked;
+  })
+
+  @action isCheckedWithdrawal = ((next) => {
+    if (this.withdrawalIsChecked) {
+      next();
+    } else {
+      this.root.UtilStore.toggleAlert('내용 확인란에 체크를 해주셔야 합니다.');
+    }
+  });
 }
 
-export default Store;
+export default UserStore;

@@ -24,7 +24,7 @@ router.get('/alert', (req, res) => {
                END  as replyDate,
     GU.NICKNAME AS replyName
     FROM GTC_USER_ALERT GUA, GTC_BOARD_POST GBP, GTC_BOARD_REPLY GBR, GTC_USER GU
-    WHERE GBP.ID = GUA.POST_ID and
+    WHERE GBP.ID = GBR.BP_ID and
     GBR.ID = GUA.REPLY_ID and
     GU.ID = GBR.WRITER and
     GBP.WRITER = ${userId} and

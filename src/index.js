@@ -17,7 +17,10 @@ ReactDOM.render((
     UserStore={stores.UserStore}
     SettingStore={stores.SettingStore}
     PostLockerStore={stores.PostLockerStore}
-    NewAlertStore={stores.NewAlertStore}
+    UserAlertStore={stores.UserAlertStore}
+    UserFavoritePostStore={stores.UserFavoritePostStore}
+    UserIgnoreStore={stores.UserIgnoreStore}
+    UserStore2={stores.UserStore2}
   >
     <Router>
       <Route component={App} />
