@@ -84,7 +84,7 @@ router.post('/login', (req, res) => {
             res.cookie('authToken', token, { httpOnly: true });
             res.json({
               LOGIN_SUCCESS: true,
-              MESSAGE: '로그인이 완료되었습니다.',
+              MESSAGE: '😊 로그인 완료!',
             });
           },
         );
