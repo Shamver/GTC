@@ -125,23 +125,29 @@ const AbsolDiv = styled.div`
 
 const PostList = observer(({ pathname }) => {
   const { BoardStore } = useStores();
+  const { getBoardPostList, setCurrentBoard, boardPostList } = BoardStore;
   useEffect(() => {
-    BoardStore.getBoardPostList(pathname);
-    BoardStore.setCurrentBoard(pathname);
-  }, [pathname, BoardStore]);
+    getBoardPostList(pathname);
+    setCurrentBoard(pathname);
+  }, [pathname, getBoardPostList, setCurrentBoard]);
 
-  return BoardStore.boardPostList[pathname].map((data) => (
-    <tr height="35" key={data.id}>
-      <CenterTd>{data.id}</CenterTd>
-      <CenterTd>{data.categoryName}</CenterTd>
-      <MiddleTd width="700">
-        <FontAwesomeIcon icon={faCommentDots} /> &nbsp;
-        <PostTitle to={`/post/${data.id}`}>{data.title}</PostTitle>
-      </MiddleTd>
-      <CenterTdWriter>{data.writer}</CenterTdWriter>
-      <CenterTd>{data.date}</CenterTd>
-    </tr>
-  ));
+  return boardPostList[pathname].map((data) => {
+    const {
+      id, title, writer, date, categoryName,
+    } = data;
+    return (
+      <tr height="35" key={data.id}>
+        <CenterTd>{id}</CenterTd>
+        <CenterTd>{categoryName}</CenterTd>
+        <MiddleTd width="700">
+          <FontAwesomeIcon icon={faCommentDots} /> &nbsp;
+          <PostTitle to={`/post/${id}`}>{title}</PostTitle>
+        </MiddleTd>
+        <CenterTdWriter>{writer}</CenterTdWriter>
+        <CenterTd>{date}</CenterTd>
+      </tr>
+    );
+  });
 });
 
 PostList.propTypes = {
@@ -149,83 +155,82 @@ PostList.propTypes = {
 };
 
 const FreeBoard = ({ pathname }) => (
-  <BoardWrapper>
-    <TableWrapper>
-      <TableHead>
-        <MarginlessH3>자유게시판</MarginlessH3>
-        <RightLink to={`${pathname}/post`}>
-          <Button color="danger" size="sm">
-            <FontAwesomeIcon icon={faPen} />
-            &nbsp;&nbsp;글 쓰기
-          </Button>
-        </RightLink>
-      </TableHead>
-      <InnerTableHeader>
-        <th>
-          <td><NavLink to="/free"><FontAwesomeIcon icon={faHome} /></NavLink></td>
-          <td><NavLink to="/a">자유</NavLink></td>
-          <td><NavLink to="/a">잡담</NavLink></td>
-        </th>
-      </InnerTableHeader>
-      <ManginessTable bordered hover size="sm">
-        <tbody>
-          <PostList pathname={pathname} />
-        </tbody>
-      </ManginessTable>
-      <AbsolDiv>
-        <AbsoluteLeftLink to={`${pathname}/post`}>
-          <Button outline color="warning" size="sm">
-            <FontAwesomeIcon icon={faStar} />
-            &nbsp;&nbsp;인기 글
-          </Button>
-        </AbsoluteLeftLink>
-        <AbsoluteRightLink to={`${pathname}/post`}>
-          <Button color="danger" size="sm">
-            <FontAwesomeIcon icon={faPen} />
-            &nbsp;&nbsp;글 쓰기
-          </Button>
-        </AbsoluteRightLink>
-      </AbsolDiv>
-      <PaginationCustom>
-        <PaginationItem active>
-          <PaginationLink href="#">
-            1
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">
-            2
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">
-            3
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink href="#">
-            4
-          </PaginationLink>
-        </PaginationItem>
-        <PaginationItem>
-          <PaginationLink next href="#" />
-        </PaginationItem>
-      </PaginationCustom>
-    </TableWrapper>
-    <br />
-  </BoardWrapper>
+  <>
+    <BoardWrapper>
+      <TableWrapper>
+        <TableHead>
+          <MarginlessH3>자유게시판</MarginlessH3>
+          <RightLink to={`${pathname}/post`}>
+            <Button color="danger" size="sm">
+              <FontAwesomeIcon icon={faPen} />
+              &nbsp;&nbsp;글 쓰기
+            </Button>
+          </RightLink>
+        </TableHead>
+        <InnerTableHeader>
+          <tbody>
+            <tr>
+              <td>
+                <NavLink to="/free">
+                  <FontAwesomeIcon icon={faHome} />
+                </NavLink>
+              </td>
+              <td><NavLink to="/a">자유</NavLink></td>
+              <td><NavLink to="/a">잡담</NavLink></td>
+            </tr>
+          </tbody>
+        </InnerTableHeader>
+        <ManginessTable bordered hover size="sm">
+          <tbody>
+            <PostList pathname={pathname} />
+          </tbody>
+        </ManginessTable>
+        <AbsolDiv>
+          <AbsoluteLeftLink to={`${pathname}/post`}>
+            <Button outline color="warning" size="sm">
+              <FontAwesomeIcon icon={faStar} />
+              &nbsp;&nbsp;인기 글
+            </Button>
+          </AbsoluteLeftLink>
+          <AbsoluteRightLink to={`${pathname}/post`}>
+            <Button color="danger" size="sm">
+              <FontAwesomeIcon icon={faPen} />
+              &nbsp;&nbsp;글 쓰기
+            </Button>
+          </AbsoluteRightLink>
+        </AbsolDiv>
+        <PaginationCustom>
+          <PaginationItem active>
+            <PaginationLink href="#">
+              1
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">
+              2
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">
+              3
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink href="#">
+              4
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink next href="#" />
+          </PaginationItem>
+        </PaginationCustom>
+      </TableWrapper>
+    </BoardWrapper>
+  </>
 );
 
 FreeBoard.propTypes = {
   pathname: Proptypes.string.isRequired,
-  BoardStore: Proptypes.shape({
-    getBoardPostList: Proptypes.func,
-    setCurrentBoard: Proptypes.func,
-  }),
-};
-
-FreeBoard.defaultProps = {
-  BoardStore: null,
 };
 
 export default FreeBoard;

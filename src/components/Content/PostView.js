@@ -5,14 +5,97 @@ import styled from 'styled-components';
 import { Container, Button } from 'reactstrap';
 import { faClock, faEye, faBellSlash } from '@fortawesome/free-regular-svg-icons';
 import {
-  faCommentDots, faPen, faBars, faPlus,
+  faCommentDots, faBars, faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import renderHTML from 'react-render-html';
 import useStores from '../../stores/useStores';
 import CurrentBoard from './CurrentBoard';
+import ReplyForm from './Reply/ReplyForm';
+
+const PostView = ({ match }) => {
+  const { BoardStore } = useStores();
+  const {
+    getPost, setReplyBpId, postView,
+  } = BoardStore;
+  const {
+    boardName, categoryName, title, writer, date, views, content,
+  } = postView;
+  const { params } = match;
+  const { id } = params;
+
+  useEffect(() => {
+    getPost(id);
+    setReplyBpId(id);
+  }, [getPost, setReplyBpId, id]);
+
+  return (
+    <>
+      <PostWrapper>
+        <ViewWrapper>
+          <MarginlessH3>{boardName}</MarginlessH3>
+          <br />
+          <CategoryAndTitle>
+            <Category>
+              {categoryName}
+            </Category>
+            <Title>
+              {title}
+            </Title>
+          </CategoryAndTitle>
+          <b>{writer}</b>님
+          <NavLine />
+          <PostViewWrapper>
+            <InnerContainer>
+              <span>
+                <FontAwesomeIcon icon={faClock} /> {date}
+              </span>
+              <RightSpan>
+                <FontAwesomeIcon icon={faCommentDots} /> 0
+                &nbsp;
+                <FontAwesomeIcon icon={faEye} /> {views}
+              </RightSpan>
+            </InnerContainer>
+            <ContentWrapper>
+              {renderHTML(`${content}`)}
+            </ContentWrapper>
+            <InnerFooterContainer>
+              <Button outline color="secondary" size="sm">
+                <FontAwesomeIcon icon={faBars} />
+                &nbsp;목록
+              </Button>
+              &nbsp;
+              <Button outline color="danger" size="sm">
+                <FontAwesomeIcon icon={faBellSlash} />
+                &nbsp;신고
+              </Button>
+              <RightSpan>
+                <Button outline color="secondary" size="sm">
+                  <FontAwesomeIcon icon={faPlus} />
+                  &nbsp;스크랩
+                </Button>
+              </RightSpan>
+            </InnerFooterContainer>
+          </PostViewWrapper>
+          <ReplyForm match={match} />
+        </ViewWrapper>
+      </PostWrapper>
+      <CurrentBoard />
+    </>
+  );
+};
+
+PostView.propTypes = {
+  match: Proptypes.shape({
+    params: Proptypes.shape({
+      id: Proptypes.string,
+    }),
+  }),
+};
+
+PostView.defaultProps = {
+  match: null,
+};
 
 const PostWrapper = styled.div`
   background-color : white;
@@ -90,127 +173,5 @@ const RightSpan = styled.span`
 const ContentWrapper = styled.div`
   padding : 14px;
 `;
-
-const ReplyH5 = styled.h5`
-  font-size: 14px;
-  font-weight : bold;
-`;
-
-const ReplyHeader = styled.div`
-  padding: 1em 7px 0.7em;
-  color : #DC3545;
-`;
-
-const CKEditorCustom = styled(CKEditor)`
-  margin-bottom : 5px !important;
-`;
-
-const RightButton = styled(Button)`
-  float : right;
-`;
-
-const PostView = ({ match }) => {
-  const { BoardStore } = useStores();
-  useEffect(() => {
-    BoardStore.getPost(match.params.id);
-  }, [match.params.id, BoardStore]);
-
-  return (
-    <>
-      <PostWrapper>
-        <ViewWrapper>
-          <MarginlessH3>{BoardStore.postView.boardName}</MarginlessH3>
-          <br />
-          <CategoryAndTitle>
-            <Category>
-              {BoardStore.postView.categoryName}
-            </Category>
-            <Title>
-              {BoardStore.postView.title}
-            </Title>
-          </CategoryAndTitle>
-          <b>{BoardStore.postView.writer}</b>님
-          <NavLine />
-          <PostViewWrapper>
-            <InnerContainer>
-              <span>
-                <FontAwesomeIcon icon={faClock} /> {BoardStore.postView.date}
-              </span>
-              <RightSpan>
-                <FontAwesomeIcon icon={faCommentDots} /> 0
-                &nbsp;
-                <FontAwesomeIcon icon={faEye} /> {BoardStore.postView.views}
-              </RightSpan>
-            </InnerContainer>
-            <ContentWrapper>
-              {renderHTML(`${BoardStore.postView.content}`)}
-            </ContentWrapper>
-            <InnerFooterContainer>
-              <Button outline color="secondary" size="sm">
-                <FontAwesomeIcon icon={faBars} />
-                &nbsp;목록
-              </Button>
-              &nbsp;
-              <Button outline color="danger" size="sm">
-                <FontAwesomeIcon icon={faBellSlash} />
-                &nbsp;신고
-              </Button>
-              <RightSpan>
-                <Button outline color="secondary" size="sm">
-                  <FontAwesomeIcon icon={faPlus} />
-                  &nbsp;스크랩
-                </Button>
-              </RightSpan>
-            </InnerFooterContainer>
-          </PostViewWrapper>
-          <ReplyHeader>
-            <ReplyH5>
-              <FontAwesomeIcon icon={faCommentDots} /> 댓글 0개
-            </ReplyH5>
-          </ReplyHeader>
-          <CKEditorCustom
-            editor={ClassicEditor}
-            data={BoardStore.replyText}
-            onInit={(editor) => {
-              console.log(editor);
-            }}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              BoardStore.onChangeValue(data);
-            }}
-            placeholder="내용을 작성해주세요."
-          />
-          <RightButton color="info" size="sm">
-            <FontAwesomeIcon icon={faPen} />
-            &nbsp;
-            댓글 쓰기
-          </RightButton>
-        </ViewWrapper>
-      </PostWrapper>
-      <CurrentBoard />
-    </>
-  );
-};
-
-PostView.propTypes = {
-  match: Proptypes.shape({
-    params: Proptypes.shape({
-      id: Proptypes.string,
-    }),
-  }).isRequired,
-  BoardStore: Proptypes.shape({
-    getPost: Proptypes.func,
-    postView: Proptypes.shape({
-      boardName: Proptypes.string,
-      categoryName: Proptypes.string,
-      views: Proptypes.string,
-    }),
-    replyText: Proptypes.string,
-  }),
-};
-
-PostView.defaultProps = {
-  BoardStore: null,
-};
 
 export default observer(PostView);

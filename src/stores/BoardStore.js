@@ -1,6 +1,7 @@
 import { action, observable } from 'mobx';
 import axios from 'axios';
 import React from 'react';
+import { toast } from 'react-toastify';
 
 class BoardStore {
   @observable post = {
@@ -14,9 +15,14 @@ class BoardStore {
     secretReplyAllow: 'N',
   };
 
-  @observable postView = {};
+  @observable reply = {
+    text: '',
+    bpId: '',
+  };
 
-  @observable replyText = '';
+  @observable replyEditId = 0;
+
+  @observable postView = {};
 
   @observable boards = [{
     value: 'NOTICE',
@@ -49,11 +55,18 @@ class BoardStore {
     '/crime': [],
   };
 
+  @observable postReplyList = [];
+
   @observable currentBoard;
 
   constructor(root) {
     this.root = root;
   }
+
+  @action setReplyEditId = (id) => {
+    this.replyEditId = id;
+    this.root.ReplyStore.modifyModeId = 0;
+  };
 
   @action setCurrentBoard = (currentBoard) => {
     this.currentBoard = currentBoard;
@@ -63,6 +76,7 @@ class BoardStore {
     if (!this.postValidationCheck()) {
       return false;
     }
+
     axios.post('/api/board/post', {
       board: this.post.board,
       category: this.post.category,
@@ -77,7 +91,7 @@ class BoardStore {
       .then((response) => {
         if (response.data) {
           this.root.RouteStore.history.push('/free');
-          this.root.UtilStore.toggleAlert('글이 정상적으로 등록되었습니다.');
+          toast.success('😊 포스팅이 등록되었어요!');
           this.post = {
             board: '',
             category: '',
@@ -91,6 +105,58 @@ class BoardStore {
         }
       })
       .catch((response) => { console.log(response); });
+
+    return true;
+  };
+
+  @action addReply = () => {
+    if (!this.replyValidationCheck()) {
+      return false;
+    }
+
+    axios.post('/api/board/reply', {
+      text: this.reply.text,
+      writer: this.root.UserStore.userData.id,
+      bpId: this.reply.bpId,
+      replyId: this.replyEditId === 0 ? null : this.replyEditId,
+      depth: this.replyEditId === 0 ? 1 : 2,
+    })
+      .then((response) => {
+        if (response.data) {
+          toast.success('😊 댓글이 정상적으로 등록되었어요!');
+          this.reply = {
+            text: '',
+            bpId: this.reply.bpId,
+          };
+          this.getReply(this.reply.bpId);
+          this.setReplyEditId(0);
+        }
+      })
+      .catch((response) => { console.log(response); });
+
+    return true;
+  };
+
+  @action likeReply = (replyId) => {
+    axios.post('/api/board/reply/like', {
+      id: replyId,
+      uId: this.root.UserStore.userData.id,
+    })
+      .then((response) => {
+        if (response.data === 1) {
+          toast.success('😳 해당 댓글 좋아요 완료!');
+        } else if (response.data === 2) {
+          toast.error('😳 이미 해당 댓글을 좋아합니다. ㅠㅠ');
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
+
+  replyValidationCheck = () => {
+    if (!this.reply.text.trim()) {
+      this.root.UtilStore.toggleAlert('댓글 내용을 입력해주세요.');
+      return false;
+    }
 
     return true;
   };
@@ -114,8 +180,19 @@ class BoardStore {
     }
   };
 
+  @action onChangeReplyValue = (text) => {
+    this.reply = {
+      ...this.reply,
+      text,
+    };
+  };
+
   @action setPostBoard = (board) => {
     this.post.board = board.toUpperCase();
+  };
+
+  @action setReplyBpId = (bpId) => {
+    this.reply.bpId = bpId;
   };
 
   @action setPostBoardOptions = () => {
@@ -140,7 +217,7 @@ class BoardStore {
         }
       })
       .catch((response) => { console.log(response); });
-  }
+  };
 
   @action getPost = (id) => {
     axios.get(`/api/board/post/${id}`, {})
@@ -148,11 +225,24 @@ class BoardStore {
         if (response.data) {
           const [post] = response.data;
           this.postView = post;
-          console.log(post);
         }
       })
       .catch((response) => { console.log(response); });
-  }
+  };
+
+  @action getReply = (id) => {
+    axios.get('/api/board/reply/', {
+      params: {
+        bpId: id,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          this.postReplyList = response.data;
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
 
   postValidationCheck = () => {
     // board
