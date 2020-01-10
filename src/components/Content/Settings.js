@@ -92,8 +92,7 @@ const Settings = () => {
 
   useEffect(() => {
     getDataIgnore();
-    getDataFavorite();
-  }, [getDataIgnore, getDataFavorite]);
+  }, [getDataIgnore]);
 
   const IgnoreTableData = ignoreList.map((v) => (TableBody('ignore', v, onChangeIgnore)));
 
