@@ -12,7 +12,6 @@ ReactDOM.render((
     HeaderStore={stores.HeaderStore}
     BoardStore={stores.BoardStore}
     UtilStore={stores.UtilStore}
-    CategoryStore={stores.CategoryStore}
     RouteStore={stores.RouteStore}
     UserStore={stores.UserStore}
     SettingStore={stores.SettingStore}

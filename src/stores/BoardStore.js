@@ -65,7 +65,7 @@ class BoardStore {
 
   @action setReplyEditId = (id) => {
     this.replyEditId = id;
-    console.log(id);
+    this.root.ReplyStore.modifyModeId = 0;
   };
 
   @action setCurrentBoard = (currentBoard) => {

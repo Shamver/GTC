@@ -8,7 +8,6 @@ import {
   faCommentDots, faBars, faPlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CKEditor from '@ckeditor/ckeditor5-react';
 import renderHTML from 'react-render-html';
 import useStores from '../../stores/useStores';
 import CurrentBoard from './CurrentBoard';

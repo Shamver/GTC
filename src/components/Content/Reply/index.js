@@ -157,7 +157,7 @@ ReplyEdit.propTypes = {
 const Reply = ({ data }) => {
   const { BoardStore, UserStore, ReplyStore } = useStores();
   const { setReplyEditId, likeReply } = BoardStore;
-  const { modifyMode, modifyModeId } = ReplyStore;
+  const { modifyMode, modifyModeId, deleteReply } = ReplyStore;
   const { userData } = UserStore;
 
   return (
@@ -174,7 +174,7 @@ const Reply = ({ data }) => {
                 <>
                   <SpanLikeLink onClick={() => modifyMode(data.id)}>수정</SpanLikeLink>
                   &nbsp;·&nbsp;
-                  <SpanLikeLink>삭제</SpanLikeLink>
+                  <SpanLikeLink onClick={() => deleteReply(data.id)}>삭제</SpanLikeLink>
                   &nbsp;·&nbsp;
                 </>
               )
@@ -185,7 +185,7 @@ const Reply = ({ data }) => {
             &nbsp;·&nbsp;
             <SpanLikeLink onClick={() => setReplyEditId(data.id)}>대댓글</SpanLikeLink>
              &nbsp;·&nbsp;
-            {data.date}
+            { data.updateDate ? data.updateDate : data.date}
             &nbsp;·&nbsp;
             {/* <Link to="#">수정</Link>
             &nbsp;·&nbsp;  {/* (글쓴이) 와 마찬가지로 */}
@@ -193,7 +193,9 @@ const Reply = ({ data }) => {
           </span>
         </ReplyInHeader>
         <ReplyInContent>
-          <SpanLikeLink>{data.replyWriterName ? `@${data.replyWriterName}` : ''}</SpanLikeLink>
+          <SpanLikeLink>{data.replyWriterName && data.replyWriterName !== 'DELETED' ? `@${data.replyWriterName}` : ''}</SpanLikeLink>
+          <Writer>{data.replyWriterName && data.replyWriterName === 'DELETED' ? '[삭제된 댓글의 답글]' : ''}</Writer>
+
           { modifyModeId === data.id
             ? (<ReplyModify content={data.content} />)
             : renderHTML(`${data.content}`)}
@@ -215,6 +217,7 @@ Reply.propTypes = {
     depth: Proptypes.number,
     date: Proptypes.string,
     replyWriterName: Proptypes.string,
+    updateDate: Proptypes.string,
   }).isRequired,
 };
 

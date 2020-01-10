@@ -100,6 +100,7 @@ router.post('/reply', (req, res) => {
       ID_UPPER,
       WRITER,
       DATE,
+      UPDATE_DATE,
       CONTENT,
       DEPTH
     ) VALUES (
@@ -108,7 +109,8 @@ router.post('/reply', (req, res) => {
       IFNULL(${data.replyId}, (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
       IFNULL((SELECT ID_UPPER FROM (SELECT MIN(ID_UPPER) AS ID_UPPER FROM GTC_BOARD_REPLY WHERE ID = ${data.replyId}) as temp),(SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
       '${data.writer}', 
-      sysdate(), 
+      sysdate(),
+      null, 
       '${data.text}',
       ${data.depth}
     );
@@ -129,22 +131,35 @@ router.get('/reply', (req, res) => {
     , C.WRITER AS idPostWriter
     , A.WRITER AS idWriter
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = A.WRITER) AS writer
-    , CASE WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
+    , CASE WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇 초 전'
         WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE,A.DATE, SYSDATE()),'분 전')
         WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR,A.DATE, SYSDATE()),'시간 전')
         WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY,A.DATE, SYSDATE()),'일 전')
         WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH,A.DATE, SYSDATE()),'달 전')
        ELSE CONCAT(TIMESTAMPDIFF(YEAR,A.DATE, SYSDATE()),'년 전')
     END  as date
-    , CASE WHEN B.DEPTH >= 2 THEN (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = B.WRITER) 
-        ELSE NULL 
-        END AS replyWriterName
+    , CASE
+            WHEN A.UPDATE_DATE IS NULL THEN NULL 
+            WHEN A.UPDATE_DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇 초 전 수정'
+            WHEN A.UPDATE_DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE,A.UPDATE_DATE, SYSDATE()),'분 전 수정')
+            WHEN A.UPDATE_DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR,A.UPDATE_DATE, SYSDATE()),'시간 전 수정')
+            WHEN A.UPDATE_DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY,A.UPDATE_DATE, SYSDATE()),'일 전 수정')
+            WHEN A.UPDATE_DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH,A.UPDATE_DATE, SYSDATE()),'달 전 수정')
+           ELSE CONCAT(TIMESTAMPDIFF(YEAR, A.UPDATE_DATE, SYSDATE()),'년 전')
+       END  as updateDate
+    , ( 
+        SELECT 
+                CASE WHEN MIN(DEPTH) IS NULL THEN 'DELETED'
+                        WHEN DEPTH = 2 THEN  (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = WRITER) 
+                END 
+        FROM GTC_BOARD_REPLY
+        WHERE ID = A.ID_REPLY
+    ) AS replyWriterName
     , A.CONTENT as content
     , A.DEPTH as depth
     , (SELECT COUNT(*) FROM GTC_BOARD_REPLY_LIKE WHERE ID = A.ID) AS likeCount
-    FROM GTC_BOARD_REPLY A, GTC_BOARD_REPLY B, GTC_BOARD_POST C
+    FROM GTC_BOARD_REPLY A, GTC_BOARD_POST C
   WHERE A.BP_ID = '${data.bpId}'
-  AND B.ID = A.ID_REPLY
   AND C.ID = A.BP_ID
   ORDER BY A.ID_UPPER, A.ID`;
 
@@ -155,12 +170,15 @@ router.get('/reply', (req, res) => {
 });
 
 router.put('/reply', (req, res) => {
-  const data = req.query;
-  const query = `UPDATE `;
+  const data = req.body;
+  const query = `UPDATE GTC_BOARD_REPLY
+    SET CONTENT = '${data.content}',
+    UPDATE_DATE = sysdate()
+  WHERE ID = ${data.id}`;
 
-  conn.query(query, (err, rows) => {
+  conn.query(query, (err) => {
     if (err) throw err;
-    res.send(rows);
+    res.send(true);
   });
 });
 

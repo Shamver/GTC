@@ -10,18 +10,18 @@ import { Button } from 'reactstrap';
 import useStores from '../../../stores/useStores';
 import Reply from './index';
 
-const ReplyForm = ({ match }) => {
+const ReplyForm = observer(({ match }) => {
   const { params } = match;
   const { id } = params;
   const { BoardStore, ReplyStore } = useStores();
-  const { replyEditId } = BoardStore;
+  const { replyEditId, postReplyList } = BoardStore;
   const { modifyModeId } = ReplyStore;
 
   return (
     <>
       <ReplyHeader>
         <ReplyH5>
-          <FontAwesomeIcon icon={faCommentDots} /> 댓글 0개
+          <FontAwesomeIcon icon={faCommentDots} /> 댓글 {postReplyList.length}개
         </ReplyH5>
       </ReplyHeader>
       <ReplyListWrapper>
@@ -32,7 +32,7 @@ const ReplyForm = ({ match }) => {
         : ''}
     </>
   );
-};
+});
 
 ReplyForm.propTypes = {
   match: Proptypes.shape({
