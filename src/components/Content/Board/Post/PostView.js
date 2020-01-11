@@ -9,9 +9,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import renderHTML from 'react-render-html';
-import useStores from '../../stores/useStores';
-import CurrentBoard from './CurrentBoard';
-import ReplyForm from './Reply/ReplyForm';
+import useStores from '../../../../stores/useStores';
+import CurrentBoard from '../CurrentBoard';
+import ReplyForm from '../Reply/ReplyForm';
 
 const PostView = ({ match }) => {
   const { BoardStore } = useStores();

@@ -11,42 +11,7 @@ import { observer } from 'mobx-react';
 import * as PropTypes from 'prop-types';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import useStores from '../../stores/useStores';
-
-const PostingWrapper = styled.div`
-  background-color : white;
-  padding : 14px;
-  
-  & .ck-content {
-    height : 500px;
-    font-family: 'NanumSquareRound',sans-serif !important;
-  }
-`;
-
-const CustomCheckbox = styled(CustomInput)`
-  display : inline !important;
-  margin-right : 10px;
-`;
-
-const MarginButton = styled(Button)`
-  margin-right : 5px;
-`;
-
-const RightButton = styled(Button)`
-  float : right;
-`;
-
-const PostingFooter = styled.div`
-  margin-top : 15px;
-`;
-
-const PostingHeader = styled(Row)`
-  padding : 10px 0px;
-`;
-
-const SelectInput = styled(Input)`
-  margin-bottom : 10px;
-`;
+import useStores from '../../../../stores/useStores';
 
 const Posting = (props) => {
   const { BoardStore } = useStores();
@@ -117,5 +82,40 @@ Posting.propTypes = {
     }),
   }).isRequired,
 };
+
+const PostingWrapper = styled.div`
+  background-color : white;
+  padding : 14px;
+  
+  & .ck-content {
+    height : 500px;
+    font-family: 'NanumSquareRound',sans-serif !important;
+  }
+`;
+
+const CustomCheckbox = styled(CustomInput)`
+  display : inline !important;
+  margin-right : 10px;
+`;
+
+const MarginButton = styled(Button)`
+  margin-right : 5px;
+`;
+
+const RightButton = styled(Button)`
+  float : right;
+`;
+
+const PostingFooter = styled.div`
+  margin-top : 15px;
+`;
+
+const PostingHeader = styled(Row)`
+  padding : 10px 0px;
+`;
+
+const SelectInput = styled(Input)`
+  margin-bottom : 10px;
+`;
 
 export default observer(Posting);

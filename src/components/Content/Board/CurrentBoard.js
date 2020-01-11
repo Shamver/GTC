@@ -1,6 +1,6 @@
 import React from 'react';
-import useStores from '../../stores/useStores';
-import FreeBoard from './FreeBoard';
+import useStores from '../../../stores/useStores';
+import Index from './index';
 
 const CurrentBoard = () => {
   const { BoardStore } = useStores();
@@ -8,12 +8,12 @@ const CurrentBoard = () => {
 
   if (currentBoard === '/free') {
     return (
-      <FreeBoard pathname="/free" />
+      <Index pathname="/free" />
     );
   }
 
   return (
-    <FreeBoard pathname="/free" />
+    <Index pathname="/free" />
   );
 };
 

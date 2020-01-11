@@ -2,9 +2,9 @@ const express = require('express');
 
 const router = express.Router();
 
-const authMiddleware = require('../middleware/auth');
+const authMiddleware = require('../../middleware/auth');
 
-const db = require('../db_con')();
+const db = require('../../dbConnection')();
 
 const conn = db.init();
 

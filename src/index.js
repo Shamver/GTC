@@ -6,6 +6,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import stores from './stores';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render((
   <Provider
@@ -18,6 +19,7 @@ ReactDOM.render((
     PostLockerStore={stores.PostLockerStore}
     NewAlertStore={stores.NewAlertStore}
     ReplyStore={stores.ReplyStore}
+    PostStore={stores.PostStore}
   >
     <Router>
       <Route component={App} />

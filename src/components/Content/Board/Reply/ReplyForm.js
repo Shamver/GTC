@@ -7,7 +7,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import * as Proptypes from 'prop-types';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import { Button } from 'reactstrap';
-import useStores from '../../../stores/useStores';
+import useStores from '../../../../stores/useStores';
 import Reply from './index';
 
 const ReplyForm = observer(({ match }) => {

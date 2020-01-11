@@ -4,11 +4,11 @@ const router = express.Router();
 
 const jwt = require('jsonwebtoken');
 
-const db = require('../db_con')();
+const db = require('../../dbConnection')();
 
 const conn = db.init();
 
-const filter = require('../middleware/content');
+const filter = require('../../middleware/content');
 
 router.get('/alert', (req, res) => {
   const { userId, updateYN } = req.query;

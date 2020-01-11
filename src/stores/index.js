@@ -1,12 +1,13 @@
-import HeaderStore from './HeaderStore';
-import BoardStore from './BoardStore';
-import UtilStore from './UtilStore';
-import RouteStore from './RouteStore';
-import UserStore from './UserStore';
+import HeaderStore from './util/HeaderStore';
+import BoardStore from './board/BoardStore';
+import PostStore from './board/PostStore';
+import UtilStore from './util/UtilStore';
+import RouteStore from './util/RouteStore';
+import UserStore from './user/UserStore';
 import SettingStore from './SettingStore';
 import PostLockerStore from './PostLockerStore';
 import NewAlertStore from './NewAlertStore';
-import ReplyStore from './ReplyStore';
+import ReplyStore from './board/ReplyStore';
 
 class RootStore {
   constructor() {
@@ -19,6 +20,7 @@ class RootStore {
     this.PostLockerStore = new PostLockerStore(this);
     this.NewAlertStore = new NewAlertStore(this);
     this.ReplyStore = new ReplyStore(this);
+    this.PostStore = new PostStore(this);
   }
 }
 

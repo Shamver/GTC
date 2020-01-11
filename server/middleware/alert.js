@@ -1,4 +1,4 @@
-const db = require('../db_con')();
+const db = require('../dbConnection')();
 
 const conn = db.init();
 

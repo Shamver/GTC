@@ -4,8 +4,8 @@ const router = express.Router();
 
 const jwt = require('jsonwebtoken');
 
-const db = require('../db_con')();
-const authMiddleware = require('../middleware/auth');
+const db = require('../../dbConnection')();
+const authMiddleware = require('../../middleware/auth');
 
 const conn = db.init();
 

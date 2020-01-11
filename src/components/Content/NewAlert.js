@@ -112,7 +112,7 @@ const StrongSpan = styled.span`
 `;
 
 const AlertData = (data, onLink, onDelete) => (
-  <AlertWrapper className={(data.isRead === 'Y' ? '' : 'noRead')}>
+  <AlertWrapper className={data.isRead === 'Y' ? '' : 'noRead'}>
     <AlertBox>
       <LinkA to={`/post/${data.postId}#${data.replyId}`} name={`${data.id}`} onClick={onLink}>
         <StrongSpan>{data.replyName}</StrongSpan>님이 <StrongSpan>{data.postTitle}</StrongSpan>

@@ -9,8 +9,8 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import { Button } from 'reactstrap';
 import { observer } from 'mobx-react';
-import avatar from '../../../resources/images/anonymous.png';
-import useStores from '../../../stores/useStores';
+import avatar from '../../../../resources/images/anonymous.png';
+import useStores from '../../../../stores/useStores';
 
 const ReplyInHeader = styled.div`
   background: #f7f7f7;

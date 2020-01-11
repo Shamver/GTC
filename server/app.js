@@ -10,20 +10,16 @@ app.use('/', express.static(`${__dirname}/../public`));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const api = require('./routes/index.js');
-const boardApi = require('./routes/BoardRouter.js');
-const authApi = require('./routes/AuthRouter.js');
-const userApi = require('./routes/UserRouter.js');
+const boardApi = require('./routes/board/BoardRouter.js');
+const authApi = require('./routes/user/AuthRouter.js');
+const userApi = require('./routes/user/UserRouter.js');
 const settingApi = require('./routes/SettingRouter.js');
 const postlockerApi = require('./routes/PostlockerRouter.js');
-const replyApi = require('./routes/ReplyRouter.js');
+const replyApi = require('./routes/board/ReplyRouter.js');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.set('jwt-secret', jwtConfig.secret);
-
-app.use('/api', api);
-
 
 app.use('/api/board', boardApi);
 
