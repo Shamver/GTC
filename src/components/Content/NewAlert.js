@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 import Loading from '../util/Loading';
 
 
-import useStores from '../../stores/useStores';
+import useStores from '../../Stores/useStores';
 
 const MainContainer = styled(Container)`
   background-color: white;

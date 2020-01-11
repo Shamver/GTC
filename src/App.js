@@ -6,7 +6,7 @@ import { observer } from 'mobx-react';
 import Header from './components/layout/Header';
 import Content from './components/layout/Content';
 import Category from './components/layout/Category';
-import useStores from './stores/useStores';
+import useStores from './Stores/useStores';
 
 const ContainerWrapper = styled.div`
   background-color: rgb(243, 242, 240);

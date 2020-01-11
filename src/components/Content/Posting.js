@@ -11,7 +11,7 @@ import { observer } from 'mobx-react';
 import * as PropTypes from 'prop-types';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import useStores from '../../stores/useStores';
+import useStores from '../../Stores/useStores';
 
 const PostingWrapper = styled.div`
   background-color : white;

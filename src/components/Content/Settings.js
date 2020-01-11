@@ -7,7 +7,7 @@ import { observer } from 'mobx-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faExclamationTriangle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
-import useStores from '../../stores/useStores';
+import useStores from '../../Stores/useStores';
 
 const MainContainer = styled(Container)`
   background-color: white;

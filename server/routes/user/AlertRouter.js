@@ -12,16 +12,19 @@ router.get('/alert', (req, res) => {
   const { userId, updateYN } = req.query;
 
   const query = `
-    SELECT GUA.ID AS id, GUA.TYPE AS type, GUA.READ_YN AS isRead,
+    SELECT GUA.ID AS id, GUA.READ_YN AS isRead,
+    CASE WHEN GBR.ID = GBR.ID_REPLY THEN 'reply'
+           ELSE 'rereply'
+         END as type,
     GBP.ID AS postId, GBP.TITLE AS postTitle,
     GBR.ID AS replyId, GBR.CONTENT AS replyContent,
     CASE WHEN GBR.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
-                    WHEN GBR.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, GBR.DATE, SYSDATE()),'분 전')
-                    WHEN GBR.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR, GBR.DATE, SYSDATE()),'시간 전')
-                    WHEN GBR.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY, GBR.DATE, SYSDATE()),'일 전')
-                    WHEN GBR.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH, GBR.DATE, SYSDATE()),'달 전')
-                   ELSE CONCAT(TIMESTAMPDIFF(YEAR,GBR.DATE, SYSDATE()),'년 전')
-               END  as replyDate,
+              WHEN GBR.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, GBR.DATE, SYSDATE()),'분 전')
+              WHEN GBR.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR, GBR.DATE, SYSDATE()),'시간 전')
+              WHEN GBR.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY, GBR.DATE, SYSDATE()),'일 전')
+              WHEN GBR.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH, GBR.DATE, SYSDATE()),'달 전')
+             ELSE CONCAT(TIMESTAMPDIFF(YEAR,GBR.DATE, SYSDATE()),'년 전')
+          END  as replyDate,
     GU.NICKNAME AS replyName
     FROM GTC_USER_ALERT GUA, GTC_BOARD_POST GBP, GTC_BOARD_REPLY GBR, GTC_USER GU
     WHERE GBP.ID = GBR.BP_ID and

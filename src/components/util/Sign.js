@@ -6,7 +6,7 @@ import {
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 
-import useStores from '../../stores/useStores';
+import useStores from '../../Stores/useStores';
 
 const Form = styled.form`
   position: absolute;

@@ -10,9 +10,9 @@ import UserFavoritePostStore from './user/FavoritePostStore';
 import UserIgnoreStore from './user/IgnoreStore';
 import UserStore2 from './user/UserStore';
 
-import PostLockerStore from './postlocker/PostLockerStore';
+import PostLockerStore from './component/PostLockerStore';
 
-import SettingStore from './setting/SettingStore';
+import SettingStore from './component/SettingStore';
 
 class RootStore {
   constructor() {
