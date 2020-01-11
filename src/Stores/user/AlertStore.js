@@ -9,7 +9,8 @@ class AlertStore {
   }
 
   @action getDataAlert = ((updateYN = 'N') => {
-    const { toggleAlert, setLoading } = this.root.UtilStore;
+    const { toggleAlert } = this.root.UtilStore;
+    const { setLoading } = this.root.UtilLoadingStore;
     const { userData } = this.root.UserStore;
     const { history } = this.root.RouteStore;
 
@@ -56,6 +57,10 @@ class AlertStore {
   });
 
   @action onReadAlertAll = (() => {
+    if (this.alertList.length === 0) {
+      return;
+    }
+
     axios.put('/api/user/alert', {
       id: this.alertList.map((v) => v.id),
     })

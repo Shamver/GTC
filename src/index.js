@@ -21,6 +21,9 @@ ReactDOM.render((
     UserFavoritePostStore={stores.UserFavoritePostStore}
     UserIgnoreStore={stores.UserIgnoreStore}
     UserStore2={stores.UserStore2}
+    UtilStore2={stores.UtilStore2}
+    UtilAlertStore={stores.UtilAlertStore}
+    UtilLoadingStore={stores.UtilLoadingStore}
   >
     <Router>
       <Route component={App} />

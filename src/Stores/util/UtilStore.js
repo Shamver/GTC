@@ -13,8 +13,6 @@ class UtilStore {
 
   @observable callbackFunc = () => {};
 
-  @observable loading = true;
-
   constructor(root) {
     this.root = root;
   }
@@ -40,10 +38,6 @@ class UtilStore {
 
   @action changeSign = () => {
     this.signDisplay = !this.signDisplay;
-  };
-
-  @action setLoading = (v) => {
-    this.loading = v;
   };
 }
 

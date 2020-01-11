@@ -132,15 +132,19 @@ const AlertData = (data, onLink, onDelete) => (
 
 // 알림의 종류는 새 댓글, 새 대댓글만 우선
 const NewAlert = () => {
-  const { NewAlertStore, UtilStore } = useStores();
+  const { UserAlertStore, UtilStore, UtilLoadingStore } = useStores();
 
   const {
     getDataAlert, onDeleteAlert, onLink, onReadAlertAll, alertList,
-  } = NewAlertStore;
+  } = UserAlertStore;
 
   const {
-    toggleConfirmAlert, loading, setLoading,
+    toggleConfirmAlert,
   } = UtilStore;
+
+  const {
+    loading, setLoading,
+  } = UtilLoadingStore;
 
   useEffect(() => {
     getDataAlert();
