@@ -11,8 +11,71 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link } from 'react-router-dom';
 import Loading from '../util/Loading';
 
-
 import useStores from '../../Stores/useStores';
+
+const AlertData = (data, onLink, onDelete) => (
+  <AlertWrapper className={(data.isRead === 'Y' ? '' : 'noRead')}>
+    <AlertBox>
+      <LinkA to={`/post/${data.postId}#${data.replyId}`} name={`${data.id}`} onClick={onLink}>
+        <StrongSpan>{data.replyName}</StrongSpan>님이 <StrongSpan>{data.postTitle}</StrongSpan>
+        에 새&nbsp;
+        {data.type === 'reply' ? '댓글' : '대댓글'}을 달았습니다:&nbsp;
+        {data.replyContent}
+      </LinkA>
+      <DateSpan>{data.replyDate}</DateSpan>
+    </AlertBox>
+    <AlertActionBox>
+      <DeleteA onClick={onDelete} name={`${data.id}`}>
+        <FontAwesomeIcon icon={faTimes} />
+      </DeleteA>
+    </AlertActionBox>
+  </AlertWrapper>
+);
+
+// 알림의 종류는 새 댓글, 새 대댓글만 우선
+const NewAlert = () => {
+  const { UserAlertStore, UtilAlertStore, UtilLoadingStore } = useStores();
+
+  const {
+    getDataAlert, onDeleteAlert, onLink, onReadAlertAll, alertList,
+  } = UserAlertStore;
+
+  const {
+    toggleConfirmAlert,
+  } = UtilAlertStore;
+
+  const {
+    loading,
+  } = UtilLoadingStore;
+
+  useEffect(() => {
+    getDataAlert();
+  }, [loading, getDataAlert, alertList]);
+
+  const Alerts = alertList.map((v) => (AlertData(v, onLink, onDeleteAlert)));
+
+  if (loading) {
+    return (
+      <Loading />
+    );
+  }
+  return (
+    <MainContainer>
+      <NotifyHeader>
+        <FlexDiv>
+          <H4>내 알림</H4>
+          <Hr width={120} />
+        </FlexDiv>
+        <ReadAll>
+          <ReadAllButton onClick={() => { toggleConfirmAlert('모두 읽음 처리 하시겠습니까?', onReadAlertAll); }}>
+            모두 읽음 처리
+          </ReadAllButton>
+        </ReadAll>
+      </NotifyHeader>
+      {Alerts.length === 0 ? '새로운 알림이 없습니다.' : Alerts}
+    </MainContainer>
+  );
+};
 
 const MainContainer = styled(Container)`
   background-color: white;
@@ -110,73 +173,5 @@ const DeleteA = styled.a`
 const StrongSpan = styled.span`
   font-weight: 750;
 `;
-
-const AlertData = (data, onLink, onDelete) => (
-  <AlertWrapper className={(data.isRead === 'Y' ? '' : 'noRead')}>
-    <AlertBox>
-      <LinkA to={`/post/${data.postId}#${data.replyId}`} name={`${data.id}`} onClick={onLink}>
-        <StrongSpan>{data.replyName}</StrongSpan>님이 <StrongSpan>{data.postTitle}</StrongSpan>
-        에 새&nbsp;
-        {data.type === 'reply' ? '댓글' : '대댓글'}을 달았습니다:&nbsp;
-        {data.replyContent}
-      </LinkA>
-      <DateSpan>{data.replyDate}</DateSpan>
-    </AlertBox>
-    <AlertActionBox>
-      <DeleteA onClick={onDelete} name={`${data.id}`}>
-        <FontAwesomeIcon icon={faTimes} />
-      </DeleteA>
-    </AlertActionBox>
-  </AlertWrapper>
-);
-
-// 알림의 종류는 새 댓글, 새 대댓글만 우선
-const NewAlert = () => {
-  const { UserAlertStore, UtilStore, UtilLoadingStore } = useStores();
-
-  const {
-    getDataAlert, onDeleteAlert, onLink, onReadAlertAll, alertList,
-  } = UserAlertStore;
-
-  const {
-    toggleConfirmAlert,
-  } = UtilStore;
-
-  const {
-    loading, setLoading,
-  } = UtilLoadingStore;
-
-  useEffect(() => {
-    getDataAlert();
-
-    return () => {
-      setLoading(true);
-    };
-  }, []);
-
-  const Alerts = alertList.map((v) => (AlertData(v, onLink, onDeleteAlert)));
-
-  if (loading) {
-    return (
-      <Loading />
-    );
-  }
-  return (
-    <MainContainer>
-      <NotifyHeader>
-        <FlexDiv>
-          <H4>내 알림</H4>
-          <Hr width={120} />
-        </FlexDiv>
-        <ReadAll>
-          <ReadAllButton onClick={() => { toggleConfirmAlert('모두 읽음 처리 하시겠습니까?', onReadAlertAll); }}>
-            모두 읽음 처리
-          </ReadAllButton>
-        </ReadAll>
-      </NotifyHeader>
-      {Alerts.length === 0 ? '새로운 알림이 없습니다.' : Alerts}
-    </MainContainer>
-  );
-};
 
 export default observer(NewAlert);

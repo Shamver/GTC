@@ -8,7 +8,7 @@ const conn = db.init();
 
 const filter = require('../../middleware/content');
 
-router.get('/alert', (req, res) => {
+router.get('/', (req, res) => {
   const { userId, updateYN } = req.query;
 
   const query = `
@@ -55,7 +55,7 @@ router.get('/alert', (req, res) => {
   });
 });
 
-router.put('/alert', (req, res) => {
+router.put('/', (req, res) => {
   const { id } = req.body;
 
   const query = `
@@ -74,7 +74,7 @@ router.put('/alert', (req, res) => {
   });
 });
 
-router.delete('/alert', (req, res) => {
+router.delete('/', (req, res) => {
   const { id } = req.body;
 
   const query = `
