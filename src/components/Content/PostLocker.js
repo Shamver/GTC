@@ -69,36 +69,31 @@ const FavoriteTableBody = (title, data, onClickEvent) => (
 );
 
 const PostLocker = () => {
-  const { PostLockerStore, UtilStore } = useStores();
   const {
-    activeTab, postList, replyList, favoriteList,
-    onActive, onDeleteFavorite,
-    getDataPost, getDataReply, getDataFavorite,
-  } = PostLockerStore;
+    ComponentPostLockerStore, BoardPostStore, BoardReplyStore, UserFavoriteStore,
+  } = useStores();
+
   const {
-    toggleConfirmAlert,
-  } = UtilStore;
+    activeTab, onActive,
+  } = ComponentPostLockerStore;
+
+  const {
+    postList, getDataPost,
+  } = BoardPostStore;
+
+  const {
+    replyList, getDataReply,
+  } = BoardReplyStore;
+
+  const {
+    favoriteList, getDataFavorite, onDeleteFavorite,
+  } = UserFavoriteStore;
 
   useEffect(() => {
     getDataPost();
     getDataReply();
     getDataFavorite();
-  }, []);
-
-  const myReplyList = [
-    {
-      postId: 32877163,
-      postTitle: '오늘 쥐스타 인벤, 상황정리 짤',
-      replyContent: `
-        <p>1번째 줄</p>
-        <p>2번째 줄@@ㅁㄴㅇㅁㄴㅇㅁㄴ</p>
-        <p>3번째 줄</p>
-        <p>4번째 줄~~~~~~~</p>
-      `,
-      replyDate: '2019-11-17 15:31:23',
-      replyId: 123,
-    },
-  ];
+  }, [getDataReply, getDataPost, getDataFavorite, postList, replyList, favoriteList]);
 
   const MyPostTableData = postList.map((v) => (MyPostTableBody('myPost', v)));
   const MyReplyTableData = replyList.map((v) => (MyReplyTableBody('myReply', v)));

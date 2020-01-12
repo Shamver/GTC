@@ -6,16 +6,19 @@ import RouteStore from './RouteStore';
 import UserStore from './UserStore';
 
 import UserAlertStore from './user/AlertStore';
-import UserFavoritePostStore from './user/FavoriteStore';
+import UserFavoriteStore from './user/FavoriteStore';
 import UserIgnoreStore from './user/IgnoreStore';
 import UserStore2 from './user/UserStore';
 
-import PostLockerStore from './component/PostLockerStore';
+import ComponentPostLockerStore from './component/PostLockerStore';
 import ComponentSettingStore from './component/SettingStore';
 
 import UtilStore2 from './util/UtilStore';
 import UtilAlertStore from './util/AlertStore';
 import UtilLoadingStore from './util/LoadingStore';
+
+import BoardPostStore from './board/PostStore';
+import BoardReplyStore from './board/ReplyStore';
 
 class RootStore {
   constructor() {
@@ -26,14 +29,16 @@ class RootStore {
     this.RouteStore = new RouteStore(this);
     this.UserStore = new UserStore(this);
     this.UserAlertStore = new UserAlertStore(this);
-    this.UserFavoritePostStore = new UserFavoritePostStore(this);
+    this.UserFavoriteStore = new UserFavoriteStore(this);
     this.UserIgnoreStore = new UserIgnoreStore(this);
     this.UserStore2 = new UserStore2(this);
-    this.PostLockerStore = new PostLockerStore(this);
+    this.ComponentPostLockerStore = new ComponentPostLockerStore(this);
     this.ComponentSettingStore = new ComponentSettingStore(this);
     this.UtilStore2 = new UtilStore2(this);
     this.UtilAlertStore = new UtilAlertStore(this);
     this.UtilLoadingStore = new UtilLoadingStore(this);
+    this.BoardPostStore = new BoardPostStore(this);
+    this.BoardReplyStore = new BoardReplyStore(this);
   }
 }
 
