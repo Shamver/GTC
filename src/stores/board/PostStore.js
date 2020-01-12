@@ -15,6 +15,7 @@ class PostStore {
   };
 
   @observable boardPostList = {
+    '': [],
     '/free': [],
     '/trade': [],
     '/notice': [],
@@ -74,7 +75,6 @@ class PostStore {
             ...this.boardPostList,
             [board]: response.data,
           };
-          console.log(response.data);
         }
       })
       .catch((response) => { console.log(response); });
@@ -90,6 +90,7 @@ class PostStore {
       })
       .catch((response) => { console.log(response); });
   };
+
 
   postValidationCheck = () => {
     // board
@@ -117,6 +118,29 @@ class PostStore {
     }
 
     return true;
+  };
+
+  @action onChangeValue = (event) => {
+    if (typeof event === 'string') {
+      this.post = {
+        ...this.post,
+        text: event,
+      };
+    } else if (this.post[event.target.name] === 'Y') {
+      this.post = {
+        ...this.post,
+        [event.target.name]: 'N',
+      };
+    } else {
+      this.post = {
+        ...this.post,
+        [event.target.name]: event.target.value,
+      };
+    }
+  };
+
+  @action setPostBoard = (board) => {
+    this.post.board = board.toUpperCase();
   };
 }
 

@@ -148,7 +148,7 @@ const NewAlert = () => {
     return () => {
       setLoading(true);
     };
-  }, []);
+  }, [getDataAlert, setLoading]);
 
   const Alerts = alertList.map((v) => (AlertData(v, onLink, onDeleteAlert)));
 

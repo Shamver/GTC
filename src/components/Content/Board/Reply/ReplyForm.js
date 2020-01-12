@@ -13,8 +13,8 @@ import Reply from './index';
 const ReplyForm = observer(({ match }) => {
   const { params } = match;
   const { id } = params;
-  const { BoardStore, ReplyStore } = useStores();
-  const { replyEditId, postReplyList } = BoardStore;
+  const { ReplyStore } = useStores();
+  const { replyEditId, postReplyList } = ReplyStore;
   const { modifyModeId } = ReplyStore;
 
   return (
@@ -43,12 +43,12 @@ ReplyForm.propTypes = {
 };
 
 const ReplyList = observer(({ bpId }) => {
-  const { BoardStore } = useStores();
-  const { getReply, postReplyList } = BoardStore;
+  const { ReplyStore } = useStores();
+  const { getReply, postReplyList } = ReplyStore;
 
   useEffect(() => {
     getReply(bpId);
-  }, [getReply, bpId, BoardStore]);
+  }, [getReply, bpId]);
 
   return postReplyList.map((data) => (
     <Reply key={data.id} data={data} />
@@ -56,10 +56,10 @@ const ReplyList = observer(({ bpId }) => {
 });
 
 const ReplyEdit = observer(() => {
-  const { BoardStore } = useStores();
+  const { ReplyStore } = useStores();
   const {
     onChangeReplyValue, reply, addReply,
-  } = BoardStore;
+  } = ReplyStore;
   const { text } = reply;
   return (
     <>

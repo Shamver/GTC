@@ -1,6 +1,6 @@
 import { action, observable } from 'mobx';
-import axios from 'axios';
 import React from 'react';
+import axios from 'axios';
 
 class BoardStore {
   boardKinds = {
@@ -32,11 +32,9 @@ class BoardStore {
     name: '질문 & 답변',
   }];
 
+  @observable currentBoard = '';
+
   @observable boardList;
-
-
-
-  @observable currentBoard;
 
   constructor(root) {
     this.root = root;
@@ -46,30 +44,7 @@ class BoardStore {
     this.currentBoard = currentBoard;
   };
 
-  @action onChangeValue = (event) => {
-    if (typeof event === 'string') {
-      this.post = {
-        ...this.post,
-        text: event,
-      };
-    } else if (this.post[event.target.name] === 'Y') {
-      this.post = {
-        ...this.post,
-        [event.target.name]: 'N',
-      };
-    } else {
-      this.post = {
-        ...this.post,
-        [event.target.name]: event.target.value,
-      };
-    }
-  };
-
-  @action setPostBoard = (board) => {
-    this.post.board = board.toUpperCase();
-  };
-
-  @action setPostBoardOptions = () => {
+  @action setBoardOptions = () => {
     this.boardList = this.boards.map((data) => (
       <option
         value={data.value}
@@ -80,7 +55,15 @@ class BoardStore {
     ));
   };
 
-
+  @action setCurrentBoardToId = (id) => {
+    axios.get('/api/board', { params: { id } })
+      .then((response) => {
+        if (response.data) {
+          this.currentBoard = response.data;
+        }
+      })
+      .catch((response) => { console.log(response); });
+  }
 }
 
 export default BoardStore;

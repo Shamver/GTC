@@ -20,7 +20,12 @@ class ReplyStore {
 
   @action setReplyEditId = (id) => {
     this.replyEditId = id;
-    this.root.ReplyStore.modifyModeId = 0;
+    this.modifyModeId = 0;
+  };
+
+  @action modifyMode = (id) => {
+    this.modifyModeId = id;
+    this.replyEditId = 0;
   };
 
   @action addReply = () => {
@@ -86,7 +91,7 @@ class ReplyStore {
   };
 
   @action deleteReply = (id) => {
-    axios.delete('/api/reply', {
+    axios.delete('/api/board/reply', {
       params: { id },
     })
       .then((response) => {
@@ -117,11 +122,6 @@ class ReplyStore {
       .catch((response) => { console.log(response); });
   };
 
-  @action modifyMode = (id) => {
-    this.modifyModeId = id;
-    this.root.BoardStore.replyEditId = 0;
-  };
-
   @action onChangeReplyValue = (text) => {
     this.reply = {
       ...this.reply,
@@ -140,7 +140,6 @@ class ReplyStore {
   @action setReplyBpId = (bpId) => {
     this.reply.bpId = bpId;
   };
-
 }
 
 export default ReplyStore;

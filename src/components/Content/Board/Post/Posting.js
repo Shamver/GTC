@@ -14,19 +14,19 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import useStores from '../../../../stores/useStores';
 
 const Posting = (props) => {
-  const { BoardStore } = useStores();
+  const { BoardStore, PostStore } = useStores();
+  const { boardList, setBoardOptions } = BoardStore;
   const {
-    post, setPostBoard, setPostBoardOptions, onChangeValue, boardList,
-    addPost,
-  } = BoardStore;
+    post, setPostBoard, onChangeValue, addPost,
+  } = PostStore;
   const { match } = props;
   const { params } = match;
   const { board } = params;
 
   useEffect(() => {
     setPostBoard(board);
-    setPostBoardOptions();
-  }, [BoardStore, board, setPostBoard, setPostBoardOptions]);
+    setBoardOptions();
+  }, [BoardStore, board, setPostBoard, setBoardOptions]);
 
   return (
     <PostingWrapper>

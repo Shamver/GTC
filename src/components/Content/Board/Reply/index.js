@@ -72,10 +72,8 @@ const Writer = styled.span`
 `;
 
 const ReplyModify = ({ content }) => {
-  const { BoardStore, ReplyStore } = useStores();
-  const { onChangeReplyValue } = BoardStore;
-  const { modifyReply, modifyMode } = ReplyStore;
-
+  const { ReplyStore } = useStores();
+  const { onChangeReplyValue, modifyReply, modifyMode } = ReplyStore;
   return (
     <>
       <CKEditor
@@ -117,10 +115,10 @@ ReplyAnswer.propTypes = {
 };
 
 const ReplyEdit = observer(({ id }) => {
-  const { BoardStore } = useStores();
+  const { ReplyStore } = useStores();
   const {
     onChangeReplyValue, reply, replyEditId, setReplyEditId, addReply,
-  } = BoardStore;
+  } = ReplyStore;
   const { text } = reply;
 
   if (replyEditId === id) {
@@ -155,9 +153,10 @@ ReplyEdit.propTypes = {
 
 
 const Reply = ({ data }) => {
-  const { BoardStore, UserStore, ReplyStore } = useStores();
-  const { setReplyEditId, likeReply } = BoardStore;
-  const { modifyMode, modifyModeId, deleteReply } = ReplyStore;
+  const { UserStore, ReplyStore } = useStores();
+  const {
+    modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply,
+  } = ReplyStore;
   const { userData } = UserStore;
 
   return (
@@ -187,8 +186,6 @@ const Reply = ({ data }) => {
              &nbsp;·&nbsp;
             { data.updateDate ? data.updateDate : data.date}
             &nbsp;·&nbsp;
-            {/* <Link to="#">수정</Link>
-            &nbsp;·&nbsp;  {/* (글쓴이) 와 마찬가지로 */}
             <SpanLikeLink>신고 #</SpanLikeLink>
           </span>
         </ReplyInHeader>
