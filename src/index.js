@@ -15,7 +15,7 @@ ReactDOM.render((
     CategoryStore={stores.CategoryStore}
     RouteStore={stores.RouteStore}
     UserStore={stores.UserStore}
-    SettingStore={stores.SettingStore}
+    ComponentSettingStore={stores.ComponentSettingStore}
     PostLockerStore={stores.PostLockerStore}
     UserAlertStore={stores.UserAlertStore}
     UserFavoritePostStore={stores.UserFavoritePostStore}

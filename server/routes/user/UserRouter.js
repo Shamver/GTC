@@ -1,11 +1,11 @@
 const express = require('express');
 
-const userRouter = express.Router();
+const router = express.Router();
 const db = require('../../db_con')();
 
 const conn = db.init();
 
-userRouter.delete('/withdrawal', (req, res) => {
+router.delete('/withdrawal', (req, res) => {
   const { userId } = req.body;
 
   const query = `
@@ -24,4 +24,4 @@ userRouter.delete('/withdrawal', (req, res) => {
   });
 });
 
-module.exports = userRouter;
+module.exports = router;

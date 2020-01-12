@@ -9,56 +9,6 @@ import renderHTML from 'react-render-html';
 import { Link } from 'react-router-dom';
 import useStores from '../../Stores/useStores';
 
-const MainContainer = styled(Container)`
-  background-color: white;
-  padding: 14px !important;
-`;
-
-const NavLinkBtn = styled(NavLink)`
-  padding: 10px 15px !important;
-  border: 1px solid transparent !important;
-  margin-right: 2px;
-  
-  &:hover {
-    cursor: pointer;
-    border-color: #eee #eee #ddd;
-    background-color: #eee;
-  }
-  
-  &.active {
-    cursor: default;
-    border: 1px solid #c9c9c9 !important;
-    border-bottom-color: transparent !important;
-  }
-`;
-
-const TableTr = styled.tr`
-  height: 30px;
-`;
-
-const TableTh = styled.th`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  padding: 8px !important;
-`;
-
-const TableTd = styled.td`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  padding: 8px !important;
-`;
-
-const ListTable = styled(Table)`
-  border: 1px solid #c9c9c9 !important;
-`;
-
-const DeleteBtn = styled(Button)`
-  margin: -5px 0 !important;
-`;
-
 const MyPostTableBody = (title, data) => (
   <TableTr key={title + data.postId}>
     <TableTd scope="row">
@@ -253,5 +203,56 @@ const PostLocker = () => {
     </MainContainer>
   );
 };
+
+
+const MainContainer = styled(Container)`
+  background-color: white;
+  padding: 14px !important;
+`;
+
+const NavLinkBtn = styled(NavLink)`
+  padding: 10px 15px !important;
+  border: 1px solid transparent !important;
+  margin-right: 2px;
+  
+  &:hover {
+    cursor: pointer;
+    border-color: #eee #eee #ddd;
+    background-color: #eee;
+  }
+  
+  &.active {
+    cursor: default;
+    border: 1px solid #c9c9c9 !important;
+    border-bottom-color: transparent !important;
+  }
+`;
+
+const TableTr = styled.tr`
+  height: 30px;
+`;
+
+const TableTh = styled.th`
+  vertical-align: middle !important;
+  width: ${(props) => props.width}%;
+  padding: 8px !important;
+`;
+
+const TableTd = styled.td`
+  vertical-align: middle !important;
+  width: ${(props) => props.width}%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 8px !important;
+`;
+
+const ListTable = styled(Table)`
+  border: 1px solid #c9c9c9 !important;
+`;
+
+const DeleteBtn = styled(Button)`
+  margin: -5px 0 !important;
+`;
 
 export default observer(PostLocker);

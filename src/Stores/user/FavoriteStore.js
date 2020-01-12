@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
 
-class FavoritePostStore {
+class FavoriteStore {
   @observable favoriteList = [];
 
   constructor(root) {
@@ -11,7 +11,7 @@ class FavoritePostStore {
   @action getDataFavorite = (() => {
     const { userData } = this.root.UserStore;
     if (userData !== undefined) {
-      axios.get('/api/postlocker/favorite', {
+      axios.get('/api/user/favorite', {
         params: {
           userId: userData.id,
         },
@@ -28,7 +28,7 @@ class FavoritePostStore {
   @action onDeleteFavorite = ((e) => {
     const { name } = e.target;
 
-    axios.delete('/api/postlocker/favorite', {
+    axios.delete('/api/user/favorite', {
       data: {
         name,
       },
@@ -40,4 +40,4 @@ class FavoritePostStore {
   });
 }
 
-export default FavoritePostStore;
+export default FavoriteStore;

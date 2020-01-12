@@ -17,19 +17,9 @@ class SettingStore {
     }
   });
 
-  @action onChangeFavorite = ((e) => {
-    const { name } = e.target;
-
-    this.favoriteList = this.favoriteList.map(
-      (data) => (data.id === Number.parseInt(name, 10)
-        ? { ...data, checked: !data.checked }
-        : data),
-    );
-  });
-
   @action onClickWithdrawal = (() => {
     this.withdrawalIsChecked = !this.withdrawalIsChecked;
-  })
+  });
 
   @action isCheckedWithdrawal = ((next) => {
     if (this.withdrawalIsChecked) {

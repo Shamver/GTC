@@ -9,64 +9,6 @@ import { faTrashAlt, faExclamationTriangle, faExclamationCircle } from '@fortawe
 
 import useStores from '../../Stores/useStores';
 
-const MainContainer = styled(Container)`
-  background-color: white;
-  padding: 14px !important;
-`;
-
-const NavLinkBtn = styled(NavLink)`
-  padding: 10px 15px !important;
-  border: 1px solid transparent !important;
-  margin-right: 2px;
-  
-  &:hover {
-    cursor: pointer;
-    border-color: #eee #eee #ddd;
-    background-color: #eee;
-  }
-  
-  &.active {
-    cursor: default;
-    border: 1px solid #c9c9c9 !important;
-    border-bottom-color: transparent !important;
-  }
-`;
-
-const TableTh = styled.th`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  padding: 8px !important;
-`;
-
-const TableTd = styled.td`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  padding: 8px !important;
-`;
-
-const ListTable = styled(Table)`
-  border: 1px solid #c9c9c9 !important;
-`;
-
-const WithdrawalWrapper = styled.div`
-  padding-top: 8px;
-`;
-
-const Hr = styled.hr`
-  margin-top: 20px;
-  margin-bottom: 20px;
-  border: 0;
-  border-top: 1px solid #eee;
-  margin-left: 0px;
-`;
-
-const P = styled.p`
-  color: #c00;
-`;
-
 const TableBody = (title, data, onClickEvent) => (
   <tr key={title + data.id}>
     <TableTh scope="row">
@@ -80,19 +22,29 @@ const TableBody = (title, data, onClickEvent) => (
 );
 
 const Settings = () => {
-  const { SettingStore, UtilStore } = useStores();
   const {
-    activeTab, ignoreList, onChangeIgnore, getDataIgnore,
-    onDeleteIgnore, onClickWithdrawal, isCheckedWithdrawal,
-    withdrawal, onActive,
-  } = SettingStore;
+    UserIgnoreStore, ComponentSettingStore, UserStore, UtilAlertStore,
+  } = useStores();
+
+  const {
+    ignoreList, onChangeIgnore, getDataIgnore, onDeleteIgnore,
+  } = UserIgnoreStore;
+
+  const {
+    withdrawal,
+  } = UserStore;
+
+  const {
+    activeTab, onClickWithdrawal, isCheckedWithdrawal, onActive,
+  } = ComponentSettingStore;
+
   const {
     toggleConfirmAlert,
-  } = UtilStore;
+  } = UtilAlertStore;
 
   useEffect(() => {
     getDataIgnore();
-  }, []);
+  }, [getDataIgnore, ignoreList]);
 
   const IgnoreTableData = ignoreList.map((v) => (TableBody('ignore', v, onChangeIgnore)));
 
@@ -189,5 +141,63 @@ const Settings = () => {
     </MainContainer>
   );
 };
+
+const MainContainer = styled(Container)`
+  background-color: white;
+  padding: 14px !important;
+`;
+
+const NavLinkBtn = styled(NavLink)`
+  padding: 10px 15px !important;
+  border: 1px solid transparent !important;
+  margin-right: 2px;
+  
+  &:hover {
+    cursor: pointer;
+    border-color: #eee #eee #ddd;
+    background-color: #eee;
+  }
+  
+  &.active {
+    cursor: default;
+    border: 1px solid #c9c9c9 !important;
+    border-bottom-color: transparent !important;
+  }
+`;
+
+const TableTh = styled.th`
+  vertical-align: middle !important;
+  width: ${(props) => props.width}%;
+  padding: 8px !important;
+`;
+
+const TableTd = styled.td`
+  vertical-align: middle !important;
+  width: ${(props) => props.width}%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding: 8px !important;
+`;
+
+const ListTable = styled(Table)`
+  border: 1px solid #c9c9c9 !important;
+`;
+
+const WithdrawalWrapper = styled.div`
+  padding-top: 8px;
+`;
+
+const Hr = styled.hr`
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #eee;
+  margin-left: 0px;
+`;
+
+const P = styled.p`
+  color: #c00;
+`;
 
 export default observer(Settings);

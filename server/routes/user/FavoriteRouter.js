@@ -5,12 +5,14 @@ const db = require('../../db_con')();
 
 const conn = db.init();
 
-router.get('/favorite', (req, res) => {
+// 우선은 어차피 포스트만 즐겨찾기 대상이기 때문에 루트로만 라우팅. 추가적으로 생기면 진행.
+router.get('/', (req, res) => {
   const { userId } = req.query;
 
-  const query = `SELECT GUFP.ID AS favoriteId, GBP.TITLE AS postTitle, GUFP.POST_ID AS postId, date_format(GUFP.DATE, '%Y-%m-%d %H:%i:%s') AS date FROM GTC_USER_FAVORITE_POST GUFP LEFT JOIN GTC_BOARD_POST GBP
-    ON GUFP.POST_ID = GBP.ID
-    WHERE GUFP.USER_ID='${userId}'
+  const query = `SELECT GUF.ID AS favoriteId, GBP.TITLE AS postTitle, GUF.POST_ID AS postId, date_format(GUF.DATE, '%Y-%m-%d %H:%i:%s') AS date
+    FROM GTC_USER_FAVORITE GUF LEFT JOIN GTC_BOARD_POST GBP
+    ON GUF.POST_ID = GBP.ID
+    WHERE GUF.USER_ID='${userId}'
     `;
 
   conn.query(query, (err, rows) => {
@@ -23,10 +25,10 @@ router.get('/favorite', (req, res) => {
   });
 });
 
-router.delete('/favorite', (req, res) => {
+router.delete('/', (req, res) => {
   const data = req.body;
 
-  const query = `DELETE FROM GTC_USER_FAVORITE_POST
+  const query = `DELETE FROM GTC_USER_FAVORITE
     WHERE ID='${data.name}'
   `;
 

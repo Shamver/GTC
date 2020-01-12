@@ -20,7 +20,7 @@ const boardReplyApi = require('./routes/board/ReplyRouter');
 const userApi = require('./routes/user/UserRouter');
 const userAlertApi = require('./routes/user/AlertRouter');
 const userIgnoreApi = require('./routes/user/IgnoreRouter');
-const userFavoritePostApi = require('./routes/user/FavoritePostRouter');
+const userFavoriteApi = require('./routes/user/FavoriteRouter');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -31,13 +31,12 @@ app.use('/api/user', authMiddleware);
 app.use('/api/board', boardApi);
 
 app.use('/api/board/post', boardPostApi);
-
 app.use('/api/board/reply', boardReplyApi);
 
 app.use('/api/user', userApi);
-app.use('/api/user', userAlertApi);
-app.use('/api/user', userIgnoreApi);
-app.use('/api/user', userFavoritePostApi);
+app.use('/api/user/alert', userAlertApi);
+app.use('/api/user/ignore', userIgnoreApi);
+app.use('/api/user/favorite', userFavoriteApi);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

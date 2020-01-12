@@ -6,12 +6,12 @@ import RouteStore from './RouteStore';
 import UserStore from './UserStore';
 
 import UserAlertStore from './user/AlertStore';
-import UserFavoritePostStore from './user/FavoritePostStore';
+import UserFavoritePostStore from './user/FavoriteStore';
 import UserIgnoreStore from './user/IgnoreStore';
 import UserStore2 from './user/UserStore';
 
 import PostLockerStore from './component/PostLockerStore';
-import SettingStore from './component/SettingStore';
+import ComponentSettingStore from './component/SettingStore';
 
 import UtilStore2 from './util/UtilStore';
 import UtilAlertStore from './util/AlertStore';
@@ -30,7 +30,7 @@ class RootStore {
     this.UserIgnoreStore = new UserIgnoreStore(this);
     this.UserStore2 = new UserStore2(this);
     this.PostLockerStore = new PostLockerStore(this);
-    this.SettingStore = new SettingStore(this);
+    this.ComponentSettingStore = new ComponentSettingStore(this);
     this.UtilStore2 = new UtilStore2(this);
     this.UtilAlertStore = new UtilAlertStore(this);
     this.UtilLoadingStore = new UtilLoadingStore(this);
