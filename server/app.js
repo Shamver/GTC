@@ -28,7 +28,6 @@ app.set('jwt-secret', jwtConfig.secret);
 
 app.use('/api/auth', authApi);
 app.use('/api/user', authMiddleware);
-app.use('/api/board', boardApi);
 
 app.use('/api/board/post', boardPostApi);
 app.use('/api/board/reply', boardReplyApi);
@@ -37,6 +36,9 @@ app.use('/api/user', userApi);
 app.use('/api/user/alert', userAlertApi);
 app.use('/api/user/ignore', userIgnoreApi);
 app.use('/api/user/favorite', userFavoriteApi);
+
+// :id 때문에 뒤로 미룸
+app.use('/api/board', boardApi);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

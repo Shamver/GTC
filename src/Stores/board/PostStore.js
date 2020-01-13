@@ -17,7 +17,7 @@ class PostStore {
       toggleAlert('로그인 후 이용해주세요.');
       history.push('/');
     } else {
-      axios.get('/api/board/mine', {
+      axios.get('/api/board/post/mine', {
         params: {
           userId: userData.id,
         },

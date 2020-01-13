@@ -32,7 +32,11 @@ router.get('/', (req, res) => {
     GU.ID = GBR.WRITER and
     GBP.WRITER = ${userId} and
     GUA.SHOW_YN = 'Y' and
-    TIMESTAMPDIFF(minute, date_format(GUA.READ_DATE, '%Y-%m-%d %H:%i'), date_format(sysdate(), '%Y-%m-%d %H:%i')) < 1441
+    (
+      (GUA.READ_YN = 'N')
+      OR
+      (TIMESTAMPDIFF(minute, date_format(GUA.READ_DATE, '%Y-%m-%d %H:%i'), date_format(sysdate(), '%Y-%m-%d %H:%i')) < 1441)
+    )
     `;
 
   conn.query(query, (err, rows) => {

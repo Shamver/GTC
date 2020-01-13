@@ -215,10 +215,21 @@ const KakaoRegister = () => {
 };
 
 const HeaderSessionComp = observer(() => {
-  const { UserStore, HeaderStore } = useStores();
+  const { UserStore, HeaderStore, UserAlertStore } = useStores();
+
+  const {
+    userData,
+  } = UserStore;
+
+  const {
+    alertCount, getDataAlert,
+  } = UserAlertStore;
+
   useEffect(() => {
-  }, [UserStore.userData]);
-  if (!UserStore.userData) {
+    getDataAlert();
+  }, [userData, alertCount, getDataAlert]);
+
+  if (!userData) {
     return (
       <>
         <KakaoSign />
@@ -250,7 +261,7 @@ const HeaderSessionComp = observer(() => {
             <ProfileId>thisIsId</ProfileId>
           </DropdownItemTitle>
           <Link to="/newalert">
-            <DropdownItem30>새로운 알림 ({1} 개)</DropdownItem30>
+            <DropdownItem30>새로운 알림 ({alertCount} 개)</DropdownItem30>
           </Link>
           <DropdownItem30>내 정보 관리</DropdownItem30>
           <DropdownItem30>{10} 포인트</DropdownItem30>

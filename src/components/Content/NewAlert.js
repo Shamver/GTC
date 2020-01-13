@@ -9,7 +9,9 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Link } from 'react-router-dom';
+import renderHTML from 'react-render-html';
 import Loading from '../util/Loading';
+
 
 import useStores from '../../Stores/useStores';
 
@@ -20,7 +22,7 @@ const AlertData = (data, onLink, onDelete) => (
         <StrongSpan>{data.replyName}</StrongSpan>님이 <StrongSpan>{data.postTitle}</StrongSpan>
         에 새&nbsp;
         {data.type === 'reply' ? '댓글' : '대댓글'}을 달았습니다:&nbsp;
-        {data.replyContent}
+        {renderHTML(data.replyContent)}
       </LinkA>
       <DateSpan>{data.replyDate}</DateSpan>
     </AlertBox>
@@ -37,7 +39,7 @@ const NewAlert = () => {
   const { UserAlertStore, UtilAlertStore, UtilLoadingStore } = useStores();
 
   const {
-    getDataAlert, onDeleteAlert, onLink, onReadAlertAll, alertList,
+    getDataAlert, onDeleteAlert, onClickAlert, onReadAlertAll, alertList,
   } = UserAlertStore;
 
   const {
@@ -52,7 +54,7 @@ const NewAlert = () => {
     getDataAlert();
   }, [loading, getDataAlert, alertList]);
 
-  const Alerts = alertList.map((v) => (AlertData(v, onLink, onDeleteAlert)));
+  const Alerts = alertList.map((v) => (AlertData(v, onClickAlert, onDeleteAlert)));
 
   if (loading) {
     return (

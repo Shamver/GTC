@@ -4,6 +4,8 @@ import axios from 'axios';
 class AlertStore {
   @observable alertList = [];
 
+  @observable alertCount = 0;
+
   constructor(root) {
     this.root = root;
   }
@@ -27,6 +29,7 @@ class AlertStore {
         .then((response) => {
           if (response.data) {
             this.alertList = response.data;
+            this.alertCount = response.data.filter((v) => v.isRead === 'N').length;
             setLoading(false);
           }
         })

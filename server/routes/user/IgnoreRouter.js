@@ -5,7 +5,7 @@ const db = require('../../db_con')();
 
 const conn = db.init();
 
-router.get('/ignore', (req, res) => {
+router.get('/', (req, res) => {
   const { userId } = req.query;
 
   const query = `SELECT GUI.FROM_ID AS f_id, GUI.TARGET_ID AS t_id, date_format(GUI.DATE, '%Y년 %m월 %d일 %H시 %i분 %s초') AS date, GU.NICKNAME AS nickname FROM GTC_USER_IGNORE GUI LEFT JOIN GTC_USER GU
@@ -31,7 +31,7 @@ router.get('/ignore', (req, res) => {
   });
 });
 
-router.delete('/ignore', (req, res) => {
+router.delete('/', (req, res) => {
   const data = req.body;
 
   let subQuery = '';

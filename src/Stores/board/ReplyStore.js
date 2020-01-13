@@ -17,7 +17,7 @@ class ReplyStore {
       toggleAlert('로그인 후 이용해주세요.');
       history.push('/');
     } else {
-      axios.get('/api/board/reply', {
+      axios.get('/api/board/reply/mine', {
         params: {
           userId: userData.id,
         },
