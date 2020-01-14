@@ -7,7 +7,7 @@ import { observer } from 'mobx-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faExclamationTriangle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
 
-import useStores from '../../Stores/useStores';
+import useStores from '../../stores/useStores';
 
 const TableBody = (title, data, onClickEvent) => (
   <tr key={title + data.id}>

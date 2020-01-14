@@ -9,7 +9,7 @@ import { faCommentDots, faStar } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
-import useStores from '../../Stores/useStores';
+import useStores from '../../stores/useStores';
 
 const RightLink = styled(Link)`
   float : right;

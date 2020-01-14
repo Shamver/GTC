@@ -13,7 +13,7 @@ import renderHTML from 'react-render-html';
 import Loading from '../util/Loading';
 
 
-import useStores from '../../Stores/useStores';
+import useStores from '../../stores/useStores';
 
 const AlertData = (data, onLink, onDelete) => (
   <AlertWrapper className={(data.isRead === 'Y' ? '' : 'noRead')}>

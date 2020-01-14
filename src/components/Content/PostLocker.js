@@ -7,7 +7,7 @@ import { observer } from 'mobx-react';
 import renderHTML from 'react-render-html';
 
 import { Link } from 'react-router-dom';
-import useStores from '../../Stores/useStores';
+import useStores from '../../stores/useStores';
 
 const MyPostTableBody = (title, data) => (
   <TableTr key={title + data.postId}>

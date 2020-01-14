@@ -1,5 +1,5 @@
 import React from 'react';
-import useStores from '../../Stores/useStores';
+import useStores from '../../stores/useStores';
 import FreeBoard from './FreeBoard';
 
 const CurrentBoard = () => {

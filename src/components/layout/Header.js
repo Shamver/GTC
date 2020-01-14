@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import KakaoLogin from 'react-kakao-login';
 import avatar from '../../resources/images/avatar.png';
 import logo from '../../resources/images/logo.png';
-import useStores from '../../Stores/useStores';
+import useStores from '../../stores/useStores';
 import { jsKey } from '../../config/kakao-config';
 
 const InputGroupWrapper = styled.div`
@@ -226,7 +226,9 @@ const HeaderSessionComp = observer(() => {
   } = UserAlertStore;
 
   useEffect(() => {
-    getDataAlert();
+    if (userData) {
+      getDataAlert();
+    }
   }, [userData, alertCount, getDataAlert]);
 
   if (!userData) {
