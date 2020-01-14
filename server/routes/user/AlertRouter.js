@@ -49,9 +49,7 @@ router.get('/', (req, res) => {
       if (updateYN === 'Y') {
         res.send(returnRows.reverse());
       } else {
-        setTimeout(() => {
-          res.send(returnRows.reverse());
-        }, 500);
+        res.send(returnRows.reverse());
       }
     } else {
       res.send(rows);

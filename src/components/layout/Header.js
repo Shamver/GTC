@@ -170,6 +170,23 @@ const LoginButton = styled(Button)`
   }
 `;
 
+const NewAlertCountSpan = styled.span`
+  margin-right: 5px;
+
+  border-radius: 100px;
+  padding: 3.5px 5.5px;
+  background: #d80a0a;
+  
+  display: inline-block;
+  min-width: 10px;
+  font-size: 0.9rem !important;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+`;
 
 const KakaoSign = () => {
   const { UserStore, UtilStore } = useStores();
@@ -254,6 +271,7 @@ const HeaderSessionComp = observer(() => {
       </DropdownIn>
       <DropdownIn isOpen={dropdown.avatar} toggle={onActive}>
         <AvatarDropdownToggleC name="avatar" caret>
+          <NewAlertCountSpan>{alertCount}</NewAlertCountSpan>
           <Avatar src={avatar} />
         </AvatarDropdownToggleC>
         <DropdownMenu>

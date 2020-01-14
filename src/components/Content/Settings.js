@@ -9,17 +9,23 @@ import { faTrashAlt, faExclamationTriangle, faExclamationCircle } from '@fortawe
 
 import useStores from '../../stores/useStores';
 
-const TableBody = (title, data, onClickEvent) => (
-  <tr key={title + data.id}>
-    <TableTh scope="row">
-      <CustomInput type="checkbox" id={title + data.id} name={data.id} onClick={onClickEvent} />
-    </TableTh>
-    <TableTd>
-      { data.nickname }
-    </TableTd>
-    <TableTd>{data.date}</TableTd>
-  </tr>
-);
+const TableBody = (title, data, onClickEvent) => {
+  const {
+    id, nickname, date,
+  } = data;
+
+  return (
+    <tr key={title + id}>
+      <TableTh scope="row">
+        <CustomInput type="checkbox" id={title + id} name={id} onClick={onClickEvent} />
+      </TableTh>
+      <TableTd>
+        { nickname }
+      </TableTd>
+      <TableTd>{date}</TableTd>
+    </tr>
+  );
+};
 
 const Settings = () => {
   const {
