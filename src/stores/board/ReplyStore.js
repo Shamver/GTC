@@ -71,17 +71,17 @@ class ReplyStore {
   };
 
   @action modifyReply = () => {
-    if (!this.root.BoardStore.replyValidationCheck()) return false;
+    if (!this.replyValidationCheck()) return false;
 
     axios.put('/api/board/reply', {
       id: this.modifyModeId,
-      content: this.root.BoardStore.reply.text,
+      content: this.reply.text,
     }).then((response) => {
       if (response.data) {
         toast.success('😊 댓글이 수정되었어요!');
-        this.root.BoardStore.reply.text = '';
-        this.root.BoardStore.getReply(this.root.BoardStore.reply.bpId);
-        this.root.BoardStore.setReplyEditId(0);
+        this.reply.text = '';
+        this.getReply(this.reply.bpId);
+        this.setReplyEditId(0);
         this.modifyModeId = 0;
       }
     })
@@ -97,8 +97,8 @@ class ReplyStore {
       .then((response) => {
         if (response.data) {
           toast.success('😊 댓글이 삭제되었어요!');
-          this.root.BoardStore.getReply(this.root.BoardStore.reply.bpId);
-          this.root.BoardStore.setReplyEditId(0);
+          this.getReply(this.reply.bpId);
+          this.setReplyEditId(0);
           this.modifyModeId = 0;
         }
       })

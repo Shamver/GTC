@@ -50,8 +50,12 @@ const P5Col2 = styled(Col)`
 
 const App = ({ history }) => {
   const { RouteStore, UserStore } = useStores();
-  RouteStore.setRoute(history);
-  UserStore.cookieCheck();
+  const { setRoute } = RouteStore;
+  const { cookieCheck } = UserStore;
+
+  setRoute(history);
+  cookieCheck();
+
   return (
     <ContainerWrapper>
       <Container>
@@ -70,21 +74,7 @@ const App = ({ history }) => {
 };
 
 App.propTypes = {
-  location: Proptypes.shape({}).isRequired,
-  match: Proptypes.shape({}).isRequired,
   history: Proptypes.shape({}).isRequired,
-  RouteStore: Proptypes.shape({
-    setRoute: Proptypes.func,
-  }),
-  UserStore: Proptypes.shape({
-    sessionCheck: Proptypes.func,
-  }),
 };
-
-App.defaultProps = {
-  RouteStore: null,
-  UserStore: null,
-};
-
 
 export default observer(App);

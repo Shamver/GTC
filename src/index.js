@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+import unregister from './serviceWorker';
 import stores from './stores';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,4 +27,4 @@ ReactDOM.render((
   </Provider>
 ), document.getElementById('root'));
 
-serviceWorker.unregister();
+unregister();
