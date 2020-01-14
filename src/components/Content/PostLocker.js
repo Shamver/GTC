@@ -9,64 +9,82 @@ import renderHTML from 'react-render-html';
 import { Link } from 'react-router-dom';
 import useStores from '../../stores/useStores';
 
-const MyPostTableBody = (title, data) => (
-  <TableTr key={title + data.postId}>
-    <TableTd scope="row">
-      <b>{data.postId}</b>
-    </TableTd>
-    <TableTd>
-      <Link to={`/post/${data.postId}`}>
-        {data.postTitle}
-      </Link>
-    </TableTd>
-    <TableTd>
-      {data.postDate}
-    </TableTd>
-    <TableTd>
-      {data.postViews}
-    </TableTd>
-  </TableTr>
-);
+const MyPostTableBody = (title, data) => {
+  const {
+    postId, postTitle, postDate, postViews,
+  } = data;
 
-const MyReplyTableBody = (title, data) => (
-  <TableTr key={title + data.postId}>
-    <TableTd>
-      <Link to={`/post/${data.postId}#${data.replyId}`}>
-        {data.postTitle}
-      </Link>
-    </TableTd>
-    <TableTd width={60}>
-      {renderHTML(data.replyContent)}
-    </TableTd>
-    <TableTd>
-      {data.replyDate}
-    </TableTd>
-  </TableTr>
-);
+  return (
+    <TableTr key={title + postId}>
+      <TableTd scope="row">
+        <b>{data.postId}</b>
+      </TableTd>
+      <TableTd>
+        <Link to={`/post/${postId}`}>
+          {postTitle}
+        </Link>
+      </TableTd>
+      <TableTd>
+        {postDate}
+      </TableTd>
+      <TableTd>
+        {postViews}
+      </TableTd>
+    </TableTr>
+  );
+};
 
-const FavoriteTableBody = (title, data, onClickEvent) => (
-  <TableTr key={title + data.id}>
-    <TableTd>
-      <b>{data.postId}</b>
-    </TableTd>
-    <TableTd>
-      <Link to={`/post/${data.id}`}>
-        {data.postTitle}
-      </Link>
-    </TableTd>
-    <TableTd>
-      {data.postDate}
-    </TableTd>
-    <TableTd>
-      {data.postViews}
-    </TableTd>
-    <TableTd>
-      <DeleteBtn name={data.favoriteId} color="danger" size="sm" onClick={onClickEvent}>
-        삭제
-      </DeleteBtn>
-    </TableTd>
-  </TableTr>
-);
+const MyReplyTableBody = (title, data) => {
+  const {
+    postId, replyId, postTitle, replyContent, replyDate,
+  } = data;
+
+  return (
+    <TableTr key={title + postId}>
+      <TableTd>
+        <Link to={`/post/${postId}#${replyId}`}>
+          {postTitle}
+        </Link>
+      </TableTd>
+      <TableTd width={60}>
+        {renderHTML(replyContent)}
+      </TableTd>
+      <TableTd>
+        {replyDate}
+      </TableTd>
+    </TableTr>
+  );
+};
+
+const FavoriteTableBody = (title, data, onClickEvent) => {
+  const {
+    id, postId, postTitle, postDate, postViews, favoriteId,
+  } = data;
+
+  return (
+    <TableTr key={title + id}>
+      <TableTd>
+        <b>{postId}</b>
+      </TableTd>
+      <TableTd>
+        <Link to={`/post/${id}`}>
+          {postTitle}
+        </Link>
+      </TableTd>
+      <TableTd>
+        {postDate}
+      </TableTd>
+      <TableTd>
+        {postViews}
+      </TableTd>
+      <TableTd>
+        <DeleteBtn name={favoriteId} color="danger" size="sm" onClick={onClickEvent}>
+          삭제
+        </DeleteBtn>
+      </TableTd>
+    </TableTr>
+  );
+};
 
 const PostLocker = () => {
   const {

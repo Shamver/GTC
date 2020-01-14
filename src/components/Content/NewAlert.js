@@ -15,24 +15,30 @@ import Loading from '../util/Loading';
 
 import useStores from '../../stores/useStores';
 
-const AlertData = (data, onLink, onDelete) => (
-  <AlertWrapper className={(data.isRead === 'Y' ? '' : 'noRead')}>
-    <AlertBox>
-      <LinkA to={`/post/${data.postId}#${data.replyId}`} name={`${data.id}`} onClick={onLink}>
-        <StrongSpan>{data.replyName}</StrongSpan>님이 <StrongSpan>{data.postTitle}</StrongSpan>
-        에 새&nbsp;
-        {data.type === 'reply' ? '댓글' : '대댓글'}을 달았습니다:&nbsp;
-        {renderHTML(data.replyContent)}
-      </LinkA>
-      <DateSpan>{data.replyDate}</DateSpan>
-    </AlertBox>
-    <AlertActionBox>
-      <DeleteA onClick={onDelete} name={`${data.id}`}>
-        <FontAwesomeIcon icon={faTimes} />
-      </DeleteA>
-    </AlertActionBox>
-  </AlertWrapper>
-);
+const AlertData = (data, onLink, onDelete) => {
+  const {
+    id, isRead, replyId, postId, replyName, postTitle, replyDate,
+  } = data;
+
+  return (
+    <AlertWrapper className={(isRead === 'Y' ? '' : 'noRead')}>
+      <AlertBox>
+        <LinkA to={`/post/${postId}#${replyId}`} name={`${id}`} onClick={onLink}>
+          <StrongSpan>{replyName}</StrongSpan>님이 <StrongSpan>{postTitle}</StrongSpan>
+          에 새&nbsp;
+          {data.type === 'reply' ? '댓글' : '대댓글'}을 달았습니다:&nbsp;
+          {renderHTML(data.replyContent)}
+        </LinkA>
+        <DateSpan>{replyDate}</DateSpan>
+      </AlertBox>
+      <AlertActionBox>
+        <DeleteA onClick={onDelete} name={`${data.id}`}>
+          <FontAwesomeIcon icon={faTimes} />
+        </DeleteA>
+      </AlertActionBox>
+    </AlertWrapper>
+  );
+};
 
 // 알림의 종류는 새 댓글, 새 대댓글만 우선
 const NewAlert = () => {
