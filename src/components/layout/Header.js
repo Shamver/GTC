@@ -174,11 +174,11 @@ const NewAlertCountSpan = styled.span`
   margin-right: 5px;
 
   border-radius: 100px;
-  padding: 3.5px 5.5px;
+  padding: 3.4px 7px;
   background: #d80a0a;
   
   display: inline-block;
-  min-width: 10px;
+  min-width: 20px;
   font-size: 0.9rem !important;
   font-weight: 700;
   line-height: 1;
