@@ -8,6 +8,35 @@ import Content from './components/layout/Content';
 import Category from './components/layout/Category';
 import useStores from './stores/useStores';
 
+const App = ({ history }) => {
+  const { RouteStore, UserStore } = useStores();
+  const { setRoute } = RouteStore;
+  const { cookieCheck } = UserStore;
+
+  setRoute(history);
+  cookieCheck();
+
+  return (
+    <ContainerWrapper>
+      <Container>
+        <Header />
+        <UnderSection>
+          <P5Col>
+            <Category />
+          </P5Col>
+          <P5Col2 xs="10">
+            <Content />
+          </P5Col2>
+        </UnderSection>
+      </Container>
+    </ContainerWrapper>
+  );
+};
+
+App.propTypes = {
+  history: Proptypes.shape({}).isRequired,
+};
+
 const ContainerWrapper = styled.div`
   background-color: rgb(243, 242, 240);
 `;
@@ -47,34 +76,5 @@ const P5Col = styled(Col)`
 const P5Col2 = styled(Col)`
   padding : 0 5px 0 5px !important;
 `;
-
-const App = ({ history }) => {
-  const { RouteStore, UserStore } = useStores();
-  const { setRoute } = RouteStore;
-  const { cookieCheck } = UserStore;
-
-  setRoute(history);
-  cookieCheck();
-
-  return (
-    <ContainerWrapper>
-      <Container>
-        <Header />
-        <UnderSection>
-          <P5Col>
-            <Category />
-          </P5Col>
-          <P5Col2 xs="10">
-            <Content />
-          </P5Col2>
-        </UnderSection>
-      </Container>
-    </ContainerWrapper>
-  );
-};
-
-App.propTypes = {
-  history: Proptypes.shape({}).isRequired,
-};
 
 export default observer(App);

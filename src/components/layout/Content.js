@@ -28,7 +28,6 @@ const Content = () => (
       <Route exact path="/crime" render={({ location }) => <Contents.Board path={location.pathname} />} />
       <Route exact path="/qna" render={({ location }) => <Contents.Board path={location.pathname} />} />
 
-
       <Route exact path="/settings" render={() => <Contents.Settings />} />
       <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
       <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />

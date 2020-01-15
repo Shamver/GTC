@@ -2,8 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 
-const jwt = require('jsonwebtoken');
-
 const db = require('../../dbConnection')();
 
 const conn = db.init();

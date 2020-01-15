@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import 'react-quill/dist/quill.snow.css';
 import styled from 'styled-components';
 import {
   CustomInput, Button, Input, Row, Col,

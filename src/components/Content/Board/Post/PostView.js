@@ -62,7 +62,6 @@ const PostView = ({ match }) => {
             </InnerContainer>
             <ContentWrapper>
               {renderHTML(`${content}`)}
-
               <TextCenterDiv>
                 <SmallFontButton outline color="success">
                   <FontAwesomeIcon icon={faThumbsUp} />

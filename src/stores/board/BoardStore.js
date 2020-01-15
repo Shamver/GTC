@@ -63,7 +63,9 @@ class BoardStore {
         }
       })
       .catch((response) => { console.log(response); });
-  }
+  };
+
+  @action getBoardName = (path) => this.boardKinds[path]
 }
 
 export default BoardStore;

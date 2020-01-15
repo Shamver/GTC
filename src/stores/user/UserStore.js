@@ -69,7 +69,7 @@ class UserStore {
         if (response.data) {
           toast.success(response.data.MESSAGE);
           if (response.data.LOGIN_SUCCESS) {
-            this.userTokenData = response.data.token;
+            this.userData = response.data.token;
             this.cookieCheck();
           }
         }

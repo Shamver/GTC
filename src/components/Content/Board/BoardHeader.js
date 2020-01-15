@@ -9,10 +9,11 @@ import useStores from '../../../stores/useStores';
 
 const BoardHeader = ({ path }) => {
   const { BoardStore } = useStores();
-  const { boardKinds } = BoardStore;
+  const { getBoardName } = BoardStore;
+  const BoardName = getBoardName(path);
   return (
     <TableHead>
-      <MarginlessH3>{boardKinds[path]}</MarginlessH3>
+      <MarginlessH3>{BoardName}</MarginlessH3>
       <RightLink to={`${path}/post`}>
         <Button color="danger" size="sm">
           <FontAwesomeIcon icon={faPen} />

@@ -61,22 +61,18 @@ router.post('/login', (req, res) => {
   conn.query(query, (err, rows) => {
     if (err) throw err;
     if (rows.length === 1) {
-      // req.session.user = {
-      //   email: rows[0].email,
-      //   name: rows[0].name,
-      //   nickname: rows[0].nickname,
-      //   gtNickname: rows[0].gtNickname,
-      // };
-      if (rows[0].deletedDate === null) {
+      const resultData = rows[0];
+      const { id, nickname, deletedDate } = resultData;
+
+      if (deletedDate === null) {
         jwt.sign(
           {
-            _id: rows[0].email,
-            id: rows[0].id,
-            username: rows[0].nickname,
+            id,
+            username: nickname,
           },
           secret,
           {
-            expiresIn: '7d',
+            expiresIn: '1d',
             issuer: 'GTC',
             subject: 'userInfo',
           }, (err2, token) => {

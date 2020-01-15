@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 
 const authMiddleware = (req, res, next) => {
   // read the token from header or url
-  const token = req.cookies.authToken;
+  const { authToken } = req.cookies;
+  const token = authToken;
 
   // token does not exist
   if (!token) {
@@ -35,6 +36,8 @@ const authMiddleware = (req, res, next) => {
     req.decoded = decoded;
     next();
   }).catch(onError);
+
+  return true;
 };
 
 module.exports = authMiddleware;

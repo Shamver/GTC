@@ -15,10 +15,6 @@ const override = css`
   text-align: center;
 `;
 
-const Div = styled.div`
-  height: 100px;
-`;
-
 const Loading = () => (
   <Div>
     <SyncLoader
@@ -29,5 +25,9 @@ const Loading = () => (
     />
   </Div>
 );
+
+const Div = styled.div`
+  height: 100px;
+`;
 
 export default observer(Loading);
