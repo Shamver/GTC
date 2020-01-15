@@ -286,7 +286,7 @@ const HeaderSessionComp = observer(() => {
           <DropdownItem30>내 정보 관리</DropdownItem30>
           <DropdownItem30>{10} 포인트</DropdownItem30>
           <DropdownItem30 divider />
-          <Link to="/settings">
+          <Link to="/setting">
             <DropdownItem30>설정</DropdownItem30>
           </Link>
           <Link to="/postlocker">
