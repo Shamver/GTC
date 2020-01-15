@@ -33,14 +33,15 @@ router.get('/', (req, res) => {
 
 router.delete('/', (req, res) => {
   const data = req.body;
-
+  const {
+    list,
+  } = data;
   let subQuery = '';
 
-  // 에로우 부분 왜저럼?
-  data.list.map((v, i) => {
-    subQuery += `(FROM_ID=${v.f_id} AND TARGET_ID=${v.t_id})`;
-    if (i !== data.list.length - 1) subQuery += ' OR ';
-  });
+  for (let i = 0; i < list.length; i += 1) {
+    subQuery += `(FROM_ID=${list[i].f_id} AND TARGET_ID=${list[i].t_id})`;
+    if (i !== list.length - 1) subQuery += ' OR ';
+  }
 
   const query = `DELETE FROM GTC_USER_IGNORE
     WHERE
