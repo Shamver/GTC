@@ -19,6 +19,8 @@ import logo from '../../resources/images/logo.png';
 import useStores from '../../stores/useStores';
 import { jsKey } from '../../config/kakao-config';
 
+import HeaderFavoriteItem from './HeaderFavoriteItem';
+
 const InputGroupWrapper = styled.div`
   width : 250px;
   display : inline-block;
@@ -239,14 +241,8 @@ const HeaderSessionComp = observer(() => {
   } = UserStore;
 
   const {
-    alertCount, getDataAlert,
+    alertCount,
   } = UserAlertStore;
-
-  useEffect(() => {
-    if (userData) {
-      getDataAlert();
-    }
-  }, [userData, getDataAlert]);
 
   if (!userData) {
     return (
@@ -304,8 +300,31 @@ const HeaderSessionComp = observer(() => {
 });
 
 const Header = () => {
-  const { HeaderStore } = useStores();
+  const {
+    HeaderStore, UserFavoriteStore, UserAlertStore, UserStore,
+  } = useStores();
   const { onActive, dropdown } = HeaderStore;
+
+  const {
+    getDataFavorite, favoriteList,
+  } = UserFavoriteStore;
+
+  const {
+    getDataAlert,
+  } = UserAlertStore;
+
+  const {
+    userData,
+  } = UserStore;
+
+  useEffect(() => {
+    if (userData) {
+      getDataAlert();
+      getDataFavorite();
+    }
+  }, [userData, getDataAlert, getDataFavorite]);
+
+  const FavoriteDatas = favoriteList.map((v) => HeaderFavoriteItem(v));
 
   return (
     <HeaderWrapper>
@@ -344,9 +363,7 @@ const Header = () => {
                   <FontAwesomeIcon icon={faStar} /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
-                  <DropdownItem30>괴물쥐</DropdownItem30>
-                  <DropdownItem30>얍얍</DropdownItem30>
-                  <DropdownItem30>룩삼</DropdownItem30>
+                  {FavoriteDatas}
                 </DropdownMenu>
               </DropdownIn>
               <DropdownIn isOpen={dropdown.smile} toggle={onActive}>
