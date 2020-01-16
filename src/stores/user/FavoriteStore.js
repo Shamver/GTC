@@ -10,7 +10,7 @@ class FavoriteStore {
 
   @action getDataFavorite = (() => {
     const { userData } = this.root.UserStore;
-    if (userData !== undefined) {
+    if (userData) {
       axios.get('/api/user/favorite', {
         params: {
           userId: userData.id,

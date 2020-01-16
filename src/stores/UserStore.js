@@ -85,7 +85,7 @@ class UserStore {
         if (response.data.type === 'LOGOUT') {
           this.root.UtilStore.toggleAlert(text);
           this.cookieCheck();
-          if (history.location.pathname === '/settings') {
+          if (history.location.pathname !== '/') {
             history.push('/');
           }
         }

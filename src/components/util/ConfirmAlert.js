@@ -7,26 +7,31 @@ import * as Proptypes from 'prop-types';
 import useStores from '../../stores/useStores';
 
 const ConfirmAlert = () => {
-  const { UtilStore } = useStores();
+  const { UtilAlertStore } = useStores();
+
+  const {
+    confirmAlertToggle, toggleConfirmAlert, text, callbackFunc,
+  } = UtilAlertStore;
+
   return (
     <div>
-      <Modal isOpen={UtilStore.confirmAlertToggle} toggle={UtilStore.toggleConfirmAlert}>
-        <ModalHeader toggle={UtilStore.toggleConfirmAlert}>확인 요청</ModalHeader>
+      <Modal isOpen={confirmAlertToggle} toggle={toggleConfirmAlert}>
+        <ModalHeader toggle={toggleConfirmAlert}>확인 요청</ModalHeader>
         <ModalBody>
           {
-            UtilStore.text.split('\n').map((line) => (<span key={line}>{line}<br /></span>))
+            text.split('\n').map((line) => (<span key={line}>{line}<br /></span>))
           }
         </ModalBody>
         <ModalFooter>
           <Button
             color="primary"
             onClick={() => {
-              UtilStore.callbackFunc();
-              UtilStore.toggleConfirmAlert();
+              callbackFunc();
+              toggleConfirmAlert();
             }}
           >네
           </Button>
-          <Button color="secondary" onClick={UtilStore.toggleConfirmAlert}>아니오</Button>
+          <Button color="secondary" onClick={toggleConfirmAlert}>아니오</Button>
         </ModalFooter>
       </Modal>
     </div>

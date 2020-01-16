@@ -29,7 +29,9 @@ class AlertStore {
         .then((response) => {
           if (response.data) {
             this.alertList = response.data;
-            this.alertCount = response.data.filter((v) => v.isRead === 'N').length;
+            if (response.data.length > 0) {
+              this.alertCount = response.data.filter((v) => v.isRead === 'N').length;
+            }
             setLoading(false);
           }
         })

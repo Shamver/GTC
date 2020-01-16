@@ -18,7 +18,7 @@ const HeaderFavoriteItem = (data) => {
   } = data;
 
   return (
-    <Link to={`/post/${postId}`}>
+    <Link to={`/post/${postId}`} key={`HeaderFavoriteItem${postId}`}>
       <DropdownItem30>{postTitle}</DropdownItem30>
     </Link>
   );
