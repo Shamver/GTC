@@ -11,6 +11,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.11.2",
     "@fortawesome/free-solid-svg-icons": "^5.11.2",
     "@fortawesome/react-fontawesome": "^0.1.7",
+    "app-root-path": "^3.0.0",
     "axios": "^0.19.0",
     "babel-eslint": "^10.0.3",
     "body-parser": "^1.19.0",
@@ -46,7 +47,8 @@
     "reactstrap": "^8.1.1",
     "styled-components": "^4.4.1",
     "winston": "^3.2.1",
-    "winston-daily-rotate-file": "^4.4.1"
+    "winston-daily-rotate-file": "^4.4.1",
+    "process": "latest"
   },
   "scripts": {
     "start": "npm-run-all --parallel start:**",

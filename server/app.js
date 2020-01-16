@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const authMiddleware = require('./middleware/auth');
 const jwtConfig = require('./config/jwt-config');
+const { info } = require('./log-config');
 
 const app = express();
 
@@ -46,4 +47,4 @@ app.use('/api/board', authMiddleware);
 app.use('/api/board', boardApi);
 
 const port = process.env.PORT || 3001;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+app.listen(port, () => info(`Listening on port ${port}...`));
