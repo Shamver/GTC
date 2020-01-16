@@ -246,7 +246,7 @@ const HeaderSessionComp = observer(() => {
     if (userData) {
       getDataAlert();
     }
-  }, [userData, alertCount, getDataAlert]);
+  }, [userData, getDataAlert]);
 
   if (!userData) {
     return (

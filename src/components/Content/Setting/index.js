@@ -12,16 +12,20 @@ import SettingTabContent from './SettingTabContent';
 
 const Setting = () => {
   const {
-    UserIgnoreStore,
+    UserIgnoreStore, ComponentSettingStore,
   } = useStores();
 
   const {
-    ignoreList, getDataIgnore,
+    getDataIgnore,
   } = UserIgnoreStore;
+
+  const {
+    activeTab,
+  } = ComponentSettingStore;
 
   useEffect(() => {
     getDataIgnore();
-  }, [getDataIgnore, ignoreList]);
+  }, [getDataIgnore, activeTab]);
 
   return (
     <MainContainer>

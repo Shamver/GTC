@@ -12,26 +12,30 @@ import PostLockerTabContent from './PostLockerTabContent';
 
 const PostLocker = () => {
   const {
-    BoardPostStore, BoardReplyStore, UserFavoriteStore,
+    BoardPostStore, BoardReplyStore, UserFavoriteStore, ComponentPostLockerStore,
   } = useStores();
 
   const {
-    postList, getDataPost,
+    getDataPost,
   } = BoardPostStore;
 
   const {
-    replyList, getDataReply,
+    getDataReply,
   } = BoardReplyStore;
 
   const {
-    favoriteList, getDataFavorite,
+    getDataFavorite,
   } = UserFavoriteStore;
+
+  const {
+    activeTab,
+  } = ComponentPostLockerStore;
 
   useEffect(() => {
     getDataPost();
     getDataReply();
     getDataFavorite();
-  }, [getDataReply, getDataPost, getDataFavorite, postList, replyList, favoriteList]);
+  }, [getDataReply, getDataPost, getDataFavorite, activeTab]);
 
   return (
     <MainContainer>
