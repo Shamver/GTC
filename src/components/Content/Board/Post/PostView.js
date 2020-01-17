@@ -16,11 +16,12 @@ import BoardFooter from '../BoardFooter';
 
 const PostView = ({ match }) => {
   const { PostStore, ReplyStore, BoardStore } = useStores();
-  const { getPost, postView } = PostStore;
+  const { getPost, postView, recommendPost } = PostStore;
   const { setReplyBpId, postReplyList } = ReplyStore;
   const { currentBoard, setCurrentBoardToId } = BoardStore;
   const {
-    boardName, categoryName, title, writer, date, views, content,
+    id: postId, boardName, categoryName, title, writer, date, views, content,
+    recommendCount,
   } = postView;
   const { params } = match;
   const { id } = params;
@@ -63,9 +64,9 @@ const PostView = ({ match }) => {
             <ContentWrapper>
               {renderHTML(`${content}`)}
               <TextCenterDiv>
-                <SmallFontButton outline color="success">
+                <SmallFontButton outline color="success" onClick={() => recommendPost(postId)}>
                   <FontAwesomeIcon icon={faThumbsUp} />
-                  &nbsp;추천 0
+                  &nbsp;추천 {recommendCount}
                 </SmallFontButton>
                 &nbsp;
                 <SmallFontButton outline color="primary">

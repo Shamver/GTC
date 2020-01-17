@@ -20,7 +20,7 @@ const HeaderInProfile = () => {
 
   return (
     <>
-      { userData
+      { !userData
         ? (
           <>
             <KakaoSign isRegister={false} />

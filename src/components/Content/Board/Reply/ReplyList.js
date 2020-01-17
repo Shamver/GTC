@@ -11,6 +11,7 @@ const ReplyList = ({ bpId }) => {
     getReply(bpId);
   }, [getReply, bpId]);
 
+
   return postReplyList.map((data) => (
     <Reply key={data.id} data={data} />
   ));
