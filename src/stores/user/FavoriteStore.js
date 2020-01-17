@@ -18,8 +18,11 @@ class FavoriteStore {
         },
       })
         .then((response) => {
-          if (response.data) {
+          const { data } = response;
+          if (data.success) {
             this.favoriteList = response.data;
+          } else if (data.message === 'not logged in') {
+            this.favoriteList = [];
           }
         })
         .catch((response) => {
