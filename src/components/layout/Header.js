@@ -318,10 +318,8 @@ const Header = () => {
   } = UserStore;
 
   useEffect(() => {
-    if (userData) {
-      getDataAlert();
-      getDataFavorite();
-    }
+    getDataAlert();
+    getDataFavorite();
   }, [userData, getDataAlert, getDataFavorite]);
 
   const FavoriteDatas = favoriteList.map((v) => HeaderFavoriteItem(v));
@@ -363,7 +361,7 @@ const Header = () => {
                   <FontAwesomeIcon icon={faStar} /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
-                  {FavoriteDatas}
+                  {FavoriteDatas.length === 0 ? '로그인 후 이용 가능합니다.' : FavoriteDatas}
                 </DropdownMenu>
               </DropdownIn>
               <DropdownIn isOpen={dropdown.smile} toggle={onActive}>

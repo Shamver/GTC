@@ -13,10 +13,10 @@ const PostLockerMyPost = () => {
   } = useStores();
 
   const {
-    postList,
+    postMineList,
   } = BoardPostStore;
 
-  const MyPostTableData = postList.map((v) => (PostLockerMyPostTable('myPost', v)));
+  const MyPostTableData = postMineList.map((v) => (PostLockerMyPostTable('myPost', v)));
 
   return (
     <TabPane tabId="myPost">

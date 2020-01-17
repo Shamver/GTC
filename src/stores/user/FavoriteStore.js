@@ -10,6 +10,7 @@ class FavoriteStore {
 
   @action getDataFavorite = (() => {
     const { userData } = this.root.UserStore;
+
     if (userData) {
       axios.get('/api/user/favorite', {
         params: {
@@ -21,7 +22,11 @@ class FavoriteStore {
             this.favoriteList = response.data;
           }
         })
-        .catch((response) => { console.log(response); });
+        .catch((response) => {
+          console.log(response);
+        });
+    } else {
+      this.favoriteList = [];
     }
   });
 

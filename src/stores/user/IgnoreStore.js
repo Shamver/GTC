@@ -9,14 +9,9 @@ class IgnoreStore {
   }
 
   @action getDataIgnore = (() => {
-    const { toggleAlert } = this.root.UtilStore;
     const { userData } = this.root.UserStore;
-    const { history } = this.root.RouteStore;
 
-    if (userData === undefined) {
-      toggleAlert('로그인 후 이용해주세요.');
-      history.push('/');
-    } else {
+    if (userData) {
       axios.get('/api/user/ignore', {
         params: {
           userId: userData.id,
@@ -27,7 +22,11 @@ class IgnoreStore {
             this.ignoreList = response.data;
           }
         })
-        .catch((response) => { console.log(response); });
+        .catch((response) => {
+          console.log(response);
+        });
+    } else {
+      this.ignoreList = [];
     }
   });
 

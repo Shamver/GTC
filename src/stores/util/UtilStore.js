@@ -39,6 +39,20 @@ class UtilStore {
   @action changeSign = () => {
     this.signDisplay = !this.signDisplay;
   };
+
+  @action loginCheck = () => {
+    const { userData } = this.root.UserStore;
+    const { toggleAlert } = this.root.UtilStore;
+    const { history } = this.root.RouteStore;
+
+    if (userData) {
+      return true;
+    }
+
+    toggleAlert('로그인 후 이용 가능합니다.');
+    history.push('/');
+    return false;
+  }
 }
 
 export default UtilStore;

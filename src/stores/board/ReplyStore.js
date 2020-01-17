@@ -2,21 +2,16 @@ import { observable, action } from 'mobx';
 import axios from 'axios';
 
 class ReplyStore {
-  @observable replyList = [];
+  @observable replyMineList = [];
 
   constructor(root) {
     this.root = root;
   }
 
-  @action getDataReply = (() => {
-    const { toggleAlert } = this.root.UtilStore;
+  @action getDataReplyMine = (() => {
     const { userData } = this.root.UserStore;
-    const { history } = this.root.RouteStore;
 
-    if (userData === undefined) {
-      toggleAlert('로그인 후 이용해주세요.');
-      history.push('/');
-    } else {
+    if (userData) {
       axios.get('/api/board/reply/mine', {
         params: {
           userId: userData.id,
@@ -24,10 +19,14 @@ class ReplyStore {
       })
         .then((response) => {
           if (response.data) {
-            this.replyList = response.data;
+            this.replyMineList = response.data;
           }
         })
-        .catch((response) => { console.log(response); });
+        .catch((response) => {
+          console.log(response);
+        });
+    } else {
+      this.replyMineList = [];
     }
   });
 }

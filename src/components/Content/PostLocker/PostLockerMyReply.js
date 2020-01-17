@@ -14,10 +14,10 @@ const PostLockerMyReply = () => {
   } = useStores();
 
   const {
-    replyList,
+    replyMineList,
   } = BoardReplyStore;
 
-  const MyReplyTableData = replyList.map((v) => (PostLockerMyReplyTable('myReply', v)));
+  const MyReplyTableData = replyMineList.map((v) => (PostLockerMyReplyTable('myReply', v)));
 
   return (
     <TabPane tabId="myReply">

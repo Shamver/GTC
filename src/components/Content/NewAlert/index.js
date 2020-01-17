@@ -13,7 +13,7 @@ import NewAlertData from './NewAlertData';
 import useStores from '../../../stores/useStores';
 
 const NewAlert = () => {
-  const { UserAlertStore, UtilLoadingStore } = useStores();
+  const { UserAlertStore, UtilLoadingStore, UtilStore } = useStores();
 
   const {
     onDeleteAlert, onClickAlert, alertList,
@@ -23,9 +23,17 @@ const NewAlert = () => {
     loading, setLoading,
   } = UtilLoadingStore;
 
-  useEffect(() => () => {
-    setLoading(true);
-  }, [setLoading]);
+  const {
+    loginCheck,
+  } = UtilStore;
+
+  useEffect(() => {
+    loginCheck();
+
+    return () => {
+      setLoading(true);
+    };
+  }, [loginCheck, setLoading]);
 
   const Alerts = alertList.map((v) => (NewAlertData(v, onClickAlert, onDeleteAlert)));
 
