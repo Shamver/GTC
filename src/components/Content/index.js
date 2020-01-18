@@ -1,12 +1,12 @@
-import FreeBoard from './FreeBoard';
-import Settings from './Settings';
-import PostView from './PostView';
+import Setting from './Setting';
+import Board from './Board';
+import PostView from './Board/Post/PostView';
 import PostLocker from './PostLocker';
 import NewAlert from './NewAlert';
 
 export default {
-  FreeBoard,
-  Settings,
+  Board,
+  Setting,
   PostLocker,
   PostView,
   NewAlert,

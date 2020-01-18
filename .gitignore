@@ -28,3 +28,4 @@ yarn-error.log*
 # Properties
 /server/config
 /src/config
+/logs

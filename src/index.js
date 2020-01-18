@@ -3,21 +3,30 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'mobx-react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+import unregister from './serviceWorker';
 import stores from './stores';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render((
   <Provider
-    HeaderStore={stores.HeaderStore}
-    BoardStore={stores.BoardStore}
-    UtilStore={stores.UtilStore}
-    RouteStore={stores.RouteStore}
     UserStore={stores.UserStore}
-    SettingStore={stores.SettingStore}
-    PostLockerStore={stores.PostLockerStore}
-    NewAlertStore={stores.NewAlertStore}
-    ReplyStore={stores.ReplyStore}
+    UserAlertStore={stores.UserAlertStore}
+    UserFavoriteStore={stores.UserFavoriteStore}
+    UserIgnoreStore={stores.UserIgnoreStore}
+
+    ComponentHeaderStore={stores.ComponentHeaderStore}
+    ComponentSettingStore={stores.ComponentSettingStore}
+    ComponentPostLockerStore={stores.ComponentPostLockerStore}
+
+    UtilStore={stores.UtilStore}
+    UtilRouteStore={stores.UtilRouteStore}
+    UtilAlertStore={stores.UtilAlertStore}
+    UtilLoadingStore={stores.UtilLoadingStore}
+
+    BoardStore={stores.BoardStore}
+    BoardPostStore={stores.BoardPostStore}
+    BoardReplyStore={stores.BoardReplyStore}
   >
     <Router>
       <Route component={App} />
@@ -25,4 +34,4 @@ ReactDOM.render((
   </Provider>
 ), document.getElementById('root'));
 
-serviceWorker.unregister();
+unregister();

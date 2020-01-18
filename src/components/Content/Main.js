@@ -4,20 +4,6 @@ import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 
-const ArrowIcon = styled(FontAwesomeIcon)`
-  vertical-align : text-top;
-`;
-
-const Texth5 = styled.h5`
-  font-weight : bold;
-`;
-
-const PostList = styled.div`
-  background-color : white;
-  height : 300px;
-  margin-bottom : 20px;
-`;
-
 const Main = () => (
   <Row>
     <Col xs="6">
@@ -41,5 +27,19 @@ const Main = () => (
     </Col>
   </Row>
 );
+
+const ArrowIcon = styled(FontAwesomeIcon)`
+  vertical-align : text-top;
+`;
+
+const Texth5 = styled.h5`
+  font-weight : bold;
+`;
+
+const PostList = styled.div`
+  background-color : white;
+  height : 300px;
+  margin-bottom : 20px;
+`;
 
 export default Main;
