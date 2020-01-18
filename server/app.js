@@ -10,31 +10,35 @@ app.use('/', express.static(`${__dirname}/../public`));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const api = require('./routes/index.js');
 const boardApi = require('./routes/BoardRouter.js');
 const authApi = require('./routes/AuthRouter.js');
-const userApi = require('./routes/UserRouter.js');
-const settingApi = require('./routes/SettingRouter.js');
-const postlockerApi = require('./routes/PostlockerRouter.js');
-const replyApi = require('./routes/ReplyRouter.js');
+
+const boardPostApi = require('./routes/board/PostRouter');
+
+const boardReplyApi = require('./routes/board/ReplyRouter');
+
+const userApi = require('./routes/user/UserRouter');
+const userAlertApi = require('./routes/user/AlertRouter');
+const userIgnoreApi = require('./routes/user/IgnoreRouter');
+const userFavoriteApi = require('./routes/user/FavoriteRouter');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.set('jwt-secret', jwtConfig.secret);
 
-app.use('/api', api);
-
-
-app.use('/api/board', boardApi);
-
 app.use('/api/auth', authApi);
-
 app.use('/api/user', authMiddleware);
+
+app.use('/api/board/post', boardPostApi);
+app.use('/api/board/reply', boardReplyApi);
+
 app.use('/api/user', userApi);
-app.use('/api/setting', settingApi);
-app.use('/api/postlocker', postlockerApi);
-app.use('/api/', authMiddleware);
-app.use('/api/', replyApi);
+app.use('/api/user/alert', userAlertApi);
+app.use('/api/user/ignore', userIgnoreApi);
+app.use('/api/user/favorite', userFavoriteApi);
+
+// :id 때문에 뒤로 미룸
+app.use('/api/board', boardApi);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listening on port ${port}...`));

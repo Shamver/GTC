@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {
   InputGroup, InputGroupAddon, Button, Input,
@@ -18,6 +18,8 @@ import avatar from '../../resources/images/avatar.png';
 import logo from '../../resources/images/logo.png';
 import useStores from '../../stores/useStores';
 import { jsKey } from '../../config/kakao-config';
+
+import HeaderFavoriteItem from './HeaderFavoriteItem';
 
 const InputGroupWrapper = styled.div`
   width : 250px;
@@ -170,6 +172,23 @@ const LoginButton = styled(Button)`
   }
 `;
 
+const NewAlertCountSpan = styled.span`
+  margin-right: 5px;
+
+  border-radius: 100px;
+  padding: 3.4px 7px;
+  background: #d80a0a;
+  
+  display: inline-block;
+  min-width: 20px;
+  font-size: 0.9rem !important;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+`;
 
 const KakaoSign = () => {
   const { UserStore, UtilStore } = useStores();
@@ -223,8 +242,15 @@ KakaoRegister.propTypes = {
 };
 
 const HeaderSessionComp = observer(() => {
-  const { UserStore, HeaderStore } = useStores();
-  const { userData } = UserStore;
+  const { UserStore, HeaderStore, UserAlertStore } = useStores();
+
+  const {
+    userData,
+  } = UserStore;
+
+  const {
+    alertCount,
+  } = UserAlertStore;
 
   if (!userData) {
     return (
@@ -249,6 +275,7 @@ const HeaderSessionComp = observer(() => {
       </DropdownIn>
       <DropdownIn isOpen={dropdown.avatar} toggle={onActive}>
         <AvatarDropdownToggleC name="avatar" caret>
+          <NewAlertCountSpan>{alertCount}</NewAlertCountSpan>
           <Avatar src={avatar} />
         </AvatarDropdownToggleC>
         <DropdownMenu>
@@ -258,12 +285,12 @@ const HeaderSessionComp = observer(() => {
             <ProfileId>thisIsId</ProfileId>
           </DropdownItemTitle>
           <Link to="/newalert">
-            <DropdownItem30>새로운 알림 ({1} 개)</DropdownItem30>
+            <DropdownItem30>새로운 알림 ({alertCount} 개)</DropdownItem30>
           </Link>
           <DropdownItem30>내 정보 관리</DropdownItem30>
           <DropdownItem30>{10} 포인트</DropdownItem30>
           <DropdownItem30 divider />
-          <Link to="/settings">
+          <Link to="/setting">
             <DropdownItem30>설정</DropdownItem30>
           </Link>
           <Link to="/postlocker">
@@ -281,8 +308,29 @@ const HeaderSessionComp = observer(() => {
 });
 
 const Header = () => {
-  const { HeaderStore } = useStores();
+  const {
+    HeaderStore, UserFavoriteStore, UserAlertStore, UserStore,
+  } = useStores();
   const { onActive, dropdown } = HeaderStore;
+
+  const {
+    getDataFavorite, favoriteList,
+  } = UserFavoriteStore;
+
+  const {
+    getDataAlert,
+  } = UserAlertStore;
+
+  const {
+    userData,
+  } = UserStore;
+
+  useEffect(() => {
+    getDataAlert();
+    getDataFavorite();
+  }, [userData, getDataAlert, getDataFavorite]);
+
+  const FavoriteDatas = favoriteList.map((v) => HeaderFavoriteItem(v));
 
   return (
     <HeaderWrapper>
@@ -321,9 +369,7 @@ const Header = () => {
                   <FontAwesomeIcon icon={faStar} /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
-                  <DropdownItem30>괴물쥐</DropdownItem30>
-                  <DropdownItem30>얍얍</DropdownItem30>
-                  <DropdownItem30>룩삼</DropdownItem30>
+                  {FavoriteDatas.length === 0 ? '로그인 후 이용 가능합니다.' : FavoriteDatas}
                 </DropdownMenu>
               </DropdownIn>
               <DropdownIn isOpen={dropdown.smile} toggle={onActive}>

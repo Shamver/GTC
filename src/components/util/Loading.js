@@ -4,8 +4,6 @@ import { css } from '@emotion/core';
 import { SyncLoader } from 'react-spinners';
 import styled from 'styled-components';
 
-import { observer } from 'mobx-react';
-
 // Can be a string as well. Need to ensure each key-value pair ends with ;
 const override = css`
   display: block;
@@ -30,4 +28,4 @@ const Loading = () => (
   </Div>
 );
 
-export default observer(Loading);
+export default Loading;

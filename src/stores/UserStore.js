@@ -86,7 +86,7 @@ class UserStore {
         if (response.data.type === 'LOGOUT') {
           toast.success(text);
           this.cookieCheck();
-          if (history.location.pathname === '/settings') {
+          if (history.location.pathname !== '/') {
             history.push('/');
           }
         }

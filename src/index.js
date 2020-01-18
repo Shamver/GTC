@@ -14,10 +14,16 @@ ReactDOM.render((
     UtilStore={stores.UtilStore}
     RouteStore={stores.RouteStore}
     UserStore={stores.UserStore}
-    SettingStore={stores.SettingStore}
-    PostLockerStore={stores.PostLockerStore}
-    NewAlertStore={stores.NewAlertStore}
-    ReplyStore={stores.ReplyStore}
+    ComponentSettingStore={stores.ComponentSettingStore}
+    ComponentPostLockerStore={stores.ComponentPostLockerStore}
+    UserAlertStore={stores.UserAlertStore}
+    UserFavoriteStore={stores.UserFavoriteStore}
+    UserIgnoreStore={stores.UserIgnoreStore}
+    UserStore2={stores.UserStore2}
+    UtilAlertStore={stores.UtilAlertStore}
+    UtilLoadingStore={stores.UtilLoadingStore}
+    BoardPostStore={stores.BoardPostStore}
+    BoardReplyStore={stores.BoardReplyStore}
   >
     <Router>
       <Route component={App} />
