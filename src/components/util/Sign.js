@@ -3,10 +3,72 @@ import { observer } from 'mobx-react';
 import {
   Modal, ModalHeader, ModalBody, FormText, Input,
 } from 'reactstrap';
-import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
-
 import useStores from '../../stores/useStores';
+
+const Sign = () => {
+  const { UtilStore, UserStore } = useStores();
+  const { signToggle, toggleSign } = UtilStore;
+  const { onRegisterChangeValue, registerData, registerCheck } = UserStore;
+  const {
+    email, nickname, birth, gender,
+  } = registerData;
+
+  return (
+    <Modal isOpen={signToggle} toggle={toggleSign}>
+      <ModalHeaderBack toggle={toggleSign}><b>회원가입</b></ModalHeaderBack>
+      <ModalBodyNoPadding>
+        <div>
+          <Deform>
+            <RegisterForm>
+              <FormInput type="text" onChange={onRegisterChangeValue} value={email} name="email" placeholder="이메일" readOnly />
+              <FormInputWithText type="text" onChange={onRegisterChangeValue} name="name" placeholder="이름" />
+              <FormTextLeft>
+                실명을 입력해주세요. <br />
+                <AccentText>(실명 미 입력시 추후 사이트에서 밴 당할 우려가 있습니다.)</AccentText>
+              </FormTextLeft>
+              <FormInputWithText
+                type="text"
+                onChange={onRegisterChangeValue}
+                name="nickname"
+                placeholder="닉네임"
+                value={nickname}
+              />
+              <FormTextLeft>
+                GTC에서 보여질 닉네임을 적어주세요.
+              </FormTextLeft>
+              <FormInputWithText type="text" onChange={onRegisterChangeValue} name="tel" placeholder="전화번호" maxLength="11" />
+              <FormTextLeft>
+                GTC는 한 전화번호 명의로 하나의 계정만 생성할 수 있습니다. <br />
+                -를 빼고 입력해주세요. ex) 01012345678
+              </FormTextLeft>
+              <FormInputWithText type="date" onChange={onRegisterChangeValue} name="birth" value={birth} />
+              <FormTextLeft>
+                생년월일을 입력해주세요.
+              </FormTextLeft>
+              <FormSelect type="select" onChange={onRegisterChangeValue} name="gender" value={gender}>
+                <option value="">성별 선택</option>
+                <option value="male">남자</option>
+                <option value="female">여자</option>
+              </FormSelect>
+              <FormInputWithText
+                type="text"
+                onChange={onRegisterChangeValue}
+                name="gtNickname"
+                placeholder="그로우토피아 닉네임"
+              />
+              <FormTextLeft>
+                가장 많이 사용하는 그로우토피아 닉네임을 적어주세요.
+                <br /> <AccentText>거래 중 해당 닉네임으로 인증이 안될시 거래에 문제가 생길 수 있습니다.</AccentText>
+              </FormTextLeft>
+              <FormButton type="button" onClick={registerCheck}>가입</FormButton>
+            </RegisterForm>
+          </Deform>
+        </div>
+      </ModalBodyNoPadding>
+    </Modal>
+  );
+};
 
 const Form = styled.form`
   position: absolute;
@@ -102,85 +164,5 @@ const FormTextLeft = styled(FormText)`
 const AccentText = styled.span`
   color : red !important;
 `;
-
-const Sign = () => {
-  const { UtilStore, UserStore } = useStores();
-  return (
-    <Modal isOpen={UtilStore.signToggle} toggle={UtilStore.toggleSign}>
-      <ModalHeaderBack toggle={UtilStore.toggleSign}><b>회원가입</b></ModalHeaderBack>
-      <ModalBodyNoPadding>
-        <div>
-          <Deform>
-            <RegisterForm>
-              <FormInput type="text" onChange={UserStore.onRegisterChangeValue} value={UserStore.registerData.email} name="email" placeholder="이메일" readOnly />
-              <FormInputWithText type="text" onChange={UserStore.onRegisterChangeValue} name="name" placeholder="이름" />
-              <FormTextLeft>
-                실명을 입력해주세요. <br />
-                <AccentText>(실명 미 입력시 추후 사이트에서 밴 당할 우려가 있습니다.)</AccentText>
-              </FormTextLeft>
-              <FormInputWithText
-                type="text"
-                onChange={UserStore.onRegisterChangeValue}
-                name="nickname"
-                placeholder="닉네임"
-                value={UserStore.registerData.nickname}
-              />
-              <FormTextLeft>
-                GTC에서 보여질 닉네임을 적어주세요.
-              </FormTextLeft>
-              <FormInputWithText type="text" onChange={UserStore.onRegisterChangeValue} name="tel" placeholder="전화번호" maxLength="11" />
-              <FormTextLeft>
-                GTC는 한 전화번호 명의로 하나의 계정만 생성할 수 있습니다. <br />
-                -를 빼고 입력해주세요. ex) 01012345678
-              </FormTextLeft>
-              <FormInputWithText type="date" onChange={UserStore.onRegisterChangeValue} name="birth" value={UserStore.registerData.birth} />
-              <FormTextLeft>
-                생년월일을 입력해주세요.
-              </FormTextLeft>
-              <FormSelect type="select" onChange={UserStore.onRegisterChangeValue} name="gender" value={UserStore.registerData.gender}>
-                <option value="">성별 선택</option>
-                <option value="male">남자</option>
-                <option value="female">여자</option>
-              </FormSelect>
-              <FormInputWithText
-                type="text"
-                onChange={UserStore.onRegisterChangeValue}
-                name="gtNickname"
-                placeholder="그로우토피아 닉네임"
-              />
-              <FormTextLeft>
-                가장 많이 사용하는 그로우토피아 닉네임을 적어주세요.
-                <br /> <AccentText>거래 중 해당 닉네임으로 인증이 안될시 거래에 문제가 생길 수 있습니다.</AccentText>
-              </FormTextLeft>
-              <FormButton type="button" onClick={UserStore.registerCheck}>가입</FormButton>
-            </RegisterForm>
-          </Deform>
-        </div>
-      </ModalBodyNoPadding>
-    </Modal>
-  );
-};
-
-Sign.propTypes = {
-  UtilStore: Proptypes.shape({
-    alertToggle: Proptypes.bool,
-    text: Proptypes.string,
-    signDisplay: Proptypes.bool,
-    toggleSign: Proptypes.func,
-    signToggle: Proptypes.bool,
-    changeSign: Proptypes.func,
-  }),
-  UserStore: Proptypes.shape({
-    onRegisterChangeValue: Proptypes.func,
-    onLoginChangeValue: Proptypes.func,
-    login: Proptypes.func,
-    registerCheck: Proptypes.func,
-  }),
-};
-
-Sign.defaultProps = {
-  UtilStore: null,
-  UserStore: null,
-};
 
 export default observer(Sign);

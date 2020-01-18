@@ -5,29 +5,32 @@ import styled from 'styled-components';
 import { Container, Button } from 'reactstrap';
 import { faClock, faEye, faBellSlash } from '@fortawesome/free-regular-svg-icons';
 import {
-  faCommentDots, faBars, faPlus,
+  faCommentDots, faBars, faPlus, faThumbsUp, faThumbsDown, faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import renderHTML from 'react-render-html';
-import useStores from '../../stores/useStores';
-import CurrentBoard from './CurrentBoard';
-import ReplyForm from './Reply/ReplyForm';
+import useStores from '../../../../stores/useStores';
+import ReplyForm from '../Reply/ReplyForm';
+import BoardContent from '../BoardContent';
+import BoardFooter from '../BoardFooter';
 
 const PostView = ({ match }) => {
-  const { BoardStore } = useStores();
+  const { PostStore, ReplyStore, BoardStore } = useStores();
+  const { getPost, postView, recommendPost } = PostStore;
+  const { setReplyBpId, postReplyList } = ReplyStore;
+  const { currentBoard, setCurrentBoardToId } = BoardStore;
   const {
-    getPost, setReplyBpId, postView,
-  } = BoardStore;
-  const {
-    boardName, categoryName, title, writer, date, views, content,
+    id: postId, boardName, categoryName, title, writer, date, views, content,
+    recommendCount,
   } = postView;
   const { params } = match;
   const { id } = params;
 
   useEffect(() => {
+    setCurrentBoardToId(id);
     getPost(id);
     setReplyBpId(id);
-  }, [getPost, setReplyBpId, id]);
+  }, [getPost, setReplyBpId, id, setCurrentBoardToId]);
 
   return (
     <>
@@ -51,13 +54,26 @@ const PostView = ({ match }) => {
                 <FontAwesomeIcon icon={faClock} /> {date}
               </span>
               <RightSpan>
-                <FontAwesomeIcon icon={faCommentDots} /> 0
+                <FontAwesomeIcon icon={faCommentDots} /> {postReplyList.length}
+                &nbsp;
+                <FontAwesomeIcon icon={faHeart} /> 0
                 &nbsp;
                 <FontAwesomeIcon icon={faEye} /> {views}
               </RightSpan>
             </InnerContainer>
             <ContentWrapper>
               {renderHTML(`${content}`)}
+              <TextCenterDiv>
+                <SmallFontButton outline color="success" onClick={() => recommendPost(postId)}>
+                  <FontAwesomeIcon icon={faThumbsUp} />
+                  &nbsp;추천 {recommendCount}
+                </SmallFontButton>
+                &nbsp;
+                <SmallFontButton outline color="primary">
+                  <FontAwesomeIcon icon={faThumbsDown} />
+                  &nbsp;비추천 0
+                </SmallFontButton>
+              </TextCenterDiv>
             </ContentWrapper>
             <InnerFooterContainer>
               <Button outline color="secondary" size="sm">
@@ -78,9 +94,10 @@ const PostView = ({ match }) => {
             </InnerFooterContainer>
           </PostViewWrapper>
           <ReplyForm match={match} />
+          <BoardContent path={currentBoard} />
+          <BoardFooter path={currentBoard} />
         </ViewWrapper>
       </PostWrapper>
-      <CurrentBoard />
     </>
   );
 };
@@ -96,6 +113,14 @@ PostView.propTypes = {
 PostView.defaultProps = {
   match: null,
 };
+
+const TextCenterDiv = styled.div`
+  text-align : center;
+`;
+
+const SmallFontButton = styled(Button)`
+  font-size : 14px !important;
+`;
 
 const PostWrapper = styled.div`
   background-color : white;
