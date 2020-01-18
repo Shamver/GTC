@@ -16,8 +16,8 @@ import HeaderInProfile from './HeaderInProfile';
 import HeaderFavoriteItem from './HeaderFavoriteItem';
 
 const Index = () => {
-  const { HeaderStore, UserFavoriteStore } = useStores();
-  const { onActive, dropdown } = HeaderStore;
+  const { ComponentHeaderStore, UserFavoriteStore } = useStores();
+  const { onActive, dropdown } = ComponentHeaderStore;
   const { favoriteList, getDataFavorite } = UserFavoriteStore;
 
   useEffect(() => {

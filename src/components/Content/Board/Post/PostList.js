@@ -5,9 +5,9 @@ import useStores from '../../../../stores/useStores';
 import Post from './index';
 
 const PostList = ({ path }) => {
-  const { BoardStore, PostStore } = useStores();
+  const { BoardStore, BoardPostStore } = useStores();
   const { setCurrentBoard } = BoardStore;
-  const { getBoardPostList, boardPostList } = PostStore;
+  const { getBoardPostList, boardPostList } = BoardPostStore;
   useEffect(() => {
     getBoardPostList(path);
     setCurrentBoard(path);

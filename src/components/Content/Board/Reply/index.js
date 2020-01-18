@@ -12,10 +12,10 @@ import ReplyModify from './ReplyModify';
 import ReplyEdit from './ReplyEdit';
 
 const Reply = ({ data }) => {
-  const { UserStore, ReplyStore } = useStores();
+  const { UserStore, BoardReplyStore } = useStores();
   const {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
-  } = ReplyStore;
+  } = BoardReplyStore;
   const { userData } = UserStore;
 
   return (

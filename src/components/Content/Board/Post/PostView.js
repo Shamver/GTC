@@ -15,9 +15,9 @@ import BoardContent from '../BoardContent';
 import BoardFooter from '../BoardFooter';
 
 const PostView = ({ match }) => {
-  const { PostStore, ReplyStore, BoardStore } = useStores();
-  const { getPost, postView, recommendPost } = PostStore;
-  const { setReplyBpId, postReplyList } = ReplyStore;
+  const { BoardPostStore, BoardReplyStore, BoardStore } = useStores();
+  const { getPost, postView, recommendPost } = BoardPostStore;
+  const { setReplyBpId, postReplyList } = BoardReplyStore;
   const { currentBoard, setCurrentBoardToId } = BoardStore;
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,

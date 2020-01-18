@@ -3,8 +3,8 @@ import {
   TabPane, Table,
 } from 'reactstrap';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
-
 import PostLockerMyPostTable from './PostLockerMyPostTable';
 
 const PostLockerMyPost = () => {
@@ -17,7 +17,6 @@ const PostLockerMyPost = () => {
   } = BoardPostStore;
 
   const MyPostTableData = postMineList.map((v) => (PostLockerMyPostTable('myPost', v)));
-
   return (
     <TabPane tabId="myPost">
       <ListTable size="sm" bordered>
@@ -62,4 +61,4 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
-export default PostLockerMyPost;
+export default observer(PostLockerMyPost);

@@ -1,7 +1,7 @@
 const express = require('express');
 
 const router = express.Router();
-const db = require('../../db_con')();
+const db = require('../../dbConnection')();
 
 const conn = db.init();
 

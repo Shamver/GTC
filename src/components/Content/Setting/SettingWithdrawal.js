@@ -10,12 +10,12 @@ import useStores from '../../../stores/useStores';
 
 const SettingWithdrawal = () => {
   const {
-    ComponentSettingStore, UserStore2, UtilAlertStore,
+    ComponentSettingStore, UserStore, UtilAlertStore,
   } = useStores();
 
   const {
     withdrawal,
-  } = UserStore2;
+  } = UserStore;
 
   const {
     onClickWithdrawal, isCheckedWithdrawal,

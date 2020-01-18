@@ -11,9 +11,8 @@ import ReplyEdit from './ReplyEdit';
 const ReplyForm = observer(({ match }) => {
   const { params } = match;
   const { id } = params;
-  const { ReplyStore } = useStores();
-  const { replyEditId, postReplyList } = ReplyStore;
-  const { modifyModeId } = ReplyStore;
+  const { BoardReplyStore } = useStores();
+  const { replyEditId, postReplyList, modifyModeId } = BoardReplyStore;
 
   return (
     <>

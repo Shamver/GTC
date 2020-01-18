@@ -13,9 +13,9 @@ import KakaoSign from './KakaoSign';
 import useStores from '../../../stores/useStores';
 
 const HeaderInProfile = () => {
-  const { UserStore, HeaderStore, UserAlertStore } = useStores();
+  const { UserStore, ComponentHeaderStore, UserAlertStore } = useStores();
   const { userData, logout } = UserStore;
-  const { onActive, dropdown } = HeaderStore;
+  const { onActive, dropdown } = ComponentHeaderStore;
   const { mail, avatar } = dropdown;
   const { alertCount, getDataAlert } = UserAlertStore;
 
@@ -59,7 +59,7 @@ const HeaderInProfile = () => {
                 <DropdownItem30>내 정보 관리</DropdownItem30>
                 <DropdownItem30>{10} 포인트</DropdownItem30>
                 <DropdownItem30 divider />
-                <Link to="/settings">
+                <Link to="/setting">
                   <DropdownItem30>설정</DropdownItem30>
                 </Link>
                 <Link to="/postlocker">

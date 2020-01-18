@@ -50,7 +50,7 @@ class PostStore {
     })
       .then((response) => {
         if (response.data) {
-          this.root.RouteStore.history.push('/free');
+          this.root.UtilRouteStore.history.push('/free');
           toast.success('😊 포스팅이 등록되었어요!');
           this.post = {
             board: '',

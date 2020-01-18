@@ -9,8 +9,8 @@ import styled from 'styled-components';
 import useStores from '../../../../stores/useStores';
 
 const ReplyModify = ({ content }) => {
-  const { ReplyStore } = useStores();
-  const { onChangeReplyValue, modifyReply, modifyMode } = ReplyStore;
+  const { BoardReplyStore } = useStores();
+  const { onChangeReplyValue, modifyReply, modifyMode } = BoardReplyStore;
   return (
     <>
       <CKEditor

@@ -80,7 +80,7 @@ class UserStore {
   };
 
   @action logout = (e, text = '😊 로그아웃 완료!') => {
-    const { history } = this.root.RouteStore;
+    const { history } = this.root.UtilRouteStore;
     axios.post('/api/auth/logout', {})
       .then((response) => {
         if (response.data.type === 'LOGOUT') {
@@ -166,7 +166,7 @@ class UserStore {
 
   @action withdrawal = (() => {
     const { userData, logout } = this.root.UserStore;
-    const { history } = this.root.RouteStore;
+    const { history } = this.root.UtilRouteStore;
 
     if (userData !== undefined) {
       axios.delete('/api/user/withdrawal', {

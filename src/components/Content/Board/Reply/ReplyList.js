@@ -4,8 +4,8 @@ import useStores from '../../../../stores/useStores';
 import Reply from './index';
 
 const ReplyList = ({ bpId }) => {
-  const { ReplyStore } = useStores();
-  const { getReply, postReplyList } = ReplyStore;
+  const { BoardReplyStore } = useStores();
+  const { getReply, postReplyList } = BoardReplyStore;
 
   useEffect(() => {
     getReply(bpId);

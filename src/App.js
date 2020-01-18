@@ -9,8 +9,8 @@ import Category from './components/layout/Category';
 import useStores from './stores/useStores';
 
 const App = ({ history }) => {
-  const { RouteStore, UserStore } = useStores();
-  const { setRoute } = RouteStore;
+  const { UtilRouteStore, UserStore } = useStores();
+  const { setRoute } = UtilRouteStore;
   const { cookieCheck } = UserStore;
 
   setRoute(history);

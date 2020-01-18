@@ -9,10 +9,10 @@ import styled from 'styled-components';
 import useStores from '../../../../stores/useStores';
 
 const ReplyEdit = () => {
-  const { ReplyStore } = useStores();
+  const { BoardReplyStore } = useStores();
   const {
     onChangeReplyValue, reply, setReplyEditId, addReply, replyEditId, modifyModeId,
-  } = ReplyStore;
+  } = BoardReplyStore;
   const { text } = reply;
 
   return (

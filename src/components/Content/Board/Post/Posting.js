@@ -13,11 +13,11 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import useStores from '../../../../stores/useStores';
 
 const Posting = (props) => {
-  const { BoardStore, PostStore } = useStores();
+  const { BoardStore, BoardPostStore } = useStores();
   const { boardList, setBoardOptions } = BoardStore;
   const {
     post, setPostBoard, onChangeValue, addPost,
-  } = PostStore;
+  } = BoardPostStore;
   const { match } = props;
   const { params } = match;
   const { board } = params;
