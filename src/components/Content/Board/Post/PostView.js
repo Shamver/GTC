@@ -18,10 +18,10 @@ const PostView = ({ match }) => {
   const { BoardPostStore, BoardReplyStore, BoardStore } = useStores();
   const { getPost, postView, recommendPost } = BoardPostStore;
   const { setReplyBpId, postReplyList } = BoardReplyStore;
-  const { currentBoard, setCurrentBoardToId } = BoardStore;
+  const { currentBoard, setCurrentBoardToId, moveBoard } = BoardStore;
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
-    recommendCount,
+    recommendCount, notRecommendCount, board
   } = postView;
   const { params } = match;
   const { id } = params;
@@ -56,7 +56,7 @@ const PostView = ({ match }) => {
               <RightSpan>
                 <FontAwesomeIcon icon={faCommentDots} /> {postReplyList.length}
                 &nbsp;
-                <FontAwesomeIcon icon={faHeart} /> 0
+                <FontAwesomeIcon icon={faHeart} /> {recommendCount}
                 &nbsp;
                 <FontAwesomeIcon icon={faEye} /> {views}
               </RightSpan>
@@ -64,19 +64,19 @@ const PostView = ({ match }) => {
             <ContentWrapper>
               {renderHTML(`${content}`)}
               <TextCenterDiv>
-                <SmallFontButton outline color="success" onClick={() => recommendPost(postId)}>
+                <SmallFontButton outline color="success" onClick={() => recommendPost(postId, true)}>
                   <FontAwesomeIcon icon={faThumbsUp} />
                   &nbsp;추천 {recommendCount}
                 </SmallFontButton>
                 &nbsp;
-                <SmallFontButton outline color="primary">
+                <SmallFontButton outline color="primary" onClick={() => recommendPost(postId, false)}>
                   <FontAwesomeIcon icon={faThumbsDown} />
-                  &nbsp;비추천 0
+                  &nbsp;비추천 {notRecommendCount}
                 </SmallFontButton>
               </TextCenterDiv>
             </ContentWrapper>
             <InnerFooterContainer>
-              <Button outline color="secondary" size="sm">
+              <Button outline color="secondary" size="sm" onClick={() => moveBoard(board)}>
                 <FontAwesomeIcon icon={faBars} />
                 &nbsp;목록
               </Button>

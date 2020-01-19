@@ -46,6 +46,10 @@ const ManginessTable = styled(Table)`
   & td:last-child {
     border-right : none;
   }
+  
+  & tr:hover {
+    background-color : #fafafa !important;
+  }
 `;
 
 const InnerTableHeader = styled(Table)`

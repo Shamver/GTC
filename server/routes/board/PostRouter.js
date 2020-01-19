@@ -14,6 +14,8 @@ router.get('/', (req, res) => {
         , IF(BC_ID = 'FREE','자유','그외') as categoryName
         , P.DEPTH AS depth
         , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
+        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
+        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id) as replyCount
     FROM GTC_BOARD_POST P 
     WHERE B_ID = '${data.board.replace('/', '')}'
     ORDER BY P.DATE DESC`;
@@ -66,7 +68,8 @@ router.post('/recommend', (req, res) => {
       query = `INSERT INTO GTC_BOARD_POST_RECOMMEND
         VALUES (
           ${data.id},
-          ${data.uId}
+          ${data.uId},
+          '${data.type}'
         )`;
 
       conn.query(query, (err2) => {
@@ -105,7 +108,8 @@ router.get('/:id', (req, res) => {
         , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND )
         , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
         , P.DEPTH AS depth
-        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id) as recommendCount
+        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
+        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R02') as notRecommendCount
         , CASE WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
                     WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE,DATE, SYSDATE()),'분 전')
                     WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR,DATE, SYSDATE()),'시간 전')

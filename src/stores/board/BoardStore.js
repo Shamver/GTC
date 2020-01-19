@@ -65,7 +65,11 @@ class BoardStore {
       .catch((response) => { console.log(response); });
   };
 
-  @action getBoardName = (path) => this.boardKinds[path]
+  @action getBoardName = (path) => this.boardKinds[path];
+
+  @action moveBoard = (path) => {
+    this.root.UtilRouteStore.history.push('/'.concat(path.toLowerCase()));
+  };
 }
 
 export default BoardStore;
