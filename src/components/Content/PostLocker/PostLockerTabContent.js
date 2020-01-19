@@ -9,13 +9,8 @@ import PostLockerMyReply from './PostLockerMyReply';
 import PostLockerFavorite from './PostLockerFavorite';
 
 const PostLockerTabContent = () => {
-  const {
-    ComponentPostLockerStore,
-  } = useStores();
-
-  const {
-    activeTab,
-  } = ComponentPostLockerStore;
+  const { ComponentPostLockerStore } = useStores();
+  const { activeTab } = ComponentPostLockerStore;
 
   return (
     <TabContent activeTab={activeTab}>

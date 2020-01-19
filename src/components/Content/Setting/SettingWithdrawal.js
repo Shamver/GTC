@@ -12,18 +12,9 @@ const SettingWithdrawal = () => {
   const {
     ComponentSettingStore, UserStore, UtilAlertStore,
   } = useStores();
-
-  const {
-    withdrawal,
-  } = UserStore;
-
-  const {
-    onClickWithdrawal, isCheckedWithdrawal,
-  } = ComponentSettingStore;
-
-  const {
-    toggleConfirmAlert,
-  } = UtilAlertStore;
+  const { withdrawal } = UserStore;
+  const { onClickWithdrawal, isCheckedWithdrawal } = ComponentSettingStore;
+  const { toggleConfirmAlert } = UtilAlertStore;
 
   return (
     <TabPane tabId="withdrawal">

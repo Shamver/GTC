@@ -11,13 +11,8 @@ import SettingWithdrawal from './SettingWithdrawal';
 import Loading from '../../util/Loading';
 
 const SettingTabContent = () => {
-  const {
-    ComponentSettingStore, UtilLoadingStore,
-  } = useStores();
-
-  const {
-    activeTab,
-  } = ComponentSettingStore;
+  const { ComponentSettingStore, UtilLoadingStore } = useStores();
+  const { activeTab } = ComponentSettingStore;
   const { loading } = UtilLoadingStore;
 
   console.log(loading);

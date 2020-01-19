@@ -8,13 +8,8 @@ import useStores from '../../../stores/useStores';
 import PostLockerFavoriteTable from './PostLockerFavoriteTable';
 
 const PostLockerFavorite = () => {
-  const {
-    UserFavoriteStore,
-  } = useStores();
-
-  const {
-    favoriteList, onDeleteFavorite,
-  } = UserFavoriteStore;
+  const { UserFavoriteStore } = useStores();
+  const { favoriteList, onDeleteFavorite } = UserFavoriteStore;
 
   const FavoriteTableData = favoriteList.map((v) => (PostLockerFavoriteTable('favorite', v, onDeleteFavorite)));
 

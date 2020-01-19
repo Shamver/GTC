@@ -14,18 +14,9 @@ import useStores from '../../../stores/useStores';
 
 const NewAlert = () => {
   const { UserAlertStore, UtilLoadingStore, UtilStore } = useStores();
-
-  const {
-    onDeleteAlert, onClickAlert, alertList,
-  } = UserAlertStore;
-
-  const {
-    loading, doLoading,
-  } = UtilLoadingStore;
-
-  const {
-    loginCheck,
-  } = UtilStore;
+  const { onDeleteAlert, onClickAlert, alertList } = UserAlertStore;
+  const { loading, doLoading } = UtilLoadingStore;
+  const { loginCheck } = UtilStore;
 
   useEffect(() => {
     if (loginCheck()) {

@@ -9,13 +9,8 @@ import useStores from '../../../stores/useStores';
 import PostLockerMyReplyTable from './PostLockerMyReplyTable';
 
 const PostLockerMyReply = () => {
-  const {
-    BoardReplyStore,
-  } = useStores();
-
-  const {
-    replyMineList,
-  } = BoardReplyStore;
+  const { BoardReplyStore } = useStores();
+  const { replyMineList } = BoardReplyStore;
 
   const MyReplyTableData = replyMineList.map((v) => (PostLockerMyReplyTable('myReply', v)));
 

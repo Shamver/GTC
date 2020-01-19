@@ -8,15 +8,11 @@ import useStores from '../../../stores/useStores';
 import PostLockerMyPostTable from './PostLockerMyPostTable';
 
 const PostLockerMyPost = () => {
-  const {
-    BoardPostStore,
-  } = useStores();
-
-  const {
-    postMineList,
-  } = BoardPostStore;
+  const { BoardPostStore } = useStores();
+  const { postMineList } = BoardPostStore;
 
   const MyPostTableData = postMineList.map((v) => (PostLockerMyPostTable('myPost', v)));
+
   return (
     <TabPane tabId="myPost">
       <ListTable size="sm" bordered>

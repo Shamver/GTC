@@ -7,17 +7,9 @@ import { Button } from 'reactstrap';
 import useStores from '../../../stores/useStores';
 
 const NewAlertHeader = () => {
-  const {
-    UtilAlertStore, UserAlertStore,
-  } = useStores();
-
-  const {
-    toggleConfirmAlert,
-  } = UtilAlertStore;
-
-  const {
-    onReadAlertAll,
-  } = UserAlertStore;
+  const { UtilAlertStore, UserAlertStore } = useStores();
+  const { toggleConfirmAlert } = UtilAlertStore;
+  const { onReadAlertAll } = UserAlertStore;
 
   return (
     <NotifyHeader>

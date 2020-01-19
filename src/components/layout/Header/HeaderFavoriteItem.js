@@ -13,9 +13,7 @@ const DropdownItem30 = styled(DropdownItem)`
 `;
 
 const HeaderFavoriteItem = (data) => {
-  const {
-    postId, postTitle,
-  } = data;
+  const { postId, postTitle } = data;
 
   return (
     <Link to={`/post/${postId}`} key={`HeaderFavoriteItem${postId}`}>
