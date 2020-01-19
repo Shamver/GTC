@@ -10,38 +10,35 @@ import useStores from '../../../stores/useStores';
 import PostLockerNav from './PostLockerNav';
 import PostLockerTabContent from './PostLockerTabContent';
 
+import Loading from '../../util/Loading';
+
 const PostLocker = () => {
   const {
     BoardPostStore, BoardReplyStore, UserFavoriteStore, ComponentPostLockerStore, UtilStore,
+    UtilLoadingStore,
   } = useStores();
 
-  const {
-    getDataPostMine,
-  } = BoardPostStore;
-
-  const {
-    getDataReplyMine,
-  } = BoardReplyStore;
-
-  const {
-    getDataFavorite,
-  } = UserFavoriteStore;
-
-  const {
-    activeTab,
-  } = ComponentPostLockerStore;
-
-  const {
-    loginCheck,
-  } = UtilStore;
+  const { getDataPostMine } = BoardPostStore;
+  const { getDataReplyMine } = BoardReplyStore;
+  const { getDataFavorite } = UserFavoriteStore;
+  const { activeTab } = ComponentPostLockerStore;
+  const { loginCheck } = UtilStore;
+  const { loading, doLoading } = UtilLoadingStore;
 
   useEffect(() => {
     if (loginCheck()) {
+      doLoading();
       getDataPostMine();
       getDataReplyMine();
       getDataFavorite();
     }
-  }, [loginCheck, getDataReplyMine, getDataPostMine, getDataFavorite, activeTab]);
+  }, [loginCheck, getDataReplyMine, getDataPostMine, getDataFavorite, activeTab, doLoading]);
+
+  if (loading) {
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <MainContainer>

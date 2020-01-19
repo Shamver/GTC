@@ -63,7 +63,7 @@ const Index = () => {
                   <FontAwesomeIcon icon={faStar} /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
-                  {userData ? (FavoriteDatas.length === 0 ? '즐겨찾기한 게시물이 없습니다.' : FavoriteDatas) : '로그인 후 이용 가능합니다.' }
+                  {userData ? FavoriteDatas : '로그인 후 이용 가능합니다.'}
                 </DropdownMenu>
               </DropdownIn>
               <DropdownIn isOpen={dropdown.smile} toggle={onActive}>

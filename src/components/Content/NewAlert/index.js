@@ -20,7 +20,7 @@ const NewAlert = () => {
   } = UserAlertStore;
 
   const {
-    loading, setLoading,
+    loading, doLoading,
   } = UtilLoadingStore;
 
   const {
@@ -28,12 +28,10 @@ const NewAlert = () => {
   } = UtilStore;
 
   useEffect(() => {
-    loginCheck();
-
-    return () => {
-      setLoading(true);
-    };
-  }, [loginCheck, setLoading]);
+    if (loginCheck()) {
+      doLoading();
+    }
+  }, [loginCheck, doLoading]);
 
   const Alerts = alertList.map((v) => (NewAlertData(v, onClickAlert, onDeleteAlert)));
 

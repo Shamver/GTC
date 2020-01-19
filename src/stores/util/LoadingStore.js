@@ -10,6 +10,13 @@ class LoadingStore {
   @action setLoading = (v) => {
     this.loading = v;
   };
+
+  @action doLoading = () => {
+    this.loading = true;
+    setTimeout(() => {
+      this.loading = false;
+    }, 200);
+  }
 }
 
 export default LoadingStore;
