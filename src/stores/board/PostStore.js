@@ -10,7 +10,7 @@ class PostStore {
     text: '',
     depth: '',
     secret: 'N',
-    replyAllow: 'N',
+    replyAllow: 'Y',
     secretReplyAllow: 'N',
   };
 

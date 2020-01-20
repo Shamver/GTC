@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { faShare, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faShare, faThumbsUp, faLock } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Proptypes from 'prop-types';
 import renderHTML from 'react-render-html';
@@ -17,6 +17,10 @@ const Reply = ({ data }) => {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
   } = BoardReplyStore;
   const { userData } = UserStore;
+
+  const ReplyContentText = data.secretYN === 'Y' && data.idPostWriter === data.idWriter
+    ? renderHTML(`${data.content}`)
+    : '';
 
   return (
     <ReplyLayout>
@@ -56,9 +60,15 @@ const Reply = ({ data }) => {
           <SpanLikeLink>{data.replyWriterName && data.replyWriterName !== 'DELETED' ? `@${data.replyWriterName}` : ''}</SpanLikeLink>
           <Writer>{data.replyWriterName && data.replyWriterName === 'DELETED' ? '[삭제된 댓글의 답글]' : ''}</Writer>
 
+          {/* 수정의 경우의 수 */}
+          { data.secretYN === 'Y'
+            ? (<SecretReply><FontAwesomeIcon icon={faLock} /> 비밀 댓글</SecretReply>)
+            : '' }
           { modifyModeId === data.id
             ? (<ReplyModify content={data.content} />)
-            : renderHTML(`${data.content}`)}
+            : ReplyContentText }
+
+          {/* 대댓글의 경우의 수 */}
           { replyEditId === data.id
             ? (<ReplyEdit />)
             : ''}
@@ -80,6 +90,7 @@ Reply.propTypes = {
     date: Proptypes.string,
     replyWriterName: Proptypes.string,
     updateDate: Proptypes.string,
+    secretYN: Proptypes.string,
   }).isRequired,
 };
 
@@ -137,6 +148,10 @@ const SpanLikeLink = styled.span`
 const Writer = styled.span`
   font-size: 12px;
   color : #aaa;
+`;
+
+const SecretReply = styled(Writer)`
+  color : #e89717;
 `;
 
 export default observer(Reply);

@@ -105,7 +105,6 @@ router.get('/:id', (req, res) => {
         , BC_ID AS category
         , if(BC_ID = 'FREE','자유','그외') as categoryName
         , P.TITLE AS title
-        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND )
         , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
         , P.DEPTH AS depth
         , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount

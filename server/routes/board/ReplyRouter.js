@@ -72,6 +72,7 @@ router.get('/', (req, res) => {
     ) AS replyWriterName
     , A.CONTENT as content
     , A.DEPTH as depth
+    , A.SECRET_YN as secretYN
     , (SELECT COUNT(*) FROM GTC_BOARD_REPLY_LIKE WHERE ID = A.ID) AS likeCount
     FROM GTC_BOARD_REPLY A, GTC_BOARD_POST C
   WHERE A.BP_ID = '${data.bpId}'

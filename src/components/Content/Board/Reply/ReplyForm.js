@@ -8,7 +8,7 @@ import useStores from '../../../../stores/useStores';
 import ReplyList from './ReplyList';
 import ReplyEdit from './ReplyEdit';
 
-const ReplyForm = observer(({ match }) => {
+const ReplyForm = observer(({ match, replyAllow }) => {
   const { params } = match;
   const { id } = params;
   const { BoardReplyStore } = useStores();
@@ -24,7 +24,7 @@ const ReplyForm = observer(({ match }) => {
       <ReplyListWrapper>
         <ReplyList bpId={id} />
       </ReplyListWrapper>
-      { replyEditId === 0 && modifyModeId === 0
+      { replyEditId === 0 && modifyModeId === 0 && replyAllow === 'Y'
         ? (<ReplyEdit />)
         : ''}
     </>
