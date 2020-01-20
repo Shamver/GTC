@@ -82,7 +82,7 @@ const DeleteA = styled.a`
 `;
 
 const StrongSpan = styled.span`
-  font-weight: 750;
+  font-weight: 700;
 `;
 
 export default NewAlertData;

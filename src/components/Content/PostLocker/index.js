@@ -21,7 +21,7 @@ const PostLocker = () => {
   const { getDataFavorite } = UserFavoriteStore;
   const { activeTab } = ComponentPostLockerStore;
   const { loginCheck } = UtilStore;
-  const { doLoading } = UtilLoadingStore;
+  const { doLoading, setLoading } = UtilLoadingStore;
 
   useEffect(() => {
     if (loginCheck()) {
@@ -30,7 +30,14 @@ const PostLocker = () => {
       getDataReplyMine();
       getDataFavorite();
     }
-  }, [loginCheck, getDataReplyMine, getDataPostMine, getDataFavorite, activeTab, doLoading]);
+
+    return () => {
+      setLoading(true);
+    };
+  }, [
+    loginCheck, getDataReplyMine, getDataPostMine, getDataFavorite, activeTab,
+    doLoading, setLoading,
+  ]);
 
   return (
     <MainContainer>

@@ -12,14 +12,18 @@ import useStores from '../../../stores/useStores';
 
 const NewAlert = () => {
   const { UtilLoadingStore, UtilStore } = useStores();
-  const { doLoading } = UtilLoadingStore;
+  const { doLoading, setLoading } = UtilLoadingStore;
   const { loginCheck } = UtilStore;
 
   useEffect(() => {
     if (loginCheck()) {
       doLoading();
     }
-  }, [loginCheck, doLoading]);
+
+    return () => {
+      setLoading(true);
+    };
+  }, [loginCheck, doLoading, setLoading]);
 
   return (
     <MainContainer>

@@ -16,7 +16,7 @@ class LoadingStore {
     setTimeout(() => {
       this.loading = false;
     }, 200);
-  }
+  };
 }
 
 export default LoadingStore;

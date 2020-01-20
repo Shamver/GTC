@@ -1,8 +1,7 @@
 import React from 'react';
-
 import styled from 'styled-components';
-
 import { Button } from 'reactstrap';
+import { observer } from 'mobx-react';
 
 import useStores from '../../../stores/useStores';
 
@@ -65,4 +64,4 @@ const ReadAllButton = styled(Button)`
   }
 `;
 
-export default NewAlertHeader;
+export default observer(NewAlertHeader);

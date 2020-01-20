@@ -1,18 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   TabPane, Table,
 } from 'reactstrap';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 
 import useStores from '../../../stores/useStores';
-
 import PostLockerMyReplyTable from './PostLockerMyReplyTable';
 
 const PostLockerMyReply = () => {
-  const { BoardReplyStore } = useStores();
+  const { BoardReplyStore, UtilLoadingStore } = useStores();
   const { replyMineList } = BoardReplyStore;
+  const { setLoading } = UtilLoadingStore;
 
   const MyReplyTableData = replyMineList.map((v) => (PostLockerMyReplyTable('myReply', v)));
+
+  useEffect(() => () => {
+    setLoading(true);
+  }, [setLoading]);
 
   return (
     <TabPane tabId="myReply">
@@ -57,4 +62,4 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
-export default PostLockerMyReply;
+export default observer(PostLockerMyReply);

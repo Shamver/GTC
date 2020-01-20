@@ -1,17 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   TabPane, Table,
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
+
 import useStores from '../../../stores/useStores';
 import PostLockerMyPostTable from './PostLockerMyPostTable';
 
 const PostLockerMyPost = () => {
-  const { BoardPostStore } = useStores();
+  const { BoardPostStore, UtilLoadingStore } = useStores();
   const { postMineList } = BoardPostStore;
+  const { setLoading } = UtilLoadingStore;
 
   const MyPostTableData = postMineList.map((v) => (PostLockerMyPostTable('myPost', v)));
+
+  useEffect(() => () => {
+    setLoading(true);
+  }, [setLoading]);
 
   return (
     <TabPane tabId="myPost">
