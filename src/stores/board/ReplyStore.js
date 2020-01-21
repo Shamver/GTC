@@ -6,6 +6,7 @@ class ReplyStore {
   @observable reply = {
     text: '',
     bpId: '',
+    secretYN: 'N',
   };
 
   @observable replyEditId = 0;
@@ -56,13 +57,13 @@ class ReplyStore {
     if (!this.replyValidationCheck()) {
       return false;
     }
-
     axios.post('/api/board/reply', {
       text: this.reply.text,
       writer: this.root.UserStore.userData.id,
       bpId: this.reply.bpId,
       replyId: this.replyEditId === 0 ? null : this.replyEditId,
       depth: this.replyEditId === 0 ? 1 : 2,
+      secretYN: this.reply.secretYN,
     })
       .then((response) => {
         if (response.data) {
@@ -70,6 +71,7 @@ class ReplyStore {
           this.reply = {
             text: '',
             bpId: this.reply.bpId,
+            secretYN: 'N',
           };
           this.getReply(this.reply.bpId);
           this.setReplyEditId(0);
@@ -146,11 +148,23 @@ class ReplyStore {
       .catch((response) => { console.log(response); });
   };
 
-  @action onChangeReplyValue = (text) => {
-    this.reply = {
-      ...this.reply,
-      text,
-    };
+  @action onChangeValue = (event) => {
+    if (typeof event === 'string') {
+      this.reply = {
+        ...this.reply,
+        text: event,
+      };
+    } else if (this.reply[event.target.name] === 'Y') {
+      this.reply = {
+        ...this.reply,
+        [event.target.name]: 'N',
+      };
+    } else {
+      this.reply = {
+        ...this.reply,
+        [event.target.name]: event.target.value,
+      };
+    }
   };
 
   replyValidationCheck = () => {

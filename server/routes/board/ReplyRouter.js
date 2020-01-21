@@ -17,7 +17,8 @@ router.post('/', (req, res) => {
       DATE,
       UPDATE_DATE,
       CONTENT,
-      DEPTH
+      DEPTH,
+      SECRET_YN
     ) VALUES (
       (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp),
       ${data.bpId},
@@ -27,7 +28,8 @@ router.post('/', (req, res) => {
       sysdate(),
       null, 
       '${data.text}',
-      ${data.depth}
+      ${data.depth},
+      '${data.secretYN}'
     );
   `;
 

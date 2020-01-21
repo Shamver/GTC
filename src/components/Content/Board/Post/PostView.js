@@ -21,7 +21,7 @@ const PostView = ({ match }) => {
   const { currentBoard, setCurrentBoardToId, moveBoard } = BoardStore;
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
-    recommendCount, notRecommendCount, board, replyAllow,
+    recommendCount, notRecommendCount, board, replyAllow, secretReplyAllow,
   } = postView;
   const { params } = match;
   const { id } = params;
@@ -93,7 +93,7 @@ const PostView = ({ match }) => {
               </RightSpan>
             </InnerFooterContainer>
           </PostViewWrapper>
-          <ReplyForm match={match} replyAllow={replyAllow} />
+          <ReplyForm match={match} replyAllow={replyAllow} secretReplyAllow={secretReplyAllow} />
           <BoardContent path={currentBoard} />
           <BoardFooter path={currentBoard} />
         </ViewWrapper>

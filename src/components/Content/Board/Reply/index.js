@@ -11,14 +11,14 @@ import useStores from '../../../../stores/useStores';
 import ReplyModify from './ReplyModify';
 import ReplyEdit from './ReplyEdit';
 
-const Reply = ({ data }) => {
+const Reply = ({ data, secretReplyAllow }) => {
   const { UserStore, BoardReplyStore } = useStores();
   const {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
   } = BoardReplyStore;
   const { userData } = UserStore;
 
-  const ReplyContentText = data.secretYN === 'Y' && data.idPostWriter === data.idWriter
+  const ReplyContentText = data.secretYN === 'N' || (data.secretYN === 'Y' && data.idPostWriter === data.idWriter)
     ? renderHTML(`${data.content}`)
     : '';
 
@@ -57,20 +57,21 @@ const Reply = ({ data }) => {
           </span>
         </ReplyInHeader>
         <ReplyInContent>
+          {/* 수정의 경우의 수 */}
+          { data.secretYN === 'Y'
+            ? (<><SecretReply><FontAwesomeIcon icon={faLock} /> 비밀 댓글</SecretReply> <br /></>)
+            : '' }
+
           <SpanLikeLink>{data.replyWriterName && data.replyWriterName !== 'DELETED' ? `@${data.replyWriterName}` : ''}</SpanLikeLink>
           <Writer>{data.replyWriterName && data.replyWriterName === 'DELETED' ? '[삭제된 댓글의 답글]' : ''}</Writer>
 
-          {/* 수정의 경우의 수 */}
-          { data.secretYN === 'Y'
-            ? (<SecretReply><FontAwesomeIcon icon={faLock} /> 비밀 댓글</SecretReply>)
-            : '' }
           { modifyModeId === data.id
             ? (<ReplyModify content={data.content} />)
             : ReplyContentText }
 
           {/* 대댓글의 경우의 수 */}
           { replyEditId === data.id
-            ? (<ReplyEdit />)
+            ? (<ReplyEdit secretReplyAllow={secretReplyAllow} />)
             : ''}
         </ReplyInContent>
       </ReplyWrapper>
@@ -92,6 +93,7 @@ Reply.propTypes = {
     updateDate: Proptypes.string,
     secretYN: Proptypes.string,
   }).isRequired,
+  secretReplyAllow: Proptypes.string.isRequired,
 };
 
 
