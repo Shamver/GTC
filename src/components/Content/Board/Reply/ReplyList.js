@@ -13,7 +13,7 @@ const ReplyList = ({ bpId }) => {
 
 
   return postReplyList.map((data) => (
-    <Reply key={data.id} data={data} />
+    <Reply id={`reply${data.id}`} key={data.id} data={data} />
   ));
 };
 
