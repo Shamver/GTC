@@ -21,22 +21,18 @@ const PostLocker = () => {
   const { getDataFavorite } = UserFavoriteStore;
   const { activeTab } = ComponentPostLockerStore;
   const { loginCheck } = UtilStore;
-  const { doLoading, setLoading } = UtilLoadingStore;
+  const { doLoading } = UtilLoadingStore;
+
+  doLoading();
 
   useEffect(() => {
     if (loginCheck()) {
-      doLoading();
       getDataPostMine();
       getDataReplyMine();
       getDataFavorite();
     }
-
-    return () => {
-      setLoading(true);
-    };
   }, [
     loginCheck, getDataReplyMine, getDataPostMine, getDataFavorite, activeTab,
-    doLoading, setLoading,
   ]);
 
   return (

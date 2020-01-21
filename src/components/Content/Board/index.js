@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
@@ -14,9 +14,7 @@ const Board = ({ path }) => {
 
   const { doLoading } = UtilLoadingStore;
 
-  useEffect(() => {
-    doLoading();
-  }, [doLoading]);
+  doLoading();
 
   return (
     <>

@@ -18,18 +18,15 @@ const Setting = () => {
   const { getDataIgnore } = UserIgnoreStore;
   const { activeTab } = ComponentSettingStore;
   const { loginCheck } = UtilStore;
-  const { doLoading, setLoading } = UtilLoadingStore;
+  const { doLoading } = UtilLoadingStore;
+
+  doLoading();
 
   useEffect(() => {
     if (loginCheck()) {
-      doLoading();
       getDataIgnore();
     }
-
-    return () => {
-      setLoading(true);
-    };
-  }, [loginCheck, getDataIgnore, activeTab, doLoading, setLoading]);
+  }, [loginCheck, getDataIgnore, activeTab]);
 
   return (
     <MainContainer>

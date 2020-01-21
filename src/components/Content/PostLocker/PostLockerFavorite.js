@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   TabPane, Table,
 } from 'reactstrap';
@@ -9,15 +9,10 @@ import useStores from '../../../stores/useStores';
 import PostLockerFavoriteTable from './PostLockerFavoriteTable';
 
 const PostLockerFavorite = () => {
-  const { UserFavoriteStore, UtilLoadingStore } = useStores();
+  const { UserFavoriteStore } = useStores();
   const { favoriteList, onDeleteFavorite } = UserFavoriteStore;
-  const { setLoading } = UtilLoadingStore;
 
   const FavoriteTableData = favoriteList.map((v) => (PostLockerFavoriteTable('favorite', v, onDeleteFavorite)));
-
-  useEffect(() => () => {
-    setLoading(true);
-  }, [setLoading]);
 
   return (
     <TabPane tabId="favorite">

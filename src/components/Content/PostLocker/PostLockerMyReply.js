@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   TabPane, Table,
 } from 'reactstrap';
@@ -9,15 +9,10 @@ import useStores from '../../../stores/useStores';
 import PostLockerMyReplyTable from './PostLockerMyReplyTable';
 
 const PostLockerMyReply = () => {
-  const { BoardReplyStore, UtilLoadingStore } = useStores();
+  const { BoardReplyStore } = useStores();
   const { replyMineList } = BoardReplyStore;
-  const { setLoading } = UtilLoadingStore;
 
   const MyReplyTableData = replyMineList.map((v) => (PostLockerMyReplyTable('myReply', v)));
-
-  useEffect(() => () => {
-    setLoading(true);
-  }, [setLoading]);
 
   return (
     <TabPane tabId="myReply">
