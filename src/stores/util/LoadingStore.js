@@ -11,7 +11,7 @@ class LoadingStore {
     this.loading = true;
     setTimeout(() => {
       this.loading = false;
-    }, 300);
+    }, 250);
   };
 }
 
