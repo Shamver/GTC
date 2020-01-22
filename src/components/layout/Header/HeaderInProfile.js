@@ -6,7 +6,7 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import React, {useEffect} from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import avatarImg from '../../../resources/images/avatar.png';
 import KakaoSign from './KakaoSign';
@@ -58,7 +58,9 @@ const HeaderInProfile = () => {
                 <Link to="/newalert">
                   <DropdownItem30>새로운 알림 ({alertCount} 개)</DropdownItem30>
                 </Link>
-                <DropdownItem30>내 정보 관리</DropdownItem30>
+                <Link to="/myaccount">
+                  <DropdownItem30>내 정보 관리</DropdownItem30>
+                </Link>
                 <DropdownItem30>{10} 포인트</DropdownItem30>
                 <DropdownItem30 divider />
                 <Link to="/setting">

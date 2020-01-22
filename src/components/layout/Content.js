@@ -9,7 +9,6 @@ import Sign from '../util/Sign';
 import ConfirmAlert from '../util/ConfirmAlert';
 import Contents from '../Content';
 
-
 const BorderedDiv = styled.div`
   border-bottom: 2px solid #ebeae8;
   border-right: 2px solid #ebeae8;
@@ -32,6 +31,7 @@ const Content = () => (
       <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
       <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
       <Route exact path="/setting" render={() => <Contents.Setting />} />
+      <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
 
       <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
     </Switch>
