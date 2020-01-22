@@ -17,7 +17,7 @@ import BoardFooter from '../BoardFooter';
 const PostView = ({ match }) => {
   const { BoardPostStore, BoardReplyStore, BoardStore } = useStores();
   const { getPost, postView, recommendPost } = BoardPostStore;
-  const { setReplyBpId, postReplyList } = BoardReplyStore;
+  const { setReplyBpId, postReplyList, setReplyOption } = BoardReplyStore;
   const { currentBoard, setCurrentBoardToId, moveBoard } = BoardStore;
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
@@ -30,7 +30,10 @@ const PostView = ({ match }) => {
     setCurrentBoardToId(id);
     getPost(id);
     setReplyBpId(id);
-  }, [getPost, setReplyBpId, id, setCurrentBoardToId]);
+    setReplyOption(replyAllow, secretReplyAllow);
+  }, [
+    getPost, setReplyBpId, id, setCurrentBoardToId, replyAllow, secretReplyAllow, setReplyOption,
+  ]);
 
   return (
     <>
@@ -93,7 +96,7 @@ const PostView = ({ match }) => {
               </RightSpan>
             </InnerFooterContainer>
           </PostViewWrapper>
-          <ReplyForm match={match} replyAllow={replyAllow} secretReplyAllow={secretReplyAllow} />
+          <ReplyForm match={match} />
           <BoardContent path={currentBoard} />
           <BoardFooter path={currentBoard} />
         </ViewWrapper>

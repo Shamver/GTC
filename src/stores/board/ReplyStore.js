@@ -17,6 +17,11 @@ class ReplyStore {
 
   @observable replyMineList = [];
 
+  @observable CurrentReplyOption = {
+    replyAllow: '',
+    secretReplyAllow: '',
+  };
+
   constructor(root) {
     this.root = root;
   }
@@ -51,6 +56,13 @@ class ReplyStore {
   @action modifyMode = (id) => {
     this.modifyModeId = id;
     this.replyEditId = 0;
+  };
+
+  @action setReplyOption = (replyAllow, secretReplyAllow) => {
+    this.CurrentReplyOption = {
+      replyAllow,
+      secretReplyAllow,
+    };
   };
 
   @action addReply = () => {

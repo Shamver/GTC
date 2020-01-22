@@ -11,7 +11,7 @@ import useStores from '../../../../stores/useStores';
 import ReplyModify from './ReplyModify';
 import ReplyEdit from './ReplyEdit';
 
-const Reply = ({ data, secretReplyAllow }) => {
+const Reply = ({ data }) => {
   const { UserStore, BoardReplyStore } = useStores();
   const {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
@@ -71,7 +71,7 @@ const Reply = ({ data, secretReplyAllow }) => {
 
           {/* 대댓글의 경우의 수 */}
           { replyEditId === data.id
-            ? (<ReplyEdit secretReplyAllow={secretReplyAllow} />)
+            ? (<ReplyEdit />)
             : ''}
         </ReplyInContent>
       </ReplyWrapper>

@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
         , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
         , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id) as replyCount
     FROM GTC_BOARD_POST P 
-    WHERE B_ID = '${data.board.replace('/', '')}'
+    WHERE B_ID = '${data.board}'
     ORDER BY P.DATE DESC`;
 
   conn.query(query, (err, rows) => {

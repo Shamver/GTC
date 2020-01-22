@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import useStores from '../../../../stores/useStores';
 import Reply from './index';
 
-const ReplyList = ({ bpId, secretReplyAllow}) => {
+const ReplyList = ({ bpId }) => {
   const { BoardReplyStore } = useStores();
   const { getReply, postReplyList } = BoardReplyStore;
 
@@ -13,7 +13,7 @@ const ReplyList = ({ bpId, secretReplyAllow}) => {
 
 
   return postReplyList.map((data) => (
-    <Reply key={data.id} data={data} secretReplyAllow={secretReplyAllow} />
+    <Reply key={data.id} data={data} />
   ));
 };
 

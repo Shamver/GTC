@@ -4,12 +4,12 @@ import axios from 'axios';
 
 class BoardStore {
   boardKinds = {
-    '/notice': '공지사항',
-    '/free': '자유 게시판',
-    '/trade': '아이템 거래',
-    '/cash': '월드락 거래',
-    '/crime': '신고게시판',
-    '/qna': '질문 & 답변',
+    notice: '공지사항',
+    free: '자유 게시판',
+    trade: '아이템 거래',
+    cash: '월드락 거래',
+    crime: '신고게시판',
+    qna: '질문 & 답변',
   };
 
   boards = [{
@@ -68,7 +68,7 @@ class BoardStore {
   @action getBoardName = (path) => this.boardKinds[path];
 
   @action moveBoard = (path) => {
-    this.root.UtilRouteStore.history.push('/'.concat(path.toLowerCase()));
+    this.root.UtilRouteStore.history.setCurrentBoardToId('/'.concat(path.toLowerCase()));
   };
 }
 

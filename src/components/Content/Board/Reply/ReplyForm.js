@@ -8,11 +8,14 @@ import useStores from '../../../../stores/useStores';
 import ReplyList from './ReplyList';
 import ReplyEdit from './ReplyEdit';
 
-const ReplyForm = observer(({ match, replyAllow, secretReplyAllow }) => {
+const ReplyForm = observer(({ match }) => {
   const { params } = match;
   const { id } = params;
   const { BoardReplyStore } = useStores();
-  const { replyEditId, postReplyList, modifyModeId } = BoardReplyStore;
+  const {
+    replyEditId, postReplyList, modifyModeId, CurrentReplyOption,
+  } = BoardReplyStore;
+  const { replyAllow } = CurrentReplyOption;
 
   return (
     <>
@@ -22,10 +25,10 @@ const ReplyForm = observer(({ match, replyAllow, secretReplyAllow }) => {
         </ReplyH5>
       </ReplyHeader>
       <ReplyListWrapper>
-        <ReplyList bpId={id} secretReplyAllow={secretReplyAllow} />
+        <ReplyList bpId={id} />
       </ReplyListWrapper>
       { replyEditId === 0 && modifyModeId === 0 && replyAllow === 'Y'
-        ? (<ReplyEdit secretReplyAllow={secretReplyAllow} />)
+        ? (<ReplyEdit />)
         : ''}
     </>
   );

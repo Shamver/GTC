@@ -16,12 +16,12 @@ class PostStore {
 
   @observable boardPostList = {
     '': [],
-    '/free': [],
-    '/trade': [],
-    '/notice': [],
-    '/cash': [],
-    '/qna': [],
-    '/crime': [],
+    free: [],
+    trade: [],
+    notice: [],
+    cash: [],
+    qna: [],
+    crime: [],
   };
 
   @observable postView = {};

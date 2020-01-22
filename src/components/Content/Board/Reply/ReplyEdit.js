@@ -9,12 +9,14 @@ import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import useStores from '../../../../stores/useStores';
 
-const ReplyEdit = ({ secretReplyAllow }) => {
+const ReplyEdit = () => {
   const { BoardReplyStore } = useStores();
   const {
     onChangeValue, reply, setReplyEditId, addReply, replyEditId, modifyModeId,
+    CurrentReplyOption,
   } = BoardReplyStore;
   const { text, secretYN } = reply;
+  const { secretReplyAllow } = CurrentReplyOption;
 
   return (
     <>
