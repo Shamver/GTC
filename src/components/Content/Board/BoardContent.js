@@ -5,30 +5,47 @@ import { faHome } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Table } from 'reactstrap';
 import * as Proptypes from 'prop-types';
+import { observer } from 'mobx-react';
+
+import useStores from '../../../stores/useStores';
+
+import Loading from '../../util/Loading';
 import PostList from './Post/PostList';
 
-const BoardContent = ({ path }) => (
-  <>
-    <InnerTableHeader>
-      <tbody>
-        <tr>
-          <td>
-            <NavLink to="/free">
-              <FontAwesomeIcon icon={faHome} />
-            </NavLink>
-          </td>
-          <td><NavLink to="/a">자유</NavLink></td>
-          <td><NavLink to="/a">잡담</NavLink></td>
-        </tr>
-      </tbody>
-    </InnerTableHeader>
-    <ManginessTable bordered hover size="sm">
-      <tbody>
-        <PostList path={path} />
-      </tbody>
-    </ManginessTable>
-  </>
-);
+const BoardContent = ({ path }) => {
+  const { UtilLoadingStore } = useStores();
+
+  const { loading } = UtilLoadingStore;
+
+  if (loading) {
+    return (
+      <Loading />
+    );
+  }
+
+  return (
+    <>
+      <InnerTableHeader>
+        <tbody>
+          <tr>
+            <td>
+              <NavLink to="/free">
+                <FontAwesomeIcon icon={faHome} />
+              </NavLink>
+            </td>
+            <td><NavLink to="/a">자유</NavLink></td>
+            <td><NavLink to="/a">잡담</NavLink></td>
+          </tr>
+        </tbody>
+      </InnerTableHeader>
+      <ManginessTable bordered hover size="sm">
+        <tbody>
+          <PostList path={path} />
+        </tbody>
+      </ManginessTable>
+    </>
+  );
+};
 
 BoardContent.propTypes = {
   path: Proptypes.string.isRequired,
@@ -59,4 +76,4 @@ const InnerTableHeader = styled(Table)`
   }
 `;
 
-export default BoardContent;
+export default observer(BoardContent);

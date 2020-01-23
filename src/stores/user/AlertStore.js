@@ -11,7 +11,6 @@ class AlertStore {
   }
 
   @action getDataAlert = ((updateYN = 'N') => {
-    const { setLoading } = this.root.UtilLoadingStore;
     const { userData } = this.root.UserStore;
 
     if (userData) {
@@ -27,7 +26,6 @@ class AlertStore {
             if (response.data.length > 0) {
               this.alertCount = response.data.filter((v) => v.isRead === 'N').length;
             }
-            setLoading(false);
           }
         })
         .catch((response) => {

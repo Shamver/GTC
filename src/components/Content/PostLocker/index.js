@@ -13,27 +13,17 @@ import PostLockerTabContent from './PostLockerTabContent';
 const PostLocker = () => {
   const {
     BoardPostStore, BoardReplyStore, UserFavoriteStore, ComponentPostLockerStore, UtilStore,
+    UtilLoadingStore,
   } = useStores();
 
-  const {
-    getDataPostMine,
-  } = BoardPostStore;
+  const { getDataPostMine } = BoardPostStore;
+  const { getDataReplyMine } = BoardReplyStore;
+  const { getDataFavorite } = UserFavoriteStore;
+  const { activeTab } = ComponentPostLockerStore;
+  const { loginCheck } = UtilStore;
+  const { doLoading } = UtilLoadingStore;
 
-  const {
-    getDataReplyMine,
-  } = BoardReplyStore;
-
-  const {
-    getDataFavorite,
-  } = UserFavoriteStore;
-
-  const {
-    activeTab,
-  } = ComponentPostLockerStore;
-
-  const {
-    loginCheck,
-  } = UtilStore;
+  doLoading();
 
   useEffect(() => {
     if (loginCheck()) {
@@ -41,7 +31,9 @@ const PostLocker = () => {
       getDataReplyMine();
       getDataFavorite();
     }
-  }, [loginCheck, getDataReplyMine, getDataPostMine, getDataFavorite, activeTab]);
+  }, [
+    loginCheck, getDataReplyMine, getDataPostMine, getDataFavorite, activeTab,
+  ]);
 
   return (
     <MainContainer>

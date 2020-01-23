@@ -3,19 +3,24 @@ import {
   TabContent,
 } from 'reactstrap';
 
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 import SettingIgnore from './SettingIgnore';
 import SettingWithdrawal from './SettingWithdrawal';
 
-const SettingTabContent = () => {
-  const {
-    ComponentSettingStore,
-  } = useStores();
+import Loading from '../../util/Loading';
 
-  const {
-    activeTab,
-  } = ComponentSettingStore;
+const SettingTabContent = () => {
+  const { ComponentSettingStore, UtilLoadingStore } = useStores();
+  const { loading } = UtilLoadingStore;
+  const { activeTab } = ComponentSettingStore;
+
+  if (loading) {
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <TabContent activeTab={activeTab}>
@@ -25,4 +30,4 @@ const SettingTabContent = () => {
   );
 };
 
-export default SettingTabContent;
+export default observer(SettingTabContent);

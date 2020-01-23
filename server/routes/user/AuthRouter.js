@@ -62,13 +62,16 @@ router.post('/login', (req, res) => {
     if (err) throw err;
     if (rows.length === 1) {
       const resultData = rows[0];
-      const { id, nickname, deletedDate } = resultData;
+      const {
+        id, nickname, gtNickname, deletedDate,
+      } = resultData;
 
       if (deletedDate === null) {
         jwt.sign(
           {
             id,
             username: nickname,
+            gtName: gtNickname,
           },
           secret,
           {

@@ -2,20 +2,27 @@ import React from 'react';
 import {
   TabContent,
 } from 'reactstrap';
+
+import { observer } from 'mobx-react';
+
 import useStores from '../../../stores/useStores';
 
 import PostLockerMyPost from './PostLockerMyPost';
 import PostLockerMyReply from './PostLockerMyReply';
 import PostLockerFavorite from './PostLockerFavorite';
 
-const PostLockerTabContent = () => {
-  const {
-    ComponentPostLockerStore,
-  } = useStores();
+import Loading from '../../util/Loading';
 
-  const {
-    activeTab,
-  } = ComponentPostLockerStore;
+const PostLockerTabContent = () => {
+  const { ComponentPostLockerStore, UtilLoadingStore } = useStores();
+  const { activeTab } = ComponentPostLockerStore;
+  const { loading } = UtilLoadingStore;
+
+  if (loading) {
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <TabContent activeTab={activeTab}>
@@ -26,4 +33,4 @@ const PostLockerTabContent = () => {
   );
 };
 
-export default PostLockerTabContent;
+export default observer(PostLockerTabContent);

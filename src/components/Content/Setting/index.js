@@ -12,20 +12,15 @@ import SettingTabContent from './SettingTabContent';
 
 const Setting = () => {
   const {
-    UserIgnoreStore, ComponentSettingStore, UtilStore,
+    UserIgnoreStore, ComponentSettingStore, UtilStore, UtilLoadingStore,
   } = useStores();
 
-  const {
-    getDataIgnore,
-  } = UserIgnoreStore;
+  const { getDataIgnore } = UserIgnoreStore;
+  const { activeTab } = ComponentSettingStore;
+  const { loginCheck } = UtilStore;
+  const { doLoading } = UtilLoadingStore;
 
-  const {
-    activeTab,
-  } = ComponentSettingStore;
-
-  const {
-    loginCheck,
-  } = UtilStore;
+  doLoading();
 
   useEffect(() => {
     if (loginCheck()) {

@@ -20,8 +20,10 @@ const HeaderInProfile = () => {
   const { alertCount, getDataAlert } = UserAlertStore;
 
   useEffect(() => {
-    getDataAlert();
-  }, [getDataAlert]);
+    if (userData) {
+      getDataAlert();
+    }
+  }, [getDataAlert, userData]);
 
   return (
     <>
@@ -49,12 +51,12 @@ const HeaderInProfile = () => {
                 <Avatar src={avatarImg} />
               </AvatarDropdownToggleC>
               <DropdownMenu>
-                <DropdownItemTitle>
-                  <ProfileNick>닉네임</ProfileNick>
-                  <ProfileId>thisIsId</ProfileId>
+                <DropdownItemTitle onClick={() => { }}>
+                  <ProfileNick>{userData.username}</ProfileNick>
+                  <ProfileId>{userData.gtName}</ProfileId>
                 </DropdownItemTitle>
                 <Link to="/newalert">
-                  <DropdownItem30>새로운 알림 ({1} 개)</DropdownItem30>
+                  <DropdownItem30>새로운 알림 ({alertCount} 개)</DropdownItem30>
                 </Link>
                 <DropdownItem30>내 정보 관리</DropdownItem30>
                 <DropdownItem30>{10} 포인트</DropdownItem30>
@@ -65,7 +67,6 @@ const HeaderInProfile = () => {
                 <Link to="/postlocker">
                   <DropdownItem30>글보관함</DropdownItem30>
                 </Link>
-                <DropdownItem30>아이콘보관함</DropdownItem30>
                 <DropdownItem30 onClick={logout}>
                   <FontAwesomeIcon icon={faSignOutAlt} />
                   &nbsp; 로그아웃
@@ -115,8 +116,27 @@ const AvatarDropdownToggleC = styled(DropdownToggleC)`
   padding : 5px 13px 7px 10px !important;
 `;
 
-const DropdownItemTitle = styled(DropdownItem30)`
-  margin: 2px 0px 5px 0px !important;
+const DropdownItemTitle = styled.div`
+  display: block;
+  width: 100%;
+  padding: 0 1.5rem;
+  clear: both;
+  font-weight: 700;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+  max-height: 36px;
+
+  margin: 0px !important;
+  cursor: default !important;
+  &:hover {
+    background: none !important;
+  }
+  &:focus {
+    background: none !important;
+  }
 `;
 
 const ProfileNick = styled.span`

@@ -7,13 +7,8 @@ import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 
 const PostLockerNav = () => {
-  const {
-    ComponentPostLockerStore,
-  } = useStores();
-
-  const {
-    activeTab, onActive,
-  } = ComponentPostLockerStore;
+  const { ComponentPostLockerStore } = useStores();
+  const { activeTab, onActive } = ComponentPostLockerStore;
 
   return (
     <Nav tabs>

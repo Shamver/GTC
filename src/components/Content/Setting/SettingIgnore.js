@@ -11,16 +11,9 @@ import useStores from '../../../stores/useStores';
 import SettingIgnoreTable from './SettingIgnoreTable';
 
 const SettingIgnore = () => {
-  const {
-    UserIgnoreStore, UtilAlertStore,
-  } = useStores();
-
-  const {
-    ignoreList, onChangeIgnore, onDeleteIgnore,
-  } = UserIgnoreStore;
-  const {
-    toggleConfirmAlert,
-  } = UtilAlertStore;
+  const { UserIgnoreStore, UtilAlertStore } = useStores();
+  const { ignoreList, onChangeIgnore, onDeleteIgnore } = UserIgnoreStore;
+  const { toggleConfirmAlert } = UtilAlertStore;
 
   const IgnoreTableData = ignoreList.map((v) => (SettingIgnoreTable('ignore', v, onChangeIgnore)));
 

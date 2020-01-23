@@ -4,6 +4,8 @@ const router = express.Router();
 
 const db = require('../../dbConnection')();
 
+const alertMiddleware = require('../../middleware/alert');
+
 const conn = db.init();
 
 router.post('/', (req, res) => {
@@ -33,6 +35,8 @@ router.post('/', (req, res) => {
 
   conn.query(query, (err) => {
     if (err) throw err;
+
+    alertMiddleware()
     res.send(true);
   });
 });

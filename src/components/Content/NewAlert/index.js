@@ -5,47 +5,26 @@ import {
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
-import Loading from '../../util/Loading';
-
 import NewAlertHeader from './NewAlertHeader';
-import NewAlertData from './NewAlertData';
+import NewAlertContent from './NewAlertContent';
 
 import useStores from '../../../stores/useStores';
 
 const NewAlert = () => {
-  const { UserAlertStore, UtilLoadingStore, UtilStore } = useStores();
+  const { UtilLoadingStore, UtilStore } = useStores();
+  const { doLoading } = UtilLoadingStore;
+  const { loginCheck } = UtilStore;
 
-  const {
-    onDeleteAlert, onClickAlert, alertList,
-  } = UserAlertStore;
-
-  const {
-    loading, setLoading,
-  } = UtilLoadingStore;
-
-  const {
-    loginCheck,
-  } = UtilStore;
+  doLoading();
 
   useEffect(() => {
     loginCheck();
+  }, [loginCheck]);
 
-    return () => {
-      setLoading(true);
-    };
-  }, [loginCheck, setLoading]);
-
-  const Alerts = alertList.map((v) => (NewAlertData(v, onClickAlert, onDeleteAlert)));
-
-  if (loading) {
-    return (
-      <Loading />
-    );
-  }
   return (
     <MainContainer>
       <NewAlertHeader />
-      {Alerts.length === 0 ? '새로운 알림이 없습니다.' : Alerts}
+      <NewAlertContent />
     </MainContainer>
   );
 };

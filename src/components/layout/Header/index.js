@@ -16,9 +16,10 @@ import HeaderInProfile from './HeaderInProfile';
 import HeaderFavoriteItem from './HeaderFavoriteItem';
 
 const Index = () => {
-  const { ComponentHeaderStore, UserFavoriteStore } = useStores();
+  const { ComponentHeaderStore, UserFavoriteStore, UserStore } = useStores();
   const { onActive, dropdown } = ComponentHeaderStore;
   const { favoriteList, getDataFavorite } = UserFavoriteStore;
+  const { userData } = UserStore;
 
   useEffect(() => {
     getDataFavorite();
@@ -62,7 +63,7 @@ const Index = () => {
                   <FontAwesomeIcon icon={faStar} /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
-                  {FavoriteDatas.length === 0 ? '로그인 후 이용 가능합니다.' : FavoriteDatas}
+                  {userData ? FavoriteDatas : '로그인 후 이용 가능합니다.'}
                 </DropdownMenu>
               </DropdownIn>
               <DropdownIn isOpen={dropdown.smile} toggle={onActive}>

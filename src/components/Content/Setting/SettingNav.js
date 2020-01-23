@@ -6,13 +6,8 @@ import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 
 const SettingNav = () => {
-  const {
-    ComponentSettingStore,
-  } = useStores();
-
-  const {
-    activeTab, onActive,
-  } = ComponentSettingStore;
+  const { ComponentSettingStore } = useStores();
+  const { activeTab, onActive } = ComponentSettingStore;
 
   return (
     <Nav tabs>

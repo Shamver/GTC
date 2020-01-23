@@ -3,18 +3,14 @@ import {
   TabPane, Table,
 } from 'reactstrap';
 import styled from 'styled-components';
-import useStores from '../../../stores/useStores';
+import { observer } from 'mobx-react';
 
+import useStores from '../../../stores/useStores';
 import PostLockerFavoriteTable from './PostLockerFavoriteTable';
 
 const PostLockerFavorite = () => {
-  const {
-    UserFavoriteStore,
-  } = useStores();
-
-  const {
-    favoriteList, onDeleteFavorite,
-  } = UserFavoriteStore;
+  const { UserFavoriteStore } = useStores();
+  const { favoriteList, onDeleteFavorite } = UserFavoriteStore;
 
   const FavoriteTableData = favoriteList.map((v) => (PostLockerFavoriteTable('favorite', v, onDeleteFavorite)));
 
@@ -63,4 +59,4 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
-export default PostLockerFavorite;
+export default observer(PostLockerFavorite);

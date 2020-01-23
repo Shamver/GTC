@@ -1,23 +1,14 @@
 import React from 'react';
-
 import styled from 'styled-components';
-
 import { Button } from 'reactstrap';
+import { observer } from 'mobx-react';
 
 import useStores from '../../../stores/useStores';
 
 const NewAlertHeader = () => {
-  const {
-    UtilAlertStore, UserAlertStore,
-  } = useStores();
-
-  const {
-    toggleConfirmAlert,
-  } = UtilAlertStore;
-
-  const {
-    onReadAlertAll,
-  } = UserAlertStore;
+  const { UtilAlertStore, UserAlertStore } = useStores();
+  const { toggleConfirmAlert } = UtilAlertStore;
+  const { onReadAlertAll } = UserAlertStore;
 
   return (
     <NotifyHeader>
@@ -73,4 +64,4 @@ const ReadAllButton = styled(Button)`
   }
 `;
 
-export default NewAlertHeader;
+export default observer(NewAlertHeader);
