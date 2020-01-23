@@ -20,18 +20,17 @@ const Content = () => (
   <BorderedDiv>
     <Switch>
       <Route exact path="/" render={() => <Main />} />
-
-      <Route exact path="/notice" render={({ location }) => <Contents.Board path={location.pathname} />} />
-      <Route exact path="/free" render={({ location }) => <Contents.Board path={location.pathname} />} />
-      <Route exact path="/trade" render={({ location }) => <Contents.Board path={location.pathname} />} />
-      <Route exact path="/cash" render={({ location }) => <Contents.Board path={location.pathname} />} />
-      <Route exact path="/crime" render={({ location }) => <Contents.Board path={location.pathname} />} />
-      <Route exact path="/qna" render={({ location }) => <Contents.Board path={location.pathname} />} />
-
       <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
-      <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
       <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
       <Route exact path="/setting" render={() => <Contents.Setting />} />
+
+
+      {/* BOARD */}
+      <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} />} />
+
+      {/*<Route exact path="/:board/page/:pageNum" render={({ location }) => <Contents.Board path={location.pathname} />} />*/}
+
+      <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
 
       <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
     </Switch>

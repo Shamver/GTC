@@ -8,7 +8,7 @@ const conn = db.init();
 
 router.get('/', (req, res) => {
   const data = req.query;
-  const query = `SELECT CONCAT('/', LOWER(B_ID)) AS currentBoard 
+  const query = `SELECT LOWER(B_ID) AS currentBoard 
         FROM GTC_BOARD_POST
         WHERE ID = ${data.id}
   `;

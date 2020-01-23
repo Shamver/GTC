@@ -10,7 +10,7 @@ import useStores from '../../../../stores/useStores';
 
 const ReplyModify = ({ content }) => {
   const { BoardReplyStore } = useStores();
-  const { onChangeReplyValue, modifyReply, modifyMode } = BoardReplyStore;
+  const { onChangeValue, modifyReply, modifyMode } = BoardReplyStore;
   return (
     <>
       <CKEditor
@@ -19,7 +19,7 @@ const ReplyModify = ({ content }) => {
         onInit={() => {}}
         onChange={(event, editor) => {
           const ReplyContent = editor.getData();
-          onChangeReplyValue(ReplyContent);
+          onChangeValue(ReplyContent);
         }}
       />
       <Button size="sm" outline onClick={() => modifyMode(0)}>취소</Button>

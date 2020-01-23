@@ -8,6 +8,7 @@ const PostList = ({ path }) => {
   const { BoardStore, BoardPostStore } = useStores();
   const { setCurrentBoard } = BoardStore;
   const { getBoardPostList, boardPostList } = BoardPostStore;
+  console.log(path);
   useEffect(() => {
     getBoardPostList(path);
     setCurrentBoard(path);

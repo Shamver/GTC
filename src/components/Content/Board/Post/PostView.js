@@ -22,14 +22,15 @@ const PostView = ({ match }) => {
     setCurrentBoardToId(id);
     getPost(id);
     setReplyBpId(id);
-  }, [getPost, setReplyBpId, id, setCurrentBoardToId]);
+
+  }, [
+    getPost, setReplyBpId, id, setCurrentBoardToId,
+  ]);
 
   return (
-    <>
-      <PostWrapper>
-        <PostContent match={match} />
-      </PostWrapper>
-    </>
+    <PostWrapper>
+      <PostContent match={match} />
+    </PostWrapper>
   );
 };
 

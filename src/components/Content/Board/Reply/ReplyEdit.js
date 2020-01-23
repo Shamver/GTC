@@ -1,19 +1,22 @@
 import { observer } from 'mobx-react';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import { Button } from 'reactstrap';
+import { Button, CustomInput } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import styled from 'styled-components';
+import * as Proptypes from 'prop-types';
 import useStores from '../../../../stores/useStores';
 
 const ReplyEdit = () => {
   const { BoardReplyStore } = useStores();
   const {
-    onChangeReplyValue, reply, setReplyEditId, addReply, replyEditId, modifyModeId,
+    onChangeValue, reply, setReplyEditId, addReply, replyEditId, modifyModeId,
+    CurrentReplyOption,
   } = BoardReplyStore;
-  const { text } = reply;
+  const { text, secretYN } = reply;
+  const { secretReplyAllow } = CurrentReplyOption;
 
   return (
     <>
@@ -23,10 +26,17 @@ const ReplyEdit = () => {
         onInit={() => {}}
         onChange={(event, editor) => {
           const ReplyContent = editor.getData();
-          onChangeReplyValue(ReplyContent);
+          onChangeValue(ReplyContent);
         }}
         placeholder="내용을 작성해주세요."
       />
+      { secretReplyAllow === 'Y'
+        ? (
+          <>
+            <CustomCheckbox type="checkbox" id="secretYN" name="secretYN" value="Y" onChange={onChangeValue} label="비밀 댓글 🔒 " checked={secretYN === 'Y'} />
+          </>
+        )
+        : ''}
       { replyEditId === 0 && modifyModeId === 0 ? '' : (
         <Button size="sm" outline onClick={() => setReplyEditId(0)}>취소</Button>
       )}
@@ -39,8 +49,22 @@ const ReplyEdit = () => {
   );
 };
 
+ReplyEdit.propTypes = {
+  secretReplyAllow: Proptypes.string.isRequired,
+};
+
 const RightButton = styled(Button)`
   float : right;
+`;
+
+const CustomCheckbox = styled(CustomInput)`
+  display : inline !important;
+  margin-right : 10px;
+  
+  & label {
+    padding-top : 3.2px;
+    font-size : 13px !important;
+  }
 `;
 
 export default observer(ReplyEdit);

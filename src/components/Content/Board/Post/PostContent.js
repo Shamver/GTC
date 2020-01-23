@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
@@ -20,13 +20,17 @@ const PostContent = ({ match }) => {
     BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore,
   } = useStores();
   const { postView, recommendPost } = BoardPostStore;
-  const { postReplyList } = BoardReplyStore;
+  const { postReplyList, setReplyOption } = BoardReplyStore;
   const { currentBoard } = BoardStore;
   const { loading } = UtilLoadingStore;
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
-    recommendCount,
+    recommendCount, replyAllow, secretReplyAllow,
   } = postView;
+
+  useEffect(() => {
+    setReplyOption(replyAllow, secretReplyAllow);
+  }, [replyAllow, secretReplyAllow, setReplyOption]);
 
   if (loading) {
     return (
