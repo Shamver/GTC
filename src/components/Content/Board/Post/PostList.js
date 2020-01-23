@@ -4,13 +4,12 @@ import * as Proptypes from 'prop-types';
 import useStores from '../../../../stores/useStores';
 import Post from './index';
 
-const PostList = ({ path }) => {
+const PostList = ({ path, currentPage }) => {
   const { BoardStore, BoardPostStore } = useStores();
   const { setCurrentBoard } = BoardStore;
   const { getBoardPostList, boardPostList } = BoardPostStore;
-  console.log(path);
   useEffect(() => {
-    getBoardPostList(path);
+    getBoardPostList(path, currentPage);
     setCurrentBoard(path);
   }, [path, getBoardPostList, setCurrentBoard]);
   return boardPostList[path].map((data) => (<Post key={data.id} data={data} />));
@@ -18,6 +17,7 @@ const PostList = ({ path }) => {
 
 PostList.propTypes = {
   path: Proptypes.string,
+  currentPage: Proptypes.number,
 };
 
 export default observer(PostList);

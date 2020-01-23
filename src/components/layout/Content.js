@@ -27,8 +27,7 @@ const Content = () => (
 
       {/* BOARD */}
       <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} />} />
-
-      {/*<Route exact path="/:board/page/:pageNum" render={({ location }) => <Contents.Board path={location.pathname} />} />*/}
+      <Route exact path="/:board/page/:currentPage" render={({ match }) => <Contents.Board path={match.params.board} currentPage={match.params.currentPage} />} />
 
       <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
 

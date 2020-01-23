@@ -5,22 +5,22 @@ import styled from 'styled-components';
 const BoardPagination = () => (
   <PaginationCustom>
     <PaginationItem active>
-      <PaginationLink href="#">
+      <PaginationLink href="./page/1">
         1
       </PaginationLink>
     </PaginationItem>
     <PaginationItem>
-      <PaginationLink href="#">
+      <PaginationLink href="./page/2">
         2
       </PaginationLink>
     </PaginationItem>
     <PaginationItem>
-      <PaginationLink href="#">
+      <PaginationLink href="./page/3">
         3
       </PaginationLink>
     </PaginationItem>
     <PaginationItem>
-      <PaginationLink href="#">
+      <PaginationLink href="./page/4">
         4
       </PaginationLink>
     </PaginationItem>
