@@ -164,11 +164,11 @@ class UserStore {
     return true;
   };
 
-  @action withdrawal = (() => {
-    const { userData, logout } = this.root.UserStore;
+  @action withdrawal = () => {
+    const { userData, logout } = this;
     const { history } = this.root.UtilRouteStore;
 
-    if (userData !== undefined) {
+    if (userData) {
       axios.delete('/api/user/withdrawal', {
         data: {
           userId: userData.id,
@@ -182,7 +182,7 @@ class UserStore {
         })
         .catch((response) => { console.log(response); });
     }
-  });
+  };
 }
 
 export default UserStore;

@@ -1,84 +1,112 @@
 import React, { useEffect } from 'react';
 import {
-  Container, FormText, Input, Row, Col,
+  Container, FormText, Input, Row, Col, CustomInput,
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
+import avatarImg from '../../../resources/images/avatar.png';
+import anonymous from '../../../resources/images/anonymous.png';
+
 import useStores from '../../../stores/useStores';
+import Loading from '../../util/Loading';
 
 const MyAccount = () => {
-  const { UtilLoadingStore } = useStores();
+  const { UtilLoadingStore, ComponentMyAccountStore, UserStore } = useStores();
   const { doLoading } = UtilLoadingStore;
+  const { isProfile, onChangeProfile } = ComponentMyAccountStore;
+  const { userData } = UserStore;
 
   doLoading();
 
   useEffect(() => {
   }, []);
 
+  if (userData) {
+    return (
+      <MainContainer>
+        <h3>내 정보 수정</h3>
+        <FormWrapper>
+          <Row>
+            <Col>
+              <div>
+                <Deform>
+                  <RegisterForm>
+                    <h4>수정 불가능한 정보</h4>
+                    <FormTextLeft>
+                      이름
+                    </FormTextLeft>
+                    <FormInput type="text" name="name" value={userData.name} readOnly />
+                    <FormTextLeft>
+                      이메일
+                    </FormTextLeft>
+                    <FormInput type="text" name="email" value={userData.email} readOnly />
+                    <FormTextLeft>
+                      전화번호
+                    </FormTextLeft>
+                    <FormInput type="text" name="tel" value={userData.tel} maxLength="11" readOnly />
+                    <FormTextLeft>
+                      그로우토피아 닉네임
+                    </FormTextLeft>
+                    <FormInputWithText
+                      type="text"
+                      name="gtNickname"
+                      value={userData.gtName}
+                      readOnly
+                    />
+                  </RegisterForm>
+                </Deform>
+              </div>
+            </Col>
+            <Col>
+              <div>
+                <Deform>
+                  <RegisterForm>
+                    <h4>수정 가능한 정보</h4>
+                    <FormTextLeft>
+                      닉네임
+                    </FormTextLeft>
+                    <FormInput
+                      type="text"
+                      name="nickname"
+                      value={userData.username}
+                    />
+                    <FormTextLeft>
+                      생년월일
+                    </FormTextLeft>
+                    <FormInput type="date" name="birth" value={userData.birth} />
+                    <FormTextLeft>
+                      성별
+                    </FormTextLeft>
+                    <FormSelect type="select" name="gender">
+                      <option value="">성별 선택</option>
+                      <option value="m">남자</option>
+                      <option value="fm">여자</option>
+                    </FormSelect>
+                    <FormSwitch>
+                      {isProfile ? (<Avatar src={avatarImg} />) : (<Avatar src={anonymous} />)}
+                      <InputProfile
+                        type="switch"
+                        id="profileSwitch"
+                        name="Switch"
+                        checked={isProfile}
+                        onChange={onChangeProfile}
+                        label="프로필 사진 공개 유무"
+                      />
+                    </FormSwitch>
+                  </RegisterForm>
+                </Deform>
+              </div>
+            </Col>
+          </Row>
+          <FormButton type="button">수정</FormButton>
+        </FormWrapper>
+      </MainContainer>
+    );
+  }
+
   return (
-    <MainContainer>
-      <h3>내 정보 수정</h3>
-      <FormWrapper>
-        <Row>
-          <Col>
-            <div>
-              <Deform>
-                <RegisterForm>
-                  <h4>수정 불가능한 정보</h4>
-                  <FormInputWithText type="text" name="name" placeholder="이름" />
-                  <FormTextLeft>
-                    <AccentText>실명이 아니거나 공백일시 사이트에서 밴 당할 우려가 있습니다.</AccentText>
-                  </FormTextLeft>
-                  <FormInput type="text" name="email" placeholder="이메일" readOnly />
-                  <FormInputWithText type="text" name="tel" placeholder="전화번호" maxLength="11" />
-                  <FormTextLeft>
-                    GTC는 한 전화번호 명의로 하나의 계정만 생성할 수 있습니다. <br />
-                    -를 빼고 입력해주세요. ex) 01012345678
-                  </FormTextLeft>
-                  <FormInputWithText
-                    type="text"
-                    name="gtNickname"
-                    placeholder="그로우토피아 닉네임"
-                  />
-                  <FormTextLeft>
-                    <AccentText>거래 중 해당 닉네임으로 인증이 안될시 거래에 문제가 생길 수 있습니다.</AccentText>
-                  </FormTextLeft>
-                  프로필 사진 비공개 유무 설정 넣기.
-                </RegisterForm>
-              </Deform>
-            </div>
-          </Col>
-          <Col>
-            <div>
-              <Deform>
-                <RegisterForm>
-                  <h4>수정 가능한 정보</h4>
-                  <FormInputWithText
-                    type="text"
-                    name="nickname"
-                    placeholder="닉네임"
-                  />
-                  <FormTextLeft>
-                    GTC에서 보여질 닉네임을 적어주세요.
-                  </FormTextLeft>
-                  <FormInputWithText type="date" name="birth" />
-                  <FormTextLeft>
-                    생년월일을 입력해주세요.
-                  </FormTextLeft>
-                  <FormSelect type="select" name="gender">
-                    <option value="">성별 선택</option>
-                    <option value="male">남자</option>
-                    <option value="female">여자</option>
-                  </FormSelect>
-                </RegisterForm>
-              </Deform>
-            </div>
-          </Col>
-        </Row>
-        <FormButton type="button">가입</FormButton>
-      </FormWrapper>
-    </MainContainer>
+    <Loading />
   );
 };
 
@@ -109,6 +137,8 @@ const FormInput = styled.input`
   padding: 15px;
   box-sizing: border-box;
   font-size: 14px;
+  
+  color: ${(props) => (props.readOnly ? 'gray' : 'black')}
 `;
 
 const FormSelect = styled(Input)`
@@ -124,6 +154,10 @@ const FormSelect = styled(Input)`
   
   &:focus {
     outline: 0 !important;
+`;
+
+const FormSwitch = styled.div`
+  margin-top: 30px;
 `;
 
 const FormInputWithText = styled(FormInput)`
@@ -161,16 +195,24 @@ const RegisterForm = styled(Form)`
     opacity: 1;
     visibility: visible;
   }
+  margin-bottom: 40px;
 `;
 
 const FormTextLeft = styled(FormText)`
   float : left;
   text-align : left;
-  margin : 0 0 15px;
+  margin : 0 0 10px ;
 `;
 
-const AccentText = styled.span`
-  color : red !important;
+const Avatar = styled.img`
+  position: absolute;
+  width : 64px;
+  border-radius: 3px;
+  left: 40px;
+`;
+
+const InputProfile = styled(CustomInput)`
+  top: 17px;
 `;
 
 export default observer(MyAccount);

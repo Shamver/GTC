@@ -31,7 +31,8 @@ router.post('/register', (req, res) => {
         '${data.gender.toUpperCase()}',
         '${data.gtNickname}',
         sysdate(),
-        null
+        null,
+        'Y'
         )
       `;
 
@@ -54,6 +55,10 @@ router.post('/login', (req, res) => {
     , NAME AS name
     , GT_NICKNAME AS gtNickname
     , NICKNAME AS nickname 
+    , TEL AS tel
+    , BIRTH AS birth
+    , GENDER AS gender
+    , PROFILE_YN AS profileYN
     , DELETED_DATE AS deletedDate
     FROM GTC_USER
     WHERE EMAIL='${data.email}'`;
@@ -63,15 +68,21 @@ router.post('/login', (req, res) => {
     if (rows.length === 1) {
       const resultData = rows[0];
       const {
-        id, nickname, gtNickname, deletedDate,
+        id, nickname, gtNickname, deletedDate, email, tel, birth, gender, profileYN, name,
       } = resultData;
 
       if (deletedDate === null) {
         jwt.sign(
           {
             id,
+            name,
             username: nickname,
             gtName: gtNickname,
+            email,
+            tel,
+            birth,
+            gender,
+            profileYN,
           },
           secret,
           {
