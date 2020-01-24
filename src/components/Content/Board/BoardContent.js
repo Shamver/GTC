@@ -49,7 +49,7 @@ const BoardContent = ({ path, currentPage }) => {
 
 BoardContent.propTypes = {
   path: Proptypes.string.isRequired,
-  currentPage: Proptypes.number,
+  currentPage: Proptypes.string,
 };
 
 BoardContent.defaultProps = {

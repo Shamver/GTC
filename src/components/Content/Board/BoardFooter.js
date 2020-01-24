@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import BoardPagination from './Pagination';
 
-const BoardFooter = ({ path }) => (
+const BoardFooter = ({ path, noPagination }) => (
   <>
     <AbsolDiv>
       <AbsoluteLeftLink to={`${path}/post`}>
@@ -24,12 +24,17 @@ const BoardFooter = ({ path }) => (
         </Button>
       </AbsoluteRightLink>
     </AbsolDiv>
-    <BoardPagination />
+    <BoardPagination path={path} noPagination={noPagination} />
   </>
 );
 
 BoardFooter.propTypes = {
   path: Proptypes.string.isRequired,
+  noPagination: Proptypes.bool,
+};
+
+BoardFooter.defaultProps = {
+  noPagination: false,
 };
 
 const AbsolDiv = styled.div`

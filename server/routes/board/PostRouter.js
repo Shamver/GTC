@@ -29,8 +29,6 @@ router.get('/', (req, res) => {
     LIMIT ${(currentPage - 1) * 10}, ${currentPage * 10}
     `;
 
-  console.log(query);
-
   conn.query(query, (err, rows) => {
     if (err) throw err;
     res.send(rows);

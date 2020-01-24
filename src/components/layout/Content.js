@@ -9,7 +9,6 @@ import Sign from '../util/Sign';
 import ConfirmAlert from '../util/ConfirmAlert';
 import Contents from '../Content';
 
-
 const BorderedDiv = styled.div`
   border-bottom: 2px solid #ebeae8;
   border-right: 2px solid #ebeae8;
@@ -26,7 +25,7 @@ const Content = () => (
 
 
       {/* BOARD */}
-      <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} />} />
+      <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} noPagination />} />
       <Route exact path="/:board/page/:currentPage" render={({ match }) => <Contents.Board path={match.params.board} currentPage={match.params.currentPage} />} />
 
       <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
