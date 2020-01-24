@@ -56,7 +56,7 @@ router.post('/login', (req, res) => {
     , GT_NICKNAME AS gtNickname
     , NICKNAME AS nickname 
     , TEL AS tel
-    , BIRTH AS birth
+    , date_format(BIRTH, '%Y-%m-%d') AS birth
     , GENDER AS gender
     , PROFILE_YN AS profileYN
     , DELETED_DATE AS deletedDate

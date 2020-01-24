@@ -12,15 +12,21 @@ import useStores from '../../../stores/useStores';
 import Loading from '../../util/Loading';
 
 const MyAccount = () => {
-  const { UtilLoadingStore, ComponentMyAccountStore, UserStore } = useStores();
-  const { doLoading } = UtilLoadingStore;
-  const { isProfile, onChangeProfile } = ComponentMyAccountStore;
+  const {
+    ComponentMyAccountStore, UserStore, UtilStore,
+  } = useStores();
+  const {
+    profileYN, onChangeProfile, setDefaultValue, gender, nickname, birth,
+    onChangeValue, nicknameValidation,
+  } = ComponentMyAccountStore;
   const { userData } = UserStore;
-
-  doLoading();
+  const { loginCheck } = UtilStore;
 
   useEffect(() => {
-  }, []);
+    if (loginCheck()) {
+      setDefaultValue();
+    }
+  }, [setDefaultValue, loginCheck]);
 
   if (userData) {
     return (
@@ -64,32 +70,34 @@ const MyAccount = () => {
                   <RegisterForm>
                     <h4>수정 가능한 정보</h4>
                     <FormTextLeft>
-                      닉네임
+                      닉네임&nbsp;&nbsp;
+                      <AccentText>{nicknameValidation.status ? '' : `❌${nicknameValidation.message}`}</AccentText>
                     </FormTextLeft>
                     <FormInput
                       type="text"
                       name="nickname"
-                      value={userData.username}
+                      value={nickname}
+                      onChange={onChangeValue}
                     />
                     <FormTextLeft>
                       생년월일
                     </FormTextLeft>
-                    <FormInput type="date" name="birth" value={userData.birth} />
+                    <FormInput type="date" name="birth" value={birth} onChange={onChangeValue} />
                     <FormTextLeft>
                       성별
                     </FormTextLeft>
-                    <FormSelect type="select" name="gender">
+                    <FormSelect type="select" name="gender" value={gender} onChange={onChangeValue}>
                       <option value="">성별 선택</option>
-                      <option value="m">남자</option>
-                      <option value="fm">여자</option>
+                      <option value="M">남자</option>
+                      <option value="FM">여자</option>
                     </FormSelect>
                     <FormSwitch>
-                      {isProfile ? (<Avatar src={avatarImg} />) : (<Avatar src={anonymous} />)}
+                      {profileYN === 'Y' ? (<Avatar src={avatarImg} />) : (<Avatar src={anonymous} />)}
                       <InputProfile
                         type="switch"
                         id="profileSwitch"
                         name="Switch"
-                        checked={isProfile}
+                        checked={profileYN === 'Y'}
                         onChange={onChangeProfile}
                         label="프로필 사진 공개 유무"
                       />
@@ -213,6 +221,10 @@ const Avatar = styled.img`
 
 const InputProfile = styled(CustomInput)`
   top: 17px;
+`;
+
+const AccentText = styled.span`
+  color : red !important;
 `;
 
 export default observer(MyAccount);
