@@ -4,41 +4,62 @@ import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 
-const BoardPagination = ({ path, noPagination }) => (
+const PaginationList = ({ path, currentPage }) => {
+  console.log(currentPage);
+  const currentPageNum = parseInt(currentPage, 0);
+  const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
+  const max = currentPageNum + 3;
+  console.log(min, max)
+  const array = new Array((max - min) + 1);
+
+  if (min > 1) {
+    array.push(
+      <PaginationItem>
+        <PaginationLink previous href="#" />
+      </PaginationItem>,
+    );
+  }
+
+  for (let i = min; i <= max; i += 1) {
+    array.push(
+      <PaginationItem>
+        <CustomLink className="page-link" activeClassName="active" to={`/${path}/page/${i}`}>
+          {i}
+        </CustomLink>
+      </PaginationItem>,
+    );
+  }
+
+  // 추후 max 값 조정후 추가
+
+  return array;
+};
+
+PaginationList.propTypes = {
+  path: Proptypes.string.isRequired,
+  currentPage: Proptypes.string,
+};
+
+PaginationList.defaultProps = {
+  currentPage: '1',
+};
+
+
+const BoardPagination = ({ path, noPagination, currentPage }) => (
   <PaginationCustom>
-    <PaginationItem active={noPagination}>
-      <CustomLink className="page-link" activeClassName="active" to={'/'.concat(path).concat('/page/1')}>
-        1
-      </CustomLink>
-    </PaginationItem>
-    <PaginationItem>
-      <CustomLink className="page-link" activeClassName="active" to={'/'.concat(path).concat('/page/2')}>
-        2
-      </CustomLink>
-    </PaginationItem>
-    <PaginationItem>
-      <CustomLink className="page-link" activeClassName="active" to={'/'.concat(path).concat('/page/3')}>
-        3
-      </CustomLink>
-    </PaginationItem>
-    <PaginationItem>
-      <CustomLink className="page-link" activeClassName="active" to={'/'.concat(path).concat('/page/4')}>
-        4
-      </CustomLink>
-    </PaginationItem>
-    <PaginationItem>
-      <PaginationLink next href="#" />
-    </PaginationItem>
+    <PaginationList currentPage={currentPage} path={path} />
   </PaginationCustom>
 );
 
 BoardPagination.propTypes = {
   path: Proptypes.string.isRequired,
   noPagination: Proptypes.bool,
+  currentPage: Proptypes.string,
 };
 
 BoardPagination.defaultProps = {
   noPagination: false,
+  currentPage: '1',
 };
 
 

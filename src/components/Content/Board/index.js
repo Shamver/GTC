@@ -18,7 +18,7 @@ const Board = ({ path, currentPage, noPagination }) => {
       <TableWrapper>
         <BoardHeader path={path} />
         <BoardContent path={path} currentPage={currentPage} />
-        <BoardFooter path={path} noPagination={noPagination} />
+        <BoardFooter path={path} currentPage={currentPage} noPagination={noPagination} />
       </TableWrapper>
     </BoardWrapper>
   );
@@ -31,7 +31,7 @@ Board.propTypes = {
 };
 
 Board.defaultProps = {
-  currentPage: null,
+  currentPage: '1',
   noPagination: false,
 };
 
