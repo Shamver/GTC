@@ -36,8 +36,20 @@ router.post('/', (req, res) => {
   conn.query(query, (err) => {
     if (err) throw err;
 
-    alertMiddleware()
-    res.send(true);
+    const query2 = `SELECT WRITER as postWriter
+      FROM GTC_BOARD_POST
+      WHERE ID = ${data.bpId}
+    `;
+
+    conn.query(query2, (err2, rows) => {
+      if (err2) throw err2;
+
+      const { postWriter } = rows[0];
+      if (postWriter !== data.writer) {
+        alertMiddleware();
+      }
+      res.send(true);
+    });
   });
 });
 

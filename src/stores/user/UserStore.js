@@ -183,6 +183,31 @@ class UserStore {
         .catch((response) => { console.log(response); });
     }
   };
+
+  @action updateInfo = () => {
+    const {
+      nickname, birth, gender, profileYN,
+    } = this.root.ComponentMyAccountStore;
+    const { userData } = this;
+    const { toggleAlert } = this.root.UtilStore;
+    const { history } = this.root.UtilRouteStore;
+
+    axios.put('/api/user/info', {
+      nickname,
+      birth,
+      gender,
+      profileYN,
+      userId: userData.id,
+    })
+      .then((response) => {
+        if (response) {
+          toggleAlert('성공적으로 변경되었습니다.\n다시 로그인해주세요.');
+          history.push('/');
+          this.logout();
+        }
+      })
+      .catch((response) => console.log(response));
+  }
 }
 
 export default UserStore;

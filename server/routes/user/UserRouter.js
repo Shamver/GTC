@@ -25,4 +25,23 @@ router.delete('/withdrawal', (req, res) => {
   });
 });
 
+router.put('/info', (req, res) => {
+  const {
+    nickname, birth, gender, profileYN, userId,
+  } = req.body;
+
+  const query = `UPDATE GTC_USER
+    SET NICKNAME = '${nickname}',
+    BIRTH = '${birth}',
+    GENDER = '${gender}',
+    PROFILE_YN = '${profileYN}'
+    WHERE ID = ${userId}`;
+
+  conn.query(query, (err) => {
+    if (err) throw err;
+
+    res.send(200);
+  });
+});
+
 module.exports = router;

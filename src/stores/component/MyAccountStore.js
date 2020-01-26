@@ -9,7 +9,19 @@ class MyAccountStore {
 
   @observable gender;
 
+  @observable isAllValidationChecked = true;
+
   @observable nicknameValidation = {
+    status: true,
+    message: '',
+  };
+
+  @observable birthValidation = {
+    status: true,
+    message: '',
+  };
+
+  @observable genderValidation = {
     status: true,
     message: '',
   };
@@ -55,6 +67,34 @@ class MyAccountStore {
         message: '',
       };
     }
+
+    if (!this.birth) {
+      this.birthValidation = {
+        status: false,
+        message: '올바른 생년월일을 입력해주세요.',
+      };
+    } else {
+      this.birthValidation = {
+        status: true,
+        message: '',
+      };
+    }
+
+    if (!this.gender) {
+      this.genderValidation = {
+        status: false,
+        message: '성별을 선택해주세요.',
+      };
+    } else {
+      this.genderValidation = {
+        status: true,
+        message: '',
+      };
+    }
+
+    this.isAllValidationChecked = this.nicknameValidation.status
+    && this.birthValidation.status
+    && this.genderValidation.status;
   });
 }
 

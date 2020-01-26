@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  Container, FormText, Input, Row, Col, CustomInput,
+  Container, FormText, Input, Row, Col, CustomInput, Button,
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
@@ -17,9 +17,10 @@ const MyAccount = () => {
   } = useStores();
   const {
     profileYN, onChangeProfile, setDefaultValue, gender, nickname, birth,
-    onChangeValue, nicknameValidation,
+    onChangeValue, nicknameValidation, birthValidation, genderValidation,
+    isAllValidationChecked,
   } = ComponentMyAccountStore;
-  const { userData } = UserStore;
+  const { userData, updateInfo } = UserStore;
   const { loginCheck } = UtilStore;
 
   useEffect(() => {
@@ -80,11 +81,13 @@ const MyAccount = () => {
                       onChange={onChangeValue}
                     />
                     <FormTextLeft>
-                      생년월일
+                      생년월일&nbsp;&nbsp;
+                      <AccentText>{birthValidation.status ? '' : `❌${birthValidation.message}`}</AccentText>
                     </FormTextLeft>
                     <FormInput type="date" name="birth" value={birth} onChange={onChangeValue} />
                     <FormTextLeft>
-                      성별
+                      성별&nbsp;&nbsp;
+                      <AccentText>{genderValidation.status ? '' : `❌${genderValidation.message}`}</AccentText>
                     </FormTextLeft>
                     <FormSelect type="select" name="gender" value={gender} onChange={onChangeValue}>
                       <option value="">성별 선택</option>
@@ -107,7 +110,7 @@ const MyAccount = () => {
               </div>
             </Col>
           </Row>
-          <FormButton type="button">수정</FormButton>
+          <FormButton color="danger" onClick={updateInfo} disabled={!isAllValidationChecked}>수정</FormButton>
         </FormWrapper>
       </MainContainer>
     );
@@ -172,7 +175,7 @@ const FormInputWithText = styled(FormInput)`
   margin : 0;
 `;
 
-const FormButton = styled.button`
+const FormButton = styled(Button)`
   text-transform: uppercase;
   outline: 0;
   background: #DC3545;;
@@ -183,7 +186,6 @@ const FormButton = styled.button`
   font-size: 14px;
   -webkit-transition: all 0.3 ease;
   transition: all 0.3 ease;
-  cursor: pointer;
 `;
 
 const Deform = styled.div`
