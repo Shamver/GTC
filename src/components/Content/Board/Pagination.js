@@ -3,18 +3,21 @@ import { PaginationItem, PaginationLink, Pagination } from 'reactstrap';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
+import useStores from '../../../stores/useStores';
+import { observer } from 'mobx-react';
 
-const PaginationList = ({ path, currentPage }) => {
-  console.log(currentPage);
+const PaginationList = observer(({ path, currentPage, noPagination }) => {
+  const { BoardPostStore } = useStores();
+  const { currentBoardMaxPage } = BoardPostStore;
+
   const currentPageNum = parseInt(currentPage, 0);
   const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
-  const max = currentPageNum + 3;
-  console.log(min, max)
+  const max = (currentPageNum + 3) > currentBoardMaxPage ? currentBoardMaxPage : currentPageNum + 3;
   const array = new Array((max - min) + 1);
 
-  if (min > 1) {
+  if (currentPage > 1) {
     array.push(
-      <PaginationItem>
+      <PaginationItem key={0}>
         <PaginationLink previous href="#" />
       </PaginationItem>,
     );
@@ -22,7 +25,7 @@ const PaginationList = ({ path, currentPage }) => {
 
   for (let i = min; i <= max; i += 1) {
     array.push(
-      <PaginationItem>
+      <PaginationItem active={i === 1 && noPagination} key={i}>
         <CustomLink className="page-link" activeClassName="active" to={`/${path}/page/${i}`}>
           {i}
         </CustomLink>
@@ -30,14 +33,22 @@ const PaginationList = ({ path, currentPage }) => {
     );
   }
 
-  // 추후 max 값 조정후 추가
+  if (currentPageNum !== currentBoardMaxPage) {
+    array.push(
+      <PaginationItem key={-1}>
+        <PaginationLink next href="#" />
+      </PaginationItem>,
+    );
+  }
 
+  // 추후 max 값 조정후 추가
   return array;
-};
+});
 
 PaginationList.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
+  noPagination: Proptypes.bool,
 };
 
 PaginationList.defaultProps = {
@@ -47,7 +58,7 @@ PaginationList.defaultProps = {
 
 const BoardPagination = ({ path, noPagination, currentPage }) => (
   <PaginationCustom>
-    <PaginationList currentPage={currentPage} path={path} />
+    <PaginationList currentPage={currentPage} path={path} noPagination={noPagination} />
   </PaginationCustom>
 );
 

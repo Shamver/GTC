@@ -24,6 +24,8 @@ class PostStore {
     crime: [],
   };
 
+  @observable currentBoardMaxPage = 0;
+
   @observable postView = {};
 
   @observable postMineList = [];
@@ -77,6 +79,15 @@ class PostStore {
             ...this.boardPostList,
             [board]: response.data,
           };
+
+          // 게시글 가져올때 MAX 카운트 셋
+          if (response.data.length === 0) {
+            this.currentBoardMaxPage = 0;
+          } else {
+            const { pageCount } = response.data[0];
+            this.currentBoardMaxPage = pageCount;
+          }
+
         }
       })
       .catch((response) => { console.log(response); });
