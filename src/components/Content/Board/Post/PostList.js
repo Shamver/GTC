@@ -9,8 +9,6 @@ const PostList = ({ path, currentPage }) => {
   const { setCurrentBoard } = BoardStore;
   const { getBoardPostList, boardPostList } = BoardPostStore;
 
-
-  console.log(path);
   useEffect(() => {
     getBoardPostList(path, currentPage);
     setCurrentBoard(path);

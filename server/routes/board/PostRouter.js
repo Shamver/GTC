@@ -15,7 +15,7 @@ router.get('/', (req, res) => {
   const query = `
     SELECT 
       @rownum:=@rownum+1 as rn
-        , (SELECT Ceil(COUNT(*)/10) FROM GTC_BOARD_POST WHERE B_ID = '${board.toUpperCase()}') AS pageCount
+        , (SELECT Ceil(COUNT(*)/25) FROM GTC_BOARD_POST WHERE B_ID = '${board.toUpperCase()}') AS pageCount
         , P.ID AS id
         , P.TITLE AS title
         , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer

@@ -13,12 +13,15 @@ const PaginationList = observer(({ path, currentPage, noPagination }) => {
   const currentPageNum = parseInt(currentPage, 0);
   const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
   const max = (currentPageNum + 3) > currentBoardMaxPage ? currentBoardMaxPage : currentPageNum + 3;
-  const array = new Array((max - min) + 1);
+  console.log(min,max, currentBoardMaxPage);
+  const array = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 1);
 
   if (currentPage > 1) {
     array.push(
       <PaginationItem key={0}>
-        <PaginationLink previous href="#" />
+        <CustomLink className="page-link" activeClassName="active" to={`/${path}/page/${currentPageNum - 1}`}>
+          ‹
+        </CustomLink>
       </PaginationItem>,
     );
   }
@@ -36,7 +39,9 @@ const PaginationList = observer(({ path, currentPage, noPagination }) => {
   if (currentPageNum !== currentBoardMaxPage) {
     array.push(
       <PaginationItem key={-1}>
-        <PaginationLink next href="#" />
+        <CustomLink className="page-link" activeClassName="active" to={`/${path}/page/${currentPageNum + 1}`}>
+          ›
+        </CustomLink>
       </PaginationItem>,
     );
   }
