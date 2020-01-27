@@ -6,6 +6,7 @@ import UserIgnoreStore from './user/IgnoreStore';
 import ComponentHeaderStore from './component/HeaderStore';
 import ComponentPostLockerStore from './component/PostLockerStore';
 import ComponentSettingStore from './component/SettingStore';
+import ComponentMyAccountStore from './component/MyAccountStore';
 
 import UtilStore from './util/UtilStore';
 import UtilAlertStore from './util/AlertStore';
@@ -23,10 +24,10 @@ class RootStore {
     this.UserFavoriteStore = new UserFavoriteStore(this);
     this.UserIgnoreStore = new UserIgnoreStore(this);
 
-
     this.ComponentPostLockerStore = new ComponentPostLockerStore(this);
     this.ComponentSettingStore = new ComponentSettingStore(this);
     this.ComponentHeaderStore = new ComponentHeaderStore(this);
+    this.ComponentMyAccountStore = new ComponentMyAccountStore(this);
 
     this.UtilStore = new UtilStore(this);
     this.UtilAlertStore = new UtilAlertStore(this);

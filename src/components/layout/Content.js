@@ -9,7 +9,6 @@ import Sign from '../util/Sign';
 import ConfirmAlert from '../util/ConfirmAlert';
 import Contents from '../Content';
 
-
 const BorderedDiv = styled.div`
   border-bottom: 2px solid #ebeae8;
   border-right: 2px solid #ebeae8;
@@ -23,6 +22,7 @@ const Content = () => (
       <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
       <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
       <Route exact path="/setting" render={() => <Contents.Setting />} />
+      <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
 
 
       {/* BOARD */}
