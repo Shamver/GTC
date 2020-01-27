@@ -180,8 +180,10 @@ class ReplyStore {
   };
 
   replyValidationCheck = () => {
+    const { toggleAlert } = this.root.UtilAlertStore;
+
     if (!this.reply.text.trim()) {
-      this.root.UtilStore.toggleAlert('댓글 내용을 입력해주세요.');
+      toggleAlert('댓글 내용을 입력해주세요.');
       return false;
     }
     return true;

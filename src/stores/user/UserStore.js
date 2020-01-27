@@ -29,11 +29,13 @@ class UserStore {
   };
 
   @action registerCheck = () => {
+    const { toggleConfirmAlert } = this.root.UtilAlertStore;
+
     if (!this.registerValidationCheck()) {
       return false;
     }
 
-    this.root.UtilStore.toggleConfirmAlert(
+    toggleConfirmAlert(
       `이름(실명): ${this.registerData.name}
       전화번호: ${this.registerData.tel}
       그로우토피아 닉네임: ${this.registerData.gtNickname} \n
@@ -47,14 +49,17 @@ class UserStore {
   };
 
   @action register = () => {
+    const { toggleAlert } = this.root.UtilAlertStore;
+    const { toggleSign } = this.root.UtilStore;
+
     axios.post('/api/auth/register', this.registerData)
       .then((response) => {
         if (response.data) {
           if (response.data[0] && response.data[0].count === 1) {
-            this.root.UtilStore.toggleAlert('동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.');
+            toggleAlert('동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.');
           } else {
-            this.root.UtilStore.toggleAlert('가입이 완료되었습니다.');
-            this.root.UtilStore.toggleSign();
+            toggleAlert('가입이 완료되었습니다.');
+            toggleSign();
           }
         }
       })
@@ -120,44 +125,46 @@ class UserStore {
   };
 
   registerValidationCheck = () => {
+    const { toggleAlert } = this.root.UtilAlertStore;
+
     // name
     if (!this.registerData.name) {
-      this.root.UtilStore.toggleAlert('이름을 입력해주세요.');
+      toggleAlert('이름을 입력해주세요.');
       return false;
     }
 
     // nickname
     if (!this.registerData.nickname) {
-      this.root.UtilStore.toggleAlert('닉네임을 입력해주세요.');
+      toggleAlert('닉네임을 입력해주세요.');
       return false;
     }
 
     // tel
     if (!this.registerData.tel || Number.isNaN(this.registerData.tel)) {
-      this.root.UtilStore.toggleAlert('전화번호 형식을 맞추어서 입력해주세요.');
+      toggleAlert('전화번호 형식을 맞추어서 입력해주세요.');
       return false;
     }
 
     // birth
     if (!this.registerData.birth) {
-      this.root.UtilStore.toggleAlert('생년월일을 입력해주세요.');
+      toggleAlert('생년월일을 입력해주세요.');
       return false;
     }
 
     if (this.registerData.birth.substring(0, 4) === '1000') {
-      this.root.UtilStore.toggleAlert('생년월일을 제대로 입력해주세요.');
+      toggleAlert('생년월일을 제대로 입력해주세요.');
       return false;
     }
 
     // gender
     if (!this.registerData.gender) {
-      this.root.UtilStore.toggleAlert('성별을 입력해주세요.');
+      toggleAlert('성별을 입력해주세요.');
       return false;
     }
 
     // gtNickname
     if (!this.registerData.gtNickname) {
-      this.root.UtilStore.toggleAlert('그로우토피아 닉네임을 입력해주세요.');
+      toggleAlert('그로우토피아 닉네임을 입력해주세요.');
       return false;
     }
 
@@ -189,7 +196,7 @@ class UserStore {
       nickname, birth, gender, profileYN,
     } = this.root.ComponentMyAccountStore;
     const { userData } = this;
-    const { toggleAlert } = this.root.UtilStore;
+    const { toggleAlert } = this.root.UtilAlertStore;
     const { history } = this.root.UtilRouteStore;
 
     axios.put('/api/user/info', {

@@ -1,22 +1,13 @@
 import { observable, action } from 'mobx';
 
 class UtilStore {
-  @observable alertToggle = false;
-
   @observable signToggle = false;
 
   @observable signDisplay = true;
 
-  @observable text = '';
-
   constructor(root) {
     this.root = root;
   }
-
-  @action toggleAlert = (text) => {
-    if (text && typeof text === 'string') this.text = text;
-    this.alertToggle = !this.alertToggle;
-  };
 
   @action toggleSign = (result) => {
     if (result && result.profile) {
@@ -32,7 +23,7 @@ class UtilStore {
 
   @action loginCheck = () => {
     const { userData } = this.root.UserStore;
-    const { toggleAlert } = this.root.UtilStore;
+    const { toggleAlert } = this.root.UtilAlertStore;
     const { history } = this.root.UtilRouteStore;
 
     if (userData) {

@@ -6,8 +6,9 @@ import { jsKey } from '../../../config/kakao-config';
 import KakaoSignForm from './KakaoSignForm';
 
 const KakaoSign = ({ isRegister }) => {
-  const { UserStore, UtilStore } = useStores();
-  const { alertToggle, toggleSign } = UtilStore;
+  const { UserStore, UtilStore, UtilAlertStore } = useStores();
+  const { toggleSign } = UtilStore;
+  const { alertToggle } = UtilAlertStore;
   return (
     <KakaoLogin
       jsKey={jsKey}

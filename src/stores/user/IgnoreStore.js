@@ -41,7 +41,7 @@ class IgnoreStore {
   });
 
   @action onDeleteIgnore = (() => {
-    const { toggleAlert } = this.root.UtilStore;
+    const { toggleAlert } = this.root.UtilAlertStore;
     const list = this.ignoreList.filter((item) => item.checked === true).map((v) => ({
       f_id: v.f_id,
       t_id: v.t_id,

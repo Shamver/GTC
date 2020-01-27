@@ -7,8 +7,8 @@ import renderHTML from 'react-render-html';
 import useStores from '../../stores/useStores';
 
 const Alert = () => {
-  const { UtilStore } = useStores();
-  const { alertToggle, toggleAlert, text } = UtilStore;
+  const { UtilAlertStore } = useStores();
+  const { alertToggle, toggleAlert, text } = UtilAlertStore;
   return (
     <div>
       <Modal isOpen={alertToggle} toggle={toggleAlert}>

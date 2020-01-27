@@ -111,27 +111,29 @@ class PostStore {
 
 
   postValidationCheck = () => {
+    const { toggleAlert } = this.root.UtilAlertStore;
+
     // board
     if (!this.post.board) {
-      this.root.UtilStore.toggleAlert('게시판을 선택해주세요.');
+      toggleAlert('게시판을 선택해주세요.');
       return false;
     }
 
     // category
     if (!this.post.category) {
-      this.root.UtilStore.toggleAlert('카테고리를 선택해주세요.');
+      toggleAlert('카테고리를 선택해주세요.');
       return false;
     }
 
     // title
     if (!this.post.title.trim()) {
-      this.root.UtilStore.toggleAlert('제목을 입력해주세요.');
+      toggleAlert('제목을 입력해주세요.');
       return false;
     }
 
     // text
     if (!this.post.text.trim()) {
-      this.root.UtilStore.toggleAlert('내용을 입력해주세요.');
+      toggleAlert('내용을 입력해주세요.');
       return false;
     }
 

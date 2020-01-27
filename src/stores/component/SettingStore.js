@@ -22,10 +22,12 @@ class SettingStore {
   });
 
   @action isCheckedWithdrawal = ((next) => {
+    const { toggleAlert } = this.root.UtilAlertStore;
+
     if (this.withdrawalIsChecked) {
       next();
     } else {
-      this.root.UtilStore.toggleAlert('내용 확인란에 체크를 해주셔야 합니다.');
+      toggleAlert('내용 확인란에 체크를 해주셔야 합니다.');
     }
   });
 }
