@@ -14,7 +14,7 @@ const BoardHeader = ({ path }) => {
   return (
     <TableHead>
       <MarginlessH3>{BoardName}</MarginlessH3>
-      <RightLink to={`${path}/post`}>
+      <RightLink to={`/${path}/post`}>
         <Button color="danger" size="sm">
           <FontAwesomeIcon icon={faPen} />
           &nbsp;&nbsp;글 쓰기

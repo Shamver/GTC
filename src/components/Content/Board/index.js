@@ -9,28 +9,30 @@ import BoardFooter from './BoardFooter';
 
 import useStores from '../../../stores/useStores';
 
-const Board = ({ path }) => {
+const Board = ({ path, currentPage, noPagination }) => {
   const { UtilLoadingStore } = useStores();
-
   const { doLoading } = UtilLoadingStore;
-
   doLoading();
-
   return (
-    <>
-      <BoardWrapper>
-        <TableWrapper>
-          <BoardHeader path={path} />
-          <BoardContent path={path} />
-          <BoardFooter path={path} />
-        </TableWrapper>
-      </BoardWrapper>
-    </>
+    <BoardWrapper>
+      <TableWrapper>
+        <BoardHeader path={path} />
+        <BoardContent path={path} currentPage={currentPage} />
+        <BoardFooter path={path} currentPage={currentPage} noPagination={noPagination} />
+      </TableWrapper>
+    </BoardWrapper>
   );
 };
 
 Board.propTypes = {
   path: Proptypes.string.isRequired,
+  currentPage: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+Board.defaultProps = {
+  currentPage: '1',
+  noPagination: false,
 };
 
 const BoardWrapper = styled.div`

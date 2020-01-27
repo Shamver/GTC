@@ -12,7 +12,7 @@ import useStores from '../../../stores/useStores';
 import Loading from '../../util/Loading';
 import PostList from './Post/PostList';
 
-const BoardContent = ({ path }) => {
+const BoardContent = ({ path, currentPage }) => {
   const { UtilLoadingStore } = useStores();
 
   const { loading } = UtilLoadingStore;
@@ -40,7 +40,7 @@ const BoardContent = ({ path }) => {
       </InnerTableHeader>
       <ManginessTable bordered hover size="sm">
         <tbody>
-          <PostList path={path} />
+          <PostList path={path} currentPage={currentPage} />
         </tbody>
       </ManginessTable>
     </>
@@ -49,7 +49,13 @@ const BoardContent = ({ path }) => {
 
 BoardContent.propTypes = {
   path: Proptypes.string.isRequired,
+  currentPage: Proptypes.string,
 };
+
+BoardContent.defaultProps = {
+  currentPage: null,
+};
+
 
 const ManginessTable = styled(Table)`
   margin : 0px !important;
