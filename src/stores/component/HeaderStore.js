@@ -10,6 +10,7 @@ class HeaderStore {
     login: false,
   };
 
+  @observable latelyList = [];
 
   constructor(root) {
     this.root = root;

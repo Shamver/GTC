@@ -215,6 +215,15 @@ class UserStore {
       })
       .catch((response) => console.log(response));
   }
+
+  @action getLately = () => {
+    axios.get('/api/user/lately')
+      .then((response) => {
+        const { data } = response;
+        this.root.ComponentHeaderStore.latelyList = data;
+      })
+      .catch((response) => console.log(response));
+  }
 }
 
 export default UserStore;

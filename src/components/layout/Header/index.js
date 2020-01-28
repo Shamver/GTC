@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {
   InputGroup, InputGroupAddon, Button, Input,
@@ -14,18 +14,21 @@ import logo from '../../../resources/images/logo.png';
 import useStores from '../../../stores/useStores';
 import HeaderInProfile from './HeaderInProfile';
 import HeaderFavoriteItem from './HeaderFavoriteItem';
+import HeaderLatelyItem from './HeaderLatelyItem';
 
 const Index = () => {
-  const { ComponentHeaderStore, UserFavoriteStore, UserStore } = useStores();
-  const { onActive, dropdown } = ComponentHeaderStore;
+  const {
+    ComponentHeaderStore, UserFavoriteStore, UserStore,
+  } = useStores();
+  const { onActive, dropdown, latelyList } = ComponentHeaderStore;
   const { favoriteList, getDataFavorite } = UserFavoriteStore;
-  const { userData } = UserStore;
+  const { userData, getLately } = UserStore;
 
-  useEffect(() => {
-    getDataFavorite();
-  }, [getDataFavorite]);
+  getDataFavorite();
+  getLately();
 
-  const FavoriteDatas = favoriteList.map((v) => HeaderFavoriteItem(v));
+  const FavoriteData = favoriteList.map((v) => HeaderFavoriteItem(v));
+  const LatelyData = latelyList ? latelyList.map((v) => HeaderLatelyItem(v)) : '';
   return (
     <HeaderWrapper>
       <Link to="/">
@@ -53,9 +56,7 @@ const Index = () => {
                   <FontAwesomeIcon icon={faClock} /> 최근
                 </DropdownToggleC>
                 <DropdownMenu>
-                  <DropdownItem30>괴물쥐</DropdownItem30>
-                  <DropdownItem30>얍얍</DropdownItem30>
-                  <DropdownItem30>룩삼</DropdownItem30>
+                  {LatelyData}
                 </DropdownMenu>
               </DropdownIn>
               <DropdownIn isOpen={dropdown.favorite} toggle={onActive}>
@@ -63,7 +64,7 @@ const Index = () => {
                   <FontAwesomeIcon icon={faStar} /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
-                  {userData ? FavoriteDatas : '로그인 후 이용 가능합니다.'}
+                  {userData ? FavoriteData : '로그인 후 이용 가능합니다.'}
                 </DropdownMenu>
               </DropdownIn>
               <DropdownIn isOpen={dropdown.smile} toggle={onActive}>

@@ -4,6 +4,7 @@ const router = express.Router();
 const db = require('../../dbConnection')();
 const authMiddleware = require('../../middleware/auth');
 const { info } = require('../../log-config');
+const { set } = require('../../middleware/latelyCookie');
 
 const conn = db.init();
 
@@ -145,6 +146,10 @@ router.get('/:id', (req, res) => {
     // 정상적으로 조회가 되었다면 조회수 +1
     conn.query(query, (err2) => {
       if (err2) throw err2;
+
+      const { lately } = req.cookies;
+      const list = set(lately, req.params.id);
+      res.cookie('lately', list, { httpOnly: true });
       res.send(rows);
     });
   });

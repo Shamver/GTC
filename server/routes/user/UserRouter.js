@@ -6,6 +6,8 @@ const db = require('../../dbConnection')();
 
 const conn = db.init();
 
+const { get } = require('../../middleware/latelyCookie');
+
 router.delete('/withdrawal', (req, res) => {
   const { userId } = req.body;
 
@@ -41,6 +43,25 @@ router.put('/info', (req, res) => {
     if (err) throw err;
 
     res.send(200);
+  });
+});
+
+router.get('/lately', (req, res) => {
+  const { lately } = req.cookies;
+
+  const data = get(lately);
+
+  const query = `SELECT
+  ID AS postId
+  , TITLE AS postTitle
+  FROM GTC_BOARD_POST
+  WHERE ID IN (${data})
+  `;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+
+    res.send(rows);
   });
 });
 

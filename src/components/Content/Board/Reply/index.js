@@ -93,7 +93,7 @@ Reply.propTypes = {
     updateDate: Proptypes.string,
     secretYN: Proptypes.string,
   }).isRequired,
-  secretReplyAllow: Proptypes.string.isRequired,
+  // secretReplyAllow: Proptypes.string.isRequired,
 };
 
 

@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import styled from 'styled-components';
-import * as Proptypes from 'prop-types';
+// import * as Proptypes from 'prop-types';
 import useStores from '../../../../stores/useStores';
 
 const ReplyEdit = () => {
@@ -50,7 +50,7 @@ const ReplyEdit = () => {
 };
 
 ReplyEdit.propTypes = {
-  secretReplyAllow: Proptypes.string.isRequired,
+  // secretReplyAllow: Proptypes.string.isRequired,
 };
 
 const RightButton = styled(Button)`
