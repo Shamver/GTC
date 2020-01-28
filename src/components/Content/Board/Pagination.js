@@ -1,5 +1,5 @@
 import React from 'react';
-import { PaginationItem, PaginationLink, Pagination } from 'reactstrap';
+import { PaginationItem, Pagination } from 'reactstrap';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
