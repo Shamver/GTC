@@ -17,6 +17,8 @@ import BoardStore from './board/BoardStore';
 import BoardPostStore from './board/PostStore';
 import BoardReplyStore from './board/ReplyStore';
 
+import CookieLatelyStore from './cookie/LatelyStore';
+
 class RootStore {
   constructor() {
     this.UserStore = new UserStore(this);
@@ -37,6 +39,8 @@ class RootStore {
     this.BoardStore = new BoardStore(this);
     this.BoardPostStore = new BoardPostStore(this);
     this.BoardReplyStore = new BoardReplyStore(this);
+
+    this.CookieLatelyStore = new CookieLatelyStore(this);
   }
 }
 

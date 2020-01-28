@@ -6,7 +6,7 @@ module.exports.get = (cookie) => {
   }
 
   return [];
-}
+};
 
 module.exports.set = (cookie, id) => {
   if (cookie) {
@@ -16,11 +16,16 @@ module.exports.set = (cookie, id) => {
 
     const count = datas.length < 6 ? datas.length + 1 : maxSize;
 
+    let calc = -1;
+
     for (let i = 0; i < count; i += 1) {
       if (i === 0) {
         returnData += id;
-      } else if (datas[i - 1] !== id) {
-        returnData += `I${datas[i - 1]}`;
+      } else if (datas[i + calc] === id) {
+        returnData += `I${datas[i]}`;
+        calc = 0;
+      } else if (datas[i + calc] !== id) {
+        returnData += `I${datas[i + calc]}`;
       }
     }
 
@@ -28,4 +33,23 @@ module.exports.set = (cookie, id) => {
   }
 
   return id;
+};
+
+module.exports.del = (cookie, id) => {
+  const datas = cookie.split('I');
+
+  let returnData = '';
+
+  const count = datas.length;
+
+  for (let i = 0; i < count; i += 1) {
+    if (datas[i] !== id) {
+      if (i !== 0 && returnData !== '') {
+        returnData += 'I';
+      }
+      returnData += datas[i];
+    }
+  }
+
+  return returnData;
 };

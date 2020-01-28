@@ -94,11 +94,13 @@ class PostStore {
   };
 
   @action getPost = (id) => {
+    const { getDataLately } = this.root.CookieLatelyStore;
     axios.get(`/api/board/post/${id}`, {})
       .then((response) => {
         if (response.data) {
           const [post] = response.data;
           this.postView = post;
+          getDataLately();
         }
       })
       .catch((response) => { console.log(response); });

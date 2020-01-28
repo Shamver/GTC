@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {
   InputGroup, InputGroupAddon, Button, Input,
@@ -16,19 +16,22 @@ import HeaderInProfile from './HeaderInProfile';
 import HeaderFavoriteItem from './HeaderFavoriteItem';
 import HeaderLatelyItem from './HeaderLatelyItem';
 
-const Index = () => {
+const Header = () => {
   const {
-    ComponentHeaderStore, UserFavoriteStore, UserStore,
+    ComponentHeaderStore, UserFavoriteStore, UserStore, CookieLatelyStore,
   } = useStores();
-  const { onActive, dropdown, latelyList } = ComponentHeaderStore;
+  const { onActive, dropdown } = ComponentHeaderStore;
   const { favoriteList, getDataFavorite } = UserFavoriteStore;
-  const { userData, getLately } = UserStore;
+  const { userData } = UserStore;
+  const { latelyList, getDataLately, deleteLately } = CookieLatelyStore;
 
-  getDataFavorite();
-  getLately();
+  useEffect(() => {
+    getDataFavorite();
+    getDataLately();
+  }, [getDataFavorite, getDataLately]);
 
   const FavoriteData = favoriteList.map((v) => HeaderFavoriteItem(v));
-  const LatelyData = latelyList ? latelyList.map((v) => HeaderLatelyItem(v)) : '';
+  const LatelyData = latelyList ? latelyList.map((v) => HeaderLatelyItem(v, deleteLately)) : '';
   return (
     <HeaderWrapper>
       <Link to="/">
@@ -214,4 +217,4 @@ const Logo = styled.img`
   width : 100px;
 `;
 
-export default observer(Index);
+export default observer(Header);

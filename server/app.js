@@ -19,6 +19,7 @@ const boardPostApi = require('./routes/board/PostRouter');
 const userAlertApi = require('./routes/user/AlertRouter');
 const userIgnoreApi = require('./routes/user/IgnoreRouter');
 const userFavoriteApi = require('./routes/user/FavoriteRouter');
+const cookieLatelyApi = require('./routes/cookie/LatelyRouter');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -46,6 +47,8 @@ app.use('/api/board/reply', boardReplyApi);
 // authMiddleware 때문에 하단 위치
 app.use('/api/board', authMiddleware);
 app.use('/api/board', boardApi);
+
+app.use('/api/cookie/lately', cookieLatelyApi);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => info(`Listening on port ${port}...`));
