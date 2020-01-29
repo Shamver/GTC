@@ -21,7 +21,7 @@ module.exports.set = (cookie, id) => {
     for (let i = 0; i < count; i += 1) {
       if (i === 0) {
         returnData += id;
-      } else if (datas[i + calc] === id) {
+      } else if (datas[i + calc] === id && count === maxSize) {
         returnData += `I${datas[i]}`;
         calc = 0;
       } else if (datas[i + calc] !== id) {
