@@ -28,6 +28,7 @@ ReactDOM.render((
     BoardStore={stores.BoardStore}
     BoardPostStore={stores.BoardPostStore}
     BoardReplyStore={stores.BoardReplyStore}
+    BoardReportStore={stores.BoardReportStore}
   >
     <Router>
       <Route component={App} />

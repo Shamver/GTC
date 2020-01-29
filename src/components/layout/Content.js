@@ -8,6 +8,7 @@ import Alert from '../util/Alert';
 import Sign from '../util/Sign';
 import ConfirmAlert from '../util/ConfirmAlert';
 import Contents from '../Content';
+import Report from '../util/Report';
 
 const BorderedDiv = styled.div`
   border-bottom: 2px solid #ebeae8;
@@ -35,6 +36,7 @@ const Content = () => (
     </Switch>
     <Alert />
     <Sign />
+    <Report />
     <ConfirmAlert />
     <ToastContainer
       position="bottom-left"

@@ -18,11 +18,13 @@ import Loading from '../../../util/Loading';
 const PostContent = ({ match }) => {
   const {
     BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore,
+    BoardReportStore,
   } = useStores();
   const { postView, recommendPost } = BoardPostStore;
   const { postReplyList, setReplyOption } = BoardReplyStore;
   const { currentBoard } = BoardStore;
   const { loading } = UtilLoadingStore;
+  const { toggleReport } = BoardReportStore;
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
     recommendCount, replyAllow, secretReplyAllow,
@@ -85,7 +87,7 @@ const PostContent = ({ match }) => {
             &nbsp;목록
           </Button>
           &nbsp;
-          <Button outline color="danger" size="sm">
+          <Button outline color="danger" size="sm" onClick={toggleReport}>
             <FontAwesomeIcon icon={faBellSlash} />
             &nbsp;신고
           </Button>

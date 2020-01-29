@@ -26,13 +26,13 @@ const BoardContent = ({ path, currentPage }) => {
 
   const tempData = {
     id: 1,
-    title: '채팅창 제재 기준입니다. (2018. 10. 19)',
+    title: '공지 채팅창 제재 기준입니다. (2018. 10. 19)',
     writer: '배진영',
     type: 'notice',
     date: '01-28',
     categoryName: '공지',
-    recommendCount: 'ㅎㅇㅎㅇ',
-    replyCount: 'ㅎㅇㅎㅇ',
+    recommendCount: 0,
+    replyCount: 0,
   };
 
   return (
@@ -101,7 +101,7 @@ const HeaderDiv = styled.div`
 
   & > a {
     display: inline-block;
-    padding: 11px 16px;
+    padding: 11px 18.3px;
     background-color : #ffd7d4;
     text-decoration: none;
     font-size: 12px;

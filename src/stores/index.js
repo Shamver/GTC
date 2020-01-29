@@ -16,6 +16,7 @@ import UtilRouteStore from './util/RouteStore';
 import BoardStore from './board/BoardStore';
 import BoardPostStore from './board/PostStore';
 import BoardReplyStore from './board/ReplyStore';
+import BoardReportStore from './board/ReportStore';
 
 class RootStore {
   constructor() {
@@ -37,6 +38,7 @@ class RootStore {
     this.BoardStore = new BoardStore(this);
     this.BoardPostStore = new BoardPostStore(this);
     this.BoardReplyStore = new BoardReplyStore(this);
+    this.BoardReportStore = new BoardReportStore(this);
   }
 }
 

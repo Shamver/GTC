@@ -14,11 +14,12 @@ const Post = ({ data }) => {
 
   return (
     <tr height="35" key={data.id}>
-      <CenterTd>
+      <CenterTd width="50">
         {recommendCount > 0 ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : ''}
-
       </CenterTd>
-      { type !== 'notice' ? (<CenterTd>{categoryName}</CenterTd>) : ''}
+      <CenterTd>
+      { type !== 'notice' ? categoryName : ''}
+      </CenterTd>
       <MiddleTd width="700">
         { type !== 'notice' ? (<FontAwesomeIcon icon={faCommentDots} />) : (<FontAwesomeIcon icon={faInfoCircle} />)}
         &nbsp;

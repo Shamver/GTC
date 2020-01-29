@@ -3,8 +3,8 @@ import { PaginationItem, Pagination } from 'reactstrap';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import useStores from '../../../stores/useStores';
 import { observer } from 'mobx-react';
+import useStores from '../../../stores/useStores';
 
 const PaginationList = observer(({ path, currentPage, noPagination }) => {
   const { BoardPostStore } = useStores();
@@ -13,7 +13,6 @@ const PaginationList = observer(({ path, currentPage, noPagination }) => {
   const currentPageNum = parseInt(currentPage, 0);
   const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
   const max = (currentPageNum + 3) > currentBoardMaxPage ? currentBoardMaxPage : currentPageNum + 3;
-  console.log(min,max, currentBoardMaxPage);
   const array = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 1);
 
   if (currentPage > 1) {
