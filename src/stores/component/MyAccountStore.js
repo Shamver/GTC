@@ -11,6 +11,8 @@ class MyAccountStore {
 
   @observable isAllValidationChecked = true;
 
+  @observable timer;
+
   @observable nicknameValidation = {
     status: true,
     message: '',
@@ -40,7 +42,14 @@ class MyAccountStore {
 
   @action onChangeValue = ((e) => {
     this[e.target.name] = e.target.value;
-    this.checkValidation();
+
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+
+    this.timer = setTimeout(() => {
+      this.checkValidation();
+    }, 300);
   });
 
   @action setDefaultValue = (() => {
@@ -56,7 +65,7 @@ class MyAccountStore {
   });
 
   @action checkValidation = (() => {
-    if (this.nickname === '') {
+    if (this.nickname.trim() === '') {
       this.nicknameValidation = {
         status: false,
         message: '공백 닉네임은 불가능합니다.',

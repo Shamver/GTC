@@ -200,7 +200,7 @@ class UserStore {
     const { history } = this.root.UtilRouteStore;
 
     axios.put('/api/user/info', {
-      nickname,
+      nickname: nickname.trim(),
       birth,
       gender,
       profileYN,
