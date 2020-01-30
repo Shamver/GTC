@@ -50,7 +50,7 @@ const HeaderInProfile = () => {
                 { alertCount > 0 ? (<NewAlertCountSpan>{alertCount}</NewAlertCountSpan>) : ''}
                 <Avatar src={avatarImg} />
               </AvatarDropdownToggleC>
-              <DropdownMenu>
+              <DropdownMenuLeft>
                 <DropdownItemTitle onClick={() => { }}>
                   <ProfileNick>{userData.username}</ProfileNick>
                   <ProfileId>{userData.gtName}</ProfileId>
@@ -73,7 +73,7 @@ const HeaderInProfile = () => {
                   <FontAwesomeIcon icon={faSignOutAlt} />
                   &nbsp; 로그아웃
                 </DropdownItem30>
-              </DropdownMenu>
+              </DropdownMenuLeft>
             </DropdownIn>
           </>
         )}
@@ -95,6 +95,11 @@ const DropdownIn = styled(Dropdown)`
     text-decoration: none !important;
     background-color: #DC3545 !important;
   }
+`;
+
+// 나중에 화면단위별로 위치 변경
+const DropdownMenuLeft = styled(DropdownMenu)`
+  left: -92px !important;
 `;
 
 const DropdownItem30 = styled(DropdownItem)`

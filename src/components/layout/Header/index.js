@@ -30,8 +30,13 @@ const Header = () => {
     getDataLately();
   }, [getDataFavorite, getDataLately]);
 
-  const FavoriteData = favoriteList.map((v) => HeaderFavoriteItem(v));
-  const LatelyData = latelyList ? latelyList.map((v) => HeaderLatelyItem(v, deleteLately)) : '';
+  const FavoriteData = favoriteList.length === 0
+    ? (<DropdownItem30 disabled>즐겨찾기한 게시물이 없습니다.</DropdownItem30>)
+    : favoriteList.map((v) => HeaderFavoriteItem(v));
+  const LatelyData = latelyList.length === 0
+    ? (<DropdownItem30 disabled>최근 본 게시물이 없습니다.</DropdownItem30>)
+    : latelyList.map((v) => HeaderLatelyItem(v, deleteLately));
+
   return (
     <HeaderWrapper>
       <Link to="/">
@@ -67,7 +72,8 @@ const Header = () => {
                   <FontAwesomeIcon icon={faStar} /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
-                  {userData ? FavoriteData : '로그인 후 이용 가능합니다.'}
+                  {userData ? FavoriteData
+                    : (<DropdownItem30 disabled>로그인 후 이용 가능합니다.</DropdownItem30>)}
                 </DropdownMenu>
               </DropdownIn>
               <DropdownIn isOpen={dropdown.smile} toggle={onActive}>
