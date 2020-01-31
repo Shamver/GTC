@@ -32,14 +32,14 @@ const Report = () => {
         <h5>신고사유 선택</h5>
         <FormGroup>
           <div>
-            <CustomInput type="radio" id="exampleCustomRadio" name="customRadio" label="욕설/비하" />
-            <CustomInput type="radio" id="exampleCustomRadio2" name="customRadio" label="음란성" />
-            <CustomInput type="radio" id="exampleCustomRadio3" name="customRadio" label="게시글/댓글 도배" />
-            <CustomInput type="radio" id="exampleCustomRadio4" name="customRadio" label="홍보성 콘텐츠" />
-            <CustomInput type="radio" id="exampleCustomRadio5" name="customRadio" label="타인의 개인정보 유포" />
-            <CustomInput type="radio" id="exampleCustomRadio6" name="customRadio" label="허위사실 유포" />
-            <CustomInput type="radio" id="exampleCustomRadio7" name="customRadio" label="명예훼손 관련" />
-            <CustomInput type="radio" id="exampleCustomRadio8" name="customRadio" label="기타" />
+            <CustomInput type="radio" id="RR01" value="RR01" onChange={onChangeValue} name="reason" label="욕설/비하" />
+            <CustomInput type="radio" id="RR02" value="RR02" onChange={onChangeValue} name="reason" label="음란성" />
+            <CustomInput type="radio" id="RR03" value="RR03" onChange={onChangeValue} name="reason" label="게시글/댓글 도배" />
+            <CustomInput type="radio" id="RR04" value="RR04" onChange={onChangeValue} name="reason" label="홍보성 콘텐츠" />
+            <CustomInput type="radio" id="RR05" value="RR05" onChange={onChangeValue} name="reason" label="타인의 개인정보 유포" />
+            <CustomInput type="radio" id="RR06" value="RR06" onChange={onChangeValue} name="reason" label="허위사실 유포" />
+            <CustomInput type="radio" id="RR07" value="RR07" onChange={onChangeValue} name="reason" label="명예훼손 관련" />
+            <CustomInput type="radio" id="RR08" value="RR08" onChange={onChangeValue} name="reason" label="기타" />
           </div>
         </FormGroup>
         <Input type="textarea" name="text" onChange={onChangeValue} value={reasonDetail} placeholder="신고 사유 설명이 필요하신 경우 작성해주세요." />

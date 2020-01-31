@@ -16,6 +16,7 @@ const authApi = require('./routes/user/AuthRouter.js');
 const userApi = require('./routes/user/UserRouter.js');
 const boardReplyApi = require('./routes/board/ReplyRouter.js');
 const boardPostApi = require('./routes/board/PostRouter');
+const boardReportApi = require('./routes/board/ReportRouter');
 const userAlertApi = require('./routes/user/AlertRouter');
 const userIgnoreApi = require('./routes/user/IgnoreRouter');
 const userFavoriteApi = require('./routes/user/FavoriteRouter');
@@ -41,6 +42,10 @@ app.use('/api/board/post', boardPostApi);
 // reply
 app.use('/api/board/reply', authMiddleware);
 app.use('/api/board/reply', boardReplyApi);
+
+// report
+app.use('/api/board/report', authMiddleware);
+app.use('/api/board/report', boardReportApi);
 
 // board
 // authMiddleware 때문에 하단 위치

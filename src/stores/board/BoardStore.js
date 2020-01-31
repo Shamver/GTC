@@ -26,7 +26,7 @@ class BoardStore {
     name: '월드락 거래',
   }, {
     value: 'CRIME',
-    name: '신고게시판',
+    name: '신고 게시판',
   }, {
     value: 'Q&A',
     name: '질문 & 답변',

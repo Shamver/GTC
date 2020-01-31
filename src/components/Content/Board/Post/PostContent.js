@@ -87,7 +87,7 @@ const PostContent = ({ match }) => {
             &nbsp;목록
           </Button>
           &nbsp;
-          <Button outline color="danger" size="sm" onClick={toggleReport}>
+          <Button outline color="danger" size="sm" onClick={() => toggleReport(1, title, writer)}>
             <FontAwesomeIcon icon={faBellSlash} />
             &nbsp;신고
           </Button>
