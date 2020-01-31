@@ -130,7 +130,12 @@ class ReplyStore {
 
   @action deleteReply = (id) => {
     axios.delete('/api/board/reply', {
-      params: { id },
+      params: {
+        id,
+        writer: this.root.UserStore.userData.id,
+        bpId: this.reply.bpId,
+        replyId: id,
+      },
     })
       .then((response) => {
         if (response.data) {

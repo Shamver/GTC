@@ -8,6 +8,8 @@ const { set } = require('../../middleware/latelyCookie');
 
 const conn = db.init();
 
+const point = require('../../middleware/point');
+
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
   const { board } = req.query;
@@ -61,7 +63,18 @@ router.post('/', (req, res) => {
 
   conn.query(query, (err) => {
     if (err) throw err;
-    res.send(true);
+
+    conn.query('SELECT IFNULL(MAX(ID), 1) AS id FROM GTC_BOARD_POST', (err2, rows) => {
+      if (err2) throw err2;
+
+      const postData = {
+        ...data,
+        bpId: rows[0].id,
+      };
+
+      point('addPost', 'POST', postData);
+      res.send(true);
+    });
   });
 });
 

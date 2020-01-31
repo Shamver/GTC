@@ -55,22 +55,22 @@ const HeaderInProfile = () => {
                   <ProfileNick>{userData.username}</ProfileNick>
                   <ProfileId>{userData.gtName}</ProfileId>
                 </DropdownItemTitle>
-                <Link to="/newalert">
+                <LinkNoDeco to="/newalert">
                   <DropdownItem30>새로운 알림 ({alertCount} 개)</DropdownItem30>
-                </Link>
-                <Link to="/myaccount">
+                </LinkNoDeco>
+                <LinkNoDeco to="/myaccount">
                   <DropdownItem30>내 정보 관리</DropdownItem30>
-                </Link>
-                <Link to="mypoint">
+                </LinkNoDeco>
+                <LinkNoDeco to="mypoint">
                   <DropdownItem30>{10} 포인트</DropdownItem30>
-                </Link>
+                </LinkNoDeco>
                 <DropdownItem30 divider />
-                <Link to="/setting">
+                <LinkNoDeco to="/setting">
                   <DropdownItem30>설정</DropdownItem30>
-                </Link>
-                <Link to="/postlocker">
+                </LinkNoDeco>
+                <LinkNoDeco to="/postlocker">
                   <DropdownItem30>글보관함</DropdownItem30>
-                </Link>
+                </LinkNoDeco>
                 <DropdownItem30 onClick={logout}>
                   <FontAwesomeIcon icon={faSignOutAlt} />
                   &nbsp; 로그아웃
@@ -97,6 +97,10 @@ const DropdownIn = styled(Dropdown)`
     text-decoration: none !important;
     background-color: #DC3545 !important;
   }
+`;
+
+const LinkNoDeco = styled(Link)`
+  text-decoration: none !important;
 `;
 
 // 나중에 화면단위별로 위치 변경

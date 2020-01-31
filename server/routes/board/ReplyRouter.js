@@ -8,6 +8,8 @@ const alertMiddleware = require('../../middleware/alert');
 
 const conn = db.init();
 
+const point = require('../../middleware/point');
+
 router.post('/', (req, res) => {
   const data = req.body;
   const query = `INSERT INTO GTC_BOARD_REPLY (
@@ -38,9 +40,10 @@ router.post('/', (req, res) => {
   conn.query(query, (err) => {
     if (err) throw err;
 
-    const query2 = `SELECT WRITER as postWriter
-      FROM GTC_BOARD_POST
-      WHERE ID = ${data.bpId}
+    const query2 = `SELECT GBP.WRITER as postWriter,
+      IFNULL(MAX(GBR.ID),1) AS replyId
+      FROM GTC_BOARD_POST GBP, GTC_BOARD_REPLY GBR
+      WHERE GBP.ID = ${data.bpId}
     `;
 
     conn.query(query2, (err2, rows) => {
@@ -50,6 +53,12 @@ router.post('/', (req, res) => {
       if (postWriter !== data.writer) {
         alertMiddleware();
       }
+
+      const postData = {
+        ...data,
+        replyId: rows[0].replyId,
+      };
+      point('addReply', 'REPLY', postData);
       res.send(true);
     });
   });
@@ -123,6 +132,8 @@ router.delete('/', (req, res) => {
 
   conn.query(query, (err) => {
     if (err) throw err;
+
+    point('deleteReply', 'REPLY', data);
     res.send(true);
   });
 });
