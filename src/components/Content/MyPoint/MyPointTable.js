@@ -4,34 +4,15 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 
+import { observer } from 'mobx-react';
 import MyPointTableRow from './MyPointTableRow';
+import useStores from '../../../stores/useStores';
 
 const MyPointTable = () => {
-  const myPointList = [
-    {
-      id: 1,
-      date: '2020-01-10 15:31:31',
-      point: 1,
-      desc: '댓글 작성',
-      postId: 35102603,
-    },
-    {
-      id: 2,
-      date: '2020-01-07 15:31:31',
-      point: -1,
-      desc: '댓글 삭제',
-      postId: 35102621,
-    },
-    {
-      id: 3,
-      date: '2020-01-03 15:31:31',
-      point: 10,
-      desc: '글 작성',
-      postId: 3512603,
-    },
-  ];
+  const { UserPointStore } = useStores();
 
-  const MyPointTableData = myPointList.map((v) => (MyPointTableRow('myPoint', v)));
+  const { pointList } = UserPointStore;
+  const MyPointTableData = pointList.map((v) => (MyPointTableRow('myPoint', v)));
 
   return (
     <ListTable size="sm" bordered>
@@ -65,4 +46,4 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
-export default MyPointTable;
+export default observer(MyPointTable);

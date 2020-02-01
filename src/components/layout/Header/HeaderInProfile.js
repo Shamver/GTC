@@ -13,17 +13,23 @@ import KakaoSign from './KakaoSign';
 import useStores from '../../../stores/useStores';
 
 const HeaderInProfile = () => {
-  const { UserStore, ComponentHeaderStore, UserAlertStore } = useStores();
+  const {
+    UserStore, ComponentHeaderStore, UserAlertStore, UserPointStore,
+  } = useStores();
   const { userData, logout } = UserStore;
   const { onActive, dropdown } = ComponentHeaderStore;
   const { mail, avatar } = dropdown;
   const { alertCount, getDataAlert } = UserAlertStore;
+  const {
+    totalPoint, getTotalPointData,
+  } = UserPointStore;
 
   useEffect(() => {
     if (userData) {
       getDataAlert();
+      getTotalPointData();
     }
-  }, [getDataAlert, userData]);
+  }, [getDataAlert, userData, getTotalPointData]);
 
   return (
     <>
@@ -61,8 +67,8 @@ const HeaderInProfile = () => {
                 <LinkNoDeco to="/myaccount">
                   <DropdownItem30>내 정보 관리</DropdownItem30>
                 </LinkNoDeco>
-                <LinkNoDeco to="mypoint">
-                  <DropdownItem30>{10} 포인트</DropdownItem30>
+                <LinkNoDeco to="/mypoint">
+                  <DropdownItem30><b>{totalPoint}</b> 포인트</DropdownItem30>
                 </LinkNoDeco>
                 <DropdownItem30 divider />
                 <LinkNoDeco to="/setting">

@@ -2,6 +2,7 @@ import UserStore from './user/UserStore';
 import UserAlertStore from './user/AlertStore';
 import UserFavoriteStore from './user/FavoriteStore';
 import UserIgnoreStore from './user/IgnoreStore';
+import UserPointStore from './user/PointStore';
 
 import ComponentHeaderStore from './component/HeaderStore';
 import ComponentPostLockerStore from './component/PostLockerStore';
@@ -25,6 +26,7 @@ class RootStore {
     this.UserAlertStore = new UserAlertStore(this);
     this.UserFavoriteStore = new UserFavoriteStore(this);
     this.UserIgnoreStore = new UserIgnoreStore(this);
+    this.UserPointStore = new UserPointStore(this);
 
     this.ComponentPostLockerStore = new ComponentPostLockerStore(this);
     this.ComponentSettingStore = new ComponentSettingStore(this);

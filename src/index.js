@@ -14,6 +14,7 @@ ReactDOM.render((
     UserAlertStore={stores.UserAlertStore}
     UserFavoriteStore={stores.UserFavoriteStore}
     UserIgnoreStore={stores.UserIgnoreStore}
+    UserPointStore={stores.UserPointStore}
 
     ComponentHeaderStore={stores.ComponentHeaderStore}
     ComponentSettingStore={stores.ComponentSettingStore}

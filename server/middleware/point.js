@@ -13,10 +13,10 @@ module.exports = (action, type, data) => {
         '${data.bpId}',
         ${replyId},
         ${cost},
-        '${data.writer}'
+        '${data.writer}',
+        sysdate()
     )
   `;
-  console.log(query);
 
   conn.query(query, (err) => {
     if (err) throw err;
