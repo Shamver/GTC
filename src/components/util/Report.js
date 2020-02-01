@@ -9,8 +9,12 @@ import useStores from '../../stores/useStores';
 
 const Report = () => {
   const { BoardReportStore } = useStores();
-  const { reportToggle, toggleReport, reportData, onChangeValue } = BoardReportStore;
-  const { content, writer, reason, reasonDetail} = reportData;
+  const {
+    reportToggle, toggleReport, reportData, onChangeValue, report
+  } = BoardReportStore;
+  const {
+    content, writer, reasonDetail, type
+  } = reportData;
 
 
   return (
@@ -24,7 +28,7 @@ const Report = () => {
               <td>{writer}</td>
             </tr>
             <tr>
-              <th>제목</th>
+              <th>{type === 'RP01' ? '제목' : '댓글'}</th>
               <td>{content}</td>
             </tr>
           </tbody>
@@ -49,8 +53,8 @@ const Report = () => {
         </ReportDescription>
       </ModalBodyNoPadding>
       <ModalFooter>
-        <Button>닫기</Button>
-        <Button color="info">신고하기</Button>
+        <Button onClick={toggleReport}>닫기</Button>
+        <Button onClick={report} color="info">신고하기</Button>
       </ModalFooter>
     </ModalW630>
   );

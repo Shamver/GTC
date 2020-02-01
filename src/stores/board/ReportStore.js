@@ -1,11 +1,13 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
 
 class ReportStore {
   @observable reportToggle;
 
   @observable reportData = {
+    targetId: '',
+    type: '',
     content: '',
     writer: '',
     reason: '',
@@ -20,17 +22,12 @@ class ReportStore {
     if (!this.ReportValidationCheck()) {
       return false;
     }
+    console.log(this.reportData);
 
-    axios.post('/api/board/report', {
-      id: postId,
-      uId: this.root.UserStore.userData.id,
-      type: isRecommend ? 'R01' : 'R02',
-    })
+    axios.post('/api/board/report', this.reportData)
       .then((response) => {
-        if (response.data === 1) {
-          toast.success('😳 해당 포스팅 투표 완료!');
-        } else if (response.data === 2) {
-          toast.error('😳 이미 해당 포스팅에 투표가 완료되었어요!');
+        if (response.data) {
+          toast.success('😳 해당 포스팅에 신고가 완료되었어요.');
         }
       })
       .catch((response) => { console.log(response); });
@@ -58,9 +55,12 @@ class ReportStore {
 
   };
 
-  @action toggleReport = (bpId, content, writer) => {
-    if (bpId) {
+  @action toggleReport = (targetId, type, content, writer) => {
+    console.log(writer);
+    if (targetId) {
       this.reportData = {
+        targetId,
+        type,
         content,
         writer,
       };

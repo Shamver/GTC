@@ -2,31 +2,40 @@ const express = require('express');
 
 const router = express.Router();
 const db = require('../../dbConnection')();
+const { info } = require('../../log-config');
 
 const conn = db.init();
 
 router.post('/', (req, res) => {
   const data = req.body;
-  const query = `INSERT INTO GTC_BOARD_POST
-    VALUES(
-    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_POST) as temp),
-    '${data.board}',
-    '${data.category}',
-    null,
-    '${data.title}',
-    '${data.writer}',
-    sysdate(),
-    0,
-    '${data.content}',
-     ${data.depth},
-     '${data.secret}',
-     '${data.secretReplyAllow}',
-     '${data.replyAllow}'
-    )`;
+  let query = `SELECT COUNT(*) AS count FROM GTC_BOARD_REPORT
+    WHERE TARGET_ID = ${data.targetId}
+    AND U_ID = ${data.writer}
+    AND TYPE = ${data.type}
+    `;
 
-  conn.query(query, (err) => {
+  info(query);
+
+  conn.query(query, (err, rows) => {
     if (err) throw err;
-    res.send(true);
+
+    // 이미 해당 타겟에 동일한 유저가 신고를 함.
+    if (rows[0].count === 1) {
+      res.send(2);
+    } else {
+      query = `INSERT INTO GTC_BOARD_REPORT
+        VALUES (
+          ${data.id},
+          ${data.uId}
+        )`;
+
+      info(query);
+
+      conn.query(query, (err2) => {
+        if (err2) throw err2;
+        res.send(1);
+      });
+    }
   });
 });
 
