@@ -6,9 +6,9 @@ import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
-const PaginationList = observer(({ path, currentPage, noPagination }) => {
-  const { BoardPostStore } = useStores();
-  const { currentBoardMaxPage } = BoardPostStore;
+const PaginationList = observer(({ currentPage, noPagination }) => {
+  const { UserPointStore } = useStores();
+  const { currentBoardMaxPage } = UserPointStore;
 
   const currentPageNum = parseInt(currentPage, 0);
   const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
@@ -18,7 +18,7 @@ const PaginationList = observer(({ path, currentPage, noPagination }) => {
   if (currentPage > 1) {
     array.push(
       <PaginationItem key={0}>
-        <CustomLink className="page-link" activeClassName="active" to={`/${path}/page/${currentPageNum - 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/mypoint/${currentPageNum - 1}`}>
           ‹
         </CustomLink>
       </PaginationItem>,
@@ -28,7 +28,7 @@ const PaginationList = observer(({ path, currentPage, noPagination }) => {
   for (let i = min; i <= max; i += 1) {
     array.push(
       <PaginationItem active={i === 1 && noPagination} key={i}>
-        <CustomLink className="page-link" activeClassName="active" to={`/${path}/page/${i}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/mypoint/${i}`}>
           {i}
         </CustomLink>
       </PaginationItem>,
@@ -38,7 +38,7 @@ const PaginationList = observer(({ path, currentPage, noPagination }) => {
   if (currentPageNum !== currentBoardMaxPage) {
     array.push(
       <PaginationItem key={-1}>
-        <CustomLink className="page-link" activeClassName="active" to={`/${path}/page/${currentPageNum + 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/mypoint/${currentPageNum + 1}`}>
           ›
         </CustomLink>
       </PaginationItem>,
@@ -50,7 +50,6 @@ const PaginationList = observer(({ path, currentPage, noPagination }) => {
 });
 
 PaginationList.propTypes = {
-  path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
   noPagination: Proptypes.bool,
 };
@@ -60,19 +59,18 @@ PaginationList.defaultProps = {
 };
 
 
-const BoardPagination = ({ path, noPagination, currentPage }) => (
+const PointPagination = ({ noPagination, currentPage }) => (
   <PaginationCustom>
-    <PaginationList currentPage={currentPage} path={path} noPagination={noPagination} />
+    <PaginationList currentPage={currentPage} noPagination={noPagination} />
   </PaginationCustom>
 );
 
-BoardPagination.propTypes = {
-  path: Proptypes.string.isRequired,
+PointPagination.propTypes = {
   noPagination: Proptypes.bool,
   currentPage: Proptypes.string,
 };
 
-BoardPagination.defaultProps = {
+PointPagination.defaultProps = {
   noPagination: false,
   currentPage: '1',
 };
@@ -123,4 +121,4 @@ const PaginationCustom = styled(Pagination)`
   }
 `;
 
-export default BoardPagination;
+export default PointPagination;

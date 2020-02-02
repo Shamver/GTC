@@ -87,7 +87,6 @@ class PostStore {
             const { pageCount } = response.data[0];
             this.currentBoardMaxPage = pageCount;
           }
-
         }
       })
       .catch((response) => { console.log(response); });

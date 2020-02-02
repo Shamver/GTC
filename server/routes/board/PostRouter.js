@@ -162,7 +162,6 @@ router.get('/:id', (req, res) => {
 
       const { lately } = req.cookies;
       const list = set(lately, req.params.id);
-      console.log(lately, req.params.id);
       res.cookie('lately', list, { httpOnly: true });
       res.send(rows);
     });
