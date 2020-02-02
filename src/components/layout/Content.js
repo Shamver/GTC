@@ -10,12 +10,6 @@ import ConfirmAlert from '../util/ConfirmAlert';
 import Contents from '../Content';
 import Report from '../util/Report';
 
-const BorderedDiv = styled.div`
-  border-bottom: 2px solid #ebeae8;
-  border-right: 2px solid #ebeae8;
-  margin-bottom : 20px;
-`;
-
 const Content = () => (
   <BorderedDiv>
     <Switch>
@@ -24,7 +18,6 @@ const Content = () => (
       <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
       <Route exact path="/setting" render={() => <Contents.Setting />} />
       <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
-
 
       {/* BOARD */}
       <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} noPagination />} />
@@ -38,7 +31,7 @@ const Content = () => (
     <Sign />
     <Report />
     <ConfirmAlert />
-    <ToastContainer
+    <ToastContainerCustom
       position="bottom-left"
       autoClose={3000}
       hideProgressBar
@@ -52,5 +45,19 @@ const Content = () => (
   </BorderedDiv>
 );
 
+const BorderedDiv = styled.div`
+  border-bottom: 2px solid #ebeae8;
+  border-right: 2px solid #ebeae8;
+  margin-bottom : 20px;
+`;
+
+const ToastContainerCustom = styled(ToastContainer)`
+  & .Toastify__toast-body {
+    font-family : 'NanumSquareRound', sans-serif !important
+  }
+  
+  width : 380px !important;
+ 
+`;
 
 export default Content;

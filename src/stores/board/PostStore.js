@@ -104,11 +104,11 @@ class PostStore {
       .catch((response) => { console.log(response); });
   };
 
-  @action recommendPost = (postId, isRecommend) => {
+  @action recommendPost = (postId, type) => {
     axios.post('/api/board/post/recommend', {
       id: postId,
       uId: this.root.UserStore.userData.id,
-      type: isRecommend ? 'R01' : 'R02',
+      type,
     })
       .then((response) => {
         if (response.data === 1) {

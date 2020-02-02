@@ -10,8 +10,8 @@ router.post('/', (req, res) => {
   const data = req.body;
   let query = `SELECT COUNT(*) AS count FROM GTC_BOARD_REPORT
     WHERE TARGET_ID = ${data.targetId}
-    AND U_ID = ${data.writer}
-    AND TYPE = ${data.type}
+    AND U_ID = ${data.writerId}
+    AND TYPE = '${data.type}'
     `;
 
   info(query);
@@ -25,8 +25,11 @@ router.post('/', (req, res) => {
     } else {
       query = `INSERT INTO GTC_BOARD_REPORT
         VALUES (
-          ${data.id},
-          ${data.uId}
+          (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_REPORT) as temp),
+          ${data.targetId},
+          ${data.writerId},
+          '${data.type}',
+          '${data.reason}'
         )`;
 
       info(query);

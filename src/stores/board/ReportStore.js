@@ -22,12 +22,16 @@ class ReportStore {
     if (!this.ReportValidationCheck()) {
       return false;
     }
-    console.log(this.reportData);
-
-    axios.post('/api/board/report', this.reportData)
+    axios.post('/api/board/report', {
+      ...this.reportData,
+      writerId: this.root.UserStore.userData.id,
+    })
       .then((response) => {
-        if (response.data) {
+        if (response.data === 1) {
           toast.success('😳 해당 포스팅에 신고가 완료되었어요.');
+          this.toggleReport();
+        } else if (response.data === 2) {
+          toast.warn('😳 이미 해당 대상에 신고가 완료된 상태입니다!');
         }
       })
       .catch((response) => { console.log(response); });

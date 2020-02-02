@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../dbConnection')();
 const authMiddleware = require('../../middleware/auth');
-const { info } = require('../../log-config');
 
 const conn = db.init();
 
@@ -23,14 +22,13 @@ router.get('/', (req, res) => {
         , P.DEPTH AS depth
         , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
         , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
+        
         , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id) as replyCount
     FROM GTC_BOARD_POST P, (SELECT @ROWNUM := ${(currentPage - 1) * 25}) AS TEMP
     WHERE B_ID = '${board.toUpperCase()}'
     ORDER BY ID DESC    
     LIMIT ${(currentPage - 1) * 25}, 25
     `;
-
-  info(query);
 
   conn.query(query, (err, rows) => {
     if (err) throw err;

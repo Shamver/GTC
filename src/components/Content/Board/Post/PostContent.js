@@ -27,7 +27,7 @@ const PostContent = ({ match }) => {
   const { toggleReport } = BoardReportStore;
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
-    recommendCount, replyAllow, secretReplyAllow,
+    recommendCount, replyAllow, secretReplyAllow, notRecommendCount,
   } = postView;
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const PostContent = ({ match }) => {
           <RightSpan>
             <FontAwesomeIcon icon={faCommentDots} /> {postReplyList.length}
             &nbsp;
-            <FontAwesomeIcon icon={faHeart} /> 0
+            <FontAwesomeIcon icon={faHeart} /> {recommendCount}
             &nbsp;
             <FontAwesomeIcon icon={faEye} /> {views}
           </RightSpan>
@@ -70,14 +70,14 @@ const PostContent = ({ match }) => {
         <ContentWrapper>
           {renderHTML(`${content}`)}
           <TextCenterDiv>
-            <SmallFontButton outline color="success" onClick={() => recommendPost(postId)}>
+            <SmallFontButton outline color="success" onClick={() => recommendPost(postId, 'R01')}>
               <FontAwesomeIcon icon={faThumbsUp} />
               &nbsp;추천 {recommendCount}
             </SmallFontButton>
             &nbsp;
-            <SmallFontButton outline color="primary">
+            <SmallFontButton outline color="primary" onClick={() => recommendPost(postId, 'R02')}>
               <FontAwesomeIcon icon={faThumbsDown} />
-              &nbsp;비추천 0
+              &nbsp;비추천 {notRecommendCount}
             </SmallFontButton>
           </TextCenterDiv>
         </ContentWrapper>
