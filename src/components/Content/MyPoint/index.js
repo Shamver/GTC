@@ -9,11 +9,12 @@ import MyPointTable from './MyPointTable';
 import useStores from '../../../stores/useStores';
 
 const MyPoint = () => {
-  const { UserPointStore, UtilStore } = useStores();
-
+  const { UserPointStore, UtilStore, UtilLoadingStore } = useStores();
   const { loginCheck } = UtilStore;
-
+  const { doLoading } = UtilLoadingStore;
   const { totalPoint, getPointData } = UserPointStore;
+
+  doLoading();
 
   useEffect(() => {
     if (loginCheck()) {

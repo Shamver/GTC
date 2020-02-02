@@ -23,9 +23,9 @@ router.get('/', (req, res) => {
   conn.query(query, (err, rows) => {
     if (err) throw err;
     if (rows.length > 0) {
-      res.send(rows);
+      res.send(rows.reverse());
     } else {
-      res.send(404);
+      res.send([]);
     }
   });
 });
@@ -44,7 +44,7 @@ router.get('/sum', (req, res) => {
     if (rows.length > 0) {
       res.send(rows[0].point);
     } else {
-      res.send(404);
+      res.send(0);
     }
   });
 });

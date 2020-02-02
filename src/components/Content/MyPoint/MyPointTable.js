@@ -7,12 +7,19 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import MyPointTableRow from './MyPointTableRow';
 import useStores from '../../../stores/useStores';
+import Loading from '../../util/Loading';
 
 const MyPointTable = () => {
-  const { UserPointStore } = useStores();
-
+  const { UserPointStore, UtilLoadingStore } = useStores();
   const { pointList } = UserPointStore;
+  const { loading } = UtilLoadingStore;
   const MyPointTableData = pointList.map((v) => (MyPointTableRow('myPoint', v)));
+
+  if (loading) {
+    return (
+      <Loading />
+    );
+  }
 
   return (
     <ListTable size="sm" bordered>
