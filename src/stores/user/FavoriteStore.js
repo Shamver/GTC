@@ -8,7 +8,7 @@ class FavoriteStore {
     this.root = root;
   }
 
-  @action getDataFavorite = (() => {
+  @action getFavorite = (() => {
     const { userData } = this.root.UserStore;
 
     if (userData) {
@@ -42,7 +42,7 @@ class FavoriteStore {
       },
     })
       .then(() => {
-        this.getDataFavorite();
+        this.getFavorite();
       })
       .catch((response) => { console.log(response); });
   });

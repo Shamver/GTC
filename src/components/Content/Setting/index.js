@@ -15,7 +15,7 @@ const Setting = () => {
     UserIgnoreStore, ComponentSettingStore, UtilStore, UtilLoadingStore,
   } = useStores();
 
-  const { getDataIgnore } = UserIgnoreStore;
+  const { getIgnore } = UserIgnoreStore;
   const { activeTab } = ComponentSettingStore;
   const { loginCheck } = UtilStore;
   const { doLoading } = UtilLoadingStore;
@@ -24,9 +24,9 @@ const Setting = () => {
 
   useEffect(() => {
     if (loginCheck()) {
-      getDataIgnore();
+      getIgnore();
     }
-  }, [loginCheck, getDataIgnore, activeTab]);
+  }, [loginCheck, getIgnore, activeTab]);
 
   return (
     <MainContainer>

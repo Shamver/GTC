@@ -13,11 +13,15 @@ const PostLockerMyReplyTable = (title, data) => {
     <TableTr key={title + postId}>
       <TableTd>
         <Link to={`/post/${postId}#${replyId}`}>
-          {postTitle}
+          <Text post>
+            {postTitle}
+          </Text>
         </Link>
       </TableTd>
       <TableTd width={60}>
-        {renderHTML(replyContent)}
+        <Text>
+          {renderHTML(replyContent)}
+        </Text>
       </TableTd>
       <TableTd>
         {replyDate}
@@ -25,6 +29,14 @@ const PostLockerMyReplyTable = (title, data) => {
     </TableTr>
   );
 };
+
+const Text = styled.span`
+  max-width: ${(props) => (props.post ? '180px' : '500px')};
+  line-height: 21px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const TableTr = styled.tr`
   height: 30px;

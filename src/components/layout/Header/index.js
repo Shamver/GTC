@@ -21,14 +21,14 @@ const Header = () => {
     ComponentHeaderStore, UserFavoriteStore, UserStore, CookieLatelyStore,
   } = useStores();
   const { onActive, dropdown } = ComponentHeaderStore;
-  const { favoriteList, getDataFavorite } = UserFavoriteStore;
+  const { favoriteList, getFavorite } = UserFavoriteStore;
   const { userData } = UserStore;
-  const { latelyList, getDataLately, deleteLately } = CookieLatelyStore;
+  const { latelyList, getLately, deleteLately } = CookieLatelyStore;
 
   useEffect(() => {
-    getDataFavorite();
-    getDataLately();
-  }, [getDataFavorite, getDataLately]);
+    getFavorite();
+    getLately();
+  }, [getFavorite, getLately]);
 
   const FavoriteData = favoriteList.length === 0
     ? (<DropdownItem30 disabled>즐겨찾기한 게시물이 없습니다.</DropdownItem30>)

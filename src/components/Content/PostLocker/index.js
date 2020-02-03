@@ -16,9 +16,9 @@ const PostLocker = () => {
     UtilLoadingStore,
   } = useStores();
 
-  const { getDataPostMine } = BoardPostStore;
+  const { getPostMine } = BoardPostStore;
   const { getDataReplyMine } = BoardReplyStore;
-  const { getDataFavorite } = UserFavoriteStore;
+  const { getFavorite } = UserFavoriteStore;
   const { activeTab } = ComponentPostLockerStore;
   const { loginCheck } = UtilStore;
   const { doLoading } = UtilLoadingStore;
@@ -27,12 +27,12 @@ const PostLocker = () => {
 
   useEffect(() => {
     if (loginCheck()) {
-      getDataPostMine();
+      getPostMine();
       getDataReplyMine();
-      getDataFavorite();
+      getFavorite();
     }
   }, [
-    loginCheck, getDataReplyMine, getDataPostMine, getDataFavorite, activeTab,
+    loginCheck, getDataReplyMine, getPostMine, getFavorite, activeTab,
   ]);
 
   return (

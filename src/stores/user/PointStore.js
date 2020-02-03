@@ -12,7 +12,7 @@ class PointStore {
     this.root = root;
   }
 
-  @action getPointData = ((currentPage) => {
+  @action getPoint = ((currentPage) => {
     const { userData } = this.root.UserStore;
 
     if (userData) {

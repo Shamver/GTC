@@ -15,7 +15,9 @@ const PostLockerMyPostTable = (title, data) => {
       </TableTd>
       <TableTd>
         <Link to={`/post/${postId}`}>
-          {postTitle}
+          <Text>
+            {postTitle}
+          </Text>
         </Link>
       </TableTd>
       <TableTd>
@@ -27,6 +29,14 @@ const PostLockerMyPostTable = (title, data) => {
     </TableTr>
   );
 };
+
+const Text = styled.span`
+  max-width: 550px;
+  line-height: 21px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const TableTr = styled.tr`
   height: 30px;

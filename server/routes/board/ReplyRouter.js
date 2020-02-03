@@ -179,7 +179,7 @@ router.get('/mine', (req, res) => {
   conn.query(query, (err, rows) => {
     if (err) throw err;
     if (rows.length >= 1) {
-      res.send(rows);
+      res.send(rows.reverse());
     } else {
       res.send(rows);
     }

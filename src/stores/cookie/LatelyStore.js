@@ -9,7 +9,7 @@ class LatelyStore {
     this.root = root;
   }
 
-  @action getDataLately = () => {
+  @action getLately = () => {
     axios.get('/api/cookie/lately')
       .then((response) => {
         const { data } = response;
@@ -31,7 +31,7 @@ class LatelyStore {
     })
       .then((response) => {
         const { data } = response;
-        this.getDataLately();
+        this.getLately();
 
         toast.success(data.MESSAGE);
       })

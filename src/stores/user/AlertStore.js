@@ -10,7 +10,7 @@ class AlertStore {
     this.root = root;
   }
 
-  @action getDataAlert = ((updateYN = 'N') => {
+  @action getAlert = ((updateYN = 'N') => {
     const { userData } = this.root.UserStore;
 
     if (userData) {
@@ -54,7 +54,7 @@ class AlertStore {
       },
     })
       .then(() => {
-        this.getDataAlert('Y');
+        this.getAlert('Y');
       })
       .catch((response) => { console.log(response); });
   });
@@ -68,7 +68,7 @@ class AlertStore {
       id: this.alertList.map((v) => v.id),
     })
       .then(() => {
-        this.getDataAlert('Y');
+        this.getAlert('Y');
       })
       .catch((response) => { console.log(response); });
   });

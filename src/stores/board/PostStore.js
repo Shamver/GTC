@@ -93,13 +93,13 @@ class PostStore {
   };
 
   @action getPost = (id) => {
-    const { getDataLately } = this.root.CookieLatelyStore;
+    const { getLately } = this.root.CookieLatelyStore;
     axios.get(`/api/board/post/${id}`, {})
       .then((response) => {
         if (response.data) {
           const [post] = response.data;
           this.postView = post;
-          getDataLately();
+          getLately();
         }
       })
       .catch((response) => { console.log(response); });
@@ -175,7 +175,7 @@ class PostStore {
     this.post.board = board.toUpperCase();
   };
 
-  @action getDataPostMine = (() => {
+  @action getPostMine = (() => {
     const { userData } = this.root.UserStore;
 
     if (userData) {

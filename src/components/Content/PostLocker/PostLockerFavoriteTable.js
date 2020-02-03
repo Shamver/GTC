@@ -18,7 +18,9 @@ const PostLockerFavoriteTable = (title, data, onClickEvent) => {
       </TableTd>
       <TableTd>
         <Link to={`/post/${id}`}>
-          {postTitle}
+          <Text>
+            {postTitle}
+          </Text>
         </Link>
       </TableTd>
       <TableTd>
@@ -35,6 +37,14 @@ const PostLockerFavoriteTable = (title, data, onClickEvent) => {
     </TableTr>
   );
 };
+
+const Text = styled.span`
+  max-width: 130px;
+  line-height: 21px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 const TableTr = styled.tr`
   height: 30px;

@@ -14,15 +14,15 @@ const MyPoint = observer(({ currentPage, noPagination }) => {
   const { UserPointStore, UtilStore, UtilLoadingStore } = useStores();
   const { loginCheck } = UtilStore;
   const { doLoading } = UtilLoadingStore;
-  const { pointList, totalPoint, getPointData } = UserPointStore;
+  const { pointList, totalPoint, getPoint } = UserPointStore;
 
   doLoading();
 
   useEffect(() => {
     if (loginCheck()) {
-      getPointData(currentPage);
+      getPoint(currentPage);
     }
-  }, [loginCheck, getPointData, currentPage]);
+  }, [loginCheck, getPoint, currentPage]);
 
   return (
     <MainContainer>

@@ -19,17 +19,17 @@ const HeaderInProfile = () => {
   const { userData, logout } = UserStore;
   const { onActive, dropdown } = ComponentHeaderStore;
   const { mail, avatar } = dropdown;
-  const { alertCount, getDataAlert } = UserAlertStore;
+  const { alertCount, getAlert } = UserAlertStore;
   const {
     totalPoint, getTotalPointData,
   } = UserPointStore;
 
   useEffect(() => {
     if (userData) {
-      getDataAlert();
+      getAlert();
       getTotalPointData();
     }
-  }, [getDataAlert, userData, getTotalPointData]);
+  }, [getAlert, userData, getTotalPointData]);
 
   return (
     <>

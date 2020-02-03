@@ -8,7 +8,7 @@ class IgnoreStore {
     this.root = root;
   }
 
-  @action getDataIgnore = (() => {
+  @action getIgnore = (() => {
     const { userData } = this.root.UserStore;
 
     if (userData) {
@@ -54,7 +54,7 @@ class IgnoreStore {
         },
       })
         .then(() => {
-          this.getDataIgnore();
+          this.getIgnore();
         })
         .catch((response) => { console.log(response); });
     } else {
