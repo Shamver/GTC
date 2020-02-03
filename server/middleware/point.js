@@ -1,7 +1,13 @@
-const pointConfig = require('../config/point-config');
 const db = require('../dbConnection')();
 
 const conn = db.init();
+
+const pointConfig = {
+  addPost: 10,
+  deletePost: -10,
+  addReply: 1,
+  deleteReply: -1,
+};
 
 module.exports = (action, type, data) => {
   const replyId = data.replyId ? `'${data.replyId}'` : null;
