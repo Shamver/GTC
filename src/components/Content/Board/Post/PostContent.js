@@ -100,6 +100,18 @@ const PostContent = ({ match }) => {
         </InnerFooterContainer>
       </PostViewWrapper>
       <ReplyForm match={match} />
+      <TopBottomWrapper>
+        <div>
+          <TopBottomDiv>▲ 윗글</TopBottomDiv>
+          <TopBottomPostName>글이름</TopBottomPostName>
+          <TopBottomWriter>나다옹</TopBottomWriter>
+        </div>
+        <div>
+          <TopBottomDiv>▼ 아랫글</TopBottomDiv>
+          <TopBottomPostName>글이름</TopBottomPostName>
+          <TopBottomWriter>기몯띠</TopBottomWriter>
+        </div>
+      </TopBottomWrapper>
       <BoardContent path={currentBoard} />
       <BoardFooter path={currentBoard} />
     </ViewWrapper>
@@ -117,6 +129,35 @@ PostContent.propTypes = {
 PostContent.defaultProps = {
   match: null,
 };
+
+const TopBottomWrapper = styled.div`
+  margin-top : 50px;
+  font-size : 14px;
+  
+  & div {
+    padding : 2px 0px;
+  }
+  
+  & div:hover {
+    background-color : #fafafa;
+  }
+`;
+
+const TopBottomWriter = styled.span`
+  float : right;
+  color : #aaa;
+  font-weight : bold;
+`;
+
+const TopBottomPostName = styled.span`
+  cursor : pointer;
+`;
+
+const TopBottomDiv = styled.div`
+  width : 80px;
+  display : inline-block;
+  font-weight : bold;
+`;
 
 const TextCenterDiv = styled.div`
   text-align : center;

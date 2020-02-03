@@ -22,7 +22,6 @@ router.get('/', (req, res) => {
         , P.DEPTH AS depth
         , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
         , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
-        
         , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id) as replyCount
     FROM GTC_BOARD_POST P, (SELECT @ROWNUM := ${(currentPage - 1) * 25}) AS TEMP
     WHERE B_ID = '${board.toUpperCase()}'
@@ -147,5 +146,40 @@ router.get('/:id', (req, res) => {
     });
   });
 });
+
+
+router.get('/:id/topbottom', (req, res) => {
+  let query = `SELECT * FROM (
+      SELECT
+    @rownum:=@rownum+1 as rn
+      , P.ID AS id
+    FROM GTC_BOARD_POST P, (SELECT @ROWNUM := 0) AS TEMP
+    WHERE B_ID = 'free'
+    ORDER BY ID DESC
+    ) AS B
+    WHERE B.rn IN ((SELECT rn FROM (
+      SELECT
+    @ROWNUM2:=@rownum+1 as rn
+      , P.ID AS id
+    FROM GTC_BOARD_POST P,  (SELECT @ROWNUM2 := 0) AS TEMP
+    WHERE P.B_ID = 'free'
+    ORDER BY ID DESC
+    ) AS A
+    WHERE A.id = 300) + 1)`;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+    query = `UPDATE GTC_BOARD_POST
+        SET VIEWS = VIEWS + 1
+        WHERE ID = ${req.params.id}`;
+
+    // 정상적으로 조회가 되었다면 조회수 +1
+    conn.query(query, (err2) => {
+      if (err2) throw err2;
+      res.send(rows);
+    });
+  });
+});
+
 
 module.exports = router;

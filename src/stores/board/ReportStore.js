@@ -11,7 +11,7 @@ class ReportStore {
     content: '',
     writer: '',
     reason: '',
-    reasonDetail: '',
+    description: '',
   };
 
   constructor(root) {
@@ -67,6 +67,7 @@ class ReportStore {
         type,
         content,
         writer,
+        description: '',
       };
     }
 

@@ -29,7 +29,8 @@ router.post('/', (req, res) => {
           ${data.targetId},
           ${data.writerId},
           '${data.type}',
-          '${data.reason}'
+          '${data.reason}',
+          '${data.description}'
         )`;
 
       info(query);
