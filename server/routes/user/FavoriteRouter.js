@@ -25,6 +25,24 @@ router.get('/', (req, res) => {
   });
 });
 
+router.post('/', (req, res) => {
+  const data = req.body;
+
+  const query = `INSERT INTO GTC_USER_FAVORITE
+    VALUES(
+      (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_USER_FAVORITE) as temp)
+      , ${data.userId}
+      , ${data.bpId}
+      , sysDate()
+  `;
+
+  conn.query(query, (err) => {
+    if (err) throw err;
+
+    res.send(200);
+  });
+});
+
 router.delete('/', (req, res) => {
   const data = req.body;
 

@@ -22,7 +22,6 @@ const PostView = ({ match }) => {
     setCurrentBoardToId(id);
     getPost(id);
     setReplyBpId(id);
-
   }, [
     getPost, setReplyBpId, id, setCurrentBoardToId,
   ]);

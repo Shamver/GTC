@@ -3,9 +3,11 @@ import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { Container, Button } from 'reactstrap';
-import { faClock, faEye, faBellSlash } from '@fortawesome/free-regular-svg-icons';
 import {
-  faCommentDots, faBars, faPlus, faThumbsUp, faThumbsDown, faHeart,
+  faClock, faEye, faBellSlash, faStar as farStar,
+} from '@fortawesome/free-regular-svg-icons';
+import {
+  faCommentDots, faBars, faStar as fasStar, faThumbsUp, faThumbsDown, faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import renderHTML from 'react-render-html';
@@ -25,7 +27,7 @@ const PostContent = ({ match }) => {
   const { loading } = UtilLoadingStore;
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
-    recommendCount, replyAllow, secretReplyAllow,
+    recommendCount, replyAllow, secretReplyAllow, isFavorite,
   } = postView;
 
   useEffect(() => {
@@ -90,10 +92,10 @@ const PostContent = ({ match }) => {
             &nbsp;신고
           </Button>
           <RightSpan>
-            <Button outline color="secondary" size="sm">
-              <FontAwesomeIcon icon={faPlus} />
-              &nbsp;스크랩
-            </Button>
+            <FavoriteButton outline={!isFavorite} color="warning" size="sm">
+              <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} />
+              &nbsp;즐겨찾기
+            </FavoriteButton>
           </RightSpan>
         </InnerFooterContainer>
       </PostViewWrapper>
@@ -115,6 +117,10 @@ PostContent.propTypes = {
 PostContent.defaultProps = {
   match: null,
 };
+
+const FavoriteButton = styled(Button)`
+  color: ${(props) => (props.outline ? 'black' : 'white')}
+`;
 
 const TextCenterDiv = styled.div`
   text-align : center;
