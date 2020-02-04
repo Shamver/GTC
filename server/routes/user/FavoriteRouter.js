@@ -18,7 +18,15 @@ router.get('/', (req, res) => {
   conn.query(query, (err, rows) => {
     if (err) throw err;
     if (rows.length >= 1) {
-      res.send(rows);
+      let i = 0;
+      const returnRows = rows.map((v) => {
+        i += 1;
+        return {
+          ...v,
+          id: i,
+        };
+      });
+      res.send(returnRows);
     } else {
       res.send(rows);
     }
@@ -30,16 +38,25 @@ router.post('/', (req, res) => {
 
   const query = `INSERT INTO GTC_USER_FAVORITE
     VALUES(
-      (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_USER_FAVORITE) as temp)
-      , ${data.userId}
-      , ${data.bpId}
-      , sysDate()
+      ${data.userId}
+      , ${parseInt(data.bpId, 10)}
+      , sysdate()
+      )
   `;
 
   conn.query(query, (err) => {
-    if (err) throw err;
-
-    res.send(200);
+    if (err) {
+      if (err.errno === 1062) {
+        res.send({
+          POST_SUCCESS: false,
+          MESSAGE: '😓 이미 즐겨찾기 등록된 게시물입니다ㅠ',
+        });
+      } else {
+        throw err;
+      }
+    } else {
+      res.send(200);
+    }
   });
 });
 
@@ -47,7 +64,7 @@ router.delete('/', (req, res) => {
   const data = req.body;
 
   const query = `DELETE FROM GTC_USER_FAVORITE
-    WHERE ID='${data.name}'
+    WHERE POST_ID=${data.bpId} AND USER_ID=${data.userId}
   `;
 
   conn.query(query, (err, rows) => {

@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 class FavoriteStore {
   @observable favoriteList = [];
@@ -31,6 +32,25 @@ class FavoriteStore {
     } else {
       this.favoriteList = [];
     }
+  });
+
+  @action addFavorite = ((id) => {
+    const { userData } = this.root.UserStore;
+    const { getPost } = this.root.BoardPostStore;
+
+    axios.post('/api/user/favorite', {
+      bpId: id,
+      userId: userData.id,
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.POST_SUCCESS !== undefined && !response.data.POST_SUCCESS) {
+          toast.error(response.data.MESSAGE);
+        } else {
+          getPost(id);
+        }
+      })
+      .catch((response) => { console.log(response); });
   });
 
   @action onDeleteFavorite = ((e) => {

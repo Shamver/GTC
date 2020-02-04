@@ -19,7 +19,7 @@ import Loading from '../../../util/Loading';
 
 const PostContent = ({ match }) => {
   const {
-    BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore,
+    BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore, UserFavoriteStore,
   } = useStores();
   const { postView, recommendPost } = BoardPostStore;
   const { postReplyList, setReplyOption } = BoardReplyStore;
@@ -29,6 +29,7 @@ const PostContent = ({ match }) => {
     id: postId, boardName, categoryName, title, writer, date, views, content,
     recommendCount, replyAllow, secretReplyAllow, isFavorite,
   } = postView;
+  const { addFavorite } = UserFavoriteStore;
 
   useEffect(() => {
     setReplyOption(replyAllow, secretReplyAllow);
@@ -92,7 +93,18 @@ const PostContent = ({ match }) => {
             &nbsp;신고
           </Button>
           <RightSpan>
-            <FavoriteButton outline={!isFavorite} color="warning" size="sm">
+            <FavoriteButton
+              outline={!isFavorite}
+              color="warning"
+              size="sm"
+              onClick={() => {
+                if (isFavorite) {
+                  // deleteFavorite
+                } else {
+                  addFavorite(postId);
+                }
+              }}
+            >
               <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} />
               &nbsp;즐겨찾기
             </FavoriteButton>
