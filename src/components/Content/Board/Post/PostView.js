@@ -9,7 +9,7 @@ const PostView = ({ match }) => {
   const {
     BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore,
   } = useStores();
-  const { getPost } = BoardPostStore;
+  const { getPost, getPostUpperLower } = BoardPostStore;
   const { setReplyBpId } = BoardReplyStore;
   const { setCurrentBoardToId } = BoardStore;
   const { doLoading } = UtilLoadingStore;
@@ -21,8 +21,8 @@ const PostView = ({ match }) => {
   useEffect(() => {
     setCurrentBoardToId(id);
     getPost(id);
+    getPostUpperLower(id);
     setReplyBpId(id);
-
   }, [
     getPost, setReplyBpId, id, setCurrentBoardToId,
   ]);

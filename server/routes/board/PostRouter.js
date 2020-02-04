@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../dbConnection')();
 const authMiddleware = require('../../middleware/auth');
+const { info } = require('../../log-config');
 
 const conn = db.init();
 
@@ -147,37 +148,44 @@ router.get('/:id', (req, res) => {
   });
 });
 
+router.get('/:id/upperLower', (req, res) => {
+  const query = `SELECT *, IF(id > ${req.params.id}, 'upper', 'lower') AS upperOrLower FROM (
+        SELECT 
+              @ROWNUM := @ROWNUM + 1 as rn
+                , P.ID AS id
+                , P.TITLE AS title
+                , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
+            FROM GTC_BOARD_POST P, (SELECT @ROWNUM := 0) AS TEMP
+            WHERE B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID =  ${req.params.id})
+            ORDER BY ID DESC    
+        ) AS B
+        WHERE B.rn IN (
+        ((SELECT rn FROM (
+                SELECT 
+                      @ROWNUM2 := @ROWNUM2 + 1 as rn 
+                        , P.ID AS id
+                        FROM GTC_BOARD_POST P,  (SELECT @ROWNUM2 := 0) AS TEMP
+                        WHERE P.B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID =  ${req.params.id})
+                        ORDER BY ID DESC   
+                ) AS A
+                WHERE A.id = ${req.params.id}) + 1),
+                ((SELECT rn FROM (
+                SELECT 
+                      @ROWNUM3 := @ROWNUM3 + 1 as rn 
+                        , P.ID AS id
+                        FROM GTC_BOARD_POST P,  (SELECT @ROWNUM3 := 0) AS TEMP
+                        WHERE P.B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID =  ${req.params.id})
+                        ORDER BY ID DESC   
+                ) AS A
+                WHERE A.id = ${req.params.id}) - 1)
+        )
+  `;
 
-router.get('/:id/topbottom', (req, res) => {
-  let query = `SELECT * FROM (
-      SELECT
-    @rownum:=@rownum+1 as rn
-      , P.ID AS id
-    FROM GTC_BOARD_POST P, (SELECT @ROWNUM := 0) AS TEMP
-    WHERE B_ID = 'free'
-    ORDER BY ID DESC
-    ) AS B
-    WHERE B.rn IN ((SELECT rn FROM (
-      SELECT
-    @ROWNUM2:=@rownum+1 as rn
-      , P.ID AS id
-    FROM GTC_BOARD_POST P,  (SELECT @ROWNUM2 := 0) AS TEMP
-    WHERE P.B_ID = 'free'
-    ORDER BY ID DESC
-    ) AS A
-    WHERE A.id = 300) + 1)`;
+  info(query);
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
-    query = `UPDATE GTC_BOARD_POST
-        SET VIEWS = VIEWS + 1
-        WHERE ID = ${req.params.id}`;
-
-    // 정상적으로 조회가 되었다면 조회수 +1
-    conn.query(query, (err2) => {
-      if (err2) throw err2;
-      res.send(rows);
-    });
+    res.send(rows);
   });
 });
 

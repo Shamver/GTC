@@ -20,7 +20,7 @@ const PostContent = ({ match }) => {
     BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore,
     BoardReportStore,
   } = useStores();
-  const { postView, recommendPost } = BoardPostStore;
+  const { postView, recommendPost, currentPostUpperLower } = BoardPostStore;
   const { postReplyList, setReplyOption } = BoardReplyStore;
   const { currentBoard } = BoardStore;
   const { loading } = UtilLoadingStore;
@@ -29,6 +29,9 @@ const PostContent = ({ match }) => {
     id: postId, boardName, categoryName, title, writer, date, views, content,
     recommendCount, replyAllow, secretReplyAllow, notRecommendCount,
   } = postView;
+  const { upper, lower } = currentPostUpperLower;
+  const { title: upperTitle, writer: upperWriter } = upper;
+  const { title: lowerTitle, writer: lowerWriter } = lower;
 
   useEffect(() => {
     setReplyOption(replyAllow, secretReplyAllow);
@@ -101,16 +104,20 @@ const PostContent = ({ match }) => {
       </PostViewWrapper>
       <ReplyForm match={match} />
       <TopBottomWrapper>
-        <div>
-          <TopBottomDiv>▲ 윗글</TopBottomDiv>
-          <TopBottomPostName>글이름</TopBottomPostName>
-          <TopBottomWriter>나다옹</TopBottomWriter>
-        </div>
-        <div>
-          <TopBottomDiv>▼ 아랫글</TopBottomDiv>
-          <TopBottomPostName>글이름</TopBottomPostName>
-          <TopBottomWriter>기몯띠</TopBottomWriter>
-        </div>
+        { upper ? (
+          <div>
+            <TopBottomDiv>▲ 윗글</TopBottomDiv>
+            <TopBottomPostName>{upperTitle}</TopBottomPostName>
+            <TopBottomWriter>{upperWriter}</TopBottomWriter>
+          </div>
+        ) : ''}
+        { lower ? (
+          <div>
+            <TopBottomDiv>▼ 아랫글</TopBottomDiv>
+            <TopBottomPostName>{lowerTitle}</TopBottomPostName>
+            <TopBottomWriter>{lowerWriter}</TopBottomWriter>
+          </div>
+        ) : ''}
       </TopBottomWrapper>
       <BoardContent path={currentBoard} />
       <BoardFooter path={currentBoard} />
