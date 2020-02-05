@@ -101,7 +101,7 @@ const HeaderDiv = styled.div`
 
   & > a {
     display: inline-block;
-    padding: 11px 18.3px;
+    padding: 8px 18.3px;
     background-color : #ffd7d4;
     text-decoration: none;
     font-size: 12px;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
-import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faStar } from '@fortawesome/free-solid-svg-icons';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -12,16 +12,20 @@ const Post = ({ data }) => {
     type,
   } = data;
 
+  const IsBestPost = recommendCount >= 1
+    ? (<Star icon={faStar} />)
+    : (<FontAwesomeIcon icon={faCommentDots} />);
+
   return (
     <tr height="35" key={data.id}>
       <CenterTd width="50">
         {recommendCount > 0 ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : ''}
       </CenterTd>
       <CenterTd>
-      { type !== 'notice' ? categoryName : ''}
+        { type !== 'notice' ? categoryName : ''}
       </CenterTd>
       <MiddleTd width="700">
-        { type !== 'notice' ? (<FontAwesomeIcon icon={faCommentDots} />) : (<FontAwesomeIcon icon={faInfoCircle} />)}
+        { type === 'notice' ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}
         &nbsp;
         <PostTitle to={`/post/${id}`}>{title}</PostTitle>
         { replyCount > 0 ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{replyCount}]</ReplyCountspan>) : ''}
@@ -44,6 +48,10 @@ Post.propTypes = {
     type: Proptypes.string,
   }).isRequired,
 };
+
+const Star = styled(FontAwesomeIcon)`
+  color : #efc839;
+`;
 
 const ReplyCountspan = styled.span`
   color: #DC3545;

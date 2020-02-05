@@ -76,8 +76,8 @@ class PostStore {
     return true;
   };
 
-  @action getBoardPostList = (board, currentPage) => {
-    axios.get('/api/board/post', { params: { board, currentPage } })
+  @action getBoardPostList = (board, currentPage, filterMode) => {
+    axios.get('/api/board/post', { params: { board, currentPage, filterMode } })
       .then((response) => {
         if (response.data) {
           this.boardPostList = {

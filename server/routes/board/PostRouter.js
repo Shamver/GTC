@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../dbConnection')();
 const authMiddleware = require('../../middleware/auth');
-const { info } = require('../../log-config');
+// const { info } = require('../../log-config');
 const { set } = require('../../middleware/latelyCookie');
 
 const conn = db.init();
@@ -198,8 +198,6 @@ router.get('/:id/upperLower', (req, res) => {
                 WHERE A.id = ${req.params.id}) - 1)
         )
   `;
-
-  info(query);
 
   conn.query(query, (err, rows) => {
     if (err) throw err;

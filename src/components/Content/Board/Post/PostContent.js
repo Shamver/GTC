@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
@@ -14,6 +15,7 @@ import ReplyForm from '../Reply/ReplyForm';
 import BoardContent from '../BoardContent';
 import BoardFooter from '../BoardFooter';
 import Loading from '../../../util/Loading';
+import anonymous from '../../../../resources/images/anonymous.png';
 
 const PostContent = ({ match }) => {
   const {
@@ -30,8 +32,8 @@ const PostContent = ({ match }) => {
     recommendCount, replyAllow, secretReplyAllow, notRecommendCount,
   } = postView;
   const { upper, lower } = currentPostUpperLower;
-  const { title: upperTitle, writer: upperWriter } = upper;
-  const { title: lowerTitle, writer: lowerWriter } = lower;
+  const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
+  const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
 
   useEffect(() => {
     setReplyOption(replyAllow, secretReplyAllow);
@@ -47,15 +49,18 @@ const PostContent = ({ match }) => {
     <ViewWrapper>
       <MarginlessH3>{boardName}</MarginlessH3>
       <br />
-      <CategoryAndTitle>
-        <Category>
-          {categoryName}
-        </Category>
-        <Title>
-          {title}
-        </Title>
-      </CategoryAndTitle>
-      <b>{writer}</b>님
+      <div>
+        <CategoryAndTitle>
+          <Category>
+            {categoryName}
+          </Category>
+          <Title>
+            {title}
+          </Title>
+          <ProfileImg src={anonymous} />
+        </CategoryAndTitle>
+        <b>{writer}</b>님
+      </div>
       <NavLine />
       <PostViewWrapper>
         <InnerContainer>
@@ -85,10 +90,12 @@ const PostContent = ({ match }) => {
           </TextCenterDiv>
         </ContentWrapper>
         <InnerFooterContainer>
-          <Button outline color="secondary" size="sm">
-            <FontAwesomeIcon icon={faBars} />
-            &nbsp;목록
-          </Button>
+          <ListLink to={`/${currentBoard}`}>
+            <Button outline color="secondary" size="sm">
+              <FontAwesomeIcon icon={faBars} />
+              &nbsp;목록
+            </Button>
+          </ListLink>
           &nbsp;
           <Button outline color="danger" size="sm" onClick={() => toggleReport(postId, 'RP01', title, writer)}>
             <FontAwesomeIcon icon={faBellSlash} />
@@ -107,14 +114,14 @@ const PostContent = ({ match }) => {
         { upper ? (
           <div>
             <TopBottomDiv>▲ 윗글</TopBottomDiv>
-            <TopBottomPostName>{upperTitle}</TopBottomPostName>
+            <TopBottomLink to={`${upperId}`}>{upperTitle}</TopBottomLink>
             <TopBottomWriter>{upperWriter}</TopBottomWriter>
           </div>
         ) : ''}
         { lower ? (
           <div>
             <TopBottomDiv>▼ 아랫글</TopBottomDiv>
-            <TopBottomPostName>{lowerTitle}</TopBottomPostName>
+            <TopBottomLink to={`${lowerId}`}>{lowerTitle}</TopBottomLink>
             <TopBottomWriter>{lowerWriter}</TopBottomWriter>
           </div>
         ) : ''}
@@ -137,6 +144,32 @@ PostContent.defaultProps = {
   match: null,
 };
 
+const TopBottomLink = styled(Link)`
+  color : inherit !important;
+  text-decoration : none;
+  
+  &:hover {
+    text-decoration : none !important; 
+  }
+`;
+
+const ListLink = styled(Link)`
+  color : #6c757d;
+  text-decoration : none;
+  
+  &:hover {
+    color : white;
+    text-decoration : none;
+  }
+`;
+
+const ProfileImg = styled.img`
+  height : 42px;
+  width : 42px;
+  border-radius: 6px;
+  float : right;
+`;
+
 const TopBottomWrapper = styled.div`
   margin-top : 50px;
   font-size : 14px;
@@ -154,10 +187,6 @@ const TopBottomWriter = styled.span`
   float : right;
   color : #aaa;
   font-weight : bold;
-`;
-
-const TopBottomPostName = styled.span`
-  cursor : pointer;
 `;
 
 const TopBottomDiv = styled.div`

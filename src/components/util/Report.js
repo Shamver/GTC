@@ -16,7 +16,6 @@ const Report = () => {
     content, writer, description, type,
   } = reportData;
 
-
   return (
     <ModalW630 isOpen={reportToggle} toggle={toggleReport}>
       <ModalHeaderBack toggle={toggleReport}><b>신고하기</b></ModalHeaderBack>
@@ -46,7 +45,7 @@ const Report = () => {
             <CustomInput type="radio" id="RR08" value="RR08" onChange={onChangeValue} name="reason" label="기타" />
           </div>
         </FormGroup>
-        <Input type="textarea" name="text" onChange={onChangeValue} value={description} name="description" placeholder="신고 사유 설명이 필요하신 경우 작성해주세요." />
+        <Input type="textarea" onChange={onChangeValue} value={description} name="description" placeholder="신고 사유 설명이 필요하신 경우 작성해주세요." />
         <ReportDescription>
           다수의 신고를 받은 게시물은 숨김처리 될 수 있으며, 해당 글의 작성자는 사이트 이용제한 조치를 받을 수 있습니다.
           신고 결과에 대해 별도의 통지/안내를 하지 않으니 이 점 양지하여 주시기 바랍니다.
