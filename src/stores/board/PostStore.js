@@ -30,6 +30,11 @@ class PostStore {
 
   @observable postMineList = [];
 
+  @observable currentPostUpperLower = {
+    upper: '',
+    lower: '',
+  };
+
   constructor(root) {
     this.root = root;
   }
@@ -105,11 +110,36 @@ class PostStore {
       .catch((response) => { console.log(response); });
   };
 
-  @action recommendPost = (postId, isRecommend) => {
+  @action getPostUpperLower = (id) => {
+    axios.get(`/api/board/post/${id}/upperLower`, {})
+      .then((response) => {
+        if (response.data) {
+          const array = response.data;
+
+          // 기존에 있던 데이터를 초기화
+          this.currentPostUpperLower = {
+            upper: '',
+            lower: '',
+          };
+
+          for (let i = 0; i < array.length; i += 1) {
+            const { upperOrLower } = array[i];
+            if (upperOrLower === 'upper') {
+              this.currentPostUpperLower.upper = array[i];
+            } else {
+              this.currentPostUpperLower.lower = array[i];
+            }
+          }
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
+
+  @action recommendPost = (postId, type) => {
     axios.post('/api/board/post/recommend', {
       id: postId,
       uId: this.root.UserStore.userData.id,
-      type: isRecommend ? 'R01' : 'R02',
+      type,
     })
       .then((response) => {
         if (response.data === 1) {

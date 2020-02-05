@@ -8,12 +8,7 @@ import Alert from '../util/Alert';
 import Sign from '../util/Sign';
 import ConfirmAlert from '../util/ConfirmAlert';
 import Contents from '../Content';
-
-const BorderedDiv = styled.div`
-  border-bottom: 2px solid #ebeae8;
-  border-right: 2px solid #ebeae8;
-  margin-bottom : 20px;
-`;
+import Report from '../util/Report';
 
 const Content = () => (
   <BorderedDiv>
@@ -36,8 +31,9 @@ const Content = () => (
     </Switch>
     <Alert />
     <Sign />
+    <Report />
     <ConfirmAlert />
-    <ToastContainer
+    <ToastContainerCustom
       position="bottom-left"
       autoClose={3000}
       hideProgressBar
@@ -51,5 +47,19 @@ const Content = () => (
   </BorderedDiv>
 );
 
+const BorderedDiv = styled.div`
+  border-bottom: 2px solid #ebeae8;
+  border-right: 2px solid #ebeae8;
+  margin-bottom : 20px;
+`;
+
+const ToastContainerCustom = styled(ToastContainer)`
+  & .Toastify__toast-body {
+    font-family : 'NanumSquareRound', sans-serif !important
+  }
+  
+  width : 380px !important;
+ 
+`;
 
 export default Content;

@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -8,17 +9,20 @@ import { Link } from 'react-router-dom';
 const Post = ({ data }) => {
   const {
     id, title, writer, date, categoryName, recommendCount, replyCount,
+    type,
   } = data;
 
   return (
     <tr height="35" key={data.id}>
-      <CenterTd>
+      <CenterTd width="50">
         {recommendCount > 0 ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : ''}
-
       </CenterTd>
-      <CenterTd>{categoryName}</CenterTd>
+      <CenterTd>
+      { type !== 'notice' ? categoryName : ''}
+      </CenterTd>
       <MiddleTd width="700">
-        <FontAwesomeIcon icon={faCommentDots} /> &nbsp;
+        { type !== 'notice' ? (<FontAwesomeIcon icon={faCommentDots} />) : (<FontAwesomeIcon icon={faInfoCircle} />)}
+        &nbsp;
         <PostTitle to={`/post/${id}`}>{title}</PostTitle>
         { replyCount > 0 ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{replyCount}]</ReplyCountspan>) : ''}
       </MiddleTd>
@@ -37,6 +41,7 @@ Post.propTypes = {
     categoryName: Proptypes.string,
     recommendCount: Proptypes.number,
     replyCount: Proptypes.number,
+    type: Proptypes.string,
   }).isRequired,
 };
 
@@ -64,7 +69,8 @@ const PostTitle = styled(Link)`
 `;
 
 const MiddleTd = styled.td`
-  padding : 8px 9px 2px 10px !important
+  padding : 8px 9px 2px 10px !important;
+  font-size : 13px;
 `;
 
 const CenterTd = styled(MiddleTd)`

@@ -11,6 +11,7 @@ import useStores from '../../../stores/useStores';
 
 import Loading from '../../util/Loading';
 import PostList from './Post/PostList';
+import Post from './Post';
 
 const BoardContent = ({ path, currentPage }) => {
   const { UtilLoadingStore } = useStores();
@@ -23,21 +24,33 @@ const BoardContent = ({ path, currentPage }) => {
     );
   }
 
+  const tempData = {
+    id: 1,
+    title: '공지 채팅창 제재 기준입니다. (2018. 10. 19)',
+    writer: '배진영',
+    type: 'notice',
+    date: '01-28',
+    categoryName: '공지',
+    recommendCount: 0,
+    replyCount: 0,
+  };
+
   return (
     <>
-      <InnerTableHeader>
+      <HeaderDiv>
+        <NavLink activeClassName="active" to={`/${path}`}>
+          <FontAwesomeIcon icon={faHome} />
+        </NavLink>
+        <NavLink activeClassName="active" to={`/${path}/freedom`}>자유</NavLink>
+        <NavLink activeClassName="active" to={`/${path}/talk`}>잡담</NavLink>
+        <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
+        <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
+      </HeaderDiv>
+      <ManginessTableNoBorder bordered hover size="sm">
         <tbody>
-          <tr>
-            <td>
-              <NavLink to="/free">
-                <FontAwesomeIcon icon={faHome} />
-              </NavLink>
-            </td>
-            <td><NavLink to="/a">자유</NavLink></td>
-            <td><NavLink to="/a">잡담</NavLink></td>
-          </tr>
+          <Post data={tempData} />
         </tbody>
-      </InnerTableHeader>
+      </ManginessTableNoBorder>
       <ManginessTable bordered hover size="sm">
         <tbody>
           <PostList path={path} currentPage={currentPage} />
@@ -55,7 +68,6 @@ BoardContent.propTypes = {
 BoardContent.defaultProps = {
   currentPage: null,
 };
-
 
 const ManginessTable = styled(Table)`
   margin : 0px !important;
@@ -75,15 +87,39 @@ const ManginessTable = styled(Table)`
   }
 `;
 
-const InnerTableHeader = styled(Table)`
-  margin : 0px !important;
-  & th {
-    padding : 0px !important;
-    border-top : 2px solid #DC3545 !important;
-  }
-  & td {
-    border : none !important;
+
+const ManginessTableNoBorder = styled(ManginessTable)`
+  & tr,td {
+    border-bottom: none !important;
   }
 `;
+
+const HeaderDiv = styled.div`
+  border-top : 2px solid #DC3545;
+  background-color : #ffd7d4;
+  margin-top : 40px;
+
+  & > a {
+    display: inline-block;
+    padding: 11px 18.3px;
+    background-color : #ffd7d4;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: bold;
+    color : black;
+  }
+  
+  & > a:hover {
+    background-color : white;
+    text-decoration: none;
+    color : black;
+  } 
+  
+  & > a.active {
+    background-color : white;
+  }
+  
+`;
+
 
 export default observer(BoardContent);

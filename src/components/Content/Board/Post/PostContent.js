@@ -18,15 +18,20 @@ import Loading from '../../../util/Loading';
 const PostContent = ({ match }) => {
   const {
     BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore,
+    BoardReportStore,
   } = useStores();
-  const { postView, recommendPost } = BoardPostStore;
+  const { postView, recommendPost, currentPostUpperLower } = BoardPostStore;
   const { postReplyList, setReplyOption } = BoardReplyStore;
   const { currentBoard } = BoardStore;
   const { loading } = UtilLoadingStore;
+  const { toggleReport } = BoardReportStore;
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
-    recommendCount, replyAllow, secretReplyAllow,
+    recommendCount, replyAllow, secretReplyAllow, notRecommendCount,
   } = postView;
+  const { upper, lower } = currentPostUpperLower;
+  const { title: upperTitle, writer: upperWriter } = upper;
+  const { title: lowerTitle, writer: lowerWriter } = lower;
 
   useEffect(() => {
     setReplyOption(replyAllow, secretReplyAllow);
@@ -60,7 +65,7 @@ const PostContent = ({ match }) => {
           <RightSpan>
             <FontAwesomeIcon icon={faCommentDots} /> {postReplyList.length}
             &nbsp;
-            <FontAwesomeIcon icon={faHeart} /> 0
+            <FontAwesomeIcon icon={faHeart} /> {recommendCount}
             &nbsp;
             <FontAwesomeIcon icon={faEye} /> {views}
           </RightSpan>
@@ -68,14 +73,14 @@ const PostContent = ({ match }) => {
         <ContentWrapper>
           {renderHTML(`${content}`)}
           <TextCenterDiv>
-            <SmallFontButton outline color="success" onClick={() => recommendPost(postId)}>
+            <SmallFontButton outline color="success" onClick={() => recommendPost(postId, 'R01')}>
               <FontAwesomeIcon icon={faThumbsUp} />
               &nbsp;추천 {recommendCount}
             </SmallFontButton>
             &nbsp;
-            <SmallFontButton outline color="primary">
+            <SmallFontButton outline color="primary" onClick={() => recommendPost(postId, 'R02')}>
               <FontAwesomeIcon icon={faThumbsDown} />
-              &nbsp;비추천 0
+              &nbsp;비추천 {notRecommendCount}
             </SmallFontButton>
           </TextCenterDiv>
         </ContentWrapper>
@@ -85,7 +90,7 @@ const PostContent = ({ match }) => {
             &nbsp;목록
           </Button>
           &nbsp;
-          <Button outline color="danger" size="sm">
+          <Button outline color="danger" size="sm" onClick={() => toggleReport(postId, 'RP01', title, writer)}>
             <FontAwesomeIcon icon={faBellSlash} />
             &nbsp;신고
           </Button>
@@ -98,6 +103,22 @@ const PostContent = ({ match }) => {
         </InnerFooterContainer>
       </PostViewWrapper>
       <ReplyForm match={match} />
+      <TopBottomWrapper>
+        { upper ? (
+          <div>
+            <TopBottomDiv>▲ 윗글</TopBottomDiv>
+            <TopBottomPostName>{upperTitle}</TopBottomPostName>
+            <TopBottomWriter>{upperWriter}</TopBottomWriter>
+          </div>
+        ) : ''}
+        { lower ? (
+          <div>
+            <TopBottomDiv>▼ 아랫글</TopBottomDiv>
+            <TopBottomPostName>{lowerTitle}</TopBottomPostName>
+            <TopBottomWriter>{lowerWriter}</TopBottomWriter>
+          </div>
+        ) : ''}
+      </TopBottomWrapper>
       <BoardContent path={currentBoard} />
       <BoardFooter path={currentBoard} />
     </ViewWrapper>
@@ -115,6 +136,35 @@ PostContent.propTypes = {
 PostContent.defaultProps = {
   match: null,
 };
+
+const TopBottomWrapper = styled.div`
+  margin-top : 50px;
+  font-size : 14px;
+  
+  & div {
+    padding : 2px 0px;
+  }
+  
+  & div:hover {
+    background-color : #fafafa;
+  }
+`;
+
+const TopBottomWriter = styled.span`
+  float : right;
+  color : #aaa;
+  font-weight : bold;
+`;
+
+const TopBottomPostName = styled.span`
+  cursor : pointer;
+`;
+
+const TopBottomDiv = styled.div`
+  width : 80px;
+  display : inline-block;
+  font-weight : bold;
+`;
 
 const TextCenterDiv = styled.div`
   text-align : center;

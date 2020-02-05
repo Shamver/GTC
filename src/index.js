@@ -29,6 +29,7 @@ ReactDOM.render((
     BoardStore={stores.BoardStore}
     BoardPostStore={stores.BoardPostStore}
     BoardReplyStore={stores.BoardReplyStore}
+    BoardReportStore={stores.BoardReportStore}
 
     CookieLatelyStore={stores.CookieLatelyStore}
   >

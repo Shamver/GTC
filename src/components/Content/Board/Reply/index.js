@@ -12,10 +12,11 @@ import ReplyModify from './ReplyModify';
 import ReplyEdit from './ReplyEdit';
 
 const Reply = ({ data }) => {
-  const { UserStore, BoardReplyStore } = useStores();
+  const { UserStore, BoardReplyStore, BoardReportStore } = useStores();
   const {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
   } = BoardReplyStore;
+  const { toggleReport } = BoardReportStore;
   const { userData } = UserStore;
 
   const ReplyContentText = data.secretYN === 'N' || (data.secretYN === 'Y' && data.idPostWriter === data.idWriter)
@@ -53,7 +54,7 @@ const Reply = ({ data }) => {
              &nbsp;·&nbsp;
             { data.updateDate ? data.updateDate : data.date}
             &nbsp;·&nbsp;
-            <SpanLikeLink>신고 #</SpanLikeLink>
+            <SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>신고 #</SpanLikeLink>
           </span>
         </ReplyInHeader>
         <ReplyInContent>
@@ -93,7 +94,6 @@ Reply.propTypes = {
     updateDate: Proptypes.string,
     secretYN: Proptypes.string,
   }).isRequired,
-  // secretReplyAllow: Proptypes.string.isRequired,
 };
 
 
