@@ -20,7 +20,7 @@ class FavoriteStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.success) {
+          if (data) {
             this.favoriteList = response.data;
           } else if (data.message === 'not logged in') {
             this.favoriteList = [];
@@ -48,21 +48,28 @@ class FavoriteStore {
           toast.error(response.data.MESSAGE);
         } else {
           getPost(id);
+          toast.success('★ 즐겨찾기 추가됨');
         }
       })
       .catch((response) => { console.log(response); });
   });
 
-  @action onDeleteFavorite = ((e) => {
-    const { name } = e.target;
+  @action deleteFavorite = ((id, type = 'post') => {
+    const { userData } = this.root.UserStore;
+    const { getPost } = this.root.BoardPostStore;
 
     axios.delete('/api/user/favorite', {
       data: {
-        name,
+        bpId: id,
+        userId: userData.id,
       },
     })
       .then(() => {
+        if (type === 'post') {
+          getPost(id);
+        }
         this.getFavorite();
+        toast.info('☆ 즐겨찾기 해제됨');
       })
       .catch((response) => { console.log(response); });
   });

@@ -10,7 +10,7 @@ const PostLockerMyReplyTable = (title, data) => {
   } = data;
 
   return (
-    <TableTr key={title + postId}>
+    <TableTr key={title + replyId}>
       <TableTd>
         <Link to={`/post/${postId}#${replyId}`}>
           <Text post>

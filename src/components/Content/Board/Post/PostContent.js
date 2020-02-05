@@ -29,7 +29,7 @@ const PostContent = ({ match }) => {
     id: postId, boardName, categoryName, title, writer, date, views, content,
     recommendCount, replyAllow, secretReplyAllow, isFavorite,
   } = postView;
-  const { addFavorite } = UserFavoriteStore;
+  const { addFavorite, deleteFavorite } = UserFavoriteStore;
 
   useEffect(() => {
     setReplyOption(replyAllow, secretReplyAllow);
@@ -99,7 +99,7 @@ const PostContent = ({ match }) => {
               size="sm"
               onClick={() => {
                 if (isFavorite) {
-                  // deleteFavorite
+                  deleteFavorite(postId);
                 } else {
                   addFavorite(postId);
                 }

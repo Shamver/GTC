@@ -105,7 +105,6 @@ class PostStore {
         if (response.data) {
           const [post] = response.data;
           this.postView = post;
-          console.log(response.data);
           getLately();
         }
       })
