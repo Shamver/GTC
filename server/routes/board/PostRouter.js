@@ -123,11 +123,15 @@ router.get('/mine', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
+  const { id } = req.params;
+  const { userId } = req.query;
+
   let query = `SELECT P.ID AS id
-        , B_ID AS board
-        , if(B_ID = 'FREE','자유게시판','그외') as boardName
-        , BC_ID AS category
-        , if(BC_ID = 'FREE','자유','그외') as categoryName
+        , P.B_ID AS board
+        , if(P.B_ID = 'FREE','자유게시판','그외') as boardName
+        , P.BC_ID AS category
+        , if(P.BC_ID = 'FREE','자유','그외') as categoryName
+        , if((SELECT F.POST_ID FROM GTC_USER_FAVORITE F WHERE F.USER_ID = ${userId} AND F.POST_ID = P.ID), true, false) as isFavorite
         , P.TITLE AS title
         , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
         , P.DEPTH AS depth
@@ -145,8 +149,8 @@ router.get('/:id', (req, res) => {
         , P.SECRET as secret
         , P.SECRET_REPLY_ALLOW as secretReplyAllow
         , P.REPLY_ALLOW as replyAllow
-    FROM GTC_BOARD_POST P 
-    WHERE ID = ${req.params.id}`;
+    FROM GTC_BOARD_POST P
+    WHERE ID = ${id}`;
 
   conn.query(query, (err, rows) => {
     if (err) throw err;

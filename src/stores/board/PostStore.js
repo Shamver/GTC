@@ -99,7 +99,13 @@ class PostStore {
 
   @action getPost = (id) => {
     const { getLately } = this.root.CookieLatelyStore;
-    axios.get(`/api/board/post/${id}`, {})
+    const { userData } = this.root.UserStore;
+
+    axios.get(`/api/board/post/${id}`, {
+      params: {
+        userId: userData.id,
+      },
+    })
       .then((response) => {
         if (response.data) {
           const [post] = response.data;

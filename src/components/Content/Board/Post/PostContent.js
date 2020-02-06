@@ -3,9 +3,11 @@ import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { Container, Button } from 'reactstrap';
-import { faClock, faEye, faBellSlash } from '@fortawesome/free-regular-svg-icons';
 import {
-  faCommentDots, faBars, faPlus, faThumbsUp, faThumbsDown, faHeart,
+  faClock, faEye, faBellSlash, faStar as farStar,
+} from '@fortawesome/free-regular-svg-icons';
+import {
+  faCommentDots, faBars, faStar as fasStar, faThumbsUp, faThumbsDown, faHeart,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import renderHTML from 'react-render-html';
@@ -17,7 +19,7 @@ import Loading from '../../../util/Loading';
 
 const PostContent = ({ match }) => {
   const {
-    BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore,
+    BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore, UserFavoriteStore,
     BoardReportStore,
   } = useStores();
   const { postView, recommendPost, currentPostUpperLower } = BoardPostStore;
@@ -28,10 +30,12 @@ const PostContent = ({ match }) => {
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
     recommendCount, replyAllow, secretReplyAllow, notRecommendCount,
+    isFavorite,
   } = postView;
   const { upper, lower } = currentPostUpperLower;
   const { title: upperTitle, writer: upperWriter } = upper;
   const { title: lowerTitle, writer: lowerWriter } = lower;
+  const { addFavorite, deleteFavorite } = UserFavoriteStore;
 
   useEffect(() => {
     setReplyOption(replyAllow, secretReplyAllow);
@@ -95,10 +99,21 @@ const PostContent = ({ match }) => {
             &nbsp;신고
           </Button>
           <RightSpan>
-            <Button outline color="secondary" size="sm">
-              <FontAwesomeIcon icon={faPlus} />
-              &nbsp;스크랩
-            </Button>
+            <FavoriteButton
+              outline={!isFavorite}
+              color="warning"
+              size="sm"
+              onClick={() => {
+                if (isFavorite) {
+                  deleteFavorite(postId);
+                } else {
+                  addFavorite(postId);
+                }
+              }}
+            >
+              <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} />
+              &nbsp;즐겨찾기
+            </FavoriteButton>
           </RightSpan>
         </InnerFooterContainer>
       </PostViewWrapper>
@@ -164,6 +179,10 @@ const TopBottomDiv = styled.div`
   width : 80px;
   display : inline-block;
   font-weight : bold;
+`;
+
+const FavoriteButton = styled(Button)`
+  color: ${(props) => (props.outline ? 'black' : 'white')}
 `;
 
 const TextCenterDiv = styled.div`
