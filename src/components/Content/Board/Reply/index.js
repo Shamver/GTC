@@ -23,6 +23,9 @@ const Reply = ({ data }) => {
     ? renderHTML(`${data.content}`)
     : '';
 
+  const ReplyWriterJudge = data.idPostWriter === data.idWriter ? (<Writer>(글쓴이)</Writer>) : '';
+
+
   return (
     <ReplyLayout>
       { data.depth > 1 ? (
@@ -33,28 +36,38 @@ const Reply = ({ data }) => {
       <ReplyWrapper>
         <ReplyInHeader>
           <AvatarImg src={avatar} />
-          <ReplyWriter> {data.writer} </ReplyWriter>
-          { data.idPostWriter === data.idWriter ? (<Writer>(글쓴이)</Writer>) : ''}
+          <ReplyWriter> {data.deleteYN === 'N' ? data.writer : '  [삭제된 댓글의 작성자]  '} </ReplyWriter>
+          { data.deleteYN === 'N' ? ReplyWriterJudge : ''}
+
+
           <span className="replyOption">
-            { userData.id === data.idWriter
-              ? (
-                <>
-                  <SpanLikeLink onClick={() => modifyMode(data.id)}>수정</SpanLikeLink>
-                  &nbsp;·&nbsp;
-                  <SpanLikeLink onClick={() => deleteReply(data.id)}>삭제</SpanLikeLink>
-                  &nbsp;·&nbsp;
-                </>
-              )
-              : '' }
-            <SpanLikeLink onClick={() => likeReply(data.id)}>
-              { !data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
-            </SpanLikeLink>
-            &nbsp;·&nbsp;
-            <SpanLikeLink onClick={() => setReplyEditId(data.id)}>대댓글</SpanLikeLink>
-             &nbsp;·&nbsp;
-            { data.updateDate ? data.updateDate : data.date}
-            &nbsp;·&nbsp;
-            <SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>신고 #</SpanLikeLink>
+            { data.deleteYN === 'N' ? (
+              <>
+                { userData.id === data.idWriter
+                  ? (
+                    <>
+                      <SpanLikeLink onClick={() => modifyMode(data.id)}>수정</SpanLikeLink>
+                      &nbsp;·&nbsp;
+                      <SpanLikeLink onClick={() => deleteReply(data.id)}>삭제</SpanLikeLink>
+                      &nbsp;·&nbsp;
+                    </>
+                  )
+                  : '' }
+                <SpanLikeLink onClick={() => likeReply(data.id)}>
+                  { !data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
+                </SpanLikeLink>
+                &nbsp;·&nbsp;
+                <SpanLikeLink onClick={() => setReplyEditId(data.id)}>대댓글</SpanLikeLink>
+                &nbsp;·&nbsp;
+                { data.updateDate ? data.updateDate : data.date}
+                &nbsp;·&nbsp;
+                <SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>신고 #</SpanLikeLink>
+              </>
+            ) : (
+              <>
+                { data.updateDate ? data.updateDate : data.date }
+              </>
+            )}
           </span>
         </ReplyInHeader>
         <ReplyInContent>
@@ -68,7 +81,13 @@ const Reply = ({ data }) => {
 
           { modifyModeId === data.id
             ? (<ReplyModify content={data.content} />)
-            : ReplyContentText }
+            : (
+              <>
+                {data.deleteYN === 'N'
+                  ? ReplyContentText
+                  : (<DeleteReply>[삭제된 댓글 입니다.]</DeleteReply>)}
+              </>
+            )}
 
           {/* 대댓글의 경우의 수 */}
           { replyEditId === data.id
@@ -93,9 +112,14 @@ Reply.propTypes = {
     replyWriterName: Proptypes.string,
     updateDate: Proptypes.string,
     secretYN: Proptypes.string,
+    deleteYN: Proptypes.string,
   }).isRequired,
 };
 
+
+const DeleteReply = styled.span`
+  color : #ccc;
+`;
 
 const ReplyInHeader = styled.div`
   background: #f7f7f7;

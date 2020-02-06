@@ -22,7 +22,8 @@ router.post('/', (req, res) => {
       UPDATE_DATE,
       CONTENT,
       DEPTH,
-      SECRET_YN
+      SECRET_YN,
+      DELETE_YN
     ) VALUES (
       (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp),
       ${data.bpId},
@@ -33,7 +34,8 @@ router.post('/', (req, res) => {
       null, 
       '${data.text}',
       ${data.depth},
-      '${data.secretYN}'
+      '${data.secretYN}',
+      'N'
     );
   `;
 
@@ -100,6 +102,7 @@ router.get('/', (req, res) => {
     , A.CONTENT as content
     , A.DEPTH as depth
     , A.SECRET_YN as secretYN
+    , A.DELETE_YN as deleteYN
     , (SELECT COUNT(*) FROM GTC_BOARD_REPLY_LIKE WHERE ID = A.ID) AS likeCount
     FROM GTC_BOARD_REPLY A, GTC_BOARD_POST C
   WHERE A.BP_ID = '${data.bpId}'
@@ -127,7 +130,8 @@ router.put('/', (req, res) => {
 
 router.delete('/', (req, res) => {
   const data = req.query;
-  const query = `DELETE FROM GTC_BOARD_REPLY
+  const query = `UPDATE GTC_BOARD_REPLY
+        SET DELETE_YN = 'Y'
         WHERE ID = ${data.id}`;
 
   conn.query(query, (err) => {
