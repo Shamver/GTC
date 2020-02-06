@@ -50,6 +50,7 @@ class FavoriteStore {
           getPost(id);
           toast.success('★ 즐겨찾기 추가됨');
         }
+        this.getFavorite();
       })
       .catch((response) => { console.log(response); });
   });

@@ -39,11 +39,12 @@ const PostLockerFavoriteTable = (title, data, onClickEvent) => {
 };
 
 const Text = styled.span`
-  max-width: 130px;
+  max-width: 490px;
   line-height: 21px;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: middle !important;
 `;
 
 const TableTr = styled.tr`
