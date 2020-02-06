@@ -6,18 +6,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Proptypes from 'prop-types';
 import renderHTML from 'react-render-html';
 import { observer } from 'mobx-react';
+import {
+  DropdownToggle, DropdownMenu, DropdownItem, Dropdown,
+} from 'reactstrap';
 import avatar from '../../../../resources/images/anonymous.png';
 import useStores from '../../../../stores/useStores';
 import ReplyModify from './ReplyModify';
 import ReplyEdit from './ReplyEdit';
 
-const Reply = ({ data }) => {
-  const { UserStore, BoardReplyStore, BoardReportStore } = useStores();
+const Reply = ({ data, index }) => {
+  const {
+    UserStore, BoardReplyStore, BoardReportStore, ComponentReplyStore,
+    UtilAlertStore, UserIgnoreStore,
+  } = useStores();
   const {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
   } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
   const { userData } = UserStore;
+  const { dropdown, onActive } = ComponentReplyStore;
+  const { toggleConfirmAlert } = UtilAlertStore;
+  const { addIgnore } = UserIgnoreStore;
 
   const ReplyContentText = data.secretYN === 'N' || (data.secretYN === 'Y' && data.idPostWriter === data.idWriter)
     ? renderHTML(`${data.content}`)
@@ -33,7 +42,28 @@ const Reply = ({ data }) => {
       <ReplyWrapper>
         <ReplyInHeader>
           <AvatarImg src={avatar} />
-          <ReplyWriter> {data.writer} </ReplyWriter>
+          <WriterDropdown isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
+            <WriterDropdownToggle name={`replyIndex${index}`}> {data.writer} </WriterDropdownToggle>
+            <WriterDropdownMenu>
+              <WriterDropdownItem>
+                프로필
+              </WriterDropdownItem>
+              <WriterDropdownItem>
+                작성 글 보기
+              </WriterDropdownItem>
+              {userData.id === data.idWriter ? '' : (
+                <WriterDropdownItem
+                  onClick={() => {
+                    toggleConfirmAlert('정말 차단하시겠습니까?', () => {
+                      addIgnore(data.idWriter);
+                    });
+                  }}
+                >
+                  차단하기
+                </WriterDropdownItem>
+              )}
+            </WriterDropdownMenu>
+          </WriterDropdown>
           { data.idPostWriter === data.idWriter ? (<Writer>(글쓴이)</Writer>) : ''}
           <span className="replyOption">
             { userData.id === data.idWriter
@@ -94,8 +124,49 @@ Reply.propTypes = {
     updateDate: Proptypes.string,
     secretYN: Proptypes.string,
   }).isRequired,
+  index: Proptypes.number.isRequired,
 };
 
+const WriterDropdown = styled(Dropdown)`
+  display : inline;
+  
+  & .dropdown-item:active {
+    color: #fff !important;
+    text-decoration: none !important;
+    background-color: #DC3545 !important;
+  }
+  
+   & .dropdown-item:focus {
+    color: #fff !important;
+    text-decoration: none !important;
+    background-color: #DC3545 !important;
+  }
+`;
+
+const WriterDropdownItem = styled(DropdownItem)`
+  height : 27px;
+  line-height : 0;
+  padding-top : 0px;
+  padding-bottom : 0px;
+  font-size: 0.9rem;
+`;
+
+const WriterDropdownMenu = styled(DropdownMenu)`
+  left: 20px !important;
+`;
+
+const WriterDropdownToggle = styled(DropdownToggle)`
+  color : #DC3545 !important;
+  font-weight : bold;
+  font-size : 14px !important;
+  padding: 0 6px !important;
+  background-color: transparent !important;
+  border : 0 !important;
+  height : 100%;
+  &:focus {
+    box-shadow : none !important;
+  }
+`;
 
 const ReplyInHeader = styled.div`
   background: #f7f7f7;
@@ -123,12 +194,6 @@ const ReplyWrapper = styled.div`
   margin-bottom: 0.5em;
   border: 1px solid #f1f1f1;
   width : 100%;
-`;
-
-const ReplyWriter = styled.span`
-  color : #DC3545;
-  font-weight : bold;
-  font-size : 14px;
 `;
 
 const ReplyLayout = styled.div`

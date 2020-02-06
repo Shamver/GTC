@@ -20,6 +20,7 @@ ReactDOM.render((
     ComponentSettingStore={stores.ComponentSettingStore}
     ComponentPostLockerStore={stores.ComponentPostLockerStore}
     ComponentMyAccountStore={stores.ComponentMyAccountStore}
+    ComponentReplyStore={stores.ComponentReplyStore}
 
     UtilStore={stores.UtilStore}
     UtilRouteStore={stores.UtilRouteStore}

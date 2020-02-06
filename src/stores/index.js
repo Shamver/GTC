@@ -8,6 +8,7 @@ import ComponentHeaderStore from './component/HeaderStore';
 import ComponentPostLockerStore from './component/PostLockerStore';
 import ComponentSettingStore from './component/SettingStore';
 import ComponentMyAccountStore from './component/MyAccountStore';
+import ComponentReplyStore from './component/ReplyStore';
 
 import UtilStore from './util/UtilStore';
 import UtilAlertStore from './util/AlertStore';
@@ -33,6 +34,7 @@ class RootStore {
     this.ComponentSettingStore = new ComponentSettingStore(this);
     this.ComponentHeaderStore = new ComponentHeaderStore(this);
     this.ComponentMyAccountStore = new ComponentMyAccountStore(this);
+    this.ComponentReplyStore = new ComponentReplyStore(this);
 
     this.UtilStore = new UtilStore(this);
     this.UtilAlertStore = new UtilAlertStore(this);
