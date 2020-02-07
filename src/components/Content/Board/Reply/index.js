@@ -14,7 +14,7 @@ import useStores from '../../../../stores/useStores';
 import ReplyModify from './ReplyModify';
 import ReplyEdit from './ReplyEdit';
 
-const Reply = ({ data, index, bpId }) => {
+const Reply = ({ data, index }) => {
   const {
     UserStore, BoardReplyStore, BoardReportStore, ComponentReplyStore,
     UtilAlertStore, UserIgnoreStore,
@@ -55,7 +55,7 @@ const Reply = ({ data, index, bpId }) => {
                 <WriterDropdownItem
                   onClick={() => {
                     toggleConfirmAlert('정말 차단하시겠습니까?', () => {
-                      addIgnore(data.idWriter, bpId);
+                      addIgnore(data.idWriter);
                     });
                   }}
                 >
