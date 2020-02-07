@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
 
 class IgnoreStore {
   @observable ignoreList = [];
@@ -41,8 +41,9 @@ class IgnoreStore {
     );
   });
 
-  @action addIgnore = (id) => {
+  @action addIgnore = (id, bpId) => {
     const { userData } = this.root.UserStore;
+    const { getReply } = this.root.BoardReplyStore;
     axios.post('/api/user/ignore', {
       fromId: userData.id,
       targetId: id,
@@ -53,12 +54,13 @@ class IgnoreStore {
           toast.error(response.data.MESSAGE);
         } else {
           toast.success('✔ 성공적으로 차단되었습니다!');
+          getReply(bpId);
         }
       })
       .catch((response) => console.log(response));
   };
 
-  @action onDeleteIgnore = (() => {
+  @action deleteIgnore = (() => {
     const { toggleAlert } = this.root.UtilAlertStore;
     const list = this.ignoreList.filter((item) => item.checked === true).map((v) => ({
       f_id: v.f_id,
@@ -73,6 +75,7 @@ class IgnoreStore {
       })
         .then(() => {
           this.getIgnore();
+          toast.info('✔ 성공적으로 삭제되었습니다!');
         })
         .catch((response) => { console.log(response); });
     } else {

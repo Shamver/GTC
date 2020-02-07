@@ -77,7 +77,10 @@ class PostStore {
   };
 
   @action getBoardPostList = (board, currentPage) => {
-    axios.get('/api/board/post', { params: { board, currentPage } })
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
+
+    axios.get('/api/board/post', { params: { board, currentPage, userId } })
       .then((response) => {
         if (response.data) {
           this.boardPostList = {

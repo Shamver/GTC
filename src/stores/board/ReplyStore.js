@@ -95,9 +95,13 @@ class ReplyStore {
   };
 
   @action getReply = (id) => {
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
+
     axios.get('/api/board/reply/', {
       params: {
         bpId: id,
+        userId,
       },
     })
       .then((response) => {
