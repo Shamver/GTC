@@ -102,7 +102,7 @@ router.get('/', (req, res) => {
     , A.SECRET_YN as secretYN
     , (SELECT COUNT(*) FROM GTC_BOARD_REPLY_LIKE WHERE ID = A.ID) AS likeCount
     FROM GTC_BOARD_REPLY A, GTC_BOARD_POST C
-  WHERE A.BP_ID = '${data.bpId}'
+  WHERE A.BP_ID = '${data.bpId}' AND A.WRITER != IFNULL(( SELECT TARGET_ID FROM GTC_USER_IGNORE WHERE FROM_ID = ${data.userId}), -1)
   AND C.ID = A.BP_ID
   ORDER BY A.ID_UPPER, A.ID`;
 

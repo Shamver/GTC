@@ -12,13 +12,14 @@ const point = require('../../middleware/point');
 
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
-  const { board } = req.query;
+  const { board, userId } = req.query;
   currentPage = currentPage || 1;
 
   const query = `
     SELECT 
       @rownum:=@rownum+1 as rn
-        , (SELECT Ceil(COUNT(*)/25) FROM GTC_BOARD_POST WHERE B_ID = '${board.toUpperCase()}') AS pageCount
+        , (SELECT Ceil(COUNT(*)/25) FROM GTC_BOARD_POST WHERE B_ID = '${board.toUpperCase()}'
+        AND WRITER != IFNULL(( SELECT TARGET_ID FROM GTC_USER_IGNORE WHERE FROM_ID = ${userId}), -1)) AS pageCount
         , P.ID AS id
         , P.TITLE AS title
         , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
@@ -26,9 +27,9 @@ router.get('/', (req, res) => {
         , P.DEPTH AS depth
         , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
         , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
-        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id) as replyCount
+        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY R WHERE BP_ID=P.id AND R.WRITER != IFNULL(( SELECT TARGET_ID FROM GTC_USER_IGNORE WHERE FROM_ID = ${userId}), -1)) as replyCount
     FROM GTC_BOARD_POST P, (SELECT @ROWNUM := ${(currentPage - 1) * 25}) AS TEMP
-    WHERE B_ID = '${board.toUpperCase()}'
+    WHERE P.B_ID = '${board.toUpperCase()}' AND P.WRITER != IFNULL(( SELECT TARGET_ID FROM GTC_USER_IGNORE WHERE FROM_ID = ${userId}), -1)
     ORDER BY ID DESC    
     LIMIT ${(currentPage - 1) * 25}, 25
     `;
