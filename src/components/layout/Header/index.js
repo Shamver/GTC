@@ -90,7 +90,7 @@ const Header = () => {
             </ColNoP>
             <ColCenter xs="6">
               <TextContainer>
-                <Badge color="danger">광고</Badge>
+                <Badge color="danger">공지사항</Badge>
                 &nbsp;
                 이 안에 배신자가 있다... 이게 내 결론이다!! Project Winter 합방
               </TextContainer>

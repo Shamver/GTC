@@ -12,9 +12,24 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import useStores from '../../../../stores/useStores';
 
+
+const BoardOptions = () => {
+  const { BoardStore } = useStores();
+  const { boards } = BoardStore;
+
+  return boards.map((data) => (
+    <option
+      value={data.value}
+      key={data.value}
+    >
+      {data.name}
+    </option>
+  ));
+};
+
+
 const Posting = (props) => {
   const { BoardStore, BoardPostStore } = useStores();
-  const { boardList, setBoardOptions } = BoardStore;
   const {
     post, setPostBoard, onChangeValue, addPost,
   } = BoardPostStore;
@@ -24,15 +39,14 @@ const Posting = (props) => {
 
   useEffect(() => {
     setPostBoard(board);
-    setBoardOptions();
-  }, [BoardStore, board, setPostBoard, setBoardOptions]);
+  }, [BoardStore, board, setPostBoard]);
 
   return (
     <PostingWrapper>
       <PostingHeader>
         <Col xs="12">
           <SelectInput type="select" name="board" value={post.board} onChange={onChangeValue}>
-            {boardList}
+            <BoardOptions />
           </SelectInput>
         </Col>
         <Col xs="2">

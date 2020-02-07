@@ -76,8 +76,21 @@ const Reply = ({ data }) => {
             ? (<><SecretReply><FontAwesomeIcon icon={faLock} /> 비밀 댓글</SecretReply> <br /></>)
             : '' }
 
-          <SpanLikeLink>{data.replyWriterName && data.replyWriterName !== 'DELETED' ? `@${data.replyWriterName}` : ''}</SpanLikeLink>
-          <Writer>{data.replyWriterName && data.replyWriterName === 'DELETED' ? '[삭제된 댓글의 답글]' : ''}</Writer>
+          <SpanLikeLink>{data.replyWriterName && data.replyWriterName !== 'DELETED' ? (
+            <>
+              @{data.replyWriterName}
+              <br />
+            </>
+          ) : ''}
+          </SpanLikeLink>
+          <Writer>{data.replyWriterName && data.replyWriterName === 'DELETED' && data.depth > 1 ? (
+            <>
+              [삭제된 댓글의 답글]
+              <br />
+            </>
+          ) : ''}
+          </Writer>
+
 
           { modifyModeId === data.id
             ? (<ReplyModify content={data.content} />)

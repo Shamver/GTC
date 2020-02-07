@@ -93,7 +93,7 @@ router.get('/', (req, res) => {
        END  as updateDate
     , ( 
         SELECT 
-                CASE WHEN MIN(DEPTH) IS NULL THEN 'DELETED'
+                CASE WHEN DELETE_YN = 'Y' THEN 'DELETED'
                         WHEN DEPTH = 2 THEN  (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = WRITER) 
                 END 
         FROM GTC_BOARD_REPLY

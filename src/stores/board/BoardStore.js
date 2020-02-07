@@ -1,9 +1,8 @@
 import { action, observable } from 'mobx';
-import React from 'react';
 import axios from 'axios';
 
 class BoardStore {
-  boardKinds = {
+  @observable boardKinds = {
     notice: '공지사항',
     free: '자유 게시판',
     trade: '아이템 거래',
@@ -12,7 +11,7 @@ class BoardStore {
     qna: '질문 & 답변',
   };
 
-  boards = [{
+  @observable boards = [{
     value: 'NOTICE',
     name: '공지사항',
   }, {
@@ -34,25 +33,12 @@ class BoardStore {
 
   @observable currentBoard = '';
 
-  @observable boardList;
-
   constructor(root) {
     this.root = root;
   }
 
   @action setCurrentBoard = (currentBoard) => {
     this.currentBoard = currentBoard;
-  };
-
-  @action setBoardOptions = () => {
-    this.boardList = this.boards.map((data) => (
-      <option
-        value={data.value}
-        key={data.value}
-      >
-        {data.name}
-      </option>
-    ));
   };
 
   @action setCurrentBoardToId = (id) => {
