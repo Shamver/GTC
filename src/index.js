@@ -21,6 +21,7 @@ ReactDOM.render((
     ComponentPostLockerStore={stores.ComponentPostLockerStore}
     ComponentMyAccountStore={stores.ComponentMyAccountStore}
     ComponentReplyStore={stores.ComponentReplyStore}
+    ComponentPostStore={stores.ComponentPostStore}
 
     UtilStore={stores.UtilStore}
     UtilRouteStore={stores.UtilRouteStore}

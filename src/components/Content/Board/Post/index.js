@@ -5,12 +5,24 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import {
+  Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
+} from 'reactstrap';
+import { observer } from 'mobx-react';
+import useStores from '../../../../stores/useStores';
 
-const Post = ({ data }) => {
+const Post = ({ data, index }) => {
+  const {
+    ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
+  } = useStores();
   const {
     id, title, writer, date, categoryName, recommendCount, replyCount,
-    type,
+    type, idWriter,
   } = data;
+  const { dropdown, onActive } = ComponentPostStore;
+  const { toggleConfirmAlert } = UtilAlertStore;
+  const { userData } = UserStore;
+  const { addIgnore } = UserIgnoreStore;
 
   return (
     <tr height="35" key={data.id}>
@@ -18,7 +30,7 @@ const Post = ({ data }) => {
         {recommendCount > 0 ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : ''}
       </CenterTd>
       <CenterTd>
-      { type !== 'notice' ? categoryName : ''}
+        { type !== 'notice' ? categoryName : ''}
       </CenterTd>
       <MiddleTd width="700">
         { type !== 'notice' ? (<FontAwesomeIcon icon={faCommentDots} />) : (<FontAwesomeIcon icon={faInfoCircle} />)}
@@ -26,7 +38,30 @@ const Post = ({ data }) => {
         <PostTitle to={`/post/${id}`}>{title}</PostTitle>
         { replyCount > 0 ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{replyCount}]</ReplyCountspan>) : ''}
       </MiddleTd>
-      <CenterTdWriter>{writer}</CenterTdWriter>
+      <CenterTdWriter>
+        <WriterDropdown isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
+          <WriterDropdownToggle name={`replyIndex${index}`}> {writer} </WriterDropdownToggle>
+          <WriterDropdownMenu>
+            <WriterDropdownItem>
+              프로필
+            </WriterDropdownItem>
+            <WriterDropdownItem>
+              작성 글 보기
+            </WriterDropdownItem>
+            {userData.id === idWriter ? '' : (
+              <WriterDropdownItem
+                onClick={() => {
+                  toggleConfirmAlert('정말 차단하시겠습니까?', () => {
+                    addIgnore(idWriter);
+                  });
+                }}
+              >
+                차단하기
+              </WriterDropdownItem>
+            )}
+          </WriterDropdownMenu>
+        </WriterDropdown>
+      </CenterTdWriter>
       <CenterTd>{date}</CenterTd>
     </tr>
   );
@@ -42,8 +77,51 @@ Post.propTypes = {
     recommendCount: Proptypes.number,
     replyCount: Proptypes.number,
     type: Proptypes.string,
+    idWriter: Proptypes.number,
   }).isRequired,
+  index: Proptypes.number.isRequired,
 };
+
+const WriterDropdown = styled(Dropdown)`
+  display : inline;
+  
+  & .dropdown-item:active {
+    color: #fff !important;
+    text-decoration: none !important;
+    background-color: #DC3545 !important;
+  }
+  
+   & .dropdown-item:focus {
+    color: #fff !important;
+    text-decoration: none !important;
+    background-color: #DC3545 !important;
+  }
+`;
+
+const WriterDropdownItem = styled(DropdownItem)`
+  height : 27px;
+  line-height : 0;
+  padding-top : 0px;
+  padding-bottom : 0px;
+  font-size: 0.8rem;
+`;
+
+const WriterDropdownMenu = styled(DropdownMenu)`
+  left: 20px !important;
+`;
+
+const WriterDropdownToggle = styled(DropdownToggle)`
+  color : #DC3545 !important;
+  font-weight : bold;
+  font-size : 0.8rem !important;
+  padding: 0 6px !important;
+  background-color: transparent !important;
+  border : 0 !important;
+  height : 100%;
+  &:focus {
+    box-shadow : none !important;
+  }
+`;
 
 const ReplyCountspan = styled.span`
   color: #DC3545;
@@ -82,4 +160,4 @@ const CenterTdWriter = styled(CenterTd)`
   font-weight : bold;
 `;
 
-export default Post;
+export default observer(Post);

@@ -41,9 +41,8 @@ class IgnoreStore {
     );
   });
 
-  @action addIgnore = (id, bpId) => {
+  @action addIgnore = (id) => {
     const { userData } = this.root.UserStore;
-    const { getReply } = this.root.BoardReplyStore;
     axios.post('/api/user/ignore', {
       fromId: userData.id,
       targetId: id,
@@ -54,7 +53,7 @@ class IgnoreStore {
           toast.error(response.data.MESSAGE);
         } else {
           toast.success('✔ 성공적으로 차단되었습니다!');
-          getReply(bpId);
+          this.getIgnore();
         }
       })
       .catch((response) => console.log(response));

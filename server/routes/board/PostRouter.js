@@ -22,6 +22,7 @@ router.get('/', (req, res) => {
         AND WRITER != IFNULL(( SELECT TARGET_ID FROM GTC_USER_IGNORE WHERE FROM_ID = ${userId}), -1)) AS pageCount
         , P.ID AS id
         , P.TITLE AS title
+        , P.WRITER AS idWriter
         , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
         , IF(BC_ID = 'FREE','자유','그외') as categoryName
         , P.DEPTH AS depth
