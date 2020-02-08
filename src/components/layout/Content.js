@@ -19,7 +19,7 @@ const Content = () => (
       <Route exact path="/setting" render={() => <Contents.Setting />} />
       <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
       <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
-      <Route exact path="/mypoint/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />
+      <Route exact path="/mypoint/page/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />
 
       {/* BOARD */}
       <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} noPagination />} />

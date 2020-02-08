@@ -17,7 +17,7 @@ router.get('/', (req, res) => {
   const query = `
     SELECT 
     @rownum:=@rownum+1 as rn
-    , (SELECT Ceil(COUNT(*)/${MaxCount}) FROM GTC_USER_POINT) AS pageCount
+    , (SELECT Ceil(COUNT(*)/${MaxCount}) FROM GTC_USER_POINT WHERE USER_ID = ${userId}) AS pageCount
     , ID AS id
     , TYPE AS type
     , POST_ID AS postId
