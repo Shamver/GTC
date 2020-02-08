@@ -17,26 +17,11 @@ router.get('/', (req, res) => {
   const { board } = req.query;
   currentPage = currentPage || 1;
 
-  const query = `
-    SELECT 
-      @rownum:=@rownum+1 as rn
-        , (SELECT Ceil(COUNT(*)/25) FROM GTC_BOARD_POST WHERE B_ID = '${board.toUpperCase()}') AS pageCount
-        , P.ID AS id
-        , P.TITLE AS title
-        , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
-        , IF(BC_ID = 'FREE','자유','그외') as categoryName
-        , P.DEPTH AS depth
-        , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
-        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
-        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id) as replyCount
-    FROM GTC_BOARD_POST P, (SELECT @ROWNUM := ${(currentPage - 1) * 25}) AS TEMP
-    WHERE B_ID = '${board.toUpperCase()}'
-    ORDER BY ID DESC    
-    LIMIT ${(currentPage - 1) * 25}, 25
-    `;
-
   Database.execute(
-    (database) => database.query(query)
+    (database) => database.query(
+      query,
+      [`${board.toUpperCase()}`, ],
+    )
       .then((rows) => {
         res.send(rows);
       }),
@@ -73,6 +58,21 @@ router.post('/', (req, res) => {
      '${data.secretReplyAllow}',
      '${data.replyAllow}'
     )`;
+
+
+  Database.execute(
+    (database) => database.query(query)
+      .then((rows) => {
+        res.send(rows);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get PostList Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err);
+  });
+
 
   conn.query(query, (err) => {
     if (err) throw err;
@@ -219,6 +219,24 @@ router.get('/:id/upperLower', (req, res) => {
     res.send(rows);
   });
 });
+
+const GET_BOARD_POST_LIST = `
+    SELECT 
+      @rownum:=@rownum+1 as rn
+        , (SELECT Ceil(COUNT(*)/25) FROM GTC_BOARD_POST WHERE B_ID = ':B_ID') AS pageCount
+        , P.ID AS id
+        , P.TITLE AS title
+        , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
+        , IF(BC_ID = 'FREE','자유','그외') as categoryName
+        , P.DEPTH AS depth
+        , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
+        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
+        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id) as replyCount
+    FROM GTC_BOARD_POST P, (SELECT @ROWNUM := ${(currentPage - 1) * 25}) AS TEMP
+    WHERE B_ID = '${board.toUpperCase()}'
+    ORDER BY ID DESC    
+    LIMIT ${(currentPage - 1) * 25}, 25
+`;
 
 
 module.exports = router;
