@@ -3,10 +3,12 @@ const express = require('express');
 const router = express.Router();
 const db = require('../../dbConnection')();
 const authMiddleware = require('../../middleware/auth');
-// const { info } = require('../../log-config');
 const { set } = require('../../middleware/latelyCookie');
 
+const { error, info } = require('../../log-config');
+
 const conn = db.init();
+const Database = require('../../Database');
 
 const point = require('../../middleware/point');
 
@@ -33,10 +35,23 @@ router.get('/', (req, res) => {
     LIMIT ${(currentPage - 1) * 25}, 25
     `;
 
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
-    res.send(rows);
+  Database.execute(
+    (database) => database.query(query)
+      .then((rows) => {
+        res.send(rows);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get PostList Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err);
   });
+
+  // conn.query(query, (err, rows) => {
+  //   if (err) throw err;
+  //   res.send(rows);
+  // });
 });
 
 router.use('/', authMiddleware);

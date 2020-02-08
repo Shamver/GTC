@@ -1,7 +1,8 @@
 const mysql = require('mysql');
+const config = require('./config/db-config');
 
 class Database {
-  constructor(config) {
+  constructor() {
     this.connection = mysql.createConnection(config);
   }
 
@@ -22,4 +23,14 @@ class Database {
       });
     });
   }
+
+  execute(callback) {
+    return callback(this).then(
+      (result) => this.close().then(() => result),
+      (err) => this.close().then(() => { throw err; }),
+    );
+  }
 }
+
+
+module.exports = new Database();
