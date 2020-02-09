@@ -1,10 +1,12 @@
-import Setting from './Setting';
-import Board from './Board';
-import PostView from './Board/Post/PostView';
-import PostLocker from './PostLocker';
-import NewAlert from './NewAlert';
-import MyAccount from './MyAccount';
-import MyPoint from './MyPoint';
+import { lazy } from 'react';
+
+const Setting = lazy(() => import('./Setting'));
+const Board = lazy(() => import('./Board'));
+const PostView = lazy(() => import('./Board/Post/PostView'));
+const PostLocker = lazy(() => import('./PostLocker'));
+const NewAlert = lazy(() => import('./NewAlert'));
+const MyAccount = lazy(() => import('./MyAccount'));
+const MyPoint = lazy(() => import('./MyPoint'));
 
 export default {
   Board,
