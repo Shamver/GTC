@@ -20,24 +20,22 @@ const MyAccountContent = () => {
   const { updateInfo } = UserStore;
   const { loading } = UtilLoadingStore;
 
-  if (loading) {
-    return (
-      <Loading />
-    );
-  }
-
   return (
-    <FormWrapper>
-      <Row>
-        <MyAccountReadForm />
-        <MyAccountEditForm />
-      </Row>
-      <FormButton color="danger" onClick={updateInfo} disabled={!isAllValidationChecked}>수정</FormButton>
-    </FormWrapper>
+    <>
+      <Loading loading={loading} />
+      <FormWrapper loading={loading}>
+        <Row>
+          <MyAccountReadForm />
+          <MyAccountEditForm />
+        </Row>
+        <FormButton color="danger" onClick={updateInfo} disabled={!isAllValidationChecked}>수정</FormButton>
+      </FormWrapper>
+    </>
   );
 };
 
 const FormWrapper = styled.div`
+  display: ${(props) => (props.loading ? 'none' : 'block')}
   padding: 25px;
 `;
 

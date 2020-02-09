@@ -1,5 +1,6 @@
 import React from 'react';
 import { observer } from 'mobx-react';
+import styled from 'styled-components';
 
 import Loading from '../../util/Loading';
 import NewAlertData from './NewAlertData';
@@ -12,18 +13,18 @@ const NewAlertContent = () => {
   const { loading } = UtilLoadingStore;
 
   const Alerts = alertList.map((v) => (NewAlertData(v, onClickAlert, onDeleteAlert)));
-
-  if (loading) {
-    return (
-      <Loading />
-    );
-  }
-
   return (
     <>
-      {Alerts.length === 0 ? '새로운 알림이 없습니다.' : Alerts}
+      <Loading loading={loading} />
+      <Div loading={loading}>
+        {Alerts.length === 0 ? '새로운 알림이 없습니다.' : Alerts}
+      </Div>
     </>
   );
 };
+
+const Div = styled.div`
+  display: ${(props) => (props.loading ? 'none' : 'block')}
+`;
 
 export default observer(NewAlertContent);

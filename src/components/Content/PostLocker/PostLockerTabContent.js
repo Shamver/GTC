@@ -5,6 +5,7 @@ import {
 
 import { observer } from 'mobx-react';
 
+import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 
 import PostLockerMyPost from './PostLockerMyPost';
@@ -18,19 +19,22 @@ const PostLockerTabContent = () => {
   const { activeTab } = ComponentPostLockerStore;
   const { loading } = UtilLoadingStore;
 
-  if (loading) {
-    return (
-      <Loading />
-    );
-  }
-
   return (
-    <TabContent activeTab={activeTab}>
-      <PostLockerMyPost />
-      <PostLockerMyReply />
-      <PostLockerFavorite />
-    </TabContent>
+    <>
+      <Loading loading={loading} />
+      <Div loading={loading}>
+        <TabContent activeTab={activeTab}>
+          <PostLockerMyPost />
+          <PostLockerMyReply />
+          <PostLockerFavorite />
+        </TabContent>
+      </Div>
+    </>
   );
 };
+
+const Div = styled.div`
+  display: ${(props) => (props.loading ? 'none' : 'block')}
+`;
 
 export default observer(PostLockerTabContent);
