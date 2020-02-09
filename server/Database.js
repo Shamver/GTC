@@ -4,6 +4,16 @@ const config = require('./config/db-config');
 class Database {
   constructor() {
     this.connection = mysql.createConnection(config);
+
+    this.connection.config.queryFormat = (query, values) => {
+      if (!values) return query;
+      return query.replace(/:(\w+)/g, (txt, key) => {
+        if (Object.prototype.hasOwnProperty.call(values, key)) {
+          return escape(values[key]);
+        }
+        return txt;
+      });
+    };
   }
 
   query(sql, args) {
@@ -15,22 +25,12 @@ class Database {
     });
   }
 
-  close() {
-    return new Promise((resolve, reject) => {
-      this.connection.end((err) => {
-        if (err) reject(err);
-        resolve();
-      });
-    });
-  }
-
   execute(callback) {
     return callback(this).then(
-      (result) => this.close().then(() => result),
-      (err) => this.close().then(() => { throw err; }),
+      (result) => result,
+      (err) => { throw err; },
     );
   }
 }
-
 
 module.exports = new Database();

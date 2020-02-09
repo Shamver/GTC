@@ -19,8 +19,11 @@ router.get('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      query,
-      [`${board.toUpperCase()}`, ],
+      GET_BOARD_POST_LIST,
+      {
+        B_ID: board.toUpperCase(),
+        CURRENT_PAGE: ((currentPage - 1) * 25),
+      },
     )
       .then((rows) => {
         res.send(rows);
@@ -30,9 +33,15 @@ router.get('/', (req, res) => {
     info('Get PostList Success');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
-    error(err);
+
+    // Database 에서 보여주는 에러 메시지
+    error(err.sqlMessage);
+
+    // 실행된 sql
+    error(err.sql);
   });
 
+  // 구 query 호출 방식
   // conn.query(query, (err, rows) => {
   //   if (err) throw err;
   //   res.send(rows);
@@ -232,11 +241,11 @@ const GET_BOARD_POST_LIST = `
         , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
         , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
         , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id) as replyCount
-    FROM GTC_BOARD_POST P, (SELECT @ROWNUM := ${(currentPage - 1) * 25}) AS TEMP
-    WHERE B_ID = '${board.toUpperCase()}'
+    FROM GTC_BOARD_POST P, (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
+    WHERE B_ID = ':B_ID'
     ORDER BY ID DESC    
-    LIMIT ${(currentPage - 1) * 25}, 25
+    LIMI :CURRENT_PAGE, 25
 `;
 
-
+const temp = 'SELECT * FROM GTC_BOARD_POST';
 module.exports = router;
