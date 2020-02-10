@@ -7,6 +7,7 @@ const PostLocker = lazy(() => import('./PostLocker'));
 const NewAlert = lazy(() => import('./NewAlert'));
 const MyAccount = lazy(() => import('./MyAccount'));
 const MyPoint = lazy(() => import('./MyPoint'));
+const Mail = lazy(() => import('./Mail'));
 
 export default {
   Board,
@@ -16,4 +17,5 @@ export default {
   NewAlert,
   MyAccount,
   MyPoint,
+  Mail,
 };

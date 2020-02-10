@@ -48,7 +48,9 @@ const HeaderInProfile = () => {
               </DropdownToggleC>
               <DropdownMenu>
                 <DropdownItem30>채팅</DropdownItem30>
-                <DropdownItem30>쪽지</DropdownItem30>
+                <LinkNoDeco to="/mail">
+                  <DropdownItem30>쪽지</DropdownItem30>
+                </LinkNoDeco>
               </DropdownMenu>
             </DropdownIn>
             <DropdownIn isOpen={avatar} toggle={onActive}>
