@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      GET_BOARD_POST_LIST,
+      SELECT_BOARD_POST_LIST,
       {
         B_ID: board.toUpperCase(),
         CURRENT_PAGE: ((currentPage - 1) * 25),
@@ -40,64 +40,53 @@ router.get('/', (req, res) => {
     // 실행된 sql
     error(err.sql);
   });
-
-  // 구 query 호출 방식
-  // conn.query(query, (err, rows) => {
-  //   if (err) throw err;
-  //   res.send(rows);
-  // });
 });
 
 router.use('/', authMiddleware);
 router.post('/', (req, res) => {
   const data = req.body;
-  const query = `INSERT INTO GTC_BOARD_POST
-    VALUES(
-    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_POST) as temp),
-    '${data.board}',
-    '${data.category}',
-    null,
-    '${data.title}',
-    '${data.writer}',
-    sysdate(),
-    0,
-    '${data.content}',
-     ${data.depth},
-     '${data.secret}',
-     '${data.secretReplyAllow}',
-     '${data.replyAllow}'
-    )`;
-
 
   Database.execute(
-    (database) => database.query(query)
+    (database) => database.query(
+      INSERT_BOARD_POST,
+      {
+        BOARD: data.board,
+        CATEGORY: data.category,
+        TITLE: data.title,
+        WRITER: data.writer,
+        CONTENT: data.content,
+        DEPTH: data.depth,
+        SECRET: data.secret,
+        SECRET_REPLY_ALLOW: data.secretReplyAllow,
+        REPLY_ALLOW: data.replyAllow,
+      },
+    )
+      .then(() => database.query(
+        SELECT_BOARD_POST_MAX_ID,
+        {},
+      ))
       .then((rows) => {
-        res.send(rows);
+        const postData = {
+          ...data,
+          bpId: rows[0].id,
+        };
+
+        point('addPost', 'POST', postData);
+        res.send(true);
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('Get PostList Success');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
-    error(err);
+
+    // Database 에서 보여주는 에러 메시지
+    error(err.sqlMessage);
+
+    // 실행된 sql
+    error(err.sql);
   });
 
-
-  conn.query(query, (err) => {
-    if (err) throw err;
-
-    conn.query('SELECT IFNULL(MAX(ID), 1) AS id FROM GTC_BOARD_POST', (err2, rows) => {
-      if (err2) throw err2;
-
-      const postData = {
-        ...data,
-        bpId: rows[0].id,
-      };
-
-      point('addPost', 'POST', postData);
-      res.send(true);
-    });
-  });
 });
 
 // 게시글 추천
@@ -229,7 +218,7 @@ router.get('/:id/upperLower', (req, res) => {
   });
 });
 
-const GET_BOARD_POST_LIST = `
+const SELECT_BOARD_POST_LIST = `
     SELECT 
       @rownum:=@rownum+1 as rn
         , (SELECT Ceil(COUNT(*)/25) FROM GTC_BOARD_POST WHERE B_ID = ':B_ID') AS pageCount
@@ -244,8 +233,30 @@ const GET_BOARD_POST_LIST = `
     FROM GTC_BOARD_POST P, (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
     WHERE B_ID = ':B_ID'
     ORDER BY ID DESC    
-    LIMI :CURRENT_PAGE, 25
+    LIMIT :CURRENT_PAGE, 25
 `;
 
-const temp = 'SELECT * FROM GTC_BOARD_POST';
+const INSERT_BOARD_POST = `INSERT INTO GTC_BOARD_POST
+    VALUES(
+    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_POST) as temp),
+    ':BOARD',
+    ':CATEGORY',
+    null,
+    ':TITLE',
+    ':WRITER',
+    sysdate(),
+    0,
+    ':CONTENT',
+    :DEPTH,
+    ':SECRET',
+    ':SECRET_REPLY_ALLOW',
+    ':REPLY_ALLOW'
+)
+`;
+
+const SELECT_BOARD_POST_MAX_ID = `
+    SELECT IFNULL(MAX(ID), 1) AS id FROM GTC_BOARD_POST
+`;
+
+
 module.exports = router;
