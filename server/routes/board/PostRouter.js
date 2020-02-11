@@ -33,12 +33,17 @@ router.get('/', (req, res) => {
     info('Get PostList Success');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
+    error(err);
 
     // Database 에서 보여주는 에러 메시지
-    error(err.sqlMessage);
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
 
     // 실행된 sql
-    error(err.sql);
+    if (err.sql) {
+      error(err.sql);
+    }
   });
 });
 
@@ -76,44 +81,69 @@ router.post('/', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get PostList Success');
+    info('Get Post Add Success');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
+    error(err);
 
     // Database 에서 보여주는 에러 메시지
-    error(err.sqlMessage);
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
 
     // 실행된 sql
-    error(err.sql);
+    if (err.sql) {
+      error(err.sql);
+    }
   });
-
 });
 
 // 게시글 추천
 router.post('/recommend', (req, res) => {
   const data = req.body;
-  let query = `SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND
-    WHERE ID=${data.id}
-    AND U_ID=${data.uId}`;
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
 
-    // 이미 해당 댓글에 해당 유저가 좋아요를 누름.
-    if (rows[0].count === 1) {
-      res.send(2);
-    } else {
-      query = `INSERT INTO GTC_BOARD_POST_RECOMMEND
-        VALUES (
-          ${data.id},
-          ${data.uId},
-          '${data.type}'
-        )`;
 
-      conn.query(query, (err2) => {
-        if (err2) throw err2;
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_POST_RECOMMEND_DUPLICATE_CHECK,
+      {
+        ID: data.id,
+        U_ID: data.uId,
+      },
+    )
+      .then((rows) => {
+        if (rows[0].count === 1) {
+          res.send(2);
+          throw new Error('이미 해당 글에 투표가 되어 있습니다');
+        }
 
+        return database.query(
+          INSERT_BOARD_POST_RECOMMEND,
+          {
+            ID: data.id,
+            U_ID: data.uId,
+            TYPE: data.type,
+          },
+        );
+      })
+      .then(() => {
         res.send(1);
-      });
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Recommend Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.toString());
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
     }
   });
 });
@@ -219,25 +249,26 @@ router.get('/:id/upperLower', (req, res) => {
 });
 
 const SELECT_BOARD_POST_LIST = `
-    SELECT 
-      @rownum:=@rownum+1 as rn
-        , (SELECT Ceil(COUNT(*)/25) FROM GTC_BOARD_POST WHERE B_ID = ':B_ID') AS pageCount
-        , P.ID AS id
-        , P.TITLE AS title
-        , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
-        , IF(BC_ID = 'FREE','자유','그외') as categoryName
-        , P.DEPTH AS depth
-        , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
-        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
-        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id) as replyCount
-    FROM GTC_BOARD_POST P, (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
-    WHERE B_ID = ':B_ID'
-    ORDER BY ID DESC    
-    LIMIT :CURRENT_PAGE, 25
+  SELECT 
+    @rownum:=@rownum+1 as rn
+      , (SELECT Ceil(COUNT(*)/25) FROM GTC_BOARD_POST WHERE B_ID = ':B_ID') AS pageCount
+      , P.ID AS id
+      , P.TITLE AS title
+      , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
+      , IF(BC_ID = 'FREE','자유','그외') as categoryName
+      , P.DEPTH AS depth
+      , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
+      , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
+      , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id) as replyCount
+  FROM GTC_BOARD_POST P, (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
+  WHERE B_ID = ':B_ID'
+  ORDER BY ID DESC    
+  LIMIT :CURRENT_PAGE, 25
 `;
 
-const INSERT_BOARD_POST = `INSERT INTO GTC_BOARD_POST
-    VALUES(
+const INSERT_BOARD_POST = `
+  INSERT INTO GTC_BOARD_POST
+  VALUES (
     (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_POST) as temp),
     ':BOARD',
     ':CATEGORY',
@@ -251,12 +282,26 @@ const INSERT_BOARD_POST = `INSERT INTO GTC_BOARD_POST
     ':SECRET',
     ':SECRET_REPLY_ALLOW',
     ':REPLY_ALLOW'
-)
+  )
 `;
 
 const SELECT_BOARD_POST_MAX_ID = `
-    SELECT IFNULL(MAX(ID), 1) AS id FROM GTC_BOARD_POST
+  SELECT IFNULL(MAX(ID), 1) AS id FROM GTC_BOARD_POST
 `;
+
+const SELECT_BOARD_POST_RECOMMEND_DUPLICATE_CHECK = `
+  SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND
+  WHERE ID = :ID
+  AND U_ID = :U_ID
+`;
+
+const INSERT_BOARD_POST_RECOMMEND = `
+  INSERT INTO GTC_BOARD_POST_RECOMMEND
+  VALUES (
+    :ID,
+    :U_ID,
+    ':TYPE'
+  )`;
 
 
 module.exports = router;

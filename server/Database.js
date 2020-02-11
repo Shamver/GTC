@@ -9,7 +9,7 @@ class Database {
       if (!values) return query;
       return query.replace(/:(\w+)/g, (txt, key) => {
         if (Object.prototype.hasOwnProperty.call(values, key)) {
-          return escape(values[key]);
+          return values[key];
         }
         return txt;
       });
