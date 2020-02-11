@@ -21,6 +21,7 @@ const userAlertApi = require('./routes/user/AlertRouter');
 const userIgnoreApi = require('./routes/user/IgnoreRouter');
 const userFavoriteApi = require('./routes/user/FavoriteRouter');
 const userPointApi = require('./routes/user/PointRouter');
+const userMailApi = require('./routes/user/MailRouter');
 const cookieLatelyApi = require('./routes/cookie/LatelyRouter');
 
 app.use(cookieParser());
@@ -37,6 +38,7 @@ app.use('/api/user/alert', userAlertApi);
 app.use('/api/user/ignore', userIgnoreApi);
 app.use('/api/user/favorite', userFavoriteApi);
 app.use('/api/user/point', userPointApi);
+app.use('/api/user/mail', userMailApi);
 
 // post
 // 안에서 authMiddleWare 처리

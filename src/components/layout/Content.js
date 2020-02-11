@@ -14,7 +14,7 @@ const Report = lazy(() => import('../util/Report'));
 
 const Content = () => (
   <BorderedDiv>
-    <Suspense fallback={<Loading loading />}>
+    <Suspense fallback={<Loading loading={1} />}>
       <Switch>
         <Route exact path="/" render={() => <Main />} />
         <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />

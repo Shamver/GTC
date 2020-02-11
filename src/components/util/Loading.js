@@ -26,7 +26,7 @@ const Loading = ({ loading }) => (
 );
 
 Loading.propTypes = {
-  loading: PropTypes.isRequired,
+  loading: PropTypes.number.isRequired,
 };
 
 const Div = styled.div`
