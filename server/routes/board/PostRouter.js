@@ -102,7 +102,6 @@ router.post('/', (req, res) => {
 router.post('/recommend', (req, res) => {
   const data = req.body;
 
-
   Database.execute(
     (database) => database.query(
       SELECT_BOARD_POST_RECOMMEND_DUPLICATE_CHECK,
@@ -150,101 +149,108 @@ router.post('/recommend', (req, res) => {
 
 router.get('/mine', (req, res) => {
   const { userId } = req.query;
-  const query = `SELECT ID AS postId, TITLE AS postTitle, date_format(DATE, '%Y-%m-%d %H:%i:%s') AS postDate, VIEWS AS postViews
-    FROM GTC_BOARD_POST
-    WHERE WRITER = ${userId}
-    `;
 
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
-    if (rows.length >= 1) {
-      res.send(rows.reverse());
-    } else {
-      res.send(rows);
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_POST_MINE,
+      {
+        USER_ID: userId,
+      },
+    )
+      .then((rows) => {
+        res.send(rows);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Mine Post Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
     }
   });
 });
 
 router.get('/:id', (req, res) => {
-  let query = `SELECT P.ID AS id
-        , B_ID AS board
-        , if(B_ID = 'FREE','자유게시판','그외') as boardName
-        , BC_ID AS category
-        , if(BC_ID = 'FREE','자유','그외') as categoryName
-        , P.TITLE AS title
-        , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
-        , P.DEPTH AS depth
-        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
-        , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R02') as notRecommendCount
-        , CASE WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
-                    WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE,DATE, SYSDATE()),'분 전')
-                    WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR,DATE, SYSDATE()),'시간 전')
-                    WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY,DATE, SYSDATE()),'일 전')
-                    WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH,DATE, SYSDATE()),'달 전')
-                   ELSE CONCAT(TIMESTAMPDIFF(YEAR,DATE, SYSDATE()),'년 전')
-               END  as date
-        , P.CONTENT AS content
-        , P.VIEWS AS views
-        , P.SECRET as secret
-        , P.SECRET_REPLY_ALLOW as secretReplyAllow
-        , P.REPLY_ALLOW as replyAllow
-    FROM GTC_BOARD_POST P 
-    WHERE ID = ${req.params.id}`;
+  let postItem;
 
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
-    query = `UPDATE GTC_BOARD_POST
-        SET VIEWS = VIEWS + 1
-        WHERE ID = ${req.params.id}`;
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_POST_SINGLE,
+      {
+        POST_ID: req.params.id,
+      },
+    )
+      .then((rows) => {
+        postItem = rows;
+        return database.query(
+          UPDATE_BOARD_POST_VIEWS,
+          {
+            POST_ID: req.params.id,
+          },
+        );
+      })
+      .then(() => {
+        const { lately } = req.cookies;
+        const list = set(lately, req.params.id);
+        res.cookie('lately', list, { httpOnly: true });
 
-    // 정상적으로 조회가 되었다면 조회수 +1
-    conn.query(query, (err2) => {
-      if (err2) throw err2;
+        res.send(postItem);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Single Post Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err);
 
-      const { lately } = req.cookies;
-      const list = set(lately, req.params.id);
-      res.cookie('lately', list, { httpOnly: true });
-      res.send(rows);
-    });
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
   });
 });
 
 router.get('/:id/upperLower', (req, res) => {
-  const query = `SELECT *, IF(id > ${req.params.id}, 'upper', 'lower') AS upperOrLower FROM (
-        SELECT 
-              @ROWNUM := @ROWNUM + 1 as rn
-                , P.ID AS id
-                , P.TITLE AS title
-                , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
-            FROM GTC_BOARD_POST P, (SELECT @ROWNUM := 0) AS TEMP
-            WHERE B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID =  ${req.params.id})
-            ORDER BY ID DESC    
-        ) AS B
-        WHERE B.rn IN (
-        ((SELECT rn FROM (
-                SELECT 
-                      @ROWNUM2 := @ROWNUM2 + 1 as rn 
-                        , P.ID AS id
-                        FROM GTC_BOARD_POST P,  (SELECT @ROWNUM2 := 0) AS TEMP
-                        WHERE P.B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID =  ${req.params.id})
-                        ORDER BY ID DESC   
-                ) AS A
-                WHERE A.id = ${req.params.id}) + 1),
-                ((SELECT rn FROM (
-                SELECT 
-                      @ROWNUM3 := @ROWNUM3 + 1 as rn 
-                        , P.ID AS id
-                        FROM GTC_BOARD_POST P,  (SELECT @ROWNUM3 := 0) AS TEMP
-                        WHERE P.B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID =  ${req.params.id})
-                        ORDER BY ID DESC   
-                ) AS A
-                WHERE A.id = ${req.params.id}) - 1)
-        )
-  `;
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_POST_UPPER_AND_LOWER,
+      {
+        POST_ID: req.params.id,
+      },
+    )
+      .then((rows) => {
+        res.send(rows);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Upper and Lower Post Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err);
 
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
-    res.send(rows);
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
   });
 });
 
@@ -301,7 +307,85 @@ const INSERT_BOARD_POST_RECOMMEND = `
     :ID,
     :U_ID,
     ':TYPE'
-  )`;
+  )
+`;
 
+const SELECT_BOARD_POST_MINE = `
+  SELECT 
+    ID AS postId
+    , TITLE AS postTitle
+    , date_format(DATE, '%Y-%m-%d %H:%i:%s') AS postDate
+    , VIEWS AS postViews
+  FROM GTC_BOARD_POST
+  WHERE WRITER = :USER_ID
+  ORDER BY ID DESC
+`;
+
+const SELECT_BOARD_POST_SINGLE = `
+  SELECT 
+  P.ID AS id
+  , B_ID AS board
+  , if(B_ID = 'FREE','자유게시판','그외') as boardName
+  , BC_ID AS category
+  , if(BC_ID = 'FREE','자유','그외') as categoryName
+  , P.TITLE AS title
+  , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
+  , P.DEPTH AS depth
+  , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
+  , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R02') as notRecommendCount
+  , CASE WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
+        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE,DATE, SYSDATE()),'분 전')
+        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR,DATE, SYSDATE()),'시간 전')
+        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY,DATE, SYSDATE()),'일 전')
+        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH,DATE, SYSDATE()),'달 전')
+     ELSE CONCAT(TIMESTAMPDIFF(YEAR,DATE, SYSDATE()),'년 전')
+  END  as date
+  , P.CONTENT AS content
+  , P.VIEWS AS views
+  , P.SECRET as secret
+  , P.SECRET_REPLY_ALLOW as secretReplyAllow
+  , P.REPLY_ALLOW as replyAllow
+  FROM GTC_BOARD_POST P 
+  WHERE ID = :POST_ID
+`;
+
+const UPDATE_BOARD_POST_VIEWS = `
+  UPDATE GTC_BOARD_POST
+    SET VIEWS = VIEWS + 1
+    WHERE ID = :POST_ID
+`;
+
+const SELECT_BOARD_POST_UPPER_AND_LOWER = `
+  SELECT *, IF(id > :POST_ID, 'upper', 'lower') AS upperOrLower FROM (
+    SELECT 
+      @ROWNUM := @ROWNUM + 1 as rn
+      , P.ID AS id
+      , P.TITLE AS title
+      , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
+    FROM GTC_BOARD_POST P, (SELECT @ROWNUM := 0) AS TEMP
+    WHERE B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID = :POST_ID)
+    ORDER BY ID DESC    
+  ) AS B
+  WHERE B.rn IN (
+    ((SELECT rn FROM (
+      SELECT 
+        @ROWNUM2 := @ROWNUM2 + 1 as rn 
+          , P.ID AS id
+          FROM GTC_BOARD_POST P,  (SELECT @ROWNUM2 := 0) AS TEMP
+          WHERE P.B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID = :POST_ID)
+          ORDER BY ID DESC   
+      ) AS A
+      WHERE A.id = :POST_ID) + 1),
+      ((SELECT rn FROM (
+      SELECT 
+        @ROWNUM3 := @ROWNUM3 + 1 as rn 
+          , P.ID AS id
+          FROM GTC_BOARD_POST P,  (SELECT @ROWNUM3 := 0) AS TEMP
+          WHERE P.B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID = :POST_ID)
+          ORDER BY ID DESC   
+    ) AS A
+    WHERE A.id = :POST_ID) - 1)
+  )
+`;
 
 module.exports = router;
