@@ -12,20 +12,22 @@ import MailTabContent from './MailTabContent';
 
 const Setting = () => {
   const {
-    ComponentMailStore, UtilStore, UtilLoadingStore,
+    ComponentMailStore, UtilStore, UtilLoadingStore, UserMailStore,
   } = useStores();
 
   const { activeTab } = ComponentMailStore;
   const { loginCheck } = UtilStore;
   const { doLoading } = UtilLoadingStore;
+  const { getMail, getSentMail } = UserMailStore;
 
   doLoading();
 
   useEffect(() => {
     if (loginCheck()) {
-      // getIgnore();
+      getMail();
+      getSentMail();
     }
-  }, [loginCheck, activeTab]);
+  }, [loginCheck, activeTab, getMail, getSentMail]);
 
   return (
     <MainContainer>

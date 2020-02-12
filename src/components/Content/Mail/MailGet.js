@@ -6,24 +6,13 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
 import MailGetTable from './MailGetTable';
+import useStores from '../../../stores/useStores';
 
 const MailGet = () => {
-  const data = [
-    {
-      id: 0,
-      fromName: 1,
-      message: 'test',
-      date: '2020-01-01 08:08:08',
-    },
-    {
-      id: 1,
-      fromName: 1,
-      message: 'test2',
-      date: '2020-01-01 08:08:08',
-    },
-  ];
+  const { UserMailStore } = useStores();
+  const { getMailList } = UserMailStore;
 
-  const MailGetData = data.map((v) => (MailGetTable('mailGet', v, () => {})));
+  const MailGetData = getMailList.map((v) => (MailGetTable('mailGet', v, () => {})));
 
   return (
     <TabPane tabId="get">
@@ -40,7 +29,7 @@ const MailGet = () => {
         <tbody>
           {MailGetData.length === 0 ? (
             <tr>
-              <td colSpan={3}>
+              <td colSpan={5}>
                 받은 쪽지가 없습니다.
               </td>
             </tr>

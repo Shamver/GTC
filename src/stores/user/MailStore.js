@@ -3,7 +3,9 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 class MailStore {
-  @observable mailList = [];
+  @observable getMailList = [];
+
+  @observable sentMailList = [];
 
   @observable mailForm = {
     mailTo: '',
@@ -14,13 +16,37 @@ class MailStore {
     this.root = root;
   }
 
-  @action getMail = () => {
-
+  @action getSentMail = () => {
+    const { userData } = this.root.UserStore;
+    axios.get('/api/user/mail/sent', {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data) {
+          this.sentMailList = data;
+        }
+      })
+      .catch((response) => console.log(response));
   };
 
-  @action onChangeValue = ((e) => {
-    this.mailForm[e.target.name] = e.target.value;
-  });
+  @action getMail = () => {
+    const { userData } = this.root.UserStore;
+    axios.get('/api/user/mail/get', {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data) {
+          this.getMailList = data;
+        }
+      })
+      .catch((response) => console.log(response));
+  };
 
   @action sendMail = () => {
     const { userData } = this.root.UserStore;
@@ -49,6 +75,10 @@ class MailStore {
       })
       .catch((response) => console.log(response));
   };
+
+  @action onChangeValue = ((e) => {
+    this.mailForm[e.target.name] = e.target.value;
+  });
 }
 
 export default MailStore;

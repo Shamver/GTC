@@ -3,16 +3,18 @@ import {
   Button,
 } from 'reactstrap';
 import styled from 'styled-components';
+import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const MailSentTable = (title, data, onClickEvent) => {
   const {
-    id, message, targetName, date,
+    id, message, targetName, date, isRead,
   } = data;
 
   return (
     <TableTr key={title + id}>
       <TableTd width={5}>
-        <b>new?</b>
+        <FontAwesomeIcon icon={isRead === 'Y' ? faEnvelopeOpen : faEnvelope} />
       </TableTd>
       <TableTd width={15}>
         {targetName}
