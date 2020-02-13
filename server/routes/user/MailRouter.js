@@ -37,12 +37,12 @@ router.get('/sent', (req, res) => {
   const { userId } = req.query;
 
   const query = `
-    SELECT 
+    SELECT
     M.ID AS id
     , U.NICKNAME AS targetName
     , M.MESSAGE AS message
     , date_format(M.SENT_DATE, '%Y-%m-%d %H:%i:%s') AS date
-    , IF(M.READ_DATE = null,'N','Y') as isRead
+    , IFNULL(M.READ_DATE, null) as readDate
     FROM GTC_USER_MAIL M, GTC_USER U
     WHERE M.FROM_ID = ${userId} AND U.ID = M.TARGET_ID
   `;

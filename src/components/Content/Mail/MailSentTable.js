@@ -5,22 +5,27 @@ import {
 import styled from 'styled-components';
 import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import useStores from '../../../stores/useStores';
 
 const MailSentTable = (title, data, onClickEvent) => {
+  const { UserMailStore } = useStores();
   const {
-    id, message, targetName, date, isRead,
+    id, message, targetName, date, readDate,
   } = data;
+  const { onView } = UserMailStore;
 
   return (
     <TableTr key={title + id}>
       <TableTd width={5}>
-        <FontAwesomeIcon icon={isRead === 'Y' ? faEnvelopeOpen : faEnvelope} />
+        <FontAwesomeIcon icon={readDate ? faEnvelopeOpen : faEnvelope} />
       </TableTd>
       <TableTd width={15}>
         {targetName}
       </TableTd>
       <TableTd width={60}>
-        {message}
+        <button type="button" onClick={() => { onView(data); }}>
+          {message}
+        </button>
       </TableTd>
       <TableTd width={15}>
         {date}

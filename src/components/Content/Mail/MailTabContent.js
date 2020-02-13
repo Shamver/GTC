@@ -9,6 +9,7 @@ import useStores from '../../../stores/useStores';
 import MailGet from './MailGet';
 import MailSent from './MailSent';
 import MailSend from './MailSend';
+import MailView from './MailView';
 
 import Loading from '../../util/Loading';
 
@@ -25,6 +26,7 @@ const MailTabContent = () => {
           <MailGet />
           <MailSent />
           <MailSend />
+          <MailView />
         </TabContent>
       </Div>
     </>

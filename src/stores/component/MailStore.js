@@ -14,6 +14,10 @@ class MailStore {
       this.activeTab = name;
     }
   });
+
+  @action setTabView = (() => {
+    this.activeTab = 'view';
+  });
 }
 
 export default MailStore;

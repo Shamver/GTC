@@ -8,13 +8,13 @@ import { faEnvelope, faEnvelopeOpen } from '@fortawesome/free-solid-svg-icons';
 
 const MailGetTable = (title, data, onClickEvent) => {
   const {
-    id, message, fromName, date, isRead,
+    id, message, fromName, date, readDate,
   } = data;
 
   return (
     <TableTr key={title + id}>
       <TableTd width={5}>
-        <FontAwesomeIcon icon={isRead === 'Y' ? faEnvelopeOpen : faEnvelope} />
+        <FontAwesomeIcon icon={readDate ? faEnvelopeOpen : faEnvelope} />
       </TableTd>
       <TableTd width={15}>
         {fromName}

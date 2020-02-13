@@ -12,6 +12,8 @@ class MailStore {
     mailText: '',
   };
 
+  @observable viewMail = {};
+
   constructor(root) {
     this.root = root;
   }
@@ -75,6 +77,13 @@ class MailStore {
       })
       .catch((response) => console.log(response));
   };
+
+  @action onView = ((data) => {
+    const { setTabView } = this.root.ComponentMailStore;
+
+    this.viewMail = data;
+    setTabView();
+  });
 
   @action onChangeValue = ((e) => {
     this.mailForm[e.target.name] = e.target.value;
