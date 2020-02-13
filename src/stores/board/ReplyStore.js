@@ -139,7 +139,12 @@ class ReplyStore {
     })
       .then((response) => {
         if (response.data) {
-          toast.success('😊 댓글이 삭제되었어요!');
+          if (response.data === 0) {
+            toast.success('😊 댓글이 삭제되었어요!');
+          } else if (response.data === 1) {
+            toast.error('😳 해당 댓글에 답글이 달려있어 삭제하지 못해요!');
+          }
+
           this.getReply(this.reply.bpId);
           this.setReplyEditId(0);
           this.modifyModeId = 0;
@@ -157,7 +162,7 @@ class ReplyStore {
     })
       .then((response) => {
         if (response.data === 1) {
-          toast.success('😳 해당 댓글 좋아요 완료!');
+          toast.success('😊 해당 댓글 좋아요 완료!');
         } else if (response.data === 2) {
           toast.error('😳 이미 해당 댓글을 좋아합니다. ㅠㅠ');
         }

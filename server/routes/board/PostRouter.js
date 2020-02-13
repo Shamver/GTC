@@ -1,258 +1,14 @@
 const express = require('express');
 
 const router = express.Router();
-const db = require('../../dbConnection')();
 const authMiddleware = require('../../middleware/auth');
 const { set } = require('../../middleware/latelyCookie');
 
 const { error, info } = require('../../log-config');
 
-const conn = db.init();
 const Database = require('../../Database');
 
 const point = require('../../middleware/point');
-
-router.get('/', (req, res) => {
-  let { currentPage } = req.query;
-  const { board } = req.query;
-  currentPage = currentPage || 1;
-
-  Database.execute(
-    (database) => database.query(
-      SELECT_BOARD_POST_LIST,
-      {
-        B_ID: board.toUpperCase(),
-        CURRENT_PAGE: ((currentPage - 1) * 25),
-      },
-    )
-      .then((rows) => {
-        res.send(rows);
-      }),
-  ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get PostList Success');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
-  });
-});
-
-router.use('/', authMiddleware);
-router.post('/', (req, res) => {
-  const data = req.body;
-
-  Database.execute(
-    (database) => database.query(
-      INSERT_BOARD_POST,
-      {
-        BOARD: data.board,
-        CATEGORY: data.category,
-        TITLE: data.title,
-        WRITER: data.writer,
-        CONTENT: data.content,
-        DEPTH: data.depth,
-        SECRET: data.secret,
-        SECRET_REPLY_ALLOW: data.secretReplyAllow,
-        REPLY_ALLOW: data.replyAllow,
-      },
-    )
-      .then(() => database.query(
-        SELECT_BOARD_POST_MAX_ID,
-        {},
-      ))
-      .then((rows) => {
-        const postData = {
-          ...data,
-          bpId: rows[0].id,
-        };
-
-        point('addPost', 'POST', postData);
-        res.send(true);
-      }),
-  ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Post Add Success');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
-  });
-});
-
-// 게시글 추천
-router.post('/recommend', (req, res) => {
-  const data = req.body;
-
-  Database.execute(
-    (database) => database.query(
-      SELECT_BOARD_POST_RECOMMEND_DUPLICATE_CHECK,
-      {
-        ID: data.id,
-        U_ID: data.uId,
-      },
-    )
-      .then((rows) => {
-        if (rows[0].count === 1) {
-          res.send(2);
-          throw new Error('이미 해당 글에 투표가 되어 있습니다');
-        }
-
-        return database.query(
-          INSERT_BOARD_POST_RECOMMEND,
-          {
-            ID: data.id,
-            U_ID: data.uId,
-            TYPE: data.type,
-          },
-        );
-      })
-      .then(() => {
-        res.send(1);
-      }),
-  ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Recommend Success');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.toString());
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
-  });
-});
-
-router.get('/mine', (req, res) => {
-  const { userId } = req.query;
-
-  Database.execute(
-    (database) => database.query(
-      SELECT_BOARD_POST_MINE,
-      {
-        USER_ID: userId,
-      },
-    )
-      .then((rows) => {
-        res.send(rows);
-      }),
-  ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Mine Post Success');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
-  });
-});
-
-router.get('/:id', (req, res) => {
-  let postItem;
-
-  Database.execute(
-    (database) => database.query(
-      SELECT_BOARD_POST_SINGLE,
-      {
-        POST_ID: req.params.id,
-      },
-    )
-      .then((rows) => {
-        postItem = rows;
-        return database.query(
-          UPDATE_BOARD_POST_VIEWS,
-          {
-            POST_ID: req.params.id,
-          },
-        );
-      })
-      .then(() => {
-        const { lately } = req.cookies;
-        const list = set(lately, req.params.id);
-        res.cookie('lately', list, { httpOnly: true });
-
-        res.send(postItem);
-      }),
-  ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Single Post Success');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
-  });
-});
-
-router.get('/:id/upperLower', (req, res) => {
-  Database.execute(
-    (database) => database.query(
-      SELECT_BOARD_POST_UPPER_AND_LOWER,
-      {
-        POST_ID: req.params.id,
-      },
-    )
-      .then((rows) => {
-        res.send(rows);
-      }),
-  ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Upper and Lower Post Success');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
-  });
-});
 
 const SELECT_BOARD_POST_LIST = `
   SELECT 
@@ -387,5 +143,247 @@ const SELECT_BOARD_POST_UPPER_AND_LOWER = `
     WHERE A.id = :POST_ID) - 1)
   )
 `;
+
+router.get('/', (req, res) => {
+  let { currentPage } = req.query;
+  const { board } = req.query;
+  currentPage = currentPage || 1;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_POST_LIST,
+      {
+        B_ID: board.toUpperCase(),
+        CURRENT_PAGE: ((currentPage - 1) * 25),
+      },
+    )
+      .then((rows) => {
+        res.send(rows);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get PostList Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
+
+router.use('/', authMiddleware);
+router.post('/', (req, res) => {
+  const data = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      INSERT_BOARD_POST,
+      {
+        BOARD: data.board,
+        CATEGORY: data.category,
+        TITLE: data.title,
+        WRITER: data.writer,
+        CONTENT: data.content,
+        DEPTH: data.depth,
+        SECRET: data.secret,
+        SECRET_REPLY_ALLOW: data.secretReplyAllow,
+        REPLY_ALLOW: data.replyAllow,
+      },
+    )
+      .then(() => database.query(
+        SELECT_BOARD_POST_MAX_ID,
+        {},
+      ))
+      .then((rows) => {
+        const postData = {
+          ...data,
+          bpId: rows[0].id,
+        };
+
+        point('addPost', 'POST', postData);
+        res.send(true);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Post Add Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
+
+// 게시글 추천
+router.post('/recommend', (req, res) => {
+  const data = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_POST_RECOMMEND_DUPLICATE_CHECK,
+      {
+        ID: data.id,
+        U_ID: data.uId,
+      },
+    )
+      .then((rows) => {
+        if (rows[0].count === 1) {
+          res.send(2);
+          throw new Error('이미 해당 글에 투표가 되어 있습니다');
+        }
+
+        return database.query(
+          INSERT_BOARD_POST_RECOMMEND,
+          {
+            ID: data.id,
+            U_ID: data.uId,
+            TYPE: data.type,
+          },
+        );
+      })
+      .then(() => {
+        res.send(1);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Recommend Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
+
+router.get('/mine', (req, res) => {
+  const { userId } = req.query;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_POST_MINE,
+      {
+        USER_ID: userId,
+      },
+    )
+      .then((rows) => {
+        res.send(rows);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Mine Post Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
+
+router.get('/:id', (req, res) => {
+  let postItem;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_POST_SINGLE,
+      {
+        POST_ID: req.params.id,
+      },
+    )
+      .then((rows) => {
+        postItem = rows;
+        return database.query(
+          UPDATE_BOARD_POST_VIEWS,
+          {
+            POST_ID: req.params.id,
+          },
+        );
+      })
+      .then(() => {
+        const { lately } = req.cookies;
+        const list = set(lately, req.params.id);
+        res.cookie('lately', list, { httpOnly: true });
+
+        res.send(postItem);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Single Post Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
+
+router.get('/:id/upperLower', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_POST_UPPER_AND_LOWER,
+      {
+        POST_ID: req.params.id,
+      },
+    )
+      .then((rows) => {
+        res.send(rows);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Upper and Lower Post Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
 
 module.exports = router;

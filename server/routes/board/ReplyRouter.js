@@ -9,6 +9,20 @@ const alertMiddleware = require('../../middleware/alert');
 const conn = db.init();
 
 const point = require('../../middleware/point');
+const Database = require('../../Database');
+
+const { info, error } = require('../../log-config');
+
+const SELECT_BOARD_REPLY_RE_CHECK = `
+  SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY
+  WHERE ID_REPLY = :REPLY_ID
+`;
+
+const UPDATE_BOARD_REPLY_DELETE = `
+  UPDATE GTC_BOARD_REPLY
+    SET DELETE_YN = 'Y'
+  WHERE ID = :REPLY_ID
+`;
 
 router.post('/', (req, res) => {
   const data = req.body;
@@ -130,15 +144,47 @@ router.put('/', (req, res) => {
 
 router.delete('/', (req, res) => {
   const data = req.query;
-  const query = `UPDATE GTC_BOARD_REPLY
-        SET DELETE_YN = 'Y'
-        WHERE ID = ${data.id}`;
 
-  conn.query(query, (err) => {
-    if (err) throw err;
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_REPLY_RE_CHECK,
+      {
+        REPLY_ID: data.replyId,
+      },
+    )
+      .then((rows) => {
+        if (rows[0].count >= 1) {
+          res.send(1);
+          return new Error('댓글에 답글이 달려있기 때문에 삭제할 수 없습니다.');
+        }
 
-    point('deleteReply', 'REPLY', data);
-    res.send(true);
+        return database.query(
+          UPDATE_BOARD_REPLY_DELETE,
+          {
+            REPLY_ID: data.replyId,
+          },
+        );
+      })
+      .then(() => {
+        point('deleteReply', 'REPLY', data);
+        res.send(0);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Delete Reply Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
   });
 });
 
