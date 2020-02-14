@@ -15,8 +15,8 @@ class MailStore {
     }
   });
 
-  @action setTabView = (() => {
-    this.activeTab = 'view';
+  @action setTab = ((v) => {
+    this.activeTab = v;
   });
 }
 

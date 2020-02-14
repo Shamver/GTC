@@ -78,11 +78,38 @@ class MailStore {
       .catch((response) => console.log(response));
   };
 
+  @action deleteMail = ((id) => {
+    const { userData } = this.root.UserStore;
+    axios.delete('/api/user/mail', {
+      data: {
+        mailId: id,
+        userId: userData.id,
+      },
+    })
+      .then(() => {
+        this.viewMail = {};
+        this.getMail();
+        this.getSentMail();
+        toast.info('🚮 쪽지가 삭제되었습니다.');
+      })
+      .catch((response) => { console.log(response); });
+  });
+
   @action onView = ((data) => {
-    const { setTabView } = this.root.ComponentMailStore;
+    const { setTab } = this.root.ComponentMailStore;
+    const { readDate, id } = data;
+    const { userData } = this.root.UserStore;
+
+    if (!readDate) {
+      axios.put('/api/user/mail', {
+        mailId: id,
+        userId: userData.id,
+      })
+        .catch((response) => console.log(response));
+    }
 
     this.viewMail = data;
-    setTabView();
+    setTab('view');
   });
 
   @action onChangeValue = ((e) => {

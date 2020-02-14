@@ -16,9 +16,9 @@ router.get('/get', (req, res) => {
     , U.NICKNAME AS fromName
     , M.MESSAGE AS message
     , date_format(M.SENT_DATE, '%Y-%m-%d %H:%i:%s') AS date
-    , IF(M.READ_DATE = null,'N','Y') as isRead
+    , IFNULL(date_format(M.READ_DATE, '%Y-%m-%d %H:%i:%s'), null) as readDate
     FROM GTC_USER_MAIL M, GTC_USER U
-    WHERE M.TARGET_ID = ${userId} AND U.ID = M.FROM_ID
+    WHERE M.TARGET_ID = ${userId} AND U.ID = M.FROM_ID AND M.DELETE_YN = 'N'
   `;
 
   info(query);
@@ -42,9 +42,9 @@ router.get('/sent', (req, res) => {
     , U.NICKNAME AS targetName
     , M.MESSAGE AS message
     , date_format(M.SENT_DATE, '%Y-%m-%d %H:%i:%s') AS date
-    , IFNULL(M.READ_DATE, null) as readDate
+    , IFNULL(date_format(M.READ_DATE, '%Y-%m-%d %H:%i:%s'), null) as readDate
     FROM GTC_USER_MAIL M, GTC_USER U
-    WHERE M.FROM_ID = ${userId} AND U.ID = M.TARGET_ID
+    WHERE M.FROM_ID = ${userId} AND U.ID = M.TARGET_ID AND M.DELETE_YN = 'N'
   `;
 
   info(query);
@@ -86,6 +86,7 @@ router.post('/', (req, res) => {
         , '${message}'
         , sysdate()
         , null
+        , 'N'
         )
       `;
 
@@ -102,6 +103,42 @@ router.post('/', (req, res) => {
         SUCCESS: false,
         MESSAGE: '😓 존재하지 않는 닉네임입니다ㅠ',
       });
+    }
+  });
+});
+
+router.put('/', (req, res) => {
+  const data = req.body;
+  const { userId, mailId } = data;
+  const query = `
+    UPDATE GTC_USER_MAIL
+    SET READ_DATE = sysdate()
+    WHERE (FROM_ID = ${userId} OR TARGET_ID = ${userId}) AND ID = ${mailId}
+  `;
+
+  conn.query(query, (err) => {
+    if (err) throw err;
+    res.send(200);
+  });
+});
+
+router.delete('/', (req, res) => {
+  const data = req.body;
+  const {
+    mailId, userId,
+  } = data;
+
+  const query = `UPDATE GTC_USER_MAIL
+    SET DELETE_YN = 'Y'
+    WHERE (FROM_ID = ${userId} OR TARGET_ID = ${userId}) AND ID = ${mailId}
+  `;
+
+  conn.query(query, (err, rows) => {
+    if (err) throw err;
+    if (rows.length >= 1) {
+      res.send(200);
+    } else {
+      res.send(404);
     }
   });
 });

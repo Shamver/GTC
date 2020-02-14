@@ -5,14 +5,14 @@ import {
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
-import MailSentTable from './MailSentTable';
+import MailTable from './MailTable';
 import useStores from '../../../stores/useStores';
 
 const MailSent = () => {
   const { UserMailStore } = useStores();
   const { sentMailList } = UserMailStore;
 
-  const MailSentData = sentMailList.map((v) => (MailSentTable('mailSent', v, () => {})));
+  const MailSentData = sentMailList.map((v) => (MailTable('mailSent', v)));
 
   return (
     <TabPane tabId="sent">

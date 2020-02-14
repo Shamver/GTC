@@ -6,13 +6,19 @@ import styled from 'styled-components';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Proptypes from 'prop-types';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const MailView = () => {
-  const { UserMailStore, UserStore } = useStores();
-  const { viewMail } = UserMailStore;
+  const {
+    UserMailStore, UserStore, ComponentMailStore,
+  } = useStores();
+  const { viewMail, deleteMail } = UserMailStore;
   const { userData } = UserStore;
-  console.log(userData);
+  const { setTab } = ComponentMailStore;
+  if (viewMail.id === undefined) {
+    setTab('get');
+  }
   const {
     id, message, targetName, date, readDate, fromName,
   } = viewMail;
@@ -64,7 +70,11 @@ const MailView = () => {
             Action
           </TableTh>
           <TableTd width={80}>
-            {id}
+            {readDate ? '' : (
+              <DeleteBtn color="danger" size="sm" onClick={() => { deleteMail(id); }}>
+                <FontAwesomeIcon icon={faTrash} /> 삭제
+              </DeleteBtn>
+            )}
           </TableTd>
         </TableTr>
       </ListTable>
@@ -95,6 +105,10 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
+const DeleteBtn = styled(Button)`
+  margin: -5px 0 !important;
+`;
+
 MailView.propTypes = {
   match: Proptypes.shape({
     params: Proptypes.shape({
@@ -107,4 +121,4 @@ MailView.defaultProps = {
   match: null,
 };
 
-export default MailView;
+export default observer(MailView);
