@@ -25,7 +25,6 @@ const Reply = ({ data }) => {
 
   const ReplyWriterJudge = data.idPostWriter === data.idWriter ? (<Writer>(글쓴이)</Writer>) : '';
 
-
   return (
     <ReplyLayout>
       { data.depth > 1 ? (

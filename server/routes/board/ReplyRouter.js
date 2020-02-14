@@ -15,7 +15,8 @@ const { info, error } = require('../../log-config');
 
 const SELECT_BOARD_REPLY_RE_CHECK = `
   SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY
-  WHERE ID_REPLY = :REPLY_ID
+  WHERE (ID_REPLY = :REPLY_ID AND ID <> :REPLY_ID)
+  AND DELETE_YN = 'N'
 `;
 
 const UPDATE_BOARD_REPLY_DELETE = `
@@ -120,6 +121,7 @@ router.get('/', (req, res) => {
     , (SELECT COUNT(*) FROM GTC_BOARD_REPLY_LIKE WHERE ID = A.ID) AS likeCount
     FROM GTC_BOARD_REPLY A, GTC_BOARD_POST C
   WHERE A.BP_ID = '${data.bpId}'
+  AND A.DELETE_YN = 'N'
   AND C.ID = A.BP_ID
   ORDER BY A.ID_UPPER, A.ID`;
 
@@ -154,8 +156,8 @@ router.delete('/', (req, res) => {
     )
       .then((rows) => {
         if (rows[0].count >= 1) {
-          res.send(1);
-          return new Error('댓글에 답글이 달려있기 때문에 삭제할 수 없습니다.');
+          res.send(2);
+          throw new Error('해당 댓글에 답글이 달려있기 때문에 삭제할 수 없습니다.');
         }
 
         return database.query(
@@ -167,7 +169,7 @@ router.delete('/', (req, res) => {
       })
       .then(() => {
         point('deleteReply', 'REPLY', data);
-        res.send(0);
+        res.send(1);
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.

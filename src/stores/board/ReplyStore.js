@@ -139,9 +139,10 @@ class ReplyStore {
     })
       .then((response) => {
         if (response.data) {
-          if (response.data === 0) {
+          console.log(response.data);
+          if (response.data === 1) {
             toast.success('😊 댓글이 삭제되었어요!');
-          } else if (response.data === 1) {
+          } else if (response.data === 2) {
             toast.error('😳 해당 댓글에 답글이 달려있어 삭제하지 못해요!');
           }
 
