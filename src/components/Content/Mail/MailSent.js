@@ -10,9 +10,9 @@ import useStores from '../../../stores/useStores';
 
 const MailSent = () => {
   const { UserMailStore } = useStores();
-  const { sentMailList } = UserMailStore;
+  const { sentMailList, deleteMail, onView } = UserMailStore;
 
-  const MailSentData = sentMailList.map((v) => (MailTable('mailSent', v)));
+  const MailSentData = sentMailList.map((v) => (MailTable('mailSent', v, deleteMail, onView)));
 
   return (
     <TabPane tabId="sent">

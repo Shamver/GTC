@@ -5,14 +5,11 @@ import {
 import styled from 'styled-components';
 import { faEnvelope, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import useStores from '../../../stores/useStores';
 
-const MailTable = (title, data) => {
-  const { UserMailStore } = useStores();
+const MailTable = (title, data, onDelete, onView) => {
   const {
     id, message, fromName, targetName, date, readDate,
   } = data;
-  const { onView, deleteMail } = UserMailStore;
 
   return (
     <TableTr key={title + id}>
@@ -24,7 +21,9 @@ const MailTable = (title, data) => {
       </TableTd>
       <TableTd width={60}>
         <MessageBtn onClick={() => { onView(data); }}>
-          {message}
+          <Text>
+            {message}
+          </Text>
         </MessageBtn>
       </TableTd>
       <TableTd width={15}>
@@ -32,7 +31,7 @@ const MailTable = (title, data) => {
       </TableTd>
       <TableTd width={5}>
         {readDate ? '' : (
-          <DeleteBtn color="danger" size="sm" onClick={() => { deleteMail(id); }}>
+          <DeleteBtn color="danger" size="sm" onClick={() => { onDelete(id); }}>
             <FontAwesomeIcon icon={faTrash} /> 삭제
           </DeleteBtn>
         )}
@@ -40,6 +39,15 @@ const MailTable = (title, data) => {
     </TableTr>
   );
 };
+
+const Text = styled.span`
+  max-width: 550px;
+  line-height: 21px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle !important;
+`;
 
 const TableTd = styled.td`
   vertical-align: middle !important;

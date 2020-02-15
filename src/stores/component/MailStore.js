@@ -15,7 +15,13 @@ class MailStore {
     }
   });
 
-  @action setTab = ((v) => {
+  @action setTab = ((v, to = null) => {
+    if (to) {
+      this.root.UserMailStore.mailForm = {
+        ...this.root.UserMailStore.mailForm,
+        mailTo: to,
+      };
+    }
     this.activeTab = v;
   });
 }

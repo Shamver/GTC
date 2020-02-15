@@ -97,10 +97,10 @@ class MailStore {
 
   @action onView = ((data) => {
     const { setTab } = this.root.ComponentMailStore;
-    const { readDate, id } = data;
+    const { readDate, id, targetName } = data;
     const { userData } = this.root.UserStore;
 
-    if (!readDate) {
+    if (!readDate && targetName === undefined) {
       axios.put('/api/user/mail', {
         mailId: id,
         userId: userData.id,

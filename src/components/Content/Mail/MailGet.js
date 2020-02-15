@@ -10,9 +10,9 @@ import useStores from '../../../stores/useStores';
 
 const MailGet = () => {
   const { UserMailStore } = useStores();
-  const { getMailList } = UserMailStore;
+  const { getMailList, deleteMail, onView } = UserMailStore;
 
-  const MailGetData = getMailList.map((v) => (MailTable('mailGet', v)));
+  const MailGetData = getMailList.map((v) => (MailTable('mailGet', v, deleteMail, onView)));
 
   return (
     <TabPane tabId="get">
