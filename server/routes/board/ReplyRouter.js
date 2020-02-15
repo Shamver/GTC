@@ -25,9 +25,8 @@ const UPDATE_BOARD_REPLY_DELETE = `
   WHERE ID = :REPLY_ID
 `;
 
-router.post('/', (req, res) => {
-  const data = req.body;
-  const query = `INSERT INTO GTC_BOARD_REPLY (
+const INSERT_GTC_BOARD_REPLY = `
+INSERT INTO GTC_BOARD_REPLY (
       ID,
       BP_ID,
       ID_REPLY,
@@ -54,36 +53,8 @@ router.post('/', (req, res) => {
     );
   `;
 
-  conn.query(query, (err) => {
-    if (err) throw err;
 
-    const query2 = `SELECT GBP.WRITER as postWriter,
-      IFNULL(MAX(GBR.ID),1) AS replyId
-      FROM GTC_BOARD_POST GBP, GTC_BOARD_REPLY GBR
-      WHERE GBP.ID = ${data.bpId}
-    `;
-
-    conn.query(query2, (err2, rows) => {
-      if (err2) throw err2;
-
-      const { postWriter } = rows[0];
-      if (postWriter !== data.writer) {
-        alertMiddleware();
-      }
-
-      const postData = {
-        ...data,
-        replyId: rows[0].replyId,
-      };
-      point('addReply', 'REPLY', postData);
-      res.send(true);
-    });
-  });
-});
-
-router.get('/', (req, res) => {
-  const data = req.query;
-  const query = `SELECT 
+const SELECT_BOARD_POST_REPLY = `SELECT 
     A.ID AS id
     , A.ID_REPLY AS idReply
     , A.ID_UPPER AS idUpper
@@ -123,7 +94,51 @@ router.get('/', (req, res) => {
   WHERE A.BP_ID = '${data.bpId}'
   AND A.DELETE_YN = 'N'
   AND C.ID = A.BP_ID
-  ORDER BY A.ID_UPPER, A.ID`;
+  ORDER BY A.ID_UPPER, A.ID
+`;
+
+const SELECT_BOARD_POST_MINE `
+\`SELECT GBP.ID AS postId, GBP.TITLE AS postTitle, GBR.ID AS replyId, GBR.CONTENT AS replyContent, date_format(GBR.DATE, '%Y-%m-%d %H:%i:%s') AS replyDate
+    FROM GTC_BOARD_POST GBP LEFT JOIN GTC_BOARD_REPLY GBR
+    ON GBP.ID = GBR.BP_ID
+    WHERE GBR.WRITER = ${userId}
+    \`;
+`
+
+router.post('/', (req, res) => {
+  const data = req.body;
+  const query =
+
+  conn.query(query, (err) => {
+    if (err) throw err;
+
+    const query2 = `SELECT GBP.WRITER as postWriter,
+      IFNULL(MAX(GBR.ID),1) AS replyId
+      FROM GTC_BOARD_POST GBP, GTC_BOARD_REPLY GBR
+      WHERE GBP.ID = ${data.bpId}
+    `;
+
+    conn.query(query2, (err2, rows) => {
+      if (err2) throw err2;
+
+      const { postWriter } = rows[0];
+      if (postWriter !== data.writer) {
+        alertMiddleware();
+      }
+
+      const postData = {
+        ...data,
+        replyId: rows[0].replyId,
+      };
+      point('addReply', 'REPLY', postData);
+      res.send(true);
+    });
+  });
+});
+
+router.get('/', (req, res) => {
+  const data = req.query;
+  const query = ;
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
@@ -222,11 +237,7 @@ router.post('/like', (req, res) => {
 router.get('/mine', (req, res) => {
   const { userId } = req.query;
 
-  const query = `SELECT GBP.ID AS postId, GBP.TITLE AS postTitle, GBR.ID AS replyId, GBR.CONTENT AS replyContent, date_format(GBR.DATE, '%Y-%m-%d %H:%i:%s') AS replyDate
-    FROM GTC_BOARD_POST GBP LEFT JOIN GTC_BOARD_REPLY GBR
-    ON GBP.ID = GBR.BP_ID
-    WHERE GBR.WRITER = ${userId}
-    `;
+  const query =
 
   conn.query(query, (err, rows) => {
     if (err) throw err;
