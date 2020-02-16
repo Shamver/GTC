@@ -1,13 +1,13 @@
 import { observable, action } from 'mobx';
 
 class MyAccountStore {
-  @observable profileYN;
+  @observable profileYN = '';
 
-  @observable nickname;
+  @observable nickname = '';
 
-  @observable birth;
+  @observable birth = '';
 
-  @observable gender;
+  @observable gender = '';
 
   @observable isAllValidationChecked = true;
 

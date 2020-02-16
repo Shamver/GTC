@@ -3,11 +3,16 @@ import {
   Nav, NavItem, NavLink,
 } from 'reactstrap';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const MailNav = () => {
-  const { ComponentMailStore } = useStores();
+  const { ComponentMailStore, UserMailStore } = useStores();
   const { activeTab, onActive } = ComponentMailStore;
+  const { getMailList, sentMailList } = UserMailStore;
+
+  const getCount = getMailList.filter((v) => !v.readDate).length;
+  const sentCount = sentMailList.filter((v) => !v.readDate).length;
 
   return (
     <Nav tabs>
@@ -17,7 +22,12 @@ const MailNav = () => {
           onClick={onActive}
           name="get"
         >
-          받은 쪽지
+          받은 쪽지&nbsp;
+          {getCount === 0 ? '' : (
+            <CountSpan>
+              {getCount}
+            </CountSpan>
+          )}
         </NavLinkBtn>
       </NavItem>
       <NavItem>
@@ -26,7 +36,12 @@ const MailNav = () => {
           onClick={onActive}
           name="sent"
         >
-          보낸 쪽지
+          보낸 쪽지&nbsp;
+          {sentCount === 0 ? '' : (
+            <CountSpan>
+              {sentCount}
+            </CountSpan>
+          )}
         </NavLinkBtn>
       </NavItem>
       <NavItem>
@@ -60,4 +75,18 @@ const NavLinkBtn = styled(NavLink)`
   }
 `;
 
-export default MailNav;
+const CountSpan = styled.span`
+  background-color: #777;
+  border-radius: .25rem;
+  padding: .3rem .6rem .2rem;
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-align: center;
+  vertical-align: baseline;
+  white-space: nowrap;
+  line-height: 1;
+  display: inline;
+  color: #fff;
+`;
+
+export default observer(MailNav);

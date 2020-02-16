@@ -28,8 +28,13 @@ const MyPointContent = ({ currentPage, noPagination }) => {
 };
 
 MyPointContent.propTypes = {
-  currentPage: Proptypes.string.isRequired,
-  noPagination: Proptypes.bool.isRequired,
+  currentPage: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+MyPointContent.defaultProps = {
+  currentPage: '1',
+  noPagination: false,
 };
 
 export default observer(MyPointContent);

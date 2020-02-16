@@ -22,14 +22,19 @@ const MyPoint = ({ currentPage, noPagination }) => {
   );
 };
 
-MyPoint.propTypes = {
-  currentPage: Proptypes.string.isRequired,
-  noPagination: Proptypes.bool.isRequired,
-};
-
 const MainContainer = styled(Container)`
   background-color: white;
   padding: 1rem !important;
 `;
+
+MyPoint.propTypes = {
+  currentPage: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+MyPoint.defaultProps = {
+  currentPage: '1',
+  noPagination: false,
+};
 
 export default observer(MyPoint);
