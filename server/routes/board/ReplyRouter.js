@@ -25,36 +25,45 @@ const UPDATE_BOARD_REPLY_DELETE = `
   WHERE ID = :REPLY_ID
 `;
 
-const INSERT_GTC_BOARD_REPLY = `
-INSERT INTO GTC_BOARD_REPLY (
-      ID,
-      BP_ID,
-      ID_REPLY,
-      ID_UPPER,
-      WRITER,
-      DATE,
-      UPDATE_DATE,
-      CONTENT,
-      DEPTH,
-      SECRET_YN,
-      DELETE_YN
-    ) VALUES (
-      (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp),
-      ${data.bpId},
-      IFNULL(${data.replyId}, (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
-      IFNULL((SELECT ID_UPPER FROM (SELECT MIN(ID_UPPER) AS ID_UPPER FROM GTC_BOARD_REPLY WHERE ID = ${data.replyId}) as temp),(SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
-      '${data.writer}', 
-      sysdate(),
-      null, 
-      '${data.text}',
-      ${data.depth},
-      '${data.secretYN}',
-      'N'
-    );
-  `;
+const INSERT_BOARD_REPLY = `
+  INSERT INTO GTC_BOARD_REPLY (
+    ID,
+    BP_ID,
+    ID_REPLY,
+    ID_UPPER,
+    WRITER,
+    DATE,
+    UPDATE_DATE,
+    CONTENT,
+    DEPTH,
+    SECRET_YN,
+    DELETE_YN
+  ) VALUES (
+    (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp),
+    :BP_ID,
+    IFNULL(:REPLY_ID, (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
+    IFNULL((SELECT ID_UPPER FROM (SELECT MIN(ID_UPPER) AS ID_UPPER FROM GTC_BOARD_REPLY WHERE ID = :REPLY_ID) as temp),(SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
+    ':WRITER', 
+    sysdate(),
+    null, 
+    ':TEXT',
+    :DEPTH,
+    ':SECRET_YN',
+    'N'
+  );
+`;
+
+const SELECT_BOARD_REPLY_POST_WRITER_REPLY_ID = `
+  SELECT 
+    GBP.WRITER as postWriter,
+    IFNULL(MAX(GBR.ID),1) AS replyId
+  FROM GTC_BOARD_POST GBP, GTC_BOARD_REPLY GBR
+  WHERE GBP.ID = :BP_ID
+`;
 
 
-const SELECT_BOARD_POST_REPLY = `SELECT 
+const SELECT_BOARD_POST_REPLY = `
+  SELECT 
     A.ID AS id
     , A.ID_REPLY AS idReply
     , A.ID_UPPER AS idUpper
@@ -91,58 +100,106 @@ const SELECT_BOARD_POST_REPLY = `SELECT
     , A.DELETE_YN as deleteYN
     , (SELECT COUNT(*) FROM GTC_BOARD_REPLY_LIKE WHERE ID = A.ID) AS likeCount
     FROM GTC_BOARD_REPLY A, GTC_BOARD_POST C
-  WHERE A.BP_ID = '${data.bpId}'
+  WHERE A.BP_ID = ':BP_ID'
   AND A.DELETE_YN = 'N'
   AND C.ID = A.BP_ID
   ORDER BY A.ID_UPPER, A.ID
 `;
 
-const SELECT_BOARD_POST_MINE `
-\`SELECT GBP.ID AS postId, GBP.TITLE AS postTitle, GBR.ID AS replyId, GBR.CONTENT AS replyContent, date_format(GBR.DATE, '%Y-%m-%d %H:%i:%s') AS replyDate
-    FROM GTC_BOARD_POST GBP LEFT JOIN GTC_BOARD_REPLY GBR
-    ON GBP.ID = GBR.BP_ID
-    WHERE GBR.WRITER = ${userId}
-    \`;
-`
+const SELECT_BOARD_POST_MINE = `
+  SELECT 
+    GBP.ID AS postId
+    , GBP.TITLE AS postTitle
+    , GBR.ID AS replyId
+    , GBR.CONTENT AS replyContent
+    , date_format(GBR.DATE, '%Y-%m-%d %H:%i:%s') AS replyDate
+  FROM GTC_BOARD_POST GBP LEFT JOIN GTC_BOARD_REPLY GBR
+  ON GBP.ID = GBR.BP_ID
+  WHERE GBR.WRITER = :USER_ID
+  ORDER BY GBR.DATE DESC
+`;
 
 router.post('/', (req, res) => {
   const data = req.body;
-  const query =
 
-  conn.query(query, (err) => {
-    if (err) throw err;
+  Database.execute(
+    (database) => database.query(
+      INSERT_BOARD_REPLY,
+      {
+        BP_ID: data.bpId,
+        REPLY_ID: data.replyId,
+        WRITER: data.writer,
+        TEXT: data.text,
+        DEPTH: data.depth,
+        SECRET_YN: data.secretYN,
+      },
+    )
+      .then((rows) => {
+        console.log(rows.insertId);
+        return database.query(
+          SELECT_BOARD_REPLY_POST_WRITER_REPLY_ID,
+          {
+            BP_ID: data.bpId,
+          },
+        );
+      })
+      .then((rows) => {
+        const { postWriter } = rows[0];
+        if (postWriter !== data.writer) {
+          alertMiddleware();
+        }
 
-    const query2 = `SELECT GBP.WRITER as postWriter,
-      IFNULL(MAX(GBR.ID),1) AS replyId
-      FROM GTC_BOARD_POST GBP, GTC_BOARD_REPLY GBR
-      WHERE GBP.ID = ${data.bpId}
-    `;
+        point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
+        res.send(true);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Add Reply Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
 
-    conn.query(query2, (err2, rows) => {
-      if (err2) throw err2;
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
 
-      const { postWriter } = rows[0];
-      if (postWriter !== data.writer) {
-        alertMiddleware();
-      }
-
-      const postData = {
-        ...data,
-        replyId: rows[0].replyId,
-      };
-      point('addReply', 'REPLY', postData);
-      res.send(true);
-    });
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
   });
 });
 
 router.get('/', (req, res) => {
   const data = req.query;
-  const query = ;
 
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
-    res.send(rows);
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_POST_REPLY,
+      {
+        BP_ID: data.bpId,
+      },
+    )
+      .then((rows) => {
+        res.send(rows);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Reply Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
   });
 });
 
@@ -237,14 +294,31 @@ router.post('/like', (req, res) => {
 router.get('/mine', (req, res) => {
   const { userId } = req.query;
 
-  const query =
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_POST_MINE,
+      {
+        USER_ID: userId,
+      },
+    )
+      .then((rows) => {
+        res.send(rows);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Mine Reply Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
 
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
-    if (rows.length >= 1) {
-      res.send(rows.reverse());
-    } else {
-      res.send(rows);
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
     }
   });
 });
