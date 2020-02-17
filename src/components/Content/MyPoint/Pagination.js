@@ -8,17 +8,17 @@ import useStores from '../../../stores/useStores';
 
 const PaginationList = observer(({ currentPage, noPagination }) => {
   const { UserPointStore } = useStores();
-  const { currentBoardMaxPage } = UserPointStore;
+  const { currentPointMaxPage } = UserPointStore;
 
   const currentPageNum = parseInt(currentPage, 0);
   const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
-  const max = (currentPageNum + 3) > currentBoardMaxPage ? currentBoardMaxPage : currentPageNum + 3;
+  const max = (currentPageNum + 3) > currentPointMaxPage ? currentPointMaxPage : currentPageNum + 3;
   const array = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 1);
 
   if (currentPage > 1) {
     array.push(
       <PaginationItem key={0}>
-        <CustomLink className="page-link" activeClassName="active" to={`/mypoint/${currentPageNum - 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/mypoint/page/${currentPageNum - 1}`}>
           ‹
         </CustomLink>
       </PaginationItem>,
@@ -28,17 +28,17 @@ const PaginationList = observer(({ currentPage, noPagination }) => {
   for (let i = min; i <= max; i += 1) {
     array.push(
       <PaginationItem active={i === 1 && noPagination} key={i}>
-        <CustomLink className="page-link" activeClassName="active" to={`/mypoint/${i}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/mypoint/page/${i}`}>
           {i}
         </CustomLink>
       </PaginationItem>,
     );
   }
 
-  if (currentPageNum !== currentBoardMaxPage) {
+  if (currentPageNum !== currentPointMaxPage) {
     array.push(
       <PaginationItem key={-1}>
-        <CustomLink className="page-link" activeClassName="active" to={`/mypoint/${currentPageNum + 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/mypoint/page/${currentPageNum + 1}`}>
           ›
         </CustomLink>
       </PaginationItem>,
@@ -55,6 +55,7 @@ PaginationList.propTypes = {
 };
 
 PaginationList.defaultProps = {
+  noPagination: false,
   currentPage: '1',
 };
 

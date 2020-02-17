@@ -8,16 +8,16 @@ import { Link } from 'react-router-dom';
 
 const PostLockerFavoriteTable = (title, data, onClickEvent) => {
   const {
-    id, postId, postTitle, postDate, postViews, favoriteId,
+    postId, postTitle, postDate, postViews,
   } = data;
 
   return (
-    <TableTr key={title + id}>
+    <TableTr key={title + postId}>
       <TableTd>
         <b>{postId}</b>
       </TableTd>
       <TableTd>
-        <Link to={`/post/${id}`}>
+        <Link to={`/post/${postId}`}>
           <Text>
             {postTitle}
           </Text>
@@ -30,7 +30,7 @@ const PostLockerFavoriteTable = (title, data, onClickEvent) => {
         {postViews}
       </TableTd>
       <TableTd>
-        <DeleteBtn name={favoriteId} color="danger" size="sm" onClick={onClickEvent}>
+        <DeleteBtn color="danger" size="sm" onClick={() => { onClickEvent(postId, 'postLocker'); }}>
           삭제
         </DeleteBtn>
       </TableTd>
@@ -39,11 +39,12 @@ const PostLockerFavoriteTable = (title, data, onClickEvent) => {
 };
 
 const Text = styled.span`
-  max-width: 130px;
+  max-width: 490px;
   line-height: 21px;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: middle !important;
 `;
 
 const TableTr = styled.tr`

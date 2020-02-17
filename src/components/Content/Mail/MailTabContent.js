@@ -2,31 +2,31 @@ import React from 'react';
 import {
   TabContent,
 } from 'reactstrap';
-
-import { observer } from 'mobx-react';
-
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
-import PostLockerMyPost from './PostLockerMyPost';
-import PostLockerMyReply from './PostLockerMyReply';
-import PostLockerFavorite from './PostLockerFavorite';
+import MailGet from './MailGet';
+import MailSent from './MailSent';
+import MailSend from './MailSend';
+import MailView from './MailView';
 
 import Loading from '../../util/Loading';
 
-const PostLockerTabContent = () => {
-  const { ComponentPostLockerStore, UtilLoadingStore } = useStores();
-  const { activeTab } = ComponentPostLockerStore;
+const MailTabContent = () => {
+  const { ComponentMailStore, UtilLoadingStore } = useStores();
   const { loading } = UtilLoadingStore;
+  const { activeTab } = ComponentMailStore;
 
   return (
     <>
       <Loading loading={loading} />
       <Div loading={loading}>
         <TabContent activeTab={activeTab}>
-          <PostLockerMyPost />
-          <PostLockerMyReply />
-          <PostLockerFavorite />
+          <MailGet />
+          <MailSent />
+          <MailSend />
+          <MailView />
         </TabContent>
       </Div>
     </>
@@ -37,4 +37,4 @@ const Div = styled.div`
   display: ${(props) => (props.loading ? 'none' : 'block')}
 `;
 
-export default observer(PostLockerTabContent);
+export default observer(MailTabContent);

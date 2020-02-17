@@ -3,11 +3,15 @@ import UserAlertStore from './user/AlertStore';
 import UserFavoriteStore from './user/FavoriteStore';
 import UserIgnoreStore from './user/IgnoreStore';
 import UserPointStore from './user/PointStore';
+import UserMailStore from './user/MailStore';
 
 import ComponentHeaderStore from './component/HeaderStore';
 import ComponentPostLockerStore from './component/PostLockerStore';
 import ComponentSettingStore from './component/SettingStore';
 import ComponentMyAccountStore from './component/MyAccountStore';
+import ComponentReplyStore from './component/ReplyStore';
+import ComponentPostStore from './component/PostStore';
+import ComponentMailStore from './component/MailStore';
 
 import UtilStore from './util/UtilStore';
 import UtilAlertStore from './util/AlertStore';
@@ -28,11 +32,15 @@ class RootStore {
     this.UserFavoriteStore = new UserFavoriteStore(this);
     this.UserIgnoreStore = new UserIgnoreStore(this);
     this.UserPointStore = new UserPointStore(this);
+    this.UserMailStore = new UserMailStore(this);
 
     this.ComponentPostLockerStore = new ComponentPostLockerStore(this);
     this.ComponentSettingStore = new ComponentSettingStore(this);
     this.ComponentHeaderStore = new ComponentHeaderStore(this);
     this.ComponentMyAccountStore = new ComponentMyAccountStore(this);
+    this.ComponentReplyStore = new ComponentReplyStore(this);
+    this.ComponentPostStore = new ComponentPostStore(this);
+    this.ComponentMailStore = new ComponentMailStore(this);
 
     this.UtilStore = new UtilStore(this);
     this.UtilAlertStore = new UtilAlertStore(this);

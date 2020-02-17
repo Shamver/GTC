@@ -2,7 +2,7 @@ import React from 'react';
 import {
   TabContent,
 } from 'reactstrap';
-
+import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
@@ -16,18 +16,21 @@ const SettingTabContent = () => {
   const { loading } = UtilLoadingStore;
   const { activeTab } = ComponentSettingStore;
 
-  if (loading) {
-    return (
-      <Loading />
-    );
-  }
-
   return (
-    <TabContent activeTab={activeTab}>
-      <SettingIgnore />
-      <SettingWithdrawal />
-    </TabContent>
+    <>
+      <Loading loading={loading} />
+      <Div loading={loading}>
+        <TabContent activeTab={activeTab}>
+          <SettingIgnore />
+          <SettingWithdrawal />
+        </TabContent>
+      </Div>
+    </>
   );
 };
+
+const Div = styled.div`
+  display: ${(props) => (props.loading ? 'none' : 'block')}
+`;
 
 export default observer(SettingTabContent);

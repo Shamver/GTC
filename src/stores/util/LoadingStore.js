@@ -1,17 +1,17 @@
 import { observable, action } from 'mobx';
 
 class LoadingStore {
-  @observable loading = true;
+  @observable loading = 1;
 
   constructor(root) {
     this.root = root;
   }
 
   @action doLoading = () => {
-    this.loading = true;
+    this.loading = 1;
     setTimeout(() => {
-      this.loading = false;
-    }, 250);
+      this.loading = 0;
+    }, 500);
   };
 }
 

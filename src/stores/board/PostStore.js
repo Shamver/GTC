@@ -76,8 +76,11 @@ class PostStore {
     return true;
   };
 
-  @action getBoardPostList = (board, currentPage, filterMode) => {
-    axios.get('/api/board/post', { params: { board, currentPage, filterMode } })
+  @action getBoardPostList = (board, currentPage) => {
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
+
+    axios.get('/api/board/post', { params: { board, currentPage, userId } })
       .then((response) => {
         if (response.data) {
           this.boardPostList = {
@@ -99,7 +102,13 @@ class PostStore {
 
   @action getPost = (id) => {
     const { getLately } = this.root.CookieLatelyStore;
-    axios.get(`/api/board/post/${id}`, {})
+    const { userData } = this.root.UserStore;
+
+    axios.get(`/api/board/post/${id}`, {
+      params: {
+        userId: userData.id,
+      },
+    })
       .then((response) => {
         if (response.data) {
           const [post] = response.data;

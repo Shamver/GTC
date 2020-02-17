@@ -23,7 +23,7 @@ const SELECT_BOARD_POST_LIST = `
       , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
       , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id AND DELETE_YN = 'N') as replyCount
   FROM GTC_BOARD_POST P, (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
-  WHERE B_ID = ':B_ID'
+  WHERE B_ID = ':B_ID' AND P.WRITER != IFNULL(( SELECT TARGET_ID FROM GTC_USER_IGNORE WHERE FROM_ID =:USER_ID), -1)
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, 25
 `;
@@ -80,10 +80,11 @@ const SELECT_BOARD_POST_MINE = `
 const SELECT_BOARD_POST_SINGLE = `
   SELECT 
   P.ID AS id
-  , B_ID AS board
-  , if(B_ID = 'FREE','자유게시판','그외') as boardName
+  , P.B_ID AS board
+  , if(P.B_ID = 'FREE','자유게시판','그외') as boardName
   , BC_ID AS category
-  , if(BC_ID = 'FREE','자유','그외') as categoryName
+  , if(P.BC_ID = 'FREE','자유','그외') as categoryName
+  , if((SELECT F.POST_ID FROM GTC_USER_FAVORITE F WHERE F.USER_ID = :USER_ID AND F.POST_ID = P.ID), true, false) as isFavorite
   , P.TITLE AS title
   , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
   , P.DEPTH AS depth
@@ -146,7 +147,7 @@ const SELECT_BOARD_POST_UPPER_AND_LOWER = `
 
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
-  const { board } = req.query;
+  const { board, userId } = req.query;
   currentPage = currentPage || 1;
 
   Database.execute(
@@ -155,6 +156,7 @@ router.get('/', (req, res) => {
       {
         B_ID: board.toUpperCase(),
         CURRENT_PAGE: ((currentPage - 1) * 25),
+        USER_ID: userId,
       },
     )
       .then((rows) => {
@@ -319,6 +321,7 @@ router.get('/:id', (req, res) => {
       SELECT_BOARD_POST_SINGLE,
       {
         POST_ID: req.params.id,
+        USER_ID: req.query.userId,
       },
     )
       .then((rows) => {

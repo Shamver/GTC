@@ -10,9 +10,9 @@ import PostLockerFavoriteTable from './PostLockerFavoriteTable';
 
 const PostLockerFavorite = () => {
   const { UserFavoriteStore } = useStores();
-  const { favoriteList, onDeleteFavorite } = UserFavoriteStore;
+  const { favoriteList, deleteFavorite } = UserFavoriteStore;
 
-  const FavoriteTableData = favoriteList.map((v) => (PostLockerFavoriteTable('favorite', v, onDeleteFavorite)));
+  const FavoriteTableData = favoriteList.map((v) => (PostLockerFavoriteTable('favorite', v, deleteFavorite)));
 
   return (
     <TabPane tabId="favorite">

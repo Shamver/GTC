@@ -100,7 +100,7 @@ const SELECT_BOARD_POST_REPLY = `
     , A.DELETE_YN as deleteYN
     , (SELECT COUNT(*) FROM GTC_BOARD_REPLY_LIKE WHERE ID = A.ID) AS likeCount
     FROM GTC_BOARD_REPLY A, GTC_BOARD_POST C
-  WHERE A.BP_ID = ':BP_ID'
+  WHERE A.BP_ID = ':BP_ID' AND A.WRITER != IFNULL(( SELECT TARGET_ID FROM GTC_USER_IGNORE WHERE FROM_ID = :USER_ID), -1)
   AND A.DELETE_YN = 'N'
   AND C.ID = A.BP_ID
   ORDER BY A.ID_UPPER, A.ID
@@ -198,6 +198,7 @@ router.get('/', (req, res) => {
       SELECT_BOARD_POST_REPLY,
       {
         BP_ID: data.bpId,
+        USER_ID: data.userId,
       },
     )
       .then((rows) => {

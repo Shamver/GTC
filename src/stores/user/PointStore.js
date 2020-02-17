@@ -6,7 +6,7 @@ class PointStore {
 
   @observable totalPoint = 0;
 
-  @observable currentBoardMaxPage = 0;
+  @observable currentPointMaxPage = 0;
 
   constructor(root) {
     this.root = root;
@@ -27,10 +27,10 @@ class PointStore {
             this.pointList = response.data;
 
             if (response.data.length === 0) {
-              this.currentBoardMaxPage = 0;
+              this.currentPointMaxPage = 0;
             } else {
               const { pageCount } = response.data[0];
-              this.currentBoardMaxPage = pageCount;
+              this.currentPointMaxPage = pageCount;
             }
           }
         })

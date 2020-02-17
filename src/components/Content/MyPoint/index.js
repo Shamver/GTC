@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Container,
 } from 'reactstrap';
@@ -6,37 +6,20 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
 import * as Proptypes from 'prop-types';
-import MyPointTable from './MyPointTable';
 import useStores from '../../../stores/useStores';
-import PointPagination from './Pagination';
+import MyPointContent from './MyPointContent';
 
-const MyPoint = observer(({ currentPage, noPagination }) => {
-  const { UserPointStore, UtilStore, UtilLoadingStore } = useStores();
-  const { loginCheck } = UtilStore;
+const MyPoint = ({ currentPage, noPagination }) => {
+  const { UtilLoadingStore } = useStores();
   const { doLoading } = UtilLoadingStore;
-  const { pointList, totalPoint, getPoint } = UserPointStore;
 
   doLoading();
 
-  useEffect(() => {
-    if (loginCheck()) {
-      getPoint(currentPage);
-    }
-  }, [loginCheck, getPoint, currentPage]);
-
   return (
     <MainContainer>
-      <h4>포인트 내역</h4>
-      <p>현재 보유중인 포인트는 <b>{totalPoint}</b> 점, 포인트는 다양한 활동을 하여 얻을 수 있어요.</p>
-      <MyPointTable currentPage={currentPage} noPagination={noPagination} />
-      {pointList.length > 0 ? (<PointPagination currentPage={currentPage} noPagination={noPagination} />) : ''}
+      <MyPointContent noPagination={noPagination} currentPage={currentPage} />
     </MainContainer>
   );
-});
-
-MyPoint.propTypes = {
-  currentPage: Proptypes.string,
-  noPagination: Proptypes.bool,
 };
 
 const MainContainer = styled(Container)`
@@ -44,4 +27,14 @@ const MainContainer = styled(Container)`
   padding: 1rem !important;
 `;
 
-export default MyPoint;
+MyPoint.propTypes = {
+  currentPage: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+MyPoint.defaultProps = {
+  currentPage: '1',
+  noPagination: false,
+};
+
+export default observer(MyPoint);

@@ -26,9 +26,11 @@ const Header = () => {
   const { latelyList, getLately, deleteLately } = CookieLatelyStore;
 
   useEffect(() => {
-    getFavorite();
+    if (userData) {
+      getFavorite();
+    }
     getLately();
-  }, [getFavorite, getLately]);
+  }, [getFavorite, getLately, userData]);
 
   const FavoriteData = favoriteList.length === 0
     ? (<DropdownItem30 disabled>즐겨찾기한 게시물이 없습니다.</DropdownItem30>)

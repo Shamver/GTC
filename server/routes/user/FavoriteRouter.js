@@ -9,10 +9,15 @@ const conn = db.init();
 router.get('/', (req, res) => {
   const { userId } = req.query;
 
-  const query = `SELECT GUF.ID AS favoriteId, GBP.TITLE AS postTitle, GUF.POST_ID AS postId, date_format(GUF.DATE, '%Y-%m-%d %H:%i:%s') AS date
+  const query = `SELECT GBP.TITLE AS postTitle
+    , GUF.POST_ID AS postId
+    , date_format(GBP.DATE, '%Y-%m-%d %H:%i:%s') AS postDate
+    , GUF.DATE AS favoriteDate
+    , GBP.VIEWS AS postViews
     FROM GTC_USER_FAVORITE GUF LEFT JOIN GTC_BOARD_POST GBP
     ON GUF.POST_ID = GBP.ID
-    WHERE GUF.USER_ID='${userId}'
+    WHERE GUF.USER_ID=${userId}
+    ORDER BY favoriteDate DESC
     `;
 
   conn.query(query, (err, rows) => {
@@ -25,11 +30,38 @@ router.get('/', (req, res) => {
   });
 });
 
+router.post('/', (req, res) => {
+  const data = req.body;
+
+  const query = `INSERT INTO GTC_USER_FAVORITE
+    VALUES(
+      ${data.userId}
+      , ${parseInt(data.bpId, 10)}
+      , sysdate()
+      )
+  `;
+
+  conn.query(query, (err) => {
+    if (err) {
+      if (err.errno === 1062) {
+        res.send({
+          POST_SUCCESS: false,
+          MESSAGE: '😓 이미 즐겨찾기 등록된 게시물입니다ㅠ',
+        });
+      } else {
+        throw err;
+      }
+    } else {
+      res.send(200);
+    }
+  });
+});
+
 router.delete('/', (req, res) => {
   const data = req.body;
 
   const query = `DELETE FROM GTC_USER_FAVORITE
-    WHERE ID='${data.name}'
+    WHERE POST_ID=${data.bpId} AND USER_ID=${data.userId}
   `;
 
   conn.query(query, (err, rows) => {

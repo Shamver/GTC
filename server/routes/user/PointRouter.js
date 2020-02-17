@@ -5,7 +5,6 @@ const router = express.Router();
 const db = require('../../dbConnection')();
 
 const conn = db.init();
-const { info } = require('../../log-config');
 
 router.get('/', (req, res) => {
   const { userId } = req.query;
@@ -17,7 +16,7 @@ router.get('/', (req, res) => {
   const query = `
     SELECT 
     @rownum:=@rownum+1 as rn
-    , (SELECT Ceil(COUNT(*)/${MaxCount}) FROM GTC_USER_POINT) AS pageCount
+    , (SELECT Ceil(COUNT(*)/${MaxCount}) FROM GTC_USER_POINT WHERE USER_ID = ${userId}) AS pageCount
     , ID AS id
     , TYPE AS type
     , POST_ID AS postId
@@ -28,8 +27,6 @@ router.get('/', (req, res) => {
     WHERE USER_ID = ${userId}
     LIMIT ${(currentPage - 1) * MaxCount}, ${MaxCount}
   `;
-
-  info(query);
 
   conn.query(query, (err, rows) => {
     if (err) throw err;

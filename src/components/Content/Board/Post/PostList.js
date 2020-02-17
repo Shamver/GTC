@@ -5,15 +5,23 @@ import useStores from '../../../../stores/useStores';
 import Post from './index';
 
 const PostList = ({ path, currentPage }) => {
-  const { BoardStore, BoardPostStore } = useStores();
+  const {
+    BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore,
+  } = useStores();
   const { setCurrentBoard } = BoardStore;
   const { getBoardPostList, boardPostList } = BoardPostStore;
+  const { onSet } = ComponentPostStore;
+  const { ignoreList } = UserIgnoreStore;
 
   useEffect(() => {
     getBoardPostList(path, currentPage);
     setCurrentBoard(path);
-  }, [path, getBoardPostList, setCurrentBoard, currentPage]);
-  return boardPostList[path].map((data) => (<Post key={data.id} data={data} />));
+  }, [path, getBoardPostList, setCurrentBoard, currentPage, ignoreList]);
+  return boardPostList[path].map((data, index) => {
+    onSet(index);
+
+    return (<Post key={data.id} data={data} index={index} path={path} currentPage={currentPage} />);
+  });
 };
 
 PostList.propTypes = {

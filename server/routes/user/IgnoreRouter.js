@@ -31,6 +31,33 @@ router.get('/', (req, res) => {
   });
 });
 
+router.post('/', (req, res) => {
+  const data = req.body;
+
+  const query = `INSERT INTO GTC_USER_IGNORE
+    VALUES(
+      ${data.fromId}
+      , ${data.targetId}
+      , sysdate()
+      )
+  `;
+
+  conn.query(query, (err) => {
+    if (err) {
+      if (err.errno === 1062) {
+        res.send({
+          POST_SUCCESS: false,
+          MESSAGE: '😓 이미 차단한 유저입니다ㅠ',
+        });
+      } else {
+        throw err;
+      }
+    } else {
+      res.send(200);
+    }
+  });
+});
+
 router.delete('/', (req, res) => {
   const data = req.body;
   const {

@@ -15,11 +15,15 @@ ReactDOM.render((
     UserFavoriteStore={stores.UserFavoriteStore}
     UserIgnoreStore={stores.UserIgnoreStore}
     UserPointStore={stores.UserPointStore}
+    UserMailStore={stores.UserMailStore}
 
     ComponentHeaderStore={stores.ComponentHeaderStore}
     ComponentSettingStore={stores.ComponentSettingStore}
     ComponentPostLockerStore={stores.ComponentPostLockerStore}
     ComponentMyAccountStore={stores.ComponentMyAccountStore}
+    ComponentReplyStore={stores.ComponentReplyStore}
+    ComponentPostStore={stores.ComponentPostStore}
+    ComponentMailStore={stores.ComponentMailStore}
 
     UtilStore={stores.UtilStore}
     UtilRouteStore={stores.UtilRouteStore}

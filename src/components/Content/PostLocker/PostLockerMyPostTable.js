@@ -36,6 +36,7 @@ const Text = styled.span`
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: middle !important;
 `;
 
 const TableTr = styled.tr`

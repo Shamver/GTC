@@ -4,17 +4,23 @@ import useStores from '../../../../stores/useStores';
 import Reply from './index';
 
 const ReplyList = ({ bpId }) => {
-  const { BoardReplyStore } = useStores();
+  const { BoardReplyStore, ComponentReplyStore, UserIgnoreStore } = useStores();
   const { getReply, postReplyList } = BoardReplyStore;
+  const { onSet } = ComponentReplyStore;
+  const { ignoreList } = UserIgnoreStore;
 
   useEffect(() => {
     getReply(bpId);
-  }, [getReply, bpId]);
+  }, [getReply, bpId, ignoreList]);
 
 
-  return postReplyList.map((data) => (
-    <Reply id={`reply${data.id}`} key={data.id} data={data} />
-  ));
+  return postReplyList.map((data, index) => {
+    onSet(`replyIndex${index}`);
+
+    return (
+      <Reply id={`reply${data.id}`} key={data.id} data={data} index={index} />
+    );
+  });
 };
 
 export default observer(ReplyList);
