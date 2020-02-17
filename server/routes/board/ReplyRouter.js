@@ -119,6 +119,28 @@ const SELECT_BOARD_POST_MINE = `
   ORDER BY GBR.DATE DESC
 `;
 
+const SELECT_BOARD_REPLY_LIKE_DUPLICATE_CHECK = `
+  SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY_LIKE
+    WHERE ID = :ID
+    AND U_ID = :U_ID
+`;
+
+const INSERT_BOARD_REPLY_LIKE = `
+  INSERT INTO GTC_BOARD_REPLY_LIKE
+  VALUES (
+    :ID,
+    :U_ID
+  )
+`;
+
+const UPDATE_BOARD_REPLY = `
+  UPDATE GTC_BOARD_REPLY
+  SET 
+    CONTENT = ':CONTENT',
+    UPDATE_DATE = sysdate()
+  WHERE ID = :ID
+`;
+
 router.post('/', (req, res) => {
   const data = req.body;
 
@@ -134,15 +156,12 @@ router.post('/', (req, res) => {
         SECRET_YN: data.secretYN,
       },
     )
-      .then((rows) => {
-        console.log(rows.insertId);
-        return database.query(
-          SELECT_BOARD_REPLY_POST_WRITER_REPLY_ID,
-          {
-            BP_ID: data.bpId,
-          },
-        );
-      })
+      .then(() => database.query(
+        SELECT_BOARD_REPLY_POST_WRITER_REPLY_ID,
+        {
+          BP_ID: data.bpId,
+        },
+      ))
       .then((rows) => {
         const { postWriter } = rows[0];
         if (postWriter !== data.writer) {
@@ -205,14 +224,34 @@ router.get('/', (req, res) => {
 
 router.put('/', (req, res) => {
   const data = req.body;
-  const query = `UPDATE GTC_BOARD_REPLY
-    SET CONTENT = '${data.content}',
-    UPDATE_DATE = sysdate()
-  WHERE ID = ${data.id}`;
 
-  conn.query(query, (err) => {
-    if (err) throw err;
-    res.send(true);
+  Database.execute(
+    (database) => database.query(
+      UPDATE_BOARD_REPLY,
+      {
+        ID: data.id,
+        CONTENT: data.content,
+      },
+    )
+      .then(() => {
+        res.send(true);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Modify Reply Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
   });
 });
 
@@ -265,27 +304,47 @@ router.delete('/', (req, res) => {
 // 댓글 좋아요
 router.post('/like', (req, res) => {
   const data = req.body;
-  let query = `SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY_LIKE
-    WHERE ID=${data.id}
-    AND U_ID=${data.uId}`;
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
 
-    // 이미 해당 댓글에 해당 유저가 좋아요를 누름.
-    if (rows[0].count === 1) {
-      res.send(2);
-    } else {
-      query = `INSERT INTO GTC_BOARD_REPLY_LIKE
-        VALUES (
-          ${data.id},
-          ${data.uId}
-        )`;
-
-      conn.query(query, (err2) => {
-        if (err2) throw err2;
-
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_REPLY_LIKE_DUPLICATE_CHECK,
+      {
+        ID: data.id,
+        U_ID: data.uId,
+      },
+    )
+      .then((rows) => {
+        if (rows[0].count === 1) {
+          res.send(2);
+          throw new Error('이미 해당 댓글에 좋아요를 눌렀습니다.');
+        } else {
+          return database.query(
+            INSERT_BOARD_REPLY_LIKE,
+            {
+              ID: data.id,
+              U_ID: data.uId,
+            },
+          );
+        }
+      })
+      .then(() => {
         res.send(1);
-      });
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Add Reply Like Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
     }
   });
 });
