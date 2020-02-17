@@ -34,6 +34,7 @@ ReactDOM.render((
     BoardPostStore={stores.BoardPostStore}
     BoardReplyStore={stores.BoardReplyStore}
     BoardReportStore={stores.BoardReportStore}
+    BoardSearchStore={stores.BoardSearchStore}
 
     CookieLatelyStore={stores.CookieLatelyStore}
   >

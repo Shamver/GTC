@@ -22,6 +22,7 @@ import BoardStore from './board/BoardStore';
 import BoardPostStore from './board/PostStore';
 import BoardReplyStore from './board/ReplyStore';
 import BoardReportStore from './board/ReportStore';
+import BoardSearchStore from './board/SearchStore';
 
 import CookieLatelyStore from './cookie/LatelyStore';
 
@@ -51,6 +52,7 @@ class RootStore {
     this.BoardPostStore = new BoardPostStore(this);
     this.BoardReplyStore = new BoardReplyStore(this);
     this.BoardReportStore = new BoardReportStore(this);
+    this.BoardSearchStore = new BoardSearchStore(this);
 
     this.CookieLatelyStore = new CookieLatelyStore(this);
   }

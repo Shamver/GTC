@@ -19,11 +19,15 @@ import HeaderLatelyItem from './HeaderLatelyItem';
 const Header = () => {
   const {
     ComponentHeaderStore, UserFavoriteStore, UserStore, CookieLatelyStore,
+    BoardSearchStore,
   } = useStores();
   const { onActive, dropdown } = ComponentHeaderStore;
   const { favoriteList, getFavorite } = UserFavoriteStore;
   const { userData } = UserStore;
   const { latelyList, getLately, deleteLately } = CookieLatelyStore;
+  const {
+    onChange, searchText, onSubmit, search,
+  } = BoardSearchStore;
 
   useEffect(() => {
     if (userData) {
@@ -48,9 +52,9 @@ const Header = () => {
       </Link>
       <InputGroupWrapper>
         <InputGroupA>
-          <Input placeholder="GTC 검색" />
+          <Input placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} />
           <InputGroupAddon addonType="append">
-            <Button color="danger">
+            <Button color="danger" onClick={search}>
               <FontAwesomeIcon icon={faSearch} />
             </Button>
           </InputGroupAddon>
