@@ -17,6 +17,7 @@ const SELECT_BOARD_POST_LIST = `
       , P.ID AS id
       , P.TITLE AS title
       , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
+      , P.WRITER AS idWriter
       , IF(BC_ID = 'FREE','자유','그외') as categoryName
       , P.DEPTH AS depth
       , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
