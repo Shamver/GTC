@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   Row,
 } from 'reactstrap';
@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
 import SearchContentItem from './SearchContentItem';
+import tmpThumb from '../../../resources/images/thumb.jpeg';
 
 const SearchContent = () => {
   const data = [
@@ -16,6 +17,7 @@ const SearchContent = () => {
       replyCount: 1,
       content: 'ㅁㄴ알ㄴㅇ마ㅓ룬아룬ㅇ말ㄴㅇ맒ㄴ',
       date: '2020-02-02 10:10:10',
+      thumbnail: null,
     },
     {
       id: 1,
@@ -24,6 +26,7 @@ const SearchContent = () => {
       replyCount: 0,
       content: 'ㅁㄴㅁㄴㅁㄻ알ㄴㅇ마ㅓ룬아룬ㅇ말ㄴㅇ맒ㄴ',
       date: '2020-02-01 10:10:10',
+      thumbnail: tmpThumb,
     },
     {
       id: 2,
@@ -32,12 +35,11 @@ const SearchContent = () => {
       replyCount: 5,
       content: 'ㅁㄴ알ㄴㅇ마ㅓ룬아룬ㅇ말ㅁㄴㅇㅁㄴㄴㅇ맒ㄴ',
       date: '2020-02-01 09:10:10',
+      thumbnail: null,
     },
   ];
 
   const Item = data.map((v) => (SearchContentItem('search', v)));
-
-  console.log(Item);
 
   return (
     <>
@@ -62,7 +64,7 @@ const H5 = styled.h5`
 const Hr = styled.hr`
   background-color: #DC3545;
   width: 100%;
-  margin: 5px 0;
+  margin: 6px 0 0;
   height: 1px;
 `;
 
