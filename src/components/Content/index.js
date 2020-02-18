@@ -8,6 +8,7 @@ const NewAlert = lazy(() => import('./NewAlert'));
 const MyAccount = lazy(() => import('./MyAccount'));
 const MyPoint = lazy(() => import('./MyPoint'));
 const Mail = lazy(() => import('./Mail'));
+const Search = lazy(() => import('./Search'));
 
 export default {
   Board,
@@ -18,4 +19,5 @@ export default {
   MyAccount,
   MyPoint,
   Mail,
+  Search,
 };
