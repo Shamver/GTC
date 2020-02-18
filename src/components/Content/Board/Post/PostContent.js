@@ -8,7 +8,8 @@ import {
   faClock, faEye, faBellSlash, faStar as farStar,
 } from '@fortawesome/free-regular-svg-icons';
 import {
-  faCommentDots, faBars, faStar as fasStar, faThumbsUp, faThumbsDown, faHeart,
+  faCommentDots, faBars, faStar as fasStar, faThumbsUp, faThumbsDown, faHeart, faPen,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import renderHTML from 'react-render-html';
@@ -32,7 +33,7 @@ const PostContent = ({ match }) => {
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
     recommendCount, replyAllow, secretReplyAllow, notRecommendCount,
-    isFavorite,
+    isFavorite, myPostYN,
   } = postView;
   const { upper, lower } = currentPostUpperLower;
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
@@ -95,20 +96,39 @@ const PostContent = ({ match }) => {
         </ContentWrapper>
         <InnerFooterContainer>
           <ListLink to={`/${currentBoard}`}>
-            <Button outline color="secondary" size="sm">
+            <GreyButton outline color="secondary" size="sm">
               <FontAwesomeIcon icon={faBars} />
               &nbsp;목록
-            </Button>
+            </GreyButton>
           </ListLink>
           &nbsp;
           <Button outline color="danger" size="sm" onClick={() => toggleReport(postId, 'RP01', title, writer)}>
             <FontAwesomeIcon icon={faBellSlash} />
             &nbsp;신고
           </Button>
+          { myPostYN === 'Y'
+            ? (
+              <>
+                <RightSpan>
+                  <Link to={`/board/modify/${postId}`}>
+                    <GreyButton color="secondary" size="sm" outline>
+                      <FontAwesomeIcon icon={faTrash} /> 삭제
+                    </GreyButton>
+                  </Link>
+                </RightSpan>
+                <RightSpan>
+                  <Link to={`/board/modify/${postId}`}>
+                    <GreyButton color="secondary" size="sm" outline>
+                      <FontAwesomeIcon icon={faPen} /> 수정
+                    </GreyButton>
+                  </Link>
+                </RightSpan>
+              </>
+            )
+            : ''}
           <RightSpan>
-            <FavoriteButton
+            <GreyButton
               outline={!isFavorite}
-              color="warning"
               size="sm"
               onClick={() => {
                 if (isFavorite) {
@@ -120,7 +140,7 @@ const PostContent = ({ match }) => {
             >
               <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} />
               &nbsp;즐겨찾기
-            </FavoriteButton>
+            </GreyButton>
           </RightSpan>
         </InnerFooterContainer>
       </PostViewWrapper>
@@ -158,6 +178,17 @@ PostContent.propTypes = {
 PostContent.defaultProps = {
   match: null,
 };
+
+const GreyButton = styled(Button)`
+  background-color : white !important;
+  border-color: #ccc;
+  color : black !important;
+  &:hover {
+    background-color : #e6e6e6 !important;
+  }
+  
+  color: ${(props) => (props.outline ? 'black' : 'white')}
+`;
 
 const TopBottomLink = styled(Link)`
   color : inherit !important;
@@ -208,10 +239,6 @@ const TopBottomDiv = styled.div`
   width : 80px;
   display : inline-block;
   font-weight : bold;
-`;
-
-const FavoriteButton = styled(Button)`
-  color: ${(props) => (props.outline ? 'black' : 'white')}
 `;
 
 const TextCenterDiv = styled.div`
@@ -277,6 +304,7 @@ const Category = styled.span`
 `;
 
 const RightSpan = styled.span`
+  margin-left : 5px;
   float : right;
 `;
 
