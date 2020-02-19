@@ -119,6 +119,33 @@ class PostStore {
       .catch((response) => { console.log(response); });
   };
 
+  @action getModifyPost = (id) => {
+    const { userData } = this.root.UserStore;
+
+    axios.get(`/api/board/post/${id}`, {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          const {
+            board, category, title, content,
+          } = response.data;
+          this.post = {
+            ...this.post,
+            board,
+            category,
+            title,
+            text: content,
+          };
+
+          console.log(...this.post);
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
+
   @action getPostUpperLower = (id) => {
     axios.get(`/api/board/post/${id}/upperLower`, {})
       .then((response) => {

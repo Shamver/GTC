@@ -110,14 +110,14 @@ const PostContent = ({ match }) => {
             ? (
               <>
                 <RightSpan>
-                  <Link to={`/board/modify/${postId}`}>
+                  <Link to={`/${currentBoard}/modify/${postId}`}>
                     <GreyButton color="secondary" size="sm" outline>
                       <FontAwesomeIcon icon={faTrash} /> 삭제
                     </GreyButton>
                   </Link>
                 </RightSpan>
                 <RightSpan>
-                  <Link to={`/board/modify/${postId}`}>
+                  <Link to={`/${currentBoard}/modify/${postId}`}>
                     <GreyButton color="secondary" size="sm" outline>
                       <FontAwesomeIcon icon={faPen} /> 수정
                     </GreyButton>

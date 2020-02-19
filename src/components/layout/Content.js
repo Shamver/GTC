@@ -33,6 +33,8 @@ const Content = () => (
         <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
 
         <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
+
+        <Route exact path="/:board/modify/:id" render={({ match }) => <Posting match={match} isModify />} />
       </Switch>
       <Alert />
       <Sign />

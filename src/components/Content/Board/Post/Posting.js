@@ -32,14 +32,18 @@ const Posting = (props) => {
   const { BoardStore, BoardPostStore } = useStores();
   const {
     post, setPostBoard, onChangeValue, addPost,
+    getModifyPost,
   } = BoardPostStore;
-  const { match } = props;
+  const { match, isModify } = props;
   const { params } = match;
-  const { board } = params;
+  const { board, id } = params;
 
   useEffect(() => {
+    if (isModify) {
+      getModifyPost(id);
+    }
     setPostBoard(board);
-  }, [BoardStore, board, setPostBoard]);
+  }, [BoardStore, board, setPostBoard, getModifyPost, id, isModify]);
 
   return (
     <PostingWrapper>
@@ -92,8 +96,14 @@ Posting.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       board: PropTypes.string,
+      id: PropTypes.string,
     }),
   }).isRequired,
+  isModify: PropTypes.bool,
+};
+
+Posting.defaultProps = {
+  isModify: false,
 };
 
 const PostingWrapper = styled.div`
