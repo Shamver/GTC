@@ -2,11 +2,19 @@ const express = require('express');
 
 const router = express.Router();
 
-const db = require('../../dbConnection')();
-
-const conn = db.init();
+const { error, info } = require('../../log-config');
+const Database = require('../../Database');
 
 const { get, del } = require('../../middleware/latelyCookie');
+
+const SELECT_LATELY_POST = `
+  SELECT
+  ID AS postId
+  , TITLE AS postTitle
+  FROM GTC_BOARD_POST
+  WHERE ID IN (:DATA)
+  ORDER BY FIELD (id, :DATA)
+`;
 
 router.get('/', (req, res) => {
   const { lately } = req.cookies;
@@ -14,18 +22,32 @@ router.get('/', (req, res) => {
   if (lately !== '' && lately !== undefined) {
     const data = get(lately);
 
-    const query = `SELECT
-  ID AS postId
-  , TITLE AS postTitle
-  FROM GTC_BOARD_POST
-  WHERE ID IN (${data})
-  ORDER BY FIELD (id, ${data})
-  `;
+    Database.execute(
+      (database) => database.query(
+        SELECT_LATELY_POST,
+        {
+          DATA: data,
+        },
+      )
+        .then((rows) => {
+          res.send(rows);
+        }),
+    ).then(() => {
+      // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+      info('Get LatelyPost Success');
+    }).catch((err) => {
+      // 트랜잭션 중 에러가 났을때 처리.
+      error(err.message);
 
-    conn.query(query, (err, rows) => {
-      if (err) throw err;
+      // Database 에서 보여주는 에러 메시지
+      if (err.sqlMessage) {
+        error(err.sqlMessage);
+      }
 
-      res.send(rows);
+      // 실행된 sql
+      if (err.sql) {
+        error(err.sql);
+      }
     });
   } else {
     res.send(200);

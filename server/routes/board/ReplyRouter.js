@@ -2,11 +2,7 @@ const express = require('express');
 
 const router = express.Router();
 
-const db = require('../../dbConnection')();
-
 const alertMiddleware = require('../../middleware/alert');
-
-const conn = db.init();
 
 const point = require('../../middleware/point');
 const Database = require('../../Database');

@@ -2,27 +2,54 @@ const express = require('express');
 
 const router = express.Router();
 
-const db = require('../../dbConnection')();
+const { error, info } = require('../../log-config');
+const Database = require('../../Database');
 
-const conn = db.init();
+const UPDATE_USER_DELETE = `
+  UPDATE GTC_USER
+  SET DELETED_DATE = sysdate()
+  WHERE ID = :USER_ID;
+`;
 
-const { get } = require('../../middleware/latelyCookie');
+const UPDATE_USER_INFO = `
+  UPDATE GTC_USER
+  SET NICKNAME = ':NICKNAME',
+  BIRTH = ':BIRTH',
+  GENDER = ':GENDER',
+  PROFILE_YN = ':PROFILE_YN'
+  WHERE ID = :USER_ID
+`;
 
 router.delete('/withdrawal', (req, res) => {
   const { userId } = req.body;
 
-  const query = `
-    UPDATE GTC_USER
-    SET DELETED_DATE = sysdate()
-    WHERE ID = '${userId}';
-  `;
+  Database.execute(
+    (database) => database.query(
+      UPDATE_USER_DELETE,
+      {
+        USER_ID: userId,
+      },
+    )
+      .then((rows) => {
+        if (rows.length >= 1) {
+          res.send(200);
+        }
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Update UserDelete Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
 
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
-    if (rows.length > 0) {
-      res.send(200);
-    } else {
-      res.send(404);
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
     }
   });
 });
@@ -32,36 +59,38 @@ router.put('/info', (req, res) => {
     nickname, birth, gender, profileYN, userId,
   } = req.body;
 
-  const query = `UPDATE GTC_USER
-    SET NICKNAME = '${nickname}',
-    BIRTH = '${birth}',
-    GENDER = '${gender}',
-    PROFILE_YN = '${profileYN}'
-    WHERE ID = ${userId}`;
+  Database.execute(
+    (database) => database.query(
+      UPDATE_USER_INFO,
+      {
+        USER_ID: userId,
+        NICKNAME: nickname,
+        BIRTH: birth,
+        GENDER: gender,
+        PROFILE_YN: profileYN,
+      },
+    )
+      .then((rows) => {
+        if (rows.length >= 1) {
+          res.send(200);
+        }
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Update UserInfo Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
 
-  conn.query(query, (err) => {
-    if (err) throw err;
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
 
-    res.send(200);
-  });
-});
-
-router.get('/lately', (req, res) => {
-  const { lately } = req.cookies;
-
-  const data = get(lately);
-
-  const query = `SELECT
-  ID AS postId
-  , TITLE AS postTitle
-  FROM GTC_BOARD_POST
-  WHERE ID IN (${data})
-  `;
-
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
-
-    res.send(rows);
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
   });
 });
 

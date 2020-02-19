@@ -2,9 +2,29 @@ const express = require('express');
 
 const router = express.Router();
 
-const db = require('../../dbConnection')();
+const { error, info } = require('../../log-config');
+const Database = require('../../Database');
 
-const conn = db.init();
+const SELECT_USER_POINT_LIST = `
+  SELECT 
+  @rownum:=@rownum+1 as rn
+  , (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_USER_POINT WHERE USER_ID = :USER_ID) AS pageCount
+  , ID AS id
+  , TYPE AS type
+  , POST_ID AS postId
+  , REPLY_ID AS replyId
+  , COST AS point
+  , date_format(DATE, '%Y-%m-%d %H:%i:%s') AS date
+  FROM GTC_USER_POINT, (SELECT @ROWNUM := :ROWNUM) AS TEMP
+  WHERE USER_ID = :USER_ID
+  LIMIT :ROWNUM, :MAX_COUNT
+`;
+
+const SELECT_USER_POINT_SUM = `
+  SELECT SUM(COST) AS point
+  FROM GTC_USER_POINT
+  WHERE USER_ID = :USER_ID;
+`;
 
 router.get('/', (req, res) => {
   const { userId } = req.query;
@@ -13,27 +33,33 @@ router.get('/', (req, res) => {
 
   const MaxCount = 30;
 
-  const query = `
-    SELECT 
-    @rownum:=@rownum+1 as rn
-    , (SELECT Ceil(COUNT(*)/${MaxCount}) FROM GTC_USER_POINT WHERE USER_ID = ${userId}) AS pageCount
-    , ID AS id
-    , TYPE AS type
-    , POST_ID AS postId
-    , REPLY_ID AS replyId
-    , COST AS point
-    , date_format(DATE, '%Y-%m-%d %H:%i:%s') AS date
-    FROM GTC_USER_POINT, (SELECT @ROWNUM := ${(currentPage - 1) * MaxCount}) AS TEMP
-    WHERE USER_ID = ${userId}
-    LIMIT ${(currentPage - 1) * MaxCount}, ${MaxCount}
-  `;
+  Database.execute(
+    (database) => database.query(
+      SELECT_USER_POINT_LIST,
+      {
+        USER_ID: userId,
+        MAX_COUNT: MaxCount,
+        ROWNUM: (currentPage - 1) * MaxCount,
+      },
+    )
+      .then((rows) => {
+        res.send(rows.reverse());
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get PointList Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
 
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
-    if (rows.length > 0) {
-      res.send(rows.reverse());
-    } else {
-      res.send([]);
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
     }
   });
 });
@@ -41,18 +67,33 @@ router.get('/', (req, res) => {
 router.get('/sum', (req, res) => {
   const { userId } = req.query;
 
-  const query = `
-    SELECT SUM(COST) AS point
-    FROM GTC_USER_POINT
-    WHERE USER_ID = ${userId};
-  `;
+  Database.execute(
+    (database) => database.query(
+      SELECT_USER_POINT_SUM,
+      {
+        USER_ID: userId,
+      },
+    )
+      .then((rows) => {
+        let { point } = rows[0];
+        point = point || 0;
+        res.send(point);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get PointSum Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
 
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
-    if (rows.length > 0) {
-      res.send(rows[0].point);
-    } else {
-      res.send(0);
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
     }
   });
 });
