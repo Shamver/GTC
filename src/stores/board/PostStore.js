@@ -121,7 +121,6 @@ class PostStore {
 
   @action getModifyPost = (id) => {
     const { userData } = this.root.UserStore;
-
     axios.get(`/api/board/post/${id}`, {
       params: {
         userId: userData.id,
@@ -131,16 +130,27 @@ class PostStore {
         if (response.data) {
           const {
             board, category, title, content,
-          } = response.data;
+          } = response.data[0];
           this.post = {
             ...this.post,
+            id,
             board,
             category,
             title,
             text: content,
           };
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
 
-          console.log(...this.post);
+  @action modifyPost = () => {
+    const postId = this.post.id;
+
+    axios.put(`/api/board/post/${postId}`, {})
+      .then((response) => {
+        if (response.data) {
+          toast.success('😳 해당 포스팅 수정 완료!');
         }
       })
       .catch((response) => { console.log(response); });

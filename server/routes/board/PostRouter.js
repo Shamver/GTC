@@ -146,6 +146,18 @@ const SELECT_BOARD_POST_UPPER_AND_LOWER = `
   )
 `;
 
+const UPDATE_BOARD_POST = `
+  UPDATE GTC_BOARD_POST 
+  SET B_ID = :B_ID
+    , BC_ID = :BC_ID
+    , TITLE = :TITLE
+    , CONTENT = :CONTENT
+    , SECRET = :SECRET
+    , SECRET_REPLY_ALLOW = :SECRET_REPLY_ALLOW
+    , REPLY_ALLOW = :REPLY_ALLOW
+   WHERE ID = :POST_ID 
+`;
+
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
   const { board, userId } = req.query;

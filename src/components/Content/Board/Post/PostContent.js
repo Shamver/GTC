@@ -46,7 +46,7 @@ const PostContent = ({ match }) => {
 
   if (loading) {
     return (
-      <Loading />
+      <Loading loading={1} />
     );
   }
 

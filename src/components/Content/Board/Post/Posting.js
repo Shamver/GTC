@@ -32,17 +32,17 @@ const Posting = (props) => {
   const { BoardStore, BoardPostStore } = useStores();
   const {
     post, setPostBoard, onChangeValue, addPost,
-    getModifyPost,
+    getModifyPost, modifyPost,
   } = BoardPostStore;
   const { match, isModify } = props;
   const { params } = match;
   const { board, id } = params;
 
   useEffect(() => {
+    setPostBoard(board);
     if (isModify) {
       getModifyPost(id);
     }
-    setPostBoard(board);
   }, [BoardStore, board, setPostBoard, getModifyPost, id, isModify]);
 
   return (
@@ -83,10 +83,21 @@ const Posting = (props) => {
           <FontAwesomeIcon icon={faChartBar} />
           &nbsp;설문 추가
         </MarginButton>
-        <RightButton color="danger" onClick={addPost}>
-          <FontAwesomeIcon icon={faPen} />
-          &nbsp;쓰기
-        </RightButton>
+
+        { isModify
+          ? (
+            <RightButton color="danger" onClick={modifyPost}>
+              <FontAwesomeIcon icon={faPen} />
+              &nbsp;수정하기
+            </RightButton>
+          )
+          : (
+            <RightButton color="danger" onClick={addPost}>
+              <FontAwesomeIcon icon={faPen} />
+              &nbsp;쓰기
+            </RightButton>
+          )}
+
       </PostingFooter>
     </PostingWrapper>
   );

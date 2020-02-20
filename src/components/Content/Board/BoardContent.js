@@ -20,7 +20,7 @@ const BoardContent = ({ path, currentPage }) => {
 
   if (loading) {
     return (
-      <Loading />
+      <Loading loading={1} />
     );
   }
 
@@ -48,7 +48,7 @@ const BoardContent = ({ path, currentPage }) => {
       </HeaderDiv>
       <ManginessTableNoBorder bordered hover size="sm">
         <tbody>
-          <Post data={tempData} />
+          <Post data={tempData} index={-1} />
         </tbody>
       </ManginessTableNoBorder>
       <ManginessTable bordered hover size="sm">
