@@ -43,106 +43,103 @@ const PostContent = ({ match }) => {
     setReplyOption(replyAllow, secretReplyAllow);
   }, [replyAllow, secretReplyAllow, setReplyOption]);
 
-  if (loading) {
-    return (
-      <Loading />
-    );
-  }
-
   return (
     <ViewWrapper>
       <MarginlessH3>{boardName}</MarginlessH3>
       <br />
-      <div>
-        <CategoryAndTitle>
-          <Category>
-            {categoryName}
-          </Category>
-          <Title>
-            {title}
-          </Title>
-          <ProfileImg src={anonymous} />
-        </CategoryAndTitle>
-        <b>{writer}</b>님
-      </div>
-      <NavLine />
-      <PostViewWrapper>
-        <InnerContainer>
-          <span>
-            <FontAwesomeIcon icon={faClock} /> {date}
-          </span>
-          <RightSpan>
-            <FontAwesomeIcon icon={faCommentDots} /> {postReplyList.length}
+      <Loading loading={loading} />
+      <Div loading={loading}>
+        <div>
+          <CategoryAndTitle>
+            <Category>
+              {categoryName}
+            </Category>
+            <Title>
+              {title}
+            </Title>
+            <ProfileImg src={anonymous} />
+          </CategoryAndTitle>
+          <b>{writer}</b>님
+        </div>
+        <NavLine />
+        <PostViewWrapper>
+          <InnerContainer>
+            <span>
+              <FontAwesomeIcon icon={faClock} /> {date}
+            </span>
+            <RightSpan>
+              <FontAwesomeIcon icon={faCommentDots} /> {postReplyList.length}
+              &nbsp;
+              <FontAwesomeIcon icon={faHeart} /> {recommendCount}
+              &nbsp;
+              <FontAwesomeIcon icon={faEye} /> {views}
+            </RightSpan>
+          </InnerContainer>
+          <ContentWrapper>
+            {renderHTML(`${content}`)}
+            <TextCenterDiv>
+              <SmallFontButton outline color="success" onClick={() => recommendPost(postId, 'R01')}>
+                <FontAwesomeIcon icon={faThumbsUp} />
+                &nbsp;추천 {recommendCount}
+              </SmallFontButton>
+              &nbsp;
+              <SmallFontButton outline color="primary" onClick={() => recommendPost(postId, 'R02')}>
+                <FontAwesomeIcon icon={faThumbsDown} />
+                &nbsp;비추천 {notRecommendCount}
+              </SmallFontButton>
+            </TextCenterDiv>
+          </ContentWrapper>
+          <InnerFooterContainer>
+            <ListLink to={`/${currentBoard}`}>
+              <Button outline color="secondary" size="sm">
+                <FontAwesomeIcon icon={faBars} />
+                &nbsp;목록
+              </Button>
+            </ListLink>
             &nbsp;
-            <FontAwesomeIcon icon={faHeart} /> {recommendCount}
-            &nbsp;
-            <FontAwesomeIcon icon={faEye} /> {views}
-          </RightSpan>
-        </InnerContainer>
-        <ContentWrapper>
-          {renderHTML(`${content}`)}
-          <TextCenterDiv>
-            <SmallFontButton outline color="success" onClick={() => recommendPost(postId, 'R01')}>
-              <FontAwesomeIcon icon={faThumbsUp} />
-              &nbsp;추천 {recommendCount}
-            </SmallFontButton>
-            &nbsp;
-            <SmallFontButton outline color="primary" onClick={() => recommendPost(postId, 'R02')}>
-              <FontAwesomeIcon icon={faThumbsDown} />
-              &nbsp;비추천 {notRecommendCount}
-            </SmallFontButton>
-          </TextCenterDiv>
-        </ContentWrapper>
-        <InnerFooterContainer>
-          <ListLink to={`/${currentBoard}`}>
-            <Button outline color="secondary" size="sm">
-              <FontAwesomeIcon icon={faBars} />
-              &nbsp;목록
+            <Button outline color="danger" size="sm" onClick={() => toggleReport(postId, 'RP01', title, writer)}>
+              <FontAwesomeIcon icon={faBellSlash} />
+              &nbsp;신고
             </Button>
-          </ListLink>
-          &nbsp;
-          <Button outline color="danger" size="sm" onClick={() => toggleReport(postId, 'RP01', title, writer)}>
-            <FontAwesomeIcon icon={faBellSlash} />
-            &nbsp;신고
-          </Button>
-          <RightSpan>
-            <FavoriteButton
-              outline={!isFavorite}
-              color="warning"
-              size="sm"
-              onClick={() => {
-                if (isFavorite) {
-                  deleteFavorite(postId);
-                } else {
-                  addFavorite(postId);
-                }
-              }}
-            >
-              <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} />
-              &nbsp;즐겨찾기
-            </FavoriteButton>
-          </RightSpan>
-        </InnerFooterContainer>
-      </PostViewWrapper>
-      <ReplyForm match={match} />
-      <TopBottomWrapper>
-        { upper ? (
-          <div>
-            <TopBottomDiv>▲ 윗글</TopBottomDiv>
-            <TopBottomLink to={`${upperId}`}>{upperTitle}</TopBottomLink>
-            <TopBottomWriter>{upperWriter}</TopBottomWriter>
-          </div>
-        ) : ''}
-        { lower ? (
-          <div>
-            <TopBottomDiv>▼ 아랫글</TopBottomDiv>
-            <TopBottomLink to={`${lowerId}`}>{lowerTitle}</TopBottomLink>
-            <TopBottomWriter>{lowerWriter}</TopBottomWriter>
-          </div>
-        ) : ''}
-      </TopBottomWrapper>
-      <BoardContent path={currentBoard} />
-      <BoardFooter path={currentBoard} />
+            <RightSpan>
+              <FavoriteButton
+                outline={!isFavorite}
+                color="warning"
+                size="sm"
+                onClick={() => {
+                  if (isFavorite) {
+                    deleteFavorite(postId);
+                  } else {
+                    addFavorite(postId);
+                  }
+                }}
+              >
+                <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} />
+                &nbsp;즐겨찾기
+              </FavoriteButton>
+            </RightSpan>
+          </InnerFooterContainer>
+        </PostViewWrapper>
+        <ReplyForm match={match} />
+        <TopBottomWrapper>
+          { upper ? (
+            <div>
+              <TopBottomDiv>▲ 윗글</TopBottomDiv>
+              <TopBottomLink to={`${upperId}`}>{upperTitle}</TopBottomLink>
+              <TopBottomWriter>{upperWriter}</TopBottomWriter>
+            </div>
+          ) : ''}
+          { lower ? (
+            <div>
+              <TopBottomDiv>▼ 아랫글</TopBottomDiv>
+              <TopBottomLink to={`${lowerId}`}>{lowerTitle}</TopBottomLink>
+              <TopBottomWriter>{lowerWriter}</TopBottomWriter>
+            </div>
+          ) : ''}
+        </TopBottomWrapper>
+        <BoardContent path={currentBoard} />
+        <BoardFooter path={currentBoard} />
+      </Div>
     </ViewWrapper>
   );
 };
@@ -158,6 +155,10 @@ PostContent.propTypes = {
 PostContent.defaultProps = {
   match: null,
 };
+
+const Div = styled.div`
+  display: ${(props) => (props.loading ? 'none' : 'block')}
+`;
 
 const TopBottomLink = styled(Link)`
   color : inherit !important;

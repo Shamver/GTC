@@ -20,7 +20,7 @@ class FavoriteStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data) {
+          if (data.success) {
             this.favoriteList = response.data;
           } else if (data.message === 'not logged in') {
             this.favoriteList = [];

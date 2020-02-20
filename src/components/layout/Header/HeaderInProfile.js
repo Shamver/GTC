@@ -70,7 +70,7 @@ const HeaderInProfile = () => {
                   <DropdownItem30>내 정보 관리</DropdownItem30>
                 </LinkNoDeco>
                 <LinkNoDeco to="/mypoint">
-                  <DropdownItem30><b>{totalPoint}</b> 포인트</DropdownItem30>
+                  <DropdownItem30><b>{totalPoint || 0}</b> 포인트</DropdownItem30>
                 </LinkNoDeco>
                 <DropdownItem30 divider />
                 <LinkNoDeco to="/setting">

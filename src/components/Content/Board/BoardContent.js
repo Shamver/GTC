@@ -18,12 +18,6 @@ const BoardContent = ({ path, currentPage }) => {
 
   const { loading } = UtilLoadingStore;
 
-  if (loading) {
-    return (
-      <Loading />
-    );
-  }
-
   const tempData = {
     id: 1,
     title: '공지 채팅창 제재 기준입니다. (2018. 10. 19)',
@@ -37,25 +31,28 @@ const BoardContent = ({ path, currentPage }) => {
 
   return (
     <>
-      <HeaderDiv>
-        <NavLink activeClassName="active" to={`/${path}`}>
-          <FontAwesomeIcon icon={faHome} />
-        </NavLink>
-        <NavLink activeClassName="active" to={`/${path}/freedom`}>자유</NavLink>
-        <NavLink activeClassName="active" to={`/${path}/talk`}>잡담</NavLink>
-        <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
-        <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
-      </HeaderDiv>
-      <ManginessTableNoBorder bordered hover size="sm">
-        <tbody>
-          <Post data={tempData} />
-        </tbody>
-      </ManginessTableNoBorder>
-      <ManginessTable bordered hover size="sm">
-        <tbody>
-          <PostList path={path} currentPage={currentPage} />
-        </tbody>
-      </ManginessTable>
+      <Loading loading={loading} />
+      <Div loading={loading}>
+        <HeaderDiv>
+          <NavLink activeClassName="active" to={`/${path}`}>
+            <FontAwesomeIcon icon={faHome} />
+          </NavLink>
+          <NavLink activeClassName="active" to={`/${path}/freedom`}>자유</NavLink>
+          <NavLink activeClassName="active" to={`/${path}/talk`}>잡담</NavLink>
+          <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
+          <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
+        </HeaderDiv>
+        <ManginessTableNoBorder bordered hover size="sm">
+          <tbody>
+            <Post data={tempData} />
+          </tbody>
+        </ManginessTableNoBorder>
+        <ManginessTable bordered hover size="sm">
+          <tbody>
+            <PostList path={path} currentPage={currentPage} />
+          </tbody>
+        </ManginessTable>
+      </Div>
     </>
   );
 };
@@ -68,6 +65,10 @@ BoardContent.propTypes = {
 BoardContent.defaultProps = {
   currentPage: null,
 };
+
+const Div = styled.div`
+  display: ${(props) => (props.loading ? 'none' : 'block')}
+`;
 
 const ManginessTable = styled(Table)`
   margin : 0px !important;

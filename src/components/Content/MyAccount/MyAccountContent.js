@@ -15,7 +15,7 @@ const MyAccountContent = () => {
     ComponentMyAccountStore, UserStore, UtilLoadingStore,
   } = useStores();
   const {
-    isAllValidationChecked,
+    isAllValidationChecked, disabled,
   } = ComponentMyAccountStore;
   const { updateInfo } = UserStore;
   const { loading } = UtilLoadingStore;
@@ -28,7 +28,7 @@ const MyAccountContent = () => {
           <MyAccountReadForm />
           <MyAccountEditForm />
         </Row>
-        <FormButton color="danger" onClick={updateInfo} disabled={!isAllValidationChecked}>수정</FormButton>
+        <FormButton color="danger" onClick={updateInfo} disabled={!isAllValidationChecked || disabled}>수정</FormButton>
       </FormWrapper>
     </>
   );

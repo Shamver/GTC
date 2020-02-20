@@ -13,6 +13,8 @@ class MyAccountStore {
 
   @observable timer;
 
+  @observable disabled = true;
+
   @observable nicknameValidation = {
     status: true,
     message: '',
@@ -42,6 +44,7 @@ class MyAccountStore {
 
   @action onChangeValue = ((e) => {
     this[e.target.name] = e.target.value;
+    this.disabled = true;
 
     if (this.timer) {
       clearTimeout(this.timer);
@@ -65,6 +68,7 @@ class MyAccountStore {
   });
 
   @action checkValidation = (() => {
+    const { userData } = this.root.UserStore;
     if (this.nickname.trim() === '') {
       this.nicknameValidation = {
         status: false,
@@ -100,6 +104,11 @@ class MyAccountStore {
         message: '',
       };
     }
+
+    this.disabled = this.nickname === userData.username
+      && this.birth === userData.birth
+      && this.gender === userData.gender
+      && this.profileYN === userData.profileYN;
 
     this.isAllValidationChecked = this.nicknameValidation.status
     && this.birthValidation.status

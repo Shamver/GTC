@@ -70,10 +70,8 @@ router.put('/info', (req, res) => {
         PROFILE_YN: profileYN,
       },
     )
-      .then((rows) => {
-        if (rows.length >= 1) {
-          res.send(200);
-        }
+      .then(() => {
+        res.send(200);
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
