@@ -52,8 +52,11 @@ class PointStore {
         },
       })
         .then((response) => {
-          if (response.data) {
+          const { data } = response;
+          if (data.success) {
             this.totalPoint = response.data;
+          } else {
+            this.totalPoint = 0;
           }
         })
         .catch((response) => {

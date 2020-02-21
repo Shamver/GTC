@@ -40,6 +40,11 @@ class MyAccountStore {
     } else {
       this.profileYN = 'Y';
     }
+    this.disabled = true;
+
+    this.timer = setTimeout(() => {
+      this.checkValidation();
+    }, 300);
   });
 
   @action onChangeValue = ((e) => {
@@ -109,6 +114,8 @@ class MyAccountStore {
       && this.birth === userData.birth
       && this.gender === userData.gender
       && this.profileYN === userData.profileYN;
+
+    console.log(this.profileYN, userData.profileYN);
 
     this.isAllValidationChecked = this.nicknameValidation.status
     && this.birthValidation.status
