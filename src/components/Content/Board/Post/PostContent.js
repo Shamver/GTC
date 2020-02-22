@@ -23,11 +23,14 @@ import anonymous from '../../../../resources/images/anonymous.png';
 const PostContent = ({ match }) => {
   const {
     BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore, UserFavoriteStore,
-    BoardReportStore,
+    BoardReportStore, UtilAlertStore,
   } = useStores();
-  const { postView, recommendPost, currentPostUpperLower } = BoardPostStore;
+  const {
+    postView, recommendPost, currentPostUpperLower, deletePost,
+  } = BoardPostStore;
   const { postReplyList, setReplyOption } = BoardReplyStore;
   const { currentBoard } = BoardStore;
+  const { toggleConfirmAlert } = UtilAlertStore;
   const { loading } = UtilLoadingStore;
   const { toggleReport } = BoardReportStore;
   const {
@@ -110,11 +113,9 @@ const PostContent = ({ match }) => {
             ? (
               <>
                 <RightSpan>
-                  <Link to={`/${currentBoard}/modify/${postId}`}>
-                    <GreyButton color="secondary" size="sm" outline>
-                      <FontAwesomeIcon icon={faTrash} /> 삭제
-                    </GreyButton>
-                  </Link>
+                  <GreyButton color="secondary" size="sm" outline onClick={() => toggleConfirmAlert('해당 포스트를 삭제하시겠습니까?', () => deletePost(postId))}>
+                    <FontAwesomeIcon icon={faTrash} /> 삭제
+                  </GreyButton>
                 </RightSpan>
                 <RightSpan>
                   <Link to={`/${currentBoard}/modify/${postId}`}>

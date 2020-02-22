@@ -59,16 +59,51 @@ class PostStore {
         if (response.data) {
           this.root.UtilRouteStore.history.push('/free');
           toast.success('😊 포스팅이 등록되었어요!');
-          this.post = {
-            board: '',
-            category: '',
-            title: '',
-            text: '',
-            depth: '',
-            secret: 'N',
-            replyAllow: 'Y',
-            secretReplyAllow: 'N',
-          };
+        }
+      })
+      .catch((response) => { console.log(response); });
+
+    return true;
+  };
+
+  @action modifyPost = () => {
+    if (!this.postValidationCheck()) {
+      return false;
+    }
+
+    axios.put('/api/board/post', {
+      id: this.post.id,
+      board: this.post.board,
+      category: this.post.category,
+      title: this.post.title,
+      writer: this.root.UserStore.userData.id,
+      content: this.post.text,
+      depth: 1,
+      secret: this.post.secret,
+      replyAllow: this.post.replyAllow,
+      secretReplyAllow: this.post.secretReplyAllow,
+    })
+      .then((response) => {
+        if (response.data) {
+          this.root.UtilRouteStore.history.push('/free');
+          toast.success('😊 포스팅이 수정되었어요!');
+        }
+      })
+      .catch((response) => { console.log(response); });
+
+    return true;
+  };
+
+  @action deletePost = (id) => {
+    axios.delete('/api/board/post', {
+      params: {
+        id,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          this.root.UtilRouteStore.history.push('/free');
+          toast.success('😊 포스팅이 삭제되었어요!');
         }
       })
       .catch((response) => { console.log(response); });
@@ -130,6 +165,7 @@ class PostStore {
         if (response.data) {
           const {
             board, category, title, content,
+            secret, replyAllow, secretReplyAllow,
           } = response.data[0];
           this.post = {
             ...this.post,
@@ -137,20 +173,11 @@ class PostStore {
             board,
             category,
             title,
+            secret,
+            replyAllow,
+            secretReplyAllow,
             text: content,
           };
-        }
-      })
-      .catch((response) => { console.log(response); });
-  };
-
-  @action modifyPost = () => {
-    const postId = this.post.id;
-
-    axios.put(`/api/board/post/${postId}`, {})
-      .then((response) => {
-        if (response.data) {
-          toast.success('😳 해당 포스팅 수정 완료!');
         }
       })
       .catch((response) => { console.log(response); });
@@ -251,7 +278,7 @@ class PostStore {
     this.post.board = board.toUpperCase();
   };
 
-  @action getPostMine = (() => {
+  @action getPostMine = () => {
     const { userData } = this.root.UserStore;
 
     if (userData) {
@@ -271,7 +298,20 @@ class PostStore {
     } else {
       this.postMineList = [];
     }
-  });
+  };
+
+  @action setPostClear = () => {
+    this.post = {
+      board: '',
+      category: '',
+      title: '',
+      text: '',
+      depth: '',
+      secret: 'N',
+      replyAllow: 'Y',
+      secretReplyAllow: 'N',
+    };
+  }
 }
 
 export default PostStore;
