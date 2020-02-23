@@ -55,7 +55,9 @@ const PostContent = ({ match }) => {
 
   return (
     <ViewWrapper>
-      <MarginlessH3>{boardName}</MarginlessH3>
+      <BoardLink to={`/${currentBoard}`}>
+        <MarginlessH3>{boardName}</MarginlessH3>
+      </BoardLink>
       <br />
       <div>
         <CategoryAndTitle>
@@ -180,6 +182,16 @@ PostContent.defaultProps = {
   match: null,
 };
 
+const BoardLink = styled(Link)`
+  color : black;
+  text-decoration : none;
+  
+  &:hover {
+    color : black;
+    text-decoration : none;
+  }
+`;
+
 const GreyButton = styled(Button)`
   background-color : white !important;
   border-color: #ccc;
@@ -295,6 +307,12 @@ const CategoryAndTitle = styled.h4`
 
 const Title = styled.span`
   padding-left : 7px;
+  vertical-align: bottom;
+  display: inline-block;
+  width: 800px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const Category = styled.span`

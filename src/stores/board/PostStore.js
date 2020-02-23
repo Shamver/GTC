@@ -217,6 +217,7 @@ class PostStore {
       .then((response) => {
         if (response.data === 1) {
           toast.success('😳 해당 포스팅 투표 완료!');
+          this.getPost(postId);
         } else if (response.data === 2) {
           toast.error('😳 이미 해당 포스팅에 투표가 완료되었어요!');
         }

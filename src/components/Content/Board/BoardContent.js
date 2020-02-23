@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import {Link, NavLink} from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
@@ -68,6 +68,8 @@ BoardContent.propTypes = {
 BoardContent.defaultProps = {
   currentPage: null,
 };
+
+
 
 const ManginessTable = styled(Table)`
   margin : 0px !important;

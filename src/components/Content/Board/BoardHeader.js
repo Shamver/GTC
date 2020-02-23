@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
+import { Link } from 'react-router-dom';
 
 const BoardHeader = ({ path }) => {
   const { BoardStore } = useStores();
@@ -9,7 +10,9 @@ const BoardHeader = ({ path }) => {
   const BoardName = getBoardName(path);
   return (
     <TableHead>
-      <MarginlessH3>{BoardName}</MarginlessH3>
+      <BoardLink to={path}>
+        <MarginlessH3>{BoardName}</MarginlessH3>
+      </BoardLink>
     </TableHead>
   );
 };
@@ -17,6 +20,16 @@ const BoardHeader = ({ path }) => {
 BoardHeader.propTypes = {
   path: Proptypes.string.isRequired,
 };
+
+const BoardLink = styled(Link)`
+  color : black;
+  text-decoration : none;
+  
+  &:hover {
+    color : black;
+    text-decoration : none;
+  }
+`;
 
 const TableHead = styled.div`
   margin-bottom : 10px;
