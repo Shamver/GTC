@@ -24,7 +24,9 @@ const Content = () => (
         <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
         <Route exact path="/mypoint/page/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />
         <Route exact path="/mail" render={() => <Contents.Mail />} />
+
         <Route exact path="/search" render={() => <Contents.Search />} />
+        <Route exact path="/daily" render={() => <Contents.Daily />} />
 
         {/* BOARD */}
         <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} noPagination />} />

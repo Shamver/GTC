@@ -72,7 +72,7 @@ router.get('/get', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get MailList Success');
+    info('[SELECT, GET /api/user/mail/get] 받은 쪽지 목록 조회');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -104,7 +104,7 @@ router.get('/sent', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get SentMailList Success');
+    info('[SELECT, GET /api/user/mail/sent] 보낸 쪽지 목록 조회');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -166,7 +166,7 @@ router.post('/', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get SentMailList Success');
+    info('[INSERT, POST /api/user/mail] 쪽지 전송');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -200,7 +200,7 @@ router.put('/', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Update MailRead Success');
+    info('[UPDATE, PUT /api/user/mail] 쪽지 읽음 처리');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -236,7 +236,7 @@ router.delete('/', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Update MailDelete Success');
+    info('[UPDATE, DELETE /api/user/mail] 쪽지 삭제');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);

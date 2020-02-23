@@ -17,6 +17,7 @@ const MyPoint = ({ currentPage, noPagination }) => {
 
   return (
     <MainContainer>
+      <h4>포인트 내역</h4>
       <MyPointContent noPagination={noPagination} currentPage={currentPage} />
     </MainContainer>
   );

@@ -9,6 +9,7 @@ const MyAccount = lazy(() => import('./MyAccount'));
 const MyPoint = lazy(() => import('./MyPoint'));
 const Mail = lazy(() => import('./Mail'));
 const Search = lazy(() => import('./Search'));
+const Daily = lazy(() => import('./Daily'));
 
 export default {
   Board,
@@ -20,4 +21,5 @@ export default {
   MyPoint,
   Mail,
   Search,
+  Daily,
 };

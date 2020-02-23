@@ -87,7 +87,9 @@ const Header = () => {
                   <FontAwesomeIcon icon={faSmile} />
                 </DropdownToggleC>
                 <DropdownMenu>
-                  <DropdownItem30>출석체크</DropdownItem30>
+                  <LinkNoDeco to="/daily">
+                    <DropdownItem30>출석체크</DropdownItem30>
+                  </LinkNoDeco>
                   <DropdownItem30>전광판</DropdownItem30>
                   <DropdownItem30>아이콘샵</DropdownItem30>
                   <DropdownItem30>포인트경품</DropdownItem30>
@@ -112,6 +114,10 @@ const Header = () => {
     </HeaderWrapper>
   );
 };
+
+const LinkNoDeco = styled(Link)`
+  text-decoration: none !important;
+`;
 
 const InputGroupWrapper = styled.div`
   width : 250px;

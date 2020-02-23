@@ -31,6 +31,7 @@ const Setting = () => {
 
   return (
     <MainContainer>
+      <h4>쪽지 보관함</h4>
       <MailNav />
       <MailTabContent />
     </MainContainer>

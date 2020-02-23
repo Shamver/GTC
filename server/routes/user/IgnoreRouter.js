@@ -70,7 +70,7 @@ router.get('/', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get IgnoreList Success');
+    info('[SELECT, GET /api/user/ignore] 유저 차단 목록 조회');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -121,7 +121,7 @@ router.post('/', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Insert Ignore Success');
+    info('[INSERT, POST /api/user/ignore] 유저 차단 추가');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -162,7 +162,7 @@ router.delete('/', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Delete Ignore Success');
+    info('[DELETE, DELETE /api/user/ignore] 유저 차단 삭제');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);

@@ -65,7 +65,7 @@ router.get('/', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get AlertList Success');
+    info('[SELECT, GET /api/user/alert] 유저 알림 리스트 조회');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -97,7 +97,7 @@ router.put('/', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Update Alert Read Success');
+    info('[UPDATE, PUT /api/user/alert] 유저 알림 읽음 처리');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -129,7 +129,7 @@ router.delete('/', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Update Alert Delete Success');
+    info('[UPDATE, DELETE /api/user/alert] 유저 알림 삭제');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);

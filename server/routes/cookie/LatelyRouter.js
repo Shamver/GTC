@@ -34,7 +34,7 @@ router.get('/', (req, res) => {
         }),
     ).then(() => {
       // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-      info('Get LatelyPost Success');
+      info('[SELECT, GET /api/cookie/lately] 최근 게시물 리스트 조회');
     }).catch((err) => {
       // 트랜잭션 중 에러가 났을때 처리.
       error(err.message);
