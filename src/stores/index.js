@@ -26,6 +26,8 @@ import BoardSearchStore from './board/SearchStore';
 
 import CookieLatelyStore from './cookie/LatelyStore';
 
+import EventDailyStore from './event/DailyStore';
+
 class RootStore {
   constructor() {
     this.UserStore = new UserStore(this);
@@ -55,6 +57,8 @@ class RootStore {
     this.BoardSearchStore = new BoardSearchStore(this);
 
     this.CookieLatelyStore = new CookieLatelyStore(this);
+
+    this.EventDailyStore = new EventDailyStore(this);
   }
 }
 

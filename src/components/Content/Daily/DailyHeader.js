@@ -1,8 +1,9 @@
 import React from 'react';
+import styled from 'styled-components';
 
 const DailyHeader = () => (
   <>
-    <h4>출석 체크</h4>
+    <H4>출석 체크</H4>
     <p>매일 1회 출석체크를 하시면 포인트를 드립니다. 매일매일 출석체크로 GTC와 함께 기분좋은 하루를 시작해보세요.</p>
     <ul>
       <li>출첵 기본 포인트 : 20점</li>
@@ -12,5 +13,10 @@ const DailyHeader = () => (
     </ul>
   </>
 );
+
+const H4 = styled.h4`
+  margin-bottom: 0;
+  font-weight: 600;
+`;
 
 export default DailyHeader;

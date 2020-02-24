@@ -90,9 +90,7 @@ const Header = () => {
                   <LinkNoDeco to="/daily">
                     <DropdownItem30>출석체크</DropdownItem30>
                   </LinkNoDeco>
-                  <DropdownItem30>전광판</DropdownItem30>
-                  <DropdownItem30>아이콘샵</DropdownItem30>
-                  <DropdownItem30>포인트경품</DropdownItem30>
+                  <DropdownItem30>포인트샵</DropdownItem30>
                 </DropdownMenu>
               </DropdownIn>
             </ColNoP>

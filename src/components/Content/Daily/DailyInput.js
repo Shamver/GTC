@@ -3,15 +3,40 @@ import {
   Input, Button,
 } from 'reactstrap';
 import { observer } from 'mobx-react';
+import styled from 'styled-components';
+import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import useStores from '../../../stores/useStores';
 
-const DailyInput = () => (
-  <>
-    <Input type="text" placeholder="여기에 한마디를 입력하세요" />
-    <br />
-    <Button type="button" color="primary">
-      출석체크 하기
-    </Button>
-  </>
-);
+const DailyInput = () => {
+  const { EventDailyStore } = useStores();
+  const { message, onChangeValue, addDaily } = EventDailyStore;
+
+  return (
+    <>
+      <LastDailyDiv>
+        마지막 출첵 : 20200221, 1 Combo
+      </LastDailyDiv>
+      <CustomInput type="text" placeholder="여기에 한마디를 입력하세요" maxLength={20} value={message} onChange={onChangeValue} />
+      <Button type="button" color="primary" onClick={addDaily}>
+        <FontAwesomeIcon icon={faPencilAlt} /> 출석체크 하기
+      </Button>
+    </>
+  );
+};
+
+const LastDailyDiv = styled.div`
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+`;
+
+const CustomInput = styled(Input)`
+  margin-bottom: 1rem;
+`;
 
 export default observer(DailyInput);

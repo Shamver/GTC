@@ -23,6 +23,7 @@ const userFavoriteApi = require('./routes/user/FavoriteRouter');
 const userPointApi = require('./routes/user/PointRouter');
 const userMailApi = require('./routes/user/MailRouter');
 const cookieLatelyApi = require('./routes/cookie/LatelyRouter');
+const eventDailyApi = require('./routes/event/DailyRouter');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -58,6 +59,8 @@ app.use('/api/board', authMiddleware);
 app.use('/api/board', boardApi);
 
 app.use('/api/cookie/lately', cookieLatelyApi);
+
+app.use('/api/event/daily', eventDailyApi);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => info(`Listening on port ${port}...`));
