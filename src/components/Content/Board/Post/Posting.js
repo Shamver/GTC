@@ -114,6 +114,8 @@ Posting.defaultProps = {
 };
 
 const PostingWrapper = styled.div`
+  border-bottom: 2px solid #ebeae8;
+  border-right: 2px solid #ebeae8;
   background-color : white;
   padding : 14px;
   

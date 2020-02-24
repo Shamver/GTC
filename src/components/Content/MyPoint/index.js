@@ -23,6 +23,8 @@ const MyPoint = ({ currentPage, noPagination }) => {
 };
 
 const MainContainer = styled(Container)`
+  border-bottom: 2px solid #ebeae8;
+  border-right: 2px solid #ebeae8;
   background-color: white;
   padding: 1rem !important;
 `;

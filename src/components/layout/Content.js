@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import Contents from '../Content';
 import Loading from '../util/Loading';
 
-const Main = lazy(() => import('../Content/Main'));
+const Home = lazy(() => import('../Content/Home'));
 const Posting = lazy(() => import('../Content/Board/Post/Posting'));
 const Alert = lazy(() => import('../util/Alert'));
 const Sign = lazy(() => import('../util/Sign'));
@@ -16,7 +16,7 @@ const Content = () => (
   <BorderedDiv>
     <Suspense fallback={<Loading loading={1} />}>
       <Switch>
-        <Route exact path="/" render={() => <Main />} />
+        <Route exact path="/" render={() => <Home />} />
         <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
         <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
         <Route exact path="/setting" render={() => <Contents.Setting />} />
@@ -56,8 +56,7 @@ const Content = () => (
 );
 
 const BorderedDiv = styled.div`
-  border-bottom: 2px solid #ebeae8;
-  border-right: 2px solid #ebeae8;
+  
   margin-bottom : 20px;
 `;
 
