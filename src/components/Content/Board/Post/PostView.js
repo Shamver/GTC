@@ -53,7 +53,7 @@ const PostWrapper = styled.div`
   
   & .ck-content {
     height : 100px;
-    font-family: 'NanumSquareRound',sans-serif !important;
+    font-family: 'Nanum Gothic',sans-serif !important;
   }
   
   & .ck.ck-editor {

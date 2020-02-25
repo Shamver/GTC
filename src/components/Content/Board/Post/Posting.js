@@ -121,7 +121,7 @@ const PostingWrapper = styled.div`
   
   & .ck-content {
     height : 500px;
-    font-family: 'NanumSquareRound',sans-serif !important;
+    font-family: 'Nanum Gothic',sans-serif !important;
   }
 `;
 

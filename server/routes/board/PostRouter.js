@@ -25,7 +25,7 @@ const SELECT_BOARD_POST_LIST = `
   FROM GTC_BOARD_POST P, (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
   WHERE B_ID = ':B_ID' AND P.WRITER != IFNULL(( SELECT TARGET_ID FROM GTC_USER_IGNORE WHERE FROM_ID =:USER_ID), -1)
   ORDER BY ID DESC    
-  LIMIT :CURRENT_PAGE, 25
+  LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
 
 const INSERT_BOARD_POST = `
@@ -165,7 +165,7 @@ const DELETE_BOARD_POST = `
 
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
-  const { board, userId } = req.query;
+  const { board, userId, isHome } = req.query;
   currentPage = currentPage || 1;
 
   Database.execute(
@@ -175,6 +175,7 @@ router.get('/', (req, res) => {
         B_ID: board.toUpperCase(),
         CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
+        PER_PAGE: isHome ? 10 : 25,
       },
     )
       .then((rows) => {

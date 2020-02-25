@@ -1,30 +1,56 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { observer } from 'mobx-react';
 import { Row, Col } from 'reactstrap';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
+
+const HomePostList = observer(({ board }) => {
+  const { BoardPostStore } = useStores();
+  const { getHomePostList, homePostList } = BoardPostStore;
+
+  useEffect(() => {
+    getHomePostList(board);
+  }, [getHomePostList, board]);
+
+  return homePostList[board].map((data) => (
+    <li>
+      <Link to="/temp">
+        {data.title}
+      </Link>
+    </li>
+  ));
+});
+
+HomePostList.propTypes = {
+  board: Proptypes.string.isRequired,
+};
+
 
 const Home = () => (
   <Row>
     <Col xs="6">
-      <TextH5>커뮤니티 자유게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
+      <TextH5>
+        <NoStyleLink to="/free">
+          커뮤니티 자유게시판 <ArrowIcon icon={faChevronRight} />
+        </NoStyleLink>
+      </TextH5>
       <PostList>
         <ul>
-          <li>
-            <Link to="/temp">
-              [메이플스토리] 오로라]24시간…
-            </Link>
-          </li>
+          <HomePostList board="free" />
         </ul>
       </PostList>
     </Col>
     <Col xs="6">
-      <TextH5>현금거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
+      <TextH5>현금 거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
       <PostList />
     </Col>
     <Col xs="12">
       <TextH5>공지사항 <ArrowIcon icon={faChevronRight} /></TextH5>
+      <MiddlePostList />
     </Col>
     <Col xs="6">
       <TextH5>거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
@@ -37,8 +63,18 @@ const Home = () => (
   </Row>
 );
 
+const NoStyleLink = styled(Link)`
+  color : black;
+  &:hover {
+    text-decoration : none;
+    color : black;
+  }
+`;
+
 const ArrowIcon = styled(FontAwesomeIcon)`
-  vertical-align : text-top;
+  vertical-align: baseline;
+  font-size : 12px;
+  color : #b6b6b6 !important;
 `;
 
 const TextH5 = styled.h5`
@@ -58,14 +94,25 @@ const PostList = styled.div`
     font-size : 15px;
   }
   
-   & > ul > li {
+  & > ul > li {
     padding : 0.2em 0.5em;
     border-bottom : 1px solid #f3f3f3;
-   }
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  
+  & > ul > li:last-child {
+    border : none !important;
+  }
    
-   & > ul > li > a {
+  & > ul > li > a {
     color : #737373 !important;
-   }
+  }
+`;
+
+const MiddlePostList = styled(PostList)`
+  height : 200px;
 `;
 
 export default Home;

@@ -62,7 +62,7 @@ const BorderedDiv = styled.div`
 
 const ToastContainerCustom = styled(ToastContainer)`
   & .Toastify__toast-body {
-    font-family : 'NanumSquareRound', sans-serif !important
+    font-family : 'Nanum Gothic', sans-serif !important
   }
   
   width : 380px !important;

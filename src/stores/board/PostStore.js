@@ -24,6 +24,14 @@ class PostStore {
     crime: [],
   };
 
+  @observable homePostList = {
+    free: [],
+    cash: [],
+    trade: [],
+    notice: [],
+    qna: [],
+  };
+
   @observable currentBoardMaxPage = 0;
 
   @observable postView = {};
@@ -130,6 +138,27 @@ class PostStore {
             const { pageCount } = response.data[0];
             this.currentBoardMaxPage = pageCount;
           }
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
+
+  @action getHomePostList = (board) => {
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
+
+    axios.get('/api/board/post', {
+      params: {
+        board, userId, currentPage: 1, isHome: true,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          console.log(response.data);
+          this.homePostList = {
+            ...this.homePostList,
+            [board]: response.data,
+          };
         }
       })
       .catch((response) => { console.log(response); });
