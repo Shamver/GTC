@@ -1,10 +1,13 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 class DailyStore {
   @observable message = '';
 
   @observable dailyList = [];
+
+  @observable dailyLast = '';
 
   constructor(root) {
     this.root = root;
@@ -22,6 +25,22 @@ class DailyStore {
       });
   });
 
+  @action getDailyLast = (() => {
+    const { userData } = this.root.UserStore;
+    axios.get('/api/event/daily/last', {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        this.dailyLast = {
+          ...data[0],
+        };
+      })
+      .catch((response) => console.log(response));
+  });
+
   @action addDaily = (() => {
     const { userData } = this.root.UserStore;
 
@@ -34,7 +53,13 @@ class DailyStore {
       })
         .then((response) => {
           const { data } = response;
-          console.log(data);
+          if (data.SUCCESS) {
+            this.getDailyLast();
+            this.getDailyList();
+            toast.success(data.MESSAGE);
+          } else {
+            toast.error(data.MESSAGE);
+          }
         })
         .catch((response) => {
           console.log(response);

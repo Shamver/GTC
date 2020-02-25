@@ -10,15 +10,19 @@ import useStores from '../../../stores/useStores';
 
 const DailyInput = () => {
   const { EventDailyStore } = useStores();
-  const { message, onChangeValue, addDaily } = EventDailyStore;
+  const {
+    message, onChangeValue, addDaily, dailyLast,
+  } = EventDailyStore;
 
   return (
     <>
-      <LastDailyDiv>
-        마지막 출첵 : 20200221, 1 Combo
-      </LastDailyDiv>
-      <CustomInput type="text" placeholder="여기에 한마디를 입력하세요" maxLength={20} value={message} onChange={onChangeValue} />
-      <Button type="button" color="primary" onClick={addDaily}>
+      {dailyLast === '' ? '' : (
+        <LastDailyDiv>
+          마지막 출첵 : {dailyLast.date}, {dailyLast.combo} Combo
+        </LastDailyDiv>
+      )}
+      <CustomInput type="text" placeholder={dailyLast === '' ? '여기에 한마디를 입력해주세요.' : '오늘 출석체크를 완료하셨습니다.'} maxLength={20} value={message} onChange={onChangeValue} disabled={dailyLast !== ''} />
+      <Button type="button" color="primary" onClick={addDaily} disabled={dailyLast !== ''}>
         <FontAwesomeIcon icon={faPencilAlt} /> 출석체크 하기
       </Button>
     </>

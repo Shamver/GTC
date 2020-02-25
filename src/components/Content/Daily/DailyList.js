@@ -6,32 +6,12 @@ import styled from 'styled-components';
 
 import { observer } from 'mobx-react';
 import DailyListRow from './DailyListRow';
+import useStores from '../../../stores/useStores';
 
 const DailyList = () => {
-  const data = [
-    {
-      username: '테스터1',
-      message: 'cex cex cexx',
-      point: 20,
-      combo: 12,
-      time: '00:00',
-    },
-    {
-      username: '테스터2',
-      message: 'cex cex ce!!!@#@!xx',
-      point: 20,
-      combo: 2,
-      time: '00:00',
-    },
-    {
-      username: '테스터3',
-      message: 'cex cex @#!#@!#!!!!@#@!#!@$!@%@!$@!#!#!@#!@#!@#@!$!@$cexx',
-      point: 30,
-      combo: 30,
-      time: '00:01',
-    },
-  ];
-  const DailyListData = data.map((v, index) => (DailyListRow('daily', v, index)));
+  const { EventDailyStore } = useStores();
+  const { dailyList } = EventDailyStore;
+  const DailyListData = dailyList.map((v, index) => (DailyListRow('daily', v, index)));
 
   return (
     <>

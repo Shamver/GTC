@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Container,
 } from 'reactstrap';
@@ -12,11 +12,20 @@ import DailyContent from './DailyContent';
 
 const Daily = () => {
   const {
-    UtilLoadingStore,
+    UtilLoadingStore, EventDailyStore, UtilStore,
   } = useStores();
   const { doLoading } = UtilLoadingStore;
+  const { getDailyList, getDailyLast } = EventDailyStore;
+  const { loginCheck } = UtilStore;
 
   doLoading();
+
+  useEffect(() => {
+    getDailyList();
+    if (loginCheck()) {
+      getDailyLast();
+    }
+  }, [getDailyLast, getDailyList, loginCheck]);
 
   return (
     <MainContainer>

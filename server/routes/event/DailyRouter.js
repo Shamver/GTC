@@ -11,9 +11,10 @@ const SELECT_EVENT_DAILY_LIST = `
   , D.MESSAGE AS message
   , D.POINT AS point
   , D.COMBO AS combo
-  , date_format(D.DATE, '%H:%i') AS date
+  , date_format(D.DATE, '%H:%i') AS time
   FROM GTC_USER U, GTC_EVENT_DAILY D
   WHERE U.ID = D.USER_ID
+  AND (DATE_FORMAT(DATE,'%Y%m%d000000') > date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000'))
   ORDER BY D.DATE DESC
   LIMIT 30
 `;
@@ -26,6 +27,13 @@ const SELECT_EVENT_DAILY_LAST = `
   WHERE USER_ID = :USER_ID
   ORDER BY DATE DESC
   LIMIT 1
+`;
+
+const SELECT_EVENT_DAILY_TODAY = `
+  SELECT *
+  FROM GTC_EVENT_DAILY
+  WHERE USER_ID = :USER_ID
+  AND (DATE_FORMAT(DATE,'%Y%m%d000000') > date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000'))
 `;
 
 const INSERT_EVENT_DAILY = `
@@ -127,14 +135,33 @@ router.post('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_EVENT_DAILY,
+      SELECT_EVENT_DAILY_TODAY,
       {
         USER_ID: userId,
-        MESSAGE: message,
       },
     )
+      .then((rows) => {
+        if (rows.length >= 1) {
+          res.send({
+            SUCCESS: false,
+            MESSAGE: '오늘은 이미 출석체크를 했습니다.',
+          });
+          throw new Error('이미 출석체크 되었습니다.');
+        } else {
+          return database.query(
+            INSERT_EVENT_DAILY,
+            {
+              USER_ID: userId,
+              MESSAGE: message,
+            },
+          );
+        }
+      })
       .then(() => {
-        res.send(200);
+        res.send({
+          SUCCESS: true,
+          MESSAGE: '출석체크가 완료되었습니다!',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.

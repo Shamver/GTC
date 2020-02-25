@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const DailyListRow = (title, data, index) => {
   const {
-    username, message, point, combo, time,
+    nickname, message, point, combo, time,
   } = data;
 
   return (
@@ -12,7 +12,7 @@ const DailyListRow = (title, data, index) => {
         { index + 1 } 등
       </TableTh>
       <TableTd>
-        { username }
+        { nickname }
       </TableTd>
       <TableTd>
         { message }
