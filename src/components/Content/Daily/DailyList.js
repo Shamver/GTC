@@ -29,7 +29,7 @@ const DailyList = () => {
         <tbody>
           {DailyListData.length === 0 ? (
             <tr>
-              <td colSpan={3}>
+              <td colSpan={6}>
                 출석체크한 유저가 없습니다.
               </td>
             </tr>

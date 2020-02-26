@@ -15,7 +15,7 @@ const SELECT_EVENT_DAILY_LIST = `
   FROM GTC_USER U, GTC_EVENT_DAILY D
   WHERE U.ID = D.USER_ID
   AND (DATE_FORMAT(DATE,'%Y%m%d000000') > date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000'))
-  ORDER BY D.DATE DESC
+  ORDER BY D.DATE ASC
   LIMIT 30
 `;
 
@@ -23,6 +23,9 @@ const SELECT_EVENT_DAILY_LAST = `
   SELECT 
   COMBO AS combo
   , date_format(DATE, '%Y%m%d') AS date
+  , CASE WHEN date_format(DATE, '%Y%m%d') = date_format(sysdate(), '%Y%m%d') THEN 'Y'
+    ELSE 'N'
+    END AS isDoneToday
   FROM GTC_EVENT_DAILY
   WHERE USER_ID = :USER_ID
   ORDER BY DATE DESC
@@ -42,16 +45,8 @@ const INSERT_EVENT_DAILY = `
     , :USER_ID
     , ':MESSAGE'
     , (CASE
-           WHEN (SELECT *
-                 FROM (SELECT IFNULL(MAX(COMBO) + 1, 1)
-                       FROM GTC_EVENT_DAILY
-                       WHERE (DATE_FORMAT(DATE, '%Y%m%d000000') >
-                             date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS a) = 6 THEN 40
-           WHEN (SELECT *
-                 FROM (SELECT IFNULL(MAX(COMBO) + 1, 1)
-                       FROM GTC_EVENT_DAILY
-                       WHERE (DATE_FORMAT(DATE, '%Y%m%d000000') >
-                             date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS a) = 29 THEN 120
+           WHEN (SELECT * FROM (SELECT IFNULL(COMBO, 0) + 1 FROM GTC_EVENT_DAILY WHERE (DATE_FORMAT(sysdate(),'%Y%m%d000000') > DATE_FORMAT(DATE,'%Y%m%d000000')) AND (DATE_FORMAT(DATE,'%Y%m%d000000') = date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) % 7 = 0 THEN 40
+           WHEN (SELECT * FROM (SELECT IFNULL(COMBO, 0) + 1 FROM GTC_EVENT_DAILY WHERE (DATE_FORMAT(sysdate(),'%Y%m%d000000') > DATE_FORMAT(DATE,'%Y%m%d000000')) AND (DATE_FORMAT(DATE,'%Y%m%d000000') = date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) % 30 = 0 THEN 120
            ELSE 20 END
         ) +
       (
@@ -67,7 +62,10 @@ const INSERT_EVENT_DAILY = `
                        WHERE date_format(DATE, '%Y%m%d%H%i%S') >= date_format(sysdate(), '%Y%m%d000000')) AS a) = 2 THEN 10
                  ELSE 0 END)
     , sysdate()
-    , (SELECT * FROM (SELECT IFNULL(MAX(COMBO) + 1, 1) FROM GTC_EVENT_DAILY WHERE (DATE_FORMAT(DATE,'%Y%m%d000000') > date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C)
+    , (SELECT CASE WHEN (SELECT * FROM (SELECT IFNULL(MAX(COMBO), 0) + 1 FROM GTC_EVENT_DAILY WHERE (DATE_FORMAT(sysdate(),'%Y%m%d000000') > DATE_FORMAT(DATE,'%Y%m%d000000')) AND (DATE_FORMAT(DATE,'%Y%m%d000000') = date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) > 0 THEN
+(SELECT * FROM (SELECT IFNULL(MAX(COMBO), 0) + 1 FROM GTC_EVENT_DAILY WHERE (DATE_FORMAT(sysdate(),'%Y%m%d000000') > DATE_FORMAT(DATE,'%Y%m%d000000')) AND (DATE_FORMAT(DATE,'%Y%m%d000000') = date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C)
+ELSE 1
+END)
   )
 `;
 
