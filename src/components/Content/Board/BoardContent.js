@@ -69,8 +69,6 @@ BoardContent.defaultProps = {
   currentPage: null,
 };
 
-
-
 const ManginessTable = styled(Table)`
   margin : 0px !important;
   margin-top : 0px !important;

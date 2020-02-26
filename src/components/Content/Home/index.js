@@ -17,10 +17,18 @@ const HomePostList = observer(({ board }) => {
   }, [getHomePostList, board]);
 
   return homePostList[board].map((data) => (
-    <li>
-      <Link to="/temp">
-        {data.title}
-      </Link>
+    <li key={data.id}>
+      <div>
+        <Link to="/temp">
+          {data.title}
+        </Link>
+      </div>
+      &nbsp;&nbsp;
+      { data.replyCount > 0 ? (
+        <ReplyCount>
+          [{data.replyCount}]
+        </ReplyCount>
+      ) : ''}
     </li>
   ));
 });
@@ -46,7 +54,11 @@ const Home = () => (
     </Col>
     <Col xs="6">
       <TextH5>현금 거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
-      <PostList />
+      <PostList>
+        <ul>
+          <HomePostList board="cash" />
+        </ul>
+      </PostList>
     </Col>
     <Col xs="12">
       <TextH5>공지사항 <ArrowIcon icon={faChevronRight} /></TextH5>
@@ -54,14 +66,29 @@ const Home = () => (
     </Col>
     <Col xs="6">
       <TextH5>거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
-      <PostList />
+      <PostList>
+        <ul>
+          <HomePostList board="trade" />
+        </ul>
+      </PostList>
     </Col>
     <Col xs="6">
       <TextH5>질문 & 답변 <ArrowIcon icon={faChevronRight} /></TextH5>
-      <PostList />
+      <PostList>
+        <ul>
+          <HomePostList board="qna" />
+        </ul>
+      </PostList>
     </Col>
   </Row>
 );
+
+const ReplyCount = styled.div`
+  color : #DC3545;
+  display : inline-block;
+  font-weight : bold;
+  vertical-align : text-bottom;
+`;
 
 const NoStyleLink = styled(Link)`
   color : black;
@@ -83,7 +110,7 @@ const TextH5 = styled.h5`
 
 const PostList = styled.div`
   background-color : white;
-  height : 300px;
+  height : 285px;
   margin-bottom : 20px;
   border-bottom: 2px solid #ebeae8;
   border-right: 2px solid #ebeae8;
@@ -97,18 +124,26 @@ const PostList = styled.div`
   & > ul > li {
     padding : 0.2em 0.5em;
     border-bottom : 1px solid #f3f3f3;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
   }
   
   & > ul > li:last-child {
-    border : none !important;
+    padding : 0.2em 0.5em;
+    border-bottom : none;
   }
-   
-  & > ul > li > a {
-    color : #737373 !important;
+  
+  & > ul > li a {
+    color : #737373;
   }
+  
+  & > ul > li div {
+    max-width : 400px;
+    overflow : hidden;
+    text-overflow : ellipsis;
+    white-space : nowrap;
+    display : inline-block;
+    vertical-align: middle;
+  }
+
 `;
 
 const MiddlePostList = styled(PostList)`

@@ -175,7 +175,7 @@ router.get('/', (req, res) => {
         B_ID: board.toUpperCase(),
         CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
-        PER_PAGE: isHome ? 10 : 25,
+        PER_PAGE: isHome ? 9 : 25,
       },
     )
       .then((rows) => {
