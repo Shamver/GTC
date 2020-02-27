@@ -20,7 +20,7 @@ class FavoriteStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.success) {
+          if (data) {
             this.favoriteList = response.data;
           } else if (data.message === 'not logged in') {
             this.favoriteList = [];
@@ -44,18 +44,25 @@ class FavoriteStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.POST_SUCCESS !== undefined && !response.data.POST_SUCCESS) {
-          toast.error(response.data.MESSAGE);
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            getPost(id);
+            toast.success(data.MESSAGE);
+          } else {
+            toast.info(data.MESSAGE);
+          }
+          this.getFavorite();
         } else {
-          getPost(id);
-          toast.success('★ 즐겨찾기 추가됨');
+          toast.error(data.MESSAGE);
         }
-        this.getFavorite();
       })
       .catch((response) => { console.log(response); });
   });
 
-  @action deleteFavorite = ((id, type = 'post') => {
+  @action deleteFavorite = ((id, type = 'post', e = null) => {
+    if (e !== null) {
+      e.preventDefault();
+    }
     const { userData } = this.root.UserStore;
     const { getPost } = this.root.BoardPostStore;
 
@@ -65,12 +72,21 @@ class FavoriteStore {
         userId: userData.id,
       },
     })
-      .then(() => {
-        if (type === 'post') {
-          getPost(id);
+      .then((response) => {
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            if (type === 'post') {
+              getPost(id);
+            }
+            this.getFavorite();
+            toast.success(data.MESSAGE);
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
-        this.getFavorite();
-        toast.info('☆ 즐겨찾기 해제됨');
       })
       .catch((response) => { console.log(response); });
   });

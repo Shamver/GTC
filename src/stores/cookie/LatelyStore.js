@@ -31,9 +31,14 @@ class LatelyStore {
     })
       .then((response) => {
         const { data } = response;
-        this.getLately();
-
-        toast.success(data.MESSAGE);
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.getLately();
+            toast.success(data.MESSAGE);
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        }
       })
       .catch((response) => console.log(response));
   };

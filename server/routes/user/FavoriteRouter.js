@@ -84,7 +84,8 @@ router.post('/', (req, res) => {
       .then((rows) => {
         if (rows.length >= 1) {
           res.send({
-            POST_SUCCESS: false,
+            SUCCESS: true,
+            CODE: 2,
             MESSAGE: '😓 이미 즐겨찾기된 게시물입니다ㅠ',
           });
           throw new Error('이미 즐겨찾기된 게시물입니다.');
@@ -99,7 +100,11 @@ router.post('/', (req, res) => {
         }
       })
       .then(() => {
-        res.send(200);
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '★ 즐겨찾기 추가됨',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -107,6 +112,12 @@ router.post('/', (req, res) => {
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
+
+    res.send({
+      SUCCESS: false,
+      CODE: 0,
+      MESSAGE: '쿼리 오류가 발생하셨습니다.',
+    });
 
     // Database 에서 보여주는 에러 메시지
     if (err.sqlMessage) {
@@ -132,8 +143,21 @@ router.delete('/', (req, res) => {
         BP_ID: bpId,
       },
     )
-      .then((rows) => {
-        res.send(rows);
+      .then((row) => {
+        const { affectedRows } = row;
+        if (affectedRows > 0) {
+          res.send({
+            SUCCESS: true,
+            CODE: 1,
+            MESSAGE: '☆ 즐겨찾기 해제됨',
+          });
+        } else {
+          res.send({
+            SUCCESS: true,
+            CODE: 2,
+            MESSAGE: '성공적으로 삭제되지 않았습니다.',
+          });
+        }
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -141,6 +165,12 @@ router.delete('/', (req, res) => {
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
+
+    res.send({
+      SUCCESS: false,
+      CODE: 0,
+      MESSAGE: '쿼리 오류가 발생하셨습니다.',
+    });
 
     // Database 에서 보여주는 에러 메시지
     if (err.sqlMessage) {

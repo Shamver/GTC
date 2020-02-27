@@ -34,7 +34,6 @@ class DailyStore {
     })
       .then((response) => {
         const { data } = response;
-        console.log(data);
         this.dailyLast = {
           ...data[0],
         };
@@ -55,10 +54,14 @@ class DailyStore {
         .then((response) => {
           const { data } = response;
           if (data.SUCCESS) {
-            this.getDailyLast();
-            this.getDailyList();
-            this.message = '';
-            toast.success(data.MESSAGE);
+            if (data.CODE === 1) {
+              this.getDailyLast();
+              this.getDailyList();
+              this.message = '';
+              toast.success(data.MESSAGE);
+            } else {
+              toast.info(data.MESSAGE);
+            }
           } else {
             toast.error(data.MESSAGE);
           }

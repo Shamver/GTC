@@ -62,6 +62,8 @@ router.delete('/', (req, res) => {
 
   res.cookie('lately', resetCookie, { httpOnly: true });
   res.send({
+    SUCCESS: true,
+    CODE: 1,
     MESSAGE: '😊 성공적으로 삭제되었습니다!',
   });
 });

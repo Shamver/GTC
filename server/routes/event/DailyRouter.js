@@ -141,7 +141,8 @@ router.post('/', (req, res) => {
       .then((rows) => {
         if (rows.length >= 1) {
           res.send({
-            SUCCESS: false,
+            SUCCESS: true,
+            CODE: 2,
             MESSAGE: '오늘은 이미 출석체크를 했습니다.',
           });
           throw new Error('이미 출석체크 되었습니다.');
@@ -158,6 +159,7 @@ router.post('/', (req, res) => {
       .then(() => {
         res.send({
           SUCCESS: true,
+          CODE: 1,
           MESSAGE: '출석체크가 완료되었습니다!',
         });
       }),
@@ -167,6 +169,12 @@ router.post('/', (req, res) => {
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
+
+    res.send({
+      SUCCESS: false,
+      CODE: 0,
+      MESSAGE: '쿼리 오류',
+    });
 
     // Database 에서 보여주는 에러 메시지
     if (err.sqlMessage) {
