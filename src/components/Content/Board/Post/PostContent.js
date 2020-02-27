@@ -27,6 +27,7 @@ const PostContent = ({ match }) => {
   } = useStores();
   const {
     postView, recommendPost, currentPostUpperLower, deletePost,
+    setCurrentPostId,
   } = BoardPostStore;
   const { postReplyList, setReplyOption } = BoardReplyStore;
   const { currentBoard } = BoardStore;
@@ -45,7 +46,8 @@ const PostContent = ({ match }) => {
 
   useEffect(() => {
     setReplyOption(replyAllow, secretReplyAllow);
-  }, [replyAllow, secretReplyAllow, setReplyOption]);
+    setCurrentPostId(postId);
+  }, [replyAllow, secretReplyAllow, setReplyOption, setCurrentPostId, postId]);
 
   if (loading) {
     return (
@@ -164,7 +166,7 @@ const PostContent = ({ match }) => {
           </div>
         ) : ''}
       </TopBottomWrapper>
-      <BoardContent path={currentBoard} />
+      <BoardContent path={currentBoard} currentPostId={postId} />
       <BoardFooter path={currentBoard} />
     </ViewWrapper>
   );

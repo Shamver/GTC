@@ -38,6 +38,8 @@ class PostStore {
 
   @observable postMineList = [];
 
+  @observable currentPostId;
+
   @observable currentPostUpperLower = {
     upper: '',
     lower: '',
@@ -46,6 +48,10 @@ class PostStore {
   constructor(root) {
     this.root = root;
   }
+
+  @action setCurrentPostId = (postId) => {
+    this.currentPostId = postId;
+  };
 
   @action addPost = () => {
     if (!this.postValidationCheck()) {

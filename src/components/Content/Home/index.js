@@ -19,7 +19,7 @@ const HomePostList = observer(({ board }) => {
   return homePostList[board].map((data) => (
     <li key={data.id}>
       <div>
-        <Link to="/temp">
+        <Link to={`/post/${data.id}`}>
           {data.title}
         </Link>
       </div>
@@ -62,7 +62,11 @@ const Home = () => (
     </Col>
     <Col xs="12">
       <TextH5>공지사항 <ArrowIcon icon={faChevronRight} /></TextH5>
-      <MiddlePostList />
+      <MiddlePostList>
+        <ul>
+          <HomePostList board="notice" />
+        </ul>
+      </MiddlePostList>
     </Col>
     <Col xs="6">
       <TextH5>거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
@@ -148,6 +152,10 @@ const PostList = styled.div`
 
 const MiddlePostList = styled(PostList)`
   height : 200px;
+  
+    & > ul > li div {
+    max-width : 900px;
+  }
 `;
 
 export default Home;

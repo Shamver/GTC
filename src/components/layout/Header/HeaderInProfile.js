@@ -47,7 +47,8 @@ const HeaderInProfile = () => {
                 <FontAwesomeIcon icon={faEnvelope} />
               </DropdownToggleC>
               <DropdownMenu>
-                <DropdownItem30>채팅</DropdownItem30>
+                {/* 추후 개발 예정 */}
+                {/* <DropdownItem30>채팅</DropdownItem30> */}
                 <LinkNoDeco to="/mail">
                   <DropdownItem30>쪽지</DropdownItem30>
                 </LinkNoDeco>
