@@ -20,10 +20,15 @@ class FavoriteStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.message === 'not logged in') {
-            this.favoriteList = [];
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              this.favoriteList = data.DATA;
+            } else {
+              toast.info(data.MESSAGE);
+            }
           } else {
-            this.favoriteList = response.data;
+            this.favoriteList = [];
+            toast.error(data.MESSAGE);
           }
         })
         .catch((response) => {

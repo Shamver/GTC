@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
+import {toast} from "react-toastify";
 
 class PointStore {
   @observable pointList = [];
@@ -53,10 +54,15 @@ class PointStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.message === 'not logged in') {
-            this.totalPoint = 0;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              this.totalPoint = response.data;
+            } else {
+              toast.info(data.MESSAGE);
+            }
           } else {
-            this.totalPoint = response.data;
+            this.totalPoint = 0;
+            toast.error(data.MESSAGE);
           }
         })
         .catch((response) => {

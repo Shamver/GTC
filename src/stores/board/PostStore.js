@@ -56,19 +56,26 @@ class PostStore {
       secretReplyAllow: this.post.secretReplyAllow,
     })
       .then((response) => {
-        if (response.data) {
-          this.root.UtilRouteStore.history.push('/free');
-          toast.success('😊 포스팅이 등록되었어요!');
-          this.post = {
-            board: '',
-            category: '',
-            title: '',
-            text: '',
-            depth: '',
-            secret: 'N',
-            replyAllow: 'Y',
-            secretReplyAllow: 'N',
-          };
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.root.UtilRouteStore.history.push('/free');
+            toast.success('😊 포스팅이 등록되었어요!');
+            this.post = {
+              board: '',
+              category: '',
+              title: '',
+              text: '',
+              depth: '',
+              secret: 'N',
+              replyAllow: 'Y',
+              secretReplyAllow: 'N',
+            };
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });

@@ -212,7 +212,11 @@ router.post('/', (req, res) => {
         };
 
         point('addPost', 'POST', postData);
-        res.send(true);
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '😊 포스팅이 등록되었어요!',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
