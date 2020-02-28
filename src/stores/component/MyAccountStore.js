@@ -115,8 +115,6 @@ class MyAccountStore {
       && this.gender === userData.gender
       && this.profileYN === userData.profileYN;
 
-    console.log(this.profileYN, userData.profileYN);
-
     this.isAllValidationChecked = this.nicknameValidation.status
     && this.birthValidation.status
     && this.genderValidation.status;

@@ -170,12 +170,6 @@ router.post('/', (req, res) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
 
-    res.send({
-      SUCCESS: false,
-      CODE: 0,
-      MESSAGE: '쿼리 오류',
-    });
-
     // Database 에서 보여주는 에러 메시지
     if (err.sqlMessage) {
       error(err.sqlMessage);

@@ -92,21 +92,12 @@ router.put('/', (req, res) => {
         ID_LIST: id.join(),
       },
     )
-      .then((row) => {
-        const { changedRows } = row;
-        if (changedRows > 0) {
-          res.send({
-            SUCCESS: true,
-            CODE: 1,
-            MESSAGE: '성공적으로 읽었습니다.',
-          });
-        } else {
-          res.send({
-            SUCCESS: true,
-            CODE: 2,
-            MESSAGE: '성공적으로 읽히지 않았습니다.',
-          });
-        }
+      .then(() => {
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '성공적으로 읽었습니다.',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -114,12 +105,6 @@ router.put('/', (req, res) => {
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
-
-    res.send({
-      SUCCESS: false,
-      CODE: 0,
-      MESSAGE: '쿼리 오류가 발생하셨습니다.',
-    });
 
     // Database 에서 보여주는 에러 메시지
     if (err.sqlMessage) {
@@ -143,21 +128,12 @@ router.delete('/', (req, res) => {
         ID: id,
       },
     )
-      .then((row) => {
-        const { changedRows } = row;
-        if (changedRows > 0) {
-          res.send({
-            SUCCESS: true,
-            CODE: 1,
-            MESSAGE: '성공적으로 삭제됐습니다.',
-          });
-        } else {
-          res.send({
-            SUCCESS: true,
-            CODE: 2,
-            MESSAGE: '성공적으로 삭제되지 않았습니다.',
-          });
-        }
+      .then(() => {
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '성공적으로 삭제됐습니다.',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -165,12 +141,6 @@ router.delete('/', (req, res) => {
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
-
-    res.send({
-      SUCCESS: false,
-      CODE: 0,
-      MESSAGE: '쿼리 오류가 발생하셨습니다.',
-    });
 
     // Database 에서 보여주는 에러 메시지
     if (err.sqlMessage) {

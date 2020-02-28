@@ -182,9 +182,16 @@ class UserStore {
         },
       })
         .then((response) => {
-          if (response.data) {
-            logout({}, '성공적으로 탈퇴되었습니다.\n30일 이후에 재가입이 가능합니다.\n감사합니다.');
-            history.push('/');
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              logout({}, '성공적으로 탈퇴되었습니다.\n30일 이후에 재가입이 가능합니다.\n감사합니다.');
+              history.push('/');
+            } else {
+              toast.info(data.MESSAGE);
+            }
+          } else {
+            toast.error(data.MESSAGE);
           }
         })
         .catch((response) => { console.log(response); });
@@ -207,10 +214,17 @@ class UserStore {
       userId: userData.id,
     })
       .then((response) => {
-        if (response) {
-          toggleAlert('성공적으로 변경되었습니다.\n다시 로그인해주세요.');
-          history.push('/');
-          this.logout();
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            toggleAlert('성공적으로 변경되었습니다.\n다시 로그인해주세요.');
+            history.push('/');
+            this.logout();
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => console.log(response));

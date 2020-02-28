@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
 
 class AlertStore {
   @observable alertList = [];

@@ -20,10 +20,10 @@ class FavoriteStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data) {
-            this.favoriteList = response.data;
-          } else if (data.message === 'not logged in') {
+          if (data.message === 'not logged in') {
             this.favoriteList = [];
+          } else {
+            this.favoriteList = response.data;
           }
         })
         .catch((response) => {

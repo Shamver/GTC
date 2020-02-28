@@ -39,7 +39,7 @@ const DELETE_USER_IGNORE = `
   SELECT FROM_ID, TARGET_ID from (
   SELECT FROM_ID, TARGET_ID FROM GTC_USER_IGNORE
   WHERE
-  :SUB_QUERY as sub
+  :SUB_QUERY) as sub
   );
 `;
 
@@ -102,7 +102,8 @@ router.post('/', (req, res) => {
       .then((rows) => {
         if (rows.length >= 1) {
           res.send({
-            POST_SUCCESS: false,
+            SUCCESS: true,
+            CODE: 2,
             MESSAGE: '😓 이미 차단한 유저입니다ㅠ',
           });
           throw new Error('이미 차단한 유저입니다.');
@@ -117,7 +118,11 @@ router.post('/', (req, res) => {
         }
       })
       .then(() => {
-        res.send(200);
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '✔ 성공적으로 차단되었습니다!',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -158,7 +163,11 @@ router.delete('/', (req, res) => {
       },
     )
       .then(() => {
-        res.send(200);
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '✔ 성공적으로 삭제되었습니다!',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.

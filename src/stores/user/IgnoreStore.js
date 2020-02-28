@@ -49,11 +49,15 @@ class IgnoreStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.POST_SUCCESS !== undefined && !response.data.POST_SUCCESS) {
-          toast.error(response.data.MESSAGE);
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            toast.success(data.MESSAGE);
+            this.getIgnore();
+          } else {
+            toast.info(data.MESSAGE);
+          }
         } else {
-          toast.success('✔ 성공적으로 차단되었습니다!');
-          this.getIgnore();
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => console.log(response));
@@ -72,9 +76,18 @@ class IgnoreStore {
           list,
         },
       })
-        .then(() => {
-          this.getIgnore();
-          toast.info('✔ 성공적으로 삭제되었습니다!');
+        .then((response) => {
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              toast.success(data.MESSAGE);
+              this.getIgnore();
+            } else {
+              toast.info(data.MESSAGE);
+            }
+          } else {
+            toast.error(data.MESSAGE);
+          }
         })
         .catch((response) => { console.log(response); });
     } else {

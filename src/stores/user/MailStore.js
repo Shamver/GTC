@@ -74,7 +74,11 @@ class MailStore {
         this.mailForm.mailText = '';
         this.mailForm.mailTo = '';
         if (data.SUCCESS) {
-          toast.success(data.MESSAGE);
+          if (data.CODE === 1) {
+            toast.success(data.MESSAGE);
+          } else {
+            toast.info(data.MESSAGE);
+          }
         } else {
           toast.error(data.MESSAGE);
         }
@@ -90,18 +94,27 @@ class MailStore {
         userId: userData.id,
       },
     })
-      .then(() => {
+      .then((response) => {
+        const { data } = response;
         this.viewMail = {};
         this.getMail();
         this.getSentMail();
-        toast.info('🚮 쪽지가 삭제되었습니다.');
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            toast.success(data.MESSAGE);
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
       })
       .catch((response) => { console.log(response); });
   });
 
-  @action onView = ((data) => {
+  @action onView = ((dat) => {
     const { setTab } = this.root.ComponentMailStore;
-    const { readDate, id, targetName } = data;
+    const { readDate, id, targetName } = dat;
     const { userData } = this.root.UserStore;
 
     if (!readDate && targetName === undefined) {
@@ -109,10 +122,22 @@ class MailStore {
         mailId: id,
         userId: userData.id,
       })
+        .then((response) => {
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              // 읽기 성공
+            } else {
+              toast.info(data.MESSAGE);
+            }
+          } else {
+            toast.error(data.MESSAGE);
+          }
+        })
         .catch((response) => console.log(response));
     }
 
-    this.viewMail = data;
+    this.viewMail = dat;
     setTab('view');
   });
 

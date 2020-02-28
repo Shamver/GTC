@@ -30,10 +30,12 @@ router.delete('/withdrawal', (req, res) => {
         USER_ID: userId,
       },
     )
-      .then((rows) => {
-        if (rows.length >= 1) {
-          res.send(200);
-        }
+      .then(() => {
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '회원탈퇴 완료',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -71,7 +73,11 @@ router.put('/info', (req, res) => {
       },
     )
       .then(() => {
-        res.send(200);
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '회원정보 수정완료',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.

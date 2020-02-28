@@ -136,7 +136,8 @@ router.post('/', (req, res) => {
           const { targetId } = rows[0];
           if (fromId === targetId) {
             res.send({
-              SUCCESS: false,
+              SUCCESS: true,
+              CODE: 2,
               MESSAGE: '😓 본인에게는 쪽지를 보낼 수 없습니다!',
             });
             throw new Error('본인에게는 쪽지를 보낼 수 없습니다.');
@@ -152,7 +153,8 @@ router.post('/', (req, res) => {
           }
         } else {
           res.send({
-            SUCCESS: false,
+            SUCCESS: true,
+            CODE: 3,
             MESSAGE: '😓 존재하지 않는 닉네임입니다ㅠ',
           });
           throw new Error('존재하지 않는 닉네임입니다.');
@@ -161,6 +163,7 @@ router.post('/', (req, res) => {
       .then(() => {
         res.send({
           SUCCESS: true,
+          CODE: 1,
           MESSAGE: '✔ 쪽지가 전송되었습니다.',
         });
       }),
@@ -196,7 +199,11 @@ router.put('/', (req, res) => {
       },
     )
       .then(() => {
-        res.send(200);
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '쪽지 읽기 완료',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -232,7 +239,11 @@ router.delete('/', (req, res) => {
       },
     )
       .then(() => {
-        res.send(200);
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '🚮 쪽지가 삭제되었습니다.',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.

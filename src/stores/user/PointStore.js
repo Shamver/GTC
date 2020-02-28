@@ -53,10 +53,10 @@ class PointStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data) {
-            this.totalPoint = response.data;
-          } else {
+          if (data.message === 'not logged in') {
             this.totalPoint = 0;
+          } else {
+            this.totalPoint = response.data;
           }
         })
         .catch((response) => {
