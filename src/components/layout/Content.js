@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 import Contents from '../Content';
 import Loading from '../util/Loading';
+import ScrollToTop from './ScrollToTop';
 
 const Home = lazy(() => import('../Content/Home'));
 const Posting = lazy(() => import('../Content/Board/Post/Posting'));
@@ -15,6 +16,7 @@ const Report = lazy(() => import('../util/Report'));
 const Content = () => (
   <BorderedDiv>
     <Suspense fallback={<Loading loading={1} />}>
+      <ScrollToTop />
       <Switch>
         <Route exact path="/" render={() => <Home />} />
         <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />

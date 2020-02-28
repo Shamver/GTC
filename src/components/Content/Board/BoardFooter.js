@@ -30,11 +30,11 @@ const BoardFooter = ({ path, noPagination, currentPage }) => (
     <InputGroupWrapper>
       <InputGroupWidth>
         <InputGroupAddon addonType="prepend">
-          <Input type="select">
+          <RightNoRadiusSelect type="select">
             <option>제목</option>
             <option>제목 + 내용</option>
             <option>닉네임</option>
-          </Input>
+          </RightNoRadiusSelect>
         </InputGroupAddon>
         <Input placeholder="검색어" />
         <InputGroupAddon addonType="append">
@@ -57,6 +57,12 @@ BoardFooter.defaultProps = {
   noPagination: false,
   currentPage: '1',
 };
+
+const RightNoRadiusSelect = styled(Input)`
+  border-bottom-right-radius: 0px !important;
+  border-top-right-radius: 0px !important;
+`;
+
 
 const InputGroupWrapper = styled.div`
   text-align : center;

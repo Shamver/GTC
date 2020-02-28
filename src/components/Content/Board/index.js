@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
@@ -10,8 +10,14 @@ import BoardFooter from './BoardFooter';
 import useStores from '../../../stores/useStores';
 
 const Board = ({ path, currentPage, noPagination }) => {
-  const { UtilLoadingStore } = useStores();
+  const { UtilLoadingStore, BoardPostStore } = useStores();
   const { doLoading } = UtilLoadingStore;
+  const { setCurrentPostId } = BoardPostStore;
+
+  useEffect(() => {
+    setCurrentPostId(0);
+  }, [setCurrentPostId]);
+
   doLoading();
   return (
     <BoardWrapper>
