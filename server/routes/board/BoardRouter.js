@@ -13,13 +13,13 @@ const SELECT_CURRENT_BOARD = `
 `;
 
 router.get('/', (req, res) => {
-  const { data } = req.query;
+  const { id } = req.query;
 
   Database.execute(
     (database) => database.query(
       SELECT_CURRENT_BOARD,
       {
-        ID: data.id,
+        ID: id,
       },
     )
       .then((rows) => {

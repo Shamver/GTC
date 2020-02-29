@@ -21,9 +21,12 @@ const UPDATE_BOARD_REPLY_DELETE = `
   WHERE ID = :REPLY_ID
 `;
 
+const SELECT_LAST_INSERT_ID = `
+  SELECT LAST_INSERT_ID() AS ID
+`;
+
 const INSERT_BOARD_REPLY = `
   INSERT INTO GTC_BOARD_REPLY (
-    ID,
     BP_ID,
     ID_REPLY,
     ID_UPPER,
@@ -35,7 +38,6 @@ const INSERT_BOARD_REPLY = `
     SECRET_YN,
     DELETE_YN
   ) VALUES (
-    (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp),
     :BP_ID,
     IFNULL(:REPLY_ID, (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
     IFNULL((SELECT ID_UPPER FROM (SELECT MIN(ID_UPPER) AS ID_UPPER FROM GTC_BOARD_REPLY WHERE ID = :REPLY_ID) as temp),(SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
@@ -159,17 +161,37 @@ router.post('/', (req, res) => {
         },
       ))
       .then((rows) => {
+        point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
+
         const { postWriter } = rows[0];
         if (postWriter !== data.writer) {
-          alertMiddleware();
+          return database.query(
+            SELECT_LAST_INSERT_ID,
+            {},
+          );
         }
 
-        point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
-        res.send(true);
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '댓글 작성 완료',
+        });
+        throw new Error('댓글 작성 완료');
+      })
+      .then((rows) => {
+        const { ID } = rows[0];
+        return alertMiddleware(database, ID);
+      })
+      .then(() => {
+        res.send({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '댓글 작성 완료',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Add Reply Success');
+    info('[INSERT, POST /api/board/reply] 댓글 등록 완료');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);

@@ -17,6 +17,7 @@ const PostList = ({ path, currentPage }) => {
     getBoardPostList(path, currentPage);
     setCurrentBoard(path);
   }, [path, getBoardPostList, setCurrentBoard, currentPage, ignoreList]);
+
   return boardPostList[path].map((data, index) => {
     onSet(index);
 
