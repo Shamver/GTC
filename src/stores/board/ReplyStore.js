@@ -149,7 +149,6 @@ class ReplyStore {
           } else if (response.data === 2) {
             toast.error('😳 해당 댓글에 답글이 달려있어 삭제하지 못해요!');
           }
-
           this.getReply(this.reply.bpId);
           this.setReplyEditId(0);
           this.modifyModeId = 0;
@@ -168,6 +167,7 @@ class ReplyStore {
       .then((response) => {
         if (response.data === 1) {
           toast.success('😊 해당 댓글 좋아요 완료!');
+          this.getReply(this.reply.bpId);
         } else if (response.data === 2) {
           toast.error('😳 이미 해당 댓글을 좋아합니다. ㅠㅠ');
         }

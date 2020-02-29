@@ -8,7 +8,8 @@ import {
   faClock, faEye, faBellSlash, faStar as farStar,
 } from '@fortawesome/free-regular-svg-icons';
 import {
-  faCommentDots, faBars, faStar as fasStar, faThumbsUp, faThumbsDown, faHeart,
+  faCommentDots, faBars, faStar as fasStar, faThumbsUp, faThumbsDown, faHeart, faPen,
+  faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import renderHTML from 'react-render-html';
@@ -22,17 +23,21 @@ import anonymous from '../../../../resources/images/anonymous.png';
 const PostContent = ({ match }) => {
   const {
     BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore, UserFavoriteStore,
-    BoardReportStore,
+    BoardReportStore, UtilAlertStore,
   } = useStores();
-  const { postView, recommendPost, currentPostUpperLower } = BoardPostStore;
+  const {
+    postView, recommendPost, currentPostUpperLower, deletePost,
+    setCurrentPostId,
+  } = BoardPostStore;
   const { postReplyList, setReplyOption } = BoardReplyStore;
   const { currentBoard } = BoardStore;
+  const { toggleConfirmAlert } = UtilAlertStore;
   const { loading } = UtilLoadingStore;
   const { toggleReport } = BoardReportStore;
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
     recommendCount, replyAllow, secretReplyAllow, notRecommendCount,
-    isFavorite,
+    isFavorite, myPostYN,
   } = postView;
   const { upper, lower } = currentPostUpperLower;
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
@@ -41,11 +46,20 @@ const PostContent = ({ match }) => {
 
   useEffect(() => {
     setReplyOption(replyAllow, secretReplyAllow);
-  }, [replyAllow, secretReplyAllow, setReplyOption]);
+    setCurrentPostId(postId);
+  }, [replyAllow, secretReplyAllow, setReplyOption, setCurrentPostId, postId]);
+
+  if (loading) {
+    return (
+      <Loading loading={1} />
+    );
+  }
 
   return (
     <ViewWrapper>
-      <MarginlessH3>{boardName}</MarginlessH3>
+      <BoardLink to={`/${currentBoard}`}>
+        <MarginlessH3>{boardName}</MarginlessH3>
+      </BoardLink>
       <br />
       <Loading loading={loading} />
       <Div loading={loading}>
@@ -91,18 +105,36 @@ const PostContent = ({ match }) => {
           </ContentWrapper>
           <InnerFooterContainer>
             <ListLink to={`/${currentBoard}`}>
-              <Button outline color="secondary" size="sm">
+              <GreyButton outline color="secondary" size="sm">
                 <FontAwesomeIcon icon={faBars} />
                 &nbsp;목록
-              </Button>
+              </GreyButton>
             </ListLink>
             &nbsp;
             <Button outline color="danger" size="sm" onClick={() => toggleReport(postId, 'RP01', title, writer)}>
               <FontAwesomeIcon icon={faBellSlash} />
               &nbsp;신고
             </Button>
+            { myPostYN === 'Y'
+              ? (
+                <>
+                  <RightSpan>
+                    <GreyButton color="secondary" size="sm" outline onClick={() => toggleConfirmAlert('해당 포스트를 삭제하시겠습니까?', () => deletePost(postId))}>
+                      <FontAwesomeIcon icon={faTrash} /> 삭제
+                    </GreyButton>
+                  </RightSpan>
+                  <RightSpan>
+                    <Link to={`/${currentBoard}/modify/${postId}`}>
+                      <GreyButton color="secondary" size="sm" outline>
+                        <FontAwesomeIcon icon={faPen} /> 수정
+                      </GreyButton>
+                    </Link>
+                  </RightSpan>
+                </>
+              )
+              : ''}
             <RightSpan>
-              <FavoriteButton
+              <GreyButton
                 outline={!isFavorite}
                 color="warning"
                 size="sm"
@@ -116,7 +148,7 @@ const PostContent = ({ match }) => {
               >
                 <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} />
                 &nbsp;즐겨찾기
-              </FavoriteButton>
+              </GreyButton>
             </RightSpan>
           </InnerFooterContainer>
         </PostViewWrapper>
@@ -158,6 +190,27 @@ PostContent.defaultProps = {
 
 const Div = styled.div`
   display: ${(props) => (props.loading ? 'none' : 'block')}
+`;
+
+const BoardLink = styled(Link)`
+  color : black;
+  text-decoration : none;
+  
+  &:hover {
+    color : black;
+    text-decoration : none;
+  }
+`;
+
+const GreyButton = styled(Button)`
+  background-color : white !important;
+  border-color: #ccc;
+  color : black !important;
+  &:hover {
+    background-color : #e6e6e6 !important;
+  }
+  
+  color: ${(props) => (props.outline ? 'black' : 'white')};
 `;
 
 const TopBottomLink = styled(Link)`
@@ -209,10 +262,6 @@ const TopBottomDiv = styled.div`
   width : 80px;
   display : inline-block;
   font-weight : bold;
-`;
-
-const FavoriteButton = styled(Button)`
-  color: ${(props) => (props.outline ? 'black' : 'white')}
 `;
 
 const TextCenterDiv = styled.div`
@@ -268,6 +317,12 @@ const CategoryAndTitle = styled.h4`
 
 const Title = styled.span`
   padding-left : 7px;
+  vertical-align: bottom;
+  display: inline-block;
+  width: 800px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `;
 
 const Category = styled.span`
@@ -278,6 +333,7 @@ const Category = styled.span`
 `;
 
 const RightSpan = styled.span`
+  margin-left : 5px;
   float : right;
 `;
 

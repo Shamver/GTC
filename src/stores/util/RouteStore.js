@@ -9,7 +9,11 @@ class RouteStore {
 
   @action setRoute = (history) => {
     this.history = history;
-  }
+  };
+
+  @action goBack = () => {
+    this.history.goBack();
+  };
 }
 
 export default RouteStore;

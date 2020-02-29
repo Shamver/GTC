@@ -24,11 +24,21 @@ class PostStore {
     crime: [],
   };
 
+  @observable homePostList = {
+    free: [],
+    cash: [],
+    trade: [],
+    notice: [],
+    qna: [],
+  };
+
   @observable currentBoardMaxPage = 0;
 
   @observable postView = {};
 
   @observable postMineList = [];
+
+  @observable currentPostId;
 
   @observable currentPostUpperLower = {
     upper: '',
@@ -38,6 +48,10 @@ class PostStore {
   constructor(root) {
     this.root = root;
   }
+
+  @action setCurrentPostId = (postId) => {
+    this.currentPostId = postId;
+  };
 
   @action addPost = () => {
     if (!this.postValidationCheck()) {
@@ -59,16 +73,51 @@ class PostStore {
         if (response.data) {
           this.root.UtilRouteStore.history.push('/free');
           toast.success('😊 포스팅이 등록되었어요!');
-          this.post = {
-            board: '',
-            category: '',
-            title: '',
-            text: '',
-            depth: '',
-            secret: 'N',
-            replyAllow: 'Y',
-            secretReplyAllow: 'N',
-          };
+        }
+      })
+      .catch((response) => { console.log(response); });
+
+    return true;
+  };
+
+  @action modifyPost = () => {
+    if (!this.postValidationCheck()) {
+      return false;
+    }
+
+    axios.put('/api/board/post', {
+      id: this.post.id,
+      board: this.post.board,
+      category: this.post.category,
+      title: this.post.title,
+      writer: this.root.UserStore.userData.id,
+      content: this.post.text,
+      depth: 1,
+      secret: this.post.secret,
+      replyAllow: this.post.replyAllow,
+      secretReplyAllow: this.post.secretReplyAllow,
+    })
+      .then((response) => {
+        if (response.data) {
+          this.root.UtilRouteStore.history.push('/free');
+          toast.success('😊 포스팅이 수정되었어요!');
+        }
+      })
+      .catch((response) => { console.log(response); });
+
+    return true;
+  };
+
+  @action deletePost = (id) => {
+    axios.delete('/api/board/post', {
+      params: {
+        id,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          this.root.UtilRouteStore.history.push('/free');
+          toast.success('😊 포스팅이 삭제되었어요!');
         }
       })
       .catch((response) => { console.log(response); });
@@ -100,6 +149,27 @@ class PostStore {
       .catch((response) => { console.log(response); });
   };
 
+  @action getHomePostList = (board) => {
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
+
+    axios.get('/api/board/post', {
+      params: {
+        board, userId, currentPage: 1, isHome: true,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          console.log(response.data);
+          this.homePostList = {
+            ...this.homePostList,
+            [board]: response.data,
+          };
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
+
   @action getPost = (id) => {
     const { getLately } = this.root.CookieLatelyStore;
     const { userData } = this.root.UserStore;
@@ -114,6 +184,35 @@ class PostStore {
           const [post] = response.data;
           this.postView = post;
           getLately();
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
+
+  @action getModifyPost = (id) => {
+    const { userData } = this.root.UserStore;
+    axios.get(`/api/board/post/${id}`, {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          const {
+            board, category, title, content,
+            secret, replyAllow, secretReplyAllow,
+          } = response.data[0];
+          this.post = {
+            ...this.post,
+            id,
+            board,
+            category,
+            title,
+            secret,
+            replyAllow,
+            secretReplyAllow,
+            text: content,
+          };
         }
       })
       .catch((response) => { console.log(response); });
@@ -153,6 +252,7 @@ class PostStore {
       .then((response) => {
         if (response.data === 1) {
           toast.success('😳 해당 포스팅 투표 완료!');
+          this.getPost(postId);
         } else if (response.data === 2) {
           toast.error('😳 이미 해당 포스팅에 투표가 완료되었어요!');
         }
@@ -214,7 +314,7 @@ class PostStore {
     this.post.board = board.toUpperCase();
   };
 
-  @action getPostMine = (() => {
+  @action getPostMine = () => {
     const { userData } = this.root.UserStore;
 
     if (userData) {
@@ -234,7 +334,20 @@ class PostStore {
     } else {
       this.postMineList = [];
     }
-  });
+  };
+
+  @action setPostClear = () => {
+    this.post = {
+      board: '',
+      category: '',
+      title: '',
+      text: '',
+      depth: '',
+      secret: 'N',
+      replyAllow: 'Y',
+      secretReplyAllow: 'N',
+    };
+  }
 }
 
 export default PostStore;

@@ -48,10 +48,12 @@ PostView.defaultProps = {
 
 const PostWrapper = styled.div`
   background-color : white;
+  border-bottom: 2px solid #ebeae8;
+  border-right: 2px solid #ebeae8;
   
   & .ck-content {
     height : 100px;
-    font-family: 'NanumSquareRound',sans-serif !important;
+    font-family: 'Nanum Gothic',sans-serif !important;
   }
   
   & .ck.ck-editor {

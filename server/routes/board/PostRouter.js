@@ -26,7 +26,7 @@ const SELECT_BOARD_POST_LIST = `
   FROM GTC_BOARD_POST P, (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
   WHERE B_ID = ':B_ID' AND P.WRITER != IFNULL(( SELECT TARGET_ID FROM GTC_USER_IGNORE WHERE FROM_ID =:USER_ID), -1)
   ORDER BY ID DESC    
-  LIMIT :CURRENT_PAGE, 25
+  LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
 
 const INSERT_BOARD_POST = `
@@ -88,6 +88,7 @@ const SELECT_BOARD_POST_SINGLE = `
   , if((SELECT F.POST_ID FROM GTC_USER_FAVORITE F WHERE F.USER_ID = :USER_ID AND F.POST_ID = P.ID), true, false) as isFavorite
   , P.TITLE AS title
   , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
+  , if(P.WRITER = :USER_ID, 'Y', 'N') AS myPostYN
   , P.DEPTH AS depth
   , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
   , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R02') as notRecommendCount
@@ -146,9 +147,26 @@ const SELECT_BOARD_POST_UPPER_AND_LOWER = `
   )
 `;
 
+const UPDATE_BOARD_POST = `
+  UPDATE GTC_BOARD_POST 
+  SET B_ID = ':BOARD'
+    , BC_ID = ':CATEGORY'
+    , TITLE = ':TITLE'
+    , CONTENT = ':CONTENT'
+    , SECRET = ':SECRET'
+    , SECRET_REPLY_ALLOW = ':SECRET_REPLY_ALLOW'
+    , REPLY_ALLOW = ':REPLY_ALLOW'
+   WHERE ID = :ID 
+`;
+
+const DELETE_BOARD_POST = `
+  DELETE FROM GTC_BOARD_POST 
+  WHERE ID = :ID 
+`;
+
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
-  const { board, userId } = req.query;
+  const { board, userId, isHome } = req.query;
   currentPage = currentPage || 1;
 
   Database.execute(
@@ -158,6 +176,7 @@ router.get('/', (req, res) => {
         B_ID: board.toUpperCase(),
         CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
+        PER_PAGE: isHome ? 9 : 25,
       },
     )
       .then((rows) => {
@@ -217,6 +236,89 @@ router.post('/', (req, res) => {
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('Get Post Add Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
+
+router.put('/', (req, res) => {
+  const data = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      UPDATE_BOARD_POST,
+      {
+        ID: data.id,
+        BOARD: data.board,
+        CATEGORY: data.category,
+        TITLE: data.title,
+        WRITER: data.writer,
+        CONTENT: data.content,
+        DEPTH: data.depth,
+        SECRET: data.secret,
+        SECRET_REPLY_ALLOW: data.secretReplyAllow,
+        REPLY_ALLOW: data.replyAllow,
+      },
+    )
+      .then(() => database.query(
+        SELECT_BOARD_POST_MAX_ID,
+        {},
+      ))
+      .then((rows) => {
+        const postData = {
+          ...data,
+          bpId: rows[0].id,
+        };
+
+        point('addPost', 'POST', postData);
+        res.send(true);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Get Post Add Success');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
+
+router.delete('/', (req, res) => {
+  const data = req.query;
+
+  Database.execute(
+    (database) => database.query(
+      DELETE_BOARD_POST,
+      {
+        ID: data.id,
+      },
+    )
+      .then(() => {
+        res.send(true);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('Delete Post Success');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);

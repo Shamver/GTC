@@ -5,7 +5,6 @@ import {
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
-import { faChartBar } from '@fortawesome/free-regular-svg-icons';
 import { observer } from 'mobx-react';
 import * as PropTypes from 'prop-types';
 import CKEditor from '@ckeditor/ckeditor5-react';
@@ -29,17 +28,23 @@ const BoardOptions = () => {
 
 
 const Posting = (props) => {
-  const { BoardStore, BoardPostStore } = useStores();
+  const { BoardStore, BoardPostStore, UtilRouteStore } = useStores();
   const {
     post, setPostBoard, onChangeValue, addPost,
+    getModifyPost, modifyPost, setPostClear,
   } = BoardPostStore;
-  const { match } = props;
+  const { goBack } = UtilRouteStore;
+  const { match, isModify } = props;
   const { params } = match;
-  const { board } = params;
+  const { board, id } = params;
 
   useEffect(() => {
+    setPostClear();
     setPostBoard(board);
-  }, [BoardStore, board, setPostBoard]);
+    if (isModify) {
+      getModifyPost(id);
+    }
+  }, [BoardStore, board, setPostBoard, getModifyPost, id, isModify, setPostClear]);
 
   return (
     <PostingWrapper>
@@ -70,19 +75,25 @@ const Posting = (props) => {
       />
       <PostingFooter>
         <CustomCheckbox type="checkbox" id="replyAllow" name="replyAllow" value="Y" label="댓글 허용" onChange={onChangeValue} checked={post.replyAllow === 'Y'} />
-        <CustomCheckbox type="checkbox" id="secret" name="secret" value="Y" label="비밀글" onChange={onChangeValue} />
-        <CustomCheckbox type="checkbox" id="secretReplyAllow" name="secretReplyAllow" value="Y" label="비밀 댓글 허용" onChange={onChangeValue} />
+        <CustomCheckbox type="checkbox" id="secret" name="secret" value="Y" label="비밀글" onChange={onChangeValue} checked={post.secret === 'Y'} />
+        <CustomCheckbox type="checkbox" id="secretReplyAllow" name="secretReplyAllow" value="Y" label="비밀 댓글 허용" onChange={onChangeValue} checked={post.secretReplyAllow === 'Y'} />
       </PostingFooter>
       <PostingFooter>
-        <MarginButton color="secondary">작성취소</MarginButton>
-        <MarginButton color="info">
-          <FontAwesomeIcon icon={faChartBar} />
-          &nbsp;설문 추가
-        </MarginButton>
-        <RightButton color="danger" onClick={addPost}>
-          <FontAwesomeIcon icon={faPen} />
-          &nbsp;쓰기
-        </RightButton>
+        <MarginButton onClick={goBack} color="secondary">작성취소</MarginButton>
+        { isModify
+          ? (
+            <RightButton color="danger" onClick={modifyPost}>
+              <FontAwesomeIcon icon={faPen} />
+              &nbsp;수정하기
+            </RightButton>
+          )
+          : (
+            <RightButton color="danger" onClick={addPost}>
+              <FontAwesomeIcon icon={faPen} />
+              &nbsp;쓰기
+            </RightButton>
+          )}
+
       </PostingFooter>
     </PostingWrapper>
   );
@@ -92,17 +103,25 @@ Posting.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       board: PropTypes.string,
+      id: PropTypes.string,
     }),
   }).isRequired,
+  isModify: PropTypes.bool,
+};
+
+Posting.defaultProps = {
+  isModify: false,
 };
 
 const PostingWrapper = styled.div`
+  border-bottom: 2px solid #ebeae8;
+  border-right: 2px solid #ebeae8;
   background-color : white;
   padding : 14px;
   
   & .ck-content {
     height : 500px;
-    font-family: 'NanumSquareRound',sans-serif !important;
+    font-family: 'Nanum Gothic',sans-serif !important;
   }
 `;
 

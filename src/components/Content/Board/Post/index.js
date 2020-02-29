@@ -14,7 +14,9 @@ import useStores from '../../../../stores/useStores';
 const Post = ({ data, index }) => {
   const {
     ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
+    BoardPostStore,
   } = useStores();
+  const { currentPostId } = BoardPostStore;
   const {
     id, title, writer, date, categoryName, recommendCount, replyCount,
     type, idWriter,
@@ -24,14 +26,18 @@ const Post = ({ data, index }) => {
   const { userData } = UserStore;
   const { addIgnore } = UserIgnoreStore;
 
-  const IsBestPost = recommendCount >= 1
+  const IsBestPost = recommendCount >= 10
     ? (<Star icon={faStar} />)
     : (<FontAwesomeIcon icon={faCommentDots} />);
 
   return (
-    <tr height="35" key={data.id}>
+    <TableRow height="35" key={data.id} currentPostId={currentPostId} postId={id}>
       <CenterTd width="50">
-        {recommendCount > 0 ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : ''}
+        {currentPostId === id ? '>>' : (
+          <>
+            {recommendCount > 0 ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : ''}
+          </>
+        )}
       </CenterTd>
       <CenterTd>
         { type !== 'notice' ? categoryName : ''}
@@ -67,7 +73,7 @@ const Post = ({ data, index }) => {
         </WriterDropdown>
       </CenterTdWriter>
       <CenterTd>{date}</CenterTd>
-    </tr>
+    </TableRow>
   );
 };
 
@@ -85,6 +91,10 @@ Post.propTypes = {
   }).isRequired,
   index: Proptypes.number.isRequired,
 };
+
+const TableRow = styled.tr`
+  background-color : ${(props) => (props.currentPostId === props.postId ? '#fff9e5;' : 'white')}
+`;
 
 const Star = styled(FontAwesomeIcon)`
   color : #efc839;

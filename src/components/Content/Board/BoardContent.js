@@ -18,6 +18,12 @@ const BoardContent = ({ path, currentPage }) => {
 
   const { loading } = UtilLoadingStore;
 
+  if (loading) {
+    return (
+      <Loading loading={1} />
+    );
+  }
+
   const tempData = {
     id: 1,
     title: '공지 채팅창 제재 기준입니다. (2018. 10. 19)',
@@ -44,7 +50,7 @@ const BoardContent = ({ path, currentPage }) => {
         </HeaderDiv>
         <ManginessTableNoBorder bordered hover size="sm">
           <tbody>
-            <Post data={tempData} />
+            <Post data={tempData} index={-1} />
           </tbody>
         </ManginessTableNoBorder>
         <ManginessTable bordered hover size="sm">

@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
 import Contents from '../Content';
 import Loading from '../util/Loading';
+import ScrollToTop from './ScrollToTop';
 
-const Main = lazy(() => import('../Content/Main'));
+const Home = lazy(() => import('../Content/Home'));
 const Posting = lazy(() => import('../Content/Board/Post/Posting'));
 const Alert = lazy(() => import('../util/Alert'));
 const Sign = lazy(() => import('../util/Sign'));
@@ -15,8 +16,9 @@ const Report = lazy(() => import('../util/Report'));
 const Content = () => (
   <BorderedDiv>
     <Suspense fallback={<Loading loading={1} />}>
+      <ScrollToTop />
       <Switch>
-        <Route exact path="/" render={() => <Main />} />
+        <Route exact path="/" render={() => <Home />} />
         <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
         <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
         <Route exact path="/setting" render={() => <Contents.Setting />} />
@@ -35,6 +37,8 @@ const Content = () => (
         <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
 
         <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
+
+        <Route exact path="/:board/modify/:id" render={({ match }) => <Posting match={match} isModify />} />
       </Switch>
       <Alert />
       <Sign />
@@ -56,14 +60,13 @@ const Content = () => (
 );
 
 const BorderedDiv = styled.div`
-  border-bottom: 2px solid #ebeae8;
-  border-right: 2px solid #ebeae8;
+  
   margin-bottom : 20px;
 `;
 
 const ToastContainerCustom = styled(ToastContainer)`
   & .Toastify__toast-body {
-    font-family : 'NanumSquareRound', sans-serif !important
+    font-family : 'Nanum Gothic', sans-serif !important
   }
   
   width : 380px !important;
