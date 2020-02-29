@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
 
 class PointStore {
   @observable pointList = [];
@@ -56,7 +56,7 @@ class PointStore {
           const { data } = response;
           if (data.SUCCESS) {
             if (data.CODE === 1) {
-              this.totalPoint = response.data;
+              this.totalPoint = data.DATA;
             } else {
               toast.info(data.MESSAGE);
             }

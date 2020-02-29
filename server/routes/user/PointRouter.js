@@ -77,7 +77,12 @@ router.get('/sum', (req, res) => {
       .then((rows) => {
         let { point } = rows[0];
         point = point || 0;
-        res.send(point);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '포인트 합계 조회',
+          DATA: point,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.

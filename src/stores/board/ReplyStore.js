@@ -36,8 +36,15 @@ class ReplyStore {
         },
       })
         .then((response) => {
-          if (response.data) {
-            this.replyMineList = response.data;
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              this.replyMineList = data.DATA;
+            } else {
+              toast.info(data.MESSAGE);
+            }
+          } else {
+            toast.error(data.MESSAGE);
           }
         })
         .catch((response) => {
@@ -78,15 +85,22 @@ class ReplyStore {
       secretYN: this.reply.secretYN,
     })
       .then((response) => {
-        if (response.data) {
-          toast.success('😊 댓글이 정상적으로 등록되었어요!');
-          this.reply = {
-            text: '',
-            bpId: this.reply.bpId,
-            secretYN: 'N',
-          };
-          this.getReply(this.reply.bpId);
-          this.setReplyEditId(0);
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            toast.success(data.MESSAGE);
+            this.reply = {
+              text: '',
+              bpId: this.reply.bpId,
+              secretYN: 'N',
+            };
+            this.getReply(this.reply.bpId);
+            this.setReplyEditId(0);
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
@@ -105,8 +119,15 @@ class ReplyStore {
       },
     })
       .then((response) => {
-        if (response.data) {
-          this.postReplyList = response.data;
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.postReplyList = data.DATA;
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
@@ -119,12 +140,19 @@ class ReplyStore {
       id: this.modifyModeId,
       content: this.reply.text,
     }).then((response) => {
-      if (response.data) {
-        toast.success('😊 댓글이 수정되었어요!');
-        this.reply.text = '';
-        this.getReply(this.reply.bpId);
-        this.setReplyEditId(0);
-        this.modifyModeId = 0;
+      const { data } = response;
+      if (data.SUCCESS) {
+        if (data.CODE === 1) {
+          toast.success(data.MESSAGE);
+          this.reply.text = '';
+          this.getReply(this.reply.bpId);
+          this.setReplyEditId(0);
+          this.modifyModeId = 0;
+        } else {
+          toast.info(data.MESSAGE);
+        }
+      } else {
+        toast.error(data.MESSAGE);
       }
     })
       .catch((response) => { console.log(response); });
@@ -142,17 +170,23 @@ class ReplyStore {
       },
     })
       .then((response) => {
-        if (response.data) {
-          console.log(response.data);
-          if (response.data === 1) {
-            toast.success('😊 댓글이 삭제되었어요!');
-          } else if (response.data === 2) {
-            toast.error('😳 해당 댓글에 답글이 달려있어 삭제하지 못해요!');
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            toast.success(data.MESSAGE);
+            this.reply.text = '';
+            this.getReply(this.reply.bpId);
+            this.setReplyEditId(0);
+            this.modifyModeId = 0;
+          } else {
+            toast.info(data.MESSAGE);
           }
 
           this.getReply(this.reply.bpId);
           this.setReplyEditId(0);
           this.modifyModeId = 0;
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
@@ -166,10 +200,15 @@ class ReplyStore {
       uId: this.root.UserStore.userData.id,
     })
       .then((response) => {
-        if (response.data === 1) {
-          toast.success('😊 해당 댓글 좋아요 완료!');
-        } else if (response.data === 2) {
-          toast.error('😳 이미 해당 댓글을 좋아합니다. ㅠㅠ');
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            toast.success(data.MESSAGE);
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
