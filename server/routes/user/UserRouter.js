@@ -31,7 +31,7 @@ router.delete('/withdrawal', (req, res) => {
       },
     )
       .then(() => {
-        res.send({
+        res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '회원탈퇴 완료',
@@ -73,7 +73,7 @@ router.put('/info', (req, res) => {
       },
     )
       .then(() => {
-        res.send({
+        res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '회원정보 수정완료',

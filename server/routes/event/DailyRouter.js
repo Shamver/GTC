@@ -75,7 +75,12 @@ router.get('/', (req, res) => {
       SELECT_EVENT_DAILY_LIST,
     )
       .then((rows) => {
-        res.send(rows);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '출석체크 목록 조회',
+          DATA: rows,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -107,7 +112,12 @@ router.get('/last', (req, res) => {
       },
     )
       .then((rows) => {
-        res.send(rows);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '출석체크 마지막 한 날 조회',
+          DATA: rows,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -140,7 +150,7 @@ router.post('/', (req, res) => {
     )
       .then((rows) => {
         if (rows.length >= 1) {
-          res.send({
+          res.json({
             SUCCESS: true,
             CODE: 2,
             MESSAGE: '오늘은 이미 출석체크를 했습니다.',
@@ -157,7 +167,7 @@ router.post('/', (req, res) => {
         }
       })
       .then(() => {
-        res.send({
+        res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '출석체크가 완료되었습니다!',

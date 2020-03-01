@@ -54,13 +54,16 @@ class UserStore {
 
     axios.post('/api/auth/register', this.registerData)
       .then((response) => {
-        if (response.data) {
-          if (response.data[0] && response.data[0].count === 1) {
-            toggleAlert('동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.');
-          } else {
-            toggleAlert('가입이 완료되었습니다.');
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            toggleAlert(data.MESSAGE);
             toggleSign();
+          } else {
+            toggleAlert(data.MESSAGE);
           }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
@@ -71,12 +74,17 @@ class UserStore {
   @action login = (email) => {
     axios.post('/api/auth/login', { email })
       .then((response) => {
-        if (response.data) {
-          toast.success(response.data.MESSAGE);
-          if (response.data.LOGIN_SUCCESS) {
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            toast.success(response.data.MESSAGE);
             this.userData = response.data.token;
             this.cookieCheck();
+          } else {
+            toast.info(data.MESSAGE);
           }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
@@ -88,12 +96,19 @@ class UserStore {
     const { history } = this.root.UtilRouteStore;
     axios.post('/api/auth/logout', {})
       .then((response) => {
-        if (response.data.type === 'LOGOUT') {
-          toast.success(text);
-          this.cookieCheck();
-          if (history.location.pathname !== '/') {
-            history.push('/');
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            toast.success(text);
+            this.cookieCheck();
+            if (history.location.pathname !== '/') {
+              history.push('/');
+            }
+          } else {
+            toast.info(data.MESSAGE);
           }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
@@ -104,8 +119,13 @@ class UserStore {
   @action cookieCheck = () => {
     axios.get('/api/auth/check', {})
       .then((response) => {
-        if (response.data.success) {
-          this.userData = response.data.info;
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.userData = data.DATA;
+          } else {
+            toast.info(data.MESSAGE);
+          }
         } else {
           this.userData = null;
         }
@@ -117,7 +137,6 @@ class UserStore {
 
 
   @action onRegisterChangeValue = (event) => {
-    console.log(event.target.name);
     this.registerData = {
       ...this.registerData,
       [event.target.name]: event.target.value,

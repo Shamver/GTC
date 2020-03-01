@@ -88,7 +88,7 @@ router.post('/', (req, res) => {
     )
       .then((rows) => {
         if (rows.length >= 1) {
-          res.send({
+          res.json({
             SUCCESS: true,
             CODE: 2,
             MESSAGE: '😓 이미 즐겨찾기된 게시물입니다ㅠ',
@@ -105,7 +105,7 @@ router.post('/', (req, res) => {
         }
       })
       .then(() => {
-        res.send({
+        res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '★ 즐겨찾기 추가됨',
@@ -143,7 +143,7 @@ router.delete('/', (req, res) => {
       },
     )
       .then(() => {
-        res.send({
+        res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '☆ 즐겨찾기 해제됨',

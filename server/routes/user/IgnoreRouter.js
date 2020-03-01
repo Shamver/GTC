@@ -63,9 +63,19 @@ router.get('/', (req, res) => {
               id: i,
             };
           });
-          res.send(returnRows);
+          res.json({
+            SUCCESS: true,
+            CODE: 1,
+            MESSAGE: '차단 목록 조회',
+            DATA: returnRows,
+          });
         } else {
-          res.send(rows);
+          res.json({
+            SUCCESS: true,
+            CODE: 1,
+            MESSAGE: '차단 목록 조회',
+            DATA: rows,
+          });
         }
       }),
   ).then(() => {
@@ -101,7 +111,7 @@ router.post('/', (req, res) => {
     )
       .then((rows) => {
         if (rows.length >= 1) {
-          res.send({
+          res.json({
             SUCCESS: true,
             CODE: 2,
             MESSAGE: '😓 이미 차단한 유저입니다ㅠ',
@@ -118,7 +128,7 @@ router.post('/', (req, res) => {
         }
       })
       .then(() => {
-        res.send({
+        res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '✔ 성공적으로 차단되었습니다!',
@@ -163,7 +173,7 @@ router.delete('/', (req, res) => {
       },
     )
       .then(() => {
-        res.send({
+        res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '✔ 성공적으로 삭제되었습니다!',

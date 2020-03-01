@@ -17,6 +17,7 @@ const SELECT_USER_POINT_LIST = `
   , date_format(DATE, '%Y-%m-%d %H:%i:%s') AS date
   FROM GTC_USER_POINT, (SELECT @ROWNUM := :ROWNUM) AS TEMP
   WHERE USER_ID = :USER_ID
+  ORDER BY DATE DESC
   LIMIT :ROWNUM, :MAX_COUNT
 `;
 
@@ -43,7 +44,12 @@ router.get('/', (req, res) => {
       },
     )
       .then((rows) => {
-        res.send(rows.reverse());
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '포인트 목록 조회',
+          DATA: rows,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.

@@ -55,7 +55,11 @@ router.get('/', (req, res) => {
       }
     });
   } else {
-    res.send(200);
+    res.json({
+      SUCCESS: true,
+      CODE: 2,
+      MESSAGE: '최근 읽은 게시물이 없습니다.',
+    });
   }
 });
 
@@ -66,7 +70,7 @@ router.delete('/', (req, res) => {
   const resetCookie = del(lately, id.toString());
 
   res.cookie('lately', resetCookie, { httpOnly: true });
-  res.send({
+  res.json({
     SUCCESS: true,
     CODE: 1,
     MESSAGE: '😊 성공적으로 삭제되었습니다!',

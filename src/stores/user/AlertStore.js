@@ -21,11 +21,18 @@ class AlertStore {
         },
       })
         .then((response) => {
-          if (response.data) {
-            this.alertList = response.data;
-            if (response.data.length > 0) {
-              this.alertCount = response.data.filter((v) => v.isRead === 'N').length;
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              this.alertList = data.DATA;
+              if (data.DATA.length > 0) {
+                this.alertCount = data.DATA.filter((v) => v.isRead === 'N').length;
+              }
+            } else {
+              toast.info(data.MESSAGE);
             }
+          } else {
+            toast.error(data.MESSAGE);
           }
         })
         .catch((response) => {

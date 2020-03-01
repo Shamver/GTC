@@ -19,8 +19,15 @@ class IgnoreStore {
         },
       })
         .then((response) => {
-          if (response.data) {
-            this.ignoreList = response.data;
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              this.ignoreList = data.DATA;
+            } else {
+              toast.info(data.MESSAGE);
+            }
+          } else {
+            toast.error(data.MESSAGE);
           }
         })
         .catch((response) => {

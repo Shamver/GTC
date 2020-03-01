@@ -24,15 +24,21 @@ class PointStore {
         },
       })
         .then((response) => {
-          if (response.data) {
-            this.pointList = response.data;
-
-            if (response.data.length === 0) {
-              this.currentPointMaxPage = 0;
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              this.pointList = data.DATA;
+              if (data.DATA.length === 0) {
+                this.currentPointMaxPage = 0;
+              } else {
+                const { pageCount } = data.DATA[0];
+                this.currentPointMaxPage = pageCount;
+              }
             } else {
-              const { pageCount } = response.data[0];
-              this.currentPointMaxPage = pageCount;
+              toast.info(data.MESSAGE);
             }
+          } else {
+            toast.error(data.MESSAGE);
           }
         })
         .catch((response) => {

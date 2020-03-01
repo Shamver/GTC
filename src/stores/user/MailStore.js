@@ -27,8 +27,14 @@ class MailStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data) {
-          this.sentMailList = data;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.sentMailList = data.DATA;
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => console.log(response));
@@ -43,8 +49,14 @@ class MailStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data) {
-          this.getMailList = data;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.getMailList = data.DATA;
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => console.log(response));
