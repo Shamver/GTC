@@ -24,6 +24,7 @@ const userPointApi = require('./routes/user/PointRouter');
 const userMailApi = require('./routes/user/MailRouter');
 const cookieLatelyApi = require('./routes/cookie/LatelyRouter');
 const eventDailyApi = require('./routes/event/DailyRouter');
+const systemCodeApi = require('./routes/system/CodeRouter');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -61,6 +62,8 @@ app.use('/api/board', boardApi);
 app.use('/api/cookie/lately', cookieLatelyApi);
 
 app.use('/api/event/daily', eventDailyApi);
+
+app.use('/api/system/code', systemCodeApi);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => info(`Listening on port ${port}...`));

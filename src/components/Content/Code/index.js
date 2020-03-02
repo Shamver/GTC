@@ -1,6 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Table } from 'reactstrap';
+import useStores from "../../../stores/useStores";
+
+const CodeGroupList = () => {
+  useEffect()
+  return (
+    <tr>
+
+    </tr>
+  )
+};
+
 
 const Code = () => (
   <BoardWrapper>
@@ -8,7 +19,7 @@ const Code = () => (
       <h3>코드 관리</h3>
       <CodeTableWrapper>
         <CodeCol>
-          <Table bordered hover>
+          <CodeTable bordered hover>
             <thead>
               <tr>
                 <th>공통 코드 그룹</th>
@@ -28,7 +39,7 @@ const Code = () => (
                 <td>게시판들이 정의된 그룹</td>
               </tr>
             </tbody>
-          </Table>
+          </CodeTable>
         </CodeCol>
         <CodeCol>
           <Table bordered hover>
@@ -52,6 +63,12 @@ const Code = () => (
     </TableWrapper>
   </BoardWrapper>
 );
+
+const CodeTable = styled(Table)`
+  & > tbody > tr {
+    cursor : pointer;
+  }
+`;
 
 const NoSelectGroup = styled.td`
   text-align : center;
