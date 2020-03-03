@@ -1,16 +1,28 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Table } from 'reactstrap';
-import useStores from "../../../stores/useStores";
+import { observer } from 'mobx-react';
+import useStores from '../../../stores/useStores';
 
-const CodeGroupList = () => {
-  useEffect()
-  return (
-    <tr>
+const CodeGroupList = observer(() => {
+  const { SystemCodeStore } = useStores();
+  const { getCodeGroupList, codeGroupList } = SystemCodeStore;
+  useEffect(() => {
+    getCodeGroupList();
+  }, [getCodeGroupList]);
 
-    </tr>
-  )
-};
+  console.log(codeGroupList.length);
+  return codeGroupList.map((data) => {
+    const { group, groupName, groupDesc } = data;
+    return (
+      <tr>
+        <td>{group}</td>
+        <td>{groupName}</td>
+        <td>{groupDesc}</td>
+      </tr>
+    );
+  });
+});
 
 
 const Code = () => (
@@ -28,16 +40,7 @@ const Code = () => (
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>GTC_BOARD_CATEGORY</td>
-                <td>게시판 카테고리</td>
-                <td>여러 게시판들의 카테고리를 정의해두는 그룹</td>
-              </tr>
-              <tr>
-                <td>GTC_BOARD</td>
-                <td>게시판</td>
-                <td>게시판들이 정의된 그룹</td>
-              </tr>
+              <CodeGroupList />
             </tbody>
           </CodeTable>
         </CodeCol>

@@ -6,10 +6,14 @@ const { error, info } = require('../../log-config');
 const Database = require('../../Database');
 
 const SELECT_CODE_GROUP = `
-  SELECT * FROM GTC_CODE_GROUP
+  SELECT
+    CMGRP AS 'group'
+    , CMGRP_NM AS groupName
+    , CMGRP_DESC AS groupDesc
+  FROM GTC_CODE_GROUP
 `;
 
-router.get('/', (req, res) => {
+router.get('/group', (req, res) => {
   Database.execute(
     (database) => database.query(
       SELECT_CODE_GROUP,

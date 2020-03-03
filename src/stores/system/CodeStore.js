@@ -8,10 +8,11 @@ class CodeStore {
     this.root = root;
   }
 
-  @action getGroupCodeList = () => {
-    axios.get('/api/system/code')
+  @action getCodeGroupList = () => {
+    axios.get('/api/system/code/group')
       .then((response) => {
         if (response.data) {
+          console.log(response.data);
           this.codeGroupList = response.data;
         }
       })
