@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Table } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
+import * as Proptypes from 'prop-types';
 
 const CodeGroupList = observer(() => {
   const { SystemCodeStore } = useStores();
@@ -11,19 +12,56 @@ const CodeGroupList = observer(() => {
     getCodeGroupList();
   }, [getCodeGroupList]);
 
-  console.log(codeGroupList.length);
-  return codeGroupList.map((data) => {
-    const { group, groupName, groupDesc } = data;
-    return (
-      <tr>
-        <td>{group}</td>
-        <td>{groupName}</td>
-        <td>{groupDesc}</td>
-      </tr>
-    );
-  });
+  return codeGroupList.map((data) => (<CodeGroup data={data} key={data.group} />));
 });
 
+const CodeGroup = ({ data }) => {
+  const { SystemCodeStore } = useStores();
+  const { getCodeList } = SystemCodeStore;
+  const { group, groupName, groupDesc } = data;
+  return (
+    <tr onClick={() => getCodeList(group)}>
+      <td>{group}</td>
+      <td>{groupName}</td>
+      <td>{groupDesc}</td>
+    </tr>
+  );
+};
+
+CodeGroup.propTypes = {
+  data: Proptypes.shape({
+    group: Proptypes.string,
+    groupName: Proptypes.string,
+    groupDesc: Proptypes.string,
+  }).isRequired,
+};
+
+const CodeList = observer(() => {
+  const { SystemCodeStore } = useStores();
+  const { codeList } = SystemCodeStore;
+  return codeList.map((data) => (<CodeRow data={data} key={data.group} />));
+});
+
+const CodeRow = ({ data }) => {
+  const { code, codeName, codeOrder, codeDesc, codeUseYN } = data;
+  return (
+    <tr>
+      <td>{code}</td>
+      <td>{codeOrder}</td>
+      <td>{codeName}</td>
+      <td>{codeDesc}</td>
+      <td>{codeUseYN}</td>
+    </tr>
+  );
+};
+
+CodeGroup.propTypes = {
+  data: Proptypes.shape({
+    group: Proptypes.string,
+    groupName: Proptypes.string,
+    groupDesc: Proptypes.string,
+  }).isRequired,
+};
 
 const Code = () => (
   <BoardWrapper>
@@ -49,16 +87,17 @@ const Code = () => (
             <thead>
               <tr>
                 <th>공통 코드</th>
-                <th>정렬 순서</th>
                 <th>공통 코드명</th>
+                <th>정렬 순서</th>
                 <th>공통 코드 설명</th>
                 <th>사용 여부</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <NoSelectGroup colSpan="5">공통 코드 그룹을 더블 클릭하여 조회하세요!</NoSelectGroup>
+                <NoSelectGroup colSpan="5">공통 코드 그룹을 클릭하여 조회하세요!</NoSelectGroup>
               </tr>
+              <CodeList />
             </tbody>
           </Table>
         </CodeCol>
