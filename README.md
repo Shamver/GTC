@@ -11,7 +11,7 @@
 ## 사용한 기술 스택 및 라이브러리, 프레임워크, 아키텍쳐
 
 - react
-- code-splitting
+- code-splitting (lazy import)
 - express
 - mobx
 - react-router
