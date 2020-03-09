@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { Table } from 'reactstrap';
+import { Table, Button } from 'reactstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { observer } from 'mobx-react';
-import useStores from '../../../stores/useStores';
 import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
 
 const CodeGroupList = observer(() => {
   const { SystemCodeStore } = useStores();
@@ -24,6 +26,16 @@ const CodeGroup = ({ data }) => {
       <td>{group}</td>
       <td>{groupName}</td>
       <td>{groupDesc}</td>
+      <CenterPaddingTd>
+        <Button size="sm" color="danger">
+          <FontAwesomeIcon icon={faEdit} />
+        </Button>
+      </CenterPaddingTd>
+      <CenterPaddingTd>
+        <Button size="sm" color="danger">
+          <FontAwesomeIcon icon={faTrash} />
+        </Button>
+      </CenterPaddingTd>
     </tr>
   );
 };
@@ -39,27 +51,50 @@ CodeGroup.propTypes = {
 const CodeList = observer(() => {
   const { SystemCodeStore } = useStores();
   const { codeList } = SystemCodeStore;
+
+  if (!codeList.length) {
+    return (
+      <tr>
+        <NoSelectGroup colSpan="7">공통 코드 그룹을 클릭하여 조회하세요!</NoSelectGroup>
+      </tr>
+    );
+  }
+
   return codeList.map((data) => (<CodeRow data={data} key={data.group} />));
 });
 
 const CodeRow = ({ data }) => {
-  const { code, codeName, codeOrder, codeDesc, codeUseYN } = data;
+  const {
+    code, codeName, codeOrder, codeDesc, codeUseYN,
+  } = data;
   return (
     <tr>
       <td>{code}</td>
-      <td>{codeOrder}</td>
       <td>{codeName}</td>
+      <CenterTd>{codeOrder}</CenterTd>
       <td>{codeDesc}</td>
-      <td>{codeUseYN}</td>
+      <CenterTd>{codeUseYN}</CenterTd>
+      <CenterPaddingTd>
+        <Button size="sm" color="danger">
+          <FontAwesomeIcon icon={faEdit} />
+        </Button>
+      </CenterPaddingTd>
+      <CenterPaddingTd>
+        <Button size="sm" color="danger">
+          <FontAwesomeIcon icon={faTrash} />
+        </Button>
+      </CenterPaddingTd>
     </tr>
   );
 };
 
-CodeGroup.propTypes = {
+CodeRow.propTypes = {
   data: Proptypes.shape({
-    group: Proptypes.string,
-    groupName: Proptypes.string,
-    groupDesc: Proptypes.string,
+    code: Proptypes.string,
+    codeName: Proptypes.string,
+    codeOrder: Proptypes.number,
+    codeDesc: Proptypes.string,
+    codeUseYN: Proptypes.string,
   }).isRequired,
 };
 
@@ -69,12 +104,21 @@ const Code = () => (
       <h3>코드 관리</h3>
       <CodeTableWrapper>
         <CodeCol>
+          <PaddedDiv>
+            <RightButton size="sm" color="danger">
+              <FontAwesomeIcon icon={faPlus} />
+              &nbsp;
+              코드 그룹 추가
+            </RightButton>
+          </PaddedDiv>
           <CodeTable bordered hover>
             <thead>
               <tr>
                 <th>공통 코드 그룹</th>
                 <th>공통 그룹명</th>
                 <th>공통 그룹 설명</th>
+                <CenterTh>수정</CenterTh>
+                <CenterTh>삭제</CenterTh>
               </tr>
             </thead>
             <tbody>
@@ -83,20 +127,26 @@ const Code = () => (
           </CodeTable>
         </CodeCol>
         <CodeCol>
+          <PaddedDiv>
+            <RightButton size="sm" color="danger">
+              <FontAwesomeIcon icon={faPlus} />
+              &nbsp;
+              코드 추가
+            </RightButton>
+          </PaddedDiv>
           <Table bordered hover>
             <thead>
               <tr>
                 <th>공통 코드</th>
                 <th>공통 코드명</th>
-                <th>정렬 순서</th>
+                <CenterTh width="50">순서</CenterTh>
                 <th>공통 코드 설명</th>
-                <th>사용 여부</th>
+                <CenterTh width="80">사용 여부</CenterTh>
+                <CenterTh width="66">수정</CenterTh>
+                <CenterTh width="66">삭제</CenterTh>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <NoSelectGroup colSpan="5">공통 코드 그룹을 클릭하여 조회하세요!</NoSelectGroup>
-              </tr>
               <CodeList />
             </tbody>
           </Table>
@@ -105,6 +155,27 @@ const Code = () => (
     </TableWrapper>
   </BoardWrapper>
 );
+
+const PaddedDiv = styled.div`
+  padding-bottom : 10px;
+  height : 40px;
+`;
+
+const RightButton = styled(Button)`
+  float : right;
+`;
+
+const CenterTd = styled.td`
+  text-align : center;
+`;
+
+const CenterPaddingTd = styled(CenterTd)`
+  padding : .4rem !important;
+`;
+
+const CenterTh = styled.th`
+  text-align : center;
+`;
 
 const CodeTable = styled(Table)`
   & > tbody > tr {
