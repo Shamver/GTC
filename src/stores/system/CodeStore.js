@@ -6,8 +6,24 @@ class CodeStore {
 
   @observable codeList = [];
 
+  @observable isAddCodeGroup = false;
+
+  @observable isAddCode = false;
+
   constructor(root) {
     this.root = root;
+  }
+
+  @action addCodeGroup = () => {
+    axios.post('/api/system/code/group')
+      .then((response) => {
+        if (response.data) {
+          this.codeGroupList = response.data;
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
   }
 
   @action getCodeGroupList = () => {
@@ -29,15 +45,21 @@ class CodeStore {
       },
     })
       .then((response) => {
-
         if (response.data) {
-          console.log(response.data);
           this.codeList = response.data;
         }
       })
       .catch((response) => {
         console.log(response);
       });
+  };
+
+  @action setIsAddCodeGroup = (value) => {
+    this.isAddCodeGroup = value;
+  };
+
+  @action setIsAddCode = (value) => {
+    this.isAddCode = value;
   };
 }
 
