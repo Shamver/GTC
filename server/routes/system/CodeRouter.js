@@ -13,6 +13,16 @@ const SELECT_CODE_GROUP = `
   FROM GTC_CODE_GROUP
 `;
 
+const INSERT_CODE_GROUP = `
+  INSERT INTO GTC_CODE_GROUP
+  VALUES (
+    ':ID'
+    , ':NAME'
+    , ':DESC'
+    , sysdate()
+  )
+`;
+
 const SELECT_CODE = `
   SELECT
     CMGRP AS codeGroup
@@ -25,6 +35,40 @@ const SELECT_CODE = `
   WHERE CMGRP = ':CODE_GROUP'
 `;
 
+
+router.post('/group', (req, res) => {
+  const { id, name, desc } = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      INSERT_CODE_GROUP,
+      {
+        ID: id,
+        NAME: name,
+        DESC: desc,
+      },
+    )
+      .then(() => {
+        res.send(true);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('[INSERT, GET /api/system/code/group] 시스템 코드그룹 추가');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
 
 router.get('/group', (req, res) => {
   Database.execute(

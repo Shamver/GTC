@@ -1,40 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import { Table, Button, Input } from 'reactstrap';
+import { Table, Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import CodeGroupList from './CodeGroupList';
 import CodeList from './CodeList';
 import useStores from '../../../stores/useStores';
-
-const NewCodeGroup = () => {
-  const { SystemCodeStore } = useStores();
-  const { setIsAddCodeGroup } = SystemCodeStore;
-  return (
-    <tr>
-      <td>
-        <Input size="sm" placeholder="공통 코드 그룹" />
-      </td>
-      <td>
-        <Input size="sm" placeholder="공통 그룹명" />
-      </td>
-      <td>
-        <Input size="sm" placeholder="공통 그룹 설명" />
-      </td>
-      <CenterPaddingTd>
-        <Button size="sm" color="danger">
-          저장
-        </Button>
-      </CenterPaddingTd>
-      <CenterPaddingTd>
-        <Button size="sm" color="danger" onClick={() => setIsAddCodeGroup(false)}>
-          취소
-        </Button>
-      </CenterPaddingTd>
-    </tr>
-  );
-};
+import NewCodeGroup from './NewCodeGroup';
 
 const Code = () => {
   const { SystemCodeStore } = useStores();
@@ -98,15 +71,6 @@ const Code = () => {
     </BoardWrapper>
   );
 };
-
-
-const CenterTd = styled.td`
-  text-align : center;
-`;
-
-const CenterPaddingTd = styled(CenterTd)`
-  padding : .8rem !important;
-`;
 
 const PaddedDiv = styled.div`
   padding-bottom : 10px;
