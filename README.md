@@ -31,3 +31,8 @@
 - webpack
 - http-proxy-middleware
 - npm-run-all
+- fort-awesome
+- winston
+- classnames
+- react-toastify
+- ckeditor5
