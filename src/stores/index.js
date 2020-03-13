@@ -28,6 +28,8 @@ import CookieLatelyStore from './cookie/LatelyStore';
 
 import EventDailyStore from './event/DailyStore';
 
+import SystemCodeStore from './system/CodeStore';
+
 class RootStore {
   constructor() {
     this.UserStore = new UserStore(this);
@@ -59,6 +61,8 @@ class RootStore {
     this.CookieLatelyStore = new CookieLatelyStore(this);
 
     this.EventDailyStore = new EventDailyStore(this);
+
+    this.SystemCodeStore = new SystemCodeStore(this);
   }
 }
 

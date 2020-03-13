@@ -39,6 +39,8 @@ ReactDOM.render((
     CookieLatelyStore={stores.CookieLatelyStore}
 
     EventDailyStore={stores.EventDailyStore}
+
+    SystemCodeStore={stores.SystemCodeStore}
   >
     <Router>
       <Route component={App} />

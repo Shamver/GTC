@@ -5,7 +5,7 @@ import {
 } from 'reactstrap';
 import {
   faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock, faQuestion, faComments, faAt,
-  faExclamationTriangle,
+  faExclamationTriangle, faCode,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
@@ -63,6 +63,11 @@ const Category = () => (
       <MenuLink to="/consult" activeClassName="active">
         <MenuDiv>
           <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
+        </MenuDiv>
+      </MenuLink>
+      <MenuLink to="/code" activeClassName="active">
+        <MenuDiv>
+          <FaiPink icon={faCode} className="fa-fw" />&nbsp;&nbsp; 코드 관리
         </MenuDiv>
       </MenuLink>
     </MenuWrapper>

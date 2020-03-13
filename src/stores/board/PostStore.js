@@ -160,7 +160,6 @@ class PostStore {
     })
       .then((response) => {
         if (response.data) {
-          console.log(response.data);
           this.homePostList = {
             ...this.homePostList,
             [board]: response.data,
