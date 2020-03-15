@@ -11,6 +11,11 @@ class CodeStore {
 
   @observable isAddCode = false;
 
+  @observable groupEditModeId;
+
+  @observable codeEditModeId;
+
+
   @observable codeGroup = {
     id: '',
     name: '',
@@ -58,6 +63,25 @@ class CodeStore {
       });
   };
 
+  @action modifyCodeGroup = () => {
+    axios.put('/api/system/code/group', this.codeGroup)
+      .then((response) => {
+        if (response.data) {
+          this.codeGroup = {
+            id: '',
+            name: '',
+            desc: '',
+          };
+          this.getCodeGroupList();
+          this.setIsAddCodeGroup(false);
+          toast.success('😳 코드 그룹 수정 완료!');
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+  };
+
   @action getCodeList = (codeGroup) => {
     axios.get('/api/system/code', {
       params: {
@@ -76,11 +100,19 @@ class CodeStore {
 
   @action setIsAddCodeGroup = (value) => {
     this.isAddCodeGroup = value;
+    this.groupEditModeId = null;
   };
 
   @action setIsAddCode = (value) => {
     this.isAddCode = value;
   };
+
+  @action setGroupEditModeId = (value) => {
+    this.groupEditModeId = value.id;
+    this.isAddCodeGroup = false;
+    this.codeGroup = value;
+  };
+
 
   @action onChangeCodeGroup = (event) => {
     this.codeGroup = {

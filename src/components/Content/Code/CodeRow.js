@@ -4,11 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
-
 const CodeRow = ({ data }) => {
   const {
     code, codeName, codeOrder, codeDesc, codeUseYN,
   } = data;
+
   return (
     <tr>
       <td>{code}</td>

@@ -23,6 +23,14 @@ const INSERT_CODE_GROUP = `
   )
 `;
 
+const UPDATE_CODE_GROUP = `
+  UPDATE GTC_CODE_GROUP
+  SET  
+    CMGRP_NM = ':NAME'
+    , CMGRP_DESC = ':DESC'
+  WHERE CMGRP = ':ID'
+`;
+
 const SELECT_CODE = `
   SELECT
     CMGRP AS codeGroup
@@ -81,6 +89,39 @@ router.get('/group', (req, res) => {
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[SELECT, GET /api/system/code/group] 시스템 코드그룹 조회');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
+
+router.put('/group', (req, res) => {
+  const { id, name, desc } = req.body;
+  Database.execute(
+    (database) => database.query(
+      UPDATE_CODE_GROUP,
+      {
+        ID: id,
+        NAME: name,
+        DESC: desc,
+      },
+    )
+      .then(() => {
+        res.send(true);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('[UPDATE, PUT /api/system/code/group] 시스템 코드그룹 수정');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
