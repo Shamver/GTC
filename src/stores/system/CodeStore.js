@@ -15,7 +15,6 @@ class CodeStore {
 
   @observable codeEditModeId;
 
-
   @observable codeGroup = {
     id: '',
     name: '',
@@ -64,6 +63,10 @@ class CodeStore {
   };
 
   @action modifyCodeGroup = () => {
+    if (!this.codeGroupValidationCheck()) {
+      return false;
+    }
+
     axios.put('/api/system/code/group', this.codeGroup)
       .then((response) => {
         if (response.data) {
@@ -80,6 +83,34 @@ class CodeStore {
       .catch((response) => {
         console.log(response);
       });
+
+    return true;
+  };
+
+  @action deleteCodeGroup = (group) => {
+    axios.delete('/api/system/code/group', {
+      params: {
+        group,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          this.codeGroup = {
+            id: '',
+            name: '',
+            desc: '',
+          };
+          this.getCodeGroupList();
+          this.getCodeList('');
+          this.setIsAddCodeGroup(false);
+          toast.success('😳 코드 그룹 삭제 완료!');
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+
+    return true;
   };
 
   @action getCodeList = (codeGroup) => {

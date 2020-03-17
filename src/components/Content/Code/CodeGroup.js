@@ -8,11 +8,13 @@ import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const CodeGroup = ({ data }) => {
-  const { SystemCodeStore } = useStores();
+  const { SystemCodeStore, UtilAlertStore } = useStores();
   const {
     getCodeList, setGroupEditModeId, groupEditModeId, onChangeCodeGroup,
-    modifyCodeGroup, codeGroup,
+    modifyCodeGroup, codeGroup, deleteCodeGroup,
   } = SystemCodeStore;
+  const { toggleConfirmAlert } = UtilAlertStore;
+
   const { group, groupName, groupDesc } = data;
   const { name, desc } = codeGroup;
 
@@ -51,7 +53,7 @@ const CodeGroup = ({ data }) => {
         </Button>
       </CenterPaddingTd>
       <CenterPaddingTd>
-        <Button size="sm" color="danger">
+        <Button size="sm" color="danger" onClick={() => toggleConfirmAlert('해당 코드 그룹을 정말로 삭제하시겠습니까?', () => deleteCodeGroup(group))}>
           <FontAwesomeIcon icon={faTrash} />
         </Button>
       </CenterPaddingTd>

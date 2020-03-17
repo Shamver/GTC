@@ -31,6 +31,11 @@ const UPDATE_CODE_GROUP = `
   WHERE CMGRP = ':ID'
 `;
 
+const DELETE_CODE_GROUP = `
+  DELETE FROM GTC_CODE_GROUP
+  WHERE CMGRP = ':GROUP'
+`;
+
 const SELECT_CODE = `
   SELECT
     CMGRP AS codeGroup
@@ -122,6 +127,37 @@ router.put('/group', (req, res) => {
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[UPDATE, PUT /api/system/code/group] 시스템 코드그룹 수정');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
+
+router.delete('/group', (req, res) => {
+  const { group } = req.query;
+  Database.execute(
+    (database) => database.query(
+      DELETE_CODE_GROUP,
+      {
+        GROUP: group,
+      },
+    )
+      .then(() => {
+        res.send(true);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('[DELETE, DELETE /api/system/code/group] 시스템 코드그룹 삭제');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
