@@ -6,7 +6,7 @@ import { faTimesCircle, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useStores from '../../../stores/useStores';
 
-const NewCodeGroup = () => {
+const NewCodeRow = () => {
   const { SystemCodeStore } = useStores();
   const {
     setIsAddCodeGroup, codeGroup, onChangeCodeGroup, addCodeGroup,
@@ -15,13 +15,22 @@ const NewCodeGroup = () => {
   return (
     <tr>
       <td>
-        <Input bsSize="sm" onChange={onChangeCodeGroup} name="id" value={id} placeholder="공통 코드 그룹" />
+        <Input bsSize="sm" onChange={onChangeCodeGroup} name="id" value={id} placeholder="공통 코드" />
       </td>
       <td>
-        <Input bsSize="sm" onChange={onChangeCodeGroup} name="name" value={name} placeholder="공통 그룹명" />
+        <Input bsSize="sm" onChange={onChangeCodeGroup} name="name" value={name} placeholder="공통 코드명" />
+      </td>
+      <td width="67">
+        <Input bsSize="sm" onChange={onChangeCodeGroup} name="desc" value={desc} placeholder="순서" />
       </td>
       <td>
         <Input bsSize="sm" onChange={onChangeCodeGroup} name="desc" value={desc} placeholder="공통 그룹 설명" />
+      </td>
+      <td>
+        <Input type="select" bsSize="sm" onChange={onChangeCodeGroup} name="desc" value={desc} placeholder="공통 그룹 설명">
+          <option value="Y">Y</option>
+          <option value="N">N</option>
+        </Input>
       </td>
       <CenterPaddingTd>
         <Button size="sm" color="danger" onClick={addCodeGroup}>
@@ -45,4 +54,4 @@ const CenterPaddingTd = styled(CenterTd)`
   padding : .8rem !important;
 `;
 
-export default observer(NewCodeGroup);
+export default observer(NewCodeRow);

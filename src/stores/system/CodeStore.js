@@ -136,6 +136,7 @@ class CodeStore {
 
   @action setIsAddCode = (value) => {
     this.isAddCode = value;
+    this.codeEditModeId = null;
   };
 
   @action setGroupEditModeId = (value) => {
