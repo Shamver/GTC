@@ -9,36 +9,38 @@ import useStores from '../../../stores/useStores';
 const NewCodeRow = () => {
   const { SystemCodeStore } = useStores();
   const {
-    setIsAddCodeGroup, codeGroup, onChangeCodeGroup, addCodeGroup,
+    setIsAddCode, code, onChangeCode, addCode,
   } = SystemCodeStore;
-  const { id, name, desc } = codeGroup;
+  const {
+    id, name, desc, order, useYN,
+  } = code;
   return (
     <tr>
       <td>
-        <Input bsSize="sm" onChange={onChangeCodeGroup} name="id" value={id} placeholder="공통 코드" />
+        <Input bsSize="sm" onChange={onChangeCode} name="id" value={id} placeholder="공통 코드" />
       </td>
       <td>
-        <Input bsSize="sm" onChange={onChangeCodeGroup} name="name" value={name} placeholder="공통 코드명" />
+        <Input bsSize="sm" onChange={onChangeCode} name="name" value={name} placeholder="공통 코드명" />
       </td>
       <td width="67">
-        <Input bsSize="sm" onChange={onChangeCodeGroup} name="desc" value={desc} placeholder="순서" />
+        <Input bsSize="sm" onChange={onChangeCode} name="order" value={order} placeholder="순서" />
       </td>
       <td>
-        <Input bsSize="sm" onChange={onChangeCodeGroup} name="desc" value={desc} placeholder="공통 그룹 설명" />
+        <Input bsSize="sm" onChange={onChangeCode} name="desc" value={desc} placeholder="공통 그룹 설명" />
       </td>
       <td>
-        <Input type="select" bsSize="sm" onChange={onChangeCodeGroup} name="desc" value={desc} placeholder="공통 그룹 설명">
+        <Input type="select" bsSize="sm" onChange={onChangeCode} name="useYN" value={useYN}>
           <option value="Y">Y</option>
           <option value="N">N</option>
         </Input>
       </td>
       <CenterPaddingTd>
-        <Button size="sm" color="danger" onClick={addCodeGroup}>
+        <Button size="sm" color="danger" onClick={addCode}>
           <FontAwesomeIcon icon={faSave} />
         </Button>
       </CenterPaddingTd>
       <CenterPaddingTd>
-        <Button size="sm" color="danger" onClick={() => setIsAddCodeGroup(false)}>
+        <Button size="sm" color="danger" onClick={() => setIsAddCode(false)}>
           <FontAwesomeIcon icon={faTimesCircle} />
         </Button>
       </CenterPaddingTd>

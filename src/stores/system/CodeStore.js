@@ -21,6 +21,15 @@ class CodeStore {
     desc: '',
   };
 
+  @observable code = {
+    id: '',
+    group: '',
+    name: '',
+    order: '',
+    desc: '',
+    useYN: 'Y',
+  };
+
   constructor(root) {
     this.root = root;
   }
@@ -113,6 +122,37 @@ class CodeStore {
     return true;
   };
 
+  // Code Start ------------------------------------------------------
+
+  @action addCode = () => {
+    if (!this.codeValidationCheck()) {
+      return false;
+    }
+
+    axios.post('/api/system/code/', this.code)
+      .then((response) => {
+        if (response.data) {
+          this.code = {
+            ...this.code,
+            id: '',
+            name: '',
+            order: '',
+            desc: '',
+            useYN: '',
+          };
+          this.getCodeGroupList();
+          this.getCodeList(this.code.group);
+          this.setIsAddCodeGroup(false);
+          toast.success('😳 코드 추가 완료!');
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+
+    return true;
+  };
+
   @action getCodeList = (codeGroup) => {
     axios.get('/api/system/code', {
       params: {
@@ -122,6 +162,8 @@ class CodeStore {
       .then((response) => {
         if (response.data) {
           this.codeList = response.data;
+          this.code.group = codeGroup;
+          this.setIsAddCode(false);
         }
       })
       .catch((response) => {
@@ -129,14 +171,22 @@ class CodeStore {
       });
   };
 
+  // Other Start ------------------------------------------------------
+
   @action setIsAddCodeGroup = (value) => {
     this.isAddCodeGroup = value;
     this.groupEditModeId = null;
   };
 
   @action setIsAddCode = (value) => {
+    if (!value && !this.code.group) {
+      toast.warn('😳 코드그룹을 선택한 뒤에 코드 추가를 해보실 수 있어요!');
+      return false;
+    }
     this.isAddCode = value;
     this.codeEditModeId = null;
+
+    return true;
   };
 
   @action setGroupEditModeId = (value) => {
@@ -145,10 +195,23 @@ class CodeStore {
     this.codeGroup = value;
   };
 
+  @action setCodeEditModeId = (value) => {
+    this.codeEditModeId = value.id;
+    this.isAddCode = false;
+    this.code = value;
+  };
+
 
   @action onChangeCodeGroup = (event) => {
     this.codeGroup = {
       ...this.codeGroup,
+      [event.target.name]: event.target.value,
+    };
+  };
+
+  @action onChangeCode = (event) => {
+    this.code = {
+      ...this.code,
       [event.target.name]: event.target.value,
     };
   };
@@ -163,6 +226,23 @@ class CodeStore {
 
     if (!this.codeGroup.name) {
       toggleAlert('코드 그룹명을 입력하여 주세요.');
+      return false;
+    }
+
+    return true;
+  };
+
+
+  @action codeValidationCheck = () => {
+    const { toggleAlert } = this.root.UtilAlertStore;
+
+    if (!this.code.id) {
+      toggleAlert('코드를 입력하여 주세요.');
+      return false;
+    }
+
+    if (!this.code.name) {
+      toggleAlert('코드명을 입력하여 주세요.');
       return false;
     }
 

@@ -36,6 +36,19 @@ const DELETE_CODE_GROUP = `
   WHERE CMGRP = ':GROUP'
 `;
 
+const INSERT_CODE = `
+  INSERT INTO GTC_CODE
+  VALUES (
+    ':GROUP'
+    , ':ID'
+    , ':NAME'
+    , ':DESC'
+    , :ORDER
+    , ':USE_YN'
+    , sysdate()
+  )
+`;
+
 const SELECT_CODE = `
   SELECT
     CMGRP AS codeGroup
@@ -158,6 +171,46 @@ router.delete('/group', (req, res) => {
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[DELETE, DELETE /api/system/code/group] 시스템 코드그룹 삭제');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
+
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
+
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
+    }
+  });
+});
+
+router.post('/', (req, res) => {
+  const {
+    id, group,
+    name, desc, order, useYN,
+  } = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      INSERT_CODE,
+      {
+        ID: id,
+        GROUP: group,
+        NAME: name,
+        DESC: desc,
+        ORDER: order,
+        USE_YN: useYN,
+      },
+    )
+      .then(() => {
+        res.send(true);
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('[INSERT, POST /api/system/code] 시스템 그룹 추가');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
