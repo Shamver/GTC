@@ -184,7 +184,7 @@ router.get('/', (req, res) => {
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get PostList Success');
+    info('[SELECT, GET /api/board/post] 게시판 포스트 가져오기');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);

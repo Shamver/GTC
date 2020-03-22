@@ -2,11 +2,15 @@ import React from 'react';
 import { Button, Input } from 'reactstrap';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
+import { faTimesCircle, faSave } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useStores from '../../../stores/useStores';
 
 const NewCodeGroup = () => {
   const { SystemCodeStore } = useStores();
-  const { setIsAddCodeGroup, codeGroup, onChangeCodeGroup, addCodeGroup } = SystemCodeStore;
+  const {
+    setIsAddCodeGroup, codeGroup, onChangeCodeGroup, addCodeGroup,
+  } = SystemCodeStore;
   const { id, name, desc } = codeGroup;
   return (
     <tr>
@@ -21,12 +25,12 @@ const NewCodeGroup = () => {
       </td>
       <CenterPaddingTd>
         <Button size="sm" color="danger" onClick={addCodeGroup}>
-          저장
+          <FontAwesomeIcon icon={faSave} />
         </Button>
       </CenterPaddingTd>
       <CenterPaddingTd>
         <Button size="sm" color="danger" onClick={() => setIsAddCodeGroup(false)}>
-          취소
+          <FontAwesomeIcon icon={faTimesCircle} />
         </Button>
       </CenterPaddingTd>
     </tr>

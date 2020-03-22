@@ -8,10 +8,13 @@ import CodeGroupList from './CodeGroupList';
 import CodeList from './CodeList';
 import useStores from '../../../stores/useStores';
 import NewCodeGroup from './NewCodeGroup';
+import NewCodeRow from './NewCodeRow';
 
 const Code = () => {
   const { SystemCodeStore } = useStores();
-  const { isAddCodeGroup, setIsAddCodeGroup } = SystemCodeStore;
+  const {
+    isAddCodeGroup, setIsAddCodeGroup, setIsAddCode, isAddCode,
+  } = SystemCodeStore;
   return (
     <BoardWrapper>
       <TableWrapper>
@@ -43,7 +46,7 @@ const Code = () => {
           </CodeCol>
           <CodeCol>
             <PaddedDiv>
-              <RightButton size="sm" color="danger">
+              <RightButton size="sm" color="danger" onClick={() => setIsAddCode(true)}>
                 <FontAwesomeIcon icon={faPlus} />
                 &nbsp;
                 코드 추가
@@ -62,6 +65,7 @@ const Code = () => {
                 </tr>
               </thead>
               <tbody>
+                { isAddCode ? (<NewCodeRow />) : null}
                 <CodeList />
               </tbody>
             </Table>
@@ -88,6 +92,10 @@ const CenterTh = styled.th`
 const CodeTable = styled(Table)`
   & > tbody > tr {
     cursor : pointer;
+  }
+  
+  & > tbody > tr > td {
+    vertical-align: middle;
   }
 `;
 
