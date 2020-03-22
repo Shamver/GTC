@@ -171,6 +171,36 @@ class CodeStore {
       });
   };
 
+  @action deleteCode = (group, code) => {
+    axios.delete('/api/system/code', {
+      params: {
+        group,
+        code,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          this.code = {
+            ...this.code,
+            id: '',
+            name: '',
+            order: '',
+            desc: '',
+            useYN: '',
+          };
+          this.getCodeGroupList();
+          this.getCodeList(this.code.group);
+          this.setIsAddCodeGroup(false);
+          toast.success('😳 코드 삭제 완료!');
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+
+    return true;
+  };
+
   // Other Start ------------------------------------------------------
 
   @action setIsAddCodeGroup = (value) => {

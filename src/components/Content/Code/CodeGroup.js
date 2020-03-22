@@ -11,12 +11,13 @@ const CodeGroup = ({ data }) => {
   const { SystemCodeStore, UtilAlertStore } = useStores();
   const {
     getCodeList, setGroupEditModeId, groupEditModeId, onChangeCodeGroup,
-    modifyCodeGroup, codeGroup, deleteCodeGroup,
+    modifyCodeGroup, codeGroup, deleteCodeGroup, code
   } = SystemCodeStore;
   const { toggleConfirmAlert } = UtilAlertStore;
 
   const { group, groupName, groupDesc } = data;
   const { name, desc } = codeGroup;
+  const { group: currentGroup } = code;
 
   if (group === groupEditModeId) {
     return (
@@ -43,7 +44,7 @@ const CodeGroup = ({ data }) => {
   }
 
   return (
-    <tr onClick={() => getCodeList(group)}>
+    <ActiveTr className={currentGroup === group ? 'active' : null} onClick={() => getCodeList(group)}>
       <td>{group}</td>
       <td>{groupName}</td>
       <td>{groupDesc}</td>
@@ -57,7 +58,7 @@ const CodeGroup = ({ data }) => {
           <FontAwesomeIcon icon={faTrash} />
         </Button>
       </CenterPaddingTd>
-    </tr>
+    </ActiveTr>
   );
 };
 
@@ -68,6 +69,12 @@ CodeGroup.propTypes = {
     groupDesc: Proptypes.string,
   }).isRequired,
 };
+
+const ActiveTr = styled.tr`
+  &.active {
+    background-color : #ffd7d4;
+  }
+`;
 
 const CenterTd = styled.td`
   text-align : center;
