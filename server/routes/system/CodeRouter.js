@@ -64,12 +64,12 @@ const SELECT_CODE = `
 const UPDATE_CODE = `
   UPDATE GTC_CODE
   SET  
-    CMCD_NM = :NAME
-    , CMCD_DESC = :DESC
+    CMCD_NM = ':NAME'
+    , CMCD_DESC = ':DESC'
     , CMCD_ORDER = :ORDER
-    , CMCD_USE_YN = :USE_YN
+    , CMCD_USE_YN = ':USE_YN'
   WHERE CMGRP = ':GROUP'
-  AND CODE = :CODE
+  AND CMCD = ':CODE'
 `;
 
 const DELETE_CODE = `
@@ -285,7 +285,7 @@ router.put('/', (req, res) => {
     (database) => database.query(
       UPDATE_CODE,
       {
-        ID: id,
+        CODE: id,
         GROUP: group,
         NAME: name,
         ORDER: order,

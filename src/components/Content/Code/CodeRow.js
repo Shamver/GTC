@@ -36,7 +36,10 @@ const CodeRow = ({ data }) => {
           <Input bsSize="sm" onChange={onChangeCode} value={desc} name="desc" />
         </td>
         <td>
-          <Input bsSize="sm" onChange={onChangeCode} value={useYN} name="useYN" />
+          <Input type="select" bsSize="sm" onChange={onChangeCode} name="useYN" value={useYN}>
+            <option value="Y">Y</option>
+            <option value="N">N</option>
+          </Input>
         </td>
         <CenterPaddingEditTd>
           <Button size="sm" color="danger" onClick={modifyCode}>
