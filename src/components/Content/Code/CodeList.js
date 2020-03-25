@@ -6,9 +6,9 @@ import CodeRow from './CodeRow';
 
 const CodeList = () => {
   const { SystemCodeStore } = useStores();
-  const { codeList } = SystemCodeStore;
+  const { codeList, isAddCode } = SystemCodeStore;
 
-  if (!codeList.length) {
+  if (!isAddCode && !codeList.length) {
     return (
       <tr>
         <NoSelectGroup colSpan="7">공통 코드 그룹을 클릭하여 조회하세요!</NoSelectGroup>

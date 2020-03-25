@@ -171,6 +171,35 @@ class CodeStore {
       });
   };
 
+  @action modifyCode = () => {
+    if (!this.codeValidationCheck()) {
+      return false;
+    }
+
+    axios.put('/api/system/code', this.code)
+      .then((response) => {
+        if (response.data) {
+          this.code = {
+            ...this.code,
+            id: '',
+            name: '',
+            order: '',
+            desc: '',
+            useYN: '',
+          };
+          this.getCodeGroupList();
+          this.getCodeList(this.code.group);
+          this.setIsAddCode(false);
+          toast.success('😳 코드 수정 완료!');
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+
+    return true;
+  };
+
   @action deleteCode = (group, code) => {
     axios.delete('/api/system/code', {
       params: {
@@ -209,7 +238,7 @@ class CodeStore {
   };
 
   @action setIsAddCode = (value) => {
-    if (!value && !this.code.group) {
+    if (value && !this.code.group) {
       toast.warn('😳 코드그룹을 선택한 뒤에 코드 추가를 해보실 수 있어요!');
       return false;
     }
@@ -230,7 +259,6 @@ class CodeStore {
     this.isAddCode = false;
     this.code = value;
   };
-
 
   @action onChangeCodeGroup = (event) => {
     this.codeGroup = {
@@ -273,6 +301,11 @@ class CodeStore {
 
     if (!this.code.name) {
       toggleAlert('코드명을 입력하여 주세요.');
+      return false;
+    }
+
+    if (!this.code.order) {
+      toggleAlert('순서를 입력하여 주세요.');
       return false;
     }
 

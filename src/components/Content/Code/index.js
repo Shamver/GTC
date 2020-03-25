@@ -52,7 +52,7 @@ const Code = () => {
                 코드 추가
               </RightButton>
             </PaddedDiv>
-            <Table bordered hover>
+            <CodeTable bordered hover>
               <thead>
                 <tr>
                   <th>공통 코드</th>
@@ -68,7 +68,7 @@ const Code = () => {
                 { isAddCode ? (<NewCodeRow />) : null}
                 <CodeList />
               </tbody>
-            </Table>
+            </CodeTable>
           </CodeCol>
         </CodeTableWrapper>
       </TableWrapper>
