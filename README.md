@@ -8,6 +8,7 @@
 - MariaDB
 - CRAv2 (create-react-app v2)
 - IDE ( WebStorm )
+- DataGrip
  
 ## 사용한 기술 스택 및 라이브러리, 프레임워크, 아키텍쳐
 
