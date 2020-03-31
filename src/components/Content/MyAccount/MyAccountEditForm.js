@@ -74,7 +74,7 @@ const MyAccountEditForm = () => {
   );
 };
 
-const Form = styled.form`
+const Form = styled.div`
   z-index: 1;
   background: #FFFFFF;
   max-width: 100%;

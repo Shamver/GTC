@@ -21,9 +21,12 @@ const UPDATE_BOARD_REPLY_DELETE = `
   WHERE ID = :REPLY_ID
 `;
 
+const SELECT_LAST_INSERT_ID = `
+  SELECT LAST_INSERT_ID() AS ID
+`;
+
 const INSERT_BOARD_REPLY = `
   INSERT INTO GTC_BOARD_REPLY (
-    ID,
     BP_ID,
     ID_REPLY,
     ID_UPPER,
@@ -35,7 +38,6 @@ const INSERT_BOARD_REPLY = `
     SECRET_YN,
     DELETE_YN
   ) VALUES (
-    (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp),
     :BP_ID,
     IFNULL(:REPLY_ID, (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
     IFNULL((SELECT ID_UPPER FROM (SELECT MIN(ID_UPPER) AS ID_UPPER FROM GTC_BOARD_REPLY WHERE ID = :REPLY_ID) as temp),(SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
@@ -159,17 +161,37 @@ router.post('/', (req, res) => {
         },
       ))
       .then((rows) => {
+        point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
+
         const { postWriter } = rows[0];
         if (postWriter !== data.writer) {
-          alertMiddleware();
+          return database.query(
+            SELECT_LAST_INSERT_ID,
+            {},
+          );
         }
 
-        point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
-        res.send(true);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '😊 댓글이 정상적으로 등록되었어요!',
+        });
+        throw new Error('댓글 작성 완료');
+      })
+      .then((rows) => {
+        const { ID } = rows[0];
+        return alertMiddleware(database, ID);
+      })
+      .then(() => {
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '😊 댓글이 정상적으로 등록되었어요!',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Add Reply Success');
+    info('[INSERT, POST /api/board/reply] 댓글 등록 완료');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -198,11 +220,16 @@ router.get('/', (req, res) => {
       },
     )
       .then((rows) => {
-        res.send(rows);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '댓글 목록 조회',
+          DATA: rows,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Reply Success');
+    info('[SELECT, GET /api/board/reply] 댓글 목록 조회');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -231,11 +258,15 @@ router.put('/', (req, res) => {
       },
     )
       .then(() => {
-        res.send(true);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '😊 댓글이 수정되었어요!',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Modify Reply Success');
+    info('[UPDATE, PUT /api/board/post] 댓글 수정');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -264,7 +295,11 @@ router.delete('/', (req, res) => {
     )
       .then((rows) => {
         if (rows[0].count >= 1) {
-          res.send(2);
+          res.json({
+            SUCCESS: true,
+            CODE: 2,
+            MESSAGE: '😳 해당 댓글에 답글이 달려있어 삭제하지 못해요!',
+          });
           throw new Error('해당 댓글에 답글이 달려있기 때문에 삭제할 수 없습니다.');
         }
 
@@ -277,11 +312,15 @@ router.delete('/', (req, res) => {
       })
       .then(() => {
         point('deleteReply', 'REPLY', data);
-        res.send(1);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '😊 댓글이 삭제되었어요!',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Delete Reply Success');
+    info('[DELETE, DELETE /api/board/reply] 댓글 삭제');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -312,7 +351,11 @@ router.post('/like', (req, res) => {
     )
       .then((rows) => {
         if (rows[0].count === 1) {
-          res.send(2);
+          res.json({
+            SUCCESS: true,
+            CODE: 2,
+            MESSAGE: '😳 이미 해당 댓글을 좋아합니다. ㅠㅠ',
+          });
           throw new Error('이미 해당 댓글에 좋아요를 눌렀습니다.');
         } else {
           return database.query(
@@ -325,11 +368,15 @@ router.post('/like', (req, res) => {
         }
       })
       .then(() => {
-        res.send(1);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '😊 해당 댓글 좋아요 완료!',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Add Reply Like Success');
+    info('[INSERT, POST /api/board/reply/like] 댓글 좋아요');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -358,11 +405,16 @@ router.get('/mine', (req, res) => {
       },
     )
       .then((rows) => {
-        res.send(rows);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '내가 쓴 댓글 목록 조회',
+          DATA: rows,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Mine Reply Success');
+    info('[SELECT, GET /api/board/reply/mine] 내가 쓴 댓글 목록 조회');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);

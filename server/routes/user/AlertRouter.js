@@ -32,6 +32,7 @@ const SELECT_USER_ALERT_LIST = `
     OR
     (TIMESTAMPDIFF(minute, date_format(GUA.READ_DATE, '%Y-%m-%d %H:%i'), date_format(sysdate(), '%Y-%m-%d %H:%i')) < 1441)
   )
+  ORDER BY GBR.DATE DESC
 `;
 
 const UPDATE_USER_ALERT_READ = `
@@ -61,7 +62,12 @@ router.get('/', (req, res) => {
           ...v,
           replyContent: filter(v.replyContent),
         }));
-        res.send(returnRows.reverse());
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '알림 목록 조회',
+          DATA: returnRows,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -92,8 +98,12 @@ router.put('/', (req, res) => {
         ID_LIST: id.join(),
       },
     )
-      .then((rows) => {
-        res.send(rows);
+      .then(() => {
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '성공적으로 읽었습니다.',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -124,8 +134,12 @@ router.delete('/', (req, res) => {
         ID: id,
       },
     )
-      .then((rows) => {
-        res.send(rows);
+      .then(() => {
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '성공적으로 삭제됐습니다.',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
