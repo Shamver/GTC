@@ -1,44 +1,87 @@
 const express = require('express');
 
 const router = express.Router();
-const db = require('../../dbConnection')();
-const { info } = require('../../log-config');
 
-const conn = db.init();
+const Database = require('../../Database');
+
+const { info, error } = require('../../log-config');
+
+const SELECT_BOARD_REPORT = `
+  SELECT COUNT(*) AS count FROM GTC_BOARD_REPORT
+  WHERE TARGET_ID = :TARGET_ID
+  AND U_ID = :WRITER_ID
+  AND TYPE = ':TYPE'
+`;
+
+const INSERT_BOARD_REPORT = `
+  INSERT INTO GTC_BOARD_REPORT
+  VALUES (
+    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_REPORT) as temp),
+    :TARGET_ID,
+    :WRITER_ID,
+    ':TYPE',
+    ':REASON',
+    ':DESCRIPTION'
+  )
+`;
 
 router.post('/', (req, res) => {
-  const data = req.body;
-  let query = `SELECT COUNT(*) AS count FROM GTC_BOARD_REPORT
-    WHERE TARGET_ID = ${data.targetId}
-    AND U_ID = ${data.writerId}
-    AND TYPE = '${data.type}'
-    `;
+  const {
+    targetId, writerId, type, reason, description,
+  } = req.body;
 
-  info(query);
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_REPORT,
+      {
+        TARGET_ID: targetId,
+        WRITER_ID: writerId,
+        TYPE: type,
+      },
+    )
+      .then((rows) => {
+        if (rows[0].count === 1) {
+          res.json({
+            SUCCESS: true,
+            CODE: 2,
+            MESSAGE: '😳 이미 해당 대상에 신고가 완료된 상태입니다!',
+          });
+          throw new Error('이미 신고한 사람입니다.');
+        } else {
+          return database.query(
+            INSERT_BOARD_REPORT,
+            {
+              TARGET_ID: targetId,
+              WRITER_ID: writerId,
+              TYPE: type,
+              REASON: reason,
+              DESCRIPTION: description,
+            },
+          );
+        }
+      })
+      .then(() => {
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '😳 해당 포스팅에 신고가 완료되었어요.',
+        });
+      }),
+  ).then(() => {
+    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
+    info('[INSERT, POST /api/board/report] 게시글 신고');
+  }).catch((err) => {
+    // 트랜잭션 중 에러가 났을때 처리.
+    error(err.message);
 
-  conn.query(query, (err, rows) => {
-    if (err) throw err;
+    // Database 에서 보여주는 에러 메시지
+    if (err.sqlMessage) {
+      error(err.sqlMessage);
+    }
 
-    // 이미 해당 타겟에 동일한 유저가 신고를 함.
-    if (rows[0].count === 1) {
-      res.send(2);
-    } else {
-      query = `INSERT INTO GTC_BOARD_REPORT
-        VALUES (
-          (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_REPORT) as temp),
-          ${data.targetId},
-          ${data.writerId},
-          '${data.type}',
-          '${data.reason}',
-          '${data.description}'
-        )`;
-
-      info(query);
-
-      conn.query(query, (err2) => {
-        if (err2) throw err2;
-        res.send(1);
-      });
+    // 실행된 sql
+    if (err.sql) {
+      error(err.sql);
     }
   });
 });

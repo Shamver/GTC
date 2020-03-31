@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 class AlertStore {
   @observable alertList = [];
@@ -10,22 +11,28 @@ class AlertStore {
     this.root = root;
   }
 
-  @action getAlert = ((updateYN = 'N') => {
+  @action getAlert = (() => {
     const { userData } = this.root.UserStore;
 
     if (userData) {
       axios.get('/api/user/alert', {
         params: {
-          updateYN,
           userId: userData.id,
         },
       })
         .then((response) => {
-          if (response.data) {
-            this.alertList = response.data;
-            if (response.data.length > 0) {
-              this.alertCount = response.data.filter((v) => v.isRead === 'N').length;
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              this.alertList = data.DATA;
+              if (data.DATA.length > 0) {
+                this.alertCount = data.DATA.filter((v) => v.isRead === 'N').length;
+              }
+            } else {
+              toast.info(data.MESSAGE);
             }
+          } else {
+            toast.error(data.MESSAGE);
           }
         })
         .catch((response) => {
@@ -41,8 +48,17 @@ class AlertStore {
     axios.put('/api/user/alert', {
       id: [e.currentTarget.name],
     })
-      .then(() => {
-
+      .then((response) => {
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            // 읽기 성공
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
       })
       .catch((response) => { console.log(response); });
   });
@@ -53,8 +69,17 @@ class AlertStore {
         id: e.currentTarget.name,
       },
     })
-      .then(() => {
-        this.getAlert('Y');
+      .then((response) => {
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.getAlert();
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
       })
       .catch((response) => { console.log(response); });
   });
@@ -67,8 +92,17 @@ class AlertStore {
     axios.put('/api/user/alert', {
       id: this.alertList.map((v) => v.id),
     })
-      .then(() => {
-        this.getAlert('Y');
+      .then((response) => {
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.getAlert();
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
       })
       .catch((response) => { console.log(response); });
   });

@@ -48,7 +48,12 @@ router.get('/', (req, res) => {
       },
     )
       .then((rows) => {
-        res.send(rows);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '즐겨찾기 목록 조회',
+          DATA: rows,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -83,8 +88,9 @@ router.post('/', (req, res) => {
     )
       .then((rows) => {
         if (rows.length >= 1) {
-          res.send({
-            POST_SUCCESS: false,
+          res.json({
+            SUCCESS: true,
+            CODE: 2,
             MESSAGE: '😓 이미 즐겨찾기된 게시물입니다ㅠ',
           });
           throw new Error('이미 즐겨찾기된 게시물입니다.');
@@ -99,7 +105,11 @@ router.post('/', (req, res) => {
         }
       })
       .then(() => {
-        res.send(200);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '★ 즐겨찾기 추가됨',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
@@ -132,8 +142,12 @@ router.delete('/', (req, res) => {
         BP_ID: bpId,
       },
     )
-      .then((rows) => {
-        res.send(rows);
+      .then(() => {
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '☆ 즐겨찾기 해제됨',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.

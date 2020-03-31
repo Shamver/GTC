@@ -1,5 +1,6 @@
 import { action, observable } from 'mobx';
 import axios from 'axios';
+import {toast} from "react-toastify";
 
 class BoardStore {
   @observable boardKinds = {
@@ -44,8 +45,15 @@ class BoardStore {
   @action setCurrentBoardToId = (id) => {
     axios.get('/api/board', { params: { id } })
       .then((response) => {
-        if (response.data) {
-          this.currentBoard = response.data;
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.currentBoard = data.DATA;
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });

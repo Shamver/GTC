@@ -8,8 +8,9 @@ const authMiddleware = (req, res, next) => {
   // token does not exist
   if (!token) {
     return res.json({
-      success: false,
-      message: 'not logged in',
+      SUCCESS: false,
+      CODE: 0,
+      MESSAGE: '로그인 정보가 알맞지 않습니다.',
     });
   }
 
@@ -26,8 +27,9 @@ const authMiddleware = (req, res, next) => {
   // if it has failed to verify, it will return an error message
   const onError = (error) => {
     res.json({
-      success: false,
-      message: error.message,
+      SUCCESS: false,
+      CODE: 0,
+      MESSAGE: error.message,
     });
   };
 

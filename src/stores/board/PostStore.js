@@ -70,9 +70,26 @@ class PostStore {
       secretReplyAllow: this.post.secretReplyAllow,
     })
       .then((response) => {
-        if (response.data) {
-          this.root.UtilRouteStore.history.push('/free');
-          toast.success('😊 포스팅이 등록되었어요!');
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.root.UtilRouteStore.history.push('/free');
+            toast.success('😊 포스팅이 등록되었어요!');
+            this.post = {
+              board: '',
+              category: '',
+              title: '',
+              text: '',
+              depth: '',
+              secret: 'N',
+              replyAllow: 'Y',
+              secretReplyAllow: 'N',
+            };
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
@@ -131,19 +148,26 @@ class PostStore {
 
     axios.get('/api/board/post', { params: { board, currentPage, userId } })
       .then((response) => {
-        if (response.data) {
-          this.boardPostList = {
-            ...this.boardPostList,
-            [board]: response.data,
-          };
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.boardPostList = {
+              ...this.boardPostList,
+              [board]: data.DATA,
+            };
 
-          // 게시글 가져올때 MAX 카운트 셋
-          if (response.data.length === 0) {
-            this.currentBoardMaxPage = 0;
+            // 게시글 가져올때 MAX 카운트 셋
+            if (data.DATA.length === 0) {
+              this.currentBoardMaxPage = 0;
+            } else {
+              const { pageCount } = data.DATA[0];
+              this.currentBoardMaxPage = pageCount;
+            }
           } else {
-            const { pageCount } = response.data[0];
-            this.currentBoardMaxPage = pageCount;
+            toast.info(data.MESSAGE);
           }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
@@ -179,10 +203,17 @@ class PostStore {
       },
     })
       .then((response) => {
-        if (response.data) {
-          const [post] = response.data;
-          this.postView = post;
-          getLately();
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            const [post] = data.DATA;
+            this.postView = post;
+            getLately();
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
@@ -220,23 +251,30 @@ class PostStore {
   @action getPostUpperLower = (id) => {
     axios.get(`/api/board/post/${id}/upperLower`, {})
       .then((response) => {
-        if (response.data) {
-          const array = response.data;
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            const array = data.DATA;
 
-          // 기존에 있던 데이터를 초기화
-          this.currentPostUpperLower = {
-            upper: '',
-            lower: '',
-          };
+            // 기존에 있던 데이터를 초기화
+            this.currentPostUpperLower = {
+              upper: '',
+              lower: '',
+            };
 
-          for (let i = 0; i < array.length; i += 1) {
-            const { upperOrLower } = array[i];
-            if (upperOrLower === 'upper') {
-              this.currentPostUpperLower.upper = array[i];
-            } else {
-              this.currentPostUpperLower.lower = array[i];
+            for (let i = 0; i < array.length; i += 1) {
+              const { upperOrLower } = array[i];
+              if (upperOrLower === 'upper') {
+                this.currentPostUpperLower.upper = array[i];
+              } else {
+                this.currentPostUpperLower.lower = array[i];
+              }
             }
+          } else {
+            toast.info(data.MESSAGE);
           }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
@@ -249,11 +287,15 @@ class PostStore {
       type,
     })
       .then((response) => {
-        if (response.data === 1) {
-          toast.success('😳 해당 포스팅 투표 완료!');
-          this.getPost(postId);
-        } else if (response.data === 2) {
-          toast.error('😳 이미 해당 포스팅에 투표가 완료되었어요!');
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            toast.success(data.MESSAGE);
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
@@ -323,8 +365,15 @@ class PostStore {
         },
       })
         .then((response) => {
-          if (response.data) {
-            this.postMineList = response.data;
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              this.postMineList = data.DATA;
+            } else {
+              toast.info(data.MESSAGE);
+            }
+          } else {
+            toast.error(data.MESSAGE);
           }
         })
         .catch((response) => {

@@ -180,11 +180,16 @@ router.get('/', (req, res) => {
       },
     )
       .then((rows) => {
-        res.send(rows);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '게시물 목록 조회',
+          DATA: rows,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('[SELECT, GET /api/board/post] 게시판 포스트 가져오기');
+    info('[SELECT, GET /api/board/post] 게시물 목록 조회');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -231,11 +236,15 @@ router.post('/', (req, res) => {
         };
 
         point('addPost', 'POST', postData);
-        res.send(true);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '😊 포스팅이 등록되었어요!',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Post Add Success');
+    info('[INSERT, POST /api/board/post] 게시물 등록');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -349,7 +358,11 @@ router.post('/recommend', (req, res) => {
     )
       .then((rows) => {
         if (rows[0].count === 1) {
-          res.send(2);
+          res.json({
+            SUCCESS: true,
+            CODE: 2,
+            MESSAGE: '😳 이미 해당 포스팅에 투표가 완료되었어요!',
+          });
           throw new Error('이미 해당 글에 투표가 되어 있습니다');
         }
 
@@ -363,11 +376,15 @@ router.post('/recommend', (req, res) => {
         );
       })
       .then(() => {
-        res.send(1);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '😳 해당 포스팅 투표 완료!',
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Recommend Success');
+    info('[INSERT, POST /api/board/post/recommend] 게시물 추천 투표');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -395,11 +412,16 @@ router.get('/mine', (req, res) => {
       },
     )
       .then((rows) => {
-        res.send(rows);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '내가 쓴 게시물 조회',
+          DATA: rows,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Mine Post Success');
+    info('[SELECT, GET /api/board/post/mine] 내가 쓴 게시물 조회');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -441,11 +463,16 @@ router.get('/:id', (req, res) => {
         const list = set(lately, req.params.id);
         res.cookie('lately', list, { httpOnly: true });
 
-        res.send(postItem);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '게시글 조회',
+          DATA: postItem,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Single Post Success');
+    info('[SELECT, GET /api/board/post/:id] 단일 게시물 조회');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
@@ -471,11 +498,16 @@ router.get('/:id/upperLower', (req, res) => {
       },
     )
       .then((rows) => {
-        res.send(rows);
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '게시글 위 아래 글 조회',
+          DATA: rows,
+        });
       }),
   ).then(() => {
     // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Upper and Lower Post Success');
+    info('[SELECT, GET /api/board/post/:id/upperLower] 단일 게시글 위 아래 글 조회');
   }).catch((err) => {
     // 트랜잭션 중 에러가 났을때 처리.
     error(err.message);
