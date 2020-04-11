@@ -29,16 +29,17 @@ const Content = () => (
         <Route exact path="/code" render={() => <Contents.Code />} />
 
         <Route exact path="/search" render={() => <Contents.Search />} />
+
+
+        {/* Smile Icon */}
         <Route exact path="/daily" render={() => <Contents.Daily />} />
+        <Route exact path="/advertise" render={() => <Contents.Advertise />} />
 
         {/* BOARD */}
         <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} noPagination />} />
         <Route exact path="/:board/page/:currentPage" render={({ match }) => <Contents.Board path={match.params.board} currentPage={match.params.currentPage} />} />
-
         <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
-
         <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
-
         <Route exact path="/:board/modify/:id" render={({ match }) => <Posting match={match} isModify />} />
       </Switch>
       <Alert />

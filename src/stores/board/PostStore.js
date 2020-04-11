@@ -186,7 +186,7 @@ class PostStore {
         if (response.data) {
           this.homePostList = {
             ...this.homePostList,
-            [board]: response.data,
+            [board]: response.data.rows,
           };
         }
       })

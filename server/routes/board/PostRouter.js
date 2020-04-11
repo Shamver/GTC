@@ -184,7 +184,7 @@ router.get('/', (req, res) => {
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '게시물 목록 조회',
-          DATA: rows,
+          rows,
         });
       }),
   ).then(() => {
