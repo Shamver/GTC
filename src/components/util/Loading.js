@@ -1,11 +1,9 @@
 import React from 'react';
 import { css } from '@emotion/core';
-// First way to import
 import { SyncLoader } from 'react-spinners';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-// Can be a string as well. Need to ensure each key-value pair ends with ;
 const override = css`
   display: block;
   margin: auto;

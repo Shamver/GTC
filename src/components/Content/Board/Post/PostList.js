@@ -20,7 +20,6 @@ const PostList = ({ path, currentPage }) => {
 
   return boardPostList[path].map((data, index) => {
     onSet(index);
-
     return (<Post key={data.id} data={data} index={index} path={path} currentPage={currentPage} />);
   });
 };

@@ -153,14 +153,14 @@ class PostStore {
           if (data.CODE === 1) {
             this.boardPostList = {
               ...this.boardPostList,
-              [board]: data.DATA,
+              [board]: data.rows,
             };
 
             // 게시글 가져올때 MAX 카운트 셋
-            if (data.DATA.length === 0) {
+            if (data.rows.length === 0) {
               this.currentBoardMaxPage = 0;
             } else {
-              const { pageCount } = data.DATA[0];
+              const { pageCount } = data.rows[0];
               this.currentBoardMaxPage = pageCount;
             }
           } else {

@@ -16,8 +16,6 @@ class LatelyStore {
         if (data.SUCCESS) {
           if (data.CODE === 1) {
             this.latelyList = data.DATA;
-          } else {
-            toast.info(data.MESSAGE);
           }
         } else {
           this.latelyList = [];

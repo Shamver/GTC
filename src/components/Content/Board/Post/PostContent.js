@@ -32,7 +32,7 @@ const PostContent = ({ match }) => {
   const { postReplyList, setReplyOption } = BoardReplyStore;
   const { currentBoard } = BoardStore;
   const { toggleConfirmAlert } = UtilAlertStore;
-  const { loading } = UtilLoadingStore;
+  const { loading, doLoading } = UtilLoadingStore;
   const { toggleReport } = BoardReportStore;
   const {
     id: postId, boardName, categoryName, title, writer, date, views, content,
@@ -47,16 +47,10 @@ const PostContent = ({ match }) => {
   useEffect(() => {
     setReplyOption(replyAllow, secretReplyAllow);
     setCurrentPostId(postId);
-  }, [replyAllow, secretReplyAllow, setReplyOption, setCurrentPostId, postId]);
-
-  if (loading) {
-    return (
-      <Loading loading={1} />
-    );
-  }
+  }, [replyAllow, secretReplyAllow, setReplyOption, setCurrentPostId, postId, doLoading]);
 
   return (
-    <ViewWrapper>
+    <ViewWrapper loading={loading}>
       <BoardLink to={`/${currentBoard}`}>
         <MarginlessH3>{boardName}</MarginlessH3>
       </BoardLink>

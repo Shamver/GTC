@@ -46,8 +46,6 @@ const Advertise = () => (
           </tr>
         </tbody>
       </Table>
-
-
     </TableWrapper>
   </BoardWrapper>
 );
