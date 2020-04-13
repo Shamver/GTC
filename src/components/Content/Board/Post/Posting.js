@@ -11,7 +11,6 @@ import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import useStores from '../../../../stores/useStores';
 
-
 const BoardOptions = () => {
   const { BoardStore } = useStores();
   const { boards } = BoardStore;

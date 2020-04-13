@@ -210,12 +210,14 @@ const DropdownIn = styled(Dropdown)`
     color: #fff !important;
     text-decoration: none !important;
     background-color: #DC3545 !important;
+    outline: 0;
   }
   
    & .dropdown-item:focus {
     color: #fff !important;
     text-decoration: none !important;
     background-color: #DC3545 !important;
+    outline: 0;
   }
 `;
 

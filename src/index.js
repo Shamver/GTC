@@ -39,6 +39,7 @@ ReactDOM.render((
     CookieLatelyStore={stores.CookieLatelyStore}
 
     EventDailyStore={stores.EventDailyStore}
+    EventAdvertiseStore={stores.EventAdvertiseStore}
 
     SystemCodeStore={stores.SystemCodeStore}
   >
