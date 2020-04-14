@@ -5,6 +5,12 @@ import { toast } from 'react-toastify';
 class AdvertiseStore {
   @observable AdvertisePostList = [];
 
+  @observable AdvertisePost = {
+    message: '',
+    url: '',
+    hours: 1,
+  };
+
   constructor(root) {
     this.root = root;
   }
@@ -14,9 +20,9 @@ class AdvertiseStore {
       .then((response) => {
         const { data } = response;
         if (data.SUCCESS) {
-          console.log(data);
           if (data.CODE === 0) {
-
+            this.AdvertisePostList = data.rows;
+            console.log(data.rows);
           } else {
             toast.info(data.MESSAGE);
           }
@@ -25,6 +31,13 @@ class AdvertiseStore {
         }
       })
       .catch((response) => console.log(response));
+  };
+
+  @action onChangeAdvertise = (event) => {
+    this.AdvertisePost = {
+      ...this.AdvertisePost,
+      [event.target.name]: event.target.value,
+    };
   }
 }
 

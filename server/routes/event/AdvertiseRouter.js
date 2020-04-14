@@ -6,7 +6,11 @@ const { error, info } = require('../../log-config');
 const Database = require('../../Database');
 
 const SELECT_POST_ADVERTISE_LIST = `
-  SELECT * FROM GTC_POST_ADVERTISE
+  SELECT
+      (SELECT NAME FROM GTC_USER WHERE ID = AD.USER_ID) AS name
+      , MESSAGE AS message
+      , URL AS url
+  FROM GTC_POST_ADVERTISE AD
 `;
 
 router.get('/', (req, res) => {
@@ -19,7 +23,7 @@ router.get('/', (req, res) => {
           SUCCESS: true,
           CODE: 0,
           MESSAGE: '출석체크 목록 조회',
-          DATA: rows,
+          rows,
         });
       }),
   ).then(() => {

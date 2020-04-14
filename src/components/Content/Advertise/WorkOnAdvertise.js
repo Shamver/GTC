@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import { Table } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
+import AdvertiseList from './AdvertiseList';
 
 const WorkOnAdvertise = () => {
   const { EventAdvertiseStore } = useStores();
@@ -21,21 +20,10 @@ const WorkOnAdvertise = () => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <BoldTd>비스트ㆍ3ㆍ</BoldTd>
-          <td>
-            <Link to="temp">
-              평균티어 브론즈의 롤 합방!! 버틸 수 있으면 구경오쉴?
-            </Link>
-          </td>
-        </tr>
+        <AdvertiseList />
       </tbody>
     </Table>
   );
 };
-
-const BoldTd = styled.td`
-  font-weight : bold;
-`;
 
 export default WorkOnAdvertise;
