@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
@@ -15,14 +15,11 @@ import Post from './Post';
 
 const BoardContent = ({ path, currentPage }) => {
   const { UtilLoadingStore } = useStores();
+  const { loading, doLoading } = UtilLoadingStore;
 
-  const { loading } = UtilLoadingStore;
-
-  if (loading) {
-    return (
-      <Loading loading={1} />
-    );
-  }
+  useEffect(() => {
+    doLoading();
+  }, [doLoading]);
 
   const tempData = {
     id: 1,

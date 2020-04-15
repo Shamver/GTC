@@ -4,6 +4,7 @@ import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import useStores from '../../../../stores/useStores';
 import PostContent from './PostContent';
+import Loading from '../../../util/Loading';
 
 const PostView = ({ match }) => {
   const {
@@ -12,25 +13,28 @@ const PostView = ({ match }) => {
   const { getPost, getPostUpperLower } = BoardPostStore;
   const { setReplyBpId } = BoardReplyStore;
   const { setCurrentBoardToId } = BoardStore;
-  const { doLoading } = UtilLoadingStore;
+  const { loading, doLoading } = UtilLoadingStore;
   const { params } = match;
   const { id } = params;
 
-  doLoading();
-
   useEffect(() => {
+    doLoading();
     setCurrentBoardToId(id);
     getPost(id);
     getPostUpperLower(id);
     setReplyBpId(id);
   }, [
     getPost, setReplyBpId, id, setCurrentBoardToId, getPostUpperLower,
+    doLoading,
   ]);
 
   return (
-    <PostWrapper>
-      <PostContent match={match} />
-    </PostWrapper>
+    <>
+      <Loading loading={loading} />
+      <PostWrapper loading={loading}>
+        <PostContent match={match} />
+      </PostWrapper>
+    </>
   );
 };
 
@@ -47,6 +51,7 @@ PostView.defaultProps = {
 };
 
 const PostWrapper = styled.div`
+  display :  ${(props) => (props.loading ? 'none' : 'block')}
   background-color : white;
   border-bottom: 2px solid #ebeae8;
   border-right: 2px solid #ebeae8;

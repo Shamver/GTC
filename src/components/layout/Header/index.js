@@ -90,7 +90,10 @@ const Header = () => {
                   <LinkNoDeco to="/daily">
                     <DropdownItem30>출석체크</DropdownItem30>
                   </LinkNoDeco>
-                  <DropdownItem30>포인트샵</DropdownItem30>
+                  <LinkNoDeco to="/advertise">
+                    <DropdownItem30>포스팅 광고</DropdownItem30>
+                  </LinkNoDeco>
+                  {/* <DropdownItem30>포인트샵</DropdownItem30> */}
                 </DropdownMenu>
               </DropdownIn>
             </ColNoP>
@@ -207,12 +210,14 @@ const DropdownIn = styled(Dropdown)`
     color: #fff !important;
     text-decoration: none !important;
     background-color: #DC3545 !important;
+    outline: 0;
   }
   
    & .dropdown-item:focus {
     color: #fff !important;
     text-decoration: none !important;
     background-color: #DC3545 !important;
+    outline: 0;
   }
 `;
 

@@ -11,6 +11,7 @@ const Mail = lazy(() => import('./Mail'));
 const Search = lazy(() => import('./Search'));
 const Daily = lazy(() => import('./Daily'));
 const Code = lazy(() => import('./Code'));
+const Advertise = lazy(() => import('./Advertise'));
 
 export default {
   Board,
@@ -24,4 +25,5 @@ export default {
   Search,
   Daily,
   Code,
+  Advertise,
 };

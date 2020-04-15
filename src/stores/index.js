@@ -27,6 +27,7 @@ import BoardSearchStore from './board/SearchStore';
 import CookieLatelyStore from './cookie/LatelyStore';
 
 import EventDailyStore from './event/DailyStore';
+import EventAdvertiseStore from './event/AdvertiseStore';
 
 import SystemCodeStore from './system/CodeStore';
 
@@ -61,6 +62,7 @@ class RootStore {
     this.CookieLatelyStore = new CookieLatelyStore(this);
 
     this.EventDailyStore = new EventDailyStore(this);
+    this.EventAdvertiseStore = new EventAdvertiseStore(this);
 
     this.SystemCodeStore = new SystemCodeStore(this);
   }

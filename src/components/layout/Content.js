@@ -29,16 +29,17 @@ const Content = () => (
         <Route exact path="/code" render={() => <Contents.Code />} />
 
         <Route exact path="/search" render={() => <Contents.Search />} />
+
+
+        {/* Smile Icon */}
         <Route exact path="/daily" render={() => <Contents.Daily />} />
+        <Route exact path="/advertise" render={() => <Contents.Advertise />} />
 
         {/* BOARD */}
         <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} noPagination />} />
         <Route exact path="/:board/page/:currentPage" render={({ match }) => <Contents.Board path={match.params.board} currentPage={match.params.currentPage} />} />
-
         <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
-
         <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
-
         <Route exact path="/:board/modify/:id" render={({ match }) => <Posting match={match} isModify />} />
       </Switch>
       <Alert />
@@ -47,7 +48,7 @@ const Content = () => (
       <ConfirmAlert />
       <ToastContainerCustom
         position="bottom-left"
-        autoClose={3000}
+        autoClose={false}
         hideProgressBar
         newestOnTop={false}
         closeOnClick
@@ -67,10 +68,11 @@ const BorderedDiv = styled.div`
 
 const ToastContainerCustom = styled(ToastContainer)`
   & .Toastify__toast-body {
-    font-family : 'Nanum Gothic', sans-serif !important
+    font-family : 'Nanum Gothic', sans-serif !important;
+    padding : 10px !important;
   }
   
-  width : 380px !important;
+  width : auto !important;
  
 `;
 

@@ -24,6 +24,7 @@ const userPointApi = require('./routes/user/PointRouter');
 const userMailApi = require('./routes/user/MailRouter');
 const cookieLatelyApi = require('./routes/cookie/LatelyRouter');
 const eventDailyApi = require('./routes/event/DailyRouter');
+const eventAdvertiseApi = require('./routes/event/AdvertiseRouter');
 const systemCodeApi = require('./routes/system/CodeRouter');
 
 app.use(cookieParser());
@@ -62,6 +63,7 @@ app.use('/api/board', boardApi);
 app.use('/api/cookie/lately', cookieLatelyApi);
 
 app.use('/api/event/daily', eventDailyApi);
+app.use('/api/event/advertise', eventAdvertiseApi);
 
 app.use('/api/system/code', systemCodeApi);
 
