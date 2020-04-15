@@ -15,6 +15,29 @@ class AdvertiseStore {
     this.root = root;
   }
 
+  @action AddAdPostList = () => {
+    const { userData } = this.root.UserStore;
+
+    axios.post('/api/event/advertise', {
+      ...this.AdvertisePost,
+      userId: userData.id,
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 0) {
+            toast.success(data.MESSAGE);
+            this.getAdPostList();
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
+      })
+      .catch((response) => console.log(response));
+  };
+
   @action getAdPostList = () => {
     axios.get('/api/event/advertise')
       .then((response) => {
@@ -22,7 +45,6 @@ class AdvertiseStore {
         if (data.SUCCESS) {
           if (data.CODE === 0) {
             this.AdvertisePostList = data.rows;
-            console.log(data.rows);
           } else {
             toast.info(data.MESSAGE);
           }

@@ -48,7 +48,7 @@ const Content = () => (
       <ConfirmAlert />
       <ToastContainerCustom
         position="bottom-left"
-        autoClose={3000}
+        autoClose={false}
         hideProgressBar
         newestOnTop={false}
         closeOnClick
@@ -68,10 +68,11 @@ const BorderedDiv = styled.div`
 
 const ToastContainerCustom = styled(ToastContainer)`
   & .Toastify__toast-body {
-    font-family : 'Nanum Gothic', sans-serif !important
+    font-family : 'Nanum Gothic', sans-serif !important;
+    padding : 10px !important;
   }
   
-  width : 380px !important;
+  width : auto !important;
  
 `;
 

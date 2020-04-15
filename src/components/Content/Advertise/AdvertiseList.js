@@ -8,7 +8,7 @@ const AdvertiseList = () => {
   const { AdvertisePostList } = EventAdvertiseStore;
 
   return AdvertisePostList.map((data) => (
-    <AdvertiseRow data={data} />
+    <AdvertiseRow key={data.id} data={data} />
   ));
 };
 
