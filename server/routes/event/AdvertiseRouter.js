@@ -14,7 +14,7 @@ const SELECT_POST_ADVERTISE_LIST = `
   FROM GTC_POST_ADVERTISE AD
 `;
 
-const INSERT_POST_ADVETISE = `
+const INSERT_POST_ADVERTISE = `
   INSERT INTO GTC_POST_ADVERTISE
   VALUES(
      (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_POST_ADVERTISE) as temp)
@@ -33,7 +33,7 @@ router.post('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_POST_ADVETISE,
+      INSERT_POST_ADVERTISE,
       {
         USER_ID: userId,
         MESSAGE: message,
