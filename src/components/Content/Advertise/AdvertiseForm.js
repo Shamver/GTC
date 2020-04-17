@@ -8,8 +8,8 @@ import useStores from '../../../stores/useStores';
 
 const AdvertiseForm = () => {
   const { EventAdvertiseStore } = useStores();
-  const { onChangeAdvertise, AdvertisePost, AddAdPostList } = EventAdvertiseStore;
-  const { message, url, hours } = AdvertisePost;
+  const { onChangeAdvertise, advertisePost, AddAdPostList } = EventAdvertiseStore;
+  const { message, url, hours } = advertisePost;
 
   return (
     <>
@@ -23,7 +23,7 @@ const AdvertiseForm = () => {
         <br />
       </SetDiv>
       <SetDiv>
-        <b>링크(선택)</b>
+        <b>링크</b>
         <MarginInput type="text" placeholder="http://gtc.kr/post/*" name="url" onChange={onChangeAdvertise} value={url} />
         <span>꼭 입력할 필요는 없고 입력하면 클릭 시 어디로 이동할 지 주소를 정할 수 있습니다 / GTC 포스팅 주소만 가능</span>
         <br />

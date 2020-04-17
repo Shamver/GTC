@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 class AdvertiseStore {
   @observable AdvertisePostList = [];
 
-  @observable AdvertisePost = {
+  @observable advertisePost = {
     message: '',
     url: '',
     hours: 1,
@@ -16,10 +16,13 @@ class AdvertiseStore {
   }
 
   @action AddAdPostList = () => {
-    const { userData } = this.root.UserStore;
+    if (!this.advertiseValidationCheck()) {
+      return false;
+    }
 
+    const { userData } = this.root.UserStore;
     axios.post('/api/event/advertise', {
-      ...this.AdvertisePost,
+      ...this.advertisePost,
       userId: userData.id,
     })
       .then((response) => {
@@ -28,6 +31,11 @@ class AdvertiseStore {
           if (data.CODE === 0) {
             toast.success(data.MESSAGE);
             this.getAdPostList();
+            this.advertisePost = {
+              message: '',
+              url: '',
+              hours: 1,
+            };
           } else {
             toast.info(data.MESSAGE);
           }
@@ -36,6 +44,8 @@ class AdvertiseStore {
         }
       })
       .catch((response) => console.log(response));
+
+    return false;
   };
 
   @action getAdPostList = () => {
@@ -56,11 +66,34 @@ class AdvertiseStore {
   };
 
   @action onChangeAdvertise = (event) => {
-    this.AdvertisePost = {
-      ...this.AdvertisePost,
+    this.advertisePost = {
+      ...this.advertisePost,
       [event.target.name]: event.target.value,
     };
-  }
+  };
+
+  advertiseValidationCheck = () => {
+    const { toggleAlert } = this.root.UtilAlertStore;
+
+    // message
+    if (!this.advertisePost.message.trim()) {
+      toggleAlert('하고 싶은 말을 1자 이상 입력해주세요.');
+      return false;
+    }
+
+    // url
+    if (!this.advertisePost.url.trim()) {
+      toggleAlert('링크를 입력해주세요.');
+      return false;
+    }
+
+    // hours
+    if (Number.isNaN(this.advertisePost.hours) || !this.advertisePost.hours.trim()) {
+      toggleAlert('광고 시간이 숫자형태로 입력이 되지않았거나, 입력되지 않았습니다.');
+      return false;
+    }
+    return true;
+  };
 }
 
 export default AdvertiseStore;
