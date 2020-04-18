@@ -1,6 +1,6 @@
 # GTC(Growtopaia Community) Project
 그로우토피아 게임의 웹 커뮤니티 프로젝트입니다.
-게임에 거래가 주목적인 웹 페이지이고 React-Native(or Flutter)로 모바일 어플케이션도 개발 예정입니다.
+게임에 거래가 주목적인 웹 페이지이고 React-Native(or Flutter or Native Script)로 모바일 어플케이션도 개발 예정입니다.
  
 ## 개발환경
 
