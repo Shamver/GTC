@@ -4,18 +4,15 @@ const router = express.Router();
 
 const jwt = require('jsonwebtoken');
 
-const db = require('../../dbConnection')();
 const authMiddleware = require('../../middleware/auth');
-
-const conn = db.init();
 
 const { error, info } = require('../../log-config');
 const Database = require('../../Database');
 
 const SELECT_USER_FROM_TEL_EMAIL = `
   SELECT COUNT(*) AS count FROM GTC_USER
-  WHERE TEL=':TEL'
-  or EMAIL=':EMAIL'
+  WHERE TEL_NO = ':TEL'
+  or EMAIL = ':EMAIL'
 `;
 
 const INSERT_NEW_USER = `
@@ -26,11 +23,15 @@ const INSERT_NEW_USER = `
   ':NICKNAME',
   ':TEL',
   ':BIRTH',
-  ':GENDER',
   ':GT_NICKNAME',
-  sysdate(),
+  ':GENDER',
+  'N',
+  'N',
+  'N',
+  'N',
   null,
-  'Y'
+  sysdate(),
+  null
   )
 `;
 
@@ -41,11 +42,11 @@ const SELECT_USER_FROM_EMAIL = `
   , NAME AS name
   , GT_NICKNAME AS gtNickname
   , NICKNAME AS nickname 
-  , TEL AS tel
-  , date_format(BIRTH, '%Y-%m-%d') AS birth
-  , GENDER AS gender
-  , PROFILE_YN AS profileYN
-  , DELETED_DATE AS deletedDate
+  , TEL_NO AS tel
+  , date_format(BIRTH_DT, '%Y-%m-%d') AS birth
+  , GENDER_CD AS gender
+  , PROFILE_FL AS profileYN
+  , DELETE_FL AS deletedDate
   FROM GTC_USER
   WHERE EMAIL=':EMAIL'
 `;
