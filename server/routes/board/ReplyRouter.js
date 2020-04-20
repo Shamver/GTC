@@ -9,54 +9,53 @@ const Database = require('../../Database');
 
 const { info, error } = require('../../log-config');
 
-const SELECT_BOARD_REPLY_RE_CHECK = `
-  SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY
-  WHERE (ID_REPLY = :REPLY_ID AND ID <> :REPLY_ID)
-  AND DELETE_YN = 'N'
+const SELECT_COMMENT_REPLY_CHECK = `
+  SELECT COUNT(*) AS count FROM GTC_COMMENT
+  WHERE (COMMENT_ID = :COMMENT_ID AND ID <> :COMMENT_ID)
+  AND DELETE_FL = 0
 `;
 
-const UPDATE_BOARD_REPLY_DELETE = `
-  UPDATE GTC_BOARD_REPLY
-    SET DELETE_YN = 'Y'
-  WHERE ID = :REPLY_ID
+const UPDATE_COMMENT_DELETE = `
+  UPDATE GTC_COMMENT
+    SET DELETE_FL = 1
+  WHERE ID = :COMMENT_ID
 `;
 
 const SELECT_LAST_INSERT_ID = `
-  SELECT LAST_INSERT_ID() AS ID
+  SELECT
+    LAST_INSERT_ID() AS ID
 `;
 
-const INSERT_BOARD_REPLY = `
-  INSERT INTO GTC_BOARD_REPLY (
-    BP_ID,
-    ID_REPLY,
-    ID_UPPER,
-    WRITER,
-    DATE,
-    UPDATE_DATE,
-    CONTENT,
-    DEPTH,
-    SECRET_YN,
-    DELETE_YN
+const INSERT_COMMENT = `
+  INSERT INTO GTC_COMMENT (
+    ID
+    , POST_ID
+    , COMMENT_ID
+    , COMMENT_ID_UPPER
+    , USER_ID
+    , CONTENT
+    , SECRET_FL
+    , CRT_DTTM
   ) VALUES (
-    :BP_ID,
-    IFNULL(:REPLY_ID, (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
-    IFNULL((SELECT ID_UPPER FROM (SELECT MIN(ID_UPPER) AS ID_UPPER FROM GTC_BOARD_REPLY WHERE ID = :REPLY_ID) as temp),(SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_BOARD_REPLY) as temp)),
-    ':WRITER', 
-    sysdate(),
-    null, 
-    ':TEXT',
-    :DEPTH,
-    ':SECRET_YN',
-    'N'
+    (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_COMMENT) as temp)
+    , :POST_ID
+    , IFNULL(
+      (SELECT COMMENT_ID_UPPER FROM (SELECT MIN(COMMENT_ID_UPPER) AS COMMENT_ID_UPPER FROM GTC_COMMENT WHERE ID = :COMMENT_ID) as temp)
+      , (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_COMMENT) as temp)
+    )
+    , :USER_ID 
+    , ':CONTENT'
+    , :SECRET_FL
+    , SYSDATE()
   );
 `;
 
-const SELECT_BOARD_REPLY_POST_WRITER_REPLY_ID = `
+const SELECT_COMMENT_POST_WRITER_COMMENT_ID = `
   SELECT 
-    GBP.WRITER as postWriter,
-    IFNULL(MAX(GBR.ID),1) AS replyId
-  FROM GTC_BOARD_POST GBP, GTC_BOARD_REPLY GBR
-  WHERE GBP.ID = :BP_ID
+    GP.USER_ID as postWriter,
+    IFNULL(MAX(GC.ID),1) AS commentId
+  FROM GTC_POST GP, GTC_COMMENT GC
+  WHERE GP.ID = :POST_ID
 `;
 
 
@@ -144,7 +143,7 @@ router.post('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_BOARD_REPLY,
+      INSERT_COMMENT,
       {
         BP_ID: data.bpId,
         REPLY_ID: data.replyId,
@@ -155,7 +154,7 @@ router.post('/', (req, res) => {
       },
     )
       .then(() => database.query(
-        SELECT_BOARD_REPLY_POST_WRITER_REPLY_ID,
+        SELECT_COMMENT_POST_WRITER_REPLY_ID,
         {
           BP_ID: data.bpId,
         },
@@ -288,7 +287,7 @@ router.delete('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_REPLY_RE_CHECK,
+      SELECT_COMMENT_REPLY_CHECK,
       {
         REPLY_ID: data.replyId,
       },
@@ -304,7 +303,7 @@ router.delete('/', (req, res) => {
         }
 
         return database.query(
-          UPDATE_BOARD_REPLY_DELETE,
+          UPDATE_COMMENT_DELETE,
           {
             REPLY_ID: data.replyId,
           },
