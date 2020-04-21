@@ -5,77 +5,90 @@ const router = express.Router();
 const { error, info } = require('../../log-config');
 const Database = require('../../Database');
 
-const SELECT_CODE_GROUP = `
+const SELECT_CODEGROUP = `
   SELECT
-    CMGRP AS 'group'
-    , CMGRP_NM AS groupName
-    , CMGRP_DESC AS groupDesc
+    ID AS groupId
+    , NAME AS groupName
+    , DESC AS groupDesc
   FROM GTC_CODE_GROUP
 `;
 
-const INSERT_CODE_GROUP = `
-  INSERT INTO GTC_CODE_GROUP
-  VALUES (
+const INSERT_CODEGROUP = `
+  INSERT INTO GTC_CODE_GROUP (
+    ID
+    , NAME
+    , DESC
+    , CRT_DTTM
+  ) VALUES (
     ':ID'
     , ':NAME'
     , ':DESC'
-    , sysdate()
+    , SYSDATE()
   )
 `;
 
-const UPDATE_CODE_GROUP = `
-  UPDATE GTC_CODE_GROUP
+const UPDATE_CODEGROUP = `
+  UPDATE GTC_CODEGROUP
   SET  
-    CMGRP_NM = ':NAME'
-    , CMGRP_DESC = ':DESC'
-  WHERE CMGRP = ':ID'
+    NAME = ':NAME'
+    , DESC = ':DESC'
+  WHERE ID = ':ID'
 `;
 
-const DELETE_CODE_GROUP = `
-  DELETE FROM GTC_CODE_GROUP
-  WHERE CMGRP = ':GROUP'
+const DELETE_CODEGROUP = `
+  DELETE FROM GTC_CODEGROUP
+  WHERE ID = ':CODEGROUP_ID'
 `;
 
 const INSERT_CODE = `
-  INSERT INTO GTC_CODE
-  VALUES (
-    ':GROUP'
-    , ':ID'
+  INSERT INTO GTC_CODE (
+    CODEGROUP_ID
+    , CODE
+    , NAME
+    , DESC
+    , ORDER
+    , USE_FL
+    , CRT_DTTM
+  ) VALUES (
+    ':CODEGROUP_ID'
+    , ':CODE'
     , ':NAME'
     , ':DESC'
     , :ORDER
-    , ':USE_YN'
-    , sysdate()
+    , :USE_FL
+    , SYSDATE()
   )
 `;
 
 const SELECT_CODE = `
   SELECT
-    CMGRP AS codeGroup
-    , CMCD AS code
-    , CMCD_NM AS codeName
-    , CMCD_DESC AS codeDesc
-    , CMCD_ORDER AS codeOrder
-    , CMCD_USE_YN AS codeUseYN
+    CODEGROUP_ID AS codeGroup
+    , CODE AS code
+    , NAME AS codeName
+    , DESC AS codeDesc
+    , ORDER AS codeOrder
+    , USE_FL AS codeUseFl
   FROM GTC_CODE
-  WHERE CMGRP = ':CODE_GROUP'
+  WHERE CODEGROUP_ID = ':CODEGROUP_ID'
 `;
 
 const UPDATE_CODE = `
   UPDATE GTC_CODE
   SET  
-    CMCD_NM = ':NAME'
-    , CMCD_DESC = ':DESC'
-    , CMCD_ORDER = :ORDER
-    , CMCD_USE_YN = ':USE_YN'
-  WHERE CMGRP = ':GROUP'
-  AND CMCD = ':CODE'
+    NAME = ':NAME'
+    , DESC = ':DESC'
+    , ORDER = :ORDER
+    , USE_FL = :USE_FL
+  WHERE 
+    CODEGROUP_ID = ':CODEGROUP_ID'
+    AND CODE = ':CODE'
 `;
 
 const DELETE_CODE = `
   DELETE FROM GTC_CODE
-  WHERE CMGRP = ':GROUP'
-  AND CMCD = ':CODE'
+  WHERE 
+    CODEGROUP_ID = ':CODEGROUP_ID'
+    AND CODE = ':CODE'
 `;
 
 
@@ -84,7 +97,7 @@ router.post('/group', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_CODE_GROUP,
+      INSERT_CODEGROUP,
       {
         ID: id,
         NAME: name,
@@ -116,7 +129,7 @@ router.post('/group', (req, res) => {
 router.get('/group', (req, res) => {
   Database.execute(
     (database) => database.query(
-      SELECT_CODE_GROUP,
+      SELECT_CODEGROUP,
     )
       .then((rows) => {
         res.send(rows);
@@ -144,7 +157,7 @@ router.put('/group', (req, res) => {
   const { id, name, desc } = req.body;
   Database.execute(
     (database) => database.query(
-      UPDATE_CODE_GROUP,
+      UPDATE_CODEGROUP,
       {
         ID: id,
         NAME: name,
@@ -177,7 +190,7 @@ router.delete('/group', (req, res) => {
   const { group } = req.query;
   Database.execute(
     (database) => database.query(
-      DELETE_CODE_GROUP,
+      DELETE_CODEGROUP,
       {
         GROUP: group,
       },

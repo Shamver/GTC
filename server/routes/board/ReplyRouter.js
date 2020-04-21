@@ -59,83 +59,81 @@ const SELECT_COMMENT_POST_WRITER_COMMENT_ID = `
 `;
 
 
-const SELECT_BOARD_POST_REPLY = `
+const SELECT_POST_COMMENT = `
   SELECT 
     A.ID AS id
-    , A.ID_REPLY AS idReply
-    , A.ID_UPPER AS idUpper
-    , C.WRITER AS idPostWriter
-    , A.WRITER AS idWriter
-    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = A.WRITER) AS writer
-    , CASE WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇 초 전'
-        WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE,A.DATE, SYSDATE()),'분 전')
-        WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR,A.DATE, SYSDATE()),'시간 전')
-        WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY,A.DATE, SYSDATE()),'일 전')
-        WHEN A.DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH,A.DATE, SYSDATE()),'달 전')
-       ELSE CONCAT(TIMESTAMPDIFF(YEAR,A.DATE, SYSDATE()),'년 전')
-    END  as date
+    , A.COMMENT_ID AS commentId
+    , A.COMMENT_ID_UPPER AS commentIdUpper
+    , C.USER_ID AS idPostWriter
+    , A.USER_ID AS idWriter
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = A.USER_ID) AS writer
+    , CASE WHEN A.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇 초 전'
+        WHEN A.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, A.CRT_DTTM, SYSDATE()),'분 전')
+        WHEN A.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR, A.CRT_DTTM, SYSDATE()),'시간 전')
+        WHEN A.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY, A.CRT_DTTM, SYSDATE()),'일 전')
+        WHEN A.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH, A.CRT_DTTM, SYSDATE()),'달 전')
+       ELSE CONCAT(TIMESTAMPDIFF(YEAR, A.CRT_DTTM, SYSDATE()),'년 전')
+    END AS date
     , CASE
-            WHEN A.UPDATE_DATE IS NULL THEN NULL 
-            WHEN A.UPDATE_DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇 초 전 수정'
-            WHEN A.UPDATE_DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE,A.UPDATE_DATE, SYSDATE()),'분 전 수정')
-            WHEN A.UPDATE_DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR,A.UPDATE_DATE, SYSDATE()),'시간 전 수정')
-            WHEN A.UPDATE_DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY,A.UPDATE_DATE, SYSDATE()),'일 전 수정')
-            WHEN A.UPDATE_DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH,A.UPDATE_DATE, SYSDATE()),'달 전 수정')
-           ELSE CONCAT(TIMESTAMPDIFF(YEAR, A.UPDATE_DATE, SYSDATE()),'년 전')
+            WHEN A.MFY_DTTM IS NULL THEN NULL 
+            WHEN A.MFY_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇 초 전 수정'
+            WHEN A.MFY_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, A.MFY_DTTM, SYSDATE()),'분 전 수정')
+            WHEN A.MFY_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR, A.MFY_DTTM, SYSDATE()),'시간 전 수정')
+            WHEN A.MFY_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY, A.MFY_DTTM, SYSDATE()),'일 전 수정')
+            WHEN A.MFY_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH, A.MFY_DTTM, SYSDATE()),'달 전 수정')
+           ELSE CONCAT(TIMESTAMPDIFF(YEAR, A.MFY_DTTM, SYSDATE()),'년 전')
        END  as updateDate
-    , ( 
-        SELECT 
-                CASE WHEN DELETE_YN = 'Y' THEN 'DELETED'
-                        WHEN DEPTH = 2 THEN  (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = WRITER) 
-                END 
-        FROM GTC_BOARD_REPLY
-        WHERE ID = A.ID_REPLY
-    ) AS replyWriterName
     , A.CONTENT as content
-    , A.DEPTH as depth
-    , A.SECRET_YN as secretYN
-    , A.DELETE_YN as deleteYN
-    , (SELECT COUNT(*) FROM GTC_BOARD_REPLY_LIKE WHERE ID = A.ID) AS likeCount
-    FROM GTC_BOARD_REPLY A, GTC_BOARD_POST C
-  WHERE A.BP_ID = ':BP_ID' AND A.WRITER != IFNULL(( SELECT TARGET_ID FROM GTC_USER_IGNORE WHERE FROM_ID = :USER_ID), -1)
-  AND A.DELETE_YN = 'N'
-  AND C.ID = A.BP_ID
-  ORDER BY A.ID_UPPER, A.ID
+    , A.SECRET_FL as secretFl
+    , A.DELETE_FL as deleteFl
+    , (SELECT COUNT(*) FROM GTC_COMMENT_LIKE WHERE COMMENT_ID = A.ID) AS likeCount
+    FROM GTC_COMMENT A, GTC_POST C
+  WHERE A.POST_ID = ':POST_ID' AND A.USER_ID != IFNULL(( SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
+  AND A.DELETE_FL = 0
+  AND C.ID = A.POST_ID
+  ORDER BY A.COMMENT_ID_UPPER, A.ID
 `;
 
-const SELECT_BOARD_POST_MINE = `
+const SELECT_MY_POST = `
   SELECT 
     GBP.ID AS postId
     , GBP.TITLE AS postTitle
     , GBR.ID AS replyId
     , GBR.CONTENT AS replyContent
-    , date_format(GBR.DATE, '%Y-%m-%d %H:%i:%s') AS replyDate
-  FROM GTC_BOARD_POST GBP LEFT JOIN GTC_BOARD_REPLY GBR
-  ON GBP.ID = GBR.BP_ID
-  WHERE GBR.WRITER = :USER_ID
-  ORDER BY GBR.DATE DESC
+    , date_format(GBR.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS replyDate
+  FROM 
+    GTC_POST GBP 
+    LEFT JOIN GTC_COMMENT GBR
+    ON GBP.ID = GBR.POST_ID
+  WHERE GBR.USER_ID = :USER_ID
+  ORDER BY GBR.CRT_DTTM DESC
 `;
 
-const SELECT_BOARD_REPLY_LIKE_DUPLICATE_CHECK = `
-  SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY_LIKE
-    WHERE ID = :ID
-    AND U_ID = :U_ID
+const SELECT_COMMENT_LIKE_DUPLICATE_CHECK = `
+  SELECT 
+    COUNT(*) AS count 
+  FROM GTC_COMMENT_LIKE
+  WHERE 
+    ID = :ID
+    AND USER_ID = :USER_ID
 `;
 
-const INSERT_BOARD_REPLY_LIKE = `
-  INSERT INTO GTC_BOARD_REPLY_LIKE
-  VALUES (
-    :ID,
-    :U_ID
+const INSERT_COMMENT_LIKE = `
+  INSERT INTO GTC_COMMENT_LIKE (
+    COMMENT_ID
+    , USER_ID
+  ) VALUES (
+    :COMMENT_ID
+    , :USER_ID
   )
 `;
 
-const UPDATE_BOARD_REPLY = `
-  UPDATE GTC_BOARD_REPLY
+const UPDATE_COMMENT = `
+  UPDATE GTC_COMMENT
   SET 
-    CONTENT = ':CONTENT',
-    UPDATE_DATE = sysdate()
-  WHERE ID = :ID
+    CONTENT = ':CONTENT'
+    , MFY_DTTM = SYSDATE()
+  WHERE ID = :COMMENT_ID
 `;
 
 router.post('/', (req, res) => {
@@ -145,18 +143,18 @@ router.post('/', (req, res) => {
     (database) => database.query(
       INSERT_COMMENT,
       {
-        BP_ID: data.bpId,
-        REPLY_ID: data.replyId,
-        WRITER: data.writer,
+        POST_ID: data.bpId,
+        COMMENT_ID: data.replyId,
+        USER_ID: data.writer,
         TEXT: data.text,
         DEPTH: data.depth,
         SECRET_YN: data.secretYN,
       },
     )
       .then(() => database.query(
-        SELECT_COMMENT_POST_WRITER_REPLY_ID,
+        SELECT_COMMENT_POST_WRITER_COMMENT_ID,
         {
-          BP_ID: data.bpId,
+          POST_ID: data.bpId,
         },
       ))
       .then((rows) => {
@@ -212,7 +210,7 @@ router.get('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_POST_REPLY,
+      SELECT_POST_COMMENT,
       {
         BP_ID: data.bpId,
         USER_ID: data.userId,
@@ -250,7 +248,7 @@ router.put('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      UPDATE_BOARD_REPLY,
+      UPDATE_COMMENT,
       {
         ID: data.id,
         CONTENT: data.content,
@@ -289,7 +287,7 @@ router.delete('/', (req, res) => {
     (database) => database.query(
       SELECT_COMMENT_REPLY_CHECK,
       {
-        REPLY_ID: data.replyId,
+        COMMENT_ID: data.replyId,
       },
     )
       .then((rows) => {
@@ -305,7 +303,7 @@ router.delete('/', (req, res) => {
         return database.query(
           UPDATE_COMMENT_DELETE,
           {
-            REPLY_ID: data.replyId,
+            COMMENT_ID: data.replyId,
           },
         );
       })
@@ -342,7 +340,7 @@ router.post('/like', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_REPLY_LIKE_DUPLICATE_CHECK,
+      SELECT_COMMENT_LIKE_DUPLICATE_CHECK,
       {
         ID: data.id,
         U_ID: data.uId,
@@ -358,7 +356,7 @@ router.post('/like', (req, res) => {
           throw new Error('이미 해당 댓글에 좋아요를 눌렀습니다.');
         } else {
           return database.query(
-            INSERT_BOARD_REPLY_LIKE,
+            INSERT_COMMENT_LIKE,
             {
               ID: data.id,
               U_ID: data.uId,
@@ -398,7 +396,7 @@ router.get('/mine', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_POST_MINE,
+      SELECT_MY_POST,
       {
         USER_ID: userId,
       },

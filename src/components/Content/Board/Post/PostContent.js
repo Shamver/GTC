@@ -35,11 +35,14 @@ const PostContent = ({ match }) => {
   const { loading, doLoading } = UtilLoadingStore;
   const { toggleReport } = BoardReportStore;
   const {
-    id: postId, boardName, categoryName, title, writer, date, views, content,
+    id: postId, boardName, categoryName, title, writerName, date, views, content,
     recommendCount, replyAllow, secretReplyAllow, notRecommendCount,
     isFavorite, myPostYN,
   } = postView;
   const { upper, lower } = currentPostUpperLower;
+  console.log(upper);
+  console.log(lower);
+
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
   const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
   const { addFavorite, deleteFavorite } = UserFavoriteStore;
@@ -67,7 +70,7 @@ const PostContent = ({ match }) => {
             </Title>
             <ProfileImg src={anonymous} />
           </CategoryAndTitle>
-          <b>{writer}</b>님
+          <b>{writerName}</b>님
         </div>
         <NavLine />
         <PostViewWrapper>
@@ -105,7 +108,7 @@ const PostContent = ({ match }) => {
               </GreyButton>
             </ListLink>
             &nbsp;
-            <Button outline color="danger" size="sm" onClick={() => toggleReport(postId, 'RP01', title, writer)}>
+            <Button outline color="danger" size="sm" onClick={() => toggleReport(postId, 'RP01', title, writerName)}>
               <FontAwesomeIcon icon={faBellSlash} />
               &nbsp;신고
             </Button>

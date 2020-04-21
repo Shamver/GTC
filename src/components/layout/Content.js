@@ -48,7 +48,7 @@ const Content = () => (
       <ConfirmAlert />
       <ToastContainerCustom
         position="bottom-left"
-        autoClose={false}
+        autoClose={1500}
         hideProgressBar
         newestOnTop={false}
         closeOnClick

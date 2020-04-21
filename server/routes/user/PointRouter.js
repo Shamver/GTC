@@ -7,17 +7,19 @@ const Database = require('../../Database');
 
 const SELECT_USER_POINT_LIST = `
   SELECT 
-  @rownum:=@rownum+1 as rn
-  , (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_USER_POINT WHERE USER_ID = :USER_ID) AS pageCount
-  , ID AS id
-  , TYPE AS type
-  , POST_ID AS postId
-  , REPLY_ID AS replyId
-  , COST AS point
-  , date_format(DATE, '%Y-%m-%d %H:%i:%s') AS date
-  FROM GTC_USER_POINT, (SELECT @ROWNUM := :ROWNUM) AS TEMP
+    @ROWNUM := @ROWNUM + 1 AS rn
+    , (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_USER_POINT WHERE USER_ID = :USER_ID) AS pageCount
+    , ID AS id
+    , TYPE_CD AS type
+    , POST_ID AS postId
+    , REPLY_ID AS replyId
+    , COST AS point
+    , DATE_FORMAT(CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS date
+  FROM 
+    GTC_USER_POINT
+    , (SELECT @ROWNUM := :ROWNUM) AS TEMP
   WHERE USER_ID = :USER_ID
-  ORDER BY DATE DESC
+  ORDER BY CRT_DTTM DESC
   LIMIT :ROWNUM, :MAX_COUNT
 `;
 

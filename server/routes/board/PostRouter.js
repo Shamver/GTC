@@ -14,17 +14,21 @@ const point = require('../../middleware/point');
 const SELECT_POST_LIST = `
   SELECT 
     @ROWNUM := @ROWNUM+1 as rn
-      , P.ID AS id
-      , P.TITLE AS title
-      , P.USER_ID AS writerId
-      , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
-      , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
-      , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
-      , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE ID = P.ID AND TYPE = 'R01') as recommendCount
-      , (SELECT COUNT(*) AS count FROM GTC_REPLY WHERE POST_ID = P.ID AND DELETE_FL = 0) as replyCount
-      , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD') AS pageCount
-  FROM GTC_POST P, (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
-  WHERE BOARD_CD = ':BOARD_CD' AND P.USER_ID != IFNULL((SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
+    , P.ID AS id
+    , P.TITLE AS title
+    , P.USER_ID AS writerId
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
+    , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
+    , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
+    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE ID = P.ID AND TYPE_CD = 'R01') as recommendCount
+    , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD') AS pageCount
+  FROM 
+    GTC_POST P
+    , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
+  WHERE 
+    BOARD_CD = ':BOARD_CD' 
+    AND P.USER_ID != IFNULL((SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -36,20 +40,20 @@ const INSERT_POST = `
     , CATEGORY_CD
     , TITLE
     , USER_ID
-    . CONTENT
+    , CONTENT
     , NOTICE_FL
     , SECRET_FL
     , SECRET_COMMENT_ALLOW_FL
     , COMMENT_ALLOW_FL
     , CRT_DTTM
   ) VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_POST) as temp),
+    (SELECT * FROM (SELECT IFNULL(MAX(ID) + 1, 1) FROM GTC_POST) AS TEMP)
     , ':BOARD_CD'
     , ':CATEGORY_CD'
     , ':TITLE'
     , :USER_ID
     , ':CONTENT'
-    , :NOTICE_FL
+    , 0
     , :SECRET_FL
     , :SECRET_COMMENT_ALLOW_FL
     , :COMMENT_ALLOW_FL
@@ -67,7 +71,8 @@ const SELECT_POST_RECOMMEND_DUPLICATE_CHECK = `
   SELECT 
     COUNT(*) AS count 
   FROM GTC_POST_RECOMMEND
-  WHERE POST_ID = :POST_ID
+  WHERE 
+    POST_ID = :POST_ID
     AND USER_ID = :USER_ID
 `;
 
@@ -96,29 +101,29 @@ const SELECT_MINE_POST = `
 
 const SELECT_POST_SINGLE = `
   SELECT 
-  P.ID AS id
-  , P.BOARD_CD AS board
-  , IF(P.BOARD_CD = 'FREE','자유게시판','그외') AS boardName
-  , CATEGORY_CD AS category
-  , IF(P.CATEGORY_CD = 'FREE','자유','그외') AS categoryName
-  , IF((SELECT F.POST_ID FROM GTC_USER_FAVORITE F WHERE F.USER_ID = :USER_ID AND F.POST_ID = P.ID), 1, 0) AS isFavorite
-  , P.TITLE AS title
-  , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
-  , IF(P.USER_ID = :USER_ID, 1, 0) AS isMyPost
-  , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
-  , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE ID = P.ID AND TYPE_CD = 'R02') AS notRecommendCount
-  , CASE WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
-         WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, CRT_DTTM, SYSDATE()), '분 전')
-         WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR, CRT_DTTM, SYSDATE()), '시간 전')
-         WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY, CRT_DTTM, SYSDATE()), '일 전')
-         WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH, CRT_DTTM, SYSDATE()), '달 전')
-     ELSE CONCAT(TIMESTAMPDIFF(YEAR, CRT_DTTM, SYSDATE()),'년 전')
-  END AS date
-  , P.CONTENT AS content
-  , P.VIEW_CNT AS viewCnt
-  , P.SECRET_FL AS secret
-  , P.SECRET_COMMENT_ALLOW_FL AS secretCommentAllow
-  , P.COMMENT_ALLOW_FL AS commentAllow
+    P.ID AS id
+    , P.BOARD_CD AS board
+    , IF(P.BOARD_CD = 'FREE','자유게시판','그외') AS boardName
+    , CATEGORY_CD AS category
+    , IF(P.CATEGORY_CD = 'FREE','자유','그외') AS categoryName
+    , IF((SELECT F.POST_ID FROM GTC_USER_FAVORITE F WHERE F.USER_ID = :USER_ID AND F.POST_ID = P.ID), 1, 0) AS isFavorite
+    , P.TITLE AS title
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
+    , IF(P.USER_ID = :USER_ID, 1, 0) AS isMyPost
+    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
+    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE ID = P.ID AND TYPE_CD = 'R02') AS notRecommendCount
+    , CASE WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
+           WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, CRT_DTTM, SYSDATE()), '분 전')
+           WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR, CRT_DTTM, SYSDATE()), '시간 전')
+           WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY, CRT_DTTM, SYSDATE()), '일 전')
+           WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH, CRT_DTTM, SYSDATE()), '달 전')
+      ELSE CONCAT(TIMESTAMPDIFF(YEAR, CRT_DTTM, SYSDATE()),'년 전')
+      END AS date
+    , P.CONTENT AS content
+    , P.VIEW_CNT AS viewCnt
+    , P.SECRET_FL AS secret
+    , P.SECRET_COMMENT_ALLOW_FL AS secretCommentAllow
+    , P.COMMENT_ALLOW_FL AS commentAllow
   FROM GTC_POST P 
   WHERE ID = :POST_ID
 `;
@@ -139,7 +144,7 @@ const SELECT_POST_UPPER_AND_LOWER = `
       , P.ID AS ID
       , P.TITLE AS title
       , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writer
-    FROM GTC_BOARD_POST P, (SELECT @ROWNUM := 0) AS TEMP
+    FROM GTC_POST P, (SELECT @ROWNUM := 0) AS TEMP
     WHERE BOARD_CD = (SELECT BOARD_CD FROM GTC_POST WHERE ID = :POST_ID)
     ORDER BY ID DESC    
   ) AS B
@@ -168,7 +173,8 @@ const SELECT_POST_UPPER_AND_LOWER = `
 
 const UPDATE_POST = `
   UPDATE GTC_POST 
-  SET BOARD_CD = ':BOARD_CD'
+  SET 
+    BOARD_CD = ':BOARD_CD'
     , CATEGORY_CD = ':CATEGORY_CD'
     , TITLE = ':TITLE'
     , CONTENT = ':CONTENT'
@@ -178,7 +184,7 @@ const UPDATE_POST = `
    WHERE ID = :POST_ID 
 `;
 
-const DELETE_BOARD_POST = `
+const DELETE_POST = `
   DELETE FROM GTC_POST 
   WHERE ID = :POST_ID 
 `;
@@ -192,7 +198,7 @@ router.get('/', (req, res) => {
     (database) => database.query(
       SELECT_POST_LIST,
       {
-        B_ID: board.toUpperCase(),
+        BOARD_CD: board.toUpperCase(),
         CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
         PER_PAGE: isHome ? 9 : 25,
@@ -233,15 +239,14 @@ router.post('/', (req, res) => {
     (database) => database.query(
       INSERT_POST,
       {
-        BOARD: data.board,
-        CATEGORY: data.category,
+        BOARD_CD: data.board,
+        CATEGORY_CD: data.category,
         TITLE: data.title,
-        WRITER: data.writer,
+        USER_ID: data.writer,
         CONTENT: data.content,
-        DEPTH: data.depth,
-        SECRET: data.secret,
-        SECRET_REPLY_ALLOW: data.secretReplyAllow,
-        REPLY_ALLOW: data.replyAllow,
+        SECRET_FL: data.secret,
+        SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
+        COMMENT_ALLOW_FL: data.replyAllow,
       },
     )
       .then(() => database.query(
@@ -257,7 +262,7 @@ router.post('/', (req, res) => {
         point('addPost', 'POST', postData);
         res.json({
           SUCCESS: true,
-          CODE: 0,
+          CODE: 1,
           MESSAGE: '😊 게시글이 등록되었어요!',
         });
       }),
@@ -287,16 +292,15 @@ router.put('/', (req, res) => {
     (database) => database.query(
       UPDATE_POST,
       {
-        ID: data.id,
-        BOARD: data.board,
-        CATEGORY: data.category,
+        POST_ID: data.id,
+        BOARD_CD: data.board,
+        CATEGORY_CD: data.category,
         TITLE: data.title,
-        WRITER: data.writer,
+        USER_ID: data.writer,
         CONTENT: data.content,
-        DEPTH: data.depth,
-        SECRET: data.secret,
-        SECRET_REPLY_ALLOW: data.secretReplyAllow,
-        REPLY_ALLOW: data.replyAllow,
+        SECRET_FL: data.secret,
+        SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
+        COMMENT_ALLOW_FL: data.replyAllow,
       },
     )
       .then(() => database.query(
@@ -336,9 +340,9 @@ router.delete('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      DELETE_BOARD_POST,
+      DELETE_POST,
       {
-        ID: data.id,
+        POST_ID: data.id,
       },
     )
       .then(() => {
@@ -371,8 +375,8 @@ router.post('/recommend', (req, res) => {
     (database) => database.query(
       SELECT_POST_RECOMMEND_DUPLICATE_CHECK,
       {
-        ID: data.id,
-        U_ID: data.uId,
+        POST_ID: data.id,
+        USER_ID: data.uId,
       },
     )
       .then((rows) => {
@@ -390,7 +394,7 @@ router.post('/recommend', (req, res) => {
           {
             ID: data.id,
             U_ID: data.uId,
-            TYPE: data.type,
+            TYPE_CD: data.type,
           },
         );
       })

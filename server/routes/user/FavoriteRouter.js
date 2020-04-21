@@ -6,34 +6,46 @@ const { error, info } = require('../../log-config');
 const Database = require('../../Database');
 
 const SELECT_USER_FAVORITE_LIST = `
-  SELECT GBP.TITLE AS postTitle
-  , GUF.POST_ID AS postId
-  , date_format(GBP.DATE, '%Y-%m-%d %H:%i:%s') AS postDate
-  , GUF.DATE AS favoriteDate
-  , GBP.VIEWS AS postViews
-  FROM GTC_USER_FAVORITE GUF LEFT JOIN GTC_BOARD_POST GBP
-  ON GUF.POST_ID = GBP.ID
+  SELECT 
+    GBP.TITLE AS postTitle
+    , GUF.POST_ID AS postId
+    , DATE_FORMAT(GBP.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS postDate
+    , GUF.CRT_DTTM AS favoriteDate
+    , GBP.VIEW_CNT AS postViews
+  FROM 
+    GTC_USER_FAVORITE GUF 
+    LEFT JOIN GTC_POST GBP
+    ON GUF.POST_ID = GBP.ID
   WHERE GUF.USER_ID = :USER_ID
-  ORDER BY favoriteDate DESC
+  ORDER BY GUF.CRT_DTTM DESC
 `;
 
 const SELECT_USER_FAVORITE = `
-  SELECT * FROM GTC_USER_FAVORITE
-  WHERE USER_ID = :USER_ID AND POST_ID = :BP_ID
+  SELECT 
+    * 
+  FROM GTC_USER_FAVORITE
+  WHERE 
+    USER_ID = :USER_ID 
+    AND POST_ID = :POST_ID
 `;
 
 const INSERT_USER_FAVORITE = `
-  INSERT INTO GTC_USER_FAVORITE
-  VALUES(
+  INSERT INTO GTC_USER_FAVORITE (
+    USER_ID
+    , POST_ID
+    , CRT_DTTM
+  ) VALUES (
     :USER_ID
-    , :BP_ID
-    , sysdate()
-    )
+    , :POST_ID
+    , SYSDATE()
+  )
 `;
 
 const DELETE_USER_FAVORITE = `
   DELETE FROM GTC_USER_FAVORITE
-  WHERE POST_ID = :BP_ID AND USER_ID = :USER_ID
+  WHERE 
+    POST_ID = :POST_ID 
+    AND USER_ID = :USER_ID
 `;
 
 // 우선은 어차피 포스트만 즐겨찾기 대상이기 때문에 루트로만 라우팅. 추가적으로 생기면 진행.

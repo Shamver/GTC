@@ -6,22 +6,31 @@ const Database = require('../../Database');
 
 const { info, error } = require('../../log-config');
 
-const SELECT_BOARD_REPORT = `
-  SELECT COUNT(*) AS count FROM GTC_BOARD_REPORT
-  WHERE TARGET_ID = :TARGET_ID
-  AND U_ID = :WRITER_ID
-  AND TYPE = ':TYPE'
+const SELECT_REPORT = `
+  SELECT 
+    COUNT(*) AS count 
+  FROM GTC_REPORT
+  WHERE 
+    TARGET_ID = :TARGET_ID
+    AND USER_ID = :USER_ID
+    AND TYPE_CD = ':TYPE_CD'
 `;
 
-const INSERT_BOARD_REPORT = `
-  INSERT INTO GTC_BOARD_REPORT
-  VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_REPORT) as temp),
-    :TARGET_ID,
-    :WRITER_ID,
-    ':TYPE',
-    ':REASON',
-    ':DESCRIPTION'
+const INSERT_REPORT = `
+  INSERT INTO GTC_REPORT (
+    ID
+    , TARGET_ID
+    , USER_ID
+    , TYPE_CD
+    , REASON_CD
+    , REASON_DESC
+  ) VALUES (
+    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_REPORT) as temp)
+    , :TARGET_ID
+    , :USER_ID
+    , ':TYPE_CD'
+    , ':REASON_CD'
+    , ':REASON_DESC'
   )
 `;
 
@@ -32,7 +41,7 @@ router.post('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_REPORT,
+      SELECT_REPORT,
       {
         TARGET_ID: targetId,
         WRITER_ID: writerId,
@@ -49,7 +58,7 @@ router.post('/', (req, res) => {
           throw new Error('이미 신고한 사람입니다.');
         } else {
           return database.query(
-            INSERT_BOARD_REPORT,
+            INSERT_REPORT,
             {
               TARGET_ID: targetId,
               WRITER_ID: writerId,

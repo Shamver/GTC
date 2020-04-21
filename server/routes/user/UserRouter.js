@@ -7,16 +7,17 @@ const Database = require('../../Database');
 
 const UPDATE_USER_DELETE = `
   UPDATE GTC_USER
-  SET DELETED_DATE = sysdate()
-  WHERE ID = :USER_ID;
+  SET DELETED_DTTM = SYSDATE()
+  WHERE ID = :USER_ID
 `;
 
 const UPDATE_USER_INFO = `
   UPDATE GTC_USER
-  SET NICKNAME = ':NICKNAME',
-  BIRTH = ':BIRTH',
-  GENDER = ':GENDER',
-  PROFILE_YN = ':PROFILE_YN'
+  SET 
+    NICKNAME = ':NICKNAME'
+    , BIRTH = ':BIRTH'
+    , GENDER = ':GENDER'
+    , PROFILE_FL = :PROFILE_FL
   WHERE ID = :USER_ID
 `;
 

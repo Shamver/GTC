@@ -9,15 +9,21 @@ const pointConfig = {
 };
 
 const INSERT_POINT = `
-  INSERT INTO GTC_USER_POINT VALUES(
-  (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_USER_POINT) as temp),
-  ':TYPE',
-  ':BP_ID',
-  :REPLY_ID,
-  :COST,
-  ':WRITER',
-  sysdate()
-)
+  INSERT INTO GTC_USER_POINT (
+    ID
+    , USER_ID
+    , TARGET_ID
+    , TYPE_CD
+    , COST
+    , CRT_DTTM
+  ) VALUES (
+    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_USER_POINT) AS TEMP)
+    , :USER_ID
+    , :TARGET_ID
+    , ':TYPE_CD'
+    , :COST
+    , SYSDATE()
+  )
 `;
 
 module.exports = (action, type, data) => {
@@ -28,11 +34,11 @@ module.exports = (action, type, data) => {
     (database) => database.query(
       INSERT_POINT,
       {
-        TYPE: type,
-        BP_ID: data.bpId,
-        REPLY_ID: replyId,
+        TYPE_CD: type,
+        POST_ID: data.bpId,
+        TARGET_ID: !replyId ? data.bpId : replyId,
         COST: cost,
-        WRITER: data.writer,
+        USER_ID: data.writer,
       },
     )
       .then(() => {

@@ -7,56 +7,76 @@ const Database = require('../../Database');
 
 const SELECT_USER_GET_MAIL_LIST = `
   SELECT 
-  M.ID AS id
-  , U.NICKNAME AS fromName
-  , M.MESSAGE AS message
-  , date_format(M.SENT_DATE, '%Y-%m-%d %H:%i:%s') AS date
-  , IFNULL(date_format(M.READ_DATE, '%Y-%m-%d %H:%i:%s'), null) as readDate
-  FROM GTC_USER_MAIL M, GTC_USER U
-  WHERE M.TARGET_ID = :USER_ID AND U.ID = M.FROM_ID AND M.DELETE_YN = 'N'
+    M.ID AS id
+    , U.NICKNAME AS fromName
+    , M.MESSAGE AS message
+    , DATE_FORMAT(M.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS date
+    , IFNULL(DATE_FORMAT(M.READ_DTTM, '%Y-%m-%d %H:%i:%s'), null) as readDate
+  FROM 
+    GTC_USER_MAIL M
+    , GTC_USER U
+  WHERE
+    M.TARGET_ID = :USER_ID 
+    AND U.ID = M.USER_ID 
+    AND M.DELETE_FL = 0
   ORDER BY M.SENT_DATE DESC
 `;
 
 const SELECT_USER_SENT_MAIL_LIST = `
   SELECT
-  M.ID AS id
-  , U.NICKNAME AS targetName
-  , M.MESSAGE AS message
-  , date_format(M.SENT_DATE, '%Y-%m-%d %H:%i:%s') AS date
-  , IFNULL(date_format(M.READ_DATE, '%Y-%m-%d %H:%i:%s'), null) as readDate
-  FROM GTC_USER_MAIL M, GTC_USER U
-  WHERE M.FROM_ID = :USER_ID AND U.ID = M.TARGET_ID AND M.DELETE_YN = 'N'
-  ORDER BY M.SENT_DATE DESC
+    M.ID AS id
+    , U.NICKNAME AS targetName
+    , M.MESSAGE AS message
+    , DATE_FORMAT(M.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS date
+    , IFNULL(DATE_FORMAT(M.READ_DTTM, '%Y-%m-%d %H:%i:%s'), NULL) AS readDate
+  FROM 
+    GTC_USER_MAIL M
+    , GTC_USER U
+  WHERE 
+    M.USER_ID = :USER_ID 
+    AND U.ID = M.USER_ID_TARGET 
+    AND M.DELETE_FL = 0
+  ORDER BY M.SENT_DTTM DESC
 `;
 
 const SELECT_USER_FROM_NICKNAME = `
-  SELECT ID as targetId
+  SELECT ID AS targetId
   FROM GTC_USER
   WHERE NICKNAME = ':NICKNAME'
 `;
 
 const INSERT_USER_MAIL = `
-  INSERT INTO GTC_USER_MAIL VALUES(
-    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_USER_MAIL) as temp)
-    , :FROM_ID
-    , :TARGET_ID
+  INSERT INTO GTC_USER_MAIL (
+    ID
+    , USER_ID
+    , USER_ID_TARGET
+    , MESSAGE
+    , CRT_DTTM
+  ) VALUES (
+    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1, 1) FROM GTC_USER_MAIL) AS TEMP)
+    , :USER_ID
+    , :USER_ID_TARGET
     , ':MESSAGE'
-    , sysdate()
-    , null
-    , 'N'
+    , SYSDATE()
   )
 `;
 
 const UPDATE_USER_MAIL_READ = `
   UPDATE GTC_USER_MAIL
-  SET READ_DATE = sysdate()
-  WHERE (FROM_ID = :USER_ID OR TARGET_ID = :USER_ID) AND ID = :MAIL_ID
+  SET READ_DATE = SYSDATE()
+  WHERE 
+    (USER_ID = :USER_ID 
+      OR USER_ID_TARGET = :USER_ID) 
+    AND ID = :MAIL_ID
 `;
 
 const UPDATE_USER_MAIL_DELETE = `
   UPDATE GTC_USER_MAIL
-  SET DELETE_YN = 'Y'
-  WHERE (FROM_ID = :USER_ID OR TARGET_ID = :USER_ID) AND ID = :MAIL_ID
+  SET DELETE_FL = 1
+  WHERE 
+    (USER_ID = :USER_ID 
+      OR USER_ID_TARGET = :USER_ID) 
+    AND ID = :MAIL_ID
 `;
 
 router.get('/get', (req, res) => {

@@ -73,9 +73,9 @@ const Posting = (props) => {
         }}
       />
       <PostingFooter>
-        <CustomCheckbox type="checkbox" id="replyAllow" name="replyAllow" value="Y" label="댓글 허용" onChange={onChangeValue} checked={post.replyAllow === 'Y'} />
-        <CustomCheckbox type="checkbox" id="secret" name="secret" value="Y" label="비밀글" onChange={onChangeValue} checked={post.secret === 'Y'} />
-        <CustomCheckbox type="checkbox" id="secretReplyAllow" name="secretReplyAllow" value="Y" label="비밀 댓글 허용" onChange={onChangeValue} checked={post.secretReplyAllow === 'Y'} />
+        <CustomCheckbox type="checkbox" id="replyAllow" name="replyAllowFl" value={1} label="댓글 허용" onChange={onChangeValue} checked={post.replyAllow} />
+        <CustomCheckbox type="checkbox" id="secret" name="secretFl" value={1} label="비밀글" onChange={onChangeValue} checked={post.secret} />
+        <CustomCheckbox type="checkbox" id="secretReplyAllow" name="secretReplyAllowFl" value={1} label="비밀 댓글 허용" onChange={onChangeValue} checked={post.secretReplyAllow} />
       </PostingFooter>
       <PostingFooter>
         <MarginButton onClick={goBack} color="secondary">작성취소</MarginButton>

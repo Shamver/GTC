@@ -7,8 +7,7 @@ const { error, info } = require('../../log-config');
 const Database = require('../../Database');
 
 const SELECT_CURRENT_BOARD = `
-  SELECT
-    LOWER(BOARD_CD) AS currentBoard 
+  SELECT LOWER(BOARD_CD) AS currentBoard 
   FROM GTC_POST
   WHERE ID = :POST_ID
 `;

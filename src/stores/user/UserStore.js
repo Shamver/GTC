@@ -36,9 +36,9 @@ class UserStore {
     }
 
     toggleConfirmAlert(
-      `이름(실명): ${this.registerData.name}
-      전화번호: ${this.registerData.tel}
-      그로우토피아 닉네임: ${this.registerData.gtNickname} \n
+      `이름(실명): <b>${this.registerData.name}</b><br />
+      전화번호: <b>${this.registerData.tel}</b><br />
+      그로우토피아 닉네임: <b>${this.registerData.gtNickname}</b><br /><br />
       위 정보가 정확하지 않을 시 거래에 문제가 생기거나 
       밴을 당할 우려가 있습니다.
       회원가입 입력란 하단 설명을 참고하시어 제대로 입력해주십시오.

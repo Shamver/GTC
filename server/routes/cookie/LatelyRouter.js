@@ -9,9 +9,9 @@ const { get, del } = require('../../middleware/latelyCookie');
 
 const SELECT_LATELY_POST = `
   SELECT
-  ID AS postId
-  , TITLE AS postTitle
-  FROM GTC_BOARD_POST
+    ID AS id
+    , TITLE AS title
+  FROM GTC_POST
   WHERE ID IN (:DATA)
   ORDER BY FIELD (id, :DATA)
 `;
