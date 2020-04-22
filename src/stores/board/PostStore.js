@@ -10,8 +10,8 @@ class PostStore {
     text: '',
     depth: '',
     secretFl: 0,
-    replyAllowFl: 1,
-    secretReplyAllowFl: 0,
+    commentAllowFl: 1,
+    secretCommentAllowFl: 0,
   };
 
   @observable boardPostList = {
@@ -65,8 +65,8 @@ class PostStore {
       writer: this.root.UserStore.userData.id,
       content: this.post.text,
       secret: this.post.secretFl,
-      replyAllow: this.post.replyAllowFl,
-      secretReplyAllow: this.post.secretReplyAllowFl,
+      replyAllow: this.post.commentAllowFl,
+      secretReplyAllow: this.post.secretCommentAllowFl,
     })
       .then((response) => {
         const { data } = response;
@@ -99,10 +99,9 @@ class PostStore {
       title: this.post.title,
       writer: this.root.UserStore.userData.id,
       content: this.post.text,
-      depth: 1,
       secret: this.post.secretFl,
-      replyAllow: this.post.replyAllowFl,
-      secretReplyAllow: this.post.secretReplyAllowFl,
+      replyAllow: this.post.commentAllowFl,
+      secretReplyAllow: this.post.secretCommentAllowFl,
     })
       .then((response) => {
         if (response.data) {
@@ -174,7 +173,6 @@ class PostStore {
     })
       .then((response) => {
         if (response.data) {
-          console.log(response.data.rows);
           this.homePostList = {
             ...this.homePostList,
             [board]: response.data.rows,
@@ -221,17 +219,18 @@ class PostStore {
         if (response.data) {
           const {
             board, category, title, content,
-            secret, replyAllow, secretReplyAllow,
-          } = response.data[0];
+            secretFl, commentAllowFl, secretCommentAllowFl,
+          } = response.data.DATA[0];
+
           this.post = {
             ...this.post,
             id,
             board,
             category,
             title,
-            secret,
-            replyAllow,
-            secretReplyAllow,
+            secretFl,
+            commentAllowFl,
+            secretCommentAllowFl,
             text: content,
           };
         }
@@ -334,12 +333,18 @@ class PostStore {
     }
 
     // Flag 형식의 checkbox 값 변경시
-    if ((event.target.name.indexOf('Fl') > -1) && this.post[event.target.name]) {
-      this.post = {
-        ...this.post,
-        [event.target.name]: 0,
-      };
-      console.log(event.target.name);
+    if (event.target.name.indexOf('Fl') > -1) {
+      if (this.post[event.target.name]) {
+        this.post = {
+          ...this.post,
+          [event.target.name]: 0,
+        };
+      } else {
+        this.post = {
+          ...this.post,
+          [event.target.name]: 1,
+        };
+      }
       return;
     }
 
@@ -391,8 +396,8 @@ class PostStore {
       text: '',
       depth: '',
       secretFl: 0,
-      replyAllowFl: 1,
-      secretReplyAllowFl: 0,
+      commentAllowFl: 1,
+      secretCommentAllowFl: 0,
     };
   }
 }

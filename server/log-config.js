@@ -1,16 +1,16 @@
 const appRoot = require('app-root-path'); // app root 경로를 가져오는 lib
 const { createLogger: CreatLogger, format, transports } = require('winston'); // winston lib
 const process = require('process');
-const moment = require('moment-timezone');
 
 const {
   combine, timestamp, label, printf,
 } = format;
 
+
 // log 출력 포맷
 const myFormat = printf(({
-  level, message, label: _label, timestamp: _timestamp,
-}) => `${_timestamp} [${_label}] ${level}: ${message}`);
+  level, message, timestamp: _timestamp,
+}) => `${_timestamp} ${level}: ${message}`);
 
 const options = {
   // log file
@@ -24,7 +24,9 @@ const options = {
     colorize: false,
     format: combine(
       label({ label: 'GTC' }),
-      timestamp(),
+      timestamp({
+        format: 'YYYY-MM-DD HH:mm:ss',
+      }),
       myFormat, // log 출력 포맷
     ),
   },
@@ -36,7 +38,9 @@ const options = {
     colorize: true,
     format: combine(
       label({ label: 'nba_express' }),
-      timestamp(),
+      timestamp({
+        format: 'YYYY-MM-DD HH:mm:ss',
+      }),
       myFormat,
     ),
   },
@@ -44,19 +48,8 @@ const options = {
 
 const { file } = options;
 
-const appendTimestamp = format((info, opts) => {
-  if (opts.tz) {
-    info.timestamp = moment().tz(opts.tz).format();
-  }
-  return info;
-});
 
 const logger = new CreatLogger({
-  format: combine(
-    label({ label: 'gather_gluster_info' }),
-    appendTimestamp({ tz: 'Asia/Seoul' }),
-    myFormat,
-  ),
   transports: [
     new transports.File(file), // 중요! 위에서 선언한 option 으로 로그 파일 관리 모듈 transport
   ],

@@ -37,8 +37,12 @@ const INSERT_COMMENT = `
     , SECRET_FL
     , CRT_DTTM
   ) VALUES (
-    (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_COMMENT) as temp)
+    (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1, 1) AS ID FROM GTC_COMMENT) as temp)
     , :POST_ID
+    , IFNULL(
+      :COMMENT_ID
+      , (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1, 1) AS ID FROM GTC_COMMENT) as temp)
+    )
     , IFNULL(
       (SELECT COMMENT_ID_UPPER FROM (SELECT MIN(COMMENT_ID_UPPER) AS COMMENT_ID_UPPER FROM GTC_COMMENT WHERE ID = :COMMENT_ID) as temp)
       , (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_COMMENT) as temp)
@@ -100,7 +104,7 @@ const SELECT_MY_POST = `
     , GBP.TITLE AS postTitle
     , GBR.ID AS replyId
     , GBR.CONTENT AS replyContent
-    , date_format(GBR.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS replyDate
+    , DATE_FORMAT(GBR.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS replyDate
   FROM 
     GTC_POST GBP 
     LEFT JOIN GTC_COMMENT GBR
@@ -146,9 +150,8 @@ router.post('/', (req, res) => {
         POST_ID: data.bpId,
         COMMENT_ID: data.replyId,
         USER_ID: data.writer,
-        TEXT: data.text,
-        DEPTH: data.depth,
-        SECRET_YN: data.secretYN,
+        CONTENT: data.text,
+        SECRET_FL: data.secretYN,
       },
     )
       .then(() => database.query(
@@ -157,23 +160,23 @@ router.post('/', (req, res) => {
           POST_ID: data.bpId,
         },
       ))
-      .then((rows) => {
+      .then((rows, reject) => {
         point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
-
         const { postWriter } = rows[0];
+
         if (postWriter !== data.writer) {
           return database.query(
             SELECT_LAST_INSERT_ID,
             {},
           );
         }
-
         res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '😊 댓글이 정상적으로 등록되었어요!',
         });
-        throw new Error('댓글 작성 완료');
+        reject();
+        throw new Error('댓글이 정상 정상적으로 등록되었습니다 -- 추후 수정 예정');
       })
       .then((rows) => {
         const { ID } = rows[0];

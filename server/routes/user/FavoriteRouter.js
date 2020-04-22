@@ -95,7 +95,7 @@ router.post('/', (req, res) => {
       SELECT_USER_FAVORITE,
       {
         USER_ID: userId,
-        BP_ID: parseInt(bpId, 10),
+        POST_ID: parseInt(bpId, 10),
       },
     )
       .then((rows) => {
@@ -103,7 +103,7 @@ router.post('/', (req, res) => {
           res.json({
             SUCCESS: true,
             CODE: 2,
-            MESSAGE: '😓 이미 즐겨찾기된 게시물입니다ㅠ',
+            MESSAGE: '😓 이미 즐겨찾기된 게시물입니다.',
           });
           throw new Error('이미 즐겨찾기된 게시물입니다.');
         } else {
@@ -111,7 +111,7 @@ router.post('/', (req, res) => {
             INSERT_USER_FAVORITE,
             {
               USER_ID: userId,
-              BP_ID: parseInt(bpId, 10),
+              POST_ID: parseInt(bpId, 10),
             },
           );
         }
@@ -120,7 +120,7 @@ router.post('/', (req, res) => {
         res.json({
           SUCCESS: true,
           CODE: 1,
-          MESSAGE: '★ 즐겨찾기 추가됨',
+          MESSAGE: '😊 즐겨찾기에 해당 게시물이 추가되었습니다.',
         });
       }),
   ).then(() => {
@@ -151,14 +151,14 @@ router.delete('/', (req, res) => {
       DELETE_USER_FAVORITE,
       {
         USER_ID: userId,
-        BP_ID: bpId,
+        POST_ID: bpId,
       },
     )
       .then(() => {
         res.json({
           SUCCESS: true,
           CODE: 1,
-          MESSAGE: '☆ 즐겨찾기 해제됨',
+          MESSAGE: '😊 즐겨찾기에서 해당 게시물이 삭제되었습니다.',
         });
       }),
   ).then(() => {

@@ -35,22 +35,19 @@ const PostContent = ({ match }) => {
   const { loading, doLoading } = UtilLoadingStore;
   const { toggleReport } = BoardReportStore;
   const {
-    id: postId, boardName, categoryName, title, writerName, date, views, content,
-    recommendCount, replyAllow, secretReplyAllow, notRecommendCount,
-    isFavorite, myPostYN,
+    id: postId, boardName, categoryName, title, writerName, date, viewCnt, content,
+    recommendCount, commentAllowFl, secretCommentAllowFl, notRecommendCount,
+    isFavorite, isMyPost,
   } = postView;
   const { upper, lower } = currentPostUpperLower;
-  console.log(upper);
-  console.log(lower);
-
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
   const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
   const { addFavorite, deleteFavorite } = UserFavoriteStore;
 
   useEffect(() => {
-    setReplyOption(replyAllow, secretReplyAllow);
+    setReplyOption(commentAllowFl, secretCommentAllowFl);
     setCurrentPostId(postId);
-  }, [replyAllow, secretReplyAllow, setReplyOption, setCurrentPostId, postId, doLoading]);
+  }, [commentAllowFl, secretCommentAllowFl, setReplyOption, setCurrentPostId, postId, doLoading]);
 
   return (
     <ViewWrapper loading={loading}>
@@ -76,14 +73,14 @@ const PostContent = ({ match }) => {
         <PostViewWrapper>
           <InnerContainer>
             <span>
-              <FontAwesomeIcon icon={faClock} /> {date}
+              <MiddleIcon icon={faClock} /> {date}
             </span>
             <RightSpan>
-              <FontAwesomeIcon icon={faCommentDots} /> {postReplyList.length}
+              <MiddleIcon icon={faCommentDots} /> {postReplyList.length}
               &nbsp;
-              <FontAwesomeIcon icon={faHeart} /> {recommendCount}
+              <MiddleIcon icon={faHeart} /> {recommendCount}
               &nbsp;
-              <FontAwesomeIcon icon={faEye} /> {views}
+              <MiddleIcon icon={faEye} /> {viewCnt}
             </RightSpan>
           </InnerContainer>
           <ContentWrapper>
@@ -112,7 +109,7 @@ const PostContent = ({ match }) => {
               <FontAwesomeIcon icon={faBellSlash} />
               &nbsp;신고
             </Button>
-            { myPostYN === 'Y'
+            { isMyPost
               ? (
                 <>
                   <RightSpan>
@@ -133,7 +130,7 @@ const PostContent = ({ match }) => {
             <RightSpan>
               <GreyButton
                 outline={!isFavorite}
-                color="warning"
+                color="secondary"
                 size="sm"
                 onClick={() => {
                   if (isFavorite) {
@@ -185,6 +182,10 @@ PostContent.defaultProps = {
   match: null,
 };
 
+const MiddleIcon = styled(FontAwesomeIcon)`
+  vertical-align : text-bottom;
+`;
+
 const Div = styled.div`
   display: ${(props) => (props.loading ? 'none' : 'block')}
 `;
@@ -201,7 +202,7 @@ const BoardLink = styled(Link)`
 
 const GreyButton = styled(Button)`
   background-color : white !important;
-  border-color: #ccc;
+  border-color: #ccc !important;
   color : black !important;
   &:hover {
     background-color : #e6e6e6 !important;

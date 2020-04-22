@@ -44,8 +44,8 @@ router.post('/', (req, res) => {
       SELECT_REPORT,
       {
         TARGET_ID: targetId,
-        WRITER_ID: writerId,
-        TYPE: type,
+        USER_ID: writerId,
+        TYPE_CD: type,
       },
     )
       .then((rows) => {
@@ -61,10 +61,10 @@ router.post('/', (req, res) => {
             INSERT_REPORT,
             {
               TARGET_ID: targetId,
-              WRITER_ID: writerId,
-              TYPE: type,
-              REASON: reason,
-              DESCRIPTION: description,
+              USER_ID: writerId,
+              TYPE_CD: type,
+              REASON_CD: reason,
+              REASON_DESC: description,
             },
           );
         }

@@ -13,13 +13,12 @@ const SELECT_LATELY_POST = `
     , TITLE AS title
   FROM GTC_POST
   WHERE ID IN (:DATA)
-  ORDER BY FIELD (id, :DATA)
+  ORDER BY FIELD (id,:DATA)
 `;
 
 router.get('/', (req, res) => {
   const { lately } = req.cookies;
-
-  if (lately !== '' && lately !== undefined) {
+  if (lately) {
     const data = get(lately);
 
     Database.execute(
