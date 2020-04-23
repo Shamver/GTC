@@ -6,8 +6,7 @@ const alertMiddleware = require('../../middleware/alert');
 
 const point = require('../../middleware/point');
 const Database = require('../../Database');
-
-const { info, error } = require('../../log-config');
+const { info } = require('../../log-config');
 
 const SELECT_COMMENT_REPLY_CHECK = `
   SELECT COUNT(*) AS count FROM GTC_COMMENT
@@ -27,7 +26,7 @@ const SELECT_LAST_INSERT_ID = `
 `;
 
 const INSERT_COMMENT = `
-  INSERT INTO GTC_COMMENT (
+  INSERT INTO GTC_CO MMENT (
     ID
     , POST_ID
     , COMMENT_ID
@@ -40,13 +39,13 @@ const INSERT_COMMENT = `
     (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1, 1) AS ID FROM GTC_COMMENT) as temp)
     , :POST_ID
     , IFNULL(
-      :COMMENT_ID
-      , (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1, 1) AS ID FROM GTC_COMMENT) as temp)
-    )
+        :COMMENT_ID
+        , (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1, 1) AS ID FROM GTC_COMMENT) as temp)
+      )
     , IFNULL(
-      (SELECT COMMENT_ID_UPPER FROM (SELECT MIN(COMMENT_ID_UPPER) AS COMMENT_ID_UPPER FROM GTC_COMMENT WHERE ID = :COMMENT_ID) as temp)
-      , (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_COMMENT) as temp)
-    )
+        (SELECT COMMENT_ID_UPPER FROM (SELECT MIN(COMMENT_ID_UPPER) AS COMMENT_ID_UPPER FROM GTC_COMMENT WHERE ID = :COMMENT_ID) as temp)
+        , (SELECT ID FROM (SELECT IFNULL(MAX(ID)+1,1) AS ID FROM GTC_COMMENT) as temp)
+      )
     , :USER_ID 
     , ':CONTENT'
     , :SECRET_FL
@@ -61,7 +60,6 @@ const SELECT_COMMENT_POST_WRITER_COMMENT_ID = `
   FROM GTC_POST GP, GTC_COMMENT GC
   WHERE GP.ID = :POST_ID
 `;
-
 
 const SELECT_POST_COMMENT = `
   SELECT 
@@ -160,7 +158,7 @@ router.post('/', (req, res) => {
           POST_ID: data.bpId,
         },
       ))
-      .then((rows, reject) => {
+      .then((rows) => {
         point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
         const { postWriter } = rows[0];
 
@@ -170,18 +168,13 @@ router.post('/', (req, res) => {
             {},
           );
         }
-        res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 댓글이 정상적으로 등록되었어요!',
-        });
-        reject();
-        throw new Error('댓글이 정상 정상적으로 등록되었습니다 -- 추후 수정 예정');
+        // 포인트 미지급 경우 다음 분기 다르게 하기
+        return Promise.reject();
       })
       .then((rows) => {
         const { ID } = rows[0];
         return alertMiddleware(database, ID);
-      })
+      }, () => {})
       .then(() => {
         res.json({
           SUCCESS: true,
@@ -190,21 +183,7 @@ router.post('/', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[INSERT, POST /api/board/reply] 댓글 등록 완료');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
@@ -228,21 +207,7 @@ router.get('/', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[SELECT, GET /api/board/reply] 댓글 목록 조회');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
@@ -265,21 +230,7 @@ router.put('/', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[UPDATE, PUT /api/board/post] 댓글 수정');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
@@ -319,21 +270,7 @@ router.delete('/', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[DELETE, DELETE /api/board/reply] 댓글 삭제');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
@@ -375,21 +312,7 @@ router.post('/like', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[INSERT, POST /api/board/reply/like] 댓글 좋아요');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
@@ -413,21 +336,7 @@ router.get('/mine', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[SELECT, GET /api/board/reply/mine] 내가 쓴 댓글 목록 조회');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
