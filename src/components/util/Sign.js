@@ -96,8 +96,8 @@ const FormSelect = styled(Input)`
   outline: 0 !important;
   background: #f2f2f2 !important;
   width: 100% !important;
-  border: 0 !important;
-  margin: 0 0 15px !important;
+  border : 0 !important;
+  margin : 0 0 15px !important;
   height : auto !important;
   padding: 15px !important;
   box-sizing: border-box !important;
@@ -105,6 +105,7 @@ const FormSelect = styled(Input)`
   
   &:focus {
     outline: 0 !important;
+  }
 `;
 
 const FormInputWithText = styled(FormInput)`

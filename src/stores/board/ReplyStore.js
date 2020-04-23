@@ -6,7 +6,7 @@ class ReplyStore {
   @observable reply = {
     text: '',
     bpId: '',
-    secretYN: 'N',
+    secretFl: 0,
   };
 
   @observable replyEditId = 0;
@@ -18,8 +18,8 @@ class ReplyStore {
   @observable replyMineList = [];
 
   @observable CurrentReplyOption = {
-    replyAllow: '',
-    secretReplyAllow: '',
+    commentAllowFl: '',
+    secretCommentAllowFl: '',
   };
 
   constructor(root) {
@@ -65,10 +65,10 @@ class ReplyStore {
     this.replyEditId = 0;
   };
 
-  @action setReplyOption = (replyAllow, secretReplyAllow) => {
+  @action setReplyOption = (commentAllowFl, secretCommentAllowFl) => {
     this.CurrentReplyOption = {
-      replyAllow,
-      secretReplyAllow,
+      commentAllowFl,
+      secretCommentAllowFl,
     };
   };
 
@@ -82,7 +82,7 @@ class ReplyStore {
       bpId: this.reply.bpId,
       replyId: this.replyEditId === 0 ? null : this.replyEditId,
       depth: this.replyEditId === 0 ? 1 : 2,
-      secretYN: this.reply.secretYN,
+      secretYN: this.reply.secretFl,
     })
       .then((response) => {
         const { data } = response;
@@ -92,7 +92,7 @@ class ReplyStore {
             this.reply = {
               text: '',
               bpId: this.reply.bpId,
-              secretYN: 'N',
+              secretFl: 0,
             };
             this.getReply(this.reply.bpId);
             this.setReplyEditId(0);
@@ -219,17 +219,30 @@ class ReplyStore {
         ...this.reply,
         text: event,
       };
-    } else if (this.reply[event.target.name] === 'Y') {
-      this.reply = {
-        ...this.reply,
-        [event.target.name]: 'N',
-      };
-    } else {
-      this.reply = {
-        ...this.reply,
-        [event.target.name]: event.target.value,
-      };
+      return;
     }
+
+    // Flag 형식의 checkbox 값 변경시
+    if (event.target.name.indexOf('Fl') > -1) {
+      if (this.post[event.target.name]) {
+        this.post = {
+          ...this.post,
+          [event.target.name]: 0,
+        };
+      } else {
+        this.post = {
+          ...this.post,
+          [event.target.name]: 1,
+        };
+      }
+      return;
+    }
+
+    // 일반적인 값 변경
+    this.post = {
+      ...this.post,
+      [event.target.name]: event.target.value,
+    };
   };
 
   replyValidationCheck = () => {
@@ -245,6 +258,14 @@ class ReplyStore {
   @action setReplyBpId = (bpId) => {
     this.reply.bpId = bpId;
   };
+
+  @action setCommentClear = () => {
+    this.reply = {
+      text: '',
+      bpId: '',
+      secretFl: 0,
+    };
+  }
 }
 
 export default ReplyStore;

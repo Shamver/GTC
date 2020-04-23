@@ -15,8 +15,7 @@ const ReplyForm = observer(({ match }) => {
   const {
     replyEditId, postReplyList, modifyModeId, CurrentReplyOption,
   } = BoardReplyStore;
-  const { replyAllow } = CurrentReplyOption;
-
+  const { commentAllowFl } = CurrentReplyOption;
   return (
     <>
       <ReplyHeader>
@@ -27,7 +26,7 @@ const ReplyForm = observer(({ match }) => {
       <ReplyListWrapper>
         <ReplyList bpId={id} />
       </ReplyListWrapper>
-      { replyEditId === 0 && modifyModeId === 0 && replyAllow === 'Y'
+      { replyEditId === 0 && modifyModeId === 0 && commentAllowFl
         ? (<ReplyEdit />)
         : ''}
     </>

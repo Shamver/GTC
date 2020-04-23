@@ -4,24 +4,33 @@ const router = express.Router();
 
 const Database = require('../../Database');
 
-const { info, error } = require('../../log-config');
+const { info } = require('../../log-config');
 
-const SELECT_BOARD_REPORT = `
-  SELECT COUNT(*) AS count FROM GTC_BOARD_REPORT
-  WHERE TARGET_ID = :TARGET_ID
-  AND U_ID = :WRITER_ID
-  AND TYPE = ':TYPE'
+const SELECT_REPORT = `
+  SELECT 
+    COUNT(*) AS count 
+  FROM GTC_REPORT
+  WHERE 
+    TARGET_ID = :TARGET_ID
+    AND USER_ID = :USER_ID
+    AND TYPE_CD = ':TYPE_CD'
 `;
 
-const INSERT_BOARD_REPORT = `
-  INSERT INTO GTC_BOARD_REPORT
-  VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_REPORT) as temp),
-    :TARGET_ID,
-    :WRITER_ID,
-    ':TYPE',
-    ':REASON',
-    ':DESCRIPTION'
+const INSERT_REPORT = `
+  INSERT INTO GTC_REPORT (
+    ID
+    , TARGET_ID
+    , USER_ID
+    , TYPE_CD
+    , REASON_CD
+    , REASON_DESC
+  ) VALUES (
+    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_REPORT) as temp)
+    , :TARGET_ID
+    , :USER_ID
+    , ':TYPE_CD'
+    , ':REASON_CD'
+    , ':REASON_DESC'
   )
 `;
 
@@ -32,11 +41,11 @@ router.post('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_REPORT,
+      SELECT_REPORT,
       {
         TARGET_ID: targetId,
-        WRITER_ID: writerId,
-        TYPE: type,
+        USER_ID: writerId,
+        TYPE_CD: type,
       },
     )
       .then((rows) => {
@@ -49,13 +58,13 @@ router.post('/', (req, res) => {
           throw new Error('이미 신고한 사람입니다.');
         } else {
           return database.query(
-            INSERT_BOARD_REPORT,
+            INSERT_REPORT,
             {
               TARGET_ID: targetId,
-              WRITER_ID: writerId,
-              TYPE: type,
-              REASON: reason,
-              DESCRIPTION: description,
+              USER_ID: writerId,
+              TYPE_CD: type,
+              REASON_CD: reason,
+              REASON_DESC: description,
             },
           );
         }
@@ -68,21 +77,7 @@ router.post('/', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[INSERT, POST /api/board/report] 게시글 신고');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
