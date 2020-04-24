@@ -10,9 +10,8 @@ const SELECT_USER_POINT_LIST = `
     @ROWNUM := @ROWNUM + 1 AS rn
     , (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_USER_POINT WHERE USER_ID = :USER_ID) AS pageCount
     , ID AS id
+    , TARGET_ID AS postId
     , TYPE_CD AS type
-    , POST_ID AS postId
-    , REPLY_ID AS replyId
     , COST AS point
     , DATE_FORMAT(CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS date
   FROM 

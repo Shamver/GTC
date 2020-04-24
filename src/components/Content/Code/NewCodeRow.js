@@ -30,8 +30,8 @@ const NewCodeRow = () => {
       </td>
       <td>
         <Input type="select" bsSize="sm" onChange={onChangeCode} name="useYN" value={useYN}>
-          <option value="Y">Y</option>
-          <option value="N">N</option>
+          <option value={1}>Y</option>
+          <option value={0}>N</option>
         </Input>
       </td>
       <CenterPaddingTd>
@@ -45,6 +45,7 @@ const NewCodeRow = () => {
         </Button>
       </CenterPaddingTd>
     </tr>
+
   );
 };
 

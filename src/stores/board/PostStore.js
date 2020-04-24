@@ -118,6 +118,7 @@ class PostStore {
     axios.delete('/api/board/post', {
       params: {
         id,
+        writer: this.root.UserStore.userData.id,
       },
     })
       .then((response) => {

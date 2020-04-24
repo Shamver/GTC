@@ -7,7 +7,7 @@ const Database = require('../../Database');
 
 const UPDATE_USER_DELETE = `
   UPDATE GTC_USER
-  SET DELETED_DTTM = SYSDATE()
+  SET DELETE_DTTM = SYSDATE()
   WHERE ID = :USER_ID
 `;
 

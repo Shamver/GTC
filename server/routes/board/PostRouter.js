@@ -304,6 +304,10 @@ router.delete('/', (req, res) => {
       },
     )
       .then(() => {
+        point('deletePost', 'POST', {
+          bpId: data.id,
+          writer: data.writer,
+        });
         res.send(true);
       }),
   ).then(() => {

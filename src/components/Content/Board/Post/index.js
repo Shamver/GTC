@@ -39,9 +39,9 @@ const Post = ({ data, index }) => {
           </>
         )}
       </CenterTd>
-      <CenterTd>
+      <DateTd>
         { type !== 'notice' ? categoryName : ''}
-      </CenterTd>
+      </DateTd>
       <MiddleTd width="700">
         { type === 'notice' ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}
         &nbsp;
@@ -72,7 +72,7 @@ const Post = ({ data, index }) => {
           </WriterDropdownMenu>
         </WriterDropdown>
       </CenterTdWriter>
-      <CenterTd>{date}</CenterTd>
+      <DateTd>{date}</DateTd>
     </TableRow>
   );
 };
@@ -91,6 +91,13 @@ Post.propTypes = {
   }).isRequired,
   index: Proptypes.number.isRequired,
 };
+
+const DateTd = styled.td`
+  white-space : pre;
+  text-align : center;
+  vertical-align : inherit !important;
+  padding : 0.5rem 0.8rem !important;
+`;
 
 const TableRow = styled.tr`
   background-color : ${(props) => (props.currentPostId === props.postId ? '#fff9e5;' : 'white')}
@@ -136,6 +143,7 @@ const WriterDropdownToggle = styled(DropdownToggle)`
   background-color: transparent !important;
   border : 0 !important;
   height : 100%;
+  white-space : pre;
   &:focus {
     box-shadow : none !important;
   }
