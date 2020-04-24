@@ -18,8 +18,8 @@ const Post = ({ data, index }) => {
   } = useStores();
   const { currentPostId } = BoardPostStore;
   const {
-    id, title, writerName, date, categoryName, recommendCount, replyCount,
-    type, idWriter,
+    id, title, writerName, date, categoryName, recommendCount, commentCount,
+    type, writerId,
   } = data;
   const { dropdown, onActive } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
@@ -46,7 +46,7 @@ const Post = ({ data, index }) => {
         { type === 'notice' ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}
         &nbsp;
         <PostTitle to={`/post/${id}`}>{title}</PostTitle>
-        { replyCount > 0 ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{replyCount}]</ReplyCountspan>) : ''}
+        { commentCount > 0 ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>) : ''}
       </MiddleTd>
       <CenterTdWriter>
         <WriterDropdown isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
@@ -58,11 +58,11 @@ const Post = ({ data, index }) => {
             <WriterDropdownItem>
               작성 글 보기
             </WriterDropdownItem>
-            {userData.id === idWriter ? '' : (
+            {userData.id === writerId ? '' : (
               <WriterDropdownItem
                 onClick={() => {
                   toggleConfirmAlert('정말 차단하시겠습니까?', () => {
-                    addIgnore(idWriter);
+                    addIgnore(writerId);
                   });
                 }}
               >
@@ -85,9 +85,9 @@ Post.propTypes = {
     date: Proptypes.string,
     categoryName: Proptypes.string,
     recommendCount: Proptypes.number,
-    replyCount: Proptypes.number,
+    commentCount: Proptypes.number,
     type: Proptypes.string,
-    idWriter: Proptypes.number,
+    writerId: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
 };

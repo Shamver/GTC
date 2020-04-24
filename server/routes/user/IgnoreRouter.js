@@ -103,8 +103,8 @@ router.post('/', (req, res) => {
     (database) => database.query(
       SELECT_USER_IGNORE,
       {
-        TARGET_ID: targetId,
-        FROM_ID: fromId,
+        USER_ID_TARGET: targetId,
+        USER_ID: fromId,
       },
     )
       .then((rows) => {
@@ -112,7 +112,7 @@ router.post('/', (req, res) => {
           res.json({
             SUCCESS: true,
             CODE: 2,
-            MESSAGE: '😓 이미 차단한 유저입니다ㅠ',
+            MESSAGE: '😓 이미 차단한 유저입니다.',
           });
           throw new Error('이미 차단한 유저입니다.');
         } else {

@@ -14,9 +14,7 @@ class LatelyStore {
       .then((response) => {
         const { data } = response;
         if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.latelyList = data.DATA;
-          }
+          this.latelyList = data.DATA;
         } else {
           this.latelyList = [];
           toast.error(data.MESSAGE);

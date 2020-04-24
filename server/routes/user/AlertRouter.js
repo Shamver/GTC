@@ -36,8 +36,7 @@ const SELECT_USER_ALERT_LIST = `
     AND GUA.SHOW_FL = 1
     AND (
       (GUA.READ_FL = 0)
-      OR
-      (TIMESTAMPDIFF(MINUTE, DATE_FORMAT(GUA.READ_DTTM, '%Y-%m-%d %H:%i'), DATE_FORMAT(SYSDATE(), '%Y-%m-%d %H:%i')) < 1441)
+      OR (TIMESTAMPDIFF(MINUTE, DATE_FORMAT(GUA.READ_DTTM, '%Y-%m-%d %H:%i'), DATE_FORMAT(SYSDATE(), '%Y-%m-%d %H:%i')) < 1441)
     )
     ORDER BY GBR.CRT_DTTM DESC
 `;
@@ -53,7 +52,7 @@ const UPDATE_USER_ALERT_READ = `
 const UPDATE_USER_ALERT_DELETE = `
   UPDATE GTC_USER_ALERT
   SET SHOW_FL = 0
-  WHERE ID = :ID
+  WHERE ID = :ALERT_ID
 `;
 
 router.get('/', (req, res) => {
@@ -112,7 +111,7 @@ router.delete('/', (req, res) => {
     (database) => database.query(
       UPDATE_USER_ALERT_DELETE,
       {
-        ID: id,
+        ALERT_ID: id,
       },
     )
       .then(() => {

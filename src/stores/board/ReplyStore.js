@@ -224,14 +224,14 @@ class ReplyStore {
 
     // Flag 형식의 checkbox 값 변경시
     if (event.target.name.indexOf('Fl') > -1) {
-      if (this.post[event.target.name]) {
-        this.post = {
-          ...this.post,
+      if (this.reply[event.target.name]) {
+        this.reply = {
+          ...this.reply,
           [event.target.name]: 0,
         };
       } else {
-        this.post = {
-          ...this.post,
+        this.reply = {
+          ...this.reply,
           [event.target.name]: 1,
         };
       }
@@ -239,8 +239,8 @@ class ReplyStore {
     }
 
     // 일반적인 값 변경
-    this.post = {
-      ...this.post,
+    this.reply = {
+      ...this.reply,
       [event.target.name]: event.target.value,
     };
   };

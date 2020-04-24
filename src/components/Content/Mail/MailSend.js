@@ -24,7 +24,7 @@ const MailSend = () => {
         <TitleText><b>쪽지 내용</b></TitleText>
         <Input type="textarea" placeholder="쪽지 내용을 입력하세요" name="mailText" value={mailText} onChange={onChangeValue} />
         <SendBtn
-          color="primary"
+          color="danger"
           onClick={sendMail}
         >
           <FontAwesomeIcon icon={faTelegramPlane} size="lg" /> 쪽지 보내기

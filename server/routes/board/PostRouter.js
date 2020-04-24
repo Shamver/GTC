@@ -325,12 +325,7 @@ router.post('/recommend', (req, res) => {
     )
       .then((rows) => {
         if (rows[0].count === 1) {
-          res.json({
-            SUCCESS: true,
-            CODE: 2,
-            MESSAGE: '😳 이미 해당 포스팅에 투표가 완료되었어요!',
-          });
-          throw new Error('이미 해당 글에 투표가 되어 있습니다');
+          return Promise.reject();
         }
 
         return database.query(
@@ -347,6 +342,12 @@ router.post('/recommend', (req, res) => {
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '😳 포스팅 투표 완료!',
+        });
+      }, () => {
+        res.json({
+          SUCCESS: true,
+          CODE: 2,
+          MESSAGE: '😳 이미 해당 포스팅에 투표가 완료되었어요!',
         });
       }),
   ).then(() => {

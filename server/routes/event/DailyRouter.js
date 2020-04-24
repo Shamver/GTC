@@ -11,13 +11,13 @@ const SELECT_ATTENDANCE = `
     , D.MESSAGE AS message
     , D.POINT AS point
     , D.COMBO AS combo
-    , date_format(D.CRT_DTTM, '%H:%i') AS time
+    , DATE_FORMAT(D.CRT_DTTM, '%H:%i') AS time
   FROM 
     GTC_USER U
     , GTC_ATTENDANCE D
   WHERE 
     U.ID = D.USER_ID
-    AND (DATE_FORMAT(CRT_DTTM, '%Y%m%d000000') > DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000'))
+    AND (DATE_FORMAT(D.CRT_DTTM, '%Y%m%d000000') > DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000'))
   ORDER BY D.CRT_DTTM ASC
   LIMIT 30
 `;
@@ -26,8 +26,8 @@ const SELECT_ATTENDANCE_LAST = `
   SELECT 
     COMBO AS combo
     , DATE_FORMAT(CRT_DTTM, '%Y%m%d') AS date
-    , CASE WHEN DATE_FORMAT(CRT_DTTM, '%Y%m%d') = DATE_FORMAT(SYSDATE(), '%Y%m%d') THEN 'Y'
-      ELSE 'N'
+    , CASE WHEN DATE_FORMAT(CRT_DTTM, '%Y%m%d') = DATE_FORMAT(SYSDATE(), '%Y%m%d') THEN 1
+      ELSE 0
       END AS isDoneToday
   FROM GTC_ATTENDANCE
   WHERE USER_ID = :USER_ID
@@ -57,8 +57,8 @@ const INSERT_EVENT_DAILY = `
     , :USER_ID
     , ':MESSAGE'
     , (CASE
-       WHEN (SELECT * FROM (SELECT IFNULL(COMBO, 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(DATE,'%Y%m%d000000') = date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) % 7 = 0 THEN 40
-       WHEN (SELECT * FROM (SELECT IFNULL(COMBO, 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(DATE,'%Y%m%d000000') = date_format(SUBDATE(sysdate(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) % 30 = 0 THEN 120
+       WHEN (SELECT * FROM (SELECT IFNULL(COMBO, 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) % 7 = 0 THEN 40
+       WHEN (SELECT * FROM (SELECT IFNULL(COMBO, 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) % 30 = 0 THEN 120
        ELSE 20 END
       ) + (
         CASE
@@ -72,12 +72,12 @@ const INSERT_EVENT_DAILY = `
                FROM GTC_ATTENDANCE
                WHERE date_format(CRT_DTTM, '%Y%m%d%H%i%S') >= DATE_FORMAT(SYSDATE(), '%Y%m%d000000')) AS a) = 2 THEN 10
          ELSE 0 END
-       )
-    , SYSDATE()
-    , (SELECT CASE WHEN (SELECT * FROM (SELECT IFNULL(MAX(COMBO), 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(DATE,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) > 0 THEN
-      (SELECT * FROM (SELECT IFNULL(MAX(COMBO), 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(DATE,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C)
+      )
+    , (SELECT CASE WHEN (SELECT * FROM (SELECT IFNULL(MAX(COMBO), 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) > 0 THEN
+      (SELECT * FROM (SELECT IFNULL(MAX(COMBO), 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C)
       ELSE 1
       END)
+    , SYSDATE()
   )
 `;
 
@@ -134,27 +134,28 @@ router.post('/', (req, res) => {
     )
       .then((rows) => {
         if (rows.length >= 1) {
-          res.json({
-            SUCCESS: true,
-            CODE: 2,
-            MESSAGE: '오늘은 이미 출석체크를 했습니다.',
-          });
-          throw new Error('이미 출석체크 되었습니다.');
-        } else {
-          return database.query(
-            INSERT_EVENT_DAILY,
-            {
-              USER_ID: userId,
-              MESSAGE: message,
-            },
-          );
+          return Promise.reject();
         }
+
+        return database.query(
+          INSERT_EVENT_DAILY,
+          {
+            USER_ID: userId,
+            MESSAGE: message,
+          },
+        );
       })
       .then(() => {
         res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '출석체크가 완료되었습니다!',
+        });
+      }, () => {
+        res.json({
+          SUCCESS: true,
+          CODE: 2,
+          MESSAGE: '😓 오늘은 이미 출석체크를 했습니다.',
         });
       }),
   ).then(() => {

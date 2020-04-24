@@ -16,10 +16,10 @@ const SELECT_USER_GET_MAIL_LIST = `
     GTC_USER_MAIL M
     , GTC_USER U
   WHERE
-    M.TARGET_ID = :USER_ID 
+    M.USER_ID_TARGET = :USER_ID 
     AND U.ID = M.USER_ID 
     AND M.DELETE_FL = 0
-  ORDER BY M.SENT_DATE DESC
+  ORDER BY M.CRT_DTTM DESC
 `;
 
 const SELECT_USER_SENT_MAIL_LIST = `
@@ -36,7 +36,7 @@ const SELECT_USER_SENT_MAIL_LIST = `
     M.USER_ID = :USER_ID 
     AND U.ID = M.USER_ID_TARGET 
     AND M.DELETE_FL = 0
-  ORDER BY M.SENT_DTTM DESC
+  ORDER BY M.CRT_DTTM DESC
 `;
 
 const SELECT_USER_FROM_NICKNAME = `
@@ -63,7 +63,7 @@ const INSERT_USER_MAIL = `
 
 const UPDATE_USER_MAIL_READ = `
   UPDATE GTC_USER_MAIL
-  SET READ_DATE = SYSDATE()
+  SET READ_DTTM = SYSDATE()
   WHERE 
     (USER_ID = :USER_ID 
       OR USER_ID_TARGET = :USER_ID) 
@@ -127,7 +127,7 @@ router.get('/sent', (req, res) => {
 
 router.post('/', (req, res) => {
   const { fromId, targetName, message } = req.body;
-
+  let code = 0;
   Database.execute(
     (database) => database.query(
       SELECT_USER_FROM_NICKNAME,
@@ -139,37 +139,41 @@ router.post('/', (req, res) => {
         if (rows.length >= 1) {
           const { targetId } = rows[0];
           if (fromId === targetId) {
-            res.json({
-              SUCCESS: true,
-              CODE: 2,
-              MESSAGE: '😓 본인에게는 쪽지를 보낼 수 없습니다!',
-            });
-            throw new Error('본인에게는 쪽지를 보낼 수 없습니다.');
-          } else {
-            return database.query(
-              INSERT_USER_MAIL,
-              {
-                FROM_ID: fromId,
-                TARGET_ID: targetId,
-                MESSAGE: message,
-              },
-            );
+            code = 2;
+            return Promise.reject();
           }
-        } else {
-          res.json({
-            SUCCESS: true,
-            CODE: 3,
-            MESSAGE: '😓 존재하지 않는 닉네임입니다ㅠ',
-          });
-          throw new Error('존재하지 않는 닉네임입니다.');
+          return database.query(
+            INSERT_USER_MAIL,
+            {
+              USER_ID: fromId,
+              USER_ID_TARGET: targetId,
+              MESSAGE: message,
+            },
+          );
         }
+        code = 3;
+        return Promise.reject();
       })
       .then(() => {
         res.json({
           SUCCESS: true,
           CODE: 1,
-          MESSAGE: '✔ 쪽지가 전송되었습니다.',
+          MESSAGE: '😊 쪽지가 전송되었습니다.',
         });
+      }, () => {
+        if (code === 2) {
+          res.json({
+            SUCCESS: true,
+            CODE: 2,
+            MESSAGE: '😓 본인에게는 쪽지를 보낼 수 없습니다!',
+          });
+        } else if (code === 3) {
+          res.json({
+            SUCCESS: true,
+            CODE: 3,
+            MESSAGE: '😓 존재하지 않는 닉네임입니다',
+          });
+        }
       }),
   ).then(() => {
     info('[INSERT, POST /api/user/mail] 쪽지 전송');
