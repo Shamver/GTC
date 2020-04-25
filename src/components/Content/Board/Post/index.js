@@ -18,7 +18,7 @@ const Post = ({ data, index }) => {
   } = useStores();
   const { currentPostId } = BoardPostStore;
   const {
-    id, title, writer, date, categoryName, recommendCount, replyCount,
+    id, title, writerName, date, categoryName, recommendCount, replyCount,
     type, idWriter,
   } = data;
   const { dropdown, onActive } = ComponentPostStore;
@@ -50,7 +50,7 @@ const Post = ({ data, index }) => {
       </MiddleTd>
       <CenterTdWriter>
         <WriterDropdown isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
-          <WriterDropdownToggle name={`replyIndex${index}`}> {writer} </WriterDropdownToggle>
+          <WriterDropdownToggle name={`replyIndex${index}`}> {writerName} </WriterDropdownToggle>
           <WriterDropdownMenu>
             <WriterDropdownItem>
               프로필
@@ -81,7 +81,7 @@ Post.propTypes = {
   data: Proptypes.shape({
     id: Proptypes.number,
     title: Proptypes.string,
-    writer: Proptypes.string,
+    writerName: Proptypes.string,
     date: Proptypes.string,
     categoryName: Proptypes.string,
     recommendCount: Proptypes.number,

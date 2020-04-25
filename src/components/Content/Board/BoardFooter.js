@@ -3,8 +3,7 @@ import {
   Button, InputGroup, InputGroupAddon, InputGroupText, Input,
 } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-regular-svg-icons';
-import { faPen, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
@@ -63,7 +62,6 @@ const RightNoRadiusSelect = styled(Input)`
   border-top-right-radius: 0px !important;
 `;
 
-
 const InputGroupWrapper = styled.div`
   text-align : center;
   margin-top : 20px;
@@ -92,10 +90,10 @@ const RightLink = styled(Link)`
 const AbsoluteRightLink = styled(RightLink)`
   margin : 0px;
 `;
+
 const AbsoluteLeftLink = styled(RightLink)`
   float: left;
   margin : 0px;
 `;
-
 
 export default BoardFooter;

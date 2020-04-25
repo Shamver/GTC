@@ -25,7 +25,6 @@ const BoardOptions = () => {
   ));
 };
 
-
 const Posting = (props) => {
   const { BoardStore, BoardPostStore, UtilRouteStore } = useStores();
   const {
@@ -73,9 +72,9 @@ const Posting = (props) => {
         }}
       />
       <PostingFooter>
-        <CustomCheckbox type="checkbox" id="replyAllow" name="replyAllow" value="Y" label="댓글 허용" onChange={onChangeValue} checked={post.replyAllow === 'Y'} />
-        <CustomCheckbox type="checkbox" id="secret" name="secret" value="Y" label="비밀글" onChange={onChangeValue} checked={post.secret === 'Y'} />
-        <CustomCheckbox type="checkbox" id="secretReplyAllow" name="secretReplyAllow" value="Y" label="비밀 댓글 허용" onChange={onChangeValue} checked={post.secretReplyAllow === 'Y'} />
+        <CustomCheckbox type="checkbox" id="replyAllow" name="commentAllowFl" label="댓글 허용" value={post.commentAllowFl} onChange={onChangeValue} checked={post.commentAllowFl} />
+        <CustomCheckbox type="checkbox" id="secret" name="secretFl" label="비밀글" value={post.secretFl} onChange={onChangeValue} checked={post.secretFl} />
+        <CustomCheckbox type="checkbox" id="secretReplyAllow" name="secretCommentAllowFl" value={post.secretCommentAllowFl} label="비밀 댓글 허용" onChange={onChangeValue} checked={post.secretCommentAllowFl} />
       </PostingFooter>
       <PostingFooter>
         <MarginButton onClick={goBack} color="secondary">작성취소</MarginButton>

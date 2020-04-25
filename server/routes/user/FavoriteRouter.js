@@ -2,38 +2,50 @@ const express = require('express');
 
 const router = express.Router();
 
-const { error, info } = require('../../log-config');
+const { info } = require('../../log-config');
 const Database = require('../../Database');
 
 const SELECT_USER_FAVORITE_LIST = `
-  SELECT GBP.TITLE AS postTitle
-  , GUF.POST_ID AS postId
-  , date_format(GBP.DATE, '%Y-%m-%d %H:%i:%s') AS postDate
-  , GUF.DATE AS favoriteDate
-  , GBP.VIEWS AS postViews
-  FROM GTC_USER_FAVORITE GUF LEFT JOIN GTC_BOARD_POST GBP
-  ON GUF.POST_ID = GBP.ID
+  SELECT 
+    GBP.TITLE AS postTitle
+    , GUF.POST_ID AS postId
+    , DATE_FORMAT(GBP.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS postDate
+    , GUF.CRT_DTTM AS favoriteDate
+    , GBP.VIEW_CNT AS postViews
+  FROM 
+    GTC_USER_FAVORITE GUF 
+    LEFT JOIN GTC_POST GBP
+    ON GUF.POST_ID = GBP.ID
   WHERE GUF.USER_ID = :USER_ID
-  ORDER BY favoriteDate DESC
+  ORDER BY GUF.CRT_DTTM DESC
 `;
 
 const SELECT_USER_FAVORITE = `
-  SELECT * FROM GTC_USER_FAVORITE
-  WHERE USER_ID = :USER_ID AND POST_ID = :BP_ID
+  SELECT 
+    * 
+  FROM GTC_USER_FAVORITE
+  WHERE 
+    USER_ID = :USER_ID 
+    AND POST_ID = :POST_ID
 `;
 
 const INSERT_USER_FAVORITE = `
-  INSERT INTO GTC_USER_FAVORITE
-  VALUES(
+  INSERT INTO GTC_USER_FAVORITE (
+    USER_ID
+    , POST_ID
+    , CRT_DTTM
+  ) VALUES (
     :USER_ID
-    , :BP_ID
-    , sysdate()
-    )
+    , :POST_ID
+    , SYSDATE()
+  )
 `;
 
 const DELETE_USER_FAVORITE = `
   DELETE FROM GTC_USER_FAVORITE
-  WHERE POST_ID = :BP_ID AND USER_ID = :USER_ID
+  WHERE 
+    POST_ID = :POST_ID 
+    AND USER_ID = :USER_ID
 `;
 
 // 우선은 어차피 포스트만 즐겨찾기 대상이기 때문에 루트로만 라우팅. 추가적으로 생기면 진행.
@@ -56,21 +68,7 @@ router.get('/', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[SELECT, GET /api/user/favorite] 유저 즐겨찾기 목록 조회');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
@@ -83,7 +81,7 @@ router.post('/', (req, res) => {
       SELECT_USER_FAVORITE,
       {
         USER_ID: userId,
-        BP_ID: parseInt(bpId, 10),
+        POST_ID: parseInt(bpId, 10),
       },
     )
       .then((rows) => {
@@ -91,7 +89,7 @@ router.post('/', (req, res) => {
           res.json({
             SUCCESS: true,
             CODE: 2,
-            MESSAGE: '😓 이미 즐겨찾기된 게시물입니다ㅠ',
+            MESSAGE: '😓 이미 즐겨찾기된 게시물입니다.',
           });
           throw new Error('이미 즐겨찾기된 게시물입니다.');
         } else {
@@ -99,7 +97,7 @@ router.post('/', (req, res) => {
             INSERT_USER_FAVORITE,
             {
               USER_ID: userId,
-              BP_ID: parseInt(bpId, 10),
+              POST_ID: parseInt(bpId, 10),
             },
           );
         }
@@ -108,25 +106,11 @@ router.post('/', (req, res) => {
         res.json({
           SUCCESS: true,
           CODE: 1,
-          MESSAGE: '★ 즐겨찾기 추가됨',
+          MESSAGE: '😊 즐겨찾기에 해당 게시물이 추가되었습니다.',
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[INSERT, POST /api/user/favorite] 유저 즐겨찾기 추가');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
@@ -139,32 +123,18 @@ router.delete('/', (req, res) => {
       DELETE_USER_FAVORITE,
       {
         USER_ID: userId,
-        BP_ID: bpId,
+        POST_ID: bpId,
       },
     )
       .then(() => {
         res.json({
           SUCCESS: true,
           CODE: 1,
-          MESSAGE: '☆ 즐겨찾기 해제됨',
+          MESSAGE: '😊 즐겨찾기에서 해당 게시물이 삭제되었습니다.',
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[DELETE, DELETE /api/user/favorite] 유저 즐겨찾기 삭제');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 

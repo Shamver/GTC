@@ -4,50 +4,58 @@ const router = express.Router();
 
 const jwt = require('jsonwebtoken');
 
-const db = require('../../dbConnection')();
 const authMiddleware = require('../../middleware/auth');
 
-const conn = db.init();
-
-const { error, info } = require('../../log-config');
+const { info } = require('../../log-config');
 const Database = require('../../Database');
 
 const SELECT_USER_FROM_TEL_EMAIL = `
-  SELECT COUNT(*) AS count FROM GTC_USER
-  WHERE TEL=':TEL'
-  or EMAIL=':EMAIL'
+  SELECT 
+    COUNT(*) AS count
+  FROM GTC_USER
+  WHERE 
+    TEL_NO = ':TEL_NO'
+    OR EMAIL = ':EMAIL'
 `;
 
 const INSERT_NEW_USER = `
-  INSERT INTO GTC_USER VALUES(
-  (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_USER) as temp),
-  ':EMAIL',
-  ':NAME',
-  ':NICKNAME',
-  ':TEL',
-  ':BIRTH',
-  ':GENDER',
-  ':GT_NICKNAME',
-  sysdate(),
-  null,
-  'Y'
+  INSERT INTO GTC_USER (
+    ID
+    , EMAIL
+    , NAME
+    , NICKNAME
+    , TEL_NO
+    , BIRTH_DT
+    , GT_NICKNAME
+    , GENDER_CD
+    , CRT_DTTM
+  ) VALUES (
+    (SELECT * FROM (SELECT IFNULL(MAX(ID) + 1, 1) FROM GTC_USER) as temp)
+    , ':EMAIL'
+    , ':NAME'
+    , ':NICKNAME'
+    , ':TEL_NO'
+    , ':BIRTH_DT'
+    , ':GT_NICKNAME'
+    , ':GENDER_CD'
+    , SYSDATE()
   )
 `;
 
 const SELECT_USER_FROM_EMAIL = `
   SELECT 
-  ID AS id
-  , EMAIL AS email
-  , NAME AS name
-  , GT_NICKNAME AS gtNickname
-  , NICKNAME AS nickname 
-  , TEL AS tel
-  , date_format(BIRTH, '%Y-%m-%d') AS birth
-  , GENDER AS gender
-  , PROFILE_YN AS profileYN
-  , DELETED_DATE AS deletedDate
+    ID AS id
+    , EMAIL AS email
+    , NAME AS name
+    , GT_NICKNAME AS gtNickname
+    , NICKNAME AS nickname 
+    , TEL_NO AS tel
+    , DATE_FORMAT(BIRTH_DT, '%Y-%m-%d') AS birth
+    , GENDER_CD AS gender
+    , PROFILE_FL AS profileYN
+    , IFNULL(DELETE_DTTM, NULL) AS deletedDate
   FROM GTC_USER
-  WHERE EMAIL=':EMAIL'
+  WHERE EMAIL = ':EMAIL'
 `;
 
 router.post('/register', (req, res) => {
@@ -59,7 +67,7 @@ router.post('/register', (req, res) => {
     (database) => database.query(
       SELECT_USER_FROM_TEL_EMAIL,
       {
-        TEL: tel,
+        TEL_NO: tel,
         EMAIL: email,
       },
     )
@@ -76,12 +84,12 @@ router.post('/register', (req, res) => {
           return database.query(
             INSERT_NEW_USER,
             {
-              TEL: tel,
+              TEL_NO: tel,
               EMAIL: email,
               NICKNAME: nickname,
               NAME: name,
-              BIRTH: birth,
-              GENDER: gender.toUpperCase(),
+              BIRTH_DT: birth,
+              GENDER_CD: gender.toUpperCase(),
               GT_NICKNAME: gtNickname,
             },
           );
@@ -95,21 +103,7 @@ router.post('/register', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[INSERT, POST /api/user/register] 유저 회원가입');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
@@ -128,9 +122,9 @@ router.post('/login', (req, res) => {
         if (rows.length === 1) {
           const resultData = rows[0];
           const {
-            id, nickname, gtNickname, deletedDate, email, tel, birth, gender, profileYN, name,
+            id, nickname, gtNickname, deletedDate,
+            email, tel, birth, gender, profileYN, name,
           } = resultData;
-
           if (deletedDate === null) {
             jwt.sign(
               {
@@ -163,33 +157,19 @@ router.post('/login', (req, res) => {
             res.json({
               SUCCESS: true,
               CODE: 2,
-              MESSAGE: '해당 아이디는 회원탈퇴 상태입니다.\n탈퇴일로부터 30일이 지난 후에 재가입해주세요.',
+              MESSAGE: '해당 아이디는 회원탈퇴 상태입니다. 탈퇴일로부터 30일이 지난 후에 재가입해주세요.',
             });
           }
         } else {
           res.json({
             SUCCESS: true,
             CODE: 3,
-            MESSAGE: '해당 이메일로 가입된 계정이 존재하지 않습니다.\n회원가입 후 진행해주세요.',
+            MESSAGE: '해당 이메일로 가입된 계정이 존재하지 않습니다. 회원가입 후 진행해주세요.',
           });
         }
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[SELECT, POST /api/user/login] 유저 로그인');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 

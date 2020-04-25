@@ -9,9 +9,9 @@ class PostStore {
     title: '',
     text: '',
     depth: '',
-    secret: 'N',
-    replyAllow: 'Y',
-    secretReplyAllow: 'N',
+    secretFl: 0,
+    commentAllowFl: 1,
+    secretCommentAllowFl: 0,
   };
 
   @observable boardPostList = {
@@ -64,10 +64,9 @@ class PostStore {
       title: this.post.title,
       writer: this.root.UserStore.userData.id,
       content: this.post.text,
-      depth: 1,
-      secret: this.post.secret,
-      replyAllow: this.post.replyAllow,
-      secretReplyAllow: this.post.secretReplyAllow,
+      secret: this.post.secretFl,
+      replyAllow: this.post.commentAllowFl,
+      secretReplyAllow: this.post.secretCommentAllowFl,
     })
       .then((response) => {
         const { data } = response;
@@ -75,16 +74,7 @@ class PostStore {
           if (data.CODE === 1) {
             this.root.UtilRouteStore.history.push('/free');
             toast.success('😊 포스팅이 등록되었어요!');
-            this.post = {
-              board: '',
-              category: '',
-              title: '',
-              text: '',
-              depth: '',
-              secret: 'N',
-              replyAllow: 'Y',
-              secretReplyAllow: 'N',
-            };
+            this.setPostClear();
           } else {
             toast.info(data.MESSAGE);
           }
@@ -109,10 +99,9 @@ class PostStore {
       title: this.post.title,
       writer: this.root.UserStore.userData.id,
       content: this.post.text,
-      depth: 1,
-      secret: this.post.secret,
-      replyAllow: this.post.replyAllow,
-      secretReplyAllow: this.post.secretReplyAllow,
+      secret: this.post.secretFl,
+      replyAllow: this.post.commentAllowFl,
+      secretReplyAllow: this.post.secretCommentAllowFl,
     })
       .then((response) => {
         if (response.data) {
@@ -230,17 +219,18 @@ class PostStore {
         if (response.data) {
           const {
             board, category, title, content,
-            secret, replyAllow, secretReplyAllow,
-          } = response.data[0];
+            secretFl, commentAllowFl, secretCommentAllowFl,
+          } = response.data.DATA[0];
+
           this.post = {
             ...this.post,
             id,
             board,
             category,
             title,
-            secret,
-            replyAllow,
-            secretReplyAllow,
+            secretFl,
+            commentAllowFl,
+            secretCommentAllowFl,
             text: content,
           };
         }
@@ -263,8 +253,8 @@ class PostStore {
             };
 
             for (let i = 0; i < array.length; i += 1) {
-              const { upperOrLower } = array[i];
-              if (upperOrLower === 'upper') {
+              const { isUpper } = array[i];
+              if (isUpper) {
                 this.currentPostUpperLower.upper = array[i];
               } else {
                 this.currentPostUpperLower.lower = array[i];
@@ -333,22 +323,36 @@ class PostStore {
   };
 
   @action onChangeValue = (event) => {
+    // 에디터 수정 시
     if (typeof event === 'string') {
       this.post = {
         ...this.post,
         text: event,
       };
-    } else if (this.post[event.target.name] === 'Y') {
-      this.post = {
-        ...this.post,
-        [event.target.name]: 'N',
-      };
-    } else {
-      this.post = {
-        ...this.post,
-        [event.target.name]: event.target.value,
-      };
+      return;
     }
+
+    // Flag 형식의 checkbox 값 변경시
+    if (event.target.name.indexOf('Fl') > -1) {
+      if (this.post[event.target.name]) {
+        this.post = {
+          ...this.post,
+          [event.target.name]: 0,
+        };
+      } else {
+        this.post = {
+          ...this.post,
+          [event.target.name]: 1,
+        };
+      }
+      return;
+    }
+
+    // 일반적인 값 변경
+    this.post = {
+      ...this.post,
+      [event.target.name]: event.target.value,
+    };
   };
 
   @action setPostBoard = (board) => {
@@ -391,9 +395,9 @@ class PostStore {
       title: '',
       text: '',
       depth: '',
-      secret: 'N',
-      replyAllow: 'Y',
-      secretReplyAllow: 'N',
+      secretFl: 0,
+      commentAllowFl: 1,
+      secretCommentAllowFl: 0,
     };
   }
 }

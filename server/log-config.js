@@ -6,10 +6,11 @@ const {
   combine, timestamp, label, printf,
 } = format;
 
+
 // log 출력 포맷
 const myFormat = printf(({
-  level, message, label: _label, timestamp: _timestamp,
-}) => `${_timestamp} [${_label}] ${level}: ${message}`);
+  level, message, timestamp: _timestamp,
+}) => `${_timestamp} ${level}: ${message}`);
 
 const options = {
   // log file
@@ -23,11 +24,13 @@ const options = {
     colorize: false,
     format: combine(
       label({ label: 'GTC' }),
-      timestamp(),
+      timestamp({
+        format: 'YYYY-MM-DD HH:mm:ss',
+      }),
       myFormat, // log 출력 포맷
     ),
   },
-  // 개발 시 console에 출력
+  // 개발 시 console 에 출력
   console: {
     level: 'debug',
     handleExceptions: true,
@@ -35,13 +38,16 @@ const options = {
     colorize: true,
     format: combine(
       label({ label: 'nba_express' }),
-      timestamp(),
+      timestamp({
+        format: 'YYYY-MM-DD HH:mm:ss',
+      }),
       myFormat,
     ),
   },
 };
 
 const { file } = options;
+
 
 const logger = new CreatLogger({
   transports: [

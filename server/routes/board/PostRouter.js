@@ -4,164 +4,189 @@ const router = express.Router();
 const authMiddleware = require('../../middleware/auth');
 const { set } = require('../../middleware/latelyCookie');
 
-const { error, info } = require('../../log-config');
+const { info } = require('../../log-config');
 
 const Database = require('../../Database');
 
 const point = require('../../middleware/point');
 
-const SELECT_BOARD_POST_LIST = `
+// 추후 코드 테이블 조인 수정 예정
+const SELECT_POST_LIST = `
   SELECT 
-    @rownum:=@rownum+1 as rn
-      , (SELECT Ceil(COUNT(*)/25) FROM GTC_BOARD_POST WHERE B_ID = ':B_ID') AS pageCount
-      , P.ID AS id
-      , P.TITLE AS title
-      , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
-      , P.WRITER AS idWriter
-      , IF(BC_ID = 'FREE','자유','그외') as categoryName
-      , P.DEPTH AS depth
-      , if(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.DATE, '%Y%m%d'),DATE_FORMAT(P.DATE, '%H:%i'),DATE_FORMAT(P.DATE, '%m-%d')) AS date
-      , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
-      , ( SELECT COUNT(*) AS count FROM GTC_BOARD_REPLY WHERE BP_ID=P.id AND DELETE_YN = 'N') as replyCount
-  FROM GTC_BOARD_POST P, (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
-  WHERE B_ID = ':B_ID' AND P.WRITER != IFNULL(( SELECT TARGET_ID FROM GTC_USER_IGNORE WHERE FROM_ID =:USER_ID), -1)
+    @ROWNUM := @ROWNUM+1 as rn
+    , P.ID AS id
+    , P.TITLE AS title
+    , P.USER_ID AS writerId
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
+    , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
+    , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
+    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
+    , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD') AS pageCount
+  FROM 
+    GTC_POST P
+    , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
+  WHERE 
+    BOARD_CD = ':BOARD_CD' 
+    AND P.USER_ID != IFNULL((SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
 
-const INSERT_BOARD_POST = `
-  INSERT INTO GTC_BOARD_POST
-  VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_BOARD_POST) as temp),
-    ':BOARD',
-    ':CATEGORY',
-    null,
-    ':TITLE',
-    ':WRITER',
-    sysdate(),
-    0,
-    ':CONTENT',
-    :DEPTH,
-    ':SECRET',
-    ':SECRET_REPLY_ALLOW',
-    ':REPLY_ALLOW'
+const INSERT_POST = `
+  INSERT INTO GTC_POST (
+    ID
+    , BOARD_CD
+    , CATEGORY_CD
+    , TITLE
+    , USER_ID
+    , CONTENT
+    , NOTICE_FL
+    , SECRET_FL
+    , SECRET_COMMENT_ALLOW_FL
+    , COMMENT_ALLOW_FL
+    , CRT_DTTM
+  ) VALUES (
+    (SELECT * FROM (SELECT IFNULL(MAX(ID) + 1, 1) FROM GTC_POST) AS TEMP)
+    , ':BOARD_CD'
+    , ':CATEGORY_CD'
+    , ':TITLE'
+    , :USER_ID
+    , ':CONTENT'
+    , 0
+    , :SECRET_FL
+    , :SECRET_COMMENT_ALLOW_FL
+    , :COMMENT_ALLOW_FL
+    , SYSDATE()
   )
 `;
 
-const SELECT_BOARD_POST_MAX_ID = `
-  SELECT IFNULL(MAX(ID), 1) AS id FROM GTC_BOARD_POST
+const SELECT_POST_MAX_ID = `
+  SELECT
+    IFNULL(MAX(ID), 1) AS id 
+  FROM GTC_POST
 `;
 
-const SELECT_BOARD_POST_RECOMMEND_DUPLICATE_CHECK = `
-  SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND
-  WHERE ID = :ID
-  AND U_ID = :U_ID
+const SELECT_POST_RECOMMEND_DUPLICATE_CHECK = `
+  SELECT 
+    COUNT(*) AS count 
+  FROM GTC_POST_RECOMMEND
+  WHERE 
+    POST_ID = :POST_ID
+    AND USER_ID = :USER_ID
 `;
 
-const INSERT_BOARD_POST_RECOMMEND = `
-  INSERT INTO GTC_BOARD_POST_RECOMMEND
-  VALUES (
-    :ID,
-    :U_ID,
-    ':TYPE'
+const INSERT_POST_RECOMMEND = `
+  INSERT INTO GTC_POST_RECOMMEND (
+    POST_ID
+    , USER_ID
+    , TYPE_CD
+  ) VALUES (
+    :POST_ID
+    , :USER_ID
+    , ':TYPE_CD'
   )
 `;
 
-const SELECT_BOARD_POST_MINE = `
+const SELECT_MINE_POST = `
   SELECT 
     ID AS postId
     , TITLE AS postTitle
-    , date_format(DATE, '%Y-%m-%d %H:%i:%s') AS postDate
-    , VIEWS AS postViews
-  FROM GTC_BOARD_POST
-  WHERE WRITER = :USER_ID
+    , DATE_FORMAT(CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS postDate
+    , VIEW_CNT AS viewCnt
+  FROM GTC_POST
+  WHERE USER_ID = :USER_ID
   ORDER BY ID DESC
 `;
 
-const SELECT_BOARD_POST_SINGLE = `
+const SELECT_POST_SINGLE = `
   SELECT 
-  P.ID AS id
-  , P.B_ID AS board
-  , if(P.B_ID = 'FREE','자유게시판','그외') as boardName
-  , BC_ID AS category
-  , if(P.BC_ID = 'FREE','자유','그외') as categoryName
-  , if((SELECT F.POST_ID FROM GTC_USER_FAVORITE F WHERE F.USER_ID = :USER_ID AND F.POST_ID = P.ID), true, false) as isFavorite
-  , P.TITLE AS title
-  , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
-  , if(P.WRITER = :USER_ID, 'Y', 'N') AS myPostYN
-  , P.DEPTH AS depth
-  , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R01') as recommendCount
-  , ( SELECT COUNT(*) AS count FROM GTC_BOARD_POST_RECOMMEND WHERE ID=P.id AND TYPE='R02') as notRecommendCount
-  , CASE WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
-        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE,DATE, SYSDATE()),'분 전')
-        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR,DATE, SYSDATE()),'시간 전')
-        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY,DATE, SYSDATE()),'일 전')
-        WHEN DATE > DATE_FORMAT(DATE_ADD(sysdate(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH,DATE, SYSDATE()),'달 전')
-     ELSE CONCAT(TIMESTAMPDIFF(YEAR,DATE, SYSDATE()),'년 전')
-  END  as date
-  , P.CONTENT AS content
-  , P.VIEWS AS views
-  , P.SECRET as secret
-  , P.SECRET_REPLY_ALLOW as secretReplyAllow
-  , P.REPLY_ALLOW as replyAllow
-  FROM GTC_BOARD_POST P 
+    P.ID AS id
+    , P.BOARD_CD AS board
+    , IF(P.BOARD_CD = 'FREE','자유 게시판','그외') AS boardName
+    , CATEGORY_CD AS category
+    , IF(P.CATEGORY_CD = 'FREE','자유','그외') AS categoryName
+    , IF((SELECT F.POST_ID FROM GTC_USER_FAVORITE F WHERE F.USER_ID = :USER_ID AND F.POST_ID = P.ID), 1, 0) AS isFavorite
+    , P.TITLE AS title
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
+    , IF(P.USER_ID = :USER_ID, 1, 0) AS isMyPost
+    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
+    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R02') AS notRecommendCount
+    , CASE WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
+           WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, CRT_DTTM, SYSDATE()), '분 전')
+           WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR, CRT_DTTM, SYSDATE()), '시간 전')
+           WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY, CRT_DTTM, SYSDATE()), '일 전')
+           WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH, CRT_DTTM, SYSDATE()), '달 전')
+      ELSE CONCAT(TIMESTAMPDIFF(YEAR, CRT_DTTM, SYSDATE()),'년 전')
+      END AS date
+    , P.CONTENT AS content
+    , P.VIEW_CNT AS viewCnt
+    , P.SECRET_FL AS secretFl
+    , P.SECRET_COMMENT_ALLOW_FL AS secretCommentAllowFl
+    , P.COMMENT_ALLOW_FL AS commentAllowFl
+  FROM GTC_POST P 
   WHERE ID = :POST_ID
 `;
 
-const UPDATE_BOARD_POST_VIEWS = `
-  UPDATE GTC_BOARD_POST
-    SET VIEWS = VIEWS + 1
-    WHERE ID = :POST_ID
+const UPDATE_POST_VIEW_CNT = `
+  UPDATE GTC_POST
+    SET VIEW_CNT = VIEW_CNT + 1
+  WHERE ID = :POST_ID
 `;
 
-const SELECT_BOARD_POST_UPPER_AND_LOWER = `
-  SELECT *, IF(id > :POST_ID, 'upper', 'lower') AS upperOrLower FROM (
-    SELECT 
-      @ROWNUM := @ROWNUM + 1 as rn
+const SELECT_POST_UPPER_AND_LOWER = `
+  SELECT 
+    *
+    , IF(ID > :POST_ID, 1, 0) AS isUpper 
+  FROM (
+    SELECT
+      @ROWNUM := @ROWNUM + 1 AS rn
       , P.ID AS id
       , P.TITLE AS title
-      , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.WRITER) AS writer
-    FROM GTC_BOARD_POST P, (SELECT @ROWNUM := 0) AS TEMP
-    WHERE B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID = :POST_ID)
+      , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writer
+    FROM GTC_POST P, (SELECT @ROWNUM := 0) AS TEMP
+    WHERE BOARD_CD = (SELECT BOARD_CD FROM GTC_POST WHERE ID = :POST_ID)
     ORDER BY ID DESC    
   ) AS B
-  WHERE B.rn IN (
-    ((SELECT rn FROM (
-      SELECT 
-        @ROWNUM2 := @ROWNUM2 + 1 as rn 
-          , P.ID AS id
-          FROM GTC_BOARD_POST P,  (SELECT @ROWNUM2 := 0) AS TEMP
-          WHERE P.B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID = :POST_ID)
-          ORDER BY ID DESC   
+  WHERE B.RN IN (
+    ((SELECT RN FROM (
+        SELECT 
+          @ROWNUM2 := @ROWNUM2 + 1 AS RN 
+          , P.ID AS ID
+        FROM GTC_POST P, (SELECT @ROWNUM2 := 0) AS TEMP
+        WHERE P.BOARD_CD = (SELECT BOARD_CD FROM GTC_POST WHERE ID = :POST_ID)
+        ORDER BY ID DESC   
       ) AS A
-      WHERE A.id = :POST_ID) + 1),
-      ((SELECT rn FROM (
-      SELECT 
-        @ROWNUM3 := @ROWNUM3 + 1 as rn 
-          , P.ID AS id
-          FROM GTC_BOARD_POST P,  (SELECT @ROWNUM3 := 0) AS TEMP
-          WHERE P.B_ID = (SELECT B_ID FROM GTC_BOARD_POST WHERE ID = :POST_ID)
-          ORDER BY ID DESC   
-    ) AS A
-    WHERE A.id = :POST_ID) - 1)
+      WHERE A.ID = :POST_ID) + 1),
+      ((SELECT RN FROM (
+        SELECT 
+          @ROWNUM3 := @ROWNUM3 + 1 AS RN 
+            , P.ID AS ID
+            FROM GTC_POST P, (SELECT @ROWNUM3 := 0) AS TEMP
+            WHERE P.BOARD_CD = (SELECT BOARD_CD FROM GTC_POST WHERE ID = :POST_ID)
+            ORDER BY ID DESC   
+      ) AS A
+      WHERE A.ID = :POST_ID) - 1
+    )
   )
 `;
 
-const UPDATE_BOARD_POST = `
-  UPDATE GTC_BOARD_POST 
-  SET B_ID = ':BOARD'
-    , BC_ID = ':CATEGORY'
+const UPDATE_POST = `
+  UPDATE GTC_POST 
+  SET 
+    BOARD_CD = ':BOARD_CD'
+    , CATEGORY_CD = ':CATEGORY_CD'
     , TITLE = ':TITLE'
     , CONTENT = ':CONTENT'
-    , SECRET = ':SECRET'
-    , SECRET_REPLY_ALLOW = ':SECRET_REPLY_ALLOW'
-    , REPLY_ALLOW = ':REPLY_ALLOW'
-   WHERE ID = :ID 
+    , SECRET_FL = :SECRET_FL
+    , SECRET_COMMENT_ALLOW_FL = :SECRET_COMMENT_ALLOW_FL
+    , COMMENT_ALLOW_FL = :COMMENT_ALLOW_FL
+   WHERE ID = :POST_ID 
 `;
 
-const DELETE_BOARD_POST = `
-  DELETE FROM GTC_BOARD_POST 
-  WHERE ID = :ID 
+const DELETE_POST = `
+  DELETE FROM GTC_POST 
+  WHERE ID = :POST_ID 
 `;
 
 router.get('/', (req, res) => {
@@ -171,9 +196,9 @@ router.get('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_POST_LIST,
+      SELECT_POST_LIST,
       {
-        B_ID: board.toUpperCase(),
+        BOARD_CD: board.toUpperCase(),
         CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
         PER_PAGE: isHome ? 9 : 25,
@@ -183,26 +208,12 @@ router.get('/', (req, res) => {
         res.json({
           SUCCESS: true,
           CODE: 1,
-          MESSAGE: '게시물 목록 조회',
+          MESSAGE: '게시글 목록 조회',
           rows,
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('[SELECT, GET /api/board/post] 게시물 목록 조회');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
+    info('[SELECT, GET /api/board/post] 게시글 목록 조회');
   });
 });
 
@@ -212,21 +223,20 @@ router.post('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_BOARD_POST,
+      INSERT_POST,
       {
-        BOARD: data.board,
-        CATEGORY: data.category,
+        BOARD_CD: data.board,
+        CATEGORY_CD: data.category,
         TITLE: data.title,
-        WRITER: data.writer,
+        USER_ID: data.writer,
         CONTENT: data.content,
-        DEPTH: data.depth,
-        SECRET: data.secret,
-        SECRET_REPLY_ALLOW: data.secretReplyAllow,
-        REPLY_ALLOW: data.replyAllow,
+        SECRET_FL: data.secret,
+        SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
+        COMMENT_ALLOW_FL: data.replyAllow,
       },
     )
       .then(() => database.query(
-        SELECT_BOARD_POST_MAX_ID,
+        SELECT_POST_MAX_ID,
         {},
       ))
       .then((rows) => {
@@ -239,25 +249,11 @@ router.post('/', (req, res) => {
         res.json({
           SUCCESS: true,
           CODE: 1,
-          MESSAGE: '😊 포스팅이 등록되었어요!',
+          MESSAGE: '😊 게시글이 등록되었어요!',
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('[INSERT, POST /api/board/post] 게시물 등록');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
+    info('[INSERT, POST /api/board/post] 게시글 등록');
   });
 });
 
@@ -266,22 +262,21 @@ router.put('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      UPDATE_BOARD_POST,
+      UPDATE_POST,
       {
-        ID: data.id,
-        BOARD: data.board,
-        CATEGORY: data.category,
+        POST_ID: data.id,
+        BOARD_CD: data.board,
+        CATEGORY_CD: data.category,
         TITLE: data.title,
-        WRITER: data.writer,
+        USER_ID: data.writer,
         CONTENT: data.content,
-        DEPTH: data.depth,
-        SECRET: data.secret,
-        SECRET_REPLY_ALLOW: data.secretReplyAllow,
-        REPLY_ALLOW: data.replyAllow,
+        SECRET_FL: data.secret,
+        SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
+        COMMENT_ALLOW_FL: data.replyAllow,
       },
     )
       .then(() => database.query(
-        SELECT_BOARD_POST_MAX_ID,
+        SELECT_POST_MAX_ID,
         {},
       ))
       .then((rows) => {
@@ -294,21 +289,7 @@ router.put('/', (req, res) => {
         res.send(true);
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Get Post Add Success');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
+    info('[SELECT, GET /api/board/post] 게시글 수정');
   });
 });
 
@@ -317,30 +298,16 @@ router.delete('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      DELETE_BOARD_POST,
+      DELETE_POST,
       {
-        ID: data.id,
+        POST_ID: data.id,
       },
     )
       .then(() => {
         res.send(true);
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('Delete Post Success');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
+    info('[DELETE, DELETE /api/board/post] 게시글 삭제');
   });
 });
 
@@ -350,10 +317,10 @@ router.post('/recommend', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_POST_RECOMMEND_DUPLICATE_CHECK,
+      SELECT_POST_RECOMMEND_DUPLICATE_CHECK,
       {
-        ID: data.id,
-        U_ID: data.uId,
+        POST_ID: data.id,
+        USER_ID: data.uId,
       },
     )
       .then((rows) => {
@@ -367,11 +334,11 @@ router.post('/recommend', (req, res) => {
         }
 
         return database.query(
-          INSERT_BOARD_POST_RECOMMEND,
+          INSERT_POST_RECOMMEND,
           {
-            ID: data.id,
-            U_ID: data.uId,
-            TYPE: data.type,
+            POST_ID: data.id,
+            USER_ID: data.uId,
+            TYPE_CD: data.type,
           },
         );
       })
@@ -379,25 +346,11 @@ router.post('/recommend', (req, res) => {
         res.json({
           SUCCESS: true,
           CODE: 1,
-          MESSAGE: '😳 해당 포스팅 투표 완료!',
+          MESSAGE: '😳 포스팅 투표 완료!',
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('[INSERT, POST /api/board/post/recommend] 게시물 추천 투표');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
+    info('[INSERT, POST /api/board/post/recommend] 게시글 추천 투표');
   });
 });
 
@@ -406,7 +359,7 @@ router.get('/mine', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_POST_MINE,
+      SELECT_MINE_POST,
       {
         USER_ID: userId,
       },
@@ -415,26 +368,12 @@ router.get('/mine', (req, res) => {
         res.json({
           SUCCESS: true,
           CODE: 1,
-          MESSAGE: '내가 쓴 게시물 조회',
+          MESSAGE: '내가 쓴 게시글 조회',
           DATA: rows,
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('[SELECT, GET /api/board/post/mine] 내가 쓴 게시물 조회');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
+    info('[SELECT, GET /api/board/post/mine] 내가 쓴 게시글 조회');
   });
 });
 
@@ -443,7 +382,7 @@ router.get('/:id', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_POST_SINGLE,
+      SELECT_POST_SINGLE,
       {
         POST_ID: req.params.id,
         USER_ID: req.query.userId,
@@ -452,7 +391,7 @@ router.get('/:id', (req, res) => {
       .then((rows) => {
         postItem = rows;
         return database.query(
-          UPDATE_BOARD_POST_VIEWS,
+          UPDATE_POST_VIEW_CNT,
           {
             POST_ID: req.params.id,
           },
@@ -471,28 +410,14 @@ router.get('/:id', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
-    info('[SELECT, GET /api/board/post/:id] 단일 게시물 조회');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
+    info('[SELECT, GET /api/board/post/:id] 단일 게시글 조회');
   });
 });
 
 router.get('/:id/upperLower', (req, res) => {
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_POST_UPPER_AND_LOWER,
+      SELECT_POST_UPPER_AND_LOWER,
       {
         POST_ID: req.params.id,
       },
@@ -506,21 +431,7 @@ router.get('/:id/upperLower', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[SELECT, GET /api/board/post/:id/upperLower] 단일 게시글 위 아래 글 조회');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
