@@ -31,9 +31,9 @@ const Code = () => {
             <CodeTable bordered hover>
               <thead>
                 <tr>
-                  <th>공통 코드 그룹</th>
-                  <th>공통 그룹명</th>
-                  <th>공통 그룹 설명</th>
+                  <th>코드그룹</th>
+                  <th>코드그룹명</th>
+                  <th>코드그룹 설명</th>
                   <CenterTh>수정</CenterTh>
                   <CenterTh>삭제</CenterTh>
                 </tr>
@@ -55,10 +55,10 @@ const Code = () => {
             <CodeTable bordered hover>
               <thead>
                 <tr>
-                  <th>공통 코드</th>
-                  <th>공통 코드명</th>
+                  <th>코드</th>
+                  <th>코드명</th>
                   <CenterTh width="50">순서</CenterTh>
-                  <th>공통 코드 설명</th>
+                  <th>코드 설명</th>
                   <CenterTh width="80">사용 여부</CenterTh>
                   <CenterTh width="66">수정</CenterTh>
                   <CenterTh width="66">삭제</CenterTh>

@@ -16,7 +16,7 @@ const CodeRow = ({ data }) => {
   const { toggleConfirmAlert } = UtilAlertStore;
 
   const {
-    code, codeGroup, codeName, codeOrder, codeDesc, codeUseYN,
+    code, codeGroup, codeName, codeOrder, codeDesc, useYN: codeUseYN,
   } = data;
   const {
     name, order, desc, useYN,
@@ -72,7 +72,7 @@ const CodeRow = ({ data }) => {
       <td>{codeName}</td>
       <CenterTd>{codeOrder}</CenterTd>
       <td>{codeDesc}</td>
-      <CenterTd>{codeUseYN}</CenterTd>
+      <CenterTd>{codeUseYN ? '사용' : '미사용'}</CenterTd>
       <CenterPaddingTd>
         <Button
           size="sm"
@@ -105,7 +105,7 @@ CodeRow.propTypes = {
     codeName: Proptypes.string,
     codeOrder: Proptypes.number,
     codeDesc: Proptypes.string,
-    codeUseYN: Proptypes.string,
+    useYN: Proptypes.string,
   }).isRequired,
 };
 
