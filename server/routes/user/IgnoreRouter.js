@@ -2,44 +2,56 @@ const express = require('express');
 
 const router = express.Router();
 
-const { error, info } = require('../../log-config');
+const { info } = require('../../log-config');
 const Database = require('../../Database');
 
 const SELECT_USER_IGNORE_LIST = `
   SELECT
-  GUI.FROM_ID AS f_id
-  , GUI.TARGET_ID AS t_id
-  , date_format(GUI.DATE, '%Y년 %m월 %d일 %H시 %i분 %s초') AS date
-  , GU.NICKNAME AS nickname
-  FROM GTC_USER_IGNORE GUI
-  LEFT JOIN GTC_USER GU
-  ON GUI.TARGET_ID = GU.ID
-  WHERE GUI.FROM_ID = :USER_ID
+    GUI.USER_ID AS f_id
+    , GUI.USER_ID_TARGET AS t_id
+    , DATE_FORMAT(GUI.CRT_DTTM, '%Y년 %m월 %d일 %H시 %i분 %s초') AS date
+    , GU.NICKNAME AS nickname
+  FROM
+    GTC_USER_IGNORE GUI
+    LEFT JOIN GTC_USER GU
+    ON GUI.USER_ID_TARGET = GU.ID
+  WHERE GUI.USER_ID = :USER_ID
 `;
 
 const INSERT_USER_IGNORE = `
-  INSERT INTO GTC_USER_IGNORE
-  VALUES(
-    :FROM_ID
-    , :TARGET_ID
-    , sysdate()
-    )
+  INSERT INTO GTC_USER_IGNORE (
+    USER_ID
+    , USER_ID_TARGET
+    , CRT_DTTM
+  ) VALUES (
+    :USER_ID
+    , :USER_ID_TARGET
+    , SYSDATE()
+  )
 `;
 
 const SELECT_USER_IGNORE = `
-  SELECT *
+  SELECT 
+    *
   FROM GTC_USER_IGNORE
-  WHERE TARGET_ID = :TARGET_ID AND FROM_ID = :FROM_ID
+  WHERE 
+    USER_ID_TARGET = :USER_ID_TARGET
+    AND USER_ID = :USER_ID
 `;
 
 const DELETE_USER_IGNORE = `
   DELETE FROM GTC_USER_IGNORE
-  WHERE
-  (FROM_ID, TARGET_ID) IN (
-  SELECT FROM_ID, TARGET_ID from (
-  SELECT FROM_ID, TARGET_ID FROM GTC_USER_IGNORE
-  WHERE
-  :SUB_QUERY) as sub
+  WHERE (USER_ID, USER_ID_TARGET) IN (
+    SELECT 
+      USER_ID 
+      USER_ID_TARGET 
+    FROM (
+      SELECT 
+        USER_ID
+        , USER_ID_TARGET 
+      FROM GTC_USER_IGNORE
+      WHERE :SUB_QUERY
+    ) AS sub
   );
 `;
 
@@ -79,21 +91,7 @@ router.get('/', (req, res) => {
         }
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[SELECT, GET /api/user/ignore] 유저 차단 목록 조회');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
@@ -135,21 +133,7 @@ router.post('/', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[INSERT, POST /api/user/ignore] 유저 차단 추가');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 
@@ -180,21 +164,7 @@ router.delete('/', (req, res) => {
         });
       }),
   ).then(() => {
-    // 한 DB 트랜잭션이 끝나고 하고 싶은 짓.
     info('[DELETE, DELETE /api/user/ignore] 유저 차단 삭제');
-  }).catch((err) => {
-    // 트랜잭션 중 에러가 났을때 처리.
-    error(err.message);
-
-    // Database 에서 보여주는 에러 메시지
-    if (err.sqlMessage) {
-      error(err.sqlMessage);
-    }
-
-    // 실행된 sql
-    if (err.sql) {
-      error(err.sql);
-    }
   });
 });
 

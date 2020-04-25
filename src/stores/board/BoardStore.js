@@ -49,8 +49,6 @@ class BoardStore {
         if (data.SUCCESS) {
           if (data.CODE === 1) {
             this.currentBoard = data.DATA;
-          } else {
-            toast.info(data.MESSAGE);
           }
         } else {
           toast.error(data.MESSAGE);

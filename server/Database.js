@@ -1,10 +1,11 @@
 const mysql = require('mysql');
 const config = require('./config/db-config');
+const { error } = require('./log-config');
+
 
 class Database {
   constructor() {
     this.connection = mysql.createConnection(config);
-
     this.connection.config.queryFormat = (query, values) => {
       if (!values) return query;
       return query.replace(/:(\w+)/g, (txt, key) => {
@@ -19,7 +20,22 @@ class Database {
   query(sql, args) {
     return new Promise((resolve, reject) => {
       this.connection.query(sql, args, (err, rows) => {
-        if (err) reject(err);
+        if (err) {
+          // 트랜잭션 중 에러가 났을때 처리.
+          error(err.message);
+
+          // Database 에서 보여주는 에러 메시지
+          if (err.sqlMessage) {
+            // error(err.sqlMessage);
+          }
+
+          // 실행된 sql
+          if (err.sql) {
+            error(err.sql);
+          }
+
+          reject(err);
+        }
         resolve(rows);
       });
     });

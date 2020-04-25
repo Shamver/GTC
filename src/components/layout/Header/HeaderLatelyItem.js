@@ -8,13 +8,13 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const HeaderLatelyItem = (data, onClick) => {
-  const { postId, postTitle } = data;
+  const { id, title } = data;
 
   return (
-    <CustomLink to={`/post/${postId}`} key={`HeaderLatelyItem${postId}`}>
+    <CustomLink to={`/post/${id}`} key={`HeaderLatelyItem_${id}`}>
       <DropdownItem30>
-        <Text>{postTitle}</Text>
-        <IconSpan onClick={(e) => { onClick(e, postId); }}>
+        <Text>{title}</Text>
+        <IconSpan onClick={(e) => { onClick(e, id); }}>
           <Icon icon={faTimes} />
         </IconSpan>
       </DropdownItem30>
