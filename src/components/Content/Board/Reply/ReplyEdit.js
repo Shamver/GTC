@@ -14,28 +14,27 @@ const ReplyEdit = () => {
     onChangeValue, reply, setReplyEditId, addReply, replyEditId, modifyModeId,
     CurrentReplyOption,
   } = BoardReplyStore;
-  const { text, secretYN } = reply;
-  const { secretReplyAllow } = CurrentReplyOption;
+  const { text, secretFl } = reply;
+  const { secretCommentAllowFl } = CurrentReplyOption;
 
   return (
     <>
       <CKEditor
         editor={ClassicEditor}
         data={text}
-        onInit={() => {}}
         onChange={(event, editor) => {
           const ReplyContent = editor.getData();
           onChangeValue(ReplyContent);
         }}
         placeholder="내용을 작성해주세요."
       />
-      { secretReplyAllow === 'Y'
+      { secretCommentAllowFl
         ? (
           <>
-            <CustomCheckbox type="checkbox" id="secretYN" name="secretYN" value="Y" onChange={onChangeValue} label="비밀 댓글 🔒 " checked={secretYN === 'Y'} />
+            <CustomCheckbox type="checkbox" id="secretFl" name="secretFl" value={secretFl} onChange={onChangeValue} label="비밀 댓글 🔒 " checked={secretFl} />
           </>
         )
-        : ''}
+        : null}
       { replyEditId === 0 && modifyModeId === 0 ? '' : (
         <Button size="sm" outline onClick={() => setReplyEditId(0)}>취소</Button>
       )}

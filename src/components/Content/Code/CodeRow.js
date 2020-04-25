@@ -1,11 +1,11 @@
 import React from 'react';
-import {Button, Input} from 'reactstrap';
+import { Button, Input } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faEdit, faTimesCircle, faTrash} from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
-import useStores from '../../../stores/useStores';
 import { observer } from 'mobx-react';
+import useStores from '../../../stores/useStores';
 
 const CodeRow = ({ data }) => {
   const { SystemCodeStore, UtilAlertStore } = useStores();
@@ -37,8 +37,8 @@ const CodeRow = ({ data }) => {
         </td>
         <td>
           <Input type="select" bsSize="sm" onChange={onChangeCode} name="useYN" value={useYN}>
-            <option value="Y">Y</option>
-            <option value="N">N</option>
+            <option value={1}>Y</option>
+            <option value={0}>N</option>
           </Input>
         </td>
         <CenterPaddingEditTd>

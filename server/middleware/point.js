@@ -45,6 +45,6 @@ module.exports = (action, type, data) => {
 
       }),
   ).then(() => {
-    info('[INSERT, MIDDLEWARE POINT] 포인트 추가');
+    info('[INSERT, MIDDLEWARE POINT] 포인트 이벤트');
   });
 };

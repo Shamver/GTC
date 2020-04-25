@@ -26,7 +26,7 @@ const SELECT_LAST_INSERT_ID = `
 `;
 
 const INSERT_COMMENT = `
-  INSERT INTO GTC_CO MMENT (
+  INSERT INTO GTC_COMMENT (
     ID
     , POST_ID
     , COMMENT_ID
@@ -84,13 +84,22 @@ const SELECT_POST_COMMENT = `
             WHEN A.MFY_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 MONTH),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(DAY, A.MFY_DTTM, SYSDATE()),'일 전 수정')
             WHEN A.MFY_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH, A.MFY_DTTM, SYSDATE()),'달 전 수정')
            ELSE CONCAT(TIMESTAMPDIFF(YEAR, A.MFY_DTTM, SYSDATE()),'년 전')
-       END  as updateDate
-    , A.CONTENT as content
-    , A.SECRET_FL as secretFl
-    , A.DELETE_FL as deleteFl
+       END  AS updateDate
+    , (
+        SELECT
+          CASE WHEN DELETE_FL = 1 THEN 'DELETED'
+            WHEN IF(A.ID = COMMENT_ID_UPPER, 0, 1) = 1 THEN  (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = USER_ID)
+          END
+        FROM GTC_COMMENT
+        WHERE ID = A.COMMENT_ID
+      ) AS commentReplyName
+    , A.CONTENT AS content
+    , A.SECRET_FL AS secretFl
+    , A.DELETE_FL AS deleteFl
+    , IF(A.ID = COMMENT_ID_UPPER, 0, 1) AS tabFl
     , (SELECT COUNT(*) FROM GTC_COMMENT_LIKE WHERE COMMENT_ID = A.ID) AS likeCount
     FROM GTC_COMMENT A, GTC_POST C
-  WHERE A.POST_ID = ':POST_ID' AND A.USER_ID != IFNULL(( SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
+  WHERE A.POST_ID = :POST_ID AND A.USER_ID != IFNULL(( SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
   AND A.DELETE_FL = 0
   AND C.ID = A.POST_ID
   ORDER BY A.COMMENT_ID_UPPER, A.ID
@@ -116,7 +125,7 @@ const SELECT_COMMENT_LIKE_DUPLICATE_CHECK = `
     COUNT(*) AS count 
   FROM GTC_COMMENT_LIKE
   WHERE 
-    ID = :ID
+    COMMENT_ID = :COMMENT_ID
     AND USER_ID = :USER_ID
 `;
 
@@ -194,7 +203,7 @@ router.get('/', (req, res) => {
     (database) => database.query(
       SELECT_POST_COMMENT,
       {
-        BP_ID: data.bpId,
+        POST_ID: data.bpId,
         USER_ID: data.userId,
       },
     )
@@ -218,7 +227,7 @@ router.put('/', (req, res) => {
     (database) => database.query(
       UPDATE_COMMENT,
       {
-        ID: data.id,
+        COMMENT_ID: data.id,
         CONTENT: data.content,
       },
     )
@@ -246,12 +255,7 @@ router.delete('/', (req, res) => {
     )
       .then((rows) => {
         if (rows[0].count >= 1) {
-          res.json({
-            SUCCESS: true,
-            CODE: 2,
-            MESSAGE: '😳 해당 댓글에 답글이 달려있어 삭제하지 못해요!',
-          });
-          throw new Error('해당 댓글에 답글이 달려있기 때문에 삭제할 수 없습니다.');
+          return Promise.reject();
         }
 
         return database.query(
@@ -268,6 +272,12 @@ router.delete('/', (req, res) => {
           CODE: 1,
           MESSAGE: '😊 댓글이 삭제되었어요!',
         });
+      }, () => {
+        res.json({
+          SUCCESS: true,
+          CODE: 2,
+          MESSAGE: '😳 해당 댓글에 답글이 달려있어 삭제하지 못합니다.',
+        });
       }),
   ).then(() => {
     info('[DELETE, DELETE /api/board/reply] 댓글 삭제');
@@ -282,33 +292,34 @@ router.post('/like', (req, res) => {
     (database) => database.query(
       SELECT_COMMENT_LIKE_DUPLICATE_CHECK,
       {
-        ID: data.id,
-        U_ID: data.uId,
+        COMMENT_ID: data.id,
+        USER_ID: data.uId,
       },
     )
       .then((rows) => {
         if (rows[0].count === 1) {
-          res.json({
-            SUCCESS: true,
-            CODE: 2,
-            MESSAGE: '😳 이미 해당 댓글을 좋아합니다. ㅠㅠ',
-          });
-          throw new Error('이미 해당 댓글에 좋아요를 눌렀습니다.');
-        } else {
-          return database.query(
-            INSERT_COMMENT_LIKE,
-            {
-              ID: data.id,
-              U_ID: data.uId,
-            },
-          );
+          return Promise.reject();
         }
+
+        return database.query(
+          INSERT_COMMENT_LIKE,
+          {
+            COMMENT_ID: data.id,
+            USER_ID: data.uId,
+          },
+        );
       })
       .then(() => {
         res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '😊 해당 댓글 좋아요 완료!',
+        });
+      }, () => {
+        res.json({
+          SUCCESS: true,
+          CODE: 2,
+          MESSAGE: '😳 이미 해당 댓글을 좋아요를 누르셨습니다.',
         });
       }),
   ).then(() => {

@@ -13,21 +13,24 @@ const HomePostList = ({ board }) => {
     getHomePostList(board);
   }, [getHomePostList, board]);
 
-  return homePostList[board].map((data) => (
-    <li key={data.id}>
-      <div>
-        <Link to={`/post/${data.id}`}>
-          {data.title}
-        </Link>
-      </div>
-      &nbsp;&nbsp;
-      { data.replyCount > 0 ? (
-        <ReplyCount>
-          [{data.replyCount}]
-        </ReplyCount>
-      ) : ''}
-    </li>
-  ));
+  return homePostList[board].map((data) => {
+    const { id, title, commentCount } = data;
+    return (
+      <li key={data.id}>
+        <div>
+          <Link to={`/post/${id}`}>
+            {title}
+          </Link>
+        </div>
+        &nbsp;&nbsp;
+        { commentCount > 0 ? (
+          <ReplyCount>
+            [{commentCount}]
+          </ReplyCount>
+        ) : null}
+      </li>
+    );
+  });
 };
 
 HomePostList.propTypes = {

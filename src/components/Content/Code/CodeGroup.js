@@ -11,18 +11,18 @@ const CodeGroup = ({ data }) => {
   const { SystemCodeStore, UtilAlertStore } = useStores();
   const {
     getCodeList, setGroupEditModeId, groupEditModeId, onChangeCodeGroup,
-    modifyCodeGroup, codeGroup, deleteCodeGroup, code
+    modifyCodeGroup, codeGroup, deleteCodeGroup, code,
   } = SystemCodeStore;
   const { toggleConfirmAlert } = UtilAlertStore;
 
-  const { group, groupName, groupDesc } = data;
+  const { groupId, groupName, groupDesc } = data;
   const { name, desc } = codeGroup;
   const { group: currentGroup } = code;
 
-  if (group === groupEditModeId) {
+  if (groupId === groupEditModeId) {
     return (
       <tr>
-        <td>{group}</td>
+        <td>{groupId}</td>
         <td>
           <Input bsSize="sm" onChange={onChangeCodeGroup} value={name} name="name" />
         </td>
@@ -44,17 +44,17 @@ const CodeGroup = ({ data }) => {
   }
 
   return (
-    <ActiveTr className={currentGroup === group ? 'active' : null} onClick={() => getCodeList(group)}>
-      <td>{group}</td>
+    <ActiveTr className={currentGroup === groupId ? 'active' : null} onClick={() => getCodeList(groupId)}>
+      <td>{groupId}</td>
       <td>{groupName}</td>
       <td>{groupDesc}</td>
       <CenterPaddingTd>
-        <Button size="sm" color="danger" onClick={() => setGroupEditModeId({ id: group, name: groupName, desc: groupDesc })}>
+        <Button size="sm" color="danger" onClick={() => setGroupEditModeId({ id: groupId, name: groupName, desc: groupDesc })}>
           <FontAwesomeIcon icon={faEdit} />
         </Button>
       </CenterPaddingTd>
       <CenterPaddingTd>
-        <Button size="sm" color="danger" onClick={() => toggleConfirmAlert('해당 코드 그룹을 정말로 삭제하시겠습니까?', () => deleteCodeGroup(group))}>
+        <Button size="sm" color="danger" onClick={() => toggleConfirmAlert('해당 코드 그룹을 정말로 삭제하시겠습니까?', () => deleteCodeGroup(groupId))}>
           <FontAwesomeIcon icon={faTrash} />
         </Button>
       </CenterPaddingTd>
@@ -64,7 +64,7 @@ const CodeGroup = ({ data }) => {
 
 CodeGroup.propTypes = {
   data: Proptypes.shape({
-    group: Proptypes.string,
+    groupId: Proptypes.string,
     groupName: Proptypes.string,
     groupDesc: Proptypes.string,
   }).isRequired,

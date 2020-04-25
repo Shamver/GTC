@@ -27,7 +27,7 @@ class CodeStore {
     name: '',
     order: '',
     desc: '',
-    useYN: 'Y',
+    useYN: 1,
   };
 
   constructor(root) {
@@ -138,7 +138,7 @@ class CodeStore {
             name: '',
             order: '',
             desc: '',
-            useYN: '',
+            useYN: 1,
           };
           this.getCodeGroupList();
           this.getCodeList(this.code.group);
@@ -179,18 +179,18 @@ class CodeStore {
     axios.put('/api/system/code', this.code)
       .then((response) => {
         if (response.data) {
+          this.getCodeGroupList();
+          this.getCodeList(this.code.group);
+          this.setIsAddCode(false);
+          toast.success('😳 코드 수정 완료!');
           this.code = {
             ...this.code,
             id: '',
             name: '',
             order: '',
             desc: '',
-            useYN: '',
+            useYN: 1,
           };
-          this.getCodeGroupList();
-          this.getCodeList(this.code.group);
-          this.setIsAddCode(false);
-          toast.success('😳 코드 수정 완료!');
         }
       })
       .catch((response) => {
@@ -215,7 +215,7 @@ class CodeStore {
             name: '',
             order: '',
             desc: '',
-            useYN: '',
+            useYN: 1,
           };
           this.getCodeGroupList();
           this.getCodeList(this.code.group);

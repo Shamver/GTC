@@ -7,7 +7,7 @@ const Database = require('../../Database');
 
 const UPDATE_USER_DELETE = `
   UPDATE GTC_USER
-  SET DELETED_DTTM = SYSDATE()
+  SET DELETE_DTTM = SYSDATE()
   WHERE ID = :USER_ID
 `;
 
@@ -15,8 +15,8 @@ const UPDATE_USER_INFO = `
   UPDATE GTC_USER
   SET 
     NICKNAME = ':NICKNAME'
-    , BIRTH = ':BIRTH'
-    , GENDER = ':GENDER'
+    , BIRTH_DT = ':BIRTH_DT'
+    , GENDER_CD = ':GENDER_CD'
     , PROFILE_FL = :PROFILE_FL
   WHERE ID = :USER_ID
 `;
@@ -54,9 +54,9 @@ router.put('/info', (req, res) => {
       {
         USER_ID: userId,
         NICKNAME: nickname,
-        BIRTH: birth,
-        GENDER: gender,
-        PROFILE_YN: profileYN,
+        BIRTH_DT: birth,
+        GENDER_CD: gender,
+        PROFILE_FL: profileYN,
       },
     )
       .then(() => {

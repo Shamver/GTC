@@ -44,6 +44,7 @@ router.get('/', (req, res) => {
       SUCCESS: true,
       CODE: 2,
       MESSAGE: '최근 읽은 게시물이 없습니다.',
+      DATA: [],
     });
   }
 });
@@ -58,7 +59,7 @@ router.delete('/', (req, res) => {
   res.json({
     SUCCESS: true,
     CODE: 1,
-    MESSAGE: '😊 성공적으로 삭제되었습니다!',
+    MESSAGE: '😊 성공적으로 기록이 삭제되었습니다!',
   });
 });
 

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const MyPointTableRow = (title, data) => {
   const {
-    id, type, point, date, postId, replyId,
+    id, type, point, date, postId,
   } = data;
 
   let desc;
@@ -27,7 +27,7 @@ const MyPointTableRow = (title, data) => {
         { point } 점
       </TableTd>
       <TableTd>
-        { desc } (#{type === 'POST' ? postId : replyId})
+        { desc } (#{ postId })
       </TableTd>
     </tr>
   );

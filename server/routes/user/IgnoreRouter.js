@@ -44,7 +44,7 @@ const DELETE_USER_IGNORE = `
   WHERE (USER_ID, USER_ID_TARGET) IN (
     SELECT 
       USER_ID 
-      USER_ID_TARGET 
+      , USER_ID_TARGET 
     FROM (
       SELECT 
         USER_ID
@@ -103,8 +103,8 @@ router.post('/', (req, res) => {
     (database) => database.query(
       SELECT_USER_IGNORE,
       {
-        TARGET_ID: targetId,
-        FROM_ID: fromId,
+        USER_ID_TARGET: targetId,
+        USER_ID: fromId,
       },
     )
       .then((rows) => {
@@ -112,7 +112,7 @@ router.post('/', (req, res) => {
           res.json({
             SUCCESS: true,
             CODE: 2,
-            MESSAGE: '😓 이미 차단한 유저입니다ㅠ',
+            MESSAGE: '😓 이미 차단한 유저입니다.',
           });
           throw new Error('이미 차단한 유저입니다.');
         } else {
@@ -129,7 +129,7 @@ router.post('/', (req, res) => {
         res.json({
           SUCCESS: true,
           CODE: 1,
-          MESSAGE: '✔ 성공적으로 차단되었습니다!',
+          MESSAGE: '😊 성공적으로 차단되었습니다!',
         });
       }),
   ).then(() => {
@@ -145,7 +145,7 @@ router.delete('/', (req, res) => {
   let subQuery = '';
 
   for (let i = 0; i < list.length; i += 1) {
-    subQuery += `(FROM_ID=${list[i].f_id} AND TARGET_ID=${list[i].t_id})`;
+    subQuery += `(USER_ID=${list[i].f_id} AND USER_ID_TARGET=${list[i].t_id})`;
     if (i !== list.length - 1) subQuery += ' OR ';
   }
 

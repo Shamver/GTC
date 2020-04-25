@@ -9,15 +9,15 @@ const SELECT_CODEGROUP = `
   SELECT
     ID AS groupId
     , NAME AS groupName
-    , DESC AS groupDesc
-  FROM GTC_CODE_GROUP
+    , \`DESC\` AS groupDesc
+  FROM GTC_CODEGROUP
 `;
 
 const INSERT_CODEGROUP = `
-  INSERT INTO GTC_CODE_GROUP (
+  INSERT INTO GTC_CODEGROUP (
     ID
     , NAME
-    , DESC
+    , \`DESC\`
     , CRT_DTTM
   ) VALUES (
     ':ID'
@@ -31,8 +31,8 @@ const UPDATE_CODEGROUP = `
   UPDATE GTC_CODEGROUP
   SET  
     NAME = ':NAME'
-    , DESC = ':DESC'
-  WHERE ID = ':ID'
+    , \`DESC\` = ':DESC'
+  WHERE ID = ':CODEGROUP_ID'
 `;
 
 const DELETE_CODEGROUP = `
@@ -45,8 +45,8 @@ const INSERT_CODE = `
     CODEGROUP_ID
     , CODE
     , NAME
-    , DESC
-    , ORDER
+    , \`DESC\`
+    , \`ORDER\`
     , USE_FL
     , CRT_DTTM
   ) VALUES (
@@ -65,9 +65,9 @@ const SELECT_CODE = `
     CODEGROUP_ID AS codeGroup
     , CODE AS code
     , NAME AS codeName
-    , DESC AS codeDesc
-    , ORDER AS codeOrder
-    , USE_FL AS codeUseFl
+    , \`DESC\` AS codeDesc
+    , \`ORDER\` AS codeOrder
+    , USE_FL AS useYN
   FROM GTC_CODE
   WHERE CODEGROUP_ID = ':CODEGROUP_ID'
 `;
@@ -76,8 +76,8 @@ const UPDATE_CODE = `
   UPDATE GTC_CODE
   SET  
     NAME = ':NAME'
-    , DESC = ':DESC'
-    , ORDER = :ORDER
+    , \`DESC\` = ':DESC'
+    , \`ORDER\` = :ORDER
     , USE_FL = :USE_FL
   WHERE 
     CODEGROUP_ID = ':CODEGROUP_ID'
@@ -99,7 +99,7 @@ router.post('/group', (req, res) => {
     (database) => database.query(
       INSERT_CODEGROUP,
       {
-        ID: id,
+        CODEGROUP_ID: id,
         NAME: name,
         DESC: desc,
       },
@@ -171,12 +171,12 @@ router.post('/', (req, res) => {
     (database) => database.query(
       INSERT_CODE,
       {
-        ID: id,
-        GROUP: group,
+        CODE: id,
+        CODEGROUP_ID: group,
         NAME: name,
         DESC: desc,
         ORDER: order,
-        USE_YN: useYN,
+        USE_FL: useYN,
       },
     )
       .then(() => {
@@ -194,7 +194,7 @@ router.get('/', (req, res) => {
     (database) => database.query(
       SELECT_CODE,
       {
-        CODE_GROUP: codeGroup,
+        CODEGROUP_ID: codeGroup,
       },
     )
       .then((rows) => {
@@ -215,11 +215,11 @@ router.put('/', (req, res) => {
       UPDATE_CODE,
       {
         CODE: id,
-        GROUP: group,
+        CODEGROUP_ID: group,
         NAME: name,
         ORDER: order,
         DESC: desc,
-        USE_YN: useYN,
+        USE_FL: useYN,
       },
     )
       .then(() => {
@@ -236,7 +236,7 @@ router.delete('/', (req, res) => {
     (database) => database.query(
       DELETE_CODE,
       {
-        GROUP: group,
+        CODEGROUP_ID: group,
         CODE: code,
       },
     )

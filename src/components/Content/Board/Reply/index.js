@@ -28,13 +28,13 @@ const Reply = ({ data, index }) => {
   const { toggleConfirmAlert } = UtilAlertStore;
   const { addIgnore } = UserIgnoreStore;
 
-  const ReplyContentText = data.secretYN === 'N' || (data.secretYN === 'Y' && data.idPostWriter === data.idWriter)
+  const ReplyContentText = !data.secretFl || (data.secretFl && data.idPostWriter === data.idWriter)
     ? renderHTML(`${data.content}`)
-    : '';
+    : null;
 
   return (
     <ReplyLayout>
-      { data.depth > 1 ? (
+      { data.tabFl ? (
         <Link to="/">
           <ReplyDepthIcon icon={faShare} />
         </Link>
@@ -66,18 +66,25 @@ const Reply = ({ data, index }) => {
           </WriterDropdown>
           { data.idPostWriter === data.idWriter ? (<Writer>(글쓴이)</Writer>) : ''}
           <span className="replyOption">
-            { data.deleteYN === 'N' ? (
+            { !data.deleteFl ? (
               <>
                 { userData.id === data.idWriter
                   ? (
                     <>
                       <SpanLikeLink onClick={() => modifyMode(data.id)}>수정</SpanLikeLink>
                       &nbsp;·&nbsp;
-                      <SpanLikeLink onClick={() => deleteReply(data.id)}>삭제</SpanLikeLink>
+                      <SpanLikeLink onClick={() => {
+                        toggleConfirmAlert('정말 삭제 하시겠습니까?', () => {
+                          deleteReply(data.id);
+                        });
+                      }}
+                      >
+                        삭제
+                      </SpanLikeLink>
                       &nbsp;·&nbsp;
                     </>
                   )
-                  : '' }
+                  : null }
                 <SpanLikeLink onClick={() => likeReply(data.id)}>
                   { !data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
                 </SpanLikeLink>
@@ -97,36 +104,34 @@ const Reply = ({ data, index }) => {
         </ReplyInHeader>
         <ReplyInContent>
           {/* 수정의 경우의 수 */}
-          { data.secretYN === 'Y'
+          { data.secretFl
             ? (<><SecretReply><FontAwesomeIcon icon={faLock} /> 비밀 댓글</SecretReply> <br /></>)
             : '' }
 
-          <SpanLikeLink>{data.replyWriterName && data.replyWriterName !== 'DELETED' ? (
-            <>
-              @{data.replyWriterName}
-              <br />
-            </>
-          ) : ''}
+          <SpanLikeLink>
+            {data.commentReplyName && data.commentReplyName !== 'DELETED' ? (
+              <>
+                @{data.commentReplyName}
+                <br />
+              </>
+            ) : null}
           </SpanLikeLink>
-          <Writer>{data.replyWriterName && data.replyWriterName === 'DELETED' && data.depth > 1 ? (
+          <Writer>{data.commentReplyName && data.commentReplyName === 'DELETED' && data.tabFl ? (
             <>
               [삭제된 댓글의 답글]
               <br />
             </>
           ) : ''}
           </Writer>
-
-
           { modifyModeId === data.id
             ? (<ReplyModify content={data.content} />)
             : (
               <>
-                {data.deleteYN === 'N'
+                { !data.deleteFl
                   ? ReplyContentText
                   : (<DeleteReply>[삭제된 댓글 입니다.]</DeleteReply>)}
               </>
             )}
-
           {/* 대댓글의 경우의 수 */}
           { replyEditId === data.id
             ? (<ReplyEdit />)
@@ -145,12 +150,12 @@ Reply.propTypes = {
     likeCount: Proptypes.number,
     writer: Proptypes.string,
     content: Proptypes.string,
-    depth: Proptypes.number,
+    tabFl: Proptypes.number,
     date: Proptypes.string,
-    replyWriterName: Proptypes.string,
+    commentReplyName: Proptypes.string,
     updateDate: Proptypes.string,
-    secretYN: Proptypes.string,
-    deleteYN: Proptypes.string,
+    secretFl: Proptypes.number,
+    deleteFl: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
 };
