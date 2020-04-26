@@ -75,7 +75,7 @@ class CodeStore {
     if (!this.codeGroupValidationCheck()) {
       return false;
     }
-
+    console.log(this.codeGroup);
     axios.put('/api/system/code/group', this.codeGroup)
       .then((response) => {
         if (response.data) {
@@ -304,10 +304,7 @@ class CodeStore {
       return false;
     }
 
-    console.log(this.code.order);
-    console.log(Number.isNaN(this.code.order));
-
-    if (!this.code.order.trim() || isNaN(this.code.order)) {
+    if (!this.code.order.trim() || Number.isNaN(Number(this.code.order.trim()))) {
       toggleAlert('순서를 입력하지 않았거나 숫자형태가 아닙니다.');
       return false;
     }

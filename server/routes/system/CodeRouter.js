@@ -20,7 +20,7 @@ const INSERT_CODEGROUP = `
     , \`DESC\`
     , CRT_DTTM
   ) VALUES (
-    ':ID'
+    ':CODEGROUP_ID'
     , ':NAME'
     , ':DESC'
     , SYSDATE()
@@ -131,7 +131,7 @@ router.put('/group', (req, res) => {
     (database) => database.query(
       UPDATE_CODEGROUP,
       {
-        ID: id,
+        CODEGROUP_ID: id,
         NAME: name,
         DESC: desc,
       },
@@ -150,7 +150,7 @@ router.delete('/group', (req, res) => {
     (database) => database.query(
       DELETE_CODEGROUP,
       {
-        GROUP: group,
+        CODEGROUP_ID: group,
       },
     )
       .then(() => {
