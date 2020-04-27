@@ -12,6 +12,7 @@ import ComponentMyAccountStore from './component/MyAccountStore';
 import ComponentReplyStore from './component/ReplyStore';
 import ComponentPostStore from './component/PostStore';
 import ComponentMailStore from './component/MailStore';
+import ComponentSidebarStore from './component/SidebarStore';
 
 import UtilStore from './util/UtilStore';
 import UtilAlertStore from './util/AlertStore';
@@ -47,6 +48,7 @@ class RootStore {
     this.ComponentReplyStore = new ComponentReplyStore(this);
     this.ComponentPostStore = new ComponentPostStore(this);
     this.ComponentMailStore = new ComponentMailStore(this);
+    this.ComponentSidebarStore = new ComponentSidebarStore(this);
 
     this.UtilStore = new UtilStore(this);
     this.UtilAlertStore = new UtilAlertStore(this);

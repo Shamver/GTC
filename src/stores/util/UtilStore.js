@@ -5,6 +5,8 @@ class UtilStore {
 
   @observable signDisplay = true;
 
+  @observable sidebarOpen = false;
+
   constructor(root) {
     this.root = root;
   }
@@ -33,6 +35,10 @@ class UtilStore {
     toggleAlert('로그인 후 이용 가능합니다.');
     history.push('/');
     return false;
+  }
+
+  @action onSetSidebarOpen = (open) => {
+    this.sidebarOpen = open;
   }
 }
 

@@ -8,6 +8,7 @@ import stores from './stores';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 ReactDOM.render((
   <Provider
     UserStore={stores.UserStore}
@@ -24,6 +25,7 @@ ReactDOM.render((
     ComponentReplyStore={stores.ComponentReplyStore}
     ComponentPostStore={stores.ComponentPostStore}
     ComponentMailStore={stores.ComponentMailStore}
+    ComponentSidebarStore={stores.ComponentSidebarStore}
 
     UtilStore={stores.UtilStore}
     UtilRouteStore={stores.UtilRouteStore}

@@ -30,7 +30,6 @@ const Content = () => (
 
         <Route exact path="/search" render={() => <Contents.Search />} />
 
-
         {/* Smile Icon */}
         <Route exact path="/daily" render={() => <Contents.Daily />} />
         <Route exact path="/advertise" render={() => <Contents.Advertise />} />
@@ -62,7 +61,6 @@ const Content = () => (
 );
 
 const BorderedDiv = styled.div`
-  
   margin-bottom : 20px;
 `;
 

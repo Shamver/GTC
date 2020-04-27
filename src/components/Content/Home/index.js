@@ -21,7 +21,7 @@ const Home = () => {
     <>
       <Loading loading={loading} />
       <LoadingRow loading={loading}>
-        <Col xs="6">
+        <NoRightPadding lg="6" xs="12">
           <TextH5>
             <NoStyleLink to="/free">
               커뮤니티 자유게시판 <ArrowIcon icon={faChevronRight} />
@@ -32,39 +32,39 @@ const Home = () => {
               <HomePostList board="free" />
             </ul>
           </PostList>
-        </Col>
-        <Col xs="6">
+        </NoRightPadding>
+        <NoRightPadding lg="6" xs="12">
           <TextH5>현금 거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
           <PostList>
             <ul>
               <HomePostList board="cash" />
             </ul>
           </PostList>
-        </Col>
-        <Col xs="12">
+        </NoRightPadding>
+        <NoRightPadding lg="12">
           <TextH5>공지사항 <ArrowIcon icon={faChevronRight} /></TextH5>
           <MiddlePostList>
             <ul>
               <HomePostList board="notice" />
             </ul>
           </MiddlePostList>
-        </Col>
-        <Col xs="6">
+        </NoRightPadding>
+        <NoRightPadding lg="6" xs="12">
           <TextH5>거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
           <PostList>
             <ul>
               <HomePostList board="trade" />
             </ul>
           </PostList>
-        </Col>
-        <Col xs="6">
+        </NoRightPadding>
+        <NoRightPadding lg="6" xs="12">
           <TextH5>질문 & 답변 <ArrowIcon icon={faChevronRight} /></TextH5>
           <PostList>
             <ul>
               <HomePostList board="qna" />
             </ul>
           </PostList>
-        </Col>
+        </NoRightPadding>
       </LoadingRow>
     </>
   );
@@ -72,6 +72,16 @@ const Home = () => {
 
 const LoadingRow = styled(Row)`
   display: ${(props) => (props.loading ? 'none !important' : 'flex !important')}
+  margin : 0 !important;
+`;
+
+const NoRightPadding = styled(Col)`
+  padding-right : 0 !important; 
+  
+  @media (max-width: 992px) {
+    padding-left : 5px !important;
+    padding-right : 5px !important;
+  }
 `;
 
 const NoStyleLink = styled(Link)`
