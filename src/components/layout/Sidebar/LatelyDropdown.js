@@ -43,7 +43,7 @@ const DropdownIn = styled(Dropdown)`
     outline: 0;
   }
   
-   & .dropdown-item:focus {
+  & .dropdown-item:focus {
     color: #fff !important;
     text-decoration: none !important;
     background-color: #DC3545 !important;
@@ -60,6 +60,7 @@ const DropdownItem30 = styled(DropdownItem)`
 
 const DropdownToggleC = styled(DropdownToggle)`
   background-color: transparent !important;
+  padding : 0 10px 0 0 !important;
   color : white !important;
   border : 0 !important;
   height : 100%;

@@ -62,6 +62,7 @@ const DropdownItem30 = styled(DropdownItem)`
 const DropdownToggleC = styled(DropdownToggle)`
   background-color: transparent !important;
   color : white !important;
+  padding : 0 10px 0 0 !important;
   border : 0 !important;
   height : 100%;
   &:focus {
