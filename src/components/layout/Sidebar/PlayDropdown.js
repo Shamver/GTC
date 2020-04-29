@@ -6,6 +6,7 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const PlayDropdown = () => {
@@ -13,18 +14,22 @@ const PlayDropdown = () => {
   const { onActive, dropdown } = ComponentSidebarStore;
 
   return (
-    <DropdownIn isOpen={dropdown.smile} toggle={onActive}>
+    <DropdownIn isOpen={dropdown.play} toggle={onActive}>
       <DropdownToggleC name="play" caret>
         <FontAwesomeIcon icon={faSmile} /> 놀이터
       </DropdownToggleC>
       <DropdownMenu>
         <LinkNoDeco to="/daily">
-          <DropdownItem30>출석체크</DropdownItem30>
+          <DropdownItem30>
+            출석체크
+          </DropdownItem30>
         </LinkNoDeco>
         <LinkNoDeco to="/advertise">
-          <DropdownItem30>포스팅 광고</DropdownItem30>
+          <DropdownItem30>
+              포스팅 광고
+          </DropdownItem30>
         </LinkNoDeco>
-        {/* <DropdownItem30>포인트샵</DropdownItem30> */}
+        <DropdownItem30>포인트샵</DropdownItem30>
       </DropdownMenu>
     </DropdownIn>
   );
@@ -32,7 +37,13 @@ const PlayDropdown = () => {
 
 const LinkNoDeco = styled(Link)`
   text-decoration: none !important;
+  color : #16181b;
+  transition : all 0.25s;
+  &:hover {
+    color : #16181b;
+  }
 `;
+
 
 const DropdownIn = styled(Dropdown)`
   display : inline;
@@ -70,4 +81,4 @@ const DropdownToggleC = styled(DropdownToggle)`
   }
 `;
 
-export default PlayDropdown;
+export default observer(PlayDropdown);

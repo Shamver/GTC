@@ -3,55 +3,105 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faBars } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Row, Col } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 import FavoriteDropdown from './FavoriteDropdown';
 import PlayDropdown from './PlayDropdown';
 import LatelyDropdown from './LatelyDropdown';
+import useStores from '../../../stores/useStores';
+import ProfileDropdown from './ProfileDropdown';
 
-const SidebarContent = () => (
-  <>
-    <HeaderWrapper>
-      <TopWrapper>
-        <LeftSpan>
-          <TopIcon icon={faBars} />
-        </LeftSpan>
-        <RightSpan>
-          <FontAwesomeIcon icon={faUser} /> 로그인
-        </RightSpan>
-      </TopWrapper>
-      <br />
-      <LatelyDropdown />
-      <FavoriteDropdown />
-      <PlayDropdown />
-      <br />
-    </HeaderWrapper>
-    <MiddleLabel>
-      GTC 전체 메뉴
-    </MiddleLabel>
-    <BottomMenu>
-      <MarginlessRow>
-        <Col xs="6">
-          전체 글 보기
-          <Hr />
-          <StylelessUl>
-            <MarginList>자유게시판</MarginList>
-            <MarginList>아이템 거래</MarginList>
-            <MarginList>월드락 거래</MarginList>
-            <MarginList>신고 게시판</MarginList>
-          </StylelessUl>
-        </Col>
-        <Col xs="6">
-          공지사항
-          <Hr />
-          <StylelessUl>
-            <MarginList>질문 & 답변</MarginList>
-            <MarginList>자주 묻는 질문</MarginList>
-            <MarginList>1:1 문의</MarginList>
-          </StylelessUl>
-        </Col>
-      </MarginlessRow>
-    </BottomMenu>
-  </>
-);
+const SidebarContent = () => {
+  const { UtilStore } = useStores();
+  const { sidebarOpen } = UtilStore;
+
+  return (
+    <>
+      <HeaderWrapper>
+        <TopWrapper>
+          <LeftSpan>
+            <TopIcon icon={faBars} />
+          </LeftSpan>
+          <RightSpan>
+            <ProfileDropdown />
+          </RightSpan>
+        </TopWrapper>
+        <br />
+        <LatelyDropdown />
+        <FavoriteDropdown />
+        <PlayDropdown />
+        <br />
+      </HeaderWrapper>
+      <MiddleLabel open={sidebarOpen}>
+        GTC 전체 메뉴
+      </MiddleLabel>
+      <BottomMenu>
+        <MarginlessRow>
+          <Col xs="6">
+            <LinkNoDeco to="/all">
+              전체 글 보기
+            </LinkNoDeco>
+            <Hr />
+            <StylelessUl>
+              <MarginList>
+                <LinkNoDeco to="/free">
+                  자유게시판
+                </LinkNoDeco>
+              </MarginList>
+              <MarginList>
+                <LinkNoDeco to="/trade">
+                  아이템 거래
+                </LinkNoDeco>
+              </MarginList>
+              <MarginList>
+                <LinkNoDeco to="/cash">
+                  월드락 거래
+                </LinkNoDeco>
+              </MarginList>
+              <MarginList>
+                <LinkNoDeco to="/crime">
+                  신고 게시판
+                </LinkNoDeco>
+              </MarginList>
+            </StylelessUl>
+          </Col>
+          <Col xs="6">
+            <LinkNoDeco to="/notice">
+              공지사항
+            </LinkNoDeco>
+            <Hr />
+            <StylelessUl>
+              <MarginList>
+                <LinkNoDeco to="/qna">
+                  질문 & 답변
+                </LinkNoDeco>
+              </MarginList>
+              <MarginList>
+                <LinkNoDeco to="/faq">
+                  자주 묻는 질문
+                </LinkNoDeco>
+              </MarginList>
+              <MarginList>
+                <LinkNoDeco to="/consult">
+                  1:1 문의
+                </LinkNoDeco>
+              </MarginList>
+            </StylelessUl>
+          </Col>
+        </MarginlessRow>
+      </BottomMenu>
+    </>
+  );
+};
+
+const LinkNoDeco = styled(Link)`
+  text-decoration: none !important;
+  color : white;
+  transition : all 0.25s;
+  &:hover {
+    color : #e6e6e6;
+  }
+`;
 
 const MarginList = styled.li`
   margin : 5px 0px;
@@ -80,7 +130,7 @@ const MiddleLabel = styled.div`
   padding: 5px 12px;
   margin-bottom : 10px;
   font-size : 16px;
-  box-shadow: 0px 0px 10px rgba(0,0,0,.5);
+  box-shadow : ${(props) => (props.open ? '0px 0px 10px rgba(0,0,0,.5)' : 'none')};
 `;
 
 const TopIcon = styled(FontAwesomeIcon)`
@@ -94,10 +144,20 @@ const TopWrapper = styled.div`
 const LeftSpan = styled.span`
   font-size : 22px;
   float: left;
+  transition : all 0.25s;
+  cursor : pointer;
+  &:hover {
+    color : #e6e6e6;
+  }
 `;
 
 const RightSpan = styled.span`
-  float: right;
+  float : right;
+  cursor : pointer;
+  transition : all 0.25s;
+  &:hover {
+    color : #e6e6e6;
+  }
 `;
 
 const HeaderWrapper = styled.div`
@@ -105,4 +165,4 @@ const HeaderWrapper = styled.div`
   padding : 10px;
 `;
 
-export default SidebarContent;
+export default observer(SidebarContent);

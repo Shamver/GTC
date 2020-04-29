@@ -5,6 +5,7 @@ import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
 } from 'reactstrap';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import HeaderLatelyItem from '../Header/HeaderLatelyItem';
 import useStores from '../../../stores/useStores';
 
@@ -15,7 +16,8 @@ const LatelyDropdown = () => {
 
   useEffect(() => {
     getLately();
-  }, []);
+  }, [getLately]);
+
 
   const LatelyData = latelyList.length === 0
     ? (<DropdownItem30 disabled>최근 본 게시물이 없습니다.</DropdownItem30>)
@@ -69,4 +71,4 @@ const DropdownToggleC = styled(DropdownToggle)`
   }
 `;
 
-export default LatelyDropdown;
+export default observer(LatelyDropdown);

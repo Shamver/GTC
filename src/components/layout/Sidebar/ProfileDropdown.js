@@ -9,15 +9,15 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import avatarImg from '../../../resources/images/avatar.png';
-import KakaoSign from './KakaoSign';
+import Login from './LoginForm/Login';
 import useStores from '../../../stores/useStores';
 
-const HeaderInProfile = () => {
+const ProfileDropdown = () => {
   const {
-    UserStore, ComponentHeaderStore, UserAlertStore, UserPointStore,
+    UserStore, ComponentSidebarStore, UserAlertStore, UserPointStore,
   } = useStores();
   const { userData, logout } = UserStore;
-  const { onActive, dropdown } = ComponentHeaderStore;
+  const { onActive, dropdown } = ComponentSidebarStore;
   const { mail, avatar } = dropdown;
   const { alertCount, getAlert } = UserAlertStore;
   const {
@@ -36,12 +36,12 @@ const HeaderInProfile = () => {
       { !userData
         ? (
           <KakaoWrapper>
-            <KakaoSign isRegister={false} />
-            <KakaoSign isRegister />
+            <Login isRegister={false} />
+            <Login isRegister />
           </KakaoWrapper>
         )
         : (
-          <>
+          <DropDownWrapper>
             <DropdownIn isOpen={mail} toggle={onActive}>
               <DropdownToggleC name="mail" caret>
                 <FontAwesomeIcon icon={faEnvelope} />
@@ -86,18 +86,23 @@ const HeaderInProfile = () => {
                 </DropdownItem30>
               </DropdownMenuLeft>
             </DropdownIn>
-          </>
+          </DropDownWrapper>
         )}
     </>
   );
 };
 
+const DropDownWrapper = styled.div`
+  color : white !important;
+`;
+
 const KakaoWrapper = styled.div`
-  padding : 3px;
+  color : white !important;
 `;
 
 const DropdownIn = styled(Dropdown)`
   display : inline;
+  
   & .dropdown-item:active {
     color: #fff !important;
     text-decoration: none !important;
@@ -131,7 +136,6 @@ const DropdownItem30 = styled(DropdownItem)`
 
 const DropdownToggleC = styled(DropdownToggle)`
   background-color: transparent !important;
-  color : black !important;
   border : 0 !important;
   height : 100%;
   &:focus {
@@ -203,4 +207,4 @@ const NewAlertCountSpan = styled.span`
 `;
 
 
-export default observer(HeaderInProfile);
+export default observer(ProfileDropdown);

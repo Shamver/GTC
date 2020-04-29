@@ -37,8 +37,8 @@ const Content = styled.div`
   height : 100vh;
   transition : margin 0.25s;
   margin-left : ${(props) => (props.open ? '0px' : '-300px')}
-  box-shadow: 0px 0px 10px rgba(0,0,0,.5);
-  color : white;
+  box-shadow : ${(props) => (props.open ? '0px 0px 10px rgba(0,0,0,.5)' : 'none')};
+  color : white !important;
   font-size : 14px !important;
 `;
 

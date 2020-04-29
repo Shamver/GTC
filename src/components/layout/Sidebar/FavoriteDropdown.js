@@ -5,6 +5,7 @@ import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
 } from 'reactstrap';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import HeaderFavoriteItem from '../Header/HeaderFavoriteItem';
 
@@ -71,4 +72,4 @@ const DropdownToggleC = styled(DropdownToggle)`
   }
 `;
 
-export default FavoriteDropdown;
+export default observer(FavoriteDropdown);

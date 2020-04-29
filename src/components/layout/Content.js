@@ -66,7 +66,7 @@ const BorderedDiv = styled.div`
 
 const ToastContainerCustom = styled(ToastContainer)`
   & .Toastify__toast-body {
-    font-family : 'Nanum Gothic', sans-serif !important;
+    font-family: 'Jeju Gothic', sans-serif !important;
     padding : 10px !important;
   }
   

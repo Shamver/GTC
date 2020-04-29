@@ -97,7 +97,7 @@ const Header = () => {
                   <LinkNoDeco to="/advertise">
                     <DropdownItem30>포스팅 광고</DropdownItem30>
                   </LinkNoDeco>
-                  {/* <DropdownItem30>포인트샵</DropdownItem30> */}
+                  <DropdownItem30>포인트샵</DropdownItem30>
                 </DropdownMenu>
               </DropdownIn>
             </ColNoP>
@@ -184,11 +184,9 @@ const ColCenter = styled(Col)`
   padding : 0px !important;
   margin : 0px !important;
   line-height : 30px;
-  
   @media (max-width: 1200px) {
       flex: 0 0 100% !important;
       max-width : 100% !important;
-      padding : 0 10px !important;
   }
 `;
 
@@ -221,6 +219,7 @@ const TextContainer = styled(Container)`
   overflow : hidden;
   text-overflow : ellipsis;
   white-space:nowrap;
+  padding : 5px 10px !important;
   @media (max-width: 1200px) {
     border : 0;
   }

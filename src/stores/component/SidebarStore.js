@@ -5,13 +5,32 @@ class SidebarStore {
     lately: false,
     favorite: false,
     play: false,
-    mail: false,
     avatar: false,
-    login: false,
   };
 
-  @action onActive = (target) => {
-    console.log(target);
+  @action onActive = (event) => {
+    if (!event.target.classList.contains('dropdown-item')) {
+      event.preventDefault();
+    }
+
+    const currentName = event.target.getAttribute('name');
+    const keyList = Object.keys(this.dropdown);
+    let key;
+
+    for (let i = 0; i < keyList.length; i += 1) {
+      key = keyList[i];
+      if (currentName === key) {
+        this.dropdown = {
+          ...this.dropdown,
+          [key]: true,
+        };
+      } else {
+        this.dropdown = {
+          ...this.dropdown,
+          [key]: false,
+        };
+      }
+    }
   };
 }
 
