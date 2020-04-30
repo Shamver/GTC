@@ -8,14 +8,14 @@ import LoginForm from './index';
 const Login = ({ isRegister }) => {
   const { UserStore, UtilStore, UtilAlertStore } = useStores();
   const { toggleSign } = UtilStore;
-  const { alertToggle } = UtilAlertStore;
+  const { toggleAlert } = UtilAlertStore;
   return (
     <KakaoLogin
       jsKey={jsKey}
       onSuccess={isRegister
         ? (result) => toggleSign(result)
         : (result) => UserStore.login(result.profile.kakao_account.email)}
-      onFailure={() => alertToggle('카카오 로그인에 실패하였습니다.')}
+      onFailure={() => toggleAlert('카카오 로그인에 실패하였습니다.')}
       render={(props) => (<LoginForm parentProps={props} isRegister={isRegister} />)}
       getProfile
     />

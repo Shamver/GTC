@@ -75,6 +75,7 @@ class UserStore {
     axios.post('/api/auth/login', { email })
       .then((response) => {
         const { data } = response;
+        alert(data.MESSAGE);
         if (data.SUCCESS) {
           if (data.CODE === 1) {
             toast.success(response.data.MESSAGE);
