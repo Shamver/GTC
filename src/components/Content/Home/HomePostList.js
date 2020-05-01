@@ -10,7 +10,7 @@ const HomePostList = ({ board }) => {
   const { getHomePostList, homePostList } = BoardPostStore;
 
   useEffect(() => {
-    getHomePostList(board);
+    // getHomePostList(board);
   }, [getHomePostList, board]);
 
   return homePostList[board].map((data) => {

@@ -54,7 +54,7 @@ const ProfileDropdown = () => {
                 </LinkNoDeco>
               </DropdownMenu>
             </DropdownIn>
-            <DropdownIn isOpen={avatar} toggle={onActive}>
+            <DropdownInRight isOpen={avatar} toggle={onActive}>
               <AvatarDropdownToggleC name="avatar" caret>
                 { alertCount > 0 ? (<NewAlertCountSpan>{alertCount}</NewAlertCountSpan>) : ''}
                 <Avatar src={avatarImg} />
@@ -85,7 +85,7 @@ const ProfileDropdown = () => {
                   &nbsp; 로그아웃
                 </DropdownItem30>
               </DropdownMenuLeft>
-            </DropdownIn>
+            </DropdownInRight>
           </DropDownWrapper>
         )}
     </>
@@ -103,6 +103,7 @@ const KakaoWrapper = styled.div`
 const DropdownIn = styled(Dropdown)`
   display : inline;
   
+  
   & .dropdown-item:active {
     color: #fff !important;
     text-decoration: none !important;
@@ -115,6 +116,18 @@ const DropdownIn = styled(Dropdown)`
     text-decoration: none !important;
     background-color: #DC3545 !important;
     outline: 0;
+  }
+  
+  & > .dropdown-toggle {
+    padding-top : 0 !important;
+    padding-left : 0 !important;
+  }
+  
+`;
+
+const DropdownInRight = styled(DropdownIn)`
+  & > .dropdown-toggle:first-child {
+    padding-right : 0 !important;
   }
 `;
 

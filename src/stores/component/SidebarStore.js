@@ -6,9 +6,12 @@ class SidebarStore {
     favorite: false,
     play: false,
     avatar: false,
+    mail: false,
   };
 
   @action onActive = (event) => {
+    console.log(event.target.classList);
+    console.log(event.target.classList.contains('dropdown-item'));
     if (!event.target.classList.contains('dropdown-item')) {
       event.preventDefault();
     }

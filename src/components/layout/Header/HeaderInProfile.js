@@ -111,6 +111,10 @@ const DropdownIn = styled(Dropdown)`
     background-color: #DC3545 !important;
     outline: 0;
   }
+  
+  & > .dropdown-toggle {
+    padding-left : 0 !important;
+  }
 `;
 
 const LinkNoDeco = styled(Link)`
