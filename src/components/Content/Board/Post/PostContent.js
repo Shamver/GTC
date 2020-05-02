@@ -183,7 +183,7 @@ PostContent.defaultProps = {
 };
 
 const MiddleIcon = styled(FontAwesomeIcon)`
-  vertical-align : text-bottom;
+  vertical-align : sub;
 `;
 
 const Div = styled.div`

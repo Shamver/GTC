@@ -20,7 +20,7 @@ const INSERT_CODEGROUP = `
     , \`DESC\`
     , CRT_DTTM
   ) VALUES (
-    ':ID'
+    ':CODEGROUP_ID'
     , ':NAME'
     , ':DESC'
     , SYSDATE()
@@ -66,7 +66,7 @@ const SELECT_CODE = `
     , CODE AS code
     , NAME AS codeName
     , \`DESC\` AS codeDesc
-    , \`ORDER\` AS codeOrder
+    , CAST(\`ORDER\` AS CHAR) AS codeOrder
     , USE_FL AS useYN
   FROM GTC_CODE
   WHERE CODEGROUP_ID = ':CODEGROUP_ID'
@@ -131,7 +131,7 @@ router.put('/group', (req, res) => {
     (database) => database.query(
       UPDATE_CODEGROUP,
       {
-        ID: id,
+        CODEGROUP_ID: id,
         NAME: name,
         DESC: desc,
       },
@@ -150,7 +150,7 @@ router.delete('/group', (req, res) => {
     (database) => database.query(
       DELETE_CODEGROUP,
       {
-        GROUP: group,
+        CODEGROUP_ID: group,
       },
     )
       .then(() => {

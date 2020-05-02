@@ -78,6 +78,7 @@ const MainContainer = styled(Container)`
   padding : 0px !important;
   border-bottom: 2px solid #ebeae8;
   border-right: 2px solid #ebeae8;
+
 `;
 
 const MenuWrapper = styled(Row)`

@@ -5,7 +5,7 @@ import {
   Container, Row, Col, Badge,
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
-import { faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
@@ -19,7 +19,7 @@ import HeaderLatelyItem from './HeaderLatelyItem';
 const Header = () => {
   const {
     ComponentHeaderStore, UserFavoriteStore, UserStore, CookieLatelyStore,
-    BoardSearchStore,
+    BoardSearchStore, UtilStore,
   } = useStores();
   const { onActive, dropdown } = ComponentHeaderStore;
   const { favoriteList, getFavorite, deleteFavorite } = UserFavoriteStore;
@@ -28,6 +28,7 @@ const Header = () => {
   const {
     onChange, searchText, onSubmit, search,
   } = BoardSearchStore;
+  const { onSetSidebarOpen } = UtilStore;
 
   useEffect(() => {
     if (userData) {
@@ -45,6 +46,9 @@ const Header = () => {
 
   return (
     <HeaderWrapper>
+      <button type="button" onClick={() => onSetSidebarOpen(true)}>
+        <FontAwesomeIcon icon={faBars} />
+      </button>
       <Link to="/">
         <InH1>
           <Logo src={logo} alt="" />
@@ -93,15 +97,16 @@ const Header = () => {
                   <LinkNoDeco to="/advertise">
                     <DropdownItem30>포스팅 광고</DropdownItem30>
                   </LinkNoDeco>
-                  {/* <DropdownItem30>포인트샵</DropdownItem30> */}
+                  <DropdownItem30>포인트샵</DropdownItem30>
                 </DropdownMenu>
               </DropdownIn>
             </ColNoP>
-            <ColCenter xs="6">
+            <ColCenter xs="7">
               <TextContainer>
                 <Badge color="danger">공지사항</Badge>
                 &nbsp;
-                이 안에 배신자가 있다... 이게 내 결론이다!! Project Winter 합방
+                최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
+                최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
               </TextContainer>
             </ColCenter>
             <ColNoP>
@@ -169,10 +174,20 @@ const ColNoP = styled(Col)`
   padding : 0px !important;
   margin : 0px !important;
   line-height : 40px;
+  
+  @media (max-width: 1200px) {
+      display : none;
+  }
 `;
 
-const ColCenter = styled(ColNoP)`
+const ColCenter = styled(Col)`
+  padding : 0px !important;
+  margin : 0px !important;
   line-height : 30px;
+  @media (max-width: 1200px) {
+      flex: 0 0 100% !important;
+      max-width : 100% !important;
+  }
 `;
 
 const DropdownToggleC = styled(DropdownToggle)`
@@ -201,6 +216,13 @@ const TextContainer = styled(Container)`
   height : 40px !important;
   border-left : 1px solid #e6e6e6;
   border-right : 1px solid #e6e6e6;
+  overflow : hidden;
+  text-overflow : ellipsis;
+  white-space:nowrap;
+  padding : 5px 10px !important;
+  @media (max-width: 1200px) {
+    border : 0;
+  }
 `;
 
 const DropdownIn = styled(Dropdown)`
@@ -225,14 +247,12 @@ const SpanRight = styled.span`
   float : right;
 `;
 
-
 const DropdownItem30 = styled(DropdownItem)`
   height : 27px;
   line-height : 0;
   padding-top : 0px;
   padding-bottom : 0px;
 `;
-
 
 const Logo = styled.img`
   width : 100px;

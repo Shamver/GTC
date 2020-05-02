@@ -9,15 +9,15 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import avatarImg from '../../../resources/images/avatar.png';
-import KakaoSign from './KakaoSign';
+import Login from './LoginForm/Login';
 import useStores from '../../../stores/useStores';
 
-const HeaderInProfile = () => {
+const ProfileDropdown = () => {
   const {
-    UserStore, ComponentHeaderStore, UserAlertStore, UserPointStore,
+    UserStore, ComponentSidebarStore, UserAlertStore, UserPointStore,
   } = useStores();
   const { userData, logout } = UserStore;
-  const { onActive, dropdown } = ComponentHeaderStore;
+  const { onActive, dropdown } = ComponentSidebarStore;
   const { mail, avatar } = dropdown;
   const { alertCount, getAlert } = UserAlertStore;
   const {
@@ -36,12 +36,12 @@ const HeaderInProfile = () => {
       { !userData
         ? (
           <KakaoWrapper>
-            <KakaoSign isRegister={false} />
-            <KakaoSign isRegister />
+            <Login isRegister={false} />
+            <Login isRegister />
           </KakaoWrapper>
         )
         : (
-          <>
+          <DropDownWrapper>
             <DropdownIn isOpen={mail} toggle={onActive}>
               <DropdownToggleC name="mail" caret>
                 <FontAwesomeIcon icon={faEnvelope} />
@@ -54,7 +54,7 @@ const HeaderInProfile = () => {
                 </LinkNoDeco>
               </DropdownMenu>
             </DropdownIn>
-            <DropdownIn isOpen={avatar} toggle={onActive}>
+            <DropdownInRight isOpen={avatar} toggle={onActive}>
               <AvatarDropdownToggleC name="avatar" caret>
                 { alertCount > 0 ? (<NewAlertCountSpan>{alertCount}</NewAlertCountSpan>) : ''}
                 <Avatar src={avatarImg} />
@@ -85,19 +85,25 @@ const HeaderInProfile = () => {
                   &nbsp; 로그아웃
                 </DropdownItem30>
               </DropdownMenuLeft>
-            </DropdownIn>
-          </>
+            </DropdownInRight>
+          </DropDownWrapper>
         )}
     </>
   );
 };
 
+const DropDownWrapper = styled.div`
+  color : white !important;
+`;
+
 const KakaoWrapper = styled.div`
-  padding : 3px;
+  color : white !important;
 `;
 
 const DropdownIn = styled(Dropdown)`
   display : inline;
+  
+  
   & .dropdown-item:active {
     color: #fff !important;
     text-decoration: none !important;
@@ -113,7 +119,15 @@ const DropdownIn = styled(Dropdown)`
   }
   
   & > .dropdown-toggle {
+    padding-top : 0 !important;
     padding-left : 0 !important;
+  }
+  
+`;
+
+const DropdownInRight = styled(DropdownIn)`
+  & > .dropdown-toggle:first-child {
+    padding-right : 0 !important;
   }
 `;
 
@@ -135,7 +149,6 @@ const DropdownItem30 = styled(DropdownItem)`
 
 const DropdownToggleC = styled(DropdownToggle)`
   background-color: transparent !important;
-  color : black !important;
   border : 0 !important;
   height : 100%;
   &:focus {
@@ -207,4 +220,4 @@ const NewAlertCountSpan = styled.span`
 `;
 
 
-export default observer(HeaderInProfile);
+export default observer(ProfileDropdown);
