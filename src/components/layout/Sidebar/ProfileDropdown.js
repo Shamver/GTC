@@ -42,9 +42,9 @@ const ProfileDropdown = () => {
         )
         : (
           <DropDownWrapper>
-            <DropdownIn isOpen={mail} toggle={onActive}>
-              <DropdownToggleC name="mail" caret>
-                <FontAwesomeIcon icon={faEnvelope} />
+            <DropdownIn isOpen={mail} disabled>
+              <DropdownToggleC name="mail" onClickCapture={onActive} caret>
+                <FontAwesomeIcon icon={faEnvelope} name="mail" />
               </DropdownToggleC>
               <DropdownMenu>
                 {/* 추후 개발 예정 */}

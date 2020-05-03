@@ -87,7 +87,7 @@ const Header = () => {
                 </DropdownMenu>
               </DropdownIn>
               <DropdownIn isOpen={dropdown.smile} toggle={onActive}>
-                <DropdownToggleC name="smile" caret>
+                <DropdownToggleC name="play" caret>
                   <FontAwesomeIcon icon={faSmile} />
                 </DropdownToggleC>
                 <DropdownMenu>

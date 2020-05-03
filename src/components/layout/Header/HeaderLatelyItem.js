@@ -13,7 +13,7 @@ const HeaderLatelyItem = (data, onClick) => {
   return (
     <CustomLink to={`/post/${id}`} key={`HeaderLatelyItem_${id}`}>
       <DropdownItem30>
-        {title}
+        <Text>{title}</Text>
         <IconSpan onClick={(e) => { onClick(e, id); }}>
           <Icon icon={faTimes} />
         </IconSpan>
