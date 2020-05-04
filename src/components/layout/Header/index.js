@@ -69,8 +69,8 @@ const Header = () => {
         <InnerContainer>
           <RowNoP>
             <ColNoP>
-              <DropdownIn isOpen={dropdown.lately} toggle={onActive}>
-                <DropdownToggleC name="lately" caret>
+              <DropdownIn isOpen={dropdown.lately}>
+                <DropdownToggleC name="lately" onClickCapture={onActive} caret>
                   <FontAwesomeIcon icon={faClock} /> 최근
                 </DropdownToggleC>
                 <DropdownMenu>

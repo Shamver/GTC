@@ -10,40 +10,34 @@ class HeaderStore {
     login: false,
   };
 
+  @observable currentDropdown = '';
+
   constructor(root) {
     this.root = root;
   }
 
-  // 드롭다운을 열때와 드롭다운이 열린뒤에는 어디를 클릭해도 해당 이벤트가 발생한다.
+  // 기존 드롭다운 기본 toggle 이벤트를 사용하지 않고, 토글버튼에 onClick 이벤트로 체크했다.
   @action onActive = (event) => {
-    console.log(event.target);
-    const currentName = event.target.getAttribute('name');
-
-    if (this.dropdownActiveCheck()) {
-      this.dropdown = {
-        ...this.dropdown,
-        [currentName]: true,
-      };
-    } else {
-      this.dropdownClear();
-    }
-  };
-
-  // 다른 dropdown 이 켜져있을때 다른 드롭다운 클릭시
-  // onActive 메소드가 두번 호출되는 현상이 발견됨.
-  // 해결방법 : onActive 메소드 처음 호출시 모든 드롭다운이 닫혀있을시에만 클릭한 드롭다운을 열게함.
-  @action dropdownActiveCheck = () => {
+    const currentName = event.currentTarget.getAttribute('name');
     const keyList = Object.keys(this.dropdown);
     let key;
 
+    // 똑같은 드롭다운을 다시 클릭하였을때
+    if (this.currentDropdown === currentName) {
+      this.dropdown[currentName] = false;
+      this.currentDropdown = '';
+      return;
+    }
+    this.dropdownClear();
+
     for (let i = 0; i < keyList.length; i += 1) {
       key = keyList[i];
-      if (this.dropdown[key]) {
-        return false;
+      if (key === currentName) {
+        this.dropdown[key] = true;
+        this.currentDropdown = key;
       }
     }
-    return true;
-  }
+  };
 
   @action dropdownClear = () => {
     this.dropdown = {

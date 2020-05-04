@@ -24,8 +24,8 @@ const FavoriteDropdown = () => {
     : favoriteList.map((v) => HeaderFavoriteItem(v, deleteFavorite));
 
   return (
-    <DropdownIn isOpen={dropdown.favorite} toggle={onActive}>
-      <DropdownToggleC name="favorite" caret>
+    <DropdownIn isOpen={dropdown.favorite} disabled>
+      <DropdownToggleC name="favorite" onClickCapture={onActive} caret>
         <FontAwesomeIcon icon={faStar} /> 즐겨찾기
       </DropdownToggleC>
       <DropdownMenu>

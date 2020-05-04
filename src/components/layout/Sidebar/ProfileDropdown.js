@@ -44,7 +44,7 @@ const ProfileDropdown = () => {
           <DropDownWrapper>
             <DropdownIn isOpen={mail} disabled>
               <DropdownToggleC name="mail" onClickCapture={onActive} caret>
-                <FontAwesomeIcon icon={faEnvelope} name="mail" />
+                <FontAwesomeIcon icon={faEnvelope} />
               </DropdownToggleC>
               <DropdownMenu>
                 {/* 추후 개발 예정 */}
@@ -54,13 +54,13 @@ const ProfileDropdown = () => {
                 </LinkNoDeco>
               </DropdownMenu>
             </DropdownIn>
-            <DropdownInRight isOpen={avatar} toggle={onActive}>
-              <AvatarDropdownToggleC name="avatar" caret>
+            <DropdownInRight isOpen={avatar} disabled>
+              <AvatarDropdownToggleC name="avatar" onClickCapture={onActive} caret>
                 { alertCount > 0 ? (<NewAlertCountSpan>{alertCount}</NewAlertCountSpan>) : ''}
                 <Avatar src={avatarImg} />
               </AvatarDropdownToggleC>
               <DropdownMenuLeft>
-                <DropdownItemTitle onClick={() => { }}>
+                <DropdownItemTitle>
                   <ProfileNick>{userData.username}</ProfileNick>
                   <ProfileId>{userData.gtName}</ProfileId>
                 </DropdownItemTitle>
