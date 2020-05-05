@@ -24,6 +24,7 @@ const HeaderLatelyItem = (data, onClick) => {
 
 const DropdownItem30 = styled.div`
   height : 27px;
+  line-height : 27px;
   display : inline-block;
   padding: 0 1.2rem !important;
   width: 190px !important;
@@ -39,7 +40,7 @@ const DropdownItem30 = styled.div`
 `;
 
 const CustomLink = styled(Link)`
-  display : inline-block;
+  display : block;
   height : 27px;
   clear: both;
   font-weight: 400;
@@ -53,14 +54,13 @@ const CustomLink = styled(Link)`
   &:hover {
     color: #212529;
     text-decoration: none;
-    background-color: transparent;
-  }
+    background-color: #e4e3e5;
+  
 `;
 
 const Text = styled.span`
-  vertical-align : text-top;
   max-width: 130px;
-  line-height: 21px;
+  line-height: 27px;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -68,7 +68,7 @@ const Text = styled.span`
 
 const IconSpan = styled.span`
   display: inline-block;
-  line-height: 21px;
+  line-height: 27px;
   float: right;
   cursor: pointer;
   height: 21px;
