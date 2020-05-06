@@ -14,7 +14,6 @@ const SELECT_CURRENT_BOARD = `
 
 router.get('/', (req, res) => {
   const { id } = req.query;
-
   Database.execute(
     (database) => database.query(
       SELECT_CURRENT_BOARD,

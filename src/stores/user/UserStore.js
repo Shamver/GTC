@@ -15,6 +15,8 @@ class UserStore {
 
   @observable userData;
 
+  @observable profileToggle = false;
+
   constructor(root) {
     this.root = root;
   }
@@ -247,6 +249,10 @@ class UserStore {
         }
       })
       .catch((response) => console.log(response));
+  }
+
+  @action getProfile = () => {
+    this.profileToggle = !this.profileToggle;
   }
 }
 

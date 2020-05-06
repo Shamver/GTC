@@ -71,4 +71,8 @@ router.put('/info', (req, res) => {
   });
 });
 
+router.get('/profile', (req, res) => {
+    console.log('asd')
+});
+
 module.exports = router;
