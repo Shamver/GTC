@@ -16,7 +16,7 @@ const HeaderFavoriteItem = (data, onClick) => {
         <Text>
           {postTitle}
         </Text>
-        <IconSpan onClick={(e) => { onClick(postId, 'post', e); }}>
+        <IconSpan onClick={(e) => onClick(postId, 'post', e)}>
           <Icon icon={faTimes} />
         </IconSpan>
       </DropdownItem30>

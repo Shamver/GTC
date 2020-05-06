@@ -24,8 +24,8 @@ const LatelyDropdown = () => {
     : latelyList.map((v) => HeaderLatelyItem(v, deleteLately));
 
   return (
-    <DropdownIn isOpen={dropdown.lately} disabled>
-      <DropdownToggleC name="lately" onClickCapture={onActive} caret>
+    <DropdownIn isOpen={dropdown.lately} toggle={(e) => onActive('lately', e)}>
+      <DropdownToggleC caret>
         <FontAwesomeIcon icon={faClock} /> 최근
       </DropdownToggleC>
       <DropdownMenu>

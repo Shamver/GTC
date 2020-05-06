@@ -22,7 +22,7 @@ const HeaderLatelyItem = (data, onClick) => {
   );
 };
 
-const DropdownItem30 = styled.div`
+const DropdownItem30 = styled(DropdownItem)`
   height : 27px;
   line-height : 27px;
   display : inline-block;
@@ -55,7 +55,7 @@ const CustomLink = styled(Link)`
     color: #212529;
     text-decoration: none;
     background-color: #e4e3e5;
-  
+  }
 `;
 
 const Text = styled.span`
