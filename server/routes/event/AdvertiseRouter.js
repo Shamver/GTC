@@ -49,9 +49,9 @@ router.post('/', (req, res) => {
     )
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 0,
-          MESSAGE: '😊 포스팅이 성공적으로 광고 목록에 삽입되었습니다.',
+          success: true,
+          code: 0,
+          message: '😊 포스팅이 성공적으로 광고 목록에 삽입되었습니다.',
         });
       }),
   ).then(() => {
@@ -66,10 +66,10 @@ router.get('/', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 0,
-          MESSAGE: '출석체크 목록 조회',
-          rows,
+          success: true,
+          code: 0,
+          message: '출석체크 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
