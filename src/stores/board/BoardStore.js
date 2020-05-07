@@ -46,12 +46,12 @@ class BoardStore {
     axios.get('/api/board', { params: { id } })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.currentBoard = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.currentBoard = data.result;
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
