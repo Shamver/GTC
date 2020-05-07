@@ -206,10 +206,10 @@ router.get('/', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '게시글 목록 조회',
-          rows,
+          success: true,
+          code: 1,
+          message: '게시글 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -247,9 +247,9 @@ router.post('/', (req, res) => {
 
         point('addPost', 'POST', postData);
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 게시글이 등록되었어요!',
+          success: true,
+          code: 1,
+          message: '😊 게시글이 등록되었어요!',
         });
       }),
   ).then(() => {
@@ -286,7 +286,11 @@ router.put('/', (req, res) => {
         };
 
         point('addPost', 'POST', postData);
-        res.send(true);
+        res.json({
+          success: true,
+          code: 1,
+          message: '😊 포스팅이 수정되었어요!',
+        });
       }),
   ).then(() => {
     info('[SELECT, GET /api/board/post] 게시글 수정');
@@ -308,7 +312,11 @@ router.delete('/', (req, res) => {
           bpId: data.id,
           writer: data.writer,
         });
-        res.send(true);
+        res.json({
+          success: true,
+          code: 1,
+          message: '😊 포스팅이 삭제되었어요!',
+        });
       }),
   ).then(() => {
     info('[DELETE, DELETE /api/board/post] 게시글 삭제');
@@ -343,15 +351,15 @@ router.post('/recommend', (req, res) => {
       })
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😳 포스팅 투표 완료!',
+          success: true,
+          code: 1,
+          message: '😳 포스팅 투표 완료!',
         });
       }, () => {
         res.json({
-          SUCCESS: true,
-          CODE: 2,
-          MESSAGE: '😳 이미 해당 포스팅에 투표가 완료되었어요!',
+          success: true,
+          code: 2,
+          message: '😳 이미 해당 포스팅에 투표가 완료되었어요!',
         });
       }),
   ).then(() => {
@@ -371,10 +379,10 @@ router.get('/mine', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '내가 쓴 게시글 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '내가 쓴 게시글 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -408,10 +416,10 @@ router.get('/:id', (req, res) => {
         res.cookie('lately', list, { httpOnly: true });
 
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '게시글 조회',
-          DATA: postItem,
+          success: true,
+          code: 1,
+          message: '게시글 조회',
+          result: postItem,
         });
       }),
   ).then(() => {
@@ -429,10 +437,10 @@ router.get('/:id/upperLower', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '게시글 위 아래 글 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '게시글 위 아래 글 조회',
+          result: rows,
         });
       }),
   ).then(() => {
