@@ -186,8 +186,8 @@ router.post('/', (req, res) => {
       }, () => {})
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
+          success: true,
+          code: 1,
           MESSAGE: '😊 댓글이 정상적으로 등록되었어요!',
         });
       }),
@@ -209,10 +209,10 @@ router.get('/', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
+          success: true,
+          code: 1,
           MESSAGE: '댓글 목록 조회',
-          DATA: rows,
+          result: rows,
         });
       }),
   ).then(() => {
@@ -233,8 +233,8 @@ router.put('/', (req, res) => {
     )
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
+          success: true,
+          code: 1,
           MESSAGE: '😊 댓글이 수정되었어요!',
         });
       }),
@@ -268,14 +268,14 @@ router.delete('/', (req, res) => {
       .then(() => {
         point('deleteReply', 'REPLY', data);
         res.json({
-          SUCCESS: true,
-          CODE: 1,
+          success: true,
+          code: 1,
           MESSAGE: '😊 댓글이 삭제되었어요!',
         });
       }, () => {
         res.json({
-          SUCCESS: true,
-          CODE: 2,
+          success: true,
+          code: 2,
           MESSAGE: '😳 해당 댓글에 답글이 달려있어 삭제하지 못합니다.',
         });
       }),
@@ -311,15 +311,15 @@ router.post('/like', (req, res) => {
       })
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
+          success: true,
+          code: 1,
           MESSAGE: '😊 해당 댓글 좋아요 완료!',
         });
       }, () => {
         res.json({
-          SUCCESS: true,
-          CODE: 2,
-          MESSAGE: '😳 이미 해당 댓글을 좋아요를 누르셨습니다.',
+          success: true,
+          code: 2,
+          message: '😳 이미 해당 댓글을 좋아요를 누르셨습니다.',
         });
       }),
   ).then(() => {
@@ -340,10 +340,10 @@ router.get('/mine', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '내가 쓴 댓글 목록 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '내가 쓴 댓글 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {

@@ -37,14 +37,14 @@ class ReplyStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.replyMineList = data.DATA;
+          if (data.success) {
+            if (data.code === 1) {
+              this.replyMineList = data.result;
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
         .catch((response) => {
@@ -86,9 +86,9 @@ class ReplyStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
             this.reply = {
               text: '',
               bpId: this.reply.bpId,
@@ -97,10 +97,10 @@ class ReplyStore {
             this.getReply(this.reply.bpId);
             this.setReplyEditId(0);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
@@ -120,14 +120,14 @@ class ReplyStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.postReplyList = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.postReplyList = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
@@ -141,18 +141,18 @@ class ReplyStore {
       content: this.reply.text,
     }).then((response) => {
       const { data } = response;
-      if (data.SUCCESS) {
-        if (data.CODE === 1) {
-          toast.success(data.MESSAGE);
+      if (data.success) {
+        if (data.code === 1) {
+          toast.success(data.message);
           this.reply.text = '';
           this.getReply(this.reply.bpId);
           this.setReplyEditId(0);
           this.modifyModeId = 0;
         } else {
-          toast.info(data.MESSAGE);
+          toast.info(data.message);
         }
       } else {
-        toast.error(data.MESSAGE);
+        toast.error(data.message);
       }
     })
       .catch((response) => { console.log(response); });
@@ -171,21 +171,21 @@ class ReplyStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
             this.reply.text = '';
             this.getReply(this.reply.bpId);
             this.setReplyEditId(0);
             this.modifyModeId = 0;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
           this.getReply(this.reply.bpId);
           this.setReplyEditId(0);
           this.modifyModeId = 0;
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
@@ -200,14 +200,14 @@ class ReplyStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
