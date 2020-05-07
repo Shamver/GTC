@@ -13,11 +13,11 @@ class LatelyStore {
     axios.get('/api/cookie/lately')
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          this.latelyList = data.DATA;
+        if (data.success) {
+          this.latelyList = data.result;
         } else {
           this.latelyList = [];
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => console.log(response));
@@ -32,12 +32,12 @@ class LatelyStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             this.getLately();
-            toast.success(data.MESSAGE);
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         }
       })
