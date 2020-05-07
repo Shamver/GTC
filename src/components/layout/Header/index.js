@@ -5,7 +5,9 @@ import {
   Container, Row, Col, Badge,
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
-import { faBars, faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowRight, faBars, faSearch, faStar,
+} from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
@@ -21,7 +23,9 @@ const Header = () => {
     ComponentHeaderStore, UserFavoriteStore, UserStore, CookieLatelyStore,
     BoardSearchStore, UtilStore,
   } = useStores();
-  const { onActive, dropdown, searchOpen, openSearch } = ComponentHeaderStore;
+  const {
+    onActive, dropdown, searchOpen, openSearch,
+  } = ComponentHeaderStore;
   const { favoriteList, getFavorite, deleteFavorite } = UserFavoriteStore;
   const { userData } = UserStore;
   const { latelyList, getLately, deleteLately } = CookieLatelyStore;
@@ -59,7 +63,7 @@ const Header = () => {
             <Input placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} />
             <InputGroupAddon addonType="append">
               <ResponsiveButton color="danger" onClick={search}>
-                <FontAwesomeIcon icon={faSearch} />
+                <MiddleIcon icon={faSearch} />
               </ResponsiveButton>
             </InputGroupAddon>
           </InputGroupA>
@@ -67,12 +71,18 @@ const Header = () => {
         {/* 모바일 화면에서의 서치 그룹 */}
         <ResponsiveInputGroupWrapper searchOpen={searchOpen}>
           <InputGroupA>
-            <ResponsiveInput placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} searchOpen={searchOpen} />
-            <InputGroupAddon addonType="append">
-              <ResponsiveButton color="danger" onClick={openSearch}>
-                <FontAwesomeIcon icon={faSearch} />
+            <InputGroupAddon addonType="prepend" searchOpen={searchOpen}>
+              <ResponsiveButton color="danger" onClick={openSearch} searchOpen={searchOpen}>
+                { searchOpen ? (<MiddleIcon icon={faArrowRight} />)
+                  : (<MiddleIcon icon={faSearch} />)}
               </ResponsiveButton>
             </InputGroupAddon>
+            <ResponsiveInput placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} searchOpen={searchOpen} />
+            <AppendAddOn addonType="append" searchOpen={searchOpen}>
+              <ResponsiveButton color="danger" onClick={search} searchOpen={searchOpen}>
+                <MiddleIcon icon={faSearch} />
+              </ResponsiveButton>
+            </AppendAddOn>
           </InputGroupA>
         </ResponsiveInputGroupWrapper>
       </HeaderTop>
@@ -133,6 +143,15 @@ const Header = () => {
   );
 };
 
+const MiddleIcon = styled(FontAwesomeIcon)`
+  vertical-align : sub;
+`;
+
+const AppendAddOn = styled(InputGroupAddon)`
+  display : ${(props) => (props.searchOpen ? 'inline-block' : 'none')} !important;
+`;
+
+
 const MobileMenu = styled(FontAwesomeIcon)`
   font-size : 35px;
   float: left;
@@ -141,7 +160,7 @@ const MobileMenu = styled(FontAwesomeIcon)`
   color : #DC3545;
   margin-top : 16.5px;
   margin-left : 5px;
-  @media (max-width: 600px) {
+  @media (max-width: 1200px) {
     display : inline;
   }
 `;
@@ -149,7 +168,7 @@ const MobileMenu = styled(FontAwesomeIcon)`
 const HeaderTop = styled.div`
   height : 68.13px;
   text-align : left;
-  @media (max-width: 600px) {
+  @media (max-width: 1200px) {
     text-align : center;
   }
 `;
@@ -166,7 +185,7 @@ const ResponsiveInput = styled(Input)`
 
 const ResponsiveButton = styled(Button)`
   @media (max-width: 600px) {
-    border-radius : .25rem !important;
+    border-radius : ${(props) => (props.searchOpen ? '' : '.25rem !important;')};
   }
 `;
 

@@ -22,33 +22,34 @@ const App = ({ history }) => {
   return (
     <>
       <ContainerWrapper>
-        <Container>
-          <Header />
-          <UnderSection>
-            <P5Col>
-              <Category />
-            </P5Col>
-            <P5Col2>
-              <Content />
-            </P5Col2>
-          </UnderSection>
-        </Container>
-        <LayoutFooter>
-          © 2020-2020 GTC(Growtopia Community) <br />
-          <Link to="/">이용약관</Link>
-          &nbsp; | &nbsp;
-          <Link to="/">개인정보보호방침</Link>
-          &nbsp; | &nbsp;
-          <Link to="/">관리자 모집</Link>
-          &nbsp; | &nbsp;
-          <Link to="/">광고문의</Link>
-          &nbsp; | &nbsp;
-          <Link to="/">고객센터</Link> <br />
-          GTC(Growtopia Community)는 Growtopia에서 운영하는 사이트가 아닙니다. <br />
-          <br />
-          <Link to="/">모바일버전으로 전환하기</Link>
-        </LayoutFooter>
-        <CustomSidebar />
+        <div>
+          <Container>
+            <Header />
+            <UnderSection>
+              <P5Col>
+                <Category />
+              </P5Col>
+              <P5Col2>
+                <Content />
+              </P5Col2>
+            </UnderSection>
+          </Container>
+          <LayoutFooter>
+            © 2020-2020 GTC(Growtopia Community) <br />
+            <Link to="/">이용약관</Link>
+            &nbsp; | &nbsp;
+            <Link to="/">개인정보보호방침</Link>
+            &nbsp; | &nbsp;
+            <Link to="/">관리자 모집</Link>
+            &nbsp; | &nbsp;
+            <Link to="/">광고문의</Link>
+            &nbsp; | &nbsp;
+            <Link to="/">고객센터</Link> <br />
+            GTC(Growtopia Community)는 Growtopia에서 운영하는 사이트가 아닙니다. <br />
+            <br />
+          </LayoutFooter>
+          <CustomSidebar />
+        </div>
       </ContainerWrapper>
     </>
   );
@@ -61,12 +62,12 @@ App.propTypes = {
 const LayoutFooter = styled.div`
   text-align : center;
   padding : 20px 40px 20px;
-  
   font-size : 14px;
 `;
 
 const ContainerWrapper = styled.div`
   background-color: rgb(243, 242, 240);
+  min-height : 100vh;
 `;
 
 const Container = styled.div`
@@ -74,7 +75,6 @@ const Container = styled.div`
   margin-right: auto;
   margin-left: auto;
 
-  
   @media (min-width: 0px) {
       width: 100%;
   }
@@ -90,7 +90,6 @@ const Container = styled.div`
   @media (min-width: 1200px) {
       width: 1200px;
   }
-  min-height : 100vh;
 `;
 
 const UnderSection = styled(Row)`

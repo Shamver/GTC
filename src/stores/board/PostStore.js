@@ -22,6 +22,7 @@ class PostStore {
     cash: [],
     qna: [],
     crime: [],
+    all: [],
   };
 
   @observable homePostList = {
@@ -30,6 +31,7 @@ class PostStore {
     trade: [],
     notice: [],
     qna: [],
+    all: [],
   };
 
   @observable currentBoardMaxPage = 0;

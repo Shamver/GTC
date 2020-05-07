@@ -10,6 +10,7 @@ class BoardStore {
     cash: '월드락 거래',
     crime: '신고게시판',
     qna: '질문 & 답변',
+    all: '전체 글 보기',
   };
 
   @observable boards = [{

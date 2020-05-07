@@ -68,7 +68,7 @@ const InputGroupWrapper = styled.div`
 `;
 
 const InputGroupWidth = styled(InputGroup)`
-  width : 500px !important; 
+  max-width : 500px;
   display : inline-flex !important;
 `;
 
