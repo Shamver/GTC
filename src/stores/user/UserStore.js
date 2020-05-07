@@ -15,8 +15,6 @@ class UserStore {
 
   @observable userData;
 
-  @observable profileToggle = false;
-
   constructor(root) {
     this.root = root;
   }
@@ -74,7 +72,7 @@ class UserStore {
   };
 
   @action login = (email) => {
-    axios.post('/api/auth/login', { email })
+    axios.post('/api/user/login', { email })
       .then((response) => {
         const { data } = response;
         if (data.SUCCESS) {
@@ -249,10 +247,6 @@ class UserStore {
         }
       })
       .catch((response) => console.log(response));
-  }
-
-  @action getProfile = () => {
-    this.profileToggle = !this.profileToggle;
   }
 }
 

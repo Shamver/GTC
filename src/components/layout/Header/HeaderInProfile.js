@@ -16,7 +16,7 @@ const HeaderInProfile = () => {
   const {
     UserStore, ComponentHeaderStore, UserAlertStore, UserPointStore,
   } = useStores();
-  const { userData, logout, getProfile } = UserStore;
+  const { userData, logout } = UserStore;
   const { onActive, dropdown } = ComponentHeaderStore;
   const { mail, avatar } = dropdown;
   const { alertCount, getAlert } = UserAlertStore;
@@ -60,7 +60,7 @@ const HeaderInProfile = () => {
                 <Avatar src={avatarImg} />
               </AvatarDropdownToggleC>
               <DropdownMenuLeft>
-                <DropdownItemTitle onClick={getProfile}>
+                <DropdownItemTitle>
                   <ProfileNick>{userData.username}</ProfileNick>
                   <ProfileId>{userData.gtName}</ProfileId>
                 </DropdownItemTitle>
@@ -161,10 +161,9 @@ const DropdownItemTitle = styled.div`
   max-height: 36px;
 
   margin: 0px !important;
-  cursor: pointer !important;
+  cursor: default !important;
   &:hover {
     background: none !important;
-    color: #dc3545;
   }
   &:focus {
     background: none !important;

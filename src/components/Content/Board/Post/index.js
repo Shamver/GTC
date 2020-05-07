@@ -14,7 +14,7 @@ import useStores from '../../../../stores/useStores';
 const Post = ({ data, index }) => {
   const {
     ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
-    BoardPostStore,
+    BoardPostStore, UtilStore,
   } = useStores();
   const { currentPostId } = BoardPostStore;
   const {
@@ -23,6 +23,7 @@ const Post = ({ data, index }) => {
   } = data;
   const { dropdown, onActive } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
+  const { getProfile } = UtilStore;
   const { userData } = UserStore;
   const { addIgnore } = UserIgnoreStore;
 
@@ -52,7 +53,7 @@ const Post = ({ data, index }) => {
         <WriterDropdown isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
           <WriterDropdownToggle name={`replyIndex${index}`}> {writerName} </WriterDropdownToggle>
           <WriterDropdownMenu>
-            <WriterDropdownItem>
+            <WriterDropdownItem onClick={ () => getProfile(writerId) }>
               프로필
             </WriterDropdownItem>
             <WriterDropdownItem>

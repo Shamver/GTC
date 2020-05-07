@@ -12,7 +12,7 @@ const Alert = lazy(() => import('../util/Alert'));
 const Sign = lazy(() => import('../util/Sign'));
 const ConfirmAlert = lazy(() => import('../util/ConfirmAlert'));
 const Report = lazy(() => import('../util/Report'));
-const MyProfile = lazy(()=> import('../Content/MyProfile/index'));
+const ProfileModal = lazy(()=> import('../util/ProfileModal'));
 
 const Content = () => (
   <BorderedDiv>
@@ -42,7 +42,7 @@ const Content = () => (
         <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
         <Route exact path="/:board/modify/:id" render={({ match }) => <Posting match={match} isModify />} />
       </Switch>
-      <MyProfile />
+      <ProfileModal />
       <Alert />
       <Sign />
       <Report />

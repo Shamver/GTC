@@ -1,4 +1,6 @@
 import { observable, action } from 'mobx';
+import axios from "axios";
+import {toast} from "react-toastify";
 
 class UtilStore {
   @observable signToggle = false;
@@ -6,6 +8,8 @@ class UtilStore {
   @observable signDisplay = true;
 
   @observable sidebarOpen = false;
+
+  @observable profileToggle = false;
 
   constructor(root) {
     this.root = root;
@@ -39,6 +43,27 @@ class UtilStore {
 
   @action onSetSidebarOpen = (open) => {
     this.sidebarOpen = open;
+  }
+
+  @action getProfile = (writerId) => {
+    this.profileToggle = !this.profileToggle;
+
+    axios.post('/api/user/profile', { writerId })
+        .then((response) => {
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              console.log(data.DATA);
+            } else {
+              console.log('fail');
+            }
+          } else {
+            console.log('error');
+          }
+        })
+        .catch((response) => { console.log(response); });
+
+    return true;
   }
 }
 

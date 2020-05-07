@@ -21,6 +21,12 @@ const UPDATE_USER_INFO = `
   WHERE ID = :USER_ID
 `;
 
+const GET_USER_PROFILE = `
+  SELECT COUNT(GTC_POST.CONTENT)
+  FROM GTC_POST
+  WHERE GTC_POST.USER_ID = :USER_ID
+`;
+
 router.delete('/withdrawal', (req, res) => {
   const { userId } = req.body;
 
@@ -71,8 +77,26 @@ router.put('/info', (req, res) => {
   });
 });
 
-router.get('/profile', (req, res) => {
-    console.log('asd')
+router.post('/profile', (req, res) => {
+  const { userId } = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      GET_USER_PROFILE,
+      {
+        USER_ID: userId,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          DATA: rows[0],
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, POST /api/user/profile] 유저 프로필 조회');
+  });
 });
 
 module.exports = router;
