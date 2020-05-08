@@ -21,14 +21,14 @@ class FavoriteStore {
         .then((response) => {
           const { data } = response;
           if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.favoriteList = data.DATA;
+            if (data.code === 1) {
+              this.favoriteList = data.result;
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
             this.favoriteList = [];
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
         .catch((response) => {
@@ -49,16 +49,16 @@ class FavoriteStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             getPost(id);
-            toast.success(data.MESSAGE);
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
           this.getFavorite();
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
@@ -79,18 +79,18 @@ class FavoriteStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             if (type === 'post') {
               getPost(id);
             }
             this.getFavorite();
-            toast.success(data.MESSAGE);
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
