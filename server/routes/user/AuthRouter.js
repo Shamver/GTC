@@ -75,9 +75,9 @@ router.post('/register', (req, res) => {
         if (rows[0].count && rows[0].count >= 1) {
           res.json({
             SUCCESS: true,
-            CODE: 2,
-            MESSAGE: '동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.',
-            DATA: rows,
+            code: 2,
+            message: '동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.',
+            result: rows,
           });
           throw new Error('동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.');
         } else {
@@ -97,9 +97,9 @@ router.post('/register', (req, res) => {
       })
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '가입이 완료되었습니다.',
+          success: true,
+          code: 1,
+          message: '가입이 완료되었습니다.',
         });
       }),
   ).then(() => {
@@ -147,24 +147,24 @@ router.post('/login', (req, res) => {
                 if (err2) throw (err2);
                 res.cookie('authToken', token, { httpOnly: true });
                 res.json({
-                  SUCCESS: true,
-                  CODE: 1,
-                  MESSAGE: '😊 로그인 완료!',
+                  success: true,
+                  code: 1,
+                  message: '😊 로그인 완료!',
                 });
               },
             );
           } else {
             res.json({
-              SUCCESS: true,
-              CODE: 2,
-              MESSAGE: '해당 아이디는 회원탈퇴 상태입니다. 탈퇴일로부터 30일이 지난 후에 재가입해주세요.',
+              success: true,
+              code: 2,
+              message: '해당 아이디는 회원탈퇴 상태입니다. 탈퇴일로부터 30일이 지난 후에 재가입해주세요.',
             });
           }
         } else {
           res.json({
-            SUCCESS: true,
-            CODE: 3,
-            MESSAGE: '해당 이메일로 가입된 계정이 존재하지 않습니다. 회원가입 후 진행해주세요.',
+            success: true,
+            code: 3,
+            message: '해당 이메일로 가입된 계정이 존재하지 않습니다. 회원가입 후 진행해주세요.',
           });
         }
       }),
@@ -176,19 +176,19 @@ router.post('/login', (req, res) => {
 router.post('/logout', (req, res) => {
   res.clearCookie('authToken');
   res.json({
-    SUCCESS: true,
-    CODE: 1,
-    MESSAGE: '😊 로그아웃 완료!',
+    success: true,
+    code: 1,
+    message: '😊 로그아웃 완료!',
   });
 });
 
 router.use('/check', authMiddleware);
 router.get('/check', (req, res) => {
   res.json({
-    SUCCESS: true,
-    CODE: 1,
-    MESSAGE: '토큰 체크 완료',
-    DATA: req.decoded,
+    success: true,
+    code: 1,
+    message: '토큰 체크 완료',
+    result: req.decoded,
   });
 });
 
