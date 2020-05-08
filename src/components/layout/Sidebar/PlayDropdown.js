@@ -14,8 +14,8 @@ const PlayDropdown = () => {
   const { onActive, dropdown } = ComponentSidebarStore;
 
   return (
-    <DropdownIn isOpen={dropdown.play} toggle={onActive}>
-      <DropdownToggleC name="play" caret>
+    <DropdownIn isOpen={dropdown.play} toggle={(e) => onActive('play', e)}>
+      <DropdownToggleC caret>
         <FontAwesomeIcon icon={faSmile} /> 놀이터
       </DropdownToggleC>
       <DropdownMenu>

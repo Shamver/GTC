@@ -4,37 +4,52 @@ class HeaderStore {
   @observable dropdown = {
     lately: false,
     favorite: false,
-    smile: false,
+    play: false,
     mail: false,
     avatar: false,
     login: false,
   };
 
+  @observable searchOpen = false;
+
   constructor(root) {
     this.root = root;
   }
 
-  @action onActive = (target) => {
-    const keys = Object.keys(this.dropdown);
+  @action openSearch = () => {
+    this.searchOpen = !this.searchOpen;
+  }
 
-    for (let i = 0; i < keys.length; i += 1) {
-      this.dropdown = {
-        ...this.dropdown,
-        [keys[i]]: false,
-      };
+  @action
+
+  @action onActive = (dropdown) => {
+    if (this.dropdown[dropdown]) {
+      this.dropdown[dropdown] = false;
+      return;
     }
 
-    let name;
-    if (typeof target.currentTarget.getAttribute === 'function') {
-      name = target.currentTarget.getAttribute('name');
-    }
-    if (name !== undefined) {
-      this.dropdown = {
-        ...this.dropdown,
-        [name]: !this.dropdown[name],
-      };
+    const keyList = Object.keys(this.dropdown);
+    let key;
+    this.dropdownClear();
+
+    for (let i = 0; i < keyList.length; i += 1) {
+      key = keyList[i];
+      if (key === dropdown) {
+        this.dropdown[dropdown] = true;
+      }
     }
   };
+
+  @action dropdownClear = () => {
+    this.dropdown = {
+      lately: false,
+      favorite: false,
+      play: false,
+      mail: false,
+      avatar: false,
+      login: false,
+    };
+  }
 }
 
 export default HeaderStore;

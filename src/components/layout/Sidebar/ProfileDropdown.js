@@ -42,25 +42,24 @@ const ProfileDropdown = () => {
         )
         : (
           <DropDownWrapper>
-            <DropdownIn isOpen={mail} toggle={onActive}>
-              <DropdownToggleC name="mail" caret>
+            <DropdownIn isOpen={mail} toggle={(e) => onActive('mail', e)}>
+              <DropdownToggleC caret>
                 <FontAwesomeIcon icon={faEnvelope} />
               </DropdownToggleC>
               <DropdownMenu>
-                {/* 추후 개발 예정 */}
-                {/* <DropdownItem30>채팅</DropdownItem30> */}
+                <DropdownItem30>채팅</DropdownItem30>
                 <LinkNoDeco to="/mail">
                   <DropdownItem30>쪽지</DropdownItem30>
                 </LinkNoDeco>
               </DropdownMenu>
             </DropdownIn>
-            <DropdownInRight isOpen={avatar} toggle={onActive}>
-              <AvatarDropdownToggleC name="avatar" caret>
-                { alertCount > 0 ? (<NewAlertCountSpan>{alertCount}</NewAlertCountSpan>) : ''}
+            <DropdownInRight isOpen={avatar} toggle={(e) => onActive('avatar', e)}>
+              <AvatarDropdownToggleC caret>
+                { alertCount > 0 ? (<NewAlertCountSpan>{alertCount}</NewAlertCountSpan>) : null}
                 <Avatar src={avatarImg} />
               </AvatarDropdownToggleC>
               <DropdownMenuLeft>
-                <DropdownItemTitle onClick={() => { }}>
+                <DropdownItemTitle>
                   <ProfileNick>{userData.username}</ProfileNick>
                   <ProfileId>{userData.gtName}</ProfileId>
                 </DropdownItemTitle>

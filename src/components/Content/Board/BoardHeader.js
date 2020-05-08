@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
-import useStores from '../../../stores/useStores';
 import { Link } from 'react-router-dom';
+import useStores from '../../../stores/useStores';
 
 const BoardHeader = ({ path }) => {
   const { BoardStore } = useStores();

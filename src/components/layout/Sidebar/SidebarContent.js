@@ -13,14 +13,14 @@ import ProfileDropdown from './ProfileDropdown';
 
 const SidebarContent = () => {
   const { UtilStore } = useStores();
-  const { sidebarOpen } = UtilStore;
+  const { sidebarOpen, onSetSidebarOpen } = UtilStore;
 
   return (
     <>
       <HeaderWrapper>
         <TopWrapper>
           <LeftSpan>
-            <TopIcon icon={faBars} />
+            <TopIcon icon={faBars} onClick={() => onSetSidebarOpen(false)} />
           </LeftSpan>
           <RightSpan>
             <ProfileDropdown />

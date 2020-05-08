@@ -13,7 +13,7 @@ const HeaderLatelyItem = (data, onClick) => {
   return (
     <CustomLink to={`/post/${id}`} key={`HeaderLatelyItem_${id}`}>
       <DropdownItem30>
-        {title}
+        <Text>{title}</Text>
         <IconSpan onClick={(e) => { onClick(e, id); }}>
           <Icon icon={faTimes} />
         </IconSpan>
@@ -24,7 +24,8 @@ const HeaderLatelyItem = (data, onClick) => {
 
 const DropdownItem30 = styled(DropdownItem)`
   height : 27px;
-  line-height : 0;
+  line-height : 27px;
+  display : inline-block;
   padding: 0 1.2rem !important;
   width: 190px !important;
   z-index: 1 !important;
@@ -39,6 +40,8 @@ const DropdownItem30 = styled(DropdownItem)`
 `;
 
 const CustomLink = styled(Link)`
+  display : block;
+  height : 27px;
   clear: both;
   font-weight: 400;
   color: #212529;
@@ -51,13 +54,13 @@ const CustomLink = styled(Link)`
   &:hover {
     color: #212529;
     text-decoration: none;
-    background-color: transparent;
+    background-color: #e4e3e5;
   }
 `;
 
 const Text = styled.span`
   max-width: 130px;
-  line-height: 21px;
+  line-height: 27px;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -65,7 +68,7 @@ const Text = styled.span`
 
 const IconSpan = styled.span`
   display: inline-block;
-  line-height: 21px;
+  line-height: 27px;
   float: right;
   cursor: pointer;
   height: 21px;

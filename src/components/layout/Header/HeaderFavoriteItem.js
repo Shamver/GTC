@@ -11,16 +11,16 @@ const HeaderFavoriteItem = (data, onClick) => {
   const { postId, postTitle } = data;
 
   return (
-    <Link to={`/post/${postId}`} key={`HeaderFavoriteItem${postId}`}>
+    <CustomLink to={`/post/${postId}`} key={`HeaderFavoriteItem${postId}`}>
       <DropdownItem30>
         <Text>
           {postTitle}
         </Text>
-        <IconSpan onClick={(e) => { onClick(postId, 'post', e); }}>
+        <IconSpan onClick={(e) => onClick(postId, 'post', e)}>
           <Icon icon={faTimes} />
         </IconSpan>
       </DropdownItem30>
-    </Link>
+    </CustomLink>
   );
 };
 
@@ -35,8 +35,26 @@ const Text = styled.span`
 const DropdownItem30 = styled(DropdownItem)`
   height : 27px;
   line-height : 0;
-  padding-top : 0px;
-  padding-bottom : 0px;
+  padding: 0 1.2rem !important;
+  width: 190px !important;
+  z-index: 1 !important;
+`;
+
+const CustomLink = styled(Link)`
+  clear: both;
+  font-weight: 400;
+  color: #212529;
+  text-align: inherit;
+  white-space: nowrap;
+  background-color: transparent;
+  border: 0;
+  z-index: 0 !important;
+  
+  &:hover {
+    color: #212529;
+    text-decoration: none;
+    background-color: transparent;
+  }
 `;
 
 const IconSpan = styled.span`

@@ -5,7 +5,9 @@ import {
   Container, Row, Col, Badge,
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
-import { faBars, faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowRight, faBars, faSearch, faStar,
+} from '@fortawesome/free-solid-svg-icons';
 import { faClock, faSmile } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
@@ -21,7 +23,9 @@ const Header = () => {
     ComponentHeaderStore, UserFavoriteStore, UserStore, CookieLatelyStore,
     BoardSearchStore, UtilStore,
   } = useStores();
-  const { onActive, dropdown } = ComponentHeaderStore;
+  const {
+    onActive, dropdown, searchOpen, openSearch,
+  } = ComponentHeaderStore;
   const { favoriteList, getFavorite, deleteFavorite } = UserFavoriteStore;
   const { userData } = UserStore;
   const { latelyList, getLately, deleteLately } = CookieLatelyStore;
@@ -46,39 +50,57 @@ const Header = () => {
 
   return (
     <HeaderWrapper>
-      <button type="button" onClick={() => onSetSidebarOpen(true)}>
-        <FontAwesomeIcon icon={faBars} />
-      </button>
-      <Link to="/">
-        <InH1>
-          <Logo src={logo} alt="" />
-        </InH1>
-      </Link>
-      <InputGroupWrapper>
-        <InputGroupA>
-          <Input placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} />
-          <InputGroupAddon addonType="append">
-            <Button color="danger" onClick={search}>
-              <FontAwesomeIcon icon={faSearch} />
-            </Button>
-          </InputGroupAddon>
-        </InputGroupA>
-      </InputGroupWrapper>
+      <HeaderTop>
+        <MobileMenu icon={faBars} onClick={() => onSetSidebarOpen(true)} />
+        <BlockLink to="/" searchOpen={searchOpen}>
+          <InH1>
+            <Logo src={logo} alt="" />
+          </InH1>
+        </BlockLink>
+        {/* 일반 서치 그룹 */}
+        <InputGroupWrapper searchOpen={searchOpen}>
+          <InputGroupA>
+            <Input placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} />
+            <InputGroupAddon addonType="append">
+              <ResponsiveButton color="danger" onClick={search}>
+                <MiddleIcon icon={faSearch} />
+              </ResponsiveButton>
+            </InputGroupAddon>
+          </InputGroupA>
+        </InputGroupWrapper>
+        {/* 모바일 화면에서의 서치 그룹 */}
+        <ResponsiveInputGroupWrapper searchOpen={searchOpen}>
+          <InputGroupA>
+            <InputGroupAddon addonType="prepend" searchOpen={searchOpen}>
+              <ResponsiveButton color="danger" onClick={openSearch} searchOpen={searchOpen}>
+                { searchOpen ? (<MiddleIcon icon={faArrowRight} />)
+                  : (<MiddleIcon icon={faSearch} />)}
+              </ResponsiveButton>
+            </InputGroupAddon>
+            <ResponsiveInput placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} searchOpen={searchOpen} />
+            <AppendAddOn addonType="append" searchOpen={searchOpen}>
+              <ResponsiveButton color="danger" onClick={search} searchOpen={searchOpen}>
+                <MiddleIcon icon={faSearch} />
+              </ResponsiveButton>
+            </AppendAddOn>
+          </InputGroupA>
+        </ResponsiveInputGroupWrapper>
+      </HeaderTop>
       <HeaderNavBarWrapper fluid>
         <NavLine />
         <InnerContainer>
           <RowNoP>
             <ColNoP>
-              <DropdownIn isOpen={dropdown.lately} toggle={onActive}>
-                <DropdownToggleC name="lately" caret>
+              <DropdownIn isOpen={dropdown.lately} toggle={(e) => onActive('lately', e)}>
+                <DropdownToggleC caret>
                   <FontAwesomeIcon icon={faClock} /> 최근
                 </DropdownToggleC>
                 <DropdownMenu>
                   {LatelyData}
                 </DropdownMenu>
               </DropdownIn>
-              <DropdownIn isOpen={dropdown.favorite} toggle={onActive}>
-                <DropdownToggleC name="favorite" caret>
+              <DropdownIn isOpen={dropdown.favorite} toggle={(e) => onActive('favorite', e)}>
+                <DropdownToggleC caret>
                   <FontAwesomeIcon icon={faStar} /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
@@ -86,8 +108,8 @@ const Header = () => {
                     : (<DropdownItem30 disabled>로그인 후 이용 가능합니다.</DropdownItem30>)}
                 </DropdownMenu>
               </DropdownIn>
-              <DropdownIn isOpen={dropdown.smile} toggle={onActive}>
-                <DropdownToggleC name="smile" caret>
+              <DropdownIn isOpen={dropdown.play} toggle={(e) => onActive('play', e)}>
+                <DropdownToggleC caret>
                   <FontAwesomeIcon icon={faSmile} />
                 </DropdownToggleC>
                 <DropdownMenu>
@@ -121,30 +143,89 @@ const Header = () => {
   );
 };
 
+const MiddleIcon = styled(FontAwesomeIcon)`
+  vertical-align : sub;
+`;
+
+const AppendAddOn = styled(InputGroupAddon)`
+  display : ${(props) => (props.searchOpen ? 'inline-block' : 'none')} !important;
+`;
+
+
+const MobileMenu = styled(FontAwesomeIcon)`
+  font-size : 35px;
+  float: left;
+  display : none;
+  cursor : pointer;
+  color : #DC3545;
+  margin-top : 16.5px;
+  margin-left : 5px;
+  @media (max-width: 1200px) {
+    display : inline;
+  }
+`;
+
+const HeaderTop = styled.div`
+  height : 68.13px;
+  text-align : left;
+  @media (max-width: 1200px) {
+    text-align : center;
+  }
+`;
+
+const BlockLink = styled(Link)`
+  @media (max-width: 600px) {
+    display : ${(props) => (props.searchOpen ? 'none' : 'inline-block')}
+  }
+`;
+
+const ResponsiveInput = styled(Input)`
+  display : ${(props) => (props.searchOpen ? 'inline-block' : 'none')} !important;
+`;
+
+const ResponsiveButton = styled(Button)`
+  @media (max-width: 600px) {
+    border-radius : ${(props) => (props.searchOpen ? '' : '.25rem !important;')};
+  }
+`;
+
 const LinkNoDeco = styled(Link)`
   text-decoration: none !important;
 `;
 
 const InputGroupWrapper = styled.div`
-  width : 250px;
   display : inline-block;
-  float : right;
   position : relative;
+  float : right;
+  margin-top : 15.065px;
+  @media (max-width: 600px) {
+    margin-right : 4px;
+    display : none;
+  }
+`;
+
+const ResponsiveInputGroupWrapper = styled(InputGroupWrapper)`
+  display : none;
+  @media (max-width: 600px) {
+    display : inline-block;
+  }
 `;
 
 const InputGroupA = styled(InputGroup)`
   position : absolute;
-  top : 10px;
 `;
 
 const InH1 = styled.h1`
-  display : inline;
+  display : inline-block;
+  margin : 0 !important;
   color : #DC3545;
 `;
 
 const HeaderWrapper = styled.div`
   padding : 5px;
-  height : 136px;
+  padding-top : 0px;
+  height : 120px;
+  margin-bottom : 15px;
 `;
 
 const NavLine = styled.hr`
@@ -152,6 +233,7 @@ const NavLine = styled.hr`
   border : 0;
   height : 5px;
   margin-bottom : 0;
+  margin-top : 0;
 `;
 
 const HeaderNavBarWrapper = styled(Container)`
@@ -255,7 +337,7 @@ const DropdownItem30 = styled(DropdownItem)`
 `;
 
 const Logo = styled.img`
-  width : 100px;
+  width : 130px;
 `;
 
 export default observer(Header);
