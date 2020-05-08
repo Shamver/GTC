@@ -2,6 +2,8 @@ import React from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import useStores from '../../../../stores/useStores';
 import ResponsiveRow from './responsive/ResponsiveRow';
 
@@ -13,14 +15,18 @@ const Post = ({ data, index }) => {
   return (
     <TableRow height="35" key={data.id} currentPostId={currentPostId} postId={id}>
       <CenterTd width="50">
-        {currentPostId === id ? '>>' : (
+        {currentPostId === id ? (<BlockIcon icon={faAngleDoubleRight} />) : (
           <>
-            {recommendCount > 0 ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : ''}
+            {recommendCount ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : null}
           </>
         )}
       </CenterTd>
       <ResponsiveRow data={data} index={index} />
-      <DateTd>{date}</DateTd>
+      <DateTd>
+        <BlockInner>
+          {date}
+        </BlockInner>
+      </DateTd>
     </TableRow>
   );
 };
@@ -28,23 +34,27 @@ const Post = ({ data, index }) => {
 Post.propTypes = {
   data: Proptypes.shape({
     id: Proptypes.number,
-    title: Proptypes.string,
-    writerName: Proptypes.string,
     date: Proptypes.string,
-    categoryName: Proptypes.string,
     recommendCount: Proptypes.number,
-    commentCount: Proptypes.number,
-    type: Proptypes.string,
-    writerId: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
 };
 
+const BlockInner = styled.span`
+  display : block;
+  margin : auto;
+`;
+
+const BlockIcon = styled(FontAwesomeIcon)`
+  display : block;
+  margin : auto auto;
+`;
+
 const DateTd = styled.td`
   white-space : pre;
   text-align : center;
-  vertical-align : inherit !important;
-  padding : 0.5rem 0.8rem !important;
+  vertical-align : middle !important;
+  padding : 0 !important;
 `;
 
 const TableRow = styled.tr`
@@ -61,7 +71,8 @@ const LikeCountSpan = styled.span`
 `;
 
 const MiddleTd = styled.td`
-  padding : 8px 9px 2px 10px !important;
+  padding : 0px 5px !important;
+  vertical-align : middle !important;
   font-size : 13px;
 `;
 

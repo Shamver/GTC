@@ -22,10 +22,16 @@ const ResponsiveRow = ({ data, index }) => {
         { type !== 'notice' ? categoryName : ''}
       </DateTd>
       <MiddleTd width="700">
-        { type === 'notice' ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}
-        &nbsp;
-        <PostTitle to={`/post/${id}`}>{title}</PostTitle>
-        { commentCount > 0 ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>) : ''}
+        <MiddleSpan>
+          { type === 'notice' ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}
+          &nbsp;
+          <PostTitle to={`/post/${id}`}>{title}</PostTitle>
+          { commentCount > 0 ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>) : ''}
+          <MobileWriterDropdown>
+            <WriterDropdown data={data} index={index} />
+            <TopSpan>{ type !== 'notice' ? categoryName : ''}</TopSpan>
+          </MobileWriterDropdown>
+        </MiddleSpan>
       </MiddleTd>
       <CenterTdWriter>
         <WriterDropdown data={data} index={index} />
@@ -38,7 +44,6 @@ ResponsiveRow.propTypes = {
   data: Proptypes.shape({
     id: Proptypes.number,
     title: Proptypes.string,
-    date: Proptypes.string,
     categoryName: Proptypes.string,
     recommendCount: Proptypes.number,
     commentCount: Proptypes.number,
@@ -47,11 +52,26 @@ ResponsiveRow.propTypes = {
   index: Proptypes.number.isRequired,
 };
 
+const MiddleSpan = styled.span`
+  vertical-align : middle !important;
+`;
+
+const TopSpan = styled.span`
+  vertical-align : top;
+`;
+
+const MobileWriterDropdown = styled.div`
+  display : none !important;
+  @media (max-width: 992px) {
+    display : block !important;
+  }
+`;
+
 const DateTd = styled.td`
   white-space : pre;
   text-align : center;
   vertical-align : inherit !important;
-  padding : 0.5rem 0.8rem !important;
+  padding : 0rem 0.5rem !important;
   @media (max-width: 992px) {
     display : none;
   }
@@ -67,7 +87,8 @@ const ReplyCountspan = styled.span`
 `;
 
 const MiddleTd = styled.td`
-  padding : 8px 9px 2px 10px !important;
+  padding : 0px 10px !important;
+  vertical-align : middle !important;
   font-size : 13px;
 `;
 
@@ -86,7 +107,6 @@ const CenterTdWriter = styled(CenterTd)`
 const PostTitle = styled(Link)`
   cursor: pointer
   color : black;
-  
   &:hover {
     text-decoration: none;
   }
