@@ -20,14 +20,14 @@ class IgnoreStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
+          if (data.success) {
             if (data.code === 1) {
               this.ignoreList = data.result;
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
         .catch((response) => {

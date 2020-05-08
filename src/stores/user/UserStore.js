@@ -55,15 +55,15 @@ class UserStore {
     axios.post('/api/auth/register', this.registerData)
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
+        if (data.success) {
           if (data.code === 1) {
-            toggleAlert(data.MESSAGE);
+            toggleAlert(data.message);
             toggleSign();
           } else {
-            toggleAlert(data.MESSAGE);
+            toggleAlert(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
@@ -75,16 +75,16 @@ class UserStore {
     axios.post('/api/auth/login', { email })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
+        if (data.success) {
           if (data.code === 1) {
-            toast.success(response.data.MESSAGE);
-            this.userData = response.data.token;
+            toast.success(data.message);
+            this.userData = data.token;
             this.cookieCheck();
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
@@ -97,7 +97,7 @@ class UserStore {
     axios.post('/api/auth/logout', {})
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
+        if (data.success) {
           if (data.code === 1) {
             toast.success(text);
             this.cookieCheck();
@@ -105,10 +105,10 @@ class UserStore {
               history.push('/');
             }
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
@@ -124,7 +124,7 @@ class UserStore {
           if (data.code === 1) {
             this.userData = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
           this.userData = null;

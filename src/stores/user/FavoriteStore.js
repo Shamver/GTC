@@ -20,7 +20,7 @@ class FavoriteStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
+          if (data.success) {
             if (data.code === 1) {
               this.favoriteList = data.result;
             } else {
