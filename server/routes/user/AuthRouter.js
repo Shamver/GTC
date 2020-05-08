@@ -74,7 +74,7 @@ router.post('/register', (req, res) => {
       .then((rows) => {
         if (rows[0].count && rows[0].count >= 1) {
           res.json({
-            SUCCESS: true,
+            success: true,
             code: 2,
             message: '동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.',
             result: rows,

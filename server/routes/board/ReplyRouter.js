@@ -188,7 +188,7 @@ router.post('/', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          MESSAGE: '😊 댓글이 정상적으로 등록되었어요!',
+          message: '😊 댓글이 정상적으로 등록되었어요!',
         });
       }),
   ).then(() => {
@@ -211,7 +211,7 @@ router.get('/', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          MESSAGE: '댓글 목록 조회',
+          message: '댓글 목록 조회',
           result: rows,
         });
       }),
@@ -235,7 +235,7 @@ router.put('/', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          MESSAGE: '😊 댓글이 수정되었어요!',
+          message: '😊 댓글이 수정되었어요!',
         });
       }),
   ).then(() => {
@@ -270,13 +270,13 @@ router.delete('/', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          MESSAGE: '😊 댓글이 삭제되었어요!',
+          message: '😊 댓글이 삭제되었어요!',
         });
       }, () => {
         res.json({
           success: true,
           code: 2,
-          MESSAGE: '😳 해당 댓글에 답글이 달려있어 삭제하지 못합니다.',
+          message: '😳 해당 댓글에 답글이 달려있어 삭제하지 못합니다.',
         });
       }),
   ).then(() => {
@@ -313,7 +313,7 @@ router.post('/like', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          MESSAGE: '😊 해당 댓글 좋아요 완료!',
+          message: '😊 해당 댓글 좋아요 완료!',
         });
       }, () => {
         res.json({
