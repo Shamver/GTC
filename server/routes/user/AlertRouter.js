@@ -71,10 +71,10 @@ router.get('/', (req, res) => {
           replyContent: filter(v.replyContent),
         }));
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '알림 목록 조회',
-          DATA: returnRows,
+          success: true,
+          code: 1,
+          message: '알림 목록 조회',
+          result: returnRows,
         });
       }),
   ).then(() => {
@@ -94,9 +94,9 @@ router.put('/', (req, res) => {
     )
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '성공적으로 읽었습니다.',
+          success: true,
+          code: 1,
+          message: '성공적으로 읽었습니다.',
         });
       }),
   ).then(() => {
@@ -116,9 +116,9 @@ router.delete('/', (req, res) => {
     )
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '성공적으로 삭제됐습니다.',
+          success: true,
+          code: 1,
+          message: '성공적으로 삭제됐습니다.',
         });
       }),
   ).then(() => {
