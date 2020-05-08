@@ -25,20 +25,20 @@ class PointStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.pointList = data.DATA;
-              if (data.DATA.length === 0) {
+          if (data.success) {
+            if (data.code === 1) {
+              this.pointList = data.result;
+              if (data.result.length === 0) {
                 this.currentPointMaxPage = 0;
               } else {
-                const { pageCount } = data.DATA[0];
+                const { pageCount } = data.result[0];
                 this.currentPointMaxPage = pageCount;
               }
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
         .catch((response) => {
@@ -60,15 +60,15 @@ class PointStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.totalPoint = data.DATA;
+          if (data.success) {
+            if (data.code === 1) {
+              this.totalPoint = data.result;
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
             this.totalPoint = 0;
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
         .catch((response) => {
