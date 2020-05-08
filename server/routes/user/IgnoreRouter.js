@@ -76,17 +76,17 @@ router.get('/', (req, res) => {
             };
           });
           res.json({
-            SUCCESS: true,
-            CODE: 1,
-            MESSAGE: '차단 목록 조회',
-            DATA: returnRows,
+            success: true,
+            code: 1,
+            message: '차단 목록 조회',
+            result: returnRows,
           });
         } else {
           res.json({
-            SUCCESS: true,
-            CODE: 1,
-            MESSAGE: '차단 목록 조회',
-            DATA: rows,
+            success: true,
+            code: 1,
+            message: '차단 목록 조회',
+            result: rows,
           });
         }
       }),
@@ -110,9 +110,9 @@ router.post('/', (req, res) => {
       .then((rows) => {
         if (rows.length >= 1) {
           res.json({
-            SUCCESS: true,
-            CODE: 2,
-            MESSAGE: '😓 이미 차단한 유저입니다.',
+            success: true,
+            code: 2,
+            message: '😓 이미 차단한 유저입니다.',
           });
           throw new Error('이미 차단한 유저입니다.');
         } else {
@@ -127,9 +127,9 @@ router.post('/', (req, res) => {
       })
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 성공적으로 차단되었습니다!',
+          success: true,
+          code: 1,
+          message: '😊 성공적으로 차단되었습니다!',
         });
       }),
   ).then(() => {
@@ -158,9 +158,9 @@ router.delete('/', (req, res) => {
     )
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '✔ 성공적으로 삭제되었습니다!',
+          success: true,
+          code: 1,
+          message: '✔ 성공적으로 삭제되었습니다!',
         });
       }),
   ).then(() => {

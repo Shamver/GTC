@@ -21,8 +21,8 @@ class IgnoreStore {
         .then((response) => {
           const { data } = response;
           if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.ignoreList = data.DATA;
+            if (data.code === 1) {
+              this.ignoreList = data.result;
             } else {
               toast.info(data.MESSAGE);
             }
@@ -56,15 +56,15 @@ class IgnoreStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
             this.getIgnore();
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => console.log(response));
@@ -85,15 +85,15 @@ class IgnoreStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              toast.success(data.MESSAGE);
+          if (data.success) {
+            if (data.code === 1) {
+              toast.success(data.message);
               this.getIgnore();
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
         .catch((response) => { console.log(response); });
