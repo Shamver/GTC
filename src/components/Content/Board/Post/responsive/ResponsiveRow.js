@@ -15,15 +15,17 @@ const ResponsiveRow = ({ data, index }) => {
 
   const IsBestPost = recommendCount >= 10
     ? (<Star icon={faStar} />)
-    : (<FontAwesomeIcon icon={faCommentDots} />);
+    : (<BottomIcon icon={faCommentDots} />);
   return (
     <>
       <DateTd>
-        { type !== 'notice' ? categoryName : ''}
+        <NoLineDiv>
+          { type !== 'notice' ? categoryName : ''}
+        </NoLineDiv>
       </DateTd>
       <MiddleTd width="700">
         <MiddleSpan>
-          { type === 'notice' ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}
+          { type === 'notice' ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
           &nbsp;
           <PostTitle to={`/post/${id}`}>{title}</PostTitle>
           { commentCount > 0 ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>) : ''}
@@ -52,16 +54,28 @@ ResponsiveRow.propTypes = {
   index: Proptypes.number.isRequired,
 };
 
+const BottomIcon = styled(FontAwesomeIcon)`
+  vertical-align : bottom;
+`;
+
+const NoLineDiv = styled.div`
+  line-height: normal;
+`;
+
 const MiddleSpan = styled.span`
   vertical-align : middle !important;
+  display : block;
+  line-height : normal;
 `;
 
 const TopSpan = styled.span`
+  margin-left : 10px;
   vertical-align : top;
 `;
 
 const MobileWriterDropdown = styled.div`
   display : none !important;
+  padding-top: 5px;
   @media (max-width: 992px) {
     display : block !important;
   }
@@ -70,7 +84,7 @@ const MobileWriterDropdown = styled.div`
 const DateTd = styled.td`
   white-space : pre;
   text-align : center;
-  vertical-align : inherit !important;
+  vertical-align : middle !important;
   padding : 0rem 0.5rem !important;
   @media (max-width: 992px) {
     display : none;
@@ -87,9 +101,13 @@ const ReplyCountspan = styled.span`
 `;
 
 const MiddleTd = styled.td`
-  padding : 0px 10px !important;
+  padding : 0px 0.5rem !important;
   vertical-align : middle !important;
-  font-size : 13px;
+  font-size : 14px;
+  @media (max-width: 992px) {
+    height : 50px;
+  }
+  
 `;
 
 const CenterTd = styled(MiddleTd)`

@@ -51,7 +51,8 @@ WriterDropdown.propTypes = {
 };
 
 const WriterDropdownIn = styled(Dropdown)`
-  display : inline;
+  display : inline-block;
+  line-height : normal;
   
   & .dropdown-item:active {
     color: #fff !important;
@@ -80,10 +81,12 @@ const WriterDropdownMenu = styled(DropdownMenu)`
 
 const WriterDropdownToggle = styled(DropdownToggle)`
   padding : 0px !important;
+  display : block !important;
+  line-height : normal !important;
   color : #DC3545 !important;
   font-weight : bold;
-  font-size : 0.8rem !important;
-  padding: 0 6px 0px 0px !important;
+  font-size : 14px !important;
+  margin : auto;
   background-color: transparent !important;
   border : 0 !important;
   height : 100%;

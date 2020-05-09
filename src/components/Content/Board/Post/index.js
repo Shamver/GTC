@@ -14,7 +14,7 @@ const Post = ({ data, index }) => {
 
   return (
     <TableRow height="35" key={data.id} currentPostId={currentPostId} postId={id}>
-      <CenterTd width="50">
+      <CenterTd width="40">
         {currentPostId === id ? (<BlockIcon icon={faAngleDoubleRight} />) : (
           <>
             {recommendCount ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : null}
@@ -43,6 +43,7 @@ Post.propTypes = {
 const BlockInner = styled.span`
   display : block;
   margin : auto;
+  line-height : normal;
 `;
 
 const BlockIcon = styled(FontAwesomeIcon)`
@@ -54,7 +55,7 @@ const DateTd = styled.td`
   white-space : pre;
   text-align : center;
   vertical-align : middle !important;
-  padding : 0 !important;
+  padding : 0 0.5rem !important;
 `;
 
 const TableRow = styled.tr`
@@ -62,18 +63,19 @@ const TableRow = styled.tr`
 `;
 
 const LikeCountSpan = styled.span`
+  display : block;
   background-color : #DC3545;
   color: #fff;
   font-weight: bold;
-  padding: 2.5px 5px;
-  font-size: 11px;
+  padding: 1px 5px;
+  font-size: 10px;
   border-radius: 100px;
 `;
 
 const MiddleTd = styled.td`
-  padding : 0px 5px !important;
+  padding : 0px 0.5rem !important;
   vertical-align : middle !important;
-  font-size : 13px;
+  font-size : 14px;
 `;
 
 const CenterTd = styled(MiddleTd)`
