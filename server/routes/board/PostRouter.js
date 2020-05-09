@@ -191,8 +191,12 @@ const DELETE_POST = `
 
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
-  const { board, userId, isHome } = req.query;
+  const { board, isHome } = req.query;
+  let { userId } = req.query;
   currentPage = currentPage || 1;
+
+
+  if (!userId) userId = null;
 
   Database.execute(
     (database) => database.query(

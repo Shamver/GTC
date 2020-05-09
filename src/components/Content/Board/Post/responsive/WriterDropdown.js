@@ -26,7 +26,7 @@ const WriterDropdown = ({ data, index }) => {
         <WriterDropdownItem>
           작성 글 보기
         </WriterDropdownItem>
-        {userData.id === writerId ? '' : (
+        {userData && userData.id === writerId ? '' : (
           <WriterDropdownItem
             onClick={() => {
               toggleConfirmAlert('정말 차단하시겠습니까?', () => {
