@@ -6,17 +6,24 @@ import Post from './index';
 
 const PostList = ({ path, currentPage }) => {
   const {
-    BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore,
+    BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore, UtilAlertStore, UtilRouteStore,
   } = useStores();
   const { setCurrentBoard } = BoardStore;
   const { getBoardPostList, boardPostList } = BoardPostStore;
   const { onSet } = ComponentPostStore;
   const { ignoreList } = UserIgnoreStore;
+  const { toggleAlert } = UtilAlertStore;
+  const { history } = UtilRouteStore;
 
   useEffect(() => {
     getBoardPostList(path, currentPage);
     setCurrentBoard(path);
-  }, [path, getBoardPostList, setCurrentBoard, currentPage, ignoreList]);
+  }, [path, getBoardPostList, setCurrentBoard, currentPage, ignoreList, toggleAlert, history]);
+
+  if (!boardPostList[path]) {
+    toggleAlert('아직 구현되지 않은 route 입니다.');
+    history.push('/');
+  }
 
   return boardPostList[path].map((data, index) => {
     onSet(index);

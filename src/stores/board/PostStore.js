@@ -21,6 +21,8 @@ class PostStore {
     notice: [],
     cash: [],
     qna: [],
+    faq: [],
+    consult: [],
     crime: [],
     all: [],
   };
