@@ -46,10 +46,10 @@ router.get('/', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '포인트 목록 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '포인트 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -71,10 +71,10 @@ router.get('/sum', (req, res) => {
         let { point } = rows[0];
         point = point || 0;
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '포인트 합계 조회',
-          DATA: point,
+          success: true,
+          code: 1,
+          message: '포인트 합계 조회',
+          result: point,
         });
       }),
   ).then(() => {

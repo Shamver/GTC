@@ -51,9 +51,9 @@ router.post('/', (req, res) => {
       .then((rows) => {
         if (rows[0].count === 1) {
           res.json({
-            SUCCESS: true,
-            CODE: 2,
-            MESSAGE: '😳 이미 해당 대상에 신고가 완료된 상태입니다!',
+            success: true,
+            code: 2,
+            message: '😳 이미 해당 대상에 신고가 완료된 상태입니다!',
           });
           throw new Error('이미 신고한 사람입니다.');
         } else {
@@ -71,9 +71,9 @@ router.post('/', (req, res) => {
       })
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 해당 포스팅에 신고가 완료되었어요.',
+          success: true,
+          code: 1,
+          message: '😊 해당 포스팅에 신고가 완료되었어요.',
         });
       }),
   ).then(() => {

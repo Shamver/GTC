@@ -24,15 +24,15 @@ class AdvertiseStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 0) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 0) {
+            toast.success(data.message);
             this.getAdPostList();
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => console.log(response));
@@ -42,14 +42,14 @@ class AdvertiseStore {
     axios.get('/api/event/advertise')
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 0) {
-            this.AdvertisePostList = data.rows;
+        if (data.success) {
+          if (data.code === 0) {
+            this.AdvertisePostList = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => console.log(response));

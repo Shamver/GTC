@@ -55,15 +55,15 @@ class UserStore {
     axios.post('/api/auth/register', this.registerData)
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toggleAlert(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toggleAlert(data.message);
             toggleSign();
           } else {
-            toggleAlert(data.MESSAGE);
+            toggleAlert(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
@@ -75,16 +75,16 @@ class UserStore {
     axios.post('/api/auth/login', { email })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(response.data.MESSAGE);
-            this.userData = response.data.token;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            this.userData = data.token;
             this.cookieCheck();
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
@@ -97,18 +97,18 @@ class UserStore {
     axios.post('/api/auth/logout', {})
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             toast.success(text);
             this.cookieCheck();
             if (history.location.pathname !== '/') {
               history.push('/');
             }
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
@@ -120,11 +120,11 @@ class UserStore {
     axios.get('/api/auth/check', {})
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.userData = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.userData = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
           this.userData = null;
@@ -202,15 +202,15 @@ class UserStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
+          if (data.success) {
+            if (data.code === 1) {
               logout({}, '성공적으로 탈퇴되었습니다.\n30일 이후에 재가입이 가능합니다.\n감사합니다.');
               history.push('/');
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
         .catch((response) => { console.log(response); });
@@ -234,16 +234,16 @@ class UserStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             toggleAlert('성공적으로 변경되었습니다.\n다시 로그인해주세요.');
             history.push('/');
             this.logout();
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => console.log(response));

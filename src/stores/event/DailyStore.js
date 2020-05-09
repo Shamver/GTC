@@ -17,14 +17,14 @@ class DailyStore {
     axios.get('/api/event/daily')
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.dailyList = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.dailyList = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => {
@@ -41,16 +41,16 @@ class DailyStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             this.dailyLast = {
-              ...data.DATA[0],
+              ...data.result[0],
             };
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => console.log(response));
@@ -68,17 +68,17 @@ class DailyStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
+          if (data.success) {
+            if (data.code === 1) {
               this.getDailyLast();
               this.getDailyList();
               this.message = '';
-              toast.success(data.MESSAGE);
+              toast.success(data.message);
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
         .catch((response) => {

@@ -41,7 +41,8 @@ class CodeStore {
 
     axios.post('/api/system/code/group', this.codeGroup)
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.codeGroup = {
             id: '',
             name: '',
@@ -49,7 +50,9 @@ class CodeStore {
           };
           this.getCodeGroupList();
           this.setIsAddCodeGroup(false);
-          toast.success('😳 코드 그룹 추가 완료!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
@@ -62,8 +65,11 @@ class CodeStore {
   @action getCodeGroupList = () => {
     axios.get('/api/system/code/group')
       .then((response) => {
-        if (response.data) {
-          this.codeGroupList = response.data;
+        const { data } = response;
+        if (data.success) {
+          this.codeGroupList = data.result;
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
@@ -78,7 +84,8 @@ class CodeStore {
     console.log(this.codeGroup);
     axios.put('/api/system/code/group', this.codeGroup)
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.codeGroup = {
             id: '',
             name: '',
@@ -86,7 +93,9 @@ class CodeStore {
           };
           this.getCodeGroupList();
           this.setIsAddCodeGroup(false);
-          toast.success('😳 코드 그룹 수정 완료!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
@@ -103,7 +112,8 @@ class CodeStore {
       },
     })
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.codeGroup = {
             id: '',
             name: '',
@@ -112,7 +122,9 @@ class CodeStore {
           this.getCodeGroupList();
           this.getCodeList('');
           this.setIsAddCodeGroup(false);
-          toast.success('😳 코드 그룹 삭제 완료!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
@@ -131,7 +143,8 @@ class CodeStore {
 
     axios.post('/api/system/code/', this.code)
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.code = {
             ...this.code,
             id: '',
@@ -143,7 +156,9 @@ class CodeStore {
           this.getCodeGroupList();
           this.getCodeList(this.code.group);
           this.setIsAddCodeGroup(false);
-          toast.success('😳 코드 추가 완료!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
@@ -160,10 +175,13 @@ class CodeStore {
       },
     })
       .then((response) => {
-        if (response.data) {
-          this.codeList = response.data;
+        const { data } = response;
+        if (data.success) {
+          this.codeList = data.result;
           this.code.group = codeGroup;
           this.setIsAddCode(false);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
@@ -178,11 +196,12 @@ class CodeStore {
 
     axios.put('/api/system/code', this.code)
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.getCodeGroupList();
           this.getCodeList(this.code.group);
           this.setIsAddCode(false);
-          toast.success('😳 코드 수정 완료!');
+          toast.success(data.message);
           this.code = {
             ...this.code,
             id: '',
@@ -191,6 +210,8 @@ class CodeStore {
             desc: '',
             useYN: 1,
           };
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
@@ -208,7 +229,8 @@ class CodeStore {
       },
     })
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.code = {
             ...this.code,
             id: '',
@@ -220,7 +242,9 @@ class CodeStore {
           this.getCodeGroupList();
           this.getCodeList(this.code.group);
           this.setIsAddCodeGroup(false);
-          toast.success('😳 코드 삭제 완료!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {

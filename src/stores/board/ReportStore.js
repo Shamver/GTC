@@ -28,15 +28,15 @@ class ReportStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
             this.toggleReport();
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });

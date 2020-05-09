@@ -27,14 +27,14 @@ class MailStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.sentMailList = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.sentMailList = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => console.log(response));
@@ -49,14 +49,14 @@ class MailStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.getMailList = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.getMailList = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => console.log(response));
@@ -85,14 +85,14 @@ class MailStore {
         const { data } = response;
         this.mailForm.mailText = '';
         this.mailForm.mailTo = '';
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => console.log(response));
@@ -111,14 +111,14 @@ class MailStore {
         this.viewMail = {};
         this.getMail();
         this.getSentMail();
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { console.log(response); });
@@ -136,14 +136,14 @@ class MailStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
+          if (data.success) {
+            if (data.code === 1) {
               // 읽기 성공
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
         .catch((response) => console.log(response));

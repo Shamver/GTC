@@ -88,10 +88,10 @@ router.get('/', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '출석체크 목록 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '출석체크 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -111,10 +111,10 @@ router.get('/last', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '출석체크 마지막 한 날 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '출석체크 마지막 한 날 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -147,15 +147,15 @@ router.post('/', (req, res) => {
       })
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '출석체크가 완료되었습니다!',
+          success: true,
+          code: 1,
+          message: '출석체크가 완료되었습니다!',
         });
       }, () => {
         res.json({
-          SUCCESS: true,
-          CODE: 2,
-          MESSAGE: '😓 오늘은 이미 출석체크를 했습니다.',
+          success: true,
+          code: 2,
+          message: '😓 오늘은 이미 출석체크를 했습니다.',
         });
       }),
   ).then(() => {
