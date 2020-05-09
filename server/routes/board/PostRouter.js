@@ -221,8 +221,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.use('/', authMiddleware);
-router.post('/', (req, res) => {
+router.post('/', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
@@ -402,7 +401,7 @@ router.get('/:id', (req, res) => {
       SELECT_POST_SINGLE,
       {
         POST_ID: req.params.id,
-        USER_ID: req.query.userId,
+        USER_ID: req.query.userId ? req.query.userId : null,
       },
     )
       .then((rows) => {

@@ -202,7 +202,7 @@ class PostStore {
 
     axios.get(`/api/board/post/${id}`, {
       params: {
-        userId: userData.id,
+        userId: userData ? userData.id : null,
       },
     })
       .then((response) => {
