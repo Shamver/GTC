@@ -9,19 +9,21 @@ import styled from 'styled-components';
 import useStores from '../../../../stores/useStores';
 
 const ReplyEdit = () => {
-  const { BoardReplyStore } = useStores();
+  const { BoardReplyStore, UserStore } = useStores();
   const {
     onChangeValue, reply, setReplyEditId, addReply, replyEditId, modifyModeId,
     CurrentReplyOption,
   } = BoardReplyStore;
   const { text, secretFl } = reply;
   const { secretCommentAllowFl } = CurrentReplyOption;
+  const { userData } = UserStore;
 
   return (
     <>
       <CKEditor
         editor={ClassicEditor}
         data={text}
+        disabled={!userData}
         onChange={(event, editor) => {
           const ReplyContent = editor.getData();
           onChangeValue(ReplyContent);
@@ -38,7 +40,7 @@ const ReplyEdit = () => {
       { replyEditId === 0 && modifyModeId === 0 ? '' : (
         <Button size="sm" outline onClick={() => setReplyEditId(0)}>취소</Button>
       )}
-      <RightButton size="sm" color="info" onClick={addReply}>
+      <RightButton size="sm" color="info" onClick={addReply} disabled={!userData}>
         <FontAwesomeIcon icon={faPen} />
         &nbsp;
         댓글 쓰기
