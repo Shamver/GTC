@@ -48,7 +48,6 @@ app.use('/api/user/mail', userMailApi);
 app.use('/api/board/post', boardPostApi);
 
 // reply
-app.use('/api/board/reply', authMiddleware);
 app.use('/api/board/reply', boardReplyApi);
 
 // report
@@ -56,8 +55,6 @@ app.use('/api/board/report', authMiddleware);
 app.use('/api/board/report', boardReportApi);
 
 // board
-// authMiddleware 때문에 하단 위치
-app.use('/api/board', authMiddleware);
 app.use('/api/board', boardApi);
 
 app.use('/api/cookie/lately', cookieLatelyApi);

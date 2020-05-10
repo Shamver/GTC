@@ -260,7 +260,7 @@ router.post('/', authMiddleware, (req, res) => {
   });
 });
 
-router.put('/', (req, res) => {
+router.put('/', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
@@ -300,7 +300,7 @@ router.put('/', (req, res) => {
   });
 });
 
-router.delete('/', (req, res) => {
+router.delete('/', authMiddleware, (req, res) => {
   const data = req.query;
 
   Database.execute(
@@ -327,7 +327,7 @@ router.delete('/', (req, res) => {
 });
 
 // 게시글 추천
-router.post('/recommend', (req, res) => {
+router.post('/recommend', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
@@ -370,7 +370,7 @@ router.post('/recommend', (req, res) => {
   });
 });
 
-router.get('/mine', (req, res) => {
+router.get('/mine', authMiddleware, (req, res) => {
   const { userId } = req.query;
 
   Database.execute(

@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const alertMiddleware = require('../../middleware/alert');
+const authMiddleware = require('../../middleware/auth');
 
 const point = require('../../middleware/point');
 const Database = require('../../Database');
@@ -145,7 +146,7 @@ const UPDATE_COMMENT = `
   WHERE ID = :COMMENT_ID
 `;
 
-router.post('/', (req, res) => {
+router.post('/', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
@@ -202,7 +203,7 @@ router.get('/', (req, res) => {
       SELECT_POST_COMMENT,
       {
         POST_ID: data.bpId,
-        USER_ID: data.userId,
+        USER_ID: data.userId ? data.userId : null,
       },
     )
       .then((rows) => {
@@ -218,7 +219,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.put('/', (req, res) => {
+router.put('/', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
@@ -241,7 +242,7 @@ router.put('/', (req, res) => {
   });
 });
 
-router.delete('/', (req, res) => {
+router.delete('/', authMiddleware, (req, res) => {
   const data = req.query;
 
   Database.execute(
@@ -283,7 +284,7 @@ router.delete('/', (req, res) => {
 });
 
 // 댓글 좋아요
-router.post('/like', (req, res) => {
+router.post('/like', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
@@ -326,7 +327,7 @@ router.post('/like', (req, res) => {
 });
 
 // 줄 길어지는거나 도배한거 어떻게 하냐.. 처리해야함.
-router.get('/mine', (req, res) => {
+router.get('/mine', authMiddleware, (req, res) => {
   const { userId } = req.query;
 
   Database.execute(
