@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
-import { Container, Button } from 'reactstrap';
+import { Container, Button, Row, Col } from 'reactstrap';
 import {
   faClock, faEye, faBellSlash, faStar as farStar,
 } from '@fortawesome/free-regular-svg-icons';
@@ -59,15 +59,19 @@ const PostContent = ({ match }) => {
       <Div loading={loading}>
         <div>
           <CategoryAndTitle>
-            <Category>
-              {categoryName}
-            </Category>
-            <Title>
-              {title}
-            </Title>
-            <ProfileImg src={anonymous} />
+            <NoMarginRow>
+              <Category>
+                {categoryName}
+              </Category>
+              <Title>
+                {title}
+              </Title>
+            </NoMarginRow>
           </CategoryAndTitle>
-          <b>{writerName}</b>님
+          <HeightDiv>
+            <b>{writerName}</b>님
+            <ProfileImg src={anonymous} />
+          </HeightDiv>
         </div>
         <NavLine />
         <PostViewWrapper>
@@ -182,6 +186,14 @@ PostContent.defaultProps = {
   match: null,
 };
 
+const HeightDiv = styled.div`
+  height : 42px;
+`;
+
+const NoMarginRow = styled(Row)`
+  margin : 0px !important; 
+`;
+
 const MiddleIcon = styled(FontAwesomeIcon)`
   vertical-align : sub;
 `;
@@ -273,6 +285,9 @@ const SmallFontButton = styled(Button)`
 const ViewWrapper = styled.div`
   padding : 20px;
   font-size : 13px !important;
+  @media (max-width: 992px) {
+    padding : 20px 7px !important;
+  }
 `;
 
 const MarginlessH3 = styled.h4`
@@ -286,6 +301,7 @@ const NavLine = styled.hr`
   background :#DC3545;
   border : 0;
   height : 2px;
+  margin-top : 7px;
   margin-bottom : 0;
 `;
 
@@ -313,20 +329,26 @@ const CategoryAndTitle = styled.h4`
   font-weight : 500;
 `;
 
-const Title = styled.span`
+const Title = styled(Col)`
+  padding : 0px !important;
   padding-left : 7px;
   vertical-align: bottom;
   display: inline-block;
-  width: 800px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  max-width: 750px;
+  font-size : 16px !important;
+  @media (min-width: 992px) {
+    font-size : 20px !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;
 
-const Category = styled.span`
-  
+const Category = styled.div`
+  height : 20px;
   border-right : 1px dotted gray;
   padding-right : 7px;
+  margin-right : 7px;
   color : blue;
 `;
 
