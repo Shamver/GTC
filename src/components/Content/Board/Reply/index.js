@@ -51,7 +51,7 @@ const Reply = ({ data, index }) => {
               <WriterDropdownItem>
                 작성 글 보기
               </WriterDropdownItem>
-              {userData && userData.id === data.idWriter ? '' : (
+              {!userData || userData.id === data.idWriter ? '' : (
                 <WriterDropdownItem
                   onClick={() => {
                     toggleConfirmAlert('정말 차단하시겠습니까?', () => {
