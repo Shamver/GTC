@@ -23,7 +23,7 @@ import anonymous from '../../../../resources/images/anonymous.png';
 const PostContent = ({ match }) => {
   const {
     BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore, UserFavoriteStore,
-    BoardReportStore, UtilAlertStore,
+    BoardReportStore, UtilAlertStore, UserStore,
   } = useStores();
   const {
     postView, recommendPost, currentPostUpperLower, deletePost,
@@ -43,6 +43,7 @@ const PostContent = ({ match }) => {
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
   const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
   const { addFavorite, deleteFavorite } = UserFavoriteStore;
+  const { userData } = UserStore;
 
   useEffect(() => {
     setReplyOption(commentAllowFl, secretCommentAllowFl);
@@ -86,12 +87,12 @@ const PostContent = ({ match }) => {
           <ContentWrapper>
             {renderHTML(`${content}`)}
             <TextCenterDiv>
-              <SmallFontButton outline color="success" onClick={() => recommendPost(postId, 'R01')}>
+              <SmallFontButton outline color="success" onClick={() => recommendPost(postId, 'R01')} disabled={!userData}>
                 <FontAwesomeIcon icon={faThumbsUp} />
                 &nbsp;추천 {recommendCount}
               </SmallFontButton>
               &nbsp;
-              <SmallFontButton outline color="primary" onClick={() => recommendPost(postId, 'R02')}>
+              <SmallFontButton outline color="primary" onClick={() => recommendPost(postId, 'R02')} disabled={!userData}>
                 <FontAwesomeIcon icon={faThumbsDown} />
                 &nbsp;비추천 {notRecommendCount}
               </SmallFontButton>
@@ -132,6 +133,7 @@ const PostContent = ({ match }) => {
                 outline={!isFavorite}
                 color="secondary"
                 size="sm"
+                disabled={!userData}
                 onClick={() => {
                   if (isFavorite) {
                     deleteFavorite(postId);
