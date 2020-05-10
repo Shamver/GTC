@@ -8,43 +8,51 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import BoardPagination from './Pagination';
+import useStores from "../../../stores/useStores";
 
-const BoardFooter = ({ path, noPagination, currentPage }) => (
-  <>
-    <AbsolDiv>
-      <AbsoluteLeftLink to={`${path}/post`}>
-        <Button outline color="warning" size="sm">
-          <FontAwesomeIcon icon={faStar} />
+const BoardFooter = ({ path, noPagination, currentPage }) => {
+  const {
+    UserStore,
+  } = useStores();
+  const { userData } = UserStore;
+
+  return (
+    <>
+      <AbsolDiv>
+        <AbsoluteLeftLink to={`${path}/post`}>
+          <Button outline color="warning" size="sm">
+            <FontAwesomeIcon icon={faStar} />
             &nbsp;&nbsp;인기 글
-        </Button>
-      </AbsoluteLeftLink>
-      <AbsoluteRightLink to={`${path}/post`}>
-        <Button color="danger" size="sm">
-          <FontAwesomeIcon icon={faPen} />
+          </Button>
+        </AbsoluteLeftLink>
+        <AbsoluteRightLink to={`${path}/post`}>
+          <Button color="danger" size="sm" disabled={!userData}>
+            <FontAwesomeIcon icon={faPen} />
             &nbsp;&nbsp;글 쓰기
-        </Button>
-      </AbsoluteRightLink>
-    </AbsolDiv>
-    <BoardPagination path={path} currentPage={currentPage} noPagination={noPagination} />
-    <InputGroupWrapper>
-      <InputGroupWidth>
-        <InputGroupAddon addonType="prepend">
-          <RightNoRadiusSelect type="select">
-            <option>제목</option>
-            <option>제목 + 내용</option>
-            <option>닉네임</option>
-          </RightNoRadiusSelect>
-        </InputGroupAddon>
-        <Input placeholder="검색어" />
-        <InputGroupAddon addonType="append">
-          <InputGroupButton>
-            <FontAwesomeIcon icon={faSearch} />
-          </InputGroupButton>
-        </InputGroupAddon>
-      </InputGroupWidth>
-    </InputGroupWrapper>
-  </>
-);
+          </Button>
+        </AbsoluteRightLink>
+      </AbsolDiv>
+      <BoardPagination path={path} currentPage={currentPage} noPagination={noPagination} />
+      <InputGroupWrapper>
+        <InputGroupWidth>
+          <InputGroupAddon addonType="prepend">
+            <RightNoRadiusSelect type="select">
+              <option>제목</option>
+              <option>제목 + 내용</option>
+              <option>닉네임</option>
+            </RightNoRadiusSelect>
+          </InputGroupAddon>
+          <Input placeholder="검색어" />
+          <InputGroupAddon addonType="append">
+            <InputGroupButton>
+              <FontAwesomeIcon icon={faSearch} />
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroupWidth>
+      </InputGroupWrapper>
+    </>
+  );
+};
 
 BoardFooter.propTypes = {
   path: Proptypes.string.isRequired,
