@@ -51,7 +51,7 @@ const Reply = ({ data, index }) => {
               <WriterDropdownItem>
                 작성 글 보기
               </WriterDropdownItem>
-              {userData.id === data.idWriter ? '' : (
+              {userData && userData.id === data.idWriter ? '' : (
                 <WriterDropdownItem
                   onClick={() => {
                     toggleConfirmAlert('정말 차단하시겠습니까?', () => {
@@ -68,7 +68,7 @@ const Reply = ({ data, index }) => {
           <span className="replyOption">
             { !data.deleteFl ? (
               <>
-                { userData.id === data.idWriter
+                { userData && userData.id === data.idWriter
                   ? (
                     <>
                       <SpanLikeLink onClick={() => modifyMode(data.id)}>수정</SpanLikeLink>
@@ -85,15 +85,15 @@ const Reply = ({ data, index }) => {
                     </>
                   )
                   : null }
-                <SpanLikeLink onClick={() => likeReply(data.id)}>
+                <SpanLikeLink onClick={userData ? () => likeReply(data.id) : () => {}} className={userData ? 'enable' : 'disabled'}>
                   { !data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
                 </SpanLikeLink>
                 &nbsp;·&nbsp;
-                <SpanLikeLink onClick={() => setReplyEditId(data.id)}>대댓글</SpanLikeLink>
+                <SpanLikeLink onClick={userData ? () => setReplyEditId(data.id) : () => {}} className={userData ? 'enable' : 'disabled'}>대댓글</SpanLikeLink>
                 &nbsp;·&nbsp;
                 { data.updateDate ? data.updateDate : data.date}
                 &nbsp;·&nbsp;
-                <SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>신고 #</SpanLikeLink>
+                <SpanLikeLink onClick={userData ? () => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer) : () => {}} className={userData ? 'enable' : 'disabled'}>신고 #</SpanLikeLink>
               </>
             ) : (
               <>
@@ -242,10 +242,16 @@ const ReplyDepthIcon = styled(FontAwesomeIcon)`
 `;
 
 const SpanLikeLink = styled.span`
-  color: #337ab7;
-  cursor : pointer;
-  &:hover {
-    color: #23527c;
+  &.enable {
+    color: #337ab7;
+    cursor : pointer;
+    &:hover {
+      color: #23527c;
+    }
+  }
+  &.disabled {
+    pointerEvents: none;
+    opacity: 0.4;
   }
 `;
 
