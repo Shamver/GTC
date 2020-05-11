@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
-import useStores from '../../../../stores/useStores';
-import PostContent from './PostContent';
-import Loading from '../../../util/Loading';
+import useStores from '../../../../../stores/useStores';
+import Loading from '../../../../util/Loading';
+import PostViewHeader from './PostViewHeader';
 
 const PostView = ({ match }) => {
   const {
@@ -32,7 +32,9 @@ const PostView = ({ match }) => {
     <>
       <Loading loading={loading} />
       <PostWrapper loading={loading}>
-        <PostContent match={match} />
+        <ViewWrapper>
+          <PostViewHeader />
+        </ViewWrapper>
       </PostWrapper>
     </>
   );
@@ -43,12 +45,16 @@ PostView.propTypes = {
     params: Proptypes.shape({
       id: Proptypes.string,
     }),
-  }),
+  }).isRequired,
 };
 
-PostView.defaultProps = {
-  match: null,
-};
+const ViewWrapper = styled.div`
+  padding : 20px;
+  font-size : 13px !important;
+  @media (max-width: 992px) {
+    padding : 20px 7px !important;
+  }
+`;
 
 const PostWrapper = styled.div`
   display :  ${(props) => (props.loading ? 'none' : 'block')}

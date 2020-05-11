@@ -4,9 +4,15 @@ class PostStore {
   @observable dropdown = {
   };
 
+  @observable postOptionOpen = false;
+
   constructor(root) {
     this.root = root;
   }
+
+  @action openPostOption = () => {
+    this.postOptionOpen = !this.postOptionOpen;
+  };
 
   @action onActive = (target) => {
     const keys = Object.keys(this.dropdown);
