@@ -41,6 +41,12 @@ const SELECT_POST_LIST_ALL = `
     , P.USER_ID AS writerId
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
     , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
+    , CASE WHEN BOARD_CD = 'FREE' THEN '자유 게시판'
+        WHEN BOARD_CD = 'TRADE' THEN '아이템 거래'
+        WHEN BOARD_CD = 'CASH' THEN '월드락 거래'
+        WHEN BOARD_CD = 'QNA' THEN '질문 & 답변'
+       ELSE '그 외'
+    END AS boardName
     , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount

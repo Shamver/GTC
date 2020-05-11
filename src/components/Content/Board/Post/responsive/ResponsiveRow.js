@@ -7,10 +7,10 @@ import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import WriterDropdown from './WriterDropdown';
 
-const ResponsiveRow = ({ data, index }) => {
+const ResponsiveRow = ({ data, index, path }) => {
   const {
     id, recommendCount, categoryName, commentCount,
-    type, title,
+    type, title, boardName,
   } = data;
 
   const IsBestPost = recommendCount >= 10
@@ -18,6 +18,11 @@ const ResponsiveRow = ({ data, index }) => {
     : (<FontAwesomeIcon icon={faCommentDots} />);
   return (
     <>
+      { path === 'all' ? (
+        <DateTd>
+          { type !== 'notice' ? boardName : ''}
+        </DateTd>
+      ) : '' }
       <DateTd>
         { type !== 'notice' ? categoryName : ''}
       </DateTd>
@@ -43,8 +48,10 @@ ResponsiveRow.propTypes = {
     recommendCount: Proptypes.number,
     commentCount: Proptypes.number,
     type: Proptypes.string,
+    boardName: Proptypes.string,
   }).isRequired,
   index: Proptypes.number.isRequired,
+  path: Proptypes.string.isRequired,
 };
 
 const DateTd = styled.td`
