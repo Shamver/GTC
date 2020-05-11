@@ -33,6 +33,28 @@ const SELECT_POST_LIST = `
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
 
+const SELECT_POST_LIST_ALL = `
+  SELECT 
+    @ROWNUM := @ROWNUM+1 as rn
+    , P.ID AS id
+    , P.TITLE AS title
+    , P.USER_ID AS writerId
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
+    , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
+    , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
+    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
+    , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD') AS pageCount
+  FROM 
+    GTC_POST P
+    , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
+  WHERE 
+    BOARD_CD NOT IN ('qna','faq','consult','crime') 
+    AND P.USER_ID != IFNULL((SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
+  ORDER BY ID DESC    
+  LIMIT :CURRENT_PAGE, :PER_PAGE
+`;
+
 const INSERT_POST = `
   INSERT INTO GTC_POST (
     ID
@@ -200,7 +222,7 @@ router.get('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_POST_LIST,
+      board !== 'all' ? SELECT_POST_LIST : SELECT_POST_LIST_ALL,
       {
         BOARD_CD: board.toUpperCase(),
         CURRENT_PAGE: ((currentPage - 1) * 25),
