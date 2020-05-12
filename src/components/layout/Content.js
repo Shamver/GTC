@@ -28,15 +28,25 @@ const Content = () => {
         <Switch>
           <Route exact path="/" render={() => <Home />} />
           { checkPermission(0) ? (
-            <>
-              <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
-              <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
-              <Route exact path="/setting" render={() => <Contents.Setting />} />
-              <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
-              <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
-              <Route exact path="/mypoint/page/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />
-              <Route exact path="/mail" render={() => <Contents.Mail />} />
-            </>
+            <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
+          ) : null }
+          { checkPermission(0) ? (
+            <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
+          ) : null }
+          { checkPermission(0) ? (
+            <Route exact path="/setting" render={() => <Contents.Setting />} />
+          ) : null }
+          { checkPermission(0) ? (
+            <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
+          ) : null }
+          { checkPermission(0) ? (
+            <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
+          ) : null }
+          { checkPermission(0) ? (
+            <Route exact path="/mypoint/page/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />
+          ) : null }
+          { checkPermission(0) ? (
+            <Route exact path="/mail" render={() => <Contents.Mail />} />
           ) : null }
           { checkPermission(2) ? (
             <Route exact path="/code" render={() => <Contents.Code />} />
