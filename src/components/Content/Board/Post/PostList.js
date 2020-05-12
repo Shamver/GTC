@@ -4,6 +4,7 @@ import * as Proptypes from 'prop-types';
 import useStores from '../../../../stores/useStores';
 import Post from './index';
 
+// eslint-disable-next-line consistent-return
 const PostList = ({ path, currentPage }) => {
   const {
     BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore, UtilAlertStore, UtilRouteStore,
@@ -20,15 +21,17 @@ const PostList = ({ path, currentPage }) => {
     setCurrentBoard(path);
   }, [path, getBoardPostList, setCurrentBoard, currentPage, ignoreList, toggleAlert, history]);
 
-  if (!boardPostList[path]) {
+  if (!boardPostList[path] || boardPostList[path] === undefined) {
     toggleAlert('아직 구현되지 않은 route 입니다.');
     history.push('/');
+  } else {
+    return boardPostList[path].map((data, index) => {
+      onSet(index);
+      return (
+        <Post key={data.id} data={data} index={index} path={path} currentPage={currentPage} />
+      );
+    });
   }
-
-  return boardPostList[path].map((data, index) => {
-    onSet(index);
-    return (<Post key={data.id} data={data} index={index} path={path} currentPage={currentPage} />);
-  });
 };
 
 PostList.propTypes = {

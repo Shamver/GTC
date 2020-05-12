@@ -54,6 +54,8 @@ const SELECT_USER_FROM_EMAIL = `
     , GENDER_CD AS gender
     , PROFILE_FL AS profileYN
     , IFNULL(DELETE_DTTM, NULL) AS deletedDate
+    , OPERATOR_FL AS operatorYN
+    , ADMIN_FL AS adminYN
   FROM GTC_USER
   WHERE EMAIL = ':EMAIL'
 `;
@@ -124,6 +126,7 @@ router.post('/login', (req, res) => {
           const {
             id, nickname, gtNickname, deletedDate,
             email, tel, birth, gender, profileYN, name,
+            operatorYN, adminYN,
           } = resultData;
           if (deletedDate === null) {
             jwt.sign(
@@ -137,6 +140,8 @@ router.post('/login', (req, res) => {
                 birth,
                 gender,
                 profileYN,
+                operatorYN,
+                adminYN,
               },
               secret,
               {

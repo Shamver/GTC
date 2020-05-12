@@ -135,6 +135,19 @@ class UserStore {
     return true;
   };
 
+  @action checkPermission = (level) => {
+    // level 0: 사용자, level 1: 운영자, level2: 관리자
+    if (level === 0) {
+      return true;
+    }
+    if (level === 1) {
+      return (this.userData && this.userData.operatorYN === 1);
+    }
+    if (level === 2) {
+      return (this.userData && this.userData.adminYN === 1);
+    }
+    return false;
+  };
 
   @action onRegisterChangeValue = (event) => {
     this.registerData = {
