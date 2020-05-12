@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import useStores from '../../../../../stores/useStores';
 import Loading from '../../../../util/Loading';
 import PostViewHeader from './PostViewHeader';
+import PostViewContent from './PostViewContent';
 
 const PostView = ({ match }) => {
   const {
@@ -34,6 +35,7 @@ const PostView = ({ match }) => {
       <PostWrapper loading={loading}>
         <ViewWrapper>
           <PostViewHeader />
+          <PostViewContent />
         </ViewWrapper>
       </PostWrapper>
     </>

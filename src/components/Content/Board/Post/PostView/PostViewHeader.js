@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Col, Row} from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import useStores from '../../../../../stores/useStores';
 import anonymous from '../../../../../resources/images/anonymous.png';

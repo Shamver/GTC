@@ -1,0 +1,162 @@
+import React from 'react';
+import {
+  faBellSlash, faClock, faEye, faStar as farStar,
+} from '@fortawesome/free-regular-svg-icons';
+import {
+  faBars,
+  faCommentDots,
+  faHeart,
+  faPen, faStar as fasStar,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
+import renderHTML from 'react-render-html';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, Container } from 'reactstrap';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import useStores from '../../../../../../stores/useStores';
+import PostVote from './PostVote';
+
+const PostViewContent = () => {
+  const {
+    BoardStore, BoardPostStore, BoardReplyStore, BoardReportStore,
+    UtilAlertStore, UserFavoriteStore,
+  } = useStores();
+  const { currentBoard } = BoardStore;
+  const { postView, deletePost } = BoardPostStore;
+  const { postReplyList } = BoardReplyStore;
+  const { toggleReport } = BoardReportStore;
+  const { toggleConfirmAlert } = UtilAlertStore;
+  const { addFavorite, deleteFavorite } = UserFavoriteStore;
+
+  const {
+    id: postId, title, writerName, date, viewCnt, content,
+    recommendCount, isFavorite, isMyPost,
+  } = postView;
+  return (
+    <>
+      <NavLine />
+      <ContentWrapper>
+        <ContentHeader>
+          <FontAwesomeIcon icon={faClock} /> {date}
+          <RightSpan>
+            <FontAwesomeIcon icon={faCommentDots} /> {postReplyList.length}
+            <FontAwesomeIcon icon={faHeart} /> {recommendCount}
+            <FontAwesomeIcon icon={faEye} /> {viewCnt}
+          </RightSpan>
+        </ContentHeader>
+        <ContentMain>
+          {renderHTML(`${content}`)}
+          <PostVote />
+        </ContentMain>
+        <ContentFooter>
+          <StylessLink to={`/${currentBoard}`}>
+            <GreyButton outline color="secondary" size="sm">
+              <FontAwesomeIcon icon={faBars} /> 목록
+            </GreyButton>
+          </StylessLink>
+          <Button outline color="danger" size="sm" onClick={() => toggleReport(postId, 'RP01', title, writerName)}>
+            <FontAwesomeIcon icon={faBellSlash} /> 신고
+          </Button>
+          { isMyPost
+            ? (
+              <>
+                <RightSpan>
+                  <GreyButton color="secondary" size="sm" outline onClick={() => toggleConfirmAlert('해당 포스트를 삭제하시겠습니까?', () => deletePost(postId))}>
+                    <FontAwesomeIcon icon={faTrash} /> 삭제
+                  </GreyButton>
+                </RightSpan>
+                <RightSpan>
+                  <Link to={`/${currentBoard}/modify/${postId}`}>
+                    <GreyButton color="secondary" size="sm" outline>
+                      <FontAwesomeIcon icon={faPen} /> 수정
+                    </GreyButton>
+                  </Link>
+                </RightSpan>
+              </>
+            )
+            : ''}
+          <RightSpan>
+            <GreyButton
+              outline={!isFavorite}
+              color="secondary"
+              size="sm"
+              onClick={() => {
+                if (isFavorite) {
+                  deleteFavorite(postId);
+                } else {
+                  addFavorite(postId);
+                }
+              }}
+            >
+              <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} /> 즐겨찾기
+            </GreyButton>
+          </RightSpan>
+        </ContentFooter>
+      </ContentWrapper>
+    </>
+  );
+};
+
+
+const GreyButton = styled(Button)`
+  background-color : white !important;
+  border-color: #ccc !important;
+  color : black !important;
+  &:hover {
+    background-color : #e6e6e6 !important;
+  }
+  color: ${(props) => (props.outline ? 'black' : 'white')};
+`;
+
+const StylessLink = styled(Link)`
+  color : #6c757d;
+  text-decoration : none;
+  
+  &:hover {
+    color : white;
+    text-decoration : none;
+  }
+`;
+
+const NavLine = styled.hr`
+  background :#DC3545;
+  border : 0;
+  height : 2px;
+  margin-top : 7px;
+  margin-bottom : 0;
+`;
+
+const ContentHeader = styled(Container)`
+  margin : 0 !important;
+  padding : 0 3px !important;
+  height : 35px;
+  max-width : none !important;
+  background: #f6f6f6;
+  padding: 0.6em 0.8em !important;
+`;
+
+const ContentFooter = styled(ContentHeader)`
+  height : 47px;
+`;
+
+const ContentWrapper = styled.div`
+  border-left: 1px solid #f1f1f1;
+  border-right: 1px solid #f1f1f1;
+  margin-bottom : 20px;
+`;
+
+const RightSpan = styled.span`
+  margin-left : 5px;
+  float : right;
+  
+  & > svg {
+    margin-left : 5px;
+  }
+`;
+
+const ContentMain = styled.div`
+  padding : 14px;
+`;
+
+export default PostViewContent;
