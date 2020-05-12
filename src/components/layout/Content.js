@@ -27,13 +27,17 @@ const Content = () => {
         <ScrollToTop />
         <Switch>
           <Route exact path="/" render={() => <Home />} />
-          <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
-          <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
-          <Route exact path="/setting" render={() => <Contents.Setting />} />
-          <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
-          <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
-          <Route exact path="/mypoint/page/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />
-          <Route exact path="/mail" render={() => <Contents.Mail />} />
+          { checkPermission(0) ? (
+            <>
+              <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
+              <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
+              <Route exact path="/setting" render={() => <Contents.Setting />} />
+              <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
+              <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
+              <Route exact path="/mypoint/page/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />
+              <Route exact path="/mail" render={() => <Contents.Mail />} />
+            </>
+          ) : null }
           { checkPermission(2) ? (
             <Route exact path="/code" render={() => <Contents.Code />} />
           ) : null }

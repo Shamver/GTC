@@ -138,7 +138,7 @@ class UserStore {
   @action checkPermission = (level) => {
     // level 0: 사용자, level 1: 운영자, level2: 관리자
     if (level === 0) {
-      return true;
+      return this.userData;
     }
     if (level === 1) {
       return (this.userData && this.userData.operatorYN === 1);
