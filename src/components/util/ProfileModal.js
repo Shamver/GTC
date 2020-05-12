@@ -9,16 +9,51 @@ import useStores from '../../stores/useStores';
 const MyProfile = () => {
 
     const { UtilStore } = useStores();
-    const { profileToggle, toggleProfile } = UtilStore;
+    const { profileToggle, toggleProfile, profileData } = UtilStore;
 
     return (
         <Modal isOpen={profileToggle} toggle={toggleProfile}>
-            <ModalHeader toggle={toggleProfile}><b>Profile</b></ModalHeader>
+            <ModalHeader toggle={toggleProfile}><b>{profileData.nickname}님의 프로필</b></ModalHeader>
             <ModalBody>
-                ㅎㅇ
+                <ProfileInfoBox>
+                    <ProfileInfo>
+                        <ProfileInfoTitle>가입일자</ProfileInfoTitle>
+                        <ProfileInfoContents>{profileData.userCreated}</ProfileInfoContents>
+                    </ProfileInfo>
+                    <ProfileInfo>
+                        <ProfileInfoTitle>이메일</ProfileInfoTitle>
+                        <ProfileInfoContents>{profileData.userEmail}</ProfileInfoContents>
+                    </ProfileInfo>
+                    <ProfileInfo>
+                        <ProfileInfoTitle>작성 글</ProfileInfoTitle>
+                        <ProfileInfoContents>{profileData.postCount}</ProfileInfoContents>
+                    </ProfileInfo>
+                    <ProfileInfo>
+                        <ProfileInfoTitle>작성 댓글</ProfileInfoTitle>
+                        <ProfileInfoContents>{profileData.commentCount}</ProfileInfoContents>
+                    </ProfileInfo>
+                </ProfileInfoBox>
             </ModalBody>
         </Modal>
     );
 };
+
+const ProfileInfoBox = styled.div`
+  padding: 5px;
+`;
+
+const ProfileInfo = styled.div`
+  display: flex;
+  margin: 4px 0;
+`;
+
+const ProfileInfoTitle = styled.span`
+  font-weight: 500;
+  margin: 0 5px 0 0;
+`;
+
+const ProfileInfoContents = styled.span`
+  color: #cecece;
+`;
 
 export default observer(MyProfile);

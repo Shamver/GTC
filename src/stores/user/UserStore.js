@@ -72,7 +72,7 @@ class UserStore {
   };
 
   @action login = (email) => {
-    axios.post('/api/user/login', { email })
+    axios.post('/api/auth/login', { email })
       .then((response) => {
         const { data } = response;
         if (data.SUCCESS) {

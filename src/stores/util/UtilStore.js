@@ -11,6 +11,10 @@ class UtilStore {
 
   @observable profileToggle = false;
 
+  @observable profileData = {
+
+  };
+
   constructor(root) {
     this.root = root;
   }
@@ -48,17 +52,18 @@ class UtilStore {
   @action getProfile = (writerId) => {
     this.profileToggle = !this.profileToggle;
 
-    axios.post('/api/user/profile', { writerId })
+    axios.post('/api/user/profile', { userId : writerId })
         .then((response) => {
           const { data } = response;
+
           if (data.SUCCESS) {
             if (data.CODE === 1) {
-              console.log(data.DATA);
+              this.profileData = data.DATA;
             } else {
-              console.log('fail');
+              console.log(data.MESSAGE);
             }
           } else {
-            console.log('error');
+            console.log(data.MESSAGE);
           }
         })
         .catch((response) => { console.log(response); });

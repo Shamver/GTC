@@ -22,9 +22,15 @@ const UPDATE_USER_INFO = `
 `;
 
 const GET_USER_PROFILE = `
-  SELECT COUNT(GTC_POST.CONTENT)
-  FROM GTC_POST
-  WHERE GTC_POST.USER_ID = :USER_ID
+  SELECT GTC_USER.ID as userId
+  , GTC_USER.EMAIL as userEmail
+  , GTC_USER.NAME as name
+  , GTC_USER.NICKNAME as nickname
+  , GTC_USER.CRT_DTTM as userCreated
+  , (SELECT COUNT(GTC_POST.ID) FROM GTC_POST WHERE GTC_POST.USER_ID = :USER_ID) as postCount
+  , (SELECT COUNT(GTC_COMMENT.ID) AS 'cnt' FROM GTC_COMMENT WHERE GTC_COMMENT.USER_ID = :USER_ID) as commentCount
+  FROM GTC_USER
+  WHERE GTC_USER.ID = :USER_ID
 `;
 
 router.delete('/withdrawal', (req, res) => {
@@ -79,7 +85,6 @@ router.put('/info', (req, res) => {
 
 router.post('/profile', (req, res) => {
   const { userId } = req.body;
-
   Database.execute(
     (database) => database.query(
       GET_USER_PROFILE,
@@ -91,6 +96,7 @@ router.post('/profile', (req, res) => {
         res.json({
           SUCCESS: true,
           CODE: 1,
+          MESSAGE: '유저 프로필 조회',
           DATA: rows[0],
         });
       }),
