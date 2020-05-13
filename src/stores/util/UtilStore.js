@@ -52,8 +52,9 @@ class UtilStore {
   @action getProfile = (writerId) => {
     this.profileToggle = !this.profileToggle;
 
-    axios.post('/api/user/profile', { userId : writerId })
+    axios.get(`/api/user/profile/${writerId}`, { params : {writerId} })
         .then((response) => {
+          console.log('asd')
           const { data } = response;
 
           if (data.SUCCESS) {

@@ -83,13 +83,14 @@ router.put('/info', (req, res) => {
   });
 });
 
-router.post('/profile', (req, res) => {
-  const { userId } = req.body;
+router.get('/profile/:writerId', (req, res) => {
+  const { writerId } = req.body;
+  console.log(writerId)
   Database.execute(
     (database) => database.query(
       GET_USER_PROFILE,
       {
-        USER_ID: userId,
+        USER_ID: req.params.writerId,
       },
     )
       .then((rows) => {
@@ -101,7 +102,7 @@ router.post('/profile', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, POST /api/user/profile] 유저 프로필 조회');
+    info('[SELECT, GET /api/user/profile] 유저 프로필 조회');
   });
 });
 
