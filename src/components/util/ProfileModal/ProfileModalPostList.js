@@ -7,10 +7,20 @@ import ProfileModalPost from './ProfileModalPost';
 const ProfileModalPostList = () => {
 
     const { UtilStore } = useStores();
-    const { profileToggle, toggleProfile, profileData } = UtilStore;
+    const { profilePostData } = UtilStore;
+    // const postList =  profilePostData.map( index => (
+    //     <ProfileModalPost postData={index} key={index.postId}/>
+    // ));
+    console.log(profilePostData)
 
     return (
-        <ProfileModalPost />
+        <table>
+            <tr>
+                <th>제목</th>
+                <th>타이틀</th>
+            </tr>
+            {/*{profilePostData}*/}
+        </table>
     );
 };
 

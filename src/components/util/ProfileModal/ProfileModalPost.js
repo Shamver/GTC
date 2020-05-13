@@ -3,13 +3,12 @@ import {observer} from "mobx-react";
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 
-const ProfileModalPost = () => {
-
-    const { UtilStore } = useStores();
-    const { profileToggle, toggleProfile, profileData } = UtilStore;
-
+const ProfileModalPost = ({ postData }) => {
     return (
-        <div>hi</div>
+        <tr>
+            <td>{postData.postTitle}</td>
+            <td>{postData.postCreated}</td>
+        </tr>
     );
 };
 

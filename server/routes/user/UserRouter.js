@@ -101,24 +101,38 @@ router.get('/profile/:writerId', (req, res) => {
         USER_ID: req.params.writerId,
       },
     )
-        .then(() => database.query(
-            GET_USER_POST_LIST,
-            {
-                USER_ID: req.params.writerId,
-            },
-        ))
       .then((rows) => {
-          console.log(rows)
         res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '유저 프로필 조회',
-          DATA: rows,
+          DATA: rows[0],
         });
       }),
   ).then(() => {
     info('[SELECT, GET /api/user/profile] 유저 프로필 조회');
   });
+});
+
+router.get('/profile/:writerId/post', (req, res) => {
+    Database.execute(
+        (database) => database.query(
+            GET_USER_POST_LIST,
+            {
+                USER_ID: req.params.writerId,
+            },
+        )
+            .then((rows) => {
+                res.json({
+                    SUCCESS: true,
+                    CODE: 1,
+                    MESSAGE: '유저 작성 글 조회',
+                    DATA: rows,
+                });
+            }),
+    ).then(() => {
+        info('[SELECT, GET /api/user/profile] 유저 작성 글 조회');
+    });
 });
 
 module.exports = router;

@@ -13,6 +13,8 @@ class UtilStore {
 
   @observable profileData = {};
 
+  @observable profilePostData;
+
   constructor(root) {
     this.root = root;
   }
@@ -67,8 +69,28 @@ class UtilStore {
         })
         .catch((response) => { console.log(response); });
 
+
+    axios.get(`/api/user/profile/${writerId}/post`, { params : {writerId} })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            console.log(data.DATA)
+            this.profilePostData = data.DATA;
+            console.log(this.profilePostData)
+          } else {
+            console.log(data.MESSAGE);
+          }
+        } else {
+          console.log(data.MESSAGE);
+        }
+      })
+      .catch((response) => { console.log(response); });
+
     return true;
   }
+
 }
 
 export default UtilStore;
