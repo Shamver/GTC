@@ -22,16 +22,26 @@ const UPDATE_USER_INFO = `
 `;
 
 const GET_USER_PROFILE = `
-  SELECT GTC_USER.ID as userId
-  , GTC_USER.EMAIL as userEmail
-  , GTC_USER.NAME as name
-  , GTC_USER.NICKNAME as nickname
-  , GTC_USER.CRT_DTTM as userCreated
-  , (SELECT COUNT(GTC_POST.ID) FROM GTC_POST WHERE GTC_POST.USER_ID = :USER_ID) as postCount
-  , (SELECT COUNT(GTC_COMMENT.ID) AS 'cnt' FROM GTC_COMMENT WHERE GTC_COMMENT.USER_ID = :USER_ID) as commentCount
+  SELECT GTC_USER.ID AS userId
+    , GTC_USER.EMAIL AS userEmail
+    , GTC_USER.NAME AS name
+    , GTC_USER.NICKNAME AS nickname
+    , DATE_FORMAT(GTC_USER.CRT_DTTM, '%Y-%m-%d') userCreated
+    , (SELECT COUNT(GTC_POST.ID) FROM GTC_POST WHERE GTC_POST.USER_ID = :USER_ID) AS postCount
+    , (SELECT COUNT(GTC_COMMENT.ID) AS 'cnt' FROM GTC_COMMENT WHERE GTC_COMMENT.USER_ID = :USER_ID) AS commentCount
   FROM GTC_USER
   WHERE GTC_USER.ID = :USER_ID
 `;
+
+const GET_USER_POST_LIST = `
+  SELECT GTC_POST.ID AS postId
+    , GTC_POST.BOARD_CD AS postCd
+    , GTC_POST.CATEGORY_CD AS postCategory
+    , GTC_POST.TITLE AS postTitle
+    , DATE_FORMAT(GTC_POST.CRT_DTTM, '%Y-%m-%d') postCreated
+FROM GTC_POST
+WHERE GTC_POST.USER_ID = :USER_ID
+`
 
 router.delete('/withdrawal', (req, res) => {
   const { userId } = req.body;
@@ -84,8 +94,6 @@ router.put('/info', (req, res) => {
 });
 
 router.get('/profile/:writerId', (req, res) => {
-  const { writerId } = req.body;
-  console.log(writerId)
   Database.execute(
     (database) => database.query(
       GET_USER_PROFILE,
@@ -93,12 +101,19 @@ router.get('/profile/:writerId', (req, res) => {
         USER_ID: req.params.writerId,
       },
     )
+        .then(() => database.query(
+            GET_USER_POST_LIST,
+            {
+                USER_ID: req.params.writerId,
+            },
+        ))
       .then((rows) => {
+          console.log(rows)
         res.json({
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '유저 프로필 조회',
-          DATA: rows[0],
+          DATA: rows,
         });
       }),
   ).then(() => {

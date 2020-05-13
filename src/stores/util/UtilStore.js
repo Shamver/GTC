@@ -11,9 +11,7 @@ class UtilStore {
 
   @observable profileToggle = false;
 
-  @observable profileData = {
-
-  };
+  @observable profileData = {};
 
   constructor(root) {
     this.root = root;
@@ -54,11 +52,11 @@ class UtilStore {
 
     axios.get(`/api/user/profile/${writerId}`, { params : {writerId} })
         .then((response) => {
-          console.log('asd')
           const { data } = response;
 
           if (data.SUCCESS) {
             if (data.CODE === 1) {
+              console.log(data.DATA)
               this.profileData = data.DATA;
             } else {
               console.log(data.MESSAGE);

@@ -1,12 +1,14 @@
 import React from 'react';
 import {observer} from "mobx-react";
 import {
-    Modal, ModalHeader, ModalBody, FormText, Input,
+    Modal, ModalHeader, ModalBody
 } from 'reactstrap';
 import styled from 'styled-components';
-import useStores from '../../stores/useStores';
+import useStores from '../../../stores/useStores';
+import ProfileModalPostList from './ProfileModalPostList';
+import ProfileModalCommentList from './ProfileModalCommentList';
 
-const MyProfile = () => {
+const ProfileModal = () => {
 
     const { UtilStore } = useStores();
     const { profileToggle, toggleProfile, profileData } = UtilStore;
@@ -33,6 +35,8 @@ const MyProfile = () => {
                         <ProfileInfoContents>{profileData.commentCount}</ProfileInfoContents>
                     </ProfileInfo>
                 </ProfileInfoBox>
+                <ProfileModalPostList />
+                <ProfileModalCommentList />
             </ModalBody>
         </Modal>
     );
@@ -56,4 +60,4 @@ const ProfileInfoContents = styled.span`
   color: #cecece;
 `;
 
-export default observer(MyProfile);
+export default observer(ProfileModal);
