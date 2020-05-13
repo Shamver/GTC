@@ -40,8 +40,7 @@ const PostContent = ({ match }) => {
     isFavorite, isMyPost,
   } = postView;
   const { upper, lower } = currentPostUpperLower;
-  const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
-  const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
+
 
 
   useEffect(() => {

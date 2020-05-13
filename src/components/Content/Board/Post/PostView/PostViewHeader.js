@@ -17,18 +17,18 @@ const PostViewHeader = () => {
   return (
     <>
       <BoardLink to={`/${currentBoard}`}>
-        <MarginlessH3>{boardName}</MarginlessH3>
+        <h4>{boardName}</h4>
       </BoardLink>
       <div>
         <CategoryAndTitle>
-          <NoMarginRow>
+          <Row>
             <Category>{categoryName}</Category>
             <Title>{title}</Title>
-          </NoMarginRow>
+          </Row>
         </CategoryAndTitle>
         <ProfileWrapper>
           <b>{writerName}</b>님
-          <ProfileImg src={anonymous} />
+          <img src={anonymous} alt="프로필 사진" />
         </ProfileWrapper>
       </div>
     </>
@@ -38,6 +38,9 @@ const PostViewHeader = () => {
 const CategoryAndTitle = styled.h4`
   font-size : 20px !important;
   font-weight : 500;
+  & > .row {
+    margin : 0 !important;
+  }
 `;
 
 const Title = styled(Col)`
@@ -45,8 +48,9 @@ const Title = styled(Col)`
   padding-left : 7px;
   vertical-align: bottom;
   display: inline-block;
-  max-width: 750px;
+  max-width: 900px;
   font-size : 16px !important;
+  
   @media (min-width: 992px) {
     font-size : 20px !important;
     overflow: hidden;
@@ -63,25 +67,18 @@ const Category = styled.div`
   color : blue;
 `;
 
-const MarginlessH3 = styled.h4`
-  margin : 0px;
-  font-weight: bold;
-  border-bottom : 1px solid #e6e6e6;
-  padding-bottom : 4px;
-`;
-
-const ProfileImg = styled.img`
-  height : 42px;
-  width : 42px;
-  border-radius: 6px;
-  float : right;
-`;
-
 const BoardLink = styled(Link)`
   color : black;
   text-decoration : none;
   margin-bottom : 15px;
   display : block;
+  
+  & > h4 {
+    margin : 0px;
+    font-weight: bold;
+    border-bottom : 1px solid #e6e6e6;
+    padding-bottom : 4px;
+  }
   
   &:hover {
     color : black;
@@ -91,10 +88,12 @@ const BoardLink = styled(Link)`
 
 const ProfileWrapper = styled.div`
   height : 42px;
-`;
-
-const NoMarginRow = styled(Row)`
-  margin : 0px !important; 
+  & > img {
+    height : 42px;
+    width : 42px;
+    border-radius: 6px;
+    float : right;
+  }
 `;
 
 export default PostViewHeader;

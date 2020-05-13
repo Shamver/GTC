@@ -13,11 +13,11 @@ const PostVote = () => {
     <VoteWrapper>
       <Button outline color="success" onClick={() => recommendPost(id, 'R01')}>
         <FontAwesomeIcon icon={faThumbsUp} />
-        &nbsp;추천 {recommendCount}
+        추천 {recommendCount}
       </Button>
       <Button outline color="primary" onClick={() => recommendPost(id, 'R02')}>
         <FontAwesomeIcon icon={faThumbsDown} />
-        &nbsp;비추천 {notRecommendCount}
+        비추천 {notRecommendCount}
       </Button>
     </VoteWrapper>
   );
@@ -32,6 +32,10 @@ const VoteWrapper = styled.div`
   
   & > button {
     font-size : 14px;
+  }
+  
+  & > button > svg {
+    margin-right : 5px;
   }
 `;
 

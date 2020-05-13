@@ -1,13 +1,20 @@
 import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import ReplyForm from '../../Reply/ReplyForm';
 import BoardContent from '../../BoardContent';
 import BoardFooter from '../../BoardFooter';
 import useStores from '../../../../../stores/useStores';
-import styled from "styled-components";
-import {Link} from "react-router-dom";
 
 const PostViewFooter = ({ match }) => {
-  const { BoardStore } = useStores();
+  const { BoardStore, BoardPostStore } = useStores();
+  const { currentPostUpperLower } = BoardPostStore;
+  const { currentBoard } = BoardStore;
+
+  const { upper, lower } = currentPostUpperLower;
+  const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
+  const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
+
   return (
     <>
       <ReplyForm match={match} />

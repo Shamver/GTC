@@ -3,11 +3,7 @@ import {
   faBellSlash, faClock, faEye, faStar as farStar,
 } from '@fortawesome/free-regular-svg-icons';
 import {
-  faBars,
-  faCommentDots,
-  faHeart,
-  faPen, faStar as fasStar,
-  faTrash,
+  faBars, faCommentDots, faHeart, faStar as fasStar,
 } from '@fortawesome/free-solid-svg-icons';
 import renderHTML from 'react-render-html';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -16,21 +12,21 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import useStores from '../../../../../../stores/useStores';
 import PostVote from './PostVote';
+import PostOption from './PostOption';
 
 const PostViewContent = () => {
   const {
     BoardStore, BoardPostStore, BoardReplyStore, BoardReportStore,
-    UtilAlertStore, UserFavoriteStore,
+    UserFavoriteStore,
   } = useStores();
   const { currentBoard } = BoardStore;
-  const { postView, deletePost } = BoardPostStore;
+  const { postView } = BoardPostStore;
   const { postReplyList } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
-  const { toggleConfirmAlert } = UtilAlertStore;
-  const { addFavorite, deleteFavorite } = UserFavoriteStore;
+  const { judgeFavorite } = UserFavoriteStore;
 
   const {
-    id: postId, title, writerName, date, viewCnt, content,
+    id, title, writerName, date, viewCnt, content,
     recommendCount, isFavorite, isMyPost,
   } = postView;
   return (
@@ -55,49 +51,20 @@ const PostViewContent = () => {
               <FontAwesomeIcon icon={faBars} /> 목록
             </GreyButton>
           </StylessLink>
-          <Button outline color="danger" size="sm" onClick={() => toggleReport(postId, 'RP01', title, writerName)}>
+          <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'RP01', title, writerName)}>
             <FontAwesomeIcon icon={faBellSlash} /> 신고
           </Button>
-          { isMyPost
-            ? (
-              <>
-                <RightSpan>
-                  <GreyButton color="secondary" size="sm" outline onClick={() => toggleConfirmAlert('해당 포스트를 삭제하시겠습니까?', () => deletePost(postId))}>
-                    <FontAwesomeIcon icon={faTrash} /> 삭제
-                  </GreyButton>
-                </RightSpan>
-                <RightSpan>
-                  <Link to={`/${currentBoard}/modify/${postId}`}>
-                    <GreyButton color="secondary" size="sm" outline>
-                      <FontAwesomeIcon icon={faPen} /> 수정
-                    </GreyButton>
-                  </Link>
-                </RightSpan>
-              </>
-            )
-            : ''}
           <RightSpan>
-            <GreyButton
-              outline={!isFavorite}
-              color="secondary"
-              size="sm"
-              onClick={() => {
-                if (isFavorite) {
-                  deleteFavorite(postId);
-                } else {
-                  addFavorite(postId);
-                }
-              }}
-            >
+            <GreyButton outline={!isFavorite} color="secondary" size="sm" onClick={() => judgeFavorite(isFavorite, id)}>
               <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} /> 즐겨찾기
             </GreyButton>
+            { !!isMyPost && <PostOption />}
           </RightSpan>
         </ContentFooter>
       </ContentWrapper>
     </>
   );
 };
-
 
 const GreyButton = styled(Button)`
   background-color : white !important;
@@ -112,7 +79,7 @@ const GreyButton = styled(Button)`
 const StylessLink = styled(Link)`
   color : #6c757d;
   text-decoration : none;
-  
+  margin-right : 5px;
   &:hover {
     color : white;
     text-decoration : none;
@@ -149,7 +116,6 @@ const ContentWrapper = styled.div`
 const RightSpan = styled.span`
   margin-left : 5px;
   float : right;
-  
   & > svg {
     margin-left : 5px;
   }

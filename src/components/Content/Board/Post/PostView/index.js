@@ -6,6 +6,7 @@ import useStores from '../../../../../stores/useStores';
 import Loading from '../../../../util/Loading';
 import PostViewHeader from './PostViewHeader';
 import PostViewContent from './PostViewContent';
+import PostViewFooter from './PostViewFooter';
 
 const PostView = ({ match }) => {
   const {
@@ -36,6 +37,7 @@ const PostView = ({ match }) => {
         <ViewWrapper>
           <PostViewHeader />
           <PostViewContent />
+          <PostViewFooter match={match} />
         </ViewWrapper>
       </PostWrapper>
     </>
