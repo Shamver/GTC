@@ -13,7 +13,9 @@ class UtilStore {
 
   @observable profileData = {};
 
-  @observable profilePostData;
+  @observable profilePostData = [];
+
+  @observable profileCommentData = [];
 
   constructor(root) {
     this.root = root;
@@ -53,22 +55,20 @@ class UtilStore {
     this.profileToggle = !this.profileToggle;
 
     axios.get(`/api/user/profile/${writerId}`, { params : {writerId} })
-        .then((response) => {
-          const { data } = response;
+      .then((response) => {
+        const { data } = response;
 
-          if (data.SUCCESS) {
+        if (data.SUCCESS) {
             if (data.CODE === 1) {
-              console.log(data.DATA)
               this.profileData = data.DATA;
             } else {
               console.log(data.MESSAGE);
             }
-          } else {
-            console.log(data.MESSAGE);
-          }
-        })
-        .catch((response) => { console.log(response); });
-
+        } else {
+          console.log(data.MESSAGE);
+        }
+      })
+      .catch((response) => { console.log(response); });
 
     axios.get(`/api/user/profile/${writerId}/post`, { params : {writerId} })
       .then((response) => {
@@ -76,9 +76,7 @@ class UtilStore {
 
         if (data.SUCCESS) {
           if (data.CODE === 1) {
-            console.log(data.DATA)
             this.profilePostData = data.DATA;
-            console.log(this.profilePostData)
           } else {
             console.log(data.MESSAGE);
           }
@@ -87,6 +85,22 @@ class UtilStore {
         }
       })
       .catch((response) => { console.log(response); });
+
+    axios.get(`/api/user/profile/${writerId}/comment`, { params : {writerId} })
+        .then((response) => {
+          const { data } = response;
+
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              this.profileCommentData = data.DATA;
+            } else {
+              console.log(data.MESSAGE);
+            }
+          } else {
+            console.log(data.MESSAGE);
+          }
+        })
+        .catch((response) => { console.log(response); });
 
     return true;
   }

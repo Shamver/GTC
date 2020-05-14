@@ -7,6 +7,8 @@ import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 import ProfileModalPostList from './ProfileModalPostList';
 import ProfileModalCommentList from './ProfileModalCommentList';
+import { faCalendarAlt, faAt, faPen, faComment } from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const ProfileModal = () => {
 
@@ -19,19 +21,27 @@ const ProfileModal = () => {
             <ModalBody>
                 <ProfileInfoBox>
                     <ProfileInfo>
-                        <ProfileInfoTitle>가입일자</ProfileInfoTitle>
+                        <ProfileInfoTitle>
+                            <FaiPink icon={faCalendarAlt} className="fa-fw" /> 가입일자
+                        </ProfileInfoTitle>
                         <ProfileInfoContents>{profileData.userCreated}</ProfileInfoContents>
                     </ProfileInfo>
                     <ProfileInfo>
-                        <ProfileInfoTitle>이메일</ProfileInfoTitle>
+                        <ProfileInfoTitle>
+                            <FaiPink icon={faAt} className="fa-fw" /> 이메일
+                        </ProfileInfoTitle>
                         <ProfileInfoContents>{profileData.userEmail}</ProfileInfoContents>
                     </ProfileInfo>
                     <ProfileInfo>
-                        <ProfileInfoTitle>작성 글</ProfileInfoTitle>
+                        <ProfileInfoTitle>
+                            <FaiPink icon={faPen} className="fa-fw" /> 작성 글
+                        </ProfileInfoTitle>
                         <ProfileInfoContents>{profileData.postCount}</ProfileInfoContents>
                     </ProfileInfo>
                     <ProfileInfo>
-                        <ProfileInfoTitle>작성 댓글</ProfileInfoTitle>
+                        <ProfileInfoTitle>
+                            <FaiPink icon={faComment} className="fa-fw" /> 작성 댓글
+                        </ProfileInfoTitle>
                         <ProfileInfoContents>{profileData.commentCount}</ProfileInfoContents>
                     </ProfileInfo>
                 </ProfileInfoBox>
@@ -53,11 +63,16 @@ const ProfileInfo = styled.div`
 
 const ProfileInfoTitle = styled.span`
   font-weight: 500;
+  font-size: 13px;
   margin: 0 5px 0 0;
 `;
 
 const ProfileInfoContents = styled.span`
   color: #cecece;
+`;
+
+const FaiPink = styled(FontAwesomeIcon)`
+  color: #f57c73;
 `;
 
 export default observer(ProfileModal);

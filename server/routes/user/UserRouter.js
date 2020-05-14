@@ -39,8 +39,17 @@ const GET_USER_POST_LIST = `
     , GTC_POST.CATEGORY_CD AS postCategory
     , GTC_POST.TITLE AS postTitle
     , DATE_FORMAT(GTC_POST.CRT_DTTM, '%Y-%m-%d') postCreated
-FROM GTC_POST
-WHERE GTC_POST.USER_ID = :USER_ID
+  FROM GTC_POST
+  WHERE GTC_POST.USER_ID = :USER_ID
+`
+const GET_USER_COMMENT_LIST = `
+  SELECT GTC_COMMENT.ID AS commentId
+    , GTC_COMMENT.COMMENT_ID AS _commentId
+    , GTC_COMMENT.POST_ID AS postCommentId
+    , GTC_COMMENT.CONTENT AS commentContent
+    , DATE_FORMAT(GTC_COMMENT.CRT_DTTM, '%Y-%m-%d') commentCreated
+  FROM GTC_COMMENT
+  WHERE GTC_COMMENT.USER_ID = :USER_ID
 `
 
 router.delete('/withdrawal', (req, res) => {
@@ -116,22 +125,43 @@ router.get('/profile/:writerId', (req, res) => {
 
 router.get('/profile/:writerId/post', (req, res) => {
     Database.execute(
-        (database) => database.query(
-            GET_USER_POST_LIST,
-            {
-                USER_ID: req.params.writerId,
-            },
+      (database) => database.query(
+        GET_USER_POST_LIST,
+          {
+            USER_ID: req.params.writerId,
+          },
         )
-            .then((rows) => {
-                res.json({
-                    SUCCESS: true,
-                    CODE: 1,
-                    MESSAGE: '유저 작성 글 조회',
-                    DATA: rows,
-                });
-            }),
+          .then((rows) => {
+            res.json({
+              SUCCESS: true,
+              CODE: 1,
+              MESSAGE: '유저 작성 글 조회',
+              DATA: rows,
+            });
+          }),
     ).then(() => {
-        info('[SELECT, GET /api/user/profile] 유저 작성 글 조회');
+      info('[SELECT, GET /api/user/profile/post] 유저 작성 글 조회');
+    });
+});
+
+router.get('/profile/:writerId/comment', (req, res) => {
+    Database.execute(
+      (database) => database.query(
+        GET_USER_COMMENT_LIST,
+          {
+            USER_ID: req.params.writerId,
+          },
+        )
+          .then((rows) => {
+            res.json({
+              SUCCESS: true,
+              CODE: 1,
+              MESSAGE: '유저 작성 댓글 조회',
+              DATA: rows,
+            });
+          }),
+    ).then(() => {
+      info('[SELECT, GET /api/user/profile/comment] 유저 작성 댓글 조회');
     });
 });
 

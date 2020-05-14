@@ -5,23 +5,20 @@ import useStores from '../../../stores/useStores';
 import ProfileModalPost from './ProfileModalPost';
 
 const ProfileModalPostList = () => {
-
-    const { UtilStore } = useStores();
-    const { profilePostData } = UtilStore;
-    // const postList =  profilePostData.map( index => (
-    //     <ProfileModalPost postData={index} key={index.postId}/>
-    // ));
-    console.log(profilePostData)
-
-    return (
-        <table>
-            <tr>
-                <th>제목</th>
-                <th>타이틀</th>
-            </tr>
-            {/*{profilePostData}*/}
-        </table>
-    );
+  const { UtilStore } = useStores();
+  const { profilePostData } = UtilStore;
+  const postList =  profilePostData.map( index => (
+    <ProfileModalPost postData={index} key={index.postId}/>
+  ));
+  return (
+    <table>
+      <tr>
+        <th>제목</th>
+        <th>타이틀</th>
+      </tr>
+      {postList}
+    </table>
+  );
 };
 
 export default observer(ProfileModalPostList);
