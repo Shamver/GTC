@@ -1,13 +1,13 @@
 import React from 'react';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import AdvertiseRow from './AdvertiseRow';
-import { observer } from 'mobx-react';
 
 const AdvertiseList = () => {
   const { EventAdvertiseStore } = useStores();
-  const { AdvertisePostList } = EventAdvertiseStore;
+  const { AdvertisePostListNow } = EventAdvertiseStore;
 
-  return AdvertisePostList.map((data) => (
+  return AdvertisePostListNow.map((data) => (
     <AdvertiseRow key={data.id} data={data} />
   ));
 };

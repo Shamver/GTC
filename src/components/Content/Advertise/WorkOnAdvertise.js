@@ -5,11 +5,11 @@ import AdvertiseList from './AdvertiseList';
 
 const WorkOnAdvertise = () => {
   const { EventAdvertiseStore } = useStores();
-  const { getAdPostList } = EventAdvertiseStore;
+  const { getAdPostListNow } = EventAdvertiseStore;
 
   useEffect(() => {
-    getAdPostList();
-  }, [getAdPostList]);
+    getAdPostListNow();
+  }, [getAdPostListNow]);
 
   return (
     <Table bordered>

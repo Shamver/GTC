@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 class AdvertiseStore {
   @observable AdvertisePostList = [];
 
+  @observable AdvertisePostListNow = [];
+
   @observable AdvertisePost = {
     message: '',
     url: '',
@@ -27,7 +29,7 @@ class AdvertiseStore {
         if (data.success) {
           if (data.code === 0) {
             toast.success(data.message);
-            this.getAdPostList();
+            this.getAdPostListNow();
           } else {
             toast.info(data.message);
           }
@@ -44,7 +46,25 @@ class AdvertiseStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 0) {
+            console.log(data.result);
             this.AdvertisePostList = data.result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => console.log(response));
+  };
+
+  @action getAdPostListNow = () => {
+    axios.get('/api/event/advertise/now')
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 0) {
+            this.AdvertisePostListNow = data.result;
           } else {
             toast.info(data.message);
           }

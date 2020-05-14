@@ -14,6 +14,16 @@ const SELECT_POST_ADVERTISE_LIST = `
   FROM GTC_POST_ADVERTISE AD
 `;
 
+const SELECT_POST_ADVERTISE_LIST_AFTER_NOW = `
+  SELECT
+      ID AS id
+      , (SELECT NAME FROM GTC_USER WHERE ID = AD.USER_ID) AS name
+      , MESSAGE AS message
+      , URL AS url
+  FROM GTC_POST_ADVERTISE AD
+  WHERE DATE_ADD(CRT_DTTM, INTERVAL HOURS HOUR) > now()
+`;
+
 const INSERT_POST_ADVERTISE = `
   INSERT INTO GTC_POST_ADVERTISE (
     ID
@@ -68,12 +78,31 @@ router.get('/', (req, res) => {
         res.json({
           success: true,
           code: 0,
-          message: '출석체크 목록 조회',
+          message: '광고 목록 조회',
           result: rows,
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/event/advertise] 현재 광고중인 목록 조회');
+    info('[SELECT, GET /api/event/advertise] 광고중인 목록 조회');
+  });
+});
+
+// 이 라우팅을 애드블락이 막음
+router.get('/now', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_POST_ADVERTISE_LIST_AFTER_NOW,
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 0,
+          message: '현재 광고중인 목록 조회',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/event/advertise/now] 현재 광고중인 목록 조회');
   });
 });
 
