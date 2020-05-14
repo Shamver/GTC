@@ -19,6 +19,25 @@ class AdvertiseStore {
 
   @action AddAdPostList = () => {
     const { userData } = this.root.UserStore;
+    const { toggleAlert } = this.root.UtilAlertStore;
+    const { totalPoint } = this.root.UserPointStore;
+
+    if (!userData) {
+      toggleAlert('로그인 후 이용 가능합니다.');
+      return;
+    }
+    if (this.AdvertisePost.message === '') {
+      toggleAlert('메시지는 공백이 될 수 없습니다.');
+      return;
+    }
+    if (parseInt(this.AdvertisePost.hours, 10) === 0 || parseInt(this.AdvertisePost.hours, 10) > 48) {
+      toggleAlert('할당 시간은 0이거나 48시간을 초과할 수 없습니다.');
+      return;
+    }
+    if (totalPoint < parseInt(this.AdvertisePost.hours, 10) * 100) {
+      toggleAlert('포인트가 충분하지 않습니다.');
+      return;
+    }
 
     axios.post('/api/event/advertise', {
       ...this.AdvertisePost,
