@@ -42,6 +42,12 @@ const INSERT_POST_ADVERTISE = `
   )
 `;
 
+const SELECT_USER_POINT_SUM = `
+  SELECT SUM(COST) AS point
+  FROM GTC_USER_POINT
+  WHERE USER_ID = :USER_ID;
+`;
+
 router.post('/', (req, res) => {
   const {
     userId, message, url, hours,
@@ -49,19 +55,38 @@ router.post('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_POST_ADVERTISE,
+      SELECT_USER_POINT_SUM,
       {
         USER_ID: userId,
-        MESSAGE: message,
-        URL: url,
-        HOURS: hours,
       },
     )
+      .then((rows) => {
+        // 테스트중 주석
+        if (rows[0].point < hours * 100) {
+          return Promise.reject();
+        }
+        return database.query(
+          INSERT_POST_ADVERTISE,
+          {
+            USER_ID: userId,
+            MESSAGE: message,
+            URL: url,
+            HOURS: hours,
+          },
+        );
+      })
       .then(() => {
         res.json({
           success: true,
           code: 0,
           message: '😊 포스팅이 성공적으로 광고 목록에 삽입되었습니다.',
+        });
+      })
+      .catch(() => {
+        res.json({
+          success: false,
+          code: 1,
+          message: '😳 포인트가 부족합니다.',
         });
       }),
   ).then(() => {
