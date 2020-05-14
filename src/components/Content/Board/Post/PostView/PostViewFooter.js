@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import ReplyForm from '../../Reply/ReplyForm';
@@ -6,33 +6,40 @@ import BoardContent from '../../BoardContent';
 import BoardFooter from '../../BoardFooter';
 import useStores from '../../../../../stores/useStores';
 
-const PostViewFooter = ({ match }) => {
+const PostViewFooter = () => {
   const { BoardStore, BoardPostStore } = useStores();
-  const { currentPostUpperLower } = BoardPostStore;
+  const { currentPostUpperLower, getPostUpperLower, postView } = BoardPostStore;
   const { currentBoard } = BoardStore;
 
   const { upper, lower } = currentPostUpperLower;
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
   const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
+  const { id } = postView;
+
+  useEffect(() => {
+    getPostUpperLower(id);
+  }, [getPostUpperLower, id]);
+  
+  console.log('PostView Footer 렌더링');
 
   return (
     <>
-      <ReplyForm match={match} />
+      <ReplyForm />
       <TopBottomWrapper>
-        { upper ? (
+        { !!upper && (
           <div>
             <TopBottomDiv>▲ 윗글</TopBottomDiv>
             <TopBottomLink to={`${upperId}`}>{upperTitle}</TopBottomLink>
             <TopBottomWriter>{upperWriter}</TopBottomWriter>
           </div>
-        ) : ''}
-        { lower ? (
+        )}
+        { !!lower && (
           <div>
             <TopBottomDiv>▼ 아랫글</TopBottomDiv>
             <TopBottomLink to={`${lowerId}`}>{lowerTitle}</TopBottomLink>
             <TopBottomWriter>{lowerWriter}</TopBottomWriter>
           </div>
-        ) : ''}
+        )}
       </TopBottomWrapper>
       <BoardContent path={currentBoard} />
       <BoardFooter path={currentBoard} />
@@ -43,7 +50,6 @@ const PostViewFooter = ({ match }) => {
 const TopBottomLink = styled(Link)`
   color : inherit !important;
   text-decoration : none;
-  
   &:hover {
     text-decoration : none !important; 
   }
@@ -52,7 +58,6 @@ const TopBottomLink = styled(Link)`
 const TopBottomWrapper = styled.div`
   margin-top : 50px;
   font-size : 14px;
-  
   & div {
     padding : 2px 0px;
   }

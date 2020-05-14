@@ -16,19 +16,20 @@ import PostOption from './PostOption';
 
 const PostViewContent = () => {
   const {
-    BoardStore, BoardPostStore, BoardReplyStore, BoardReportStore,
+    BoardPostStore, BoardReplyStore, BoardReportStore,
     UserFavoriteStore,
   } = useStores();
-  const { currentBoard } = BoardStore;
   const { postView } = BoardPostStore;
   const { postReplyList } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
   const { judgeFavorite } = UserFavoriteStore;
 
   const {
-    id, title, writerName, date, viewCnt, content,
+    id, title, writerName, board, date,
+    viewCnt, content,
     recommendCount, isFavorite, isMyPost,
   } = postView;
+  console.log('PostView Content 렌더링');
   return (
     <>
       <NavLine />
@@ -46,7 +47,7 @@ const PostViewContent = () => {
           <PostVote />
         </ContentMain>
         <ContentFooter>
-          <StylessLink to={`/${currentBoard}`}>
+          <StylessLink to={`/${board}`}>
             <GreyButton outline color="secondary" size="sm">
               <FontAwesomeIcon icon={faBars} /> 목록
             </GreyButton>

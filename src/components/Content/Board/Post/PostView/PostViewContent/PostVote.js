@@ -25,13 +25,12 @@ const PostVote = () => {
 
 const VoteWrapper = styled.div`
   text-align : center;
+  & > button {
+    font-size : 14px;
+  }
   
   & > button:last-child {
     margin-left : 5px;
-  }
-  
-  & > button {
-    font-size : 14px;
   }
   
   & > button > svg {

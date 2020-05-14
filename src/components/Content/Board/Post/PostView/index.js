@@ -9,26 +9,18 @@ import PostViewContent from './PostViewContent';
 import PostViewFooter from './PostViewFooter';
 
 const PostView = ({ match }) => {
-  const {
-    BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore,
-  } = useStores();
-  const { getPost, getPostUpperLower } = BoardPostStore;
-  const { setReplyBpId } = BoardReplyStore;
-  const { setCurrentBoardToId } = BoardStore;
+  const { BoardPostStore, UtilLoadingStore } = useStores();
+  const { getPost } = BoardPostStore;
   const { loading, doLoading } = UtilLoadingStore;
   const { params } = match;
   const { id } = params;
 
   useEffect(() => {
     doLoading();
-    setCurrentBoardToId(id);
     getPost(id);
-    getPostUpperLower(id);
-    setReplyBpId(id);
-  }, [
-    getPost, setReplyBpId, id, setCurrentBoardToId, getPostUpperLower,
-    doLoading,
-  ]);
+  }, [getPost]);
+
+  console.log('PostView 렌더링');
 
   return (
     <>
@@ -37,7 +29,7 @@ const PostView = ({ match }) => {
         <ViewWrapper>
           <PostViewHeader />
           <PostViewContent />
-          <PostViewFooter match={match} />
+          <PostViewFooter />
         </ViewWrapper>
       </PostWrapper>
     </>

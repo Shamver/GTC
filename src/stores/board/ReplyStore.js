@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 class ReplyStore {
   @observable reply = {
     text: '',
-    bpId: '',
     secretFl: 0,
   };
 

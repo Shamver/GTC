@@ -12,11 +12,11 @@ import useStores from '../../../stores/useStores';
 const Board = ({ path, currentPage, noPagination }) => {
   const { UtilLoadingStore, BoardPostStore } = useStores();
   const { doLoading } = UtilLoadingStore;
-  const { setCurrentPostId } = BoardPostStore;
+  const { setClearPostView } = BoardPostStore;
 
   useEffect(() => {
-    setCurrentPostId(0);
-  }, [setCurrentPostId]);
+    setClearPostView();
+  }, [setClearPostView]);
 
   doLoading();
   return (

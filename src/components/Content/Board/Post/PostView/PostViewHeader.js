@@ -6,17 +6,16 @@ import useStores from '../../../../../stores/useStores';
 import anonymous from '../../../../../resources/images/anonymous.png';
 
 const PostViewHeader = () => {
-  const { BoardStore, BoardPostStore } = useStores();
-  const { currentBoard } = BoardStore;
+  const { BoardPostStore } = useStores();
   const { postView } = BoardPostStore;
-
   const {
-    boardName, categoryName, writerName, title,
+    board, boardName, categoryName, writerName, title,
   } = postView;
 
+  console.log('PostViewHeader 렌더링');
   return (
     <>
-      <BoardLink to={`/${currentBoard}`}>
+      <BoardLink to={`/${board}`}>
         <h4>{boardName}</h4>
       </BoardLink>
       <div>
