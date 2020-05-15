@@ -34,13 +34,14 @@ const GET_USER_PROFILE = `
 `;
 
 const GET_USER_POST_LIST = `
-  SELECT GTC_POST.ID AS postId
-    , GTC_POST.BOARD_CD AS postCd
-    , GTC_POST.CATEGORY_CD AS postCategory
-    , GTC_POST.TITLE AS postTitle
-    , DATE_FORMAT(GTC_POST.CRT_DTTM, '%Y-%m-%d') postCreated
-  FROM GTC_POST
-  WHERE GTC_POST.USER_ID = :USER_ID
+  SELECT A.ID AS postId
+    , A.BOARD_CD AS postCd
+    , A.CATEGORY_CD AS postCategory
+    , A.TITLE AS postTitle
+    , DATE_FORMAT(A.CRT_DTTM, '%Y-%m-%d') postCreated
+    , (SELECT COUNT(GTC_COMMENT.ID) FROM GTC_COMMENT WHERE GTC_COMMENT.POST_ID = A.ID) AS postCommentCount
+  FROM GTC_POST A
+  WHERE A.USER_ID = :USER_ID
 `
 const GET_USER_COMMENT_LIST = `
   SELECT GTC_COMMENT.ID AS commentId
