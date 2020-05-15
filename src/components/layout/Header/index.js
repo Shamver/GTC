@@ -17,11 +17,12 @@ import useStores from '../../../stores/useStores';
 import HeaderInProfile from './HeaderInProfile';
 import HeaderFavoriteItem from './HeaderFavoriteItem';
 import HeaderLatelyItem from './HeaderLatelyItem';
+import HeaderNoticeView from './HeaderNoticeView';
 
 const Header = () => {
   const {
     ComponentHeaderStore, UserFavoriteStore, UserStore, CookieLatelyStore,
-    BoardSearchStore, UtilStore,
+    BoardSearchStore, UtilStore, EventAdvertiseStore,
   } = useStores();
   const {
     onActive, dropdown, searchOpen, openSearch,
@@ -33,13 +34,15 @@ const Header = () => {
     onChange, searchText, onSubmit, search,
   } = BoardSearchStore;
   const { onSetSidebarOpen } = UtilStore;
+  const { getAdPostListNow } = EventAdvertiseStore;
 
   useEffect(() => {
     if (userData) {
       getFavorite();
     }
+    getAdPostListNow();
     getLately();
-  }, [getFavorite, getLately, userData]);
+  }, [getFavorite, getLately, userData, getAdPostListNow]);
 
   const FavoriteData = favoriteList.length === 0
     ? (<DropdownItem30 disabled>즐겨찾기한 게시물이 없습니다.</DropdownItem30>)
@@ -125,10 +128,7 @@ const Header = () => {
             </ColNoP>
             <ColCenter xs="7">
               <TextContainer>
-                <Badge color="danger">공지사항</Badge>
-                &nbsp;
-                최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
-                최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
+                <HeaderNoticeView />
               </TextContainer>
             </ColCenter>
             <ColNoP>

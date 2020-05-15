@@ -1,15 +1,10 @@
 import React, { useEffect } from 'react';
 import { Table } from 'reactstrap';
-import useStores from '../../../stores/useStores';
 import AdvertiseList from './AdvertiseList';
 
 const WorkOnAdvertise = () => {
-  const { EventAdvertiseStore } = useStores();
-  const { getAdPostListNow } = EventAdvertiseStore;
-
   useEffect(() => {
-    getAdPostListNow();
-  }, [getAdPostListNow]);
+  }, []);
 
   return (
     <Table bordered>

@@ -10,6 +10,10 @@ class HeaderStore {
     login: false,
   };
 
+  @observable showingHeader = null;
+
+  @observable showIndex = 0;
+
   @observable searchOpen = false;
 
   constructor(root) {
@@ -18,9 +22,7 @@ class HeaderStore {
 
   @action openSearch = () => {
     this.searchOpen = !this.searchOpen;
-  }
-
-  @action
+  };
 
   @action onActive = (dropdown) => {
     if (this.dropdown[dropdown]) {
@@ -36,6 +38,19 @@ class HeaderStore {
       key = keyList[i];
       if (key === dropdown) {
         this.dropdown[dropdown] = true;
+      }
+    }
+  };
+
+  @action doCycleAds = () => {
+    const { AdvertisePostListNow } = this.root.EventAdvertiseStore;
+
+    if (AdvertisePostListNow.length !== 0) {
+      this.showingHeader = AdvertisePostListNow[this.showIndex];
+      if (AdvertisePostListNow[this.showIndex + 1]) {
+        this.showIndex += 1;
+      } else {
+        this.showIndex = 0;
       }
     }
   };
