@@ -14,18 +14,11 @@ const PostView = ({ match }) => {
   const { loading, doLoading } = UtilLoadingStore;
   const { params } = match;
   const { id } = params;
-
-  useEffect(() => {
-    doLoading();
-    getPost(id);
-  }, [getPost]);
-
-  console.log('PostView 렌더링');
+  getPost(id);
 
   return (
     <>
-      <Loading loading={loading} />
-      <PostWrapper loading={loading}>
+      <PostWrapper>
         <ViewWrapper>
           <PostViewHeader />
           <PostViewContent />

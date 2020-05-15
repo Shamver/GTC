@@ -15,7 +15,7 @@ const Report = lazy(() => import('../util/Report'));
 
 const Content = () => (
   <BorderedDiv>
-    <Suspense fallback={<Loading loading={1} />}>
+    <Suspense fallback={<Loading />}>
       <ScrollToTop />
       <Switch>
         <Route exact path="/" render={() => <Home />} />

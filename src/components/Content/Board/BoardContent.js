@@ -15,9 +15,6 @@ const BoardContent = ({ path, currentPage }) => {
   const { UtilLoadingStore } = useStores();
   const { loading, doLoading } = UtilLoadingStore;
 
-  useEffect(() => {
-    doLoading();
-  }, [doLoading]);
 
   const tempData = {
     id: 1,
@@ -32,8 +29,7 @@ const BoardContent = ({ path, currentPage }) => {
 
   return (
     <>
-      <Loading loading={loading} />
-      <Div loading={loading}>
+      <Div>
         <HeaderDiv>
           <NavLink activeClassName="active" to={`/${path}`}>
             <FontAwesomeIcon icon={faHome} />

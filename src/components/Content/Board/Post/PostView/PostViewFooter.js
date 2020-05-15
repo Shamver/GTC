@@ -15,13 +15,11 @@ const PostViewFooter = () => {
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
   const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
   const { id } = postView;
-
   useEffect(() => {
     getPostUpperLower(id);
   }, [getPostUpperLower, id]);
-  
-  console.log('PostView Footer 렌더링');
 
+  console.log('PostViewFooter 하이!');
   return (
     <>
       <ReplyForm />

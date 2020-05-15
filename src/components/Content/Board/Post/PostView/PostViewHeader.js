@@ -12,7 +12,6 @@ const PostViewHeader = () => {
     board, boardName, categoryName, writerName, title,
   } = postView;
 
-  console.log('PostViewHeader 렌더링');
   return (
     <>
       <BoardLink to={`/${board}`}>
@@ -59,7 +58,7 @@ const Title = styled(Col)`
 `;
 
 const Category = styled.div`
-  height : 20px;
+  height : 20px; 
   border-right : 1px dotted gray;
   padding-right : 7px;
   margin-right : 7px;

@@ -8,11 +8,11 @@ import ReplyList from './ReplyList';
 import ReplyEdit from './ReplyEdit';
 
 const ReplyForm = () => {
-  const { BoardReplyStore } = useStores();
-  const {
-    replyEditId, postReplyList, modifyModeId, CurrentReplyOption,
-  } = BoardReplyStore;
-  const { commentAllowFl } = CurrentReplyOption;
+  const { BoardReplyStore, BoardPostStore } = useStores();
+  const { replyEditId, postReplyList, modifyModeId } = BoardReplyStore;
+  const { postView } = BoardPostStore;
+  const { commentAllowFl } = postView;
+
   return (
     <>
       <ReplyHeader>

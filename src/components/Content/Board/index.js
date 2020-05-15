@@ -18,7 +18,7 @@ const Board = ({ path, currentPage, noPagination }) => {
     setClearPostView();
   }, [setClearPostView]);
 
-  doLoading();
+
   return (
     <BoardWrapper>
       <TableWrapper>

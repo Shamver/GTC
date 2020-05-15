@@ -29,7 +29,6 @@ const PostViewContent = () => {
     viewCnt, content,
     recommendCount, isFavorite, isMyPost,
   } = postView;
-  console.log('PostView Content 렌더링');
   return (
     <>
       <NavLine />

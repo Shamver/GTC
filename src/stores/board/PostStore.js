@@ -36,7 +36,9 @@ class PostStore {
 
   @observable currentBoardMaxPage = 0;
 
-  @observable postView = {};
+  @observable postView = {
+    id: 0,
+  };
 
   @observable postMineList = [];
 
