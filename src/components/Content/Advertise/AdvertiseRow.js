@@ -7,9 +7,15 @@ const AdvertiseRow = ({ data }) => (
   <tr>
     <BoldTd>{data.name}</BoldTd>
     <td>
-      <Link to={data.url}>
-        {data.message}
-      </Link>
+      {data.url ? (
+        <Link to={data.url}>
+          {data.message}
+        </Link>
+      ) : (
+        <span>
+          {data.message}
+        </span>
+      )}
     </td>
   </tr>
 );
