@@ -4,13 +4,14 @@ import {
     Modal, ModalHeader, ModalBody, TabContent,
     TabPane, Nav, NavItem, NavLink, Row, Col
 } from 'reactstrap';
+import { faCalendarAlt, faAt, faPen, faComment } from "@fortawesome/free-solid-svg-icons";
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
-import ProfileModalPostList from './ProfileModalPostList';
-import ProfileModalCommentList from './ProfileModalCommentList';
-import { faCalendarAlt, faAt, faPen, faComment } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import classnames from 'classnames';
+
+import ProfileModalPostList from './ProfileModalPostList';
+import ProfileModalCommentList from './ProfileModalCommentList';
 
 const ProfileModal = () => {
 
@@ -25,7 +26,7 @@ const ProfileModal = () => {
     return (
         <Modal isOpen={profileToggle} toggle={toggleProfile}>
             <ModalHeaderBack toggle={toggleProfile}><b>{profileData.nickname}님의 프로필</b></ModalHeaderBack>
-            <ModalBody>
+            <ModalBodyBox>
                 <ProfileInfoBox>
                     <ProfileInfo>
                         <ProfileInfoTitle>
@@ -56,12 +57,14 @@ const ProfileModal = () => {
                 <div>
                     <Nav tabs>
                         <NavItem>
-                            <NavLink className={classnames({ active: activeTab === '1' })} onClick={() => { toggle('1'); }} >
+                            <NavItemTitle className={classnames({ active: activeTab === '1' })} onClick={() => { toggle('1'); }} >
                                 작성글
-                            </NavLink>
-                            <NavLink className={classnames({ active: activeTab === '2' })} onClick={() => { toggle('2'); }} >
+                            </NavItemTitle>
+                        </NavItem>
+                        <NavItem>
+                            <NavItemTitle className={classnames({ active: activeTab === '2' })} onClick={() => { toggle('2'); }} >
                                 작성 댓글
-                            </NavLink>
+                            </NavItemTitle>
                         </NavItem>
                     </Nav>
                     <TabContent activeTab={activeTab}>
@@ -81,7 +84,7 @@ const ProfileModal = () => {
                         </TabPane>
                     </TabContent>
                 </div>
-            </ModalBody>
+            </ModalBodyBox>
         </Modal>
     );
 };
@@ -89,27 +92,36 @@ const ModalHeaderBack = styled(ModalHeader)`
   border-bottom: 4px solid #DC3545 !important;
 `;
 
+const ModalBodyBox = styled(ModalBody)`
+  padding: 5px !important;
+`
+
 const ProfileInfoBox = styled.div`
   padding: 5px;
 `;
 
 const ProfileInfo = styled.div`
   display: flex;
+  align-items: center;
   margin: 4px 0;
 `;
 
 const ProfileInfoTitle = styled.span`
   font-weight: 500;
   font-size: 13px;
-  margin: 0 5px 0 0;
+  margin: 0 8px 0 0;
 `;
 
 const ProfileInfoContents = styled.span`
-  color: #cecece;
+  font-size: 13px;
 `;
 
 const FaiPink = styled(FontAwesomeIcon)`
   color: #f57c73;
 `;
 
+const NavItemTitle = styled(NavLink)`
+  font-size: 13px;
+  cursor: pointer;
+`
 export default observer(ProfileModal);
