@@ -17,7 +17,7 @@ const Post = ({ data, index }) => {
       <CenterTd width="40">
         {currentPostId === id ? (<BlockIcon icon={faAngleDoubleRight} />) : (
           <>
-            {recommendCount ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : null}
+            {!!recommendCount && <LikeCountSpan>{recommendCount}</LikeCountSpan>}
           </>
         )}
       </CenterTd>

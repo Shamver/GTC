@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 import ReplyForm from '../../Reply/ReplyForm';
 import BoardContent from '../../BoardContent';
 import BoardFooter from '../../BoardFooter';
@@ -15,11 +16,9 @@ const PostViewFooter = () => {
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
   const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
   const { id } = postView;
-  useEffect(() => {
-    getPostUpperLower(id);
-  }, [getPostUpperLower, id]);
 
-  console.log('PostViewFooter 하이!');
+  console.log("PostViewFooter 렌더링");
+
   return (
     <>
       <ReplyForm />
@@ -77,4 +76,4 @@ const TopBottomDiv = styled.div`
   font-weight : bold;
 `;
 
-export default PostViewFooter;
+export default observer(PostViewFooter);

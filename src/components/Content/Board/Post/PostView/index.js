@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
-import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import useStores from '../../../../../stores/useStores';
-import Loading from '../../../../util/Loading';
 import PostViewHeader from './PostViewHeader';
 import PostViewContent from './PostViewContent';
 import PostViewFooter from './PostViewFooter';
 
 const PostView = ({ match }) => {
-  const { BoardPostStore, UtilLoadingStore } = useStores();
+  const { BoardPostStore } = useStores();
   const { getPost } = BoardPostStore;
-  const { loading, doLoading } = UtilLoadingStore;
   const { params } = match;
   const { id } = params;
+
   getPost(id);
+  alert("index 렌더링");
+
 
   return (
     <>
@@ -63,4 +63,4 @@ const PostWrapper = styled.div`
   }
 `;
 
-export default observer(PostView);
+export default PostView;

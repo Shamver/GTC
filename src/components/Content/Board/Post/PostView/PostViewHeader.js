@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Col, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 import anonymous from '../../../../../resources/images/anonymous.png';
 
@@ -12,9 +13,13 @@ const PostViewHeader = () => {
     board, boardName, categoryName, writerName, title,
   } = postView;
 
+  let link = '';
+  if (board) {
+    link = board.toLowerCase();
+  }
   return (
     <>
-      <BoardLink to={`/${board}`}>
+      <BoardLink to={`/${link}`}>
         <h4>{boardName}</h4>
       </BoardLink>
       <div>
@@ -94,4 +99,4 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-export default PostViewHeader;
+export default observer(PostViewHeader);
