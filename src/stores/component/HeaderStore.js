@@ -10,9 +10,10 @@ class HeaderStore {
     login: false,
   };
 
-  @observable showingHeader = null;
-
   @observable showIndex = 0;
+
+  // 0: 공지사항, 1: 광고
+  @observable showMode = 0;
 
   @observable searchOpen = false;
 
@@ -42,17 +43,22 @@ class HeaderStore {
     }
   };
 
-  @action doCycleAds = () => {
+  @action doCycleAds = () => setInterval(() => {
+    // 5초마다 싸이클로 돌리기
+    console.log(this.showIndex);
     const { AdvertisePostListNow } = this.root.EventAdvertiseStore;
-
-    console.log(123);
-
+    console.log(AdvertisePostListNow);
+    console.log(AdvertisePostListNow.length);
     if (AdvertisePostListNow.length !== 0) {
+      console.log(AdvertisePostListNow.length);
+      this.showMode = 1;
       this.showingHeader = AdvertisePostListNow[this.showIndex];
-      if (AdvertisePostListNow[this.showIndex + 1]) {
+      console.log(AdvertisePostListNow[this.showIndex]);
+      if (this.showIndex < AdvertisePostListNow.length) {
         this.showIndex += 1;
       } else {
         this.showIndex = 0;
+        this.showMode = 0;
       }
     } else {
       if (this.showingHeader !== null) {
@@ -60,7 +66,7 @@ class HeaderStore {
       }
       return false;
     }
-  };
+  }, 5000);
 
   @action dropdownClear = () => {
     this.dropdown = {

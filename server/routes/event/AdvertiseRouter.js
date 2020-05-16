@@ -154,6 +154,9 @@ router.get('/now', (req, res) => {
           message: '현재 광고중인 목록 조회',
           result: rows,
         });
+      })
+      .catch((err) => {
+        console.log(err);
       }),
   ).then(() => {
     info('[SELECT, GET /api/event/advertise/now] 현재 광고중인 목록 조회');
