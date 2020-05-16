@@ -45,6 +45,8 @@ class HeaderStore {
   @action doCycleAds = () => {
     const { AdvertisePostListNow } = this.root.EventAdvertiseStore;
 
+    console.log(123);
+
     if (AdvertisePostListNow.length !== 0) {
       this.showingHeader = AdvertisePostListNow[this.showIndex];
       if (AdvertisePostListNow[this.showIndex + 1]) {
@@ -52,6 +54,11 @@ class HeaderStore {
       } else {
         this.showIndex = 0;
       }
+    } else {
+      if (this.showingHeader !== null) {
+        this.showingHeader = null;
+      }
+      return false;
     }
   };
 

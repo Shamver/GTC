@@ -1,25 +1,21 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import {
   Badge,
-  DropdownItem,
 } from 'reactstrap';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useStores from '../../../stores/useStores';
 
 const HeaderNoticeView = () => {
-  const { EventAdvertiseStore, ComponentHeaderStore } = useStores();
+  const { EventAdvertiseStore } = useStores();
 
   const { AdvertisePostListNow } = EventAdvertiseStore;
-  const { doCycleAds } = ComponentHeaderStore;
 
   useEffect(() => {
-    console.log(AdvertisePostListNow);
-    setInterval(() => {
-      doCycleAds();
+    const interval = setInterval(() => {
+      // 5초마다 싸이클로 돌리기
+      console.log(1);
     }, 5000);
-  }, [AdvertisePostListNow, doCycleAds]);
+    return () => clearInterval(interval);
+  }, [AdvertisePostListNow]);
 
   return (
     <>
@@ -30,73 +26,5 @@ const HeaderNoticeView = () => {
     </>
   );
 };
-
-const DropdownItem30 = styled(DropdownItem)`
-  height : 27px;
-  line-height : 27px;
-  display : inline-block;
-  padding: 0 1.2rem !important;
-  width: 190px !important;
-  z-index: 1 !important;
-  
-  &:focus {
-    background-color: none !important;
-  }
-  
-  &:active {
-    background-color: none !important;
-  }
-`;
-
-const CustomLink = styled(Link)`
-  display : block;
-  height : 27px;
-  clear: both;
-  font-weight: 400;
-  color: #212529;
-  text-align: inherit;
-  white-space: nowrap;
-  background-color: transparent;
-  border: 0;
-  z-index: 0 !important;
-  
-  &:hover {
-    color: #212529;
-    text-decoration: none;
-    background-color: #e4e3e5;
-  }
-`;
-
-const Text = styled.span`
-  max-width: 130px;
-  line-height: 27px;
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-
-const IconSpan = styled.span`
-  display: inline-block;
-  line-height: 27px;
-  float: right;
-  cursor: pointer;
-  height: 21px;
-  width: 20px;
-  text-align: center;
-  z-index: 2 !important;
-  padding-top: 1px;
-  
-  & > * {
-    z-index: 1 !important;
-  }
-  
-  &:hover {
-    background-color: #e4e3e5;
-  }
-`;
-
-const Icon = styled(FontAwesomeIcon)`
-  color: #aaa;
-`;
 
 export default HeaderNoticeView;
