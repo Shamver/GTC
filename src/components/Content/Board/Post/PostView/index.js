@@ -12,9 +12,9 @@ const PostView = ({ match }) => {
   const { params } = match;
   const { id } = params;
 
-  getPost(id);
-  alert("index 렌더링");
-
+  useEffect(() => {
+    getPost(id);
+  }, [getPost, id]);
 
   return (
     <>

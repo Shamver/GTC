@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
@@ -6,16 +6,10 @@ import styled from 'styled-components';
 import { Table } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
-import useStores from '../../../stores/useStores';
-import Loading from '../../util/Loading';
 import PostList from './Post/PostList';
 import Post from './Post';
 
 const BoardContent = ({ path, currentPage }) => {
-  const { UtilLoadingStore } = useStores();
-  const { loading, doLoading } = UtilLoadingStore;
-
-
   const tempData = {
     id: 1,
     title: '공지 채팅창 제재 기준입니다. (2018. 10. 19)',

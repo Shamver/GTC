@@ -10,8 +10,7 @@ import BoardFooter from './BoardFooter';
 import useStores from '../../../stores/useStores';
 
 const Board = ({ path, currentPage, noPagination }) => {
-  const { UtilLoadingStore, BoardPostStore } = useStores();
-  const { doLoading } = UtilLoadingStore;
+  const { BoardPostStore } = useStores();
   const { setClearPostView } = BoardPostStore;
 
   useEffect(() => {

@@ -17,7 +17,9 @@ const PostViewFooter = () => {
   const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
   const { id } = postView;
 
-  console.log("PostViewFooter 렌더링");
+  useEffect(() => {
+    getPostUpperLower(id);
+  }, [getPostUpperLower, id]);
 
   return (
     <>
