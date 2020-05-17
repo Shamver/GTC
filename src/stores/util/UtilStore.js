@@ -53,6 +53,10 @@ class UtilStore {
     this.sidebarOpen = open;
   }
 
+  @action toggleProfile = () => {
+    this.profileToggle = !this.profileToggle;
+  }
+
   @action getProfile = (writerId) => {
     this.profileToggle = !this.profileToggle;
 

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import avatarImg from '../../../resources/images/avatar.png';
+import avatarImg from '../../../resources/images/takagi.jpg';
 import KakaoSign from './KakaoSign';
 import useStores from '../../../stores/useStores';
 

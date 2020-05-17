@@ -37,7 +37,7 @@ const TableBox = styled.div`
 const TableHeader = styled(Row)`
   font-size: 15px;
   padding: 12px 0;
-  border-bottom: 1px solid #ebebeb;
+  // border-bottom: 1px solid #ebebeb;
 `;
 
 const NoPost = styled.div`

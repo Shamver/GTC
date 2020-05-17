@@ -15,7 +15,7 @@ const ProfileModalCommentList = () => {
   return (
     <TableBox>
         <TableHeader>
-            <Col xs="9">글 내용</Col>
+            <Col xs="9">댓글 내용</Col>
             <Col xs="3">작성일</Col>
         </TableHeader>
         { commentList.length > 0
@@ -32,7 +32,7 @@ const TableBox = styled.div`
 const TableHeader = styled(Row)`
   font-size: 15px;
   padding: 12px 0;
-  border-bottom: 1px solid #ebebeb;
+  // border-bottom: 1px solid #ebebeb;
 `;
 
 const NoPost = styled.div`

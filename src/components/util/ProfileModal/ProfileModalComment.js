@@ -3,14 +3,17 @@ import {observer} from "mobx-react";
 import styled from 'styled-components';
 import {Link} from "react-router-dom";
 import {Col, Row} from "reactstrap";
+import renderHTML from "react-render-html";
 
 const ProfileModalComment = ({ commentData }) => {
   const { commentId, commentContent, commentCreated, postCommentId } = commentData;
+  const commentContentText = renderHTML(`${commentContent}`);
+
   return (
     <TableBody to={`/post/${postCommentId}`}>
         <Row>
             <ContentsBodyTitle xs="9">
-                <ContentsTitle>{commentContent}</ContentsTitle>
+                <ContentsTitle>{commentContentText}</ContentsTitle>
             </ContentsBodyTitle>
             <ContentsBodyDate xs={"3"}>{commentCreated}</ContentsBodyDate>
         </Row>

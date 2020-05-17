@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {observer} from "mobx-react";
 import {
     Modal, ModalHeader, ModalBody, TabContent,
@@ -12,6 +12,7 @@ import classnames from 'classnames';
 
 import ProfileModalPostList from './ProfileModalPostList';
 import ProfileModalCommentList from './ProfileModalCommentList';
+import avatarImg from "../../../resources/images/takagi.jpg";
 
 const ProfileModal = () => {
 
@@ -23,30 +24,35 @@ const ProfileModal = () => {
             <ModalHeaderBack toggle={toggleProfile}><b>{profileData.nickname}님의 프로필</b></ModalHeaderBack>
             <ModalBodyBox>
                 <ProfileInfoBox>
-                    <ProfileInfo>
-                        <ProfileInfoTitle>
-                            <FaiPink icon={faCalendarAlt} className="fa-fw" /> 가입일자
-                        </ProfileInfoTitle>
-                        <ProfileInfoContents>{profileData.userCreated}</ProfileInfoContents>
-                    </ProfileInfo>
-                    <ProfileInfo>
-                        <ProfileInfoTitle>
-                            <FaiPink icon={faAt} className="fa-fw" /> 이메일
-                        </ProfileInfoTitle>
-                        <ProfileInfoContents>{profileData.userEmail}</ProfileInfoContents>
-                    </ProfileInfo>
-                    <ProfileInfo>
-                        <ProfileInfoTitle>
-                            <FaiPink icon={faPen} className="fa-fw" /> 작성 글
-                        </ProfileInfoTitle>
-                        <ProfileInfoContents>{profileData.postCount}</ProfileInfoContents>
-                    </ProfileInfo>
-                    <ProfileInfo>
-                        <ProfileInfoTitle>
-                            <FaiPink icon={faComment} className="fa-fw" /> 작성 댓글
-                        </ProfileInfoTitle>
-                        <ProfileInfoContents>{profileData.commentCount}</ProfileInfoContents>
-                    </ProfileInfo>
+                    <ProfileAvatarWrap>
+                        <Avatar src={avatarImg} />
+                    </ProfileAvatarWrap>
+                    <ProfileInfoWrap>
+                        <ProfileInfo>
+                            <ProfileInfoTitle>
+                                <FaiPink icon={faCalendarAlt} className="fa-fw" /> 가입일자
+                            </ProfileInfoTitle>
+                            <ProfileInfoContents>{profileData.userCreated}</ProfileInfoContents>
+                        </ProfileInfo>
+                        <ProfileInfo>
+                            <ProfileInfoTitle>
+                                <FaiPink icon={faAt} className="fa-fw" /> 이메일
+                            </ProfileInfoTitle>
+                            <ProfileInfoContents>{profileData.userEmail}</ProfileInfoContents>
+                        </ProfileInfo>
+                        <ProfileInfo>
+                            <ProfileInfoTitle>
+                                <FaiPink icon={faPen} className="fa-fw" /> 작성 글
+                            </ProfileInfoTitle>
+                            <ProfileInfoContents>{profileData.postCount}</ProfileInfoContents>
+                        </ProfileInfo>
+                        <ProfileInfo>
+                            <ProfileInfoTitle>
+                                <FaiPink icon={faComment} className="fa-fw" /> 작성 댓글
+                            </ProfileInfoTitle>
+                            <ProfileInfoContents>{profileData.commentCount}</ProfileInfoContents>
+                        </ProfileInfo>
+                    </ProfileInfoWrap>
                 </ProfileInfoBox>
 
                 <div>
@@ -64,18 +70,10 @@ const ProfileModal = () => {
                     </Nav>
                     <TabContent activeTab={activeTab}>
                         <TabPane tabId="1">
-                            <Row>
-                                <Col sm="12">
-                                    <ProfileModalPostList />
-                                </Col>
-                            </Row>
+                          <ProfileModalPostList />
                         </TabPane>
                         <TabPane tabId="2">
-                            <Row>
-                                <Col sm="12">
-                                    <ProfileModalCommentList />
-                                </Col>
-                            </Row>
+                          <ProfileModalCommentList />
                         </TabPane>
                     </TabContent>
                 </div>
@@ -89,10 +87,23 @@ const ModalHeaderBack = styled(ModalHeader)`
 
 const ModalBodyBox = styled(ModalBody)`
   padding: 5px !important;
-`
+`;
 
 const ProfileInfoBox = styled.div`
+  display: flex;
   padding: 5px;
+`;
+
+const ProfileInfoWrap = styled.div`
+`;
+
+const ProfileAvatarWrap = styled.div`
+  margin-right: 12px;
+`;
+
+const Avatar = styled.img`
+  width : 96px;
+  border-radius: 3px;
 `;
 
 const ProfileInfo = styled.div`
