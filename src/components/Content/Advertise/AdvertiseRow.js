@@ -9,7 +9,9 @@ const AdvertiseRow = ({ data }) => (
     <td>
       {data.url ? (
         <Link to={data.url}>
-          {data.message}
+          <Span>
+            (링크) {data.message}
+          </Span>
         </Link>
       ) : (
         <span>
@@ -27,6 +29,10 @@ AdvertiseRow.propTypes = {
     url: PropTypes.string.isRequired,
   }).isRequired,
 };
+
+const Span = styled.span`
+  color: black;
+`;
 
 const BoldTd = styled.td`
   font-weight : bold;
