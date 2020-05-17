@@ -6,8 +6,9 @@ import useStores from '../../../stores/useStores';
 import { Row, Col } from 'reactstrap';
 
 import ProfileModalPost from './ProfileModalPost';
+import BoardPagination from "../../Content/Board/Pagination";
 
-const ProfileModalPostList = () => {
+const ProfileModalPostList = ({ path, currentPage, noPagination }) => {
   const { UtilStore } = useStores();
   const { profilePostData } = UtilStore;
   const postList =  profilePostData.map( index => (
@@ -25,6 +26,7 @@ const ProfileModalPostList = () => {
           ? postList
           : <NoPost>등록된 글이 없습니다.</NoPost>}
     </TableBox>
+    // <BoardPagination path={path} currentPage={currentPage} noPagination={noPagination} />
   );
 };
 

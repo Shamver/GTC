@@ -16,12 +16,7 @@ import ProfileModalCommentList from './ProfileModalCommentList';
 const ProfileModal = () => {
 
     const { UtilStore } = useStores();
-    const { profileToggle, toggleProfile, profileData } = UtilStore;
-    const [activeTab, setActiveTab] = useState('1');
-
-    const toggle = tab => {
-        if(activeTab !== tab) setActiveTab(tab);
-    }
+    const { profileToggle, toggleProfile, profileData, toggleTab, activeTab } = UtilStore;
 
     return (
         <Modal isOpen={profileToggle} toggle={toggleProfile}>
@@ -57,12 +52,12 @@ const ProfileModal = () => {
                 <div>
                     <Nav tabs>
                         <NavItem>
-                            <NavItemTitle className={classnames({ active: activeTab === '1' })} onClick={() => { toggle('1'); }} >
+                            <NavItemTitle className={classnames({ active: activeTab === '1' })} onClick={() => { toggleTab('1'); }} >
                                 작성글
                             </NavItemTitle>
                         </NavItem>
                         <NavItem>
-                            <NavItemTitle className={classnames({ active: activeTab === '2' })} onClick={() => { toggle('2'); }} >
+                            <NavItemTitle className={classnames({ active: activeTab === '2' })} onClick={() => { toggleTab('2'); }} >
                                 작성 댓글
                             </NavItemTitle>
                         </NavItem>

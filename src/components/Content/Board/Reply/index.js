@@ -17,14 +17,15 @@ import ReplyEdit from './ReplyEdit';
 const Reply = ({ data, index }) => {
   const {
     UserStore, BoardReplyStore, BoardReportStore, ComponentReplyStore,
-    UtilAlertStore, UserIgnoreStore,
+    UtilAlertStore, UserIgnoreStore, UtilStore
   } = useStores();
   const {
-    modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
+    modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId
   } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
   const { userData } = UserStore;
   const { dropdown, onActive } = ComponentReplyStore;
+  const { getProfile } = UtilStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { addIgnore } = UserIgnoreStore;
 
@@ -45,7 +46,7 @@ const Reply = ({ data, index }) => {
           <WriterDropdown isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
             <WriterDropdownToggle name={`replyIndex${index}`}> {data.writer} </WriterDropdownToggle>
             <WriterDropdownMenu>
-              <WriterDropdownItem>
+              <WriterDropdownItem onClick={ () => getProfile(data.idWriter) }>
                 프로필
               </WriterDropdownItem>
               <WriterDropdownItem>

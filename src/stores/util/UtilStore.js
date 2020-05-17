@@ -17,6 +17,8 @@ class UtilStore {
 
   @observable profileCommentData = [];
 
+  @observable activeTab = '1';
+
   constructor(root) {
     this.root = root;
   }
@@ -105,6 +107,9 @@ class UtilStore {
     return true;
   }
 
+  @action toggleTab = tab => {
+      this.activeTab = tab
+  }
 }
 
 export default UtilStore;
