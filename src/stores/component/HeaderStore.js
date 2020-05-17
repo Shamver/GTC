@@ -45,16 +45,11 @@ class HeaderStore {
 
   @action doCycleAds = () => setInterval(() => {
     // 5초마다 싸이클로 돌리기
-    console.log(this.showIndex);
     const { AdvertisePostListNow } = this.root.EventAdvertiseStore;
-    console.log(AdvertisePostListNow);
-    console.log(AdvertisePostListNow.length);
     if (AdvertisePostListNow.length !== 0) {
-      console.log(AdvertisePostListNow.length);
-      this.showMode = 1;
-      this.showingHeader = AdvertisePostListNow[this.showIndex];
-      console.log(AdvertisePostListNow[this.showIndex]);
       if (this.showIndex < AdvertisePostListNow.length) {
+        this.showMode = 1;
+        this.showingHeader = AdvertisePostListNow[this.showIndex];
         this.showIndex += 1;
       } else {
         this.showIndex = 0;
