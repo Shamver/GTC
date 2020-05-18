@@ -13,7 +13,7 @@ const ResponsiveRow = ({ data, index, path }) => {
     type, title, boardName,
   } = data;
   const { ComponentPostStore } = useStores();
-  const { onClickPost } = ComponentPostStore;
+  const { onClickPost, isVisited } = ComponentPostStore;
 
   const IsBestPost = recommendCount >= 10
     ? (<Star icon={faStar} />)
@@ -31,7 +31,7 @@ const ResponsiveRow = ({ data, index, path }) => {
       <MiddleTd width="700">
         { type === 'notice' ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}
         &nbsp;
-        <PostTitle onClick={() => onClickPost(id)}>{title}</PostTitle>
+        <PostTitle className={isVisited(id) ? 'color-gray' : ''} onClick={() => onClickPost(id)}>{title}</PostTitle>
         { commentCount > 0 ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>) : ''}
       </MiddleTd>
       <CenterTdWriter>
@@ -95,6 +95,10 @@ const CenterTdWriter = styled(CenterTd)`
 const PostTitle = styled.a`
   cursor: pointer
   color : black;
+  
+  &.color-gray {
+    color: #b0b0b0 !important;
+  }
   
   &:hover {
     text-decoration: none;

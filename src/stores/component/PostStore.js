@@ -47,6 +47,12 @@ class PostStore {
     }
     history.push(`/post/${id}`);
   };
+
+  @action isVisited = (id) => {
+    const visited = localStorage.getItem('visited');
+    const visitedArray = visited ? visited.split('|') : [];
+    return visitedArray.includes(id.toString());
+  }
 }
 
 export default PostStore;
