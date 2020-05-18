@@ -3,15 +3,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faStar } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import WriterDropdown from './WriterDropdown';
+import useStores from '../../../../../stores/useStores';
 
 const ResponsiveRow = ({ data, index, path }) => {
   const {
     id, recommendCount, categoryName, commentCount,
     type, title, boardName,
   } = data;
+  const { ComponentPostStore } = useStores();
+  const { onClickPost } = ComponentPostStore;
 
   const IsBestPost = recommendCount >= 10
     ? (<Star icon={faStar} />)
@@ -29,7 +31,7 @@ const ResponsiveRow = ({ data, index, path }) => {
       <MiddleTd width="700">
         { type === 'notice' ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}
         &nbsp;
-        <PostTitle to={`/post/${id}`}>{title}</PostTitle>
+        <PostTitle onClick={() => onClickPost(id)}>{title}</PostTitle>
         { commentCount > 0 ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>) : ''}
       </MiddleTd>
       <CenterTdWriter>
@@ -90,7 +92,7 @@ const CenterTdWriter = styled(CenterTd)`
   }
 `;
 
-const PostTitle = styled(Link)`
+const PostTitle = styled.a`
   cursor: pointer
   color : black;
   

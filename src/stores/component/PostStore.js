@@ -35,7 +35,18 @@ class PostStore {
       ...this.dropdown,
       [id]: false,
     };
-  }
+  };
+
+  @action onClickPost = (id) => {
+    const { history } = this.root.UtilRouteStore;
+    const visited = localStorage.getItem('visited');
+    const visitedArray = visited ? visited.split('|') : [];
+    if (!visitedArray.includes(id.toString())) {
+      const inputId = visited ? `${visited}|${id}` : id;
+      localStorage.setItem('visited', inputId);
+    }
+    history.push(`/post/${id}`);
+  };
 }
 
 export default PostStore;
