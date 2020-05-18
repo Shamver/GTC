@@ -1,18 +1,32 @@
 import { observable, action } from 'mobx';
 
 class LoadingStore {
-  @observable loading = 1;
+  @observable loading;
 
   constructor(root) {
     this.root = root;
   }
 
   @action doLoading = () => {
-    this.loading = 1;
+    this.loading = true;
+    console.log('로딩 시작!');
     setTimeout(() => {
-      this.loading = 0;
-    }, 500);
+      this.loading = false;
+      console.log('로딩 끝!');
+    }, 0);
   };
+
+  @action startLoading = () => {
+    console.log('로딩 시작');
+    this.loading = true;
+  }
+
+  @action stopLoading = () => {
+    setTimeout(() => {
+      console.log('로딩 끝!');
+      this.loading = false;
+    }, 1);
+  }
 }
 
 export default LoadingStore;

@@ -7,13 +7,16 @@ import PostViewContent from './PostViewContent';
 import PostViewFooter from './PostViewFooter';
 
 const PostView = ({ match }) => {
-  const { BoardPostStore } = useStores();
+  const { BoardPostStore, UtilLoadingStore } = useStores();
   const { getPost } = BoardPostStore;
+  const { startLoading, stopLoading } = UtilLoadingStore;
   const { params } = match;
   const { id } = params;
 
   useEffect(() => {
-    getPost(id);
+    for(;;) {
+      alert('ㅎㅇ');
+    }
   }, [getPost, id]);
 
   return (
