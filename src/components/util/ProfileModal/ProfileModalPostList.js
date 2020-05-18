@@ -1,14 +1,14 @@
 import React from 'react';
-import {observer} from "mobx-react";
+import {observer} from 'mobx-react';
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 
 import { Row, Col } from 'reactstrap';
 
 import ProfileModalPost from './ProfileModalPost';
-import BoardPagination from "../../Content/Board/Pagination";
+import ProfilePaginationList from './ProfilePageNation';
 
-const ProfileModalPostList = ({ path, currentPage, noPagination }) => {
+const ProfileModalPostList = ( {postCount} ) => {
   const { UtilStore } = useStores();
   const { profilePostData } = UtilStore;
   const postList =  profilePostData.map( index => (
@@ -16,17 +16,19 @@ const ProfileModalPostList = ({ path, currentPage, noPagination }) => {
   ));
 
   return (
-    <TableBox>
-      <TableHeader>
-        <Col xs="9">제목</Col>
-        <Col xs="3">작성일</Col>
-      </TableHeader>
+    <>
+      <TableBox>
+        <TableHeader>
+          <Col xs="9">제목</Col>
+          <Col xs="3">작성일</Col>
+        </TableHeader>
 
-      { postList.length > 0
+        { postList.length > 0
           ? postList
           : <NoPost>등록된 글이 없습니다.</NoPost>}
-    </TableBox>
-    // <BoardPagination path={path} currentPage={currentPage} noPagination={noPagination} />
+      </TableBox>
+      <ProfilePaginationList rows={postCount}/>
+    </>
   );
 };
 

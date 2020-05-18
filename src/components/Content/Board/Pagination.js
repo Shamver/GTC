@@ -7,7 +7,6 @@ import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const PaginationList = observer(({ path, currentPage, noPagination }) => {
-  console.log(path)
   const { BoardPostStore } = useStores();
   const { currentBoardMaxPage } = BoardPostStore;
 

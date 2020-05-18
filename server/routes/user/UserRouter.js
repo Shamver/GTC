@@ -136,7 +136,7 @@ router.get('/profile/:writerId', (req, res) => {
   });
 });
 
-router.get('/profile/:writerId/post', (req, res) => {
+router.get('/profile/:writerId/post/:currentPageNum', (req, res) => {
     Database.execute(
       (database) => database.query(
         GET_USER_POST_LIST,

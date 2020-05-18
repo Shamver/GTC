@@ -19,6 +19,8 @@ class UtilStore {
 
   @observable activeTab = '1';
 
+  @observable currentPage = 1;
+
   constructor(root) {
     this.root = root;
   }
@@ -59,6 +61,7 @@ class UtilStore {
 
   @action getProfile = (writerId) => {
     this.profileToggle = !this.profileToggle;
+    let currentPageNum = this.currentPage;
 
     axios.get(`/api/user/profile/${writerId}`, { params : {writerId} })
       .then((response) => {
@@ -76,7 +79,7 @@ class UtilStore {
       })
       .catch((response) => { console.log(response); });
 
-    axios.get(`/api/user/profile/${writerId}/post`, { params : {writerId} })
+    axios.get(`/api/user/profile/${writerId}/post/${currentPageNum}`, { params : { writerId, currentPageNum } })
       .then((response) => {
         const { data } = response;
 

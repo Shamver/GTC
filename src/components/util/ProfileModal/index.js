@@ -70,7 +70,7 @@ const ProfileModal = () => {
                     </Nav>
                     <TabContent activeTab={activeTab}>
                         <TabPane tabId="1">
-                          <ProfileModalPostList />
+                          <ProfileModalPostList postCount={profileData.postCount} />
                         </TabPane>
                         <TabPane tabId="2">
                           <ProfileModalCommentList />
