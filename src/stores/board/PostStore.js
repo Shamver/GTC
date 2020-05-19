@@ -196,12 +196,14 @@ class PostStore {
         if (data.SUCCESS) {
           if (data.CODE === 1) {
             const [post] = data.DATA;
+            console.log('observable 바꾸기 직전');
             this.postView = post;
+            console.log('observable 바꾸기 직후');
             getLately();
-            console.log('통신 후 작업 끝!');
-            setTimeout(() => {
-              console.log('로딩 끝!!!!!!!!');
-            },0)
+            this.postView = {
+              id: 0,
+            };
+            console.log('로딩 끝!!!!!!!!');
           } else {
             toast.info(data.MESSAGE);
           }
