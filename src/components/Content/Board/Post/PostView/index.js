@@ -8,8 +8,8 @@ import PostViewFooter from './PostViewFooter';
 
 const PostView = ({ match }) => {
   const { BoardPostStore, UtilLoadingStore } = useStores();
-  const { startLoading, stopLoading } = UtilLoadingStore;
   const { getPost } = BoardPostStore;
+  const { startLoading, stopLoading } = UtilLoadingStore;
   const { params } = match;
   const { id } = params;
   startLoading();
@@ -18,6 +18,7 @@ const PostView = ({ match }) => {
     getPost(id);
     stopLoading();
   }, [getPost, id, stopLoading]);
+
 
   return (
     <>

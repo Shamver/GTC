@@ -2,6 +2,7 @@ import React, { Suspense, lazy } from 'react';
 import { Switch, Route } from 'react-router';
 import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
+import { observer } from 'mobx-react';
 import Contents from '../Content';
 import Loading from '../util/Loading';
 import ScrollToTop from './ScrollToTop';
@@ -17,7 +18,6 @@ const Report = lazy(() => import('../util/Report'));
 const Content = () => {
   const { UtilLoadingStore } = useStores();
   const { loading } = UtilLoadingStore;
-
   return (
     <>
       { loading ? (<Loading />) : null}
@@ -84,7 +84,7 @@ const Content = () => {
 
 const BorderedDiv = styled.div`
   margin-bottom : 20px;
-  display: ${(props) => (props.loading ? 'none' : 'block')};
+  display : ${(props) => (props.loading ? 'none' : 'block')};
 `;
 
 const ToastContainerCustom = styled(ToastContainer)`
@@ -96,4 +96,4 @@ const ToastContainerCustom = styled(ToastContainer)`
   width : auto !important;
 `;
 
-export default Content;
+export default observer(Content);
