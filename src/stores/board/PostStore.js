@@ -138,7 +138,6 @@ class PostStore {
 
     axios.get('/api/board/post', { params: { board, currentPage, userId } })
       .then((response) => {
-        console.log( board, currentPage, userId )
         const { data } = response;
         if (data.SUCCESS) {
           if (data.CODE === 1) {

@@ -19,7 +19,7 @@ class UtilStore {
 
   @observable activeTab = '1';
 
-  @observable currentPage = 1;
+  @observable pageIndex = 1;
 
   constructor(root) {
     this.root = root;
@@ -57,11 +57,11 @@ class UtilStore {
 
   @action toggleProfile = () => {
     this.profileToggle = !this.profileToggle;
+    this.pageIndex = 1;
   }
 
   @action getProfile = (writerId) => {
     this.profileToggle = !this.profileToggle;
-    let currentPageNum = this.currentPage;
 
     axios.get(`/api/user/profile/${writerId}`, { params : {writerId} })
       .then((response) => {
@@ -79,7 +79,7 @@ class UtilStore {
       })
       .catch((response) => { console.log(response); });
 
-    axios.get(`/api/user/profile/${writerId}/post/${currentPageNum}`, { params : { writerId, currentPageNum } })
+    axios.get(`/api/user/profile/${writerId}/post/1`, { params : {writerId: writerId, currentPageNum: 1 } })
       .then((response) => {
         const { data } = response;
 
@@ -115,7 +115,29 @@ class UtilStore {
   }
 
   @action toggleTab = tab => {
-      this.activeTab = tab
+    this.activeTab = tab;
+  }
+
+  @action getPostList = index => {
+    this.pageIndex = index;
+    let writerId = this.profileData.userId;
+    let currentPageNum = ( ( 5 * index ) - 4 ) - 1;
+
+    axios.get(`/api/user/profile/${writerId}/post/${index}`, { params : { currentPageNum: currentPageNum } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profilePostData = data.DATA;
+          } else {
+            console.log(data.MESSAGE);
+          }
+        } else {
+          console.log(data.MESSAGE);
+        }
+      })
+      .catch((response) => { console.log(response); });
   }
 }
 

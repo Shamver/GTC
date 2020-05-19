@@ -6,9 +6,9 @@ import useStores from '../../../stores/useStores';
 import { Row, Col } from 'reactstrap';
 
 import ProfileModalPost from './ProfileModalPost';
-import ProfilePaginationList from './ProfilePageNation';
+import ModalPagination from './ProfilePageNation';
 
-const ProfileModalPostList = ( {postCount} ) => {
+const ProfileModalPostList = ( {profileData} ) => {
   const { UtilStore } = useStores();
   const { profilePostData } = UtilStore;
   const postList =  profilePostData.map( index => (
@@ -27,7 +27,7 @@ const ProfileModalPostList = ( {postCount} ) => {
           ? postList
           : <NoPost>등록된 글이 없습니다.</NoPost>}
       </TableBox>
-      <ProfilePaginationList rows={postCount}/>
+      <ModalPagination postRows={profileData.postCount} commentRows={profileData.commentCount}/>
     </>
   );
 };
@@ -48,6 +48,5 @@ const NoPost = styled.div`
   padding: 12px 0;
   font-size: 13px;
 `;
-
 
 export default observer(ProfileModalPostList);

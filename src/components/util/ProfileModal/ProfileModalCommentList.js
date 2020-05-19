@@ -5,23 +5,27 @@ import { Row, Col} from "reactstrap";
 import styled from 'styled-components';
 
 import ProfileModalComment from './ProfileModalComment';
+import ModalPagination from "./ProfilePageNation";
 
-const ProfileModalCommentList = () => {
+const ProfileModalCommentList = ( {profileData} ) => {
   const { UtilStore } = useStores();
   const { profileCommentData } = UtilStore;
   const commentList =  profileCommentData.map( index => (
     <ProfileModalComment commentData={index} key={index.commentId}/>
     ));
   return (
-    <TableBox>
+    <>
+      <TableBox>
         <TableHeader>
-            <Col xs="9">댓글 내용</Col>
-            <Col xs="3">작성일</Col>
+          <Col xs="9">댓글 내용</Col>
+          <Col xs="3">작성일</Col>
         </TableHeader>
         { commentList.length > 0
-            ? commentList
-            : <NoPost>작성한 댓글이 없습니다.</NoPost>}
-    </TableBox>
+          ? commentList
+          : <NoPost>작성한 댓글이 없습니다.</NoPost>}
+      </TableBox>
+      <ModalPagination postRows={profileData.postCount} commentRows={profileData.commentCount}/>
+    </>
   );
 };
 

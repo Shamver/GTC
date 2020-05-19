@@ -47,6 +47,7 @@ const GET_USER_POST_LIST = `
   FROM GTC_POST A
   WHERE A.USER_ID = :USER_ID
   ORDER BY ID DESC
+  LIMIT :CURRENT_PAGE, 5
 `
 const GET_USER_COMMENT_LIST = `
   SELECT B.ID AS commentId
@@ -136,12 +137,14 @@ router.get('/profile/:writerId', (req, res) => {
   });
 });
 
-router.get('/profile/:writerId/post/:currentPageNum', (req, res) => {
+router.get('/profile/:writerId/post/:currentPage', (req, res) => {
+    let { currentPageNum } = req.query;
     Database.execute(
       (database) => database.query(
         GET_USER_POST_LIST,
           {
             USER_ID: req.params.writerId,
+            CURRENT_PAGE: currentPageNum,
           },
         )
           .then((rows) => {

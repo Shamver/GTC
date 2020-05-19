@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import useStores from '../../../stores/useStores';
+import {observer} from "mobx-react";
 
-const ProfilePaginationList = ( {rows} ) => {
+const ProfilePaginationList = observer(({rows}) => {
     const { UtilStore } = useStores();
-    const { currentPage } = UtilStore;
+    const { getPostList, pageIndex, activeTab } = UtilStore;
 
     // const currentPageNum = parseInt(currentPage, 0);
     const arr = new Array(( rows % 5 ) === 0 ? (rows / 5) : ( (rows / 5 ) >> 0 ) );
@@ -27,14 +28,14 @@ const ProfilePaginationList = ( {rows} ) => {
     //         </PaginationItem>,
     //     );
     // }
-    // to={`/profile/${contentId}/${contentType}/${i}`}
-    for (let i = 0; i <= max; i += 1) {
+    // to={`/profile/${writerId}/${contentType}/${i}`} {`/profile/${writerId}/post/${currentPage}`}
+    for (let i = 1; i <= max + 1; i += 1) {
         arr.push(
-            <PaginationItem active={i === 1} key={i}>
-                <CustomLink className="page-link" activeClassName="active" to={`/profile/3/post/1`}>
+            <CustomPaginationItem active={i === pageIndex} key={i}>
+                <CustomLink className="page-link" activeClassName="active" onClick={ () => getPostList(i) }>
                     {i}
                 </CustomLink>
-            </PaginationItem>,
+            </CustomPaginationItem>,
         );
     }
 
@@ -48,82 +49,48 @@ const ProfilePaginationList = ( {rows} ) => {
     //     );
     // }
 
-    // 추후 max 값 조정후 추가
     return arr;
-};
+});
 
-// PaginationList.propTypes = {
-//     path: Proptypes.string.isRequired,
-//     currentPage: Proptypes.string,
-//     noPagination: Proptypes.bool,
-// };
-//
-// PaginationList.defaultProps = {
-//     currentPage: '1',
-// };
-//
-//
-// const BoardPagination = ({ path, noPagination, currentPage }) => (
-//     <PaginationCustom>
-//         <PaginationList currentPage={currentPage} path={path} noPagination={noPagination} />
-//     </PaginationCustom>
-// );
-//
-// BoardPagination.propTypes = {
-//     path: Proptypes.string.isRequired,
-//     noPagination: Proptypes.bool,
-//     currentPage: Proptypes.string,
-// };
-//
-// BoardPagination.defaultProps = {
-//     noPagination: false,
-//     currentPage: '1',
-// };
+const ModalPagination = ({rows}) => (
+    <PaginationListWrap>
+        <ProfilePaginationList rows={rows} />
+    </PaginationListWrap>
+);
 
 
-const CustomLink = styled(NavLink)`
-  &.active {
-    z-index: 1;
-    color: #fff !important;
-    background-color: #DC3545;
-    border-color: #DC3545;
-  }
-
-  &.active:hover {
-    background-color: #DC3545;
-    border-color: #DC3545;
-  }
-`;
-
-
-const PaginationCustom = styled(Pagination)`
-  color : #DC3545;
-  width : max-content;
-  margin : 0 auto;
-  margin-top : 20px;
-
-  & ul {
-    margin : 0px;
-  }
-
-  & .page-link {
-    color: #DC3545;
-  }
-
-  & .page-link:hover {
-    color: #DC3545;
-  }
-
-  & .page-link:focus {
-    box-shadow: none;
-  }
-
+const PaginationListWrap = styled.ul`
+  padding: 0;
+  margin: 0 auto;
+  text-align: center;
+  
   & .page-item.active .page-link {
     z-index: 1;
     color: #fff;
     background-color: #DC3545;
     border-color: #DC3545;
   }
+`
+
+const CustomPaginationItem = styled(PaginationItem)`
+  list-style: none;
+  display: inline-block;
+  
+  & .page-link {
+    z-index: 1;
+    color: #DC3545;
+    cursor: pointer;
+  }
+  
+  & .page-link:hover {
+    z-index: 1;
+    color: #DC3545;
+    cursor: pointer;
+  }
+`
+
+const CustomLink = styled.span`
+  text-decoration: none;
 `;
 
-export default ProfilePaginationList;
+export default ModalPagination;
