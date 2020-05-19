@@ -17,7 +17,7 @@ import ReplyEdit from './ReplyEdit';
 const Reply = ({ data, index }) => {
   const {
     UserStore, BoardReplyStore, BoardReportStore, ComponentReplyStore,
-    UtilAlertStore, UserIgnoreStore,
+    UtilAlertStore, UserIgnoreStore, UtilRouteStore,
   } = useStores();
   const {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
@@ -27,13 +27,17 @@ const Reply = ({ data, index }) => {
   const { dropdown, onActive } = ComponentReplyStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { addIgnore } = UserIgnoreStore;
+  const { history } = UtilRouteStore;
+
+  const hash = history.location.hash ? history.location.hash.split('#')[1] : null;
+  const { id } = data;
 
   const ReplyContentText = !data.secretFl || (data.secretFl && data.idPostWriter === data.idWriter)
     ? renderHTML(`${data.content}`)
     : null;
 
   return (
-    <ReplyLayout>
+    <ReplyLayout hash={hash} commentId={id}>
       { data.tabFl ? (
         <Link to="/">
           <ReplyDepthIcon icon={faShare} />
@@ -235,6 +239,7 @@ const ReplyWrapper = styled.div`
 
 const ReplyLayout = styled.div`
   display : flex;
+  background-color: ${(props) => (props.hash === props.commentId.toString() ? '#fff9e5' : 'default')};
 `;
 
 const ReplyDepthIcon = styled(FontAwesomeIcon)`

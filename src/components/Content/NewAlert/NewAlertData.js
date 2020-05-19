@@ -15,7 +15,7 @@ const NewAlertData = (data, onLink, onDelete) => {
   return (
     <AlertWrapper className={(isRead === 'Y' ? '' : 'noRead')} key={`alertData${id}`}>
       <AlertBox>
-        <LinkA to={`/post/${postId}#reply${replyId}`} name={`${id}`} onClick={onLink}>
+        <LinkA to={`/post/${postId}#${replyId}`} name={`${id}`} onClick={onLink}>
           <StrongSpan>{replyName}</StrongSpan>님이 <StrongSpan>{postTitle}</StrongSpan>
           에 새&nbsp;
           {data.type === 'reply' ? '댓글' : '대댓글'}을 달았습니다:&nbsp;
