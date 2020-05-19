@@ -13,6 +13,8 @@ class LoadingStore {
       this.loading = 0;
     }, 500);
   };
+
+  @action start
 }
 
 export default LoadingStore;
