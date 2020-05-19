@@ -9,15 +9,14 @@ import PostViewFooter from './PostViewFooter';
 const PostView = ({ match }) => {
   const { BoardPostStore, UtilLoadingStore } = useStores();
   const { getPost } = BoardPostStore;
-  const { startLoading, stopLoading } = UtilLoadingStore;
+  const { doLoading } = UtilLoadingStore;
   const { params } = match;
   const { id } = params;
-  startLoading();
 
   useEffect(() => {
     getPost(id);
-    stopLoading();
-  }, [getPost, id, stopLoading]);
+    doLoading();
+  }, [getPost, id, doLoading]);
 
 
   return (

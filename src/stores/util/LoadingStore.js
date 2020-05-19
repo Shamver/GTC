@@ -8,11 +8,10 @@ class LoadingStore {
   }
 
   @action doLoading = () => {
-    this.loading = true;
+    this.loading = 1;
     console.log('로딩 시작!');
     setTimeout(() => {
-      this.loading = false;
-      console.log('로딩 끝!');
+      this.loading = 0;
     }, 0);
   };
 

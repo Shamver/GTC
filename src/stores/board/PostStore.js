@@ -191,12 +191,17 @@ class PostStore {
       },
     })
       .then((response) => {
+        console.log('통신끝!');
         const { data } = response;
         if (data.SUCCESS) {
           if (data.CODE === 1) {
             const [post] = data.DATA;
             this.postView = post;
             getLately();
+            console.log('통신 후 작업 끝!');
+            setTimeout(() => {
+              console.log('로딩 끝!!!!!!!!');
+            },0)
           } else {
             toast.info(data.MESSAGE);
           }

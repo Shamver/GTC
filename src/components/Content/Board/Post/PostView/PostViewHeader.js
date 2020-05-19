@@ -14,7 +14,7 @@ const PostViewHeader = () => {
   } = postView;
 
   const link = board ? board.toLowerCase() : '';
-
+  console.log('PostView Header 렌더링!');
   return (
     <>
       <BoardLink to={`/${link}`}>
