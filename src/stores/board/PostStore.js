@@ -222,8 +222,9 @@ class PostStore {
       .catch((response) => { console.log(response); });
   };
 
-  @action getModifyPost = (id) => {
+  @action getModifyPost = (id, isModify = false) => {
     const { userData } = this.root.UserStore;
+    const { history } = this.root.UtilRouteStore;
     axios.get(`/api/board/post/${id}`, {
       params: {
         userId: userData.id,
@@ -234,8 +235,13 @@ class PostStore {
         if (data.success) {
           const {
             board, category, title, content,
-            secretFl, commentAllowFl, secretCommentAllowFl,
+            secretFl, commentAllowFl, secretCommentAllowFl, isMyPost,
           } = data.result[0];
+
+          if (isModify && !isMyPost) {
+            toast.error('수정권한이 없는 게시물입니다.');
+            history.push('/');
+          }
 
           this.post = {
             ...this.post,

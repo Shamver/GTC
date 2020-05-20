@@ -40,7 +40,7 @@ const Posting = (props) => {
     setPostClear();
     setPostBoard(board);
     if (isModify) {
-      getModifyPost(id);
+      getModifyPost(id, true);
     }
   }, [BoardStore, board, setPostBoard, getModifyPost, id, isModify, setPostClear]);
 
