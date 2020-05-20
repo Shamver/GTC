@@ -8,27 +8,27 @@ import PostViewFooter from './PostViewFooter';
 
 const PostView = ({ match }) => {
   const { BoardPostStore, UtilLoadingStore } = useStores();
-  const { getPost } = BoardPostStore;
-  const { doLoading } = UtilLoadingStore;
+  const { getPost, getPostUpperLower } = BoardPostStore;
+  const { loadingProcess } = UtilLoadingStore;
   const { params } = match;
   const { id } = params;
 
   useEffect(() => {
-    getPost(id);
-    doLoading();
-  }, [getPost, id, doLoading]);
+    loadingProcess([
+      () => getPost(id),
+      () => getPostUpperLower(id),
+    ]);
+  }, [getPost, getPostUpperLower, id]);
 
 
   return (
-    <>
-      <PostWrapper>
-        <ViewWrapper>
-          <PostViewHeader />
-          <PostViewContent />
-          <PostViewFooter />
-        </ViewWrapper>
-      </PostWrapper>
-    </>
+    <PostWrapper>
+      <ViewWrapper>
+        <PostViewHeader />
+        <PostViewContent />
+        <PostViewFooter />
+      </ViewWrapper>
+    </PostWrapper>
   );
 };
 

@@ -185,25 +185,21 @@ class PostStore {
     const { getLately } = this.root.CookieLatelyStore;
     const { userData } = this.root.UserStore;
 
+    console.log('GetPost Start');
     axios.get(`/api/board/post/${id}`, {
       params: {
         userId: userData.id,
       },
     })
       .then((response) => {
-        console.log('통신끝!');
         const { data } = response;
         if (data.SUCCESS) {
           if (data.CODE === 1) {
             const [post] = data.DATA;
-            console.log('observable 바꾸기 직전');
             this.postView = post;
-            console.log('observable 바꾸기 직후');
             getLately();
-            this.postView = {
-              id: 0,
-            };
-            console.log('로딩 끝!!!!!!!!');
+            console.log('GetPost Ended');
+            return Promise.resolve();
           } else {
             toast.info(data.MESSAGE);
           }
@@ -245,6 +241,7 @@ class PostStore {
   };
 
   @action getPostUpperLower = (id) => {
+    console.log('getUpperLowerPost Start');
     axios.get(`/api/board/post/${id}/upperLower`, {})
       .then((response) => {
         const { data } = response;
@@ -266,6 +263,9 @@ class PostStore {
                 this.currentPostUpperLower.lower = array[i];
               }
             }
+
+            console.log('getUpperLowerPost Ended');
+            return Promise.resolve();
           } else {
             toast.info(data.MESSAGE);
           }

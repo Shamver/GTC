@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
@@ -9,17 +9,12 @@ import useStores from '../../../../../stores/useStores';
 
 const PostViewFooter = () => {
   const { BoardStore, BoardPostStore } = useStores();
-  const { currentPostUpperLower, getPostUpperLower, postView } = BoardPostStore;
+  const { currentPostUpperLower } = BoardPostStore;
   const { currentBoard } = BoardStore;
 
   const { upper, lower } = currentPostUpperLower;
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
   const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
-  const { id } = postView;
-
-  useEffect(() => {
-    getPostUpperLower(id);
-  }, [getPostUpperLower, id]);
 
   return (
     <>
