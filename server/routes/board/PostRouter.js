@@ -217,6 +217,13 @@ const DELETE_POST = `
   WHERE ID = :POST_ID 
 `;
 
+const SELECT_POST_WRITER = `
+  SELECT 
+    IF(P.USER_ID = :USER_ID, 1, 0) AS isMyPost
+  FROM GTC_POST P 
+  WHERE ID = :POST_ID
+`;
+
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
   const { board, isHome } = req.query;
@@ -293,19 +300,32 @@ router.put('/', authMiddleware, (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      UPDATE_POST,
+      SELECT_POST_WRITER,
       {
         POST_ID: data.id,
-        BOARD_CD: data.board,
-        CATEGORY_CD: data.category,
-        TITLE: data.title,
-        USER_ID: data.writer,
-        CONTENT: data.content,
-        SECRET_FL: data.secret,
-        SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
-        COMMENT_ALLOW_FL: data.replyAllow,
+        USER_ID: data.userId,
       },
     )
+      .then((rows) => {
+        if (!rows[0].isMyPost) {
+          // 본인 게시물이 아닐 경우 리젝
+          return Promise.reject();
+        }
+        return database.query(
+          UPDATE_POST,
+          {
+            POST_ID: data.id,
+            BOARD_CD: data.board,
+            CATEGORY_CD: data.category,
+            TITLE: data.title,
+            USER_ID: data.writer,
+            CONTENT: data.content,
+            SECRET_FL: data.secret,
+            SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
+            COMMENT_ALLOW_FL: data.replyAllow,
+          },
+        );
+      })
       .then(() => database.query(
         SELECT_POST_MAX_ID,
         {},
@@ -321,6 +341,13 @@ router.put('/', authMiddleware, (req, res) => {
           success: true,
           code: 1,
           message: '😊 포스팅이 수정되었어요!',
+        });
+      })
+      .catch(() => {
+        res.json({
+          success: false,
+          code: 1,
+          message: '😳 본인의 게시물이 아닙니다.',
         });
       }),
   ).then(() => {

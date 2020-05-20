@@ -95,6 +95,7 @@ class PostStore {
     if (!this.postValidationCheck()) {
       return false;
     }
+    const { userData } = this.root.UserStore;
 
     axios.put('/api/board/post', {
       id: this.post.id,
@@ -106,6 +107,7 @@ class PostStore {
       secret: this.post.secretFl,
       replyAllow: this.post.commentAllowFl,
       secretReplyAllow: this.post.secretCommentAllowFl,
+      userId: userData.id,
     })
       .then((response) => {
         const { data } = response;
