@@ -127,9 +127,7 @@ const Header = () => {
               </DropdownIn>
             </ColNoP>
             <ColCenter xs="7">
-              <TextContainer>
-                <HeaderNoticeView />
-              </TextContainer>
+              <HeaderNoticeView />
             </ColCenter>
             <ColNoP>
               <SpanRight>
