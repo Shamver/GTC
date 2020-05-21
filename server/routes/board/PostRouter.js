@@ -81,7 +81,7 @@ const INSERT_POST = `
     , ':TITLE'
     , :USER_ID
     , ':CONTENT'
-    , 0
+    , :NOTICE_FL
     , :SECRET_FL
     , :SECRET_COMMENT_ALLOW_FL
     , :COMMENT_ALLOW_FL
@@ -271,6 +271,7 @@ router.post('/', authMiddleware, (req, res) => {
         SECRET_FL: data.secret,
         SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
         COMMENT_ALLOW_FL: data.replyAllow,
+        NOTICE_FL: data.notice,
       },
     )
       .then(() => database.query(

@@ -72,6 +72,7 @@ class PostStore {
       secret: this.post.secretFl,
       replyAllow: this.post.commentAllowFl,
       secretReplyAllow: this.post.secretCommentAllowFl,
+      notice: this.post.noticeFl,
     })
       .then((response) => {
         const { data } = response;
@@ -424,6 +425,7 @@ class PostStore {
       secretFl: 0,
       commentAllowFl: 1,
       secretCommentAllowFl: 0,
+      noticeFl: 0,
     };
   }
 }
