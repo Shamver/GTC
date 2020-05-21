@@ -12,6 +12,7 @@ class PostStore {
     secretFl: 0,
     commentAllowFl: 1,
     secretCommentAllowFl: 0,
+    noticeFl: 0,
   };
 
   @observable boardPostList = {
