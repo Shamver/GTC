@@ -64,6 +64,7 @@ const GET_USER_COMMENT_LIST = `
   FROM GTC_COMMENT B
   WHERE B.USER_ID = :USER_ID
   ORDER BY ID DESC
+  LIMIT :CURRENT_PAGE, 5
 `
 
 router.delete('/withdrawal', (req, res) => {
@@ -138,44 +139,46 @@ router.get('/profile/:writerId', (req, res) => {
 });
 
 router.get('/profile/:writerId/post/:currentPage', (req, res) => {
-    let { currentPageNum } = req.query;
-    Database.execute(
-      (database) => database.query(
-        GET_USER_POST_LIST,
-          {
-            USER_ID: req.params.writerId,
-            CURRENT_PAGE: currentPageNum,
-          },
-        )
-          .then((rows) => {
-            res.json({
-              SUCCESS: true,
-              CODE: 1,
-              MESSAGE: '유저 작성 글 조회',
-              DATA: rows,
-            });
-          }),
-    ).then(() => {
-      info('[SELECT, GET /api/user/profile/post] 유저 작성 글 조회');
-    });
+  let { currentPageNum } = req.query;
+  Database.execute(
+    (database) => database.query(
+      GET_USER_POST_LIST,
+        {
+          USER_ID: req.params.writerId,
+          CURRENT_PAGE: currentPageNum,
+        },
+      )
+        .then((rows) => {
+          res.json({
+            SUCCESS: true,
+            CODE: 1,
+            MESSAGE: '유저 작성 글 조회',
+            DATA: rows,
+          });
+        }),
+  ).then(() => {
+    info('[SELECT, GET /api/user/profile/post] 유저 작성 글 조회');
+  });
 });
 
-router.get('/profile/:writerId/comment', (req, res) => {
-    Database.execute(
-      (database) => database.query(
-        GET_USER_COMMENT_LIST,
-          {
-            USER_ID: req.params.writerId,
-          },
-        )
-          .then((rows) => {
-            res.json({
-              SUCCESS: true,
-              CODE: 1,
-              MESSAGE: '유저 작성 댓글 조회',
-              DATA: rows,
-            });
-          }),
+router.get('/profile/:writerId/comment/:currentPage', (req, res) => {
+  let { currentPageNum } = req.query;
+  Database.execute(
+    (database) => database.query(
+      GET_USER_COMMENT_LIST,
+        {
+          USER_ID: req.params.writerId,
+          CURRENT_PAGE: currentPageNum,
+        },
+      )
+        .then((rows) => {
+          res.json({
+            SUCCESS: true,
+            CODE: 1,
+            MESSAGE: '유저 작성 댓글 조회',
+            DATA: rows,
+          });
+        }),
     ).then(() => {
       info('[SELECT, GET /api/user/profile/comment] 유저 작성 댓글 조회');
     });

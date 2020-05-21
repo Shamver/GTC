@@ -1,53 +1,28 @@
 import React from 'react';
 import { PaginationItem, Pagination } from 'reactstrap';
 import styled from 'styled-components';
-import * as Proptypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
 import useStores from '../../../stores/useStores';
 import {observer} from "mobx-react";
 
 const ProfilePaginationList = observer(({rows}) => {
     const { UtilStore } = useStores();
-    const { getPostList, pageIndex, activeTab } = UtilStore;
+    const { getPostList, getCommentList, pageIndex, activeTab } = UtilStore;
 
-    // const currentPageNum = parseInt(currentPage, 0);
-    const arr = new Array(( rows % 5 ) === 0 ? (rows / 5) : ( (rows / 5 ) >> 0 ) );
-    const max = ( rows % 5 ) === 0 ? (rows / 5) : ( (rows / 5 ) >> 0 );
+    const pagingToggle = ( activeTab === '1' ) ? rows.postCount : rows.commentCount;
+    const pageIdx = ( activeTab === '1' ) ? pageIndex.postIndex : pageIndex.commentIndex;
 
-    // const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
-    // const max = (currentPageNum + 3) > currentBoardMaxPage ? currentBoardMaxPage : currentPageNum + 3;
-    // const array = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 1); //
+    const arr = new Array(( pagingToggle % 5 ) === 0 ? (pagingToggle / 5) : ( (pagingToggle / 5 ) >> 0 ) );
+    const max = ( pagingToggle % 5 ) === 0 ? (pagingToggle / 5) : ( (pagingToggle / 5 ) >> 0 );
 
-    // currentPage -> 시작 페이지
-    // if (currentPage > 1) {
-    //     array.push(
-    //         <PaginationItem key={0}>
-    //             <CustomLink className="page-link" activeClassName="active" to={`/profile/${contentId}/${contentType}/${currentPage - 1}`}>
-    //                 ‹
-    //             </CustomLink>
-    //         </PaginationItem>,
-    //     );
-    // }
-    // to={`/profile/${writerId}/${contentType}/${i}`} {`/profile/${writerId}/post/${currentPage}`}
     for (let i = 1; i <= max + 1; i += 1) {
         arr.push(
-            <CustomPaginationItem active={i === pageIndex} key={i}>
-                <CustomLink className="page-link" activeClassName="active" onClick={ () => getPostList(i) }>
+            <CustomPaginationItem active={i === pageIdx} key={i}>
+                <CustomLink className="page-link" activeClassName="active" onClick={ () => ( activeTab === '1' ) ? getPostList(i) : getCommentList(i) }>
                     {i}
                 </CustomLink>
             </CustomPaginationItem>,
         );
     }
-
-    // if (currentPageNum !== currentBoardMaxPage) {
-    //     array.push(
-    //         <PaginationItem key={-1}>
-    //             <CustomLink className="page-link" activeClassName="active" to={`/profile/${contentId}/${contentType}/${currentPage + 1}`}>
-    //                 ›
-    //             </CustomLink>
-    //         </PaginationItem>,
-    //     );
-    // }
 
     return arr;
 });

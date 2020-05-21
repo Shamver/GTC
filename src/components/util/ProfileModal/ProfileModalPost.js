@@ -3,11 +3,15 @@ import {observer} from "mobx-react";
 import {Link} from "react-router-dom";
 import { Row, Col } from 'reactstrap';
 import styled from 'styled-components';
+import useStores from "../../../stores/useStores";
 
 const ProfileModalPost = ({ postData }) => {
+  const { UtilStore } = useStores();
+  const { toggleProfile } = UtilStore;
   const { postId, postTitle, postCreated, postCommentCount } = postData;
+
   return (
-    <TableBody to={`/post/${postId}`}>
+    <TableBody to={`/post/${postId}`} onClick={ toggleProfile }>
       <Row>
         <ContentsBodyTitle xs="9">
           <ContentsTitle>{postTitle}</ContentsTitle> { postCommentCount > 0 ? <CommentCount>[{postCommentCount}]</CommentCount> : ''}

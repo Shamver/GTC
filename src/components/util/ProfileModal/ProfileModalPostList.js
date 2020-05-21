@@ -8,9 +8,10 @@ import { Row, Col } from 'reactstrap';
 import ProfileModalPost from './ProfileModalPost';
 import ModalPagination from './ProfilePageNation';
 
-const ProfileModalPostList = ( {profileData} ) => {
+const ProfileModalPostList = ( {profileInfo} ) => {
   const { UtilStore } = useStores();
-  const { profilePostData } = UtilStore;
+  const { profileData } = UtilStore;
+  const { profilePostData } = profileData;
   const postList =  profilePostData.map( index => (
     <ProfileModalPost postData={index} key={index.postId}/>
   ));
@@ -27,7 +28,7 @@ const ProfileModalPostList = ( {profileData} ) => {
           ? postList
           : <NoPost>등록된 글이 없습니다.</NoPost>}
       </TableBox>
-      <ModalPagination postRows={profileData.postCount} commentRows={profileData.commentCount}/>
+      <ModalPagination rows={profileInfo}/>
     </>
   );
 };

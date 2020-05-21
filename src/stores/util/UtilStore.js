@@ -11,15 +11,18 @@ class UtilStore {
 
   @observable profileToggle = false;
 
-  @observable profileData = {};
-
-  @observable profilePostData = [];
-
-  @observable profileCommentData = [];
+  @observable profileData = {
+    profileInfo : {},
+    profilePostData : [],
+    profileCommentData : []
+  };
 
   @observable activeTab = '1';
 
-  @observable pageIndex = 1;
+  @observable pageIndex = {
+    postIndex : 1,
+    commentIndex : 1
+  };
 
   constructor(root) {
     this.root = root;
@@ -57,7 +60,14 @@ class UtilStore {
 
   @action toggleProfile = () => {
     this.profileToggle = !this.profileToggle;
-    this.pageIndex = 1;
+    this.pageIndex = {
+      postIndex : 1,
+      commentIndex : 1
+    };
+  }
+
+  @action toggleTab = tab => {
+    this.activeTab = tab;
   }
 
   @action getProfile = (writerId) => {
@@ -69,7 +79,10 @@ class UtilStore {
 
         if (data.SUCCESS) {
             if (data.CODE === 1) {
-              this.profileData = data.DATA;
+              this.profileData = {
+                  ...this.profileData,
+                  profileInfo: data.DATA
+              }
             } else {
               console.log(data.MESSAGE);
             }
@@ -85,7 +98,10 @@ class UtilStore {
 
         if (data.SUCCESS) {
           if (data.CODE === 1) {
-            this.profilePostData = data.DATA;
+            this.profileData = {
+              ...this.profileData,
+              profilePostData: data.DATA
+            }
           } else {
             console.log(data.MESSAGE);
           }
@@ -95,13 +111,16 @@ class UtilStore {
       })
       .catch((response) => { console.log(response); });
 
-    axios.get(`/api/user/profile/${writerId}/comment`, { params : {writerId} })
+    axios.get(`/api/user/profile/${writerId}/comment/1`, { params : {writerId: writerId, currentPageNum: 1 } })
         .then((response) => {
           const { data } = response;
 
           if (data.SUCCESS) {
             if (data.CODE === 1) {
-              this.profileCommentData = data.DATA;
+              this.profileData = {
+                ...this.profileData,
+                profileCommentData: data.DATA
+              }
             } else {
               console.log(data.MESSAGE);
             }
@@ -114,22 +133,57 @@ class UtilStore {
     return true;
   }
 
-  @action toggleTab = tab => {
-    this.activeTab = tab;
-  }
-
   @action getPostList = index => {
-    this.pageIndex = index;
-    let writerId = this.profileData.userId;
+    const writerId = this.profileData.profileInfo.userId;
+
+    this.pageIndex = {
+      ...this.pageIndex,
+      postIndex : index,
+    };
+
+    let { pageIdx } = this.pageIndex;
     let currentPageNum = ( ( 5 * index ) - 4 ) - 1;
 
-    axios.get(`/api/user/profile/${writerId}/post/${index}`, { params : { currentPageNum: currentPageNum } })
+    axios.get(`/api/user/profile/${writerId}/post/${pageIdx}`, { params : { currentPageNum: currentPageNum } })
       .then((response) => {
         const { data } = response;
 
         if (data.SUCCESS) {
           if (data.CODE === 1) {
-            this.profilePostData = data.DATA;
+            this.profileData = {
+              ...this.profileData,
+              profilePostData: data.DATA
+            }
+          } else {
+            console.log(data.MESSAGE);
+          }
+        } else {
+          console.log(data.MESSAGE);
+        }
+      })
+      .catch((response) => { console.log(response); });
+  }
+
+  @action getCommentList = index => {
+    const writerId = this.profileData.profileInfo.userId;
+
+    this.pageIndex = {
+      ...this.pageIndex,
+      commentIndex : index,
+    };
+    let { pageIdx } = this.pageIndex;
+    let currentPageNum = ( ( 5 * index ) - 4 ) - 1;
+
+    axios.get(`/api/user/profile/${writerId}/comment/${pageIdx}`, { params : { currentPageNum: currentPageNum } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileCommentData: data.DATA
+            }
           } else {
             console.log(data.MESSAGE);
           }

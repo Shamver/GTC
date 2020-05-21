@@ -1,22 +1,25 @@
 import React from 'react';
 import {observer} from "mobx-react";
-import styled from 'styled-components';
 import {Link} from "react-router-dom";
+import styled from 'styled-components';
 import {Col, Row} from "reactstrap";
 import renderHTML from "react-render-html";
+import useStores from "../../../stores/useStores";
 
 const ProfileModalComment = ({ commentData }) => {
+  const { UtilStore } = useStores();
+  const { toggleProfile } = UtilStore;
   const { commentId, commentContent, commentCreated, postCommentId } = commentData;
   const commentContentText = renderHTML(`${commentContent}`);
 
   return (
-    <TableBody to={`/post/${postCommentId}`}>
-        <Row>
-            <ContentsBodyTitle xs="9">
-                <ContentsTitle>{commentContentText}</ContentsTitle>
-            </ContentsBodyTitle>
-            <ContentsBodyDate xs={"3"}>{commentCreated}</ContentsBodyDate>
-        </Row>
+    <TableBody to={`/post/${commentId}`} onClick={ toggleProfile }>
+      <Row>
+        <ContentsBodyTitle xs="9">
+          <ContentsTitle>{commentContentText}</ContentsTitle>
+        </ContentsBodyTitle>
+        <ContentsBodyDate xs={"3"}>{commentCreated}</ContentsBodyDate>
+      </Row>
     </TableBody>
   );
 };
@@ -36,6 +39,10 @@ const ContentsBodyTitle = styled(Col)`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  
+  p {
+    margin: 0 !important;
+  }
 `;
 
 const ContentsTitle = styled.div`

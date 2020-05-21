@@ -7,9 +7,11 @@ import styled from 'styled-components';
 import ProfileModalComment from './ProfileModalComment';
 import ModalPagination from "./ProfilePageNation";
 
-const ProfileModalCommentList = ( {profileData} ) => {
+const ProfileModalCommentList = ( {profileInfo} ) => {
   const { UtilStore } = useStores();
-  const { profileCommentData } = UtilStore;
+  const { profileData } = UtilStore;
+  const { profileCommentData } = profileData;
+
   const commentList =  profileCommentData.map( index => (
     <ProfileModalComment commentData={index} key={index.commentId}/>
     ));
@@ -24,7 +26,7 @@ const ProfileModalCommentList = ( {profileData} ) => {
           ? commentList
           : <NoPost>작성한 댓글이 없습니다.</NoPost>}
       </TableBox>
-      <ModalPagination postRows={profileData.postCount} commentRows={profileData.commentCount}/>
+      <ModalPagination rows={profileInfo}/>
     </>
   );
 };

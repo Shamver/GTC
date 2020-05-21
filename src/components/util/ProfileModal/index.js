@@ -18,10 +18,11 @@ const ProfileModal = () => {
 
     const { UtilStore } = useStores();
     const { profileToggle, toggleProfile, profileData, toggleTab, activeTab } = UtilStore;
+    const { profileInfo } = profileData;
 
     return (
         <Modal isOpen={profileToggle} toggle={toggleProfile}>
-            <ModalHeaderBack toggle={toggleProfile}><b>{profileData.nickname}님의 프로필</b></ModalHeaderBack>
+            <ModalHeaderBack toggle={toggleProfile}><b>{profileInfo.nickname}님의 프로필</b></ModalHeaderBack>
             <ModalBodyBox>
                 <ProfileInfoBox>
                     <ProfileAvatarWrap>
@@ -32,25 +33,25 @@ const ProfileModal = () => {
                             <ProfileInfoTitle>
                                 <FaiPink icon={faCalendarAlt} className="fa-fw" /> 가입일자
                             </ProfileInfoTitle>
-                            <ProfileInfoContents>{profileData.userCreated}</ProfileInfoContents>
+                            <ProfileInfoContents>{profileInfo.userCreated}</ProfileInfoContents>
                         </ProfileInfo>
                         <ProfileInfo>
                             <ProfileInfoTitle>
                                 <FaiPink icon={faAt} className="fa-fw" /> 이메일
                             </ProfileInfoTitle>
-                            <ProfileInfoContents>{profileData.userEmail}</ProfileInfoContents>
+                            <ProfileInfoContents>{profileInfo.userEmail}</ProfileInfoContents>
                         </ProfileInfo>
                         <ProfileInfo>
                             <ProfileInfoTitle>
                                 <FaiPink icon={faPen} className="fa-fw" /> 작성 글
                             </ProfileInfoTitle>
-                            <ProfileInfoContents>{profileData.postCount}</ProfileInfoContents>
+                            <ProfileInfoContents>{profileInfo.postCount}</ProfileInfoContents>
                         </ProfileInfo>
                         <ProfileInfo>
                             <ProfileInfoTitle>
                                 <FaiPink icon={faComment} className="fa-fw" /> 작성 댓글
                             </ProfileInfoTitle>
-                            <ProfileInfoContents>{profileData.commentCount}</ProfileInfoContents>
+                            <ProfileInfoContents>{profileInfo.commentCount}</ProfileInfoContents>
                         </ProfileInfo>
                     </ProfileInfoWrap>
                 </ProfileInfoBox>
@@ -70,10 +71,10 @@ const ProfileModal = () => {
                     </Nav>
                     <TabContent activeTab={activeTab}>
                         <TabPane tabId="1">
-                          <ProfileModalPostList profileData={profileData}/>
+                          <ProfileModalPostList profileInfo={profileInfo}/>
                         </TabPane>
                         <TabPane tabId="2">
-                          <ProfileModalCommentList profileData={profileData}/>
+                          <ProfileModalCommentList profileInfo={profileInfo}/>
                         </TabPane>
                     </TabContent>
                 </div>
@@ -81,6 +82,7 @@ const ProfileModal = () => {
         </Modal>
     );
 };
+
 const ModalHeaderBack = styled(ModalHeader)`
   border-bottom: 4px solid #DC3545 !important;
 `;
