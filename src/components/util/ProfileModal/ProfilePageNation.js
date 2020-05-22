@@ -1,23 +1,16 @@
 import React from 'react';
-import { PaginationItem, Pagination } from 'reactstrap';
+import { PaginationItem } from 'reactstrap';
 import styled from 'styled-components';
-import useStores from '../../../stores/useStores';
 import {observer} from "mobx-react";
 
-const ProfilePaginationList = observer(({rows}) => {
-    const { UtilStore } = useStores();
-    const { getPostList, getCommentList, pageIndex, activeTab } = UtilStore;
+const ProfilePaginationList = observer(({rows, index, req}) => {
+    const arr = new Array(( rows % 5 ) === 0 ? (rows / 5) : ( (rows / 5 ) >> 0 ) );
+    const max = ( rows % 5 ) === 0 ? (rows / 5) : ( (rows / 5 ) >> 0 );
 
-    const pagingToggle = ( activeTab === '1' ) ? rows.postCount : rows.commentCount;
-    const pageIdx = ( activeTab === '1' ) ? pageIndex.postIndex : pageIndex.commentIndex;
-
-    const arr = new Array(( pagingToggle % 5 ) === 0 ? (pagingToggle / 5) : ( (pagingToggle / 5 ) >> 0 ) );
-    const max = ( pagingToggle % 5 ) === 0 ? (pagingToggle / 5) : ( (pagingToggle / 5 ) >> 0 );
-
-    for (let i = 1; i <= max + 1; i += 1) {
+    for (let i = 1; i <= max; i += 1) {
         arr.push(
-            <CustomPaginationItem active={i === pageIdx} key={i}>
-                <CustomLink className="page-link" activeClassName="active" onClick={ () => ( activeTab === '1' ) ? getPostList(i) : getCommentList(i) }>
+            <CustomPaginationItem active={i === index} key={i}>
+                <CustomLink className="page-link" activeClassName="active" onClick={ () => req(i) }>
                     {i}
                 </CustomLink>
             </CustomPaginationItem>,
@@ -27,9 +20,9 @@ const ProfilePaginationList = observer(({rows}) => {
     return arr;
 });
 
-const ModalPagination = ({rows}) => (
+const ModalPagination = ({rows, pageIndex, req}) => (
     <PaginationListWrap>
-        <ProfilePaginationList rows={rows} />
+        <ProfilePaginationList rows={rows} index={pageIndex} req={req}/>
     </PaginationListWrap>
 );
 

@@ -10,8 +10,9 @@ import ModalPagination from './ProfilePageNation';
 
 const ProfileModalPostList = ( {profileInfo} ) => {
   const { UtilStore } = useStores();
-  const { profileData } = UtilStore;
+  const { profileData, pageIndex, getPostList } = UtilStore;
   const { profilePostData } = profileData;
+  const { postIndex } = pageIndex;
   const postList =  profilePostData.map( index => (
     <ProfileModalPost postData={index} key={index.postId}/>
   ));
@@ -28,7 +29,7 @@ const ProfileModalPostList = ( {profileInfo} ) => {
           ? postList
           : <NoPost>등록된 글이 없습니다.</NoPost>}
       </TableBox>
-      <ModalPagination rows={profileInfo}/>
+      <ModalPagination rows={profileInfo.postCount} pageIndex={postIndex} req={getPostList}/>
     </>
   );
 };

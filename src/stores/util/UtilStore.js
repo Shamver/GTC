@@ -72,6 +72,7 @@ class UtilStore {
 
   @action getProfile = (writerId) => {
     this.profileToggle = !this.profileToggle;
+    let { pageIdx } = this.pageIndex;
 
     axios.get(`/api/user/profile/${writerId}`, { params : {writerId} })
       .then((response) => {
@@ -92,7 +93,7 @@ class UtilStore {
       })
       .catch((response) => { console.log(response); });
 
-    axios.get(`/api/user/profile/${writerId}/post/1`, { params : {writerId: writerId, currentPageNum: 1 } })
+    axios.get(`/api/user/profile/${writerId}/post/${pageIdx}`, { params : {writerId: writerId, currentPageNum: 0 } })
       .then((response) => {
         const { data } = response;
 
@@ -111,7 +112,7 @@ class UtilStore {
       })
       .catch((response) => { console.log(response); });
 
-    axios.get(`/api/user/profile/${writerId}/comment/1`, { params : {writerId: writerId, currentPageNum: 1 } })
+    axios.get(`/api/user/profile/${writerId}/comment/${pageIdx}`, { params : {writerId: writerId, currentPageNum: 0 } })
         .then((response) => {
           const { data } = response;
 
@@ -141,10 +142,10 @@ class UtilStore {
       postIndex : index,
     };
 
-    let { pageIdx } = this.pageIndex;
+    let { postIndex } = this.pageIndex;
     let currentPageNum = ( ( 5 * index ) - 4 ) - 1;
 
-    axios.get(`/api/user/profile/${writerId}/post/${pageIdx}`, { params : { currentPageNum: currentPageNum } })
+    axios.get(`/api/user/profile/${writerId}/post/${postIndex}`, { params : { currentPageNum: currentPageNum } })
       .then((response) => {
         const { data } = response;
 
@@ -171,10 +172,10 @@ class UtilStore {
       ...this.pageIndex,
       commentIndex : index,
     };
-    let { pageIdx } = this.pageIndex;
+    let { commentIndex } = this.pageIndex;
     let currentPageNum = ( ( 5 * index ) - 4 ) - 1;
 
-    axios.get(`/api/user/profile/${writerId}/comment/${pageIdx}`, { params : { currentPageNum: currentPageNum } })
+    axios.get(`/api/user/profile/${writerId}/comment/${commentIndex}`, { params : { currentPageNum: currentPageNum } })
       .then((response) => {
         const { data } = response;
 
