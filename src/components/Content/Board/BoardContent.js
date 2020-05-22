@@ -42,13 +42,9 @@ const BoardContent = ({ path, currentPage }) => {
           <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
           <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
         </HeaderDiv>
-        <ManginessTableNoBorder bordered hover size="sm">
-          <tbody>
-            <PostList path={path} isNotice />
-          </tbody>
-        </ManginessTableNoBorder>
         <ManginessTable bordered hover size="sm">
           <tbody>
+            <PostList path={path} isNotice />
             <PostList path={path} currentPage={currentPage} />
           </tbody>
         </ManginessTable>
@@ -85,13 +81,6 @@ const ManginessTable = styled(Table)`
   
   & tr:hover {
     background-color : #fff7d9 !important;
-  }
-`;
-
-
-const ManginessTableNoBorder = styled(ManginessTable)`
-  & tr,td {
-    border-bottom: none !important;
   }
 `;
 
