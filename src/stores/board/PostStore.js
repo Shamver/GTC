@@ -28,6 +28,19 @@ class PostStore {
     all: [],
   };
 
+  @observable boardPostNoticeList = {
+    '': [],
+    free: [],
+    trade: [],
+    notice: [],
+    cash: [],
+    qna: [],
+    faq: [],
+    consult: [],
+    crime: [],
+    all: [],
+  };
+
   @observable homePostList = {
     free: [],
     cash: [],
@@ -167,6 +180,30 @@ class PostStore {
               const { pageCount } = data.result[0];
               this.currentBoardMaxPage = pageCount;
             }
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
+
+  @action getBoardPostNoticeList = (board) => {
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
+
+    axios.get('/api/board/post/notice', { params: { board, userId } })
+      .then((response) => {
+        const { data } = response;
+        console.log(data);
+        if (data.success) {
+          if (data.code === 1) {
+            this.boardPostNoticeList = {
+              ...this.boardPostNoticeList,
+              [board]: data.result,
+            };
           } else {
             toast.info(data.message);
           }

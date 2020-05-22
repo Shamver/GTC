@@ -35,8 +35,7 @@ const SELECT_POST_LIST = `
 
 const SELECT_POST_NOTICE_LIST = `
   SELECT 
-    @ROWNUM := @ROWNUM+1 as rn
-    , P.ID AS id
+    P.ID AS id
     , P.TITLE AS title
     , P.USER_ID AS writerId
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
@@ -44,16 +43,13 @@ const SELECT_POST_NOTICE_LIST = `
     , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
-    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD') AS pageCount
   FROM 
     GTC_POST P
-    , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
   WHERE 
     BOARD_CD = ':BOARD_CD' 
     AND P.USER_ID != IFNULL((SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
     AND P.NOTICE_FL = 1
-  ORDER BY ID DESC    
-  LIMIT :CURRENT_PAGE, :PER_PAGE
+  ORDER BY ID DESC
 `;
 
 const SELECT_POST_LIST_ALL = `
@@ -280,10 +276,8 @@ router.get('/', (req, res) => {
 });
 
 router.get('/notice', (req, res) => {
-  let { currentPage } = req.query;
-  const { board, isHome } = req.query;
+  const { board } = req.query;
   let { userId } = req.query;
-  currentPage = currentPage || 1;
 
   if (!userId) userId = null;
 
@@ -292,9 +286,7 @@ router.get('/notice', (req, res) => {
       SELECT_POST_NOTICE_LIST,
       {
         BOARD_CD: board.toUpperCase(),
-        CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
-        PER_PAGE: isHome ? 9 : 25,
       },
     )
       .then((rows) => {

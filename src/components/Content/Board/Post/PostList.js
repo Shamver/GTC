@@ -5,26 +5,51 @@ import useStores from '../../../../stores/useStores';
 import Post from './index';
 
 // eslint-disable-next-line consistent-return
-const PostList = ({ path, currentPage }) => {
+const PostList = ({ path, currentPage, isNotice = false }) => {
   const {
     BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore, UtilAlertStore, UtilRouteStore,
   } = useStores();
   const { setCurrentBoard } = BoardStore;
-  const { getBoardPostList, boardPostList } = BoardPostStore;
+  const {
+    getBoardPostList, boardPostList,
+    getBoardPostNoticeList, boardPostNoticeList,
+  } = BoardPostStore;
   const { onSet } = ComponentPostStore;
   const { ignoreList } = UserIgnoreStore;
   const { toggleAlert } = UtilAlertStore;
   const { history } = UtilRouteStore;
 
   useEffect(() => {
-    getBoardPostList(path, currentPage);
+    if (isNotice) {
+      getBoardPostNoticeList(path);
+    } else {
+      getBoardPostList(path, currentPage);
+    }
     setCurrentBoard(path);
-  }, [path, getBoardPostList, setCurrentBoard, currentPage, ignoreList, toggleAlert, history]);
+  }, [
+    path, getBoardPostList, setCurrentBoard, currentPage, ignoreList,
+    toggleAlert, history, getBoardPostNoticeList,
+  ]);
 
   if (!boardPostList[path] || boardPostList[path] === undefined) {
     toggleAlert('아직 구현되지 않은 route 입니다.');
     history.push('/');
   } else {
+    if (isNotice) {
+      return boardPostNoticeList[path].map((data, index) => {
+        onSet(index);
+        return (
+          <Post
+            key={data.id}
+            data={data}
+            index={index}
+            path={path}
+            currentPage={currentPage}
+            isNotice
+          />
+        );
+      });
+    }
     return boardPostList[path].map((data, index) => {
       onSet(index);
       return (
@@ -37,6 +62,7 @@ const PostList = ({ path, currentPage }) => {
 PostList.propTypes = {
   path: Proptypes.string,
   currentPage: Proptypes.string,
+  isNotice: Proptypes.bool,
 };
 
 export default observer(PostList);

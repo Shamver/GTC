@@ -9,7 +9,6 @@ import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import Loading from '../../util/Loading';
 import PostList from './Post/PostList';
-import Post from './Post';
 
 const BoardContent = ({ path, currentPage }) => {
   const { UtilLoadingStore } = useStores();
@@ -19,16 +18,16 @@ const BoardContent = ({ path, currentPage }) => {
     doLoading();
   }, [doLoading]);
 
-  const tempData = {
-    id: 1,
-    title: '공지 채팅창 제재 기준입니다. (2018. 10. 19)',
-    writer: '배진영',
-    type: 'notice',
-    date: '01-28',
-    categoryName: '공지',
-    recommendCount: 0,
-    replyCount: 0,
-  };
+  // const tempData = {
+  //   id: 1,
+  //   title: '공지 채팅창 제재 기준입니다. (2018. 10. 19)',
+  //   writer: '배진영',
+  //   type: 'notice',
+  //   date: '01-28',
+  //   categoryName: '공지',
+  //   recommendCount: 0,
+  //   replyCount: 0,
+  // };
 
   return (
     <>
@@ -45,7 +44,7 @@ const BoardContent = ({ path, currentPage }) => {
         </HeaderDiv>
         <ManginessTableNoBorder bordered hover size="sm">
           <tbody>
-            <Post data={tempData} index={-1} />
+            <PostList path={path} isNotice />
           </tbody>
         </ManginessTableNoBorder>
         <ManginessTable bordered hover size="sm">
