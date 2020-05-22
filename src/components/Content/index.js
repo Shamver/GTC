@@ -12,6 +12,7 @@ const Search = lazy(() => import('./Search'));
 const Daily = lazy(() => import('./Daily'));
 const Code = lazy(() => import('./Code'));
 const Advertise = lazy(() => import('./Advertise'));
+const Test = lazy(() => import('./Test'));
 
 export default {
   Board,
@@ -26,4 +27,5 @@ export default {
   Daily,
   Code,
   Advertise,
+  Test,
 };

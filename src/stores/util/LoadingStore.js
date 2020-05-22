@@ -3,9 +3,20 @@ import { observable, action } from 'mobx';
 class LoadingStore {
   @observable loading;
 
+  @observable test = 0;
+  @observable testB = 0;
+
   constructor(root) {
     this.root = root;
   }
+
+  @action setTest = () => {
+    this.test = this.test + 1;
+  };
+
+  @action setTestB = () => {
+    this.testB = this.testB + 1;
+  };
 
   @action loadingProcess = async (ActionArr) => {
     this.loading = 1;

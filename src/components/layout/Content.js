@@ -41,6 +41,10 @@ const Content = () => {
             <Route exact path="/mail" render={() => <Contents.Mail />} />
             <Route exact path="/code" render={() => <Contents.Code />} />
 
+            {/* Test Component */}
+            <Route exact path="/test" render={() => <Contents.Test />} />
+
+
             <Route exact path="/search" render={() => <Contents.Search />} />
 
             {/* Smile Icon */}
@@ -62,6 +66,9 @@ const Content = () => {
             <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
             <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
             <Route exact path="/:board/modify/:id" render={({ match }) => <Posting match={match} isModify />} />
+
+
+
           </Switch>
           <Alert />
           <Sign />
