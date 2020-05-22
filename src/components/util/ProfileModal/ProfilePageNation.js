@@ -4,8 +4,8 @@ import styled from 'styled-components';
 import {observer} from "mobx-react";
 
 const ProfilePaginationList = observer(({rows, index, req}) => {
-    const arr = new Array(( rows % 5 ) === 0 ? (rows / 5) : ( (rows / 5 ) >> 0 ) );
-    const max = ( rows % 5 ) === 0 ? (rows / 5) : ( (rows / 5 ) >> 0 );
+    const arr = new Array(( rows % 5 ) === 0 ? (rows / 5) : ( (rows / 5 ) >> 0 ) + 1 );
+    const max = ( rows % 5 ) === 0 ? (rows / 5) : ( ( (rows / 5 ) >> 0 ) + 1 );
 
     for (let i = 1; i <= max; i += 1) {
         arr.push(

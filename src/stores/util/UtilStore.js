@@ -1,6 +1,5 @@
 import { observable, action } from 'mobx';
 import axios from "axios";
-import {toast} from "react-toastify";
 
 class UtilStore {
   @observable signToggle = false;
@@ -136,14 +135,14 @@ class UtilStore {
 
   @action getPostList = index => {
     const writerId = this.profileData.profileInfo.userId;
-
     this.pageIndex = {
       ...this.pageIndex,
       postIndex : index,
     };
 
     let { postIndex } = this.pageIndex;
-    let currentPageNum = ( ( 5 * index ) - 4 ) - 1;
+    let currentPageNum = ( index === 1 ) ? 0 : ( index - 1 ) * 5;
+    console.log(currentPageNum);
 
     axios.get(`/api/user/profile/${writerId}/post/${postIndex}`, { params : { currentPageNum: currentPageNum } })
       .then((response) => {
@@ -173,7 +172,7 @@ class UtilStore {
       commentIndex : index,
     };
     let { commentIndex } = this.pageIndex;
-    let currentPageNum = ( ( 5 * index ) - 4 ) - 1;
+    let currentPageNum = ( index === 1 ) ? 0 : ( index - 1 ) * 5;
 
     axios.get(`/api/user/profile/${writerId}/comment/${commentIndex}`, { params : { currentPageNum: currentPageNum } })
       .then((response) => {
