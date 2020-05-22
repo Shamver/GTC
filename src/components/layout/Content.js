@@ -18,6 +18,8 @@ const Report = lazy(() => import('../util/Report'));
 const Content = () => {
   const { UtilLoadingStore } = useStores();
   const { loading } = UtilLoadingStore;
+
+  console.log('Content Rendering');
   return (
     <>
       { loading ? (<Loading />) : null}

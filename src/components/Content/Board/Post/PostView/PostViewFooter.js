@@ -16,6 +16,7 @@ const PostViewFooter = () => {
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
   const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
 
+  console.log('PostView Footer Rendering');
   return (
     <>
       <ReplyForm />

@@ -10,11 +10,16 @@ class LoadingStore {
   @action loadingProcess = async (ActionArr) => {
     this.loading = 1;
     console.log('로딩 시작');
+    const promiseArr = [];
     for (let i = 0; i < ActionArr.length; i += 1) {
-      await ActionArr[i]();
+      promiseArr.push(ActionArr[i]());
     }
-    console.log('로딩 끝');
-    this.loading = 0;
+    await Promise.all(promiseArr);
+
+    setTimeout(() => {
+      this.loading = 0;
+      console.log('로딩 긑');
+    }, 0);
   };
 
   @action startLoading = () => {

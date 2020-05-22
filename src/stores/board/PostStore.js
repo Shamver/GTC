@@ -186,8 +186,8 @@ class PostStore {
     const { userData } = this.root.UserStore;
 
     console.log('GetPost Start');
-    let that = this;
-    return new Promise(function(resolve, reject) {
+    const that = this;
+    return new Promise((resolve) => {
       axios.get(`/api/board/post/${id}`, {
         params: {
           userId: userData.id,
@@ -201,7 +201,7 @@ class PostStore {
               that.postView = post;
               getLately();
               console.log('GetPost Ended');
-
+              resolve();
             } else {
               toast.info(data.MESSAGE);
             }
@@ -249,8 +249,8 @@ class PostStore {
   @action getPostUpperLower = (id) => {
     console.log('getUpperLowerPost Start');
 
-    let that = this;
-    return new Promise(function(resolve, reject) {
+    const that = this;
+    return new Promise((resolve) => {
       axios.get(`/api/board/post/${id}/upperLower`, {})
         .then((response) => {
           const { data } = response;
@@ -274,6 +274,7 @@ class PostStore {
               }
 
               console.log('getUpperLowerPost Ended');
+              resolve();
             } else {
               toast.info(data.MESSAGE);
             }

@@ -1,4 +1,4 @@
-import React, { useEffect, memo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import useStores from '../../../../../stores/useStores';
@@ -20,7 +20,7 @@ const PostView = ({ match }) => {
     ]);
   }, [getPost, getPostUpperLower, id]);
 
-
+  console.log('PostView Rendering');
   return (
     <PostWrapper>
       <ViewWrapper>
@@ -66,4 +66,4 @@ const PostWrapper = styled.div`
   }
 `;
 
-export default memo(PostView);
+export default useMemo(PostView);
