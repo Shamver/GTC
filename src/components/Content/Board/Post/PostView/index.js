@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import useStores from '../../../../../stores/useStores';
@@ -66,4 +66,4 @@ const PostWrapper = styled.div`
   }
 `;
 
-export default useMemo(PostView);
+export default PostView;
