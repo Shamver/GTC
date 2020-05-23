@@ -13,10 +13,6 @@ const Home = () => {
   const { UtilLoadingStore } = useStores();
   const { loading, doLoading } = UtilLoadingStore;
 
-  useEffect(() => {
-    doLoading();
-  }, [doLoading]);
-
   return (
     <>
       <Loading loading={loading} />

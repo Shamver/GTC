@@ -1,40 +1,34 @@
 import React, { useEffect } from 'react';
-import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
-import useStores from '../../../../stores/useStores';
-import PostContent from './PostContent';
-import Loading from '../../../util/Loading';
+import useStores from '../../../../../stores/useStores';
+import PostViewHeader from './PostViewHeader';
+import PostViewContent from './PostViewContent';
+import PostViewFooter from './PostViewFooter';
 
 const PostView = ({ match }) => {
-  const {
-    BoardPostStore, BoardReplyStore, BoardStore, UtilLoadingStore,
-  } = useStores();
+  const { BoardPostStore, UtilLoadingStore } = useStores();
   const { getPost, getPostUpperLower } = BoardPostStore;
-  const { setReplyBpId } = BoardReplyStore;
-  const { setCurrentBoardToId } = BoardStore;
-  const { loading, doLoading } = UtilLoadingStore;
+  const { loadingProcess } = UtilLoadingStore;
   const { params } = match;
   const { id } = params;
 
   useEffect(() => {
-    doLoading();
-    setCurrentBoardToId(id);
-    getPost(id);
-    getPostUpperLower(id);
-    setReplyBpId(id);
-  }, [
-    getPost, setReplyBpId, id, setCurrentBoardToId, getPostUpperLower,
-    doLoading,
-  ]);
+    loadingProcess([
+      () => getPost(id),
+      () => getPostUpperLower(id),
+    ]);
+  }, [getPost, getPostUpperLower, id]);
 
+  console.log('PostView Rendering');
   return (
-    <>
-      <Loading loading={loading} />
-      <PostWrapper loading={loading}>
-        <PostContent match={match} />
-      </PostWrapper>
-    </>
+    <PostWrapper>
+      <ViewWrapper>
+        <PostViewHeader />
+        <PostViewContent />
+        <PostViewFooter />
+      </ViewWrapper>
+    </PostWrapper>
   );
 };
 
@@ -43,12 +37,16 @@ PostView.propTypes = {
     params: Proptypes.shape({
       id: Proptypes.string,
     }),
-  }),
+  }).isRequired,
 };
 
-PostView.defaultProps = {
-  match: null,
-};
+const ViewWrapper = styled.div`
+  padding : 20px;
+  font-size : 13px !important;
+  @media (max-width: 992px) {
+    padding : 20px 7px !important;
+  }
+`;
 
 const PostWrapper = styled.div`
   display :  ${(props) => (props.loading ? 'none' : 'block')}
@@ -68,4 +66,4 @@ const PostWrapper = styled.div`
   }
 `;
 
-export default observer(PostView);
+export default PostView;

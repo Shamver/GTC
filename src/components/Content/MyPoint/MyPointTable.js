@@ -3,7 +3,6 @@ import {
   Table,
 } from 'reactstrap';
 import styled from 'styled-components';
-
 import { observer } from 'mobx-react';
 import MyPointTableRow from './MyPointTableRow';
 import useStores from '../../../stores/useStores';

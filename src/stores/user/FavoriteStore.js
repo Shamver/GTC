@@ -95,6 +95,14 @@ class FavoriteStore {
       })
       .catch((response) => { console.log(response); });
   });
+
+  @action judgeFavorite = (isFavorite, id) => {
+    if (isFavorite) {
+      this.deleteFavorite(id);
+    } else {
+      this.addFavorite(id);
+    }
+  }
 }
 
 export default FavoriteStore;

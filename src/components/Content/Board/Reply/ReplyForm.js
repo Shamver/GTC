@@ -3,19 +3,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import * as Proptypes from 'prop-types';
 import useStores from '../../../../stores/useStores';
 import ReplyList from './ReplyList';
 import ReplyEdit from './ReplyEdit';
 
-const ReplyForm = observer(({ match }) => {
-  const { params } = match;
-  const { id } = params;
-  const { BoardReplyStore } = useStores();
-  const {
-    replyEditId, postReplyList, modifyModeId, CurrentReplyOption,
-  } = BoardReplyStore;
-  const { commentAllowFl } = CurrentReplyOption;
+const ReplyForm = () => {
+  const { BoardReplyStore, BoardPostStore } = useStores();
+  const { replyEditId, postReplyList, modifyModeId } = BoardReplyStore;
+  const { postView } = BoardPostStore;
+  const { commentAllowFl } = postView;
+
   return (
     <>
       <ReplyHeader>
@@ -24,28 +21,18 @@ const ReplyForm = observer(({ match }) => {
         </ReplyH5>
       </ReplyHeader>
       <ReplyListWrapper>
-        <ReplyList bpId={id} />
+        <ReplyList />
       </ReplyListWrapper>
       { replyEditId === 0 && modifyModeId === 0 && commentAllowFl
         ? (<ReplyEdit />)
         : ''}
     </>
   );
-});
-
-ReplyForm.propTypes = {
-  match: Proptypes.shape({
-    params: Proptypes.shape({
-      id: Proptypes.string,
-    }).isRequired,
-  }).isRequired,
 };
-
 
 const ReplyListWrapper = styled.div`
   margin-bottom : 40px;      
 `;
-
 
 const ReplyH5 = styled.h5`
   font-size: 14px;
@@ -57,4 +44,4 @@ const ReplyHeader = styled.div`
   color : #DC3545;
 `;
 
-export default ReplyForm;
+export default observer(ReplyForm);

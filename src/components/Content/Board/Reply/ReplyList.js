@@ -3,15 +3,16 @@ import React, { useEffect } from 'react';
 import useStores from '../../../../stores/useStores';
 import Reply from './index';
 
-const ReplyList = ({ bpId }) => {
-  const { BoardReplyStore, ComponentReplyStore, UserIgnoreStore } = useStores();
+const ReplyList = () => {
+  const { BoardPostStore, BoardReplyStore, ComponentReplyStore } = useStores();
+  const { postView } = BoardPostStore;
   const { getReply, postReplyList } = BoardReplyStore;
   const { onSet } = ComponentReplyStore;
-  const { ignoreList } = UserIgnoreStore;
+  const { id } = postView;
 
   useEffect(() => {
-    getReply(bpId);
-  }, [getReply, bpId, ignoreList]);
+    getReply(id);
+  }, [getReply, id]);
 
 
   return postReplyList.map((data, index) => {

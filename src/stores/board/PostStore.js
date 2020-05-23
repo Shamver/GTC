@@ -38,11 +38,11 @@ class PostStore {
 
   @observable currentBoardMaxPage = 0;
 
-  @observable postView = {};
+  @observable postView = {
+    id: 0,
+  };
 
   @observable postMineList = [];
-
-  @observable currentPostId;
 
   @observable currentPostUpperLower = {
     upper: '',
@@ -52,10 +52,6 @@ class PostStore {
   constructor(root) {
     this.root = root;
   }
-
-  @action setCurrentPostId = (postId) => {
-    this.currentPostId = postId;
-  };
 
   @action addPost = () => {
     if (!this.postValidationCheck()) {
@@ -202,26 +198,34 @@ class PostStore {
     const { getLately } = this.root.CookieLatelyStore;
     const { userData } = this.root.UserStore;
 
-    axios.get(`/api/board/post/${id}`, {
-      params: {
-        userId: userData ? userData.id : null,
-      },
-    })
-      .then((response) => {
-        const { data } = response;
-        if (data.success) {
-          if (data.code === 1) {
-            const [post] = data.result;
-            this.postView = post;
-            getLately();
-          } else {
-            toast.info(data.message);
-          }
-        } else {
-          toast.error(data.message);
-        }
+    console.log('GetPost Start');
+    const that = this;
+    return new Promise((resolve) => {
+      axios.get(`/api/board/post/${id}`, {
+        params: {
+          userId: userData.id,
+        },
       })
-      .catch((response) => { console.log(response); });
+        .then((response) => {
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              const [post] = data.DATA;
+              that.postView = post;
+              getLately();
+              console.log('GetPost Ended');
+              resolve();
+            } else {
+              toast.info(data.MESSAGE);
+            }
+          } else {
+            toast.error(data.MESSAGE);
+          }
+
+          resolve();
+        })
+        .catch((response) => { console.log(response); });
+    });
   };
 
   @action getModifyPost = (id, isModify = false) => {
@@ -264,35 +268,39 @@ class PostStore {
   };
 
   @action getPostUpperLower = (id) => {
-    axios.get(`/api/board/post/${id}/upperLower`, {})
-      .then((response) => {
-        const { data } = response;
-        if (data.success) {
-          if (data.code === 1) {
-            const array = data.result;
+    const that = this;
+    return new Promise((resolve) => {
+      axios.get(`/api/board/post/${id}/upperLower`)
+        .then((response) => {
+          const { data } = response;
+          if (data.SUCCESS) {
+            if (data.CODE === 1) {
+              const array = data.DATA;
 
-            // 기존에 있던 데이터를 초기화
-            this.currentPostUpperLower = {
-              upper: '',
-              lower: '',
-            };
+              // 기존에 있던 데이터를 초기화
+              that.currentPostUpperLower = {
+                upper: '',
+                lower: '',
+              };
 
-            for (let i = 0; i < array.length; i += 1) {
-              const { isUpper } = array[i];
-              if (isUpper) {
-                this.currentPostUpperLower.upper = array[i];
-              } else {
-                this.currentPostUpperLower.lower = array[i];
+              for (let i = 0; i < array.length; i += 1) {
+                const { isUpper } = array[i];
+                if (isUpper) {
+                  that.currentPostUpperLower.upper = array[i];
+                } else {
+                  that.currentPostUpperLower.lower = array[i];
+                }
               }
+            } else {
+              toast.info(data.MESSAGE);
             }
           } else {
-            toast.info(data.message);
+            toast.error(data.MESSAGE);
           }
-        } else {
-          toast.error(data.message);
-        }
-      })
-      .catch((response) => { console.log(response); });
+          resolve();
+        })
+        .catch((response) => { console.log(response); });
+    });
   };
 
   @action recommendPost = (postId, type) => {
@@ -424,6 +432,10 @@ class PostStore {
       commentAllowFl: 1,
       secretCommentAllowFl: 0,
     };
+  }
+
+  @action setClearPostView = () => {
+    this.postView = {};
   }
 }
 

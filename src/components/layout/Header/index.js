@@ -55,13 +55,13 @@ const Header = () => {
     <HeaderWrapper>
       <HeaderTop>
         <MobileMenu icon={faBars} onClick={() => onSetSidebarOpen(true)} />
-        <BlockLink to="/" searchOpen={searchOpen}>
+        <BlockLink to="/">
           <InH1>
             <Logo src={logo} alt="" />
           </InH1>
         </BlockLink>
         {/* 일반 서치 그룹 */}
-        <InputGroupWrapper searchOpen={searchOpen}>
+        <InputGroupWrapper searchopen={searchOpen ? 1 : 0}>
           <InputGroupA>
             <Input placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} />
             <InputGroupAddon addonType="append">
@@ -72,17 +72,17 @@ const Header = () => {
           </InputGroupA>
         </InputGroupWrapper>
         {/* 모바일 화면에서의 서치 그룹 */}
-        <ResponsiveInputGroupWrapper searchOpen={searchOpen}>
+        <ResponsiveInputGroupWrapper searchopen={searchOpen ? 1 : 0}>
           <InputGroupA>
-            <InputGroupAddon addonType="prepend" searchOpen={searchOpen}>
-              <ResponsiveButton color="danger" onClick={openSearch} searchOpen={searchOpen}>
+            <InputGroupAddon addonType="prepend" searchopen={searchOpen ? 1 : 0}>
+              <ResponsiveButton color="danger" onClick={openSearch} searchopen={searchOpen ? 1 : 0}>
                 { searchOpen ? (<MiddleIcon icon={faArrowRight} />)
                   : (<MiddleIcon icon={faSearch} />)}
               </ResponsiveButton>
             </InputGroupAddon>
-            <ResponsiveInput placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} searchOpen={searchOpen} />
-            <AppendAddOn addonType="append" searchOpen={searchOpen}>
-              <ResponsiveButton color="danger" onClick={search} searchOpen={searchOpen}>
+            <ResponsiveInput placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} searchopen={searchOpen ? 1 : 0} />
+            <AppendAddOn addonType="append" searchopen={searchOpen ? 1 : 0}>
+              <ResponsiveButton color="danger" onClick={search} searchopen={searchOpen ? 1 : 0}>
                 <MiddleIcon icon={faSearch} />
               </ResponsiveButton>
             </AppendAddOn>
@@ -148,7 +148,7 @@ const MiddleIcon = styled(FontAwesomeIcon)`
 `;
 
 const AppendAddOn = styled(InputGroupAddon)`
-  display : ${(props) => (props.searchOpen ? 'inline-block' : 'none')} !important;
+  display : ${(props) => (props.searchopen ? 'inline-block' : 'none')} !important;
 `;
 
 
@@ -175,17 +175,17 @@ const HeaderTop = styled.div`
 
 const BlockLink = styled(Link)`
   @media (max-width: 600px) {
-    display : ${(props) => (props.searchOpen ? 'none' : 'inline-block')}
+    display : ${(props) => (props.searchopen ? 'none' : 'inline-block')}
   }
 `;
 
 const ResponsiveInput = styled(Input)`
-  display : ${(props) => (props.searchOpen ? 'inline-block' : 'none')} !important;
+  display : ${(props) => (props.searchopen ? 'inline-block' : 'none')} !important;
 `;
 
 const ResponsiveButton = styled(Button)`
   @media (max-width: 600px) {
-    border-radius : ${(props) => (props.searchOpen ? '' : '.25rem !important;')};
+    border-radius : ${(props) => (props.searchopen ? '' : '.25rem !important;')};
   }
 `;
 
