@@ -11,16 +11,21 @@ class UtilStore {
   @observable profileToggle = false;
 
   @observable profileData = {
-    profileInfo : {},
-    profilePostData : [],
-    profileCommentData : []
+    profileInfo: {},
+    profilePostData: [],
+    profileCommentData: [],
   };
 
   @observable activeTab = '1';
 
   @observable pageIndex = {
-    postIndex : 1,
-    commentIndex : 1
+    postIndex: 1,
+    commentIndex: 1,
+  };
+
+  @observable rows = {
+    postRows : 0,
+    commentRows : 0,
   };
 
   constructor(root) {
@@ -78,21 +83,21 @@ class UtilStore {
         const { data } = response;
 
         if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.profileData = {
-                  ...this.profileData,
-                  profileInfo: data.DATA
-              }
-            } else {
-              console.log(data.MESSAGE);
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileInfo: data.DATA
             }
+          } else {
+            console.log(data.MESSAGE);
+          }
         } else {
           console.log(data.MESSAGE);
         }
       })
       .catch((response) => { console.log(response); });
 
-    axios.get(`/api/user/profile/${writerId}/post/${pageIdx}`, { params : {writerId: writerId, currentPageNum: 0 } })
+    axios.get(`/api/user/profile/${writerId}/post/${pageIdx}`, { params : {writerId: writerId, index: 1 } })
       .then((response) => {
         const { data } = response;
 
@@ -100,8 +105,12 @@ class UtilStore {
           if (data.CODE === 1) {
             this.profileData = {
               ...this.profileData,
-              profilePostData: data.DATA
-            }
+              profilePostData: data.DATA,
+            };
+            this.rows = {
+              ...this.rows,
+              postRows: data.DATA[0].rowCount,
+            };
           } else {
             console.log(data.MESSAGE);
           }
@@ -111,24 +120,28 @@ class UtilStore {
       })
       .catch((response) => { console.log(response); });
 
-    axios.get(`/api/user/profile/${writerId}/comment/${pageIdx}`, { params : {writerId: writerId, currentPageNum: 0 } })
-        .then((response) => {
-          const { data } = response;
+    axios.get(`/api/user/profile/${writerId}/comment/${pageIdx}`, { params : {writerId: writerId, index: 1 } })
+      .then((response) => {
+        const { data } = response;
 
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.profileData = {
-                ...this.profileData,
-                profileCommentData: data.DATA
-              }
-            } else {
-              console.log(data.MESSAGE);
-            }
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileCommentData: data.DATA
+            };
+            this.rows = {
+              ...this.rows,
+              commentRows: data.DATA[0].rowCount,
+            };
           } else {
             console.log(data.MESSAGE);
           }
-        })
-        .catch((response) => { console.log(response); });
+        } else {
+          console.log(data.MESSAGE);
+        }
+      })
+      .catch((response) => { console.log(response); });
 
     return true;
   }
@@ -141,10 +154,8 @@ class UtilStore {
     };
 
     let { postIndex } = this.pageIndex;
-    let currentPageNum = ( index === 1 ) ? 0 : ( index - 1 ) * 5;
-    console.log(currentPageNum);
 
-    axios.get(`/api/user/profile/${writerId}/post/${postIndex}`, { params : { currentPageNum: currentPageNum } })
+    axios.get(`/api/user/profile/${writerId}/post/${postIndex}`, { params : { index: index } })
       .then((response) => {
         const { data } = response;
 
@@ -153,7 +164,11 @@ class UtilStore {
             this.profileData = {
               ...this.profileData,
               profilePostData: data.DATA
-            }
+            };
+            this.rows = {
+              ...this.rows,
+              postRows: data.DATA[0].rowCount,
+            };
           } else {
             console.log(data.MESSAGE);
           }
@@ -172,9 +187,8 @@ class UtilStore {
       commentIndex : index,
     };
     let { commentIndex } = this.pageIndex;
-    let currentPageNum = ( index === 1 ) ? 0 : ( index - 1 ) * 5;
 
-    axios.get(`/api/user/profile/${writerId}/comment/${commentIndex}`, { params : { currentPageNum: currentPageNum } })
+    axios.get(`/api/user/profile/${writerId}/comment/${commentIndex}`, { params : { index: index  } })
       .then((response) => {
         const { data } = response;
 
@@ -183,7 +197,11 @@ class UtilStore {
             this.profileData = {
               ...this.profileData,
               profileCommentData: data.DATA
-            }
+            };
+            this.rows = {
+              ...this.rows,
+              commentRows: data.DATA[0].rowCount,
+            };
           } else {
             console.log(data.MESSAGE);
           }

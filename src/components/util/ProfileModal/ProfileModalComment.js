@@ -9,7 +9,7 @@ import useStores from "../../../stores/useStores";
 const ProfileModalComment = ({ commentData }) => {
   const { UtilStore } = useStores();
   const { toggleProfile } = UtilStore;
-  const { commentId, commentContent, commentCreated, postCommentId } = commentData;
+  const { commentId, commentContent, commentCreated } = commentData;
   const commentContentText = renderHTML(`${commentContent}`);
 
   return (

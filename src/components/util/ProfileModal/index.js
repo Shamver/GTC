@@ -1,8 +1,8 @@
 import React from 'react';
 import {observer} from "mobx-react";
 import {
-    Modal, ModalHeader, ModalBody, TabContent,
-    TabPane, Nav, NavItem, NavLink, Row, Col
+  Modal, ModalHeader, ModalBody, TabContent,
+  TabPane, Nav, NavItem, NavLink, Row, Col
 } from 'reactstrap';
 import { faCalendarAlt, faAt, faPen, faComment } from "@fortawesome/free-solid-svg-icons";
 import styled from 'styled-components';
@@ -16,71 +16,71 @@ import avatarImg from "../../../resources/images/takagi.jpg";
 
 const ProfileModal = () => {
 
-    const { UtilStore } = useStores();
-    const { profileToggle, toggleProfile, profileData, toggleTab, activeTab } = UtilStore;
-    const { profileInfo } = profileData;
+  const { UtilStore } = useStores();
+  const { profileToggle, toggleProfile, profileData, toggleTab, activeTab } = UtilStore;
+  const { profileInfo } = profileData;
 
-    return (
-        <Modal isOpen={profileToggle} toggle={toggleProfile}>
-            <ModalHeaderBack toggle={toggleProfile}><b>{profileInfo.nickname}님의 프로필</b></ModalHeaderBack>
-            <ModalBodyBox>
-                <ProfileInfoBox>
-                    <ProfileAvatarWrap>
-                        <Avatar src={avatarImg} />
-                    </ProfileAvatarWrap>
-                    <ProfileInfoWrap>
-                        <ProfileInfo>
-                            <ProfileInfoTitle>
-                                <FaiPink icon={faCalendarAlt} className="fa-fw" /> 가입일자
-                            </ProfileInfoTitle>
-                            <ProfileInfoContents>{profileInfo.userCreated}</ProfileInfoContents>
-                        </ProfileInfo>
-                        <ProfileInfo>
-                            <ProfileInfoTitle>
-                                <FaiPink icon={faAt} className="fa-fw" /> 이메일
-                            </ProfileInfoTitle>
-                            <ProfileInfoContents>{profileInfo.userEmail}</ProfileInfoContents>
-                        </ProfileInfo>
-                        <ProfileInfo>
-                            <ProfileInfoTitle>
-                                <FaiPink icon={faPen} className="fa-fw" /> 작성 글
-                            </ProfileInfoTitle>
-                            <ProfileInfoContents>{profileInfo.postCount}</ProfileInfoContents>
-                        </ProfileInfo>
-                        <ProfileInfo>
-                            <ProfileInfoTitle>
-                                <FaiPink icon={faComment} className="fa-fw" /> 작성 댓글
-                            </ProfileInfoTitle>
-                            <ProfileInfoContents>{profileInfo.commentCount}</ProfileInfoContents>
-                        </ProfileInfo>
-                    </ProfileInfoWrap>
-                </ProfileInfoBox>
+  return (
+    <Modal isOpen={profileToggle} toggle={toggleProfile}>
+      <ModalHeaderBack toggle={toggleProfile}><b>{profileInfo.nickname}님의 프로필</b></ModalHeaderBack>
+        <ModalBodyBox>
+          <ProfileInfoBox>
+            <ProfileAvatarWrap>
+              <Avatar src={avatarImg} />
+            </ProfileAvatarWrap>
+            <ProfileInfoWrap>
+              <ProfileInfo>
+                <ProfileInfoTitle>
+                    <FaiPink icon={faCalendarAlt} className="fa-fw" /> 가입일자
+                </ProfileInfoTitle>
+                <ProfileInfoContents>{profileInfo.userCreated}</ProfileInfoContents>
+              </ProfileInfo>
+              <ProfileInfo>
+                <ProfileInfoTitle>
+                    <FaiPink icon={faAt} className="fa-fw" /> 이메일
+                </ProfileInfoTitle>
+                <ProfileInfoContents>{profileInfo.userEmail}</ProfileInfoContents>
+              </ProfileInfo>
+              <ProfileInfo>
+                <ProfileInfoTitle>
+                    <FaiPink icon={faPen} className="fa-fw" /> 작성 글
+                </ProfileInfoTitle>
+                <ProfileInfoContents>{profileInfo.postCount}</ProfileInfoContents>
+              </ProfileInfo>
+              <ProfileInfo>
+                <ProfileInfoTitle>
+                    <FaiPink icon={faComment} className="fa-fw" /> 작성 댓글
+                </ProfileInfoTitle>
+                <ProfileInfoContents>{profileInfo.commentCount}</ProfileInfoContents>
+              </ProfileInfo>
+            </ProfileInfoWrap>
+          </ProfileInfoBox>
 
-                <div>
-                    <Nav tabs>
-                        <NavItem>
-                            <NavItemTitle className={classnames({ active: activeTab === '1' })} onClick={() => { toggleTab('1'); }} >
-                                작성글
-                            </NavItemTitle>
-                        </NavItem>
-                        <NavItem>
-                            <NavItemTitle className={classnames({ active: activeTab === '2' })} onClick={() => { toggleTab('2'); }} >
-                                작성 댓글
-                            </NavItemTitle>
-                        </NavItem>
-                    </Nav>
-                    <TabContent activeTab={activeTab}>
-                        <TabPane tabId="1">
-                          <ProfileModalPostList profileInfo={profileInfo}/>
-                        </TabPane>
-                        <TabPane tabId="2">
-                          <ProfileModalCommentList profileInfo={profileInfo}/>
-                        </TabPane>
-                    </TabContent>
-                </div>
-            </ModalBodyBox>
-        </Modal>
-    );
+          <div>
+            <Nav tabs>
+              <NavItem>
+                <NavItemTitle className={classnames({ active: activeTab === '1' })} onClick={() => { toggleTab('1'); }} >
+                  작성글
+                </NavItemTitle>
+              </NavItem>
+              <NavItem>
+                <NavItemTitle className={classnames({ active: activeTab === '2' })} onClick={() => { toggleTab('2'); }} >
+                  작성 댓글
+                </NavItemTitle>
+            </NavItem>
+          </Nav>
+          <TabContent activeTab={activeTab}>
+            <TabPane tabId="1">
+              <ProfileModalPostList profileInfo={profileInfo}/>
+            </TabPane>
+            <TabPane tabId="2">
+              <ProfileModalCommentList profileInfo={profileInfo}/>
+            </TabPane>
+          </TabContent>
+        </div>
+      </ModalBodyBox>
+    </Modal>
+  );
 };
 
 const ModalHeaderBack = styled(ModalHeader)`

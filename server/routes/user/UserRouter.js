@@ -44,10 +44,11 @@ const GET_USER_POST_LIST = `
     ELSE DATE_FORMAT(A.CRT_DTTM, '%m-%d')
   END AS postCreated
     , (SELECT COUNT(GTC_COMMENT.ID) FROM GTC_COMMENT WHERE GTC_COMMENT.POST_ID = A.ID) AS postCommentCount
+    , (SELECT CEIL(COUNT(*)/5) FROM GTC_POST WHERE GTC_POST.USER_ID = :USER_ID) AS rowCount
   FROM GTC_POST A
   WHERE A.USER_ID = :USER_ID
   ORDER BY ID DESC
-  LIMIT :CURRENT_PAGE, 5
+  LIMIT :INDEX, 5
 `
 const GET_USER_COMMENT_LIST = `
   SELECT B.ID AS commentId
@@ -61,10 +62,11 @@ const GET_USER_COMMENT_LIST = `
       WHEN B.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 YEAR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MONTH, B.CRT_DTTM, SYSDATE()),'달 전')
     ELSE CONCAT(TIMESTAMPDIFF(YEAR, B.CRT_DTTM, SYSDATE()),'년 전')
   END AS commentCreated
+    , (SELECT CEIL(COUNT(*)/5) FROM GTC_COMMENT WHERE GTC_COMMENT.USER_ID = :USER_ID) AS rowCount
   FROM GTC_COMMENT B
   WHERE B.USER_ID = :USER_ID
   ORDER BY ID DESC
-  LIMIT :CURRENT_PAGE, 5
+  LIMIT :INDEX, 5
 `
 
 router.delete('/withdrawal', (req, res) => {
@@ -139,13 +141,15 @@ router.get('/profile/:writerId', (req, res) => {
 });
 
 router.get('/profile/:writerId/post/:currentPage', (req, res) => {
-  let { currentPageNum } = req.query;
+  let { index } = req.query;
+  index = ( index === 1 ) ? 0 : ( index - 1 ) * 5;
+
   Database.execute(
     (database) => database.query(
       GET_USER_POST_LIST,
         {
           USER_ID: req.params.writerId,
-          CURRENT_PAGE: currentPageNum,
+          INDEX: index,
         },
       )
         .then((rows) => {
@@ -162,13 +166,15 @@ router.get('/profile/:writerId/post/:currentPage', (req, res) => {
 });
 
 router.get('/profile/:writerId/comment/:currentPage', (req, res) => {
-  let { currentPageNum } = req.query;
+  let { index } = req.query;
+  index = ( index === 1 ) ? 0 : ( index - 1 ) * 5;
+
   Database.execute(
     (database) => database.query(
       GET_USER_COMMENT_LIST,
         {
           USER_ID: req.params.writerId,
-          CURRENT_PAGE: currentPageNum,
+          INDEX: index,
         },
       )
         .then((rows) => {
