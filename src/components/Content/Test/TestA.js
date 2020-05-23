@@ -10,11 +10,12 @@ const TestA = () => {
   return (
     <>
       <Button type="button" onClick={setTest}>
-        A
+        test Plus
       </Button>
+      <br />
       {testB}
       <Button type="button" onClick={setTestB}>
-        B
+        testBPlus
       </Button>
     </>
   );
