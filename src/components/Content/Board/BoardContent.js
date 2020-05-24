@@ -80,7 +80,7 @@ const ManginessTable = styled(Table)`
   }
   
   & tr:hover {
-    background-color : #fff7d9 !important;
+    background-color : #fff7d9;
   }
 `;
 

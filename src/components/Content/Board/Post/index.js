@@ -58,7 +58,10 @@ const DateTd = styled.td`
 
 const TableRow = styled.tr`
   background-color : ${(props) => (props.currentPostId === props.postId ? '#fff9e5;'
-    : (props.isNotice ? '#ffd7d4' : 'white'))}
+    : (props.isNotice ? '#ffd7d4' : 'white'))};
+  &:hover {
+    background-color: ${(props) => (props.isNotice ? '#ffd7d4' : '#fff7d9')} !important;
+  }
 `;
 
 const LikeCountSpan = styled.span`
