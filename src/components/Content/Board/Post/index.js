@@ -13,7 +13,7 @@ const Post = ({
   const { id, date, recommendCount } = data;
 
   return (
-    <TableRow height="35" key={data.id} currentPostId={currentPostId} postId={id}>
+    <TableRow height="35" key={data.id} currentPostId={currentPostId} postId={id} isNotice={isNotice}>
       <CenterTd width="50">
         {currentPostId === id ? '>>'
           : isNotice ? (
@@ -57,7 +57,8 @@ const DateTd = styled.td`
 `;
 
 const TableRow = styled.tr`
-  background-color : ${(props) => (props.currentPostId === props.postId ? '#fff9e5;' : 'white')}
+  background-color : ${(props) => (props.currentPostId === props.postId ? '#fff9e5;'
+    : (props.isNotice ? '#ffd7d4' : 'white'))}
 `;
 
 const LikeCountSpan = styled.span`
