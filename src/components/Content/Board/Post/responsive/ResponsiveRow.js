@@ -7,7 +7,9 @@ import * as Proptypes from 'prop-types';
 import WriterDropdown from './WriterDropdown';
 import useStores from '../../../../../stores/useStores';
 
-const ResponsiveRow = ({ data, index, path }) => {
+const ResponsiveRow = ({
+  data, index, path, isNotice,
+}) => {
   const {
     id, recommendCount, categoryName, commentCount,
     type, title, boardName,
@@ -22,14 +24,16 @@ const ResponsiveRow = ({ data, index, path }) => {
     <>
       { path === 'all' ? (
         <DateTd>
-          { type !== 'notice' ? boardName : ''}
+          { !isNotice ? boardName : ''}
         </DateTd>
       ) : '' }
-      <DateTd>
-        { type !== 'notice' ? categoryName : ''}
-      </DateTd>
-      <MiddleTd width="700">
-        { type === 'notice' ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}
+      { !isNotice ? (
+        <DateTd>
+          { type !== 'notice' ? categoryName : ''}
+        </DateTd>
+      ) : '' }
+      <MiddleTd width="700" colSpan={isNotice ? 2 : 1}>
+        { isNotice ? (<Info icon={faInfoCircle} />) : IsBestPost}
         &nbsp;
         <PostTitle className={isVisited(id) ? 'color-gray' : ''} onClick={() => onClickPost(id)}>{title}</PostTitle>
         { commentCount > 0 ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>) : ''}
@@ -54,6 +58,7 @@ ResponsiveRow.propTypes = {
   }).isRequired,
   index: Proptypes.number.isRequired,
   path: Proptypes.string.isRequired,
+  isNotice: Proptypes.bool.isRequired,
 };
 
 const DateTd = styled.td`
@@ -68,6 +73,10 @@ const DateTd = styled.td`
 
 const Star = styled(FontAwesomeIcon)`
   color : #efc839;
+`;
+
+const Info = styled(FontAwesomeIcon)`
+  color: #0083e2;
 `;
 
 const ReplyCountspan = styled.span`

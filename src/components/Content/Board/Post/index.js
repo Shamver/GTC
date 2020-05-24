@@ -26,7 +26,7 @@ const Post = ({
             </>
           )}
       </CenterTd>
-      <ResponsiveRow data={data} index={index} path={path} />
+      <ResponsiveRow data={data} index={index} path={path} isNotice={isNotice} />
       <DateTd>{date}</DateTd>
     </TableRow>
   );
