@@ -17,15 +17,11 @@ const Report = lazy(() => import('../util/Report'));
 
 const Content = () => {
   const { UserStore, UtilLoadingStore } = useStores();
-  const { userData, checkPermission } = UserStore;
+  const { checkPermission } = UserStore;
   const { loading } = UtilLoadingStore;
-
-  useEffect(() => {
-  }, [userData]);
-
   return (
     <>
-      { loading ? (<Loading />) : null}
+      { !!loading && (<Loading />)}
       <BorderedDiv loading={loading}>
         <Suspense fallback={<Loading />}>
           <ScrollToTop />

@@ -33,7 +33,7 @@ const HeaderNoticeView = () => {
         <TextContainer>
           <Badge color="primary">광고</Badge>
           &nbsp;
-          { showingHeader ? showingHeader.url ? (
+          { (showingHeader && showingHeader.url) ? (
             <Link to={showingHeader.url}>
               <Span>
                 (링크) {showingHeader.message}
@@ -43,7 +43,7 @@ const HeaderNoticeView = () => {
             <span>
               {showingHeader.message}
             </span>
-          ) : '' }
+          )}
         </TextContainer>
       )}
     </>

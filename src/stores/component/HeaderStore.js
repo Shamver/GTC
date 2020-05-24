@@ -55,12 +55,13 @@ class HeaderStore {
         this.showIndex = 0;
         this.showMode = 0;
       }
-    } else {
-      if (this.showingHeader !== null) {
-        this.showingHeader = null;
-      }
-      return false;
+      return true;
     }
+
+    if (this.showingHeader !== null) {
+      this.showingHeader = null;
+    }
+    return false;
   }, 5000);
 
   @action dropdownClear = () => {
