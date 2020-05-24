@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {observer} from 'mobx-react';
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
@@ -7,19 +7,16 @@ import { Row, Col } from 'reactstrap';
 
 import ProfileModalPost from './ProfileModalPost';
 import ModalPagination from './ProfilePageNation';
-
 const ProfileModalPostList = () => {
   const { UtilStore } = useStores();
   const { profileData, pageIndex, getPostList, rows } = UtilStore;
   const { postRows } = rows;
   const { profilePostData } = profileData;
   const { postIndex } = pageIndex;
-
   const postList =  profilePostData.map( index => (
     <ProfileModalPost postData={index} key={index.postId}/>
   ));
 
-  console.log(postList)
   return (
     <>
       <TableBox>
@@ -44,7 +41,6 @@ const TableBox = styled.div`
 const TableHeader = styled(Row)`
   font-size: 15px;
   padding: 12px 0;
-  // border-bottom: 1px solid #ebebeb;
 `;
 
 const NoPost = styled.div`
@@ -54,4 +50,4 @@ const NoPost = styled.div`
   font-size: 13px;
 `;
 
-export default observer(ProfileModalPostList);
+export default ProfileModalPostList;

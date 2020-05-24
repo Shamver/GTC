@@ -40,7 +40,6 @@ const TableBox = styled.div`
 const TableHeader = styled(Row)`
   font-size: 15px;
   padding: 12px 0;
-  // border-bottom: 1px solid #ebebeb;
 `;
 
 const NoPost = styled.div`
@@ -50,4 +49,4 @@ const NoPost = styled.div`
   font-size: 13px;
 `;
 
-export default observer(ProfileModalCommentList);
+export default ProfileModalCommentList;

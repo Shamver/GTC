@@ -2,7 +2,7 @@ import React from 'react';
 import {observer} from "mobx-react";
 import {
   Modal, ModalHeader, ModalBody, TabContent,
-  TabPane, Nav, NavItem, NavLink, Row, Col
+  TabPane, Nav, NavItem, NavLink
 } from 'reactstrap';
 import { faCalendarAlt, faAt, faPen, faComment } from "@fortawesome/free-solid-svg-icons";
 import styled from 'styled-components';

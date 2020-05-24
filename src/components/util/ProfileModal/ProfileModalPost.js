@@ -8,13 +8,13 @@ import useStores from "../../../stores/useStores";
 const ProfileModalPost = ({ postData }) => {
   const { UtilStore } = useStores();
   const { toggleProfile } = UtilStore;
-  const { postId, postTitle, postCreated, postCommentCount, rowCount } = postData;
+  const { postId, postTitle, postCreated, postCommentCount } = postData;
 
   return (
     <TableBody to={`/post/${postId}`} onClick={ toggleProfile }>
       <Row>
         <ContentsBodyTitle xs="9">
-          <ContentsTitle>{postTitle}{rowCount}</ContentsTitle> { postCommentCount > 0 ? <CommentCount>[{postCommentCount}]</CommentCount> : ''}
+          <ContentsTitle>{postTitle}</ContentsTitle> { postCommentCount > 0 ? <CommentCount>[{postCommentCount}]</CommentCount> : ''}
         </ContentsBodyTitle>
         <ContentsBodyDate xs={"3"}>{postCreated}</ContentsBodyDate>
       </Row>
