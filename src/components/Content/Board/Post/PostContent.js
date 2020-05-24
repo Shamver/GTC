@@ -165,7 +165,7 @@ const PostContent = ({ match }) => {
             </div>
           ) : ''}
         </TopBottomWrapper>
-        <BoardContent path={currentBoard} />
+        <BoardContent path={currentBoard} isFooter />
         <BoardFooter path={currentBoard} />
       </Div>
     </ViewWrapper>

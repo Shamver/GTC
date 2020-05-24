@@ -10,7 +10,7 @@ import useStores from '../../../stores/useStores';
 import Loading from '../../util/Loading';
 import PostList from './Post/PostList';
 
-const BoardContent = ({ path, currentPage }) => {
+const BoardContent = ({ path, currentPage, isFooter }) => {
   const { UtilLoadingStore } = useStores();
   const { loading, doLoading } = UtilLoadingStore;
 
@@ -44,7 +44,7 @@ const BoardContent = ({ path, currentPage }) => {
         </HeaderDiv>
         <ManginessTable bordered hover size="sm">
           <tbody>
-            <PostList path={path} isNotice />
+            { !isFooter ? (<PostList path={path} isNotice />) : '' }
             <PostList path={path} currentPage={currentPage} />
           </tbody>
         </ManginessTable>
@@ -56,6 +56,7 @@ const BoardContent = ({ path, currentPage }) => {
 BoardContent.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
+  isFooter: Proptypes.bool.isRequired,
 };
 
 BoardContent.defaultProps = {
