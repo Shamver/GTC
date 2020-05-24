@@ -1,26 +1,41 @@
 import React from 'react';
-import {observer} from "mobx-react";
-import {Link} from "react-router-dom";
+import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
 import styled from 'styled-components';
-import useStores from "../../../stores/useStores";
+import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
 
 const ProfileModalPost = ({ postData }) => {
   const { UtilStore } = useStores();
   const { toggleProfile } = UtilStore;
-  const { postId, postTitle, postCreated, postCommentCount } = postData;
+  const {
+    postId, postTitle, postCreated, postCommentCount,
+  } = postData;
 
   return (
-    <TableBody to={`/post/${postId}`} onClick={ toggleProfile }>
+    <TableBody to={`/post/${postId}`} onClick={toggleProfile}>
       <Row>
         <ContentsBodyTitle xs="9">
-          <ContentsTitle>{postTitle}</ContentsTitle> { postCommentCount > 0 ? <CommentCount>[{postCommentCount}]</CommentCount> : ''}
+          <ContentsTitle>{postTitle}</ContentsTitle>
+          {' '}
+          { postCommentCount > 0 ? (
+            <CommentCount>
+              [
+                {postCommentCount}
+              ]
+            </CommentCount>
+          ) : ''}
         </ContentsBodyTitle>
-        <ContentsBodyDate xs={"3"}>{postCreated}</ContentsBodyDate>
+        <ContentsBodyDate xs="3">{postCreated}</ContentsBodyDate>
       </Row>
     </TableBody>
-    );
-  };
+  );
+};
+
+ProfileModalPost.propTypes = {
+  postData: Proptypes.string.isRequired,
+};
 
 const TableBody = styled(Link)`
   display: block;

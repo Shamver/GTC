@@ -1,10 +1,11 @@
 import React from 'react';
-import {observer} from "mobx-react";
-import {Link} from "react-router-dom";
+import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import {Col, Row} from "reactstrap";
-import renderHTML from "react-render-html";
-import useStores from "../../../stores/useStores";
+import { Col, Row } from 'reactstrap';
+import renderHTML from 'react-render-html';
+import useStores from '../../../stores/useStores';
+import * as Proptypes from 'prop-types';
 
 const ProfileModalComment = ({ commentData }) => {
   const { UtilStore } = useStores();
@@ -13,15 +14,19 @@ const ProfileModalComment = ({ commentData }) => {
   const commentContentText = renderHTML(`${commentContent}`);
 
   return (
-    <TableBody to={`/post/${commentId}`} onClick={ toggleProfile }>
+    <TableBody to={`/post/${commentId}`} onClick={toggleProfile}>
       <Row>
         <ContentsBodyTitle xs="9">
           <ContentsTitle>{commentContentText}</ContentsTitle>
         </ContentsBodyTitle>
-        <ContentsBodyDate xs={"3"}>{commentCreated}</ContentsBodyDate>
+        <ContentsBodyDate xs="3">{commentCreated}</ContentsBodyDate>
       </Row>
     </TableBody>
   );
+};
+
+ProfileModalComment.propTypes = {
+  commentData: Proptypes.string.isRequired,
 };
 
 const TableBody = styled(Link)`
