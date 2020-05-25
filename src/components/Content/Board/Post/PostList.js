@@ -1,13 +1,14 @@
 import { observer } from 'mobx-react';
 import React, { useEffect } from 'react';
 import * as Proptypes from 'prop-types';
+import { toast } from 'react-toastify';
 import useStores from '../../../../stores/useStores';
 import Post from './index';
 
 // eslint-disable-next-line consistent-return
 const PostList = ({ path, currentPage, isNotice = false }) => {
   const {
-    BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore, UtilAlertStore, UtilRouteStore,
+    BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore, UtilRouteStore,
   } = useStores();
   const { setCurrentBoard } = BoardStore;
   const {
@@ -16,7 +17,6 @@ const PostList = ({ path, currentPage, isNotice = false }) => {
   } = BoardPostStore;
   const { onSet } = ComponentPostStore;
   const { ignoreList } = UserIgnoreStore;
-  const { toggleAlert } = UtilAlertStore;
   const { history } = UtilRouteStore;
 
   useEffect(() => {
@@ -28,11 +28,11 @@ const PostList = ({ path, currentPage, isNotice = false }) => {
     setCurrentBoard(path);
   }, [
     path, getBoardPostList, setCurrentBoard, currentPage, ignoreList,
-    toggleAlert, history, getBoardPostNoticeList,
+    history, getBoardPostNoticeList,
   ]);
 
   if (!boardPostList[path] || boardPostList[path] === undefined) {
-    toggleAlert('아직 구현되지 않은 route 입니다.');
+    toast.error('아직 구현되지 않은 route 입니다.');
     history.push('/');
   } else {
     if (isNotice) {
