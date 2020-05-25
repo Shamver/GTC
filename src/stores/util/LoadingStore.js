@@ -26,9 +26,7 @@ class LoadingStore {
     for (let i = 0; i < ActionArr.length; i += 1) {
       promiseArr.push(ActionArr[i]());
     }
-
     await Promise.all(promiseArr);
-
     setTimeout(() => {
       this.loading = 0;
     }, 0);

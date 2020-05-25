@@ -1,7 +1,10 @@
-import React, { Suspense, lazy, useEffect, memo } from 'react';
+import React, {
+  Suspense, lazy, useEffect, memo,
+} from 'react';
 import { Switch, Route } from 'react-router';
 import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { observer } from 'mobx-react';
 import Contents from '../Content';
 import Loading from '../util/Loading';

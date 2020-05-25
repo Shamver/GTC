@@ -194,38 +194,31 @@ class PostStore {
       .catch((response) => { console.log(response); });
   };
 
-  @action getPost = (id) => {
+  @action getPost = async (id) => {
     const { getLately } = this.root.CookieLatelyStore;
     const { userData } = this.root.UserStore;
-
-    console.log('GetPost Start');
     const that = this;
-    return new Promise((resolve) => {
-      axios.get(`/api/board/post/${id}`, {
-        params: {
-          userId: userData.id,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              const [post] = data.DATA;
-              that.postView = post;
-              getLately();
-              console.log('GetPost Ended');
-              resolve();
-            } else {
-              toast.info(data.MESSAGE);
-            }
+
+    await axios.get(`/api/board/post/${id}`, {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            const [post] = data.result;
+            that.postView = post;
+            getLately();
           } else {
-            toast.error(data.MESSAGE);
+            toast.info(data.message);
           }
-          console.log('종료');
-          resolve();
-        })
-        .catch((response) => { console.log(response); });
-    });
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { console.log(response); });
   };
 
   @action getModifyPost = (id, isModify = false) => {
@@ -267,42 +260,37 @@ class PostStore {
       .catch((response) => { console.log(response); });
   };
 
-  @action getPostUpperLower = (id) => {
+  @action getPostUpperLower = async (id) => {
     const that = this;
-    console.log('통신시작');
-    return new Promise((resolve) => {
-      axios.get(`/api/board/post/${id}/upperLower`)
-        .then((response) => {
-          const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              const array = data.DATA;
+    await axios.get(`/api/board/post/${id}/upperLower`)
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            const array = data.result;
 
-              // 기존에 있던 데이터를 초기화
-              that.currentPostUpperLower = {
-                upper: '',
-                lower: '',
-              };
+            // 기존에 있던 데이터를 초기화
+            that.currentPostUpperLower = {
+              upper: '',
+              lower: '',
+            };
 
-              for (let i = 0; i < array.length; i += 1) {
-                const { isUpper } = array[i];
-                if (isUpper) {
-                  that.currentPostUpperLower.upper = array[i];
-                } else {
-                  that.currentPostUpperLower.lower = array[i];
-                }
+            for (let i = 0; i < array.length; i += 1) {
+              const { isUpper } = array[i];
+              if (isUpper) {
+                that.currentPostUpperLower.upper = array[i];
+              } else {
+                that.currentPostUpperLower.lower = array[i];
               }
-            } else {
-              toast.info(data.MESSAGE);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.info(data.message);
           }
-          console.log('종료');
-          resolve();
-        })
-        .catch((response) => { console.log(response); });
-    });
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { console.log(response); });
   };
 
   @action recommendPost = (postId, type) => {
