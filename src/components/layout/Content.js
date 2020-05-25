@@ -83,7 +83,7 @@ const Content = () => {
       </Suspense>
     </BorderedDiv>
   );
-}
+};
 
 const BorderedDiv = styled.div`
   margin-bottom : 20px;
