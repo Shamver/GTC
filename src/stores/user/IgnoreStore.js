@@ -71,7 +71,6 @@ class IgnoreStore {
   };
 
   @action deleteIgnore = (() => {
-    const { toggleAlert } = this.root.UtilAlertStore;
     const list = this.ignoreList.filter((item) => item.checked === true).map((v) => ({
       f_id: v.f_id,
       t_id: v.t_id,
@@ -99,7 +98,7 @@ class IgnoreStore {
         .catch((response) => { console.log(response); });
     } else {
       setTimeout(() => { // 딜레이를 안 주면 텍스트 할당이 안됨.. 대안 찾기.
-        toggleAlert('아무것도 선택되지 않았습니다.');
+        toast.error('아무것도 선택되지 않았습니다.');
       }, 100);
     }
   });

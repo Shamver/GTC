@@ -49,7 +49,6 @@ class UserStore {
   };
 
   @action register = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
     const { toggleSign } = this.root.UtilStore;
 
     axios.post('/api/auth/register', this.registerData)
@@ -57,10 +56,10 @@ class UserStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            toggleAlert(data.message);
+            toast.success(data.message);
             toggleSign();
           } else {
-            toggleAlert(data.message);
+            toast.error(data.message);
           }
         } else {
           toast.error(data.message);
@@ -157,46 +156,44 @@ class UserStore {
   };
 
   registerValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     // name
     if (!this.registerData.name) {
-      toggleAlert('이름을 입력해주세요.');
+      toast.error('이름을 입력해주세요.');
       return false;
     }
 
     // nickname
     if (!this.registerData.nickname) {
-      toggleAlert('닉네임을 입력해주세요.');
+      toast.error('닉네임을 입력해주세요.');
       return false;
     }
 
     // tel
     if (!this.registerData.tel || Number.isNaN(this.registerData.tel)) {
-      toggleAlert('전화번호 형식을 맞추어서 입력해주세요.');
+      toast.error('전화번호 형식을 맞추어서 입력해주세요.');
       return false;
     }
 
     // birth
     if (!this.registerData.birth) {
-      toggleAlert('생년월일을 입력해주세요.');
+      toast.error('생년월일을 입력해주세요.');
       return false;
     }
 
     if (this.registerData.birth.substring(0, 4) === '1000') {
-      toggleAlert('생년월일을 제대로 입력해주세요.');
+      toast.error('생년월일을 제대로 입력해주세요.');
       return false;
     }
 
     // gender
     if (!this.registerData.gender) {
-      toggleAlert('성별을 입력해주세요.');
+      toast.error('성별을 입력해주세요.');
       return false;
     }
 
     // gtNickname
     if (!this.registerData.gtNickname) {
-      toggleAlert('그로우토피아 닉네임을 입력해주세요.');
+      toast.error('그로우토피아 닉네임을 입력해주세요.');
       return false;
     }
 
@@ -235,7 +232,6 @@ class UserStore {
       nickname, birth, gender, profileYN,
     } = this.root.ComponentMyAccountStore;
     const { userData } = this;
-    const { toggleAlert } = this.root.UtilAlertStore;
     const { history } = this.root.UtilRouteStore;
 
     axios.put('/api/user/info', {
@@ -249,7 +245,7 @@ class UserStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            toggleAlert('성공적으로 변경되었습니다.\n다시 로그인해주세요.');
+            toast.success('성공적으로 변경되었습니다.\n다시 로그인해주세요.');
             history.push('/');
             this.logout();
           } else {
