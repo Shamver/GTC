@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Table } from 'reactstrap';
 import AdvertiseList from './AdvertiseList';
 
@@ -16,4 +16,4 @@ const WorkOnAdvertise = () => (
   </Table>
 );
 
-export default WorkOnAdvertise;
+export default memo(WorkOnAdvertise);

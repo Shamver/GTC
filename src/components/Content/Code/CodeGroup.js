@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Button, Input } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -88,4 +88,4 @@ const CenterPaddingTd = styled(CenterTd)`
   padding : .4rem !important;
 `;
 
-export default observer(CodeGroup);
+export default memo(observer(CodeGroup));

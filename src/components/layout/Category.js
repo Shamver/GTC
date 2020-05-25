@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import styled from 'styled-components';
 import {
   Container, Row,
@@ -165,4 +165,4 @@ const TopIcon = styled(FontAwesomeIcon)`
 `;
 
 
-export default observer(Category);
+export default memo(observer(Category));

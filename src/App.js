@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, memo } from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'reactstrap';
 import * as Proptypes from 'prop-types';
@@ -16,8 +16,10 @@ const App = ({ history }) => {
   const { setRoute } = UtilRouteStore;
   const { cookieCheck } = UserStore;
 
-  setRoute(history);
-  cookieCheck();
+  useEffect(() => {
+    setRoute(history);
+    cookieCheck();
+  }, [setRoute, history, cookieCheck]);
 
   return (
     <>
@@ -116,4 +118,4 @@ const P5Col2 = styled(Col)`
   }
 `;
 
-export default observer(App);
+export default memo(observer(App));

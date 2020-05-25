@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, lazy, useEffect, memo } from 'react';
 import { Switch, Route } from 'react-router';
 import styled from 'styled-components';
 import { ToastContainer } from 'react-toastify';
@@ -17,8 +17,12 @@ const Report = lazy(() => import('../util/Report'));
 
 const Content = () => {
   const { UserStore, UtilLoadingStore } = useStores();
-  const { checkPermission } = UserStore;
+  const { checkPermission, userData } = UserStore;
   const { loading } = UtilLoadingStore;
+
+  useEffect(() => {
+  }, [userData]);
+
   return (
     <>
       { !!loading && (<Loading />)}
@@ -26,22 +30,36 @@ const Content = () => {
         <Suspense fallback={<Loading />}>
           <ScrollToTop />
           <Switch>
-            <Route exact path="/" render={() => <Home />} />
             { checkPermission(0) ? (
-              <>
-                <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
-                <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
-                <Route exact path="/setting" render={() => <Contents.Setting />} />
-                <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
-                <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
-                <Route exact path="/mypoint/page/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />
-                <Route exact path="/mail" render={() => <Contents.Mail />} />
-              </>
+              <Route exact path="/mail" render={() => <Contents.Mail />} />
+            ) : null }
+
+            { checkPermission(0) ? (
+              <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
+            ) : null }
+
+            { checkPermission(0) ? (
+              <Route exact path="/setting" render={() => <Contents.Setting />} />
+            ) : null }
+
+            { checkPermission(0) ? (
+              <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
+            ) : null }
+
+            { checkPermission(0) ? (
+              <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
+            ) : null }
+
+            { checkPermission(0) ? (
+              <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
             ) : null }
 
             { checkPermission(2) ? (
               <Route exact path="/code" render={() => <Contents.Code />} />
             ) : null }
+
+            <Route exact path="/" render={() => <Home />} />
+
 
             {/* Test Component */}
             <Route exact path="/test" render={() => <Contents.Test />} />
@@ -93,4 +111,4 @@ const ToastContainerCustom = styled(ToastContainer)`
   width : auto !important;
 `;
 
-export default observer(Content);
+export default memo(observer(Content));

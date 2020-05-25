@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import * as PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -38,4 +38,4 @@ const BoldTd = styled.td`
   font-weight : bold;
 `;
 
-export default AdvertiseRow;
+export default memo(AdvertiseRow);

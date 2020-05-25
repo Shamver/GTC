@@ -2,7 +2,7 @@ import { Button, Input } from 'reactstrap';
 import { observer } from 'mobx-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 
@@ -50,4 +50,4 @@ const SetDiv = styled.div`
   margin : 10px 0px;
 `;
 
-export default observer(AdvertiseForm);
+export default memo(observer(AdvertiseForm));

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo, useEffect } from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { Table, Button } from 'reactstrap';
@@ -11,10 +11,20 @@ import NewCodeGroup from './NewCodeGroup';
 import NewCodeRow from './NewCodeRow';
 
 const Code = () => {
-  const { SystemCodeStore } = useStores();
+  const { SystemCodeStore, UtilLoadingStore } = useStores();
   const {
     isAddCodeGroup, setIsAddCodeGroup, setIsAddCode, isAddCode,
+    getCodeGroupList,
   } = SystemCodeStore;
+  const { loadingProcess } = UtilLoadingStore;
+
+  useEffect(() => {
+    loadingProcess([
+      getCodeGroupList,
+    ]);
+  }, [loadingProcess, getCodeGroupList]);
+
+
   return (
     <BoardWrapper>
       <TableWrapper>
@@ -117,4 +127,4 @@ const TableWrapper = styled.div`
   font-size : 13px !important;
 `;
 
-export default observer(Code);
+export default memo(observer(Code));

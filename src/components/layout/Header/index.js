@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import styled from 'styled-components';
 import {
   InputGroup, InputGroupAddon, Button, Input,
@@ -340,4 +340,4 @@ const Logo = styled.img`
   width : 130px;
 `;
 
-export default observer(Header);
+export default memo(observer(Header));
