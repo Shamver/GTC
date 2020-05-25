@@ -22,7 +22,7 @@ const ProfileModalPost = ({ postData }) => {
           { postCommentCount > 0 ? (
             <CommentCount>
               [
-                {postCommentCount}
+              { postCommentCount }
               ]
             </CommentCount>
           ) : ''}
