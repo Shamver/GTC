@@ -21,6 +21,18 @@ const UPDATE_USER_INFO = `
   WHERE ID = :USER_ID
 `;
 
+const INSERT_USER_NICKNAME = `
+  INSERT INTO GTC_USER_NICKNAME (
+    USER_ID
+    , PREV_NICKNAME
+    , CRT_DTTM
+  ) VALUES (
+    :USER_ID
+    , :PREV_NICKNAME
+    , SYSDATE()
+  )
+`;
+
 const GET_USER_PROFILE = `
   SELECT GTC_USER.ID AS userId
     , GTC_USER.EMAIL AS userEmail
@@ -50,6 +62,7 @@ const GET_USER_POST_LIST = `
   ORDER BY ID DESC
   LIMIT :INDEX, 5
 `;
+
 const GET_USER_COMMENT_LIST = `
   SELECT B.ID AS commentId
     , B.COMMENT_ID AS _commentId
@@ -93,7 +106,7 @@ router.delete('/withdrawal', (req, res) => {
 
 router.put('/info', (req, res) => {
   const {
-    nickname, birth, gender, profileYN, userId,
+    nickname, birth, gender, profileYN, userId, prevNickname,
   } = req.body;
 
   Database.execute(
@@ -107,6 +120,13 @@ router.put('/info', (req, res) => {
         PROFILE_FL: profileYN,
       },
     )
+      .then(() => database.query(
+        INSERT_USER_NICKNAME,
+        {
+          USER_ID: userId,
+          PREV_NICKNAME: prevNickname,
+        },
+      ))
       .then(() => {
         res.json({
           SUCCESS: true,
