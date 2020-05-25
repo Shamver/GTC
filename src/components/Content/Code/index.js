@@ -24,7 +24,6 @@ const Code = () => {
     ]);
   }, [loadingProcess, getCodeGroupList]);
 
-
   return (
     <BoardWrapper>
       <TableWrapper>

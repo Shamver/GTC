@@ -7,46 +7,27 @@ import { Table } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import PostList from './Post/PostList';
-import Post from './Post';
 
-const BoardContent = ({ path, currentPage }) => {
-  const tempData = {
-    id: 1,
-    title: '공지 채팅창 제재 기준입니다. (2018. 10. 19)',
-    writer: '배진영',
-    type: 'notice',
-    date: '01-28',
-    categoryName: '공지',
-    recommendCount: 0,
-    replyCount: 0,
-  };
-
-  return (
-    <>
-      <Div>
-        <HeaderDiv>
-          <NavLink activeClassName="active" to={`/${path}`}>
-            <FontAwesomeIcon icon={faHome} />
-          </NavLink>
-          <NavLink activeClassName="active" to={`/${path}/freedom`}>자유</NavLink>
-          <NavLink activeClassName="active" to={`/${path}/talk`}>잡담</NavLink>
-          <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
-          <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
-        </HeaderDiv>
-        <ManginessTableNoBorder bordered hover size="sm">
-          <tbody>
-            <Post data={tempData} index={-1} />
-          </tbody>
-        </ManginessTableNoBorder>
-        <ManginessTable bordered hover size="sm">
-          <tbody>
-            <PostList path={path} currentPage={currentPage} />
-          </tbody>
-        </ManginessTable>
-      </Div>
-    </>
-  );
-};
+const BoardContent = ({ path, currentPage }) => (
+  <>
+    <Div>
+      <HeaderDiv>
+        <NavLink activeClassName="active" to={`/${path}`}>
+          <FontAwesomeIcon icon={faHome} />
+        </NavLink>
+        <NavLink activeClassName="active" to={`/${path}/freedom`}>자유</NavLink>
+        <NavLink activeClassName="active" to={`/${path}/talk`}>잡담</NavLink>
+        <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
+        <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
+      </HeaderDiv>
+      <ManginessTable bordered hover size="sm">
+        <tbody>
+          <PostList path={path} currentPage={currentPage} />
+        </tbody>
+      </ManginessTable>
+    </Div>
+  </>
+);
 
 BoardContent.propTypes = {
   path: Proptypes.string.isRequired,
@@ -76,13 +57,6 @@ const ManginessTable = styled(Table)`
   
   & tr:hover {
     background-color : #fff7d9 !important;
-  }
-`;
-
-
-const ManginessTableNoBorder = styled(ManginessTable)`
-  & tr,td {
-    border-bottom: none !important;
   }
 `;
 

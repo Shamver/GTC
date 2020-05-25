@@ -136,7 +136,6 @@ class UserStore {
   };
 
   @action checkPermission = (level) => {
-    console.log(this.userData);
     // level 0: 사용자, level 1: 운영자, level2: 관리자
     if (level === 0) {
       return this.userData;

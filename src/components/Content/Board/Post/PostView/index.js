@@ -18,7 +18,7 @@ const PostView = ({ match }) => {
       () => getPost(id),
       () => getPostUpperLower(id),
     ]);
-  }, [getPost, getPostUpperLower, id]);
+  }, [loadingProcess, getPost, getPostUpperLower, id]);
 
   console.log('PostView Rendering');
   return (

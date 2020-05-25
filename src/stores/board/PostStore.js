@@ -221,7 +221,7 @@ class PostStore {
           } else {
             toast.error(data.MESSAGE);
           }
-
+          console.log('종료');
           resolve();
         })
         .catch((response) => { console.log(response); });
@@ -269,6 +269,7 @@ class PostStore {
 
   @action getPostUpperLower = (id) => {
     const that = this;
+    console.log('통신시작');
     return new Promise((resolve) => {
       axios.get(`/api/board/post/${id}/upperLower`)
         .then((response) => {
@@ -297,6 +298,7 @@ class PostStore {
           } else {
             toast.error(data.MESSAGE);
           }
+          console.log('종료');
           resolve();
         })
         .catch((response) => { console.log(response); });

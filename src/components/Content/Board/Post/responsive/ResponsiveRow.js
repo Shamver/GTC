@@ -22,12 +22,12 @@ const ResponsiveRow = ({ data, index, path }) => {
     <>
       { path === 'all' ? (
         <DateTd>
-          { type !== 'notice' ? boardName : ''}
+          { type !== 'notice' ? boardName : null}
         </DateTd>
-      ) : '' }
+      ) : null }
       <DateTd>
         <NoLineDiv>
-          { type !== 'notice' ? categoryName : ''}
+          { type !== 'notice' ? categoryName : null}
         </NoLineDiv>
       </DateTd>
       <MiddleTd width="700">
@@ -44,7 +44,7 @@ const ResponsiveRow = ({ data, index, path }) => {
             ) : null}
           <MobileWriterDropdown>
             <WriterDropdown data={data} index={index} />
-            <TopSpan>{ type !== 'notice' ? categoryName : ''}</TopSpan>
+            <TopSpan>{type !== 'notice' ? categoryName : ''}</TopSpan>
           </MobileWriterDropdown>
         </MiddleSpan>
       </MiddleTd>
