@@ -357,29 +357,27 @@ class PostStore {
 
 
   postValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     // board
     if (!this.post.board) {
-      toggleAlert('게시판을 선택해주세요.');
+      toast.error('게시판을 선택해주세요.');
       return false;
     }
 
     // category
     if (!this.post.category) {
-      toggleAlert('카테고리를 선택해주세요.');
+      toast.error('카테고리를 선택해주세요.');
       return false;
     }
 
     // title
     if (!this.post.title.trim()) {
-      toggleAlert('제목을 입력해주세요.');
+      toast.error('제목을 입력해주세요.');
       return false;
     }
 
     // text
     if (!this.post.text.trim()) {
-      toggleAlert('내용을 입력해주세요.');
+      toast.error('내용을 입력해주세요.');
       return false;
     }
 
