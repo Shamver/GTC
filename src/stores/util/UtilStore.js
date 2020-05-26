@@ -23,17 +23,16 @@ class UtilStore {
     this.signDisplay = !this.signDisplay;
   };
 
-  @action loginCheck = () => {
+  @action loginCheck = async () => {
     const { userData } = this.root.UserStore;
     const { toggleAlert } = this.root.UtilAlertStore;
     const { history } = this.root.UtilRouteStore;
-
     if (userData) {
       return true;
     }
 
-    toggleAlert('로그인 후 이용 가능합니다.');
     history.push('/');
+    toggleAlert('로그인 후 이용 가능합니다.');
     return false;
   }
 

@@ -13,8 +13,8 @@ class DailyStore {
     this.root = root;
   }
 
-  @action getDailyList = (() => {
-    axios.get('/api/event/daily')
+  @action getDailyList = async () => {
+    await axios.get('/api/event/daily')
       .then((response) => {
         const { data } = response;
         if (data.success) {
@@ -30,11 +30,11 @@ class DailyStore {
       .catch((response) => {
         console.log(response);
       });
-  });
+  };
 
-  @action getDailyLast = (() => {
+  @action getDailyLast = async () => {
     const { userData } = this.root.UserStore;
-    axios.get('/api/event/daily/last', {
+    await axios.get('/api/event/daily/last', {
       params: {
         userId: userData.id,
       },
@@ -54,7 +54,9 @@ class DailyStore {
         }
       })
       .catch((response) => console.log(response));
-  });
+
+    return true;
+  };
 
   @action addDaily = (() => {
     const { userData } = this.root.UserStore;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Input, Button,
 } from 'reactstrap';
@@ -43,4 +43,4 @@ const CustomInput = styled(Input)`
   margin-bottom: 1rem;
 `;
 
-export default observer(DailyInput);
+export default memo(observer(DailyInput));
