@@ -20,8 +20,7 @@ const SELECT_USER_FROM_TEL_EMAIL = `
 
 const INSERT_NEW_USER = `
   INSERT INTO GTC_USER (
-    ID
-    , EMAIL
+    EMAIL
     , NAME
     , NICKNAME
     , TEL_NO
@@ -30,8 +29,7 @@ const INSERT_NEW_USER = `
     , GENDER_CD
     , CRT_DTTM
   ) VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID) + 1, 1) FROM GTC_USER) as temp)
-    , ':EMAIL'
+    ':EMAIL'
     , ':NAME'
     , ':NICKNAME'
     , ':TEL_NO'
