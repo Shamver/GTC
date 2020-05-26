@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { PaginationItem } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
@@ -72,4 +72,4 @@ const CustomLink = styled.span`
   text-decoration: none;
 `;
 
-export default ModalPagination;
+export default memo(ModalPagination);

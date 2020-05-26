@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'reactstrap';
 import useStores from '../../../stores/useStores';
 import ProfileModalPost from './ProfileModalPost';
 import ModalPagination from './ProfilePageNation';
+import {observer} from "mobx-react";
 
 const ProfileModalPostList = () => {
   const { UtilStore } = useStores();

@@ -14,6 +14,7 @@ class UtilStore {
     profileInfo: {},
     profilePostData: [],
     profileCommentData: [],
+    profileNicknameHistory: [],
   };
 
   @observable activeTab = '1';
@@ -84,9 +85,30 @@ class UtilStore {
 
         if (data.SUCCESS) {
           if (data.CODE === 1) {
+            console.log(data.DATA);
             this.profileData = {
               ...this.profileData,
               profileInfo: data.DATA,
+            };
+          } else {
+            console.log(data.MESSAGE);
+          }
+        } else {
+          console.log(data.MESSAGE);
+        }
+      })
+      .catch((response) => { console.log(response); });
+
+    axios.get(`/api/user/profile/${writerId}/nickname`, { params: { writerId } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            console.log(data.DATA);
+            this.profileData = {
+              ...this.profileData,
+              profileNicknameHistory: data.DATA,
             };
           } else {
             console.log(data.MESSAGE);

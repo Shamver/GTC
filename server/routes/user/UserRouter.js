@@ -28,7 +28,7 @@ const INSERT_USER_NICKNAME = `
     , CRT_DTTM
   ) VALUES (
     :USER_ID
-    , :PREV_NICKNAME
+    , ':PREV_NICKNAME'
     , SYSDATE()
   )
 `;
@@ -43,6 +43,21 @@ const GET_USER_PROFILE = `
     , (SELECT COUNT(GTC_COMMENT.ID) AS 'cnt' FROM GTC_COMMENT WHERE GTC_COMMENT.USER_ID = :USER_ID) AS commentCount
   FROM GTC_USER
   WHERE GTC_USER.ID = :USER_ID
+`;
+
+const GET_USER_NICKNAME_HISTORY = `
+  SELECT N.ID as id
+    , N.USER_ID AS userId
+    , N.PREV_NICKNAME AS nicknameHistory
+    , CASE WHEN N.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇 초 전'
+      WHEN N.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, N.CRT_DTTM, SYSDATE()),'분 전')
+      WHEN N.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR, N.CRT_DTTM, SYSDATE()),'시간 전')
+    ELSE DATE_FORMAT(N.CRT_DTTM, '%m-%d')
+  END AS nicknameChanged
+    , (SELECT COUNT(GTC_USER_NICKNAME.ID) FROM GTC_USER_NICKNAME WHERE GTC_USER_NICKNAME.USER_ID = :USER_ID) AS changeCount
+  FROM GTC_USER_NICKNAME N
+  WHERE N.USER_ID = :USER_ID
+  ORDER BY id DESC
 `;
 
 const GET_USER_POST_LIST = `
@@ -157,6 +172,27 @@ router.get('/profile/:writerId', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, GET /api/user/profile] 유저 프로필 조회');
+  });
+});
+
+router.get('/profile/:writerId/nickname', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      GET_USER_NICKNAME_HISTORY,
+      {
+        USER_ID: req.params.writerId,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '유저 닉네임 변경 이력 조회',
+          DATA: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/user/profile/nickname] 유저 닉네임 변경 이력 조회');
   });
 });
 

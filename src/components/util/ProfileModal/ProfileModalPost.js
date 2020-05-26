@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { Row, Col } from 'reactstrap';
@@ -34,7 +34,12 @@ const ProfileModalPost = ({ postData }) => {
 };
 
 ProfileModalPost.propTypes = {
-  postData: Proptypes.string.isRequired,
+  postData: Proptypes.shape({
+    postId: Proptypes.number.isRequired,
+    postTitle: Proptypes.string.isRequired,
+    postCreated: Proptypes.string.isRequired,
+    postCommentCount: Proptypes.number,
+  }).isRequired,
 };
 
 const TableBody = styled(Link)`
@@ -71,4 +76,4 @@ const CommentCount = styled.b`
   vertical-align: middle;
 `;
 
-export default observer(ProfileModalPost);
+export default memo(observer(ProfileModalPost));

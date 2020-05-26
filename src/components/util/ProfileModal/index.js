@@ -14,6 +14,7 @@ import useStores from '../../../stores/useStores';
 
 import ProfileModalPostList from './ProfileModalPostList';
 import ProfileModalCommentList from './ProfileModalCommentList';
+import ProfileModalNickNameHistory from './ProfileModalNickNameHistory';
 import avatarImg from '../../../resources/images/takagi.jpg';
 
 const ProfileModal = () => {
@@ -22,6 +23,10 @@ const ProfileModal = () => {
     profileToggle, toggleProfile, profileData, toggleTab, activeTab,
   } = UtilStore;
   const { profileInfo } = profileData;
+  const {
+    userCreated, userEmail, postCount, commentCount,
+  } = profileInfo;
+
 
   return (
     <Modal isOpen={profileToggle} toggle={toggleProfile}>
@@ -43,7 +48,7 @@ const ProfileModal = () => {
                 {' '}
                 가입 일자
               </ProfileInfoTitle>
-              <ProfileInfoContents>{profileInfo.userCreated}</ProfileInfoContents>
+              <ProfileInfoContents>{userCreated}</ProfileInfoContents>
             </ProfileInfo>
             <ProfileInfo>
               <ProfileInfoTitle>
@@ -51,7 +56,7 @@ const ProfileModal = () => {
                 {' '}
                 이메일
               </ProfileInfoTitle>
-              <ProfileInfoContents>{profileInfo.userEmail}</ProfileInfoContents>
+              <ProfileInfoContents>{userEmail}</ProfileInfoContents>
             </ProfileInfo>
             <ProfileInfo>
               <ProfileInfoTitle>
@@ -59,7 +64,7 @@ const ProfileModal = () => {
                 {' '}
                 작성 글
               </ProfileInfoTitle>
-              <ProfileInfoContents>{profileInfo.postCount}</ProfileInfoContents>
+              <ProfileInfoContents>{postCount}</ProfileInfoContents>
             </ProfileInfo>
             <ProfileInfo>
               <ProfileInfoTitle>
@@ -67,7 +72,7 @@ const ProfileModal = () => {
                 {' '}
                 작성 댓글
               </ProfileInfoTitle>
-              <ProfileInfoContents>{profileInfo.commentCount}</ProfileInfoContents>
+              <ProfileInfoContents>{commentCount}</ProfileInfoContents>
             </ProfileInfo>
           </ProfileInfoWrap>
         </ProfileInfoBox>
@@ -76,12 +81,17 @@ const ProfileModal = () => {
           <Nav tabs>
             <NavItem>
               <NavItemTitle className={classnames({ active: activeTab === '1' })} onClick={() => { toggleTab('1'); }}>
-                  작성글
+                작성글
               </NavItemTitle>
             </NavItem>
             <NavItem>
               <NavItemTitle className={classnames({ active: activeTab === '2' })} onClick={() => { toggleTab('2'); }}>
-                  작성 댓글
+                작성 댓글
+              </NavItemTitle>
+            </NavItem>
+            <NavItem>
+              <NavItemTitle className={classnames({ active: activeTab === '3' })} onClick={() => { toggleTab('3'); }}>
+                닉네임 이력
               </NavItemTitle>
             </NavItem>
           </Nav>
@@ -91,6 +101,9 @@ const ProfileModal = () => {
             </TabPane>
             <TabPane tabId="2">
               <ProfileModalCommentList profileInfo={profileInfo} />
+            </TabPane>
+            <TabPane tabId="3">
+              <ProfileModalNickNameHistory />
             </TabPane>
           </TabContent>
         </div>
@@ -148,4 +161,5 @@ const NavItemTitle = styled(NavLink)`
   font-size: 13px;
   cursor: pointer;
 `;
+
 export default observer(ProfileModal);

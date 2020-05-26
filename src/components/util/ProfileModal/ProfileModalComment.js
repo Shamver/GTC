@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
@@ -26,7 +26,11 @@ const ProfileModalComment = ({ commentData }) => {
 };
 
 ProfileModalComment.propTypes = {
-  commentData: Proptypes.string.isRequired,
+  commentData: Proptypes.shape({
+    commentId: Proptypes.number,
+    commentContent: Proptypes.string,
+    commentCreated: Proptypes.string,
+  }).isRequired,
 };
 
 const TableBody = styled(Link)`
@@ -62,4 +66,4 @@ const ContentsTitle = styled.div`
 const ContentsBodyDate = styled(Col)`
 `;
 
-export default observer(ProfileModalComment);
+export default memo(observer(ProfileModalComment));
