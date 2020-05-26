@@ -82,8 +82,7 @@ const SELECT_POST_LIST_ALL = `
 
 const INSERT_POST = `
   INSERT INTO GTC_POST (
-    ID
-    , BOARD_CD
+    BOARD_CD
     , CATEGORY_CD
     , TITLE
     , USER_ID
@@ -94,8 +93,7 @@ const INSERT_POST = `
     , COMMENT_ALLOW_FL
     , CRT_DTTM
   ) VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID) + 1, 1) FROM GTC_POST) AS TEMP)
-    , ':BOARD_CD'
+    ':BOARD_CD'
     , ':CATEGORY_CD'
     , ':TITLE'
     , :USER_ID
@@ -243,6 +241,10 @@ const SELECT_POST_WRITER = `
   WHERE ID = :POST_ID
 `;
 
+const SELECT_LAST_INDEX = `
+  SELECT LAST_INSERT_ID() as id;
+`;
+
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
   const { board, isHome } = req.query;
@@ -321,7 +323,7 @@ router.post('/', authMiddleware, (req, res) => {
       },
     )
       .then(() => database.query(
-        SELECT_POST_MAX_ID,
+        SELECT_LAST_INDEX,
         {},
       ))
       .then((rows) => {
@@ -373,17 +375,7 @@ router.put('/', authMiddleware, (req, res) => {
           },
         );
       })
-      .then(() => database.query(
-        SELECT_POST_MAX_ID,
-        {},
-      ))
-      .then((rows) => {
-        const postData = {
-          ...data,
-          bpId: rows[0].id,
-        };
-
-        point('addPost', 'POST', postData);
+      .then(() => {
         res.json({
           success: true,
           code: 1,
