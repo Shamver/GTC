@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, memo } from 'react';
 import { Row, Col } from 'reactstrap';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,55 +6,59 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import HomePostList from './HomePostList';
+import useStores from "../../../stores/useStores";
 
-const Home = () => (
-  <NoMarginRow>
-    <NoRightPadding lg="6" xs="12">
-      <TextH5>
-        <NoStyleLink to="/free">
-          커뮤니티 자유게시판 <ArrowIcon icon={faChevronRight} />
-        </NoStyleLink>
-      </TextH5>
-      <PostList>
-        <ul>
-          <HomePostList board="free" />
-        </ul>
-      </PostList>
-    </NoRightPadding>
-    <NoRightPadding lg="6" xs="12">
-      <TextH5>현금 거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
-      <PostList>
-        <ul>
-          <HomePostList board="cash" />
-        </ul>
-      </PostList>
-    </NoRightPadding>
-    <NoRightPadding lg="12">
-      <TextH5>공지사항 <ArrowIcon icon={faChevronRight} /></TextH5>
-      <MiddlePostList>
-        <ul>
-          <HomePostList board="notice" />
-        </ul>
-      </MiddlePostList>
-    </NoRightPadding>
-    <NoRightPadding lg="6" xs="12">
-      <TextH5>거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
-      <PostList>
-        <ul>
-          <HomePostList board="trade" />
-        </ul>
-      </PostList>
-    </NoRightPadding>
-    <NoRightPadding lg="6" xs="12">
-      <TextH5>질문 & 답변 <ArrowIcon icon={faChevronRight} /></TextH5>
-      <PostList>
-        <ul>
-          <HomePostList board="qna" />
-        </ul>
-      </PostList>
-    </NoRightPadding>
-  </NoMarginRow>
-);
+const Home = () => {
+
+  return (
+    <NoMarginRow>
+      <NoRightPadding lg="6" xs="12">
+        <TextH5>
+          <NoStyleLink to="/free">
+            커뮤니티 자유게시판 <ArrowIcon icon={faChevronRight}/>
+          </NoStyleLink>
+        </TextH5>
+        <PostList>
+          <ul>
+            <HomePostList board="free"/>
+          </ul>
+        </PostList>
+      </NoRightPadding>
+      <NoRightPadding lg="6" xs="12">
+        <TextH5>현금 거래 게시판 <ArrowIcon icon={faChevronRight}/></TextH5>
+        <PostList>
+          <ul>
+            <HomePostList board="cash"/>
+          </ul>
+        </PostList>
+      </NoRightPadding>
+      <NoRightPadding lg="12">
+        <TextH5>공지사항 <ArrowIcon icon={faChevronRight}/></TextH5>
+        <MiddlePostList>
+          <ul>
+            <HomePostList board="notice"/>
+          </ul>
+        </MiddlePostList>
+      </NoRightPadding>
+      <NoRightPadding lg="6" xs="12">
+        <TextH5>거래 게시판 <ArrowIcon icon={faChevronRight}/></TextH5>
+        <PostList>
+          <ul>
+            <HomePostList board="trade"/>
+          </ul>
+        </PostList>
+      </NoRightPadding>
+      <NoRightPadding lg="6" xs="12">
+        <TextH5>질문 & 답변 <ArrowIcon icon={faChevronRight}/></TextH5>
+        <PostList>
+          <ul>
+            <HomePostList board="qna"/>
+          </ul>
+        </PostList>
+      </NoRightPadding>
+    </NoMarginRow>
+  )
+};
 
 const NoMarginRow = styled(Row)`
   margin: 0 !important;
@@ -133,4 +137,4 @@ const MiddlePostList = styled(PostList)`
   }
 `;
 
-export default observer(Home);
+export default memo(observer(Home));

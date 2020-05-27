@@ -1,17 +1,21 @@
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 
 const HomePostList = ({ board }) => {
-  const { BoardPostStore } = useStores();
+  const { BoardPostStore, UtilLoadingStore, UserStore } = useStores();
   const { getHomePostList, homePostList } = BoardPostStore;
+  const { loadingProcess } = UtilLoadingStore;
+  const { userData } = UserStore;
 
   useEffect(() => {
-    // getHomePostList(board);
-  }, [getHomePostList, board]);
+    loadingProcess([
+      () => getHomePostList(board),
+    ]);
+  }, [loadingProcess, getHomePostList, board, userData]);
 
   return homePostList[board].map((data) => {
     const { id, title, commentCount } = data;
@@ -44,4 +48,4 @@ const ReplyCount = styled.div`
   vertical-align : text-bottom;
 `;
 
-export default observer(HomePostList);
+export default memo(observer(HomePostList));

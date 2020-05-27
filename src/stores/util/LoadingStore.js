@@ -19,12 +19,7 @@ class LoadingStore {
     this.testB = this.testB + 1;
   };
 
-  @action loadingProcess = async (isNeedLogin, ActionArr) => {
-    const { loginCheck } = this.root.UtilStore;
-    if (isNeedLogin && !await loginCheck()) {
-      return false;
-    }
-
+  @action loadingProcess = async (ActionArr) => {
     this.loading = 1;
     const promiseArr = [];
 
@@ -35,8 +30,6 @@ class LoadingStore {
     setTimeout(() => {
       this.loading = 0;
     }, 0);
-
-    return true;
   };
 
   @action startLoading = () => {

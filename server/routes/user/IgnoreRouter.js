@@ -119,8 +119,8 @@ router.post('/', (req, res) => {
           return database.query(
             INSERT_USER_IGNORE,
             {
-              TARGET_ID: targetId,
-              FROM_ID: fromId,
+              USER_ID_TARGET: targetId,
+              USER_ID: fromId,
             },
           );
         }
