@@ -193,7 +193,8 @@ class ReplyStore {
     return true;
   };
 
-  @action likeReply = (replyId) => {
+  @action likeReply = (replyId, bpId) => {
+    const { getReply } = this;
     axios.post('/api/board/reply/like', {
       id: replyId,
       uId: this.root.UserStore.userData.id,
@@ -202,6 +203,7 @@ class ReplyStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
+            getReply(bpId);
             toast.success(data.message);
           } else {
             toast.info(data.message);

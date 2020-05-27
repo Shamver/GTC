@@ -14,7 +14,7 @@ import useStores from '../../../../stores/useStores';
 import ReplyModify from './ReplyModify';
 import ReplyEdit from './ReplyEdit';
 
-const Reply = ({ data, index }) => {
+const Reply = ({ data, index, bpId }) => {
   const {
     UserStore, BoardReplyStore, BoardReportStore, ComponentReplyStore,
     UtilAlertStore, UserIgnoreStore, UtilRouteStore,
@@ -89,7 +89,7 @@ const Reply = ({ data, index }) => {
                     </>
                   )
                   : null }
-                <SpanLikeLink onClick={userData ? () => likeReply(data.id) : () => {}} className={userData ? 'enable' : 'disabled'}>
+                <SpanLikeLink onClick={userData ? () => likeReply(data.id, bpId) : () => {}} className={userData ? 'enable' : 'disabled'}>
                   { !data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
                 </SpanLikeLink>
                 &nbsp;·&nbsp;
@@ -162,6 +162,7 @@ Reply.propTypes = {
     deleteFl: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
+  bpId: Proptypes.number.isRequired,
 };
 
 const WriterDropdown = styled(Dropdown)`
