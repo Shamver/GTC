@@ -22,9 +22,7 @@ const HomePostList = ({ board }) => {
     return (
       <li key={data.id}>
         <div>
-          <Link to={`/post/${id}`}>
-            {title}
-          </Link>
+          <Link to={`/post/${id}`}>{title}</Link>
         </div>
         &nbsp;&nbsp;
         { commentCount > 0 ? (

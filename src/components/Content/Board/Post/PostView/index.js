@@ -7,9 +7,10 @@ import PostViewContent from './PostViewContent';
 import PostViewFooter from './PostViewFooter';
 
 const PostView = ({ match }) => {
-  const { BoardPostStore, UtilLoadingStore } = useStores();
+  const { BoardPostStore, UtilLoadingStore, BoardReplyStore } = useStores();
   const { getPost, getPostUpperLower } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
+  const { getReply } = BoardReplyStore;
   const { params } = match;
   const { id } = params;
 
@@ -17,8 +18,9 @@ const PostView = ({ match }) => {
     loadingProcess([
       () => getPost(id),
       () => getPostUpperLower(id),
+      () => getReply(id),
     ]);
-  }, [loadingProcess, getPost, getPostUpperLower, id]);
+  }, [loadingProcess, getPost, getPostUpperLower, getReply, id]);
   return (
     <PostWrapper>
       <ViewWrapper>

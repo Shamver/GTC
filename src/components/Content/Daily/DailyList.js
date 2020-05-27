@@ -13,6 +13,8 @@ const DailyList = () => {
   const { dailyList } = EventDailyStore;
   const DailyListData = dailyList.map((v, index) => (DailyListRow('daily', v, index)));
 
+  const DailyListData = dailyList.map((v, index) => <DailyListRow title="daily" data={v} index={index} />);
+
   return (
     <>
       <ListTable size="sm" bordered>
