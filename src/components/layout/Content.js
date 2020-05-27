@@ -57,12 +57,19 @@ const Content = () => {
               <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
             ) : null }
 
+            { checkPermission(0) ? (
+              <Route exact path="/daily" render={() => <Contents.Daily />} />
+            ) : null }
+
+            { checkPermission(0) ? (
+              <Route exact path="/advertise" render={() => <Contents.Advertise />} />
+            ) : null }
+
             { checkPermission(2) ? (
               <Route exact path="/code" render={() => <Contents.Code />} />
             ) : null }
 
             <Route exact path="/" render={() => <Home />} />
-
 
             {/* Test Component */}
             <Route exact path="/test" render={() => <Contents.Test />} />
@@ -70,8 +77,6 @@ const Content = () => {
             <Route exact path="/search" render={() => <Contents.Search />} />
 
             {/* Smile Icon */}
-            <Route exact path="/daily" render={() => <Contents.Daily />} />
-            <Route exact path="/advertise" render={() => <Contents.Advertise />} />
 
             {/* BOARD */}
             <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} noPagination />} />
