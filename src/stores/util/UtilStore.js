@@ -85,7 +85,6 @@ class UtilStore {
 
         if (data.SUCCESS) {
           if (data.CODE === 1) {
-            console.log(data.DATA);
             this.profileData = {
               ...this.profileData,
               profileInfo: data.DATA,
@@ -105,7 +104,6 @@ class UtilStore {
 
         if (data.SUCCESS) {
           if (data.CODE === 1) {
-            console.log(data.DATA);
             this.profileData = {
               ...this.profileData,
               profileNicknameHistory: data.DATA,

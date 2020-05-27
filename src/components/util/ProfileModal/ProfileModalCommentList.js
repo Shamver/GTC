@@ -1,10 +1,9 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Row, Col } from 'reactstrap';
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 import ProfileModalComment from './ProfileModalComment';
 import ModalPagination from './ProfilePageNation';
-import {observer} from "mobx-react";
 
 const ProfileModalCommentList = () => {
   const { UtilStore } = useStores();
@@ -20,7 +19,7 @@ const ProfileModalCommentList = () => {
   ));
   return (
     <>
-      <TableBox>
+      <TableBox xs="12">
         <TableHeader>
           <Col xs="9">댓글 내용</Col>
           <Col xs="3">작성일</Col>
@@ -34,13 +33,14 @@ const ProfileModalCommentList = () => {
   );
 };
 
-const TableBox = styled.div`
+const TableBox = styled(Col)`
   padding: 5px;
 `;
 
 const TableHeader = styled(Row)`
   font-size: 15px;
   padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
 `;
 
 const NoPost = styled.div`

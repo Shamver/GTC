@@ -10,12 +10,12 @@ const ProfileModalNickNameHistory = () => {
   const { profileData } = UtilStore;
   const { profileNicknameHistory } = profileData;
   const nicknameList = profileNicknameHistory.map((index) => (
-    <ProfileModalNickName NickNameData={index} key={index.userId} />
+    <ProfileModalNickName NickNameData={index} key={index.id} />
   ));
 
   return (
     <>
-      <TableBox>
+      <TableBox xs="12">
         <TableHeader>
           <Col xs="9">닉네임</Col>
           <Col xs="3">마지막 사용일</Col>
@@ -28,13 +28,14 @@ const ProfileModalNickNameHistory = () => {
   );
 };
 
-const TableBox = styled.div`
+const TableBox = styled(Col)`
   padding: 5px;
 `;
 
 const TableHeader = styled(Row)`
   font-size: 15px;
   padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
 `;
 
 const NoPost = styled.div`

@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Col, Row } from 'reactstrap';
 import renderHTML from 'react-render-html';
-import useStores from '../../../stores/useStores';
 import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
 
 const ProfileModalComment = ({ commentData }) => {
   const { UtilStore } = useStores();

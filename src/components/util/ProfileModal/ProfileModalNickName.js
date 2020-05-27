@@ -21,7 +21,7 @@ const ProfileModalNickName = ({ NickNameData }) => {
 
 ProfileModalNickName.propTypes = {
   NickNameData: Proptypes.shape({
-    nicknameHistory: Proptypes.number,
+    nicknameHistory: Proptypes.string,
     nicknameChanged: Proptypes.string,
   }).isRequired,
 };

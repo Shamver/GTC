@@ -4,7 +4,6 @@ import { Row, Col } from 'reactstrap';
 import useStores from '../../../stores/useStores';
 import ProfileModalPost from './ProfileModalPost';
 import ModalPagination from './ProfilePageNation';
-import {observer} from "mobx-react";
 
 const ProfileModalPostList = () => {
   const { UtilStore } = useStores();
@@ -20,7 +19,7 @@ const ProfileModalPostList = () => {
 
   return (
     <>
-      <TableBox>
+      <TableBox xs="12">
         <TableHeader>
           <Col xs="9">제목</Col>
           <Col xs="3">작성일</Col>
@@ -34,13 +33,14 @@ const ProfileModalPostList = () => {
   );
 };
 
-const TableBox = styled.div`
+const TableBox = styled(Col)`
   padding: 5px;
 `;
 
 const TableHeader = styled(Row)`
   font-size: 15px;
   padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
 `;
 
 const NoPost = styled.div`
