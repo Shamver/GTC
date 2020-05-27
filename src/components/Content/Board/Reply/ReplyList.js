@@ -11,7 +11,7 @@ const ReplyList = ({ bpId }) => {
 
   useEffect(() => {
     getReply(bpId);
-  }, [getReply, bpId, ignoreList, postReplyList]);
+  }, [getReply, bpId, ignoreList]);
 
 
   return postReplyList.map((data, index) => {
