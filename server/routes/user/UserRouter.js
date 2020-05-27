@@ -55,9 +55,11 @@ const GET_USER_NICKNAME_HISTORY = `
     ELSE DATE_FORMAT(N.CRT_DTTM, '%m-%d')
   END AS nicknameChanged
     , (SELECT COUNT(GTC_USER_NICKNAME.ID) FROM GTC_USER_NICKNAME WHERE GTC_USER_NICKNAME.USER_ID = :USER_ID) AS changeCount
+    , (SELECT CEIL(COUNT(*)/5) FROM GTC_USER_NICKNAME WHERE GTC_USER_NICKNAME.USER_ID = :USER_ID) AS rowCount
   FROM GTC_USER_NICKNAME N
   WHERE N.USER_ID = :USER_ID
   ORDER BY id DESC
+  LIMIT :INDEX, 5
 `;
 
 const GET_USER_POST_LIST = `
@@ -175,12 +177,16 @@ router.get('/profile/:writerId', (req, res) => {
   });
 });
 
-router.get('/profile/:writerId/nickname', (req, res) => {
+router.get('/profile/:writerId/nickname/:currentPage', (req, res) => {
+  let { index } = req.query;
+  index = (index === 1) ? 0 : (index - 1) * 5;
+
   Database.execute(
     (database) => database.query(
       GET_USER_NICKNAME_HISTORY,
       {
         USER_ID: req.params.writerId,
+        INDEX: index,
       },
     )
       .then((rows) => {

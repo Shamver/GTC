@@ -14,7 +14,7 @@ import useStores from '../../../../stores/useStores';
 const Post = ({ data, index }) => {
   const {
     ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
-    BoardPostStore, UtilStore,
+    BoardPostStore,
   } = useStores();
   const { currentPostId } = BoardPostStore;
   const {
@@ -23,8 +23,7 @@ const Post = ({ data, index }) => {
   } = data;
   const { dropdown, onActive } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
-  const { getProfile } = UtilStore;
-  const { userData } = UserStore;
+  const { userData, getProfile } = UserStore;
   const { addIgnore } = UserIgnoreStore;
 
   const IsBestPost = recommendCount >= 10
@@ -53,7 +52,7 @@ const Post = ({ data, index }) => {
         <WriterDropdown isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
           <WriterDropdownToggle name={`replyIndex${index}`}> {writerName} </WriterDropdownToggle>
           <WriterDropdownMenu>
-            <WriterDropdownItem onClick={ () => getProfile(writerId) }>
+            <WriterDropdownItem onClick={() => getProfile(writerId)}>
               프로필
             </WriterDropdownItem>
             <WriterDropdownItem>

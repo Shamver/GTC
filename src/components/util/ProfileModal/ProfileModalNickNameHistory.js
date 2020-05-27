@@ -4,10 +4,16 @@ import { Row, Col } from 'reactstrap';
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 import ProfileModalNickName from './ProfileModalNickName';
+import ModalPagination from './ProfilePageNation';
 
 const ProfileModalNickNameHistory = () => {
-  const { UtilStore } = useStores();
-  const { profileData } = UtilStore;
+  const { UserStore, UtilStore } = useStores();
+  const { profileData, getNickNameList } = UserStore;
+  const {
+    pageIndex, rows,
+  } = UtilStore;
+  const { nickNameRows } = rows;
+  const { nickNameIndex } = pageIndex;
   const { profileNicknameHistory } = profileData;
   const nicknameList = profileNicknameHistory.map((index) => (
     <ProfileModalNickName NickNameData={index} key={index.id} />
@@ -24,6 +30,7 @@ const ProfileModalNickNameHistory = () => {
           ? nicknameList
           : <NoPost>변경 이력이 없습니다.</NoPost>}
       </TableBox>
+      <ModalPagination rows={nickNameRows} pageIndex={nickNameIndex} req={getNickNameList} />
     </>
   );
 };

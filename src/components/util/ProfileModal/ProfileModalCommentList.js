@@ -6,10 +6,11 @@ import ProfileModalComment from './ProfileModalComment';
 import ModalPagination from './ProfilePageNation';
 
 const ProfileModalCommentList = () => {
-  const { UtilStore } = useStores();
+  const { UtilStore, UserStore } = useStores();
   const {
-    profileData, pageIndex, getCommentList, rows,
+    pageIndex, rows,
   } = UtilStore;
+  const { profileData, getCommentList } = UserStore;
   const { commentRows } = rows;
   const { profileCommentData } = profileData;
   const { commentIndex } = pageIndex;

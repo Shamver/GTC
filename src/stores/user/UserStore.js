@@ -15,6 +15,13 @@ class UserStore {
 
   @observable userData;
 
+  @observable profileData = {
+    profileInfo: {},
+    profilePostData: [],
+    profileCommentData: [],
+    profileNicknameHistory: [],
+  };
+
   constructor(root) {
     this.root = root;
   }
@@ -247,6 +254,129 @@ class UserStore {
         }
       })
       .catch((response) => console.log(response));
+  }
+
+  @action getProfile = (writerId) => {
+    this.root.UtilStore.profileToggle = !this.root.UtilStore.profileToggle;
+    const { pageIndex } = this.root.UtilStore;
+    const { postIndex, commentIndex, nickNameIndex } = pageIndex;
+
+    axios.get(`/api/user/profile/${writerId}`, { params: { writerId } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileInfo: data.DATA,
+            };
+          } else {
+            console.log(data.MESSAGE);
+          }
+        } else {
+          console.log(data.MESSAGE);
+        }
+      }).then(() => {
+        this.getPostList(postIndex);
+        this.getCommentList(commentIndex);
+        this.getNickNameList(nickNameIndex);
+      })
+      .catch((response) => { console.log(response); });
+    return true;
+  }
+
+  @action getPostList = (index) => {
+    const writerId = this.profileData.profileInfo.userId;
+    this.root.UtilStore.pageIndex = {
+      ...this.root.UtilStore.pageIndex,
+      postIndex: index,
+    };
+
+    axios.get(`/api/user/profile/${writerId}/post/${index}`, { params: { writerId, index } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profilePostData: data.DATA,
+            };
+            this.root.UtilStore.rows = {
+              ...this.root.UtilStore.rows,
+              postRows: data.DATA[0].rowCount,
+            };
+          } else {
+            console.log(data.MESSAGE);
+          }
+        } else {
+          console.log(data.MESSAGE);
+        }
+      })
+      .catch((response) => { console.log(response); });
+  }
+
+  @action getCommentList = (index) => {
+    const writerId = this.profileData.profileInfo.userId;
+    this.root.UtilStore.pageIndex = {
+      ...this.root.UtilStore.pageIndex,
+      commentIndex: index,
+    };
+
+    axios.get(`/api/user/profile/${writerId}/comment/${index}`, { params: { writerId, index } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileCommentData: data.DATA,
+            };
+            this.root.UtilStore.rows = {
+              ...this.root.UtilStore.rows,
+              commentRows: data.DATA[0].rowCount,
+            };
+          } else {
+            console.log(data.MESSAGE);
+          }
+        } else {
+          console.log(data.MESSAGE);
+        }
+      })
+      .catch((response) => { console.log(response); });
+  }
+
+  @action getNickNameList = (index) => {
+    const writerId = this.profileData.profileInfo.userId;
+    this.root.UtilStore.pageIndex = {
+      ...this.root.UtilStore.pageIndex,
+      nickNameIndex: index,
+    };
+
+    axios.get(`/api/user/profile/${writerId}/nickname/${index}`, { params: { writerId, index } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileNicknameHistory: data.DATA,
+            };
+            this.root.UtilStore.rows = {
+              ...this.root.UtilStore.rows,
+              nickNameRows: data.DATA[0].rowCount,
+            };
+          } else {
+            console.log(data.MESSAGE);
+          }
+        } else {
+          console.log(data.MESSAGE);
+        }
+      })
+      .catch((response) => { console.log(response); });
   }
 }
 

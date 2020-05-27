@@ -6,10 +6,11 @@ import ProfileModalPost from './ProfileModalPost';
 import ModalPagination from './ProfilePageNation';
 
 const ProfileModalPostList = () => {
-  const { UtilStore } = useStores();
+  const { UtilStore, UserStore } = useStores();
   const {
-    profileData, pageIndex, getPostList, rows,
+    pageIndex, rows,
   } = UtilStore;
+  const { profileData, getPostList } = UserStore;
   const { postRows } = rows;
   const { profilePostData } = profileData;
   const { postIndex } = pageIndex;

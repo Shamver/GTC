@@ -18,10 +18,11 @@ import ProfileModalNickNameHistory from './ProfileModalNickNameHistory';
 import avatarImg from '../../../resources/images/takagi.jpg';
 
 const ProfileModal = () => {
-  const { UtilStore } = useStores();
+  const { UtilStore, UserStore } = useStores();
   const {
-    profileToggle, toggleProfile, profileData, toggleTab, activeTab,
+    profileToggle, toggleProfile, toggleTab, activeTab,
   } = UtilStore;
+  const { profileData } = UserStore;
   const { profileInfo } = profileData;
   const {
     userCreated, userEmail, postCount, commentCount,
