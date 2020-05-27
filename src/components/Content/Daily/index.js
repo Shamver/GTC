@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import {
   Container,
 } from 'reactstrap';
@@ -40,4 +40,4 @@ const MainContainer = styled(Container)`
   padding: 14px !important;
 `;
 
-export default observer(Daily);
+export default memo(observer(Daily));

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 
 const DailyHeader = () => (
@@ -19,4 +19,4 @@ const H4 = styled.h4`
   font-weight: 600;
 `;
 
-export default DailyHeader;
+export default memo(DailyHeader);

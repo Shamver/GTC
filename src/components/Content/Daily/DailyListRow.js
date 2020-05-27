@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 
 const DailyListRow = (title, data, index) => {
@@ -45,4 +45,4 @@ const TableTd = styled.td`
   padding: 8px !important;
 `;
 
-export default DailyListRow;
+export default memo(DailyListRow);

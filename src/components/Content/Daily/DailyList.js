@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Table,
 } from 'reactstrap';
@@ -50,4 +50,4 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
-export default observer(DailyList);
+export default memo(observer(DailyList));
