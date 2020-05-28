@@ -12,7 +12,7 @@ const Alert = lazy(() => import('../util/Alert'));
 const Sign = lazy(() => import('../util/Sign'));
 const ConfirmAlert = lazy(() => import('../util/ConfirmAlert'));
 const Report = lazy(() => import('../util/Report'));
-const ProfileModal = lazy(()=> import('../util/ProfileModal'));
+const ProfileModal = lazy(() => import('../util/ProfileModal'));
 
 const Content = () => (
   <BorderedDiv>
@@ -37,6 +37,7 @@ const Content = () => (
 
         {/* BOARD */}
         <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} noPagination />} />
+        <Route exact path="/:board/best" render={({ match }) => <Contents.Board path={match} noPagination />} />
         <Route exact path="/:board/page/:currentPage" render={({ match }) => <Contents.Board path={match.params.board} currentPage={match.params.currentPage} />} />
         <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
         <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />

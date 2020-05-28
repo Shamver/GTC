@@ -12,7 +12,7 @@ import BoardPagination from './Pagination';
 const BoardFooter = ({ path, noPagination, currentPage }) => (
   <>
     <AbsolDiv>
-      <AbsoluteLeftLink to={`${path}/post`}>
+      <AbsoluteLeftLink to={`${path}/best`}>
         <Button outline color="warning" size="sm">
           <FontAwesomeIcon icon={faStar} />
             &nbsp;&nbsp;인기 글

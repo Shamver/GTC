@@ -34,5 +34,4 @@ router.get('/', (req, res) => {
     info('[SELECT, GET /api/board] 현재 게시판 조회');
   });
 });
-
 module.exports = router;
