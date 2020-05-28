@@ -78,7 +78,6 @@ class UserStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.userData = data.token;
             this.cookieCheck();
           } else {
             toast.info(data.message);
@@ -88,8 +87,6 @@ class UserStore {
         }
       })
       .catch((response) => { console.log(response); });
-
-    return true;
   };
 
   @action logout = (e, text = '😊 로그아웃 완료!') => {

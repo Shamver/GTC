@@ -13,7 +13,7 @@ const Post = ({ data, index, path }) => {
   const { id, date, recommendCount } = data;
 
   return (
-    <TableRow height="35" key={data.id} currentPostId={currentPostId} postId={id}>
+    <TableRow height="35" currentPostId={currentPostId} postId={id}>
       <CenterTd width="40">
         {currentPostId === id ? (<BlockIcon icon={faAngleDoubleRight} />) : (
           <>

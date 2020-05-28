@@ -11,9 +11,10 @@ import useStores from '../../../stores/useStores';
 const DailyList = () => {
   const { EventDailyStore } = useStores();
   const { dailyList } = EventDailyStore;
-  const DailyListData = dailyList.map((v, index) => (DailyListRow('daily', v, index)));
 
-  const DailyListData = dailyList.map((v, index) => <DailyListRow title="daily" data={v} index={index} />);
+  const DailyListData = dailyList.map(
+    (v, index) => <DailyListRow data={v} index={index} key={v.id} />,
+  );
 
   return (
     <>
@@ -30,12 +31,13 @@ const DailyList = () => {
         </thead>
         <tbody>
           {DailyListData.length === 0 ? (
-            <tr>
+            <tr key={0}>
               <td colSpan={6}>
                 출석체크한 유저가 없습니다.
               </td>
             </tr>
           ) : DailyListData}
+
         </tbody>
       </ListTable>
     </>

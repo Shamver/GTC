@@ -62,8 +62,8 @@ class CodeStore {
     return true;
   };
 
-  @action getCodeGroupList = () => {
-    axios.get('/api/system/code/group')
+  @action getCodeGroupList = async () => {
+    await axios.get('/api/system/code/group')
       .then((response) => {
         const { data } = response;
         if (data.success) {
@@ -81,7 +81,6 @@ class CodeStore {
     if (!this.codeGroupValidationCheck()) {
       return false;
     }
-    console.log(this.codeGroup);
     axios.put('/api/system/code/group', this.codeGroup)
       .then((response) => {
         const { data } = response;

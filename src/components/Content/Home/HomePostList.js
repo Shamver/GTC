@@ -1,21 +1,13 @@
-import { observer } from 'mobx-react';
-import React, { useEffect, memo } from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const HomePostList = ({ board }) => {
-  const { BoardPostStore, UtilLoadingStore, UserStore } = useStores();
-  const { getHomePostList, homePostList } = BoardPostStore;
-  const { loadingProcess } = UtilLoadingStore;
-  const { userData } = UserStore;
-
-  useEffect(() => {
-    loadingProcess([
-      () => getHomePostList(board),
-    ]);
-  }, [loadingProcess, getHomePostList, board, userData]);
+  const { BoardPostStore } = useStores();
+  const { homePostList } = BoardPostStore;
 
   return homePostList[board].map((data) => {
     const { id, title, commentCount } = data;
@@ -26,9 +18,7 @@ const HomePostList = ({ board }) => {
         </div>
         &nbsp;&nbsp;
         { commentCount > 0 ? (
-          <ReplyCount>
-            [{commentCount}]
-          </ReplyCount>
+          <ReplyCount>[{commentCount}]</ReplyCount>
         ) : null}
       </li>
     );

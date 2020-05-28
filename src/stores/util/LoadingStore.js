@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 
 class LoadingStore {
-  @observable loading = 0;
+  @observable loading = 1;
 
   @observable test = 0;
 

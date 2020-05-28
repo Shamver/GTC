@@ -1,33 +1,33 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
+import * as Proptypes from 'prop-types';
 
-const DailyListRow = (title, data, index) => {
+const DailyListRow = ({ data, index }) => {
   const {
     nickname, message, point, combo, time,
   } = data;
 
   return (
-    <tr key={title + index}>
-      <TableTh scope="row">
-        { index + 1 } 등
-      </TableTh>
-      <TableTd>
-        { nickname }
-      </TableTd>
-      <TableTd>
-        { message }
-      </TableTd>
-      <TableTd>
-        { point }
-      </TableTd>
-      <TableTd>
-        { combo }
-      </TableTd>
-      <TableTd>
-        { time }
-      </TableTd>
+    <tr>
+      <TableTh scope="row">{index + 1} 등</TableTh>
+      <TableTd>{nickname}</TableTd>
+      <TableTd>{message}</TableTd>
+      <TableTd>{point}</TableTd>
+      <TableTd>{combo}</TableTd>
+      <TableTd>{time}</TableTd>
     </tr>
   );
+};
+
+DailyListRow.propTypes = {
+  data: Proptypes.shape({
+    nickname: Proptypes.string,
+    message: Proptypes.string,
+    point: Proptypes.number,
+    combo: Proptypes.number,
+    time: Proptypes.string,
+  }).isRequired,
+  index: Proptypes.number.isRequired,
 };
 
 const TableTh = styled.th`

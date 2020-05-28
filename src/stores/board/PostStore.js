@@ -171,22 +171,22 @@ class PostStore {
       .catch((response) => { console.log(response); });
   };
 
-  @action getHomePostList = (board) => {
+  @action getHomePostList = async (board) => {
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
 
-    axios.get('/api/board/post', {
+    await axios.get('/api/board/post', {
       params: {
-        board, userId, currentPage: 1, isHome: true,
+        board,
+        userId,
+        currentPage: 1,
+        isHome: true,
       },
     })
       .then((response) => {
         const { data } = response;
         if (data.success) {
-          this.homePostList = {
-            ...this.homePostList,
-            [board]: data.result,
-          };
+          this.homePostList[board] = data.result;
         } else {
           toast.error(data.message);
         }

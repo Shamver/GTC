@@ -7,7 +7,7 @@ const CodeGroupList = () => {
   const { SystemCodeStore } = useStores();
   const { codeGroupList } = SystemCodeStore;
 
-  return codeGroupList.map((data) => (<CodeGroup data={data} key={data.group} />));
+  return codeGroupList.map((data) => (<CodeGroup data={data} key={data.groupId} />));
 };
 
 export default memo(observer(CodeGroupList));

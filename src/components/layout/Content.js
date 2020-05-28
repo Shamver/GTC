@@ -70,20 +70,26 @@ const Content = () => {
             ) : null }
 
             <Route exact path="/" render={() => <Home />} />
-
-            {/* Test Component */}
-            <Route exact path="/test" render={() => <Contents.Test />} />
-
             <Route exact path="/search" render={() => <Contents.Search />} />
 
-            {/* Smile Icon */}
+            {/* ------------------------------- Test Component ------------------------------- */}
+            <Route exact path="/test" render={() => <Contents.Test />} />
 
-            {/* BOARD */}
+            {/* ------------------------------- BOARD ------------------------------- */}
             <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} noPagination />} />
             <Route exact path="/:board/page/:currentPage" render={({ match }) => <Contents.Board path={match.params.board} currentPage={match.params.currentPage} />} />
-            <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
-            <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
-            <Route exact path="/:board/modify/:id" render={({ match }) => <Posting match={match} isModify />} />
+
+            { checkPermission(0) ? (
+              <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
+            ) : null }
+
+            { checkPermission(0) ? (
+              <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
+            ) : null }
+
+            { checkPermission(0) ? (
+              <Route exact path="/:board/modify/:id" render={({ match }) => <Posting match={match} isModify />} />
+            ) : null }
           </Switch>
           <Alert />
           <Sign />

@@ -7,7 +7,8 @@ const Database = require('../../Database');
 
 const SELECT_ATTENDANCE = `
   SELECT 
-    U.NICKNAME AS nickname
+    D.ID AS id
+    , U.NICKNAME AS nickname
     , D.MESSAGE AS message
     , D.POINT AS point
     , D.COMBO AS combo
