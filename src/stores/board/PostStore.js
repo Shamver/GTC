@@ -344,6 +344,7 @@ class PostStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
+            this.getPost(postId);
             toast.success(data.message);
           } else {
             toast.info(data.message);
