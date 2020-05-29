@@ -9,10 +9,11 @@ import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import BoardPagination from './Pagination';
 
-const BoardFooter = ({ path, noPagination, currentPage }) => (
+const BoardFooter = ({path, noPagination, currentPage, temp}) => (
   <>
     <AbsolDiv>
-      <AbsoluteLeftLink to={`${path}/best`}>
+      {/*<AbsoluteLeftLink to={`${path}/best`}>*/}
+      <AbsoluteLeftLink to="#" onClick={() => temp(path)}>
         <Button outline color="warning" size="sm">
           <FontAwesomeIcon icon={faStar} />
             &nbsp;&nbsp;인기 글

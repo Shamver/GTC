@@ -240,6 +240,34 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/best', (req, res) => {
+  const { board, userId } = req.query;
+  const currentPage = 25;
+  const isHome = '';
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_BEST_POST_LIST,
+      {
+        BOARD_CD: board.toUpperCase(),
+        CURRENT_PAGE: ((currentPage - 1) * 25),
+        USER_ID: userId,
+        PER_PAGE: isHome ? 9 : 25,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          SUCCESS: true,
+          CODE: 1,
+          MESSAGE: '인기 게시글 목록 조회',
+          DATA: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/board/post/best] 인기 게시글 목록 조회');
+  });
+});
+
 router.use('/', authMiddleware);
 router.post('/', (req, res) => {
   const data = req.body;
@@ -460,34 +488,6 @@ router.get('/:id/upperLower', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, GET /api/board/post/:id/upperLower] 단일 게시글 위 아래 글 조회');
-  });
-});
-
-router.get('/best', (req, res) => {
-  let { currentPage } = req.query;
-  const { board, userId, isHome } = req.query;
-  currentPage = currentPage || 1;
-
-  Database.execute(
-    (database) => database.query(
-      SELECT_BEST_POST_LIST,
-      {
-        BOARD_CD: board.toUpperCase(),
-        CURRENT_PAGE: ((currentPage - 1) * 25),
-        USER_ID: userId,
-        PER_PAGE: isHome ? 9 : 25,
-      },
-    )
-      .then((rows) => {
-        res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '게시글 목록 조회',
-          rows,
-        });
-      }),
-  ).then(() => {
-    info('[SELECT, GET /api/board/post] 인기 게시글 목록 조회');
   });
 });
 

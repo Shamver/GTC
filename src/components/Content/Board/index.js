@@ -12,7 +12,7 @@ import useStores from '../../../stores/useStores';
 const Board = ({ path, currentPage, noPagination }) => {
   const { UtilLoadingStore, BoardPostStore } = useStores();
   const { doLoading } = UtilLoadingStore;
-  const { setCurrentPostId } = BoardPostStore;
+  const { setCurrentPostId, temp } = BoardPostStore;
 
   useEffect(() => {
     setCurrentPostId(0);
@@ -24,7 +24,7 @@ const Board = ({ path, currentPage, noPagination }) => {
       <TableWrapper>
         <BoardHeader path={path} />
         <BoardContent path={path} currentPage={currentPage} />
-        <BoardFooter path={path} currentPage={currentPage} noPagination={noPagination} />
+        <BoardFooter path={path} currentPage={currentPage} noPagination={noPagination} temp={temp} />
       </TableWrapper>
     </BoardWrapper>
   );

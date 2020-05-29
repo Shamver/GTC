@@ -9,13 +9,12 @@ const PostList = ({ path, currentPage }) => {
     BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore,
   } = useStores();
   const { setCurrentBoard } = BoardStore;
-  const { getBoardPostList, getBoardBestPostList, boardPostList } = BoardPostStore;
+  const { getBoardPostList, boardPostList } = BoardPostStore;
   const { onSet } = ComponentPostStore;
   const { ignoreList } = UserIgnoreStore;
 
   useEffect(() => {
     getBoardPostList(path, currentPage);
-    getBoardBestPostList(path, currentPage);
     setCurrentBoard(path);
   }, [path, getBoardPostList, setCurrentBoard, currentPage, ignoreList]);
 
