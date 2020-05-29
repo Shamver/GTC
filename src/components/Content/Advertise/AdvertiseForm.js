@@ -10,7 +10,6 @@ const AdvertiseForm = () => {
   const { EventAdvertiseStore } = useStores();
   const { onChangeAdvertise, AdvertisePost, AddAdPostList } = EventAdvertiseStore;
   const { message, url, hours } = AdvertisePost;
-
   return (
     <>
       <h3>포스팅 광고</h3>

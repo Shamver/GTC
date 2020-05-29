@@ -1,26 +1,29 @@
-import React from 'react';
-import {
-  Button,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { Button } from 'reactstrap';
 import styled from 'styled-components';
 import { faEnvelope, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
 
-const MailTable = (title, data, onDelete, onView) => {
+
+const MailTable = ({ data }) => {
+  const { UserMailStore } = useStores();
+  const { deleteMail, onView } = UserMailStore;
   const {
     id, message, fromName, targetName, date, readDate,
   } = data;
 
   return (
-    <TableTr key={title + id}>
+    <TableTr>
       <TableTd width={5} center>
-        {readDate ? '' : (<FontAwesomeIcon icon={faEnvelope} />)}
+        {!readDate && (<FontAwesomeIcon icon={faEnvelope} />)}
       </TableTd>
       <TableTd width={15}>
         {fromName || targetName}
       </TableTd>
       <TableTd width={60}>
-        <MessageBtn onClick={() => { onView(data); }}>
+        <MessageBtn onClick={() => onView(data)}>
           <Text>
             {message}
           </Text>
@@ -30,14 +33,25 @@ const MailTable = (title, data, onDelete, onView) => {
         {date}
       </TableTd>
       <TableTd width={5}>
-        {readDate ? '' : (
-          <DeleteBtn color="danger" size="sm" onClick={() => { onDelete(id); }}>
+        {!readDate && (
+          <DeleteBtn color="danger" size="sm" onClick={() => deleteMail(id)}>
             <FontAwesomeIcon icon={faTrash} /> 삭제
           </DeleteBtn>
         )}
       </TableTd>
     </TableTr>
   );
+};
+
+MailTable.propTypes = {
+  data: Proptypes.shape({
+    id: Proptypes.number,
+    message: Proptypes.number,
+    fromName: Proptypes.number,
+    targetName: Proptypes.number,
+    date: Proptypes.number,
+    readDate: Proptypes.string,
+  }).isRequired,
 };
 
 const Text = styled.span`
@@ -84,4 +98,4 @@ const DeleteBtn = styled(Button)`
   margin: -5px 0 !important;
 `;
 
-export default MailTable;
+export default memo(MailTable);

@@ -18,9 +18,9 @@ class MailStore {
     this.root = root;
   }
 
-  @action getSentMail = () => {
+  @action getSentMail = async () => {
     const { userData } = this.root.UserStore;
-    axios.get('/api/user/mail/sent', {
+    await axios.get('/api/user/mail/sent', {
       params: {
         userId: userData.id,
       },
@@ -40,9 +40,9 @@ class MailStore {
       .catch((response) => console.log(response));
   };
 
-  @action getMail = () => {
+  @action getMail = async () => {
     const { userData } = this.root.UserStore;
-    axios.get('/api/user/mail/get', {
+    await axios.get('/api/user/mail/get', {
       params: {
         userId: userData.id,
       },

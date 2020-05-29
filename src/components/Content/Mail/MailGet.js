@@ -1,18 +1,14 @@
-import React from 'react';
-import {
-  TabPane, Table,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { TabPane, Table } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
 import MailTable from './MailTable';
 import useStores from '../../../stores/useStores';
 
 const MailGet = () => {
   const { UserMailStore } = useStores();
-  const { getMailList, deleteMail, onView } = UserMailStore;
-
-  const MailGetData = getMailList.map((v) => (MailTable('mailGet', v, deleteMail, onView)));
+  const { getMailList } = UserMailStore;
+  const MailGetData = getMailList.map((v) => <MailTable data={v} key={v.id} />);
 
   return (
     <TabPane tabId="get">
@@ -29,9 +25,7 @@ const MailGet = () => {
         <tbody>
           {MailGetData.length === 0 ? (
             <tr>
-              <td colSpan={5}>
-                받은 쪽지가 없습니다.
-              </td>
+              <td colSpan={5}>받은 쪽지가 없습니다.</td>
             </tr>
           ) : MailGetData}
         </tbody>
@@ -50,4 +44,4 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
-export default observer(MailGet);
+export default memo(observer(MailGet));

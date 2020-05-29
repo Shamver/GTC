@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Nav, NavItem, NavLink,
 } from 'reactstrap';
@@ -89,4 +89,4 @@ const CountSpan = styled.span`
   color: #fff;
 `;
 
-export default observer(MailNav);
+export default memo(observer(MailNav));

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import {
   Container,
 } from 'reactstrap';
@@ -11,23 +11,17 @@ import MailNav from './MailNav';
 import MailTabContent from './MailTabContent';
 
 const Setting = () => {
-  const {
-    ComponentMailStore, UtilStore, UtilLoadingStore, UserMailStore,
-  } = useStores();
-
+  const { ComponentMailStore, UtilLoadingStore, UserMailStore } = useStores();
   const { activeTab } = ComponentMailStore;
-  const { loginCheck } = UtilStore;
-  const { doLoading } = UtilLoadingStore;
+  const { loadingProcess } = UtilLoadingStore;
   const { getMail, getSentMail } = UserMailStore;
 
-  doLoading();
-
   useEffect(() => {
-    if (loginCheck()) {
-      getMail();
-      getSentMail();
-    }
-  }, [loginCheck, activeTab, getMail, getSentMail]);
+    loadingProcess([
+      getMail,
+      getSentMail,
+    ]);
+  }, [loadingProcess, activeTab, getMail, getSentMail]);
 
   return (
     <MainContainer>
@@ -45,4 +39,4 @@ const MainContainer = styled(Container)`
   padding: 14px !important;
 `;
 
-export default observer(Setting);
+export default memo(observer(Setting));

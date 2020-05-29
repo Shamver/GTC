@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   TabContent,
 } from 'reactstrap';
@@ -37,4 +37,4 @@ const Div = styled.div`
   display: ${(props) => (props.loading ? 'none' : 'block')}
 `;
 
-export default observer(MailTabContent);
+export default memo(observer(MailTabContent));
