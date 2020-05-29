@@ -1,14 +1,15 @@
-import s3 from '@faceleg/s3';
-import AWS from 'aws-sdk';
-import fs from 'fs';
-import { s3 as s3Config } from '../config';
+const s3 = require('@faceleg/s3');
+const AWS = require('aws-sdk');
+const fs = require('fs');
+const { s3Config } = require('../config');
 
 const awsS3Client = s3Config.enabled && new AWS.S3(s3Config);
-export const client = s3Config.enabled && s3.createClient({
+const client = s3Config.enabled && s3.createClient({
   s3Client: awsS3Client,
 });
+exports.client = client;
 
-export default function s3UploadFile(key, path, publicPath, contentType) {
+module.exports = function s3UploadFile(key, path, publicPath, contentType) {
   return new Promise((resolve, reject) => {
     // Don't use S3 if not enabled
     if (!s3Config.enabled) return resolve(publicPath);
@@ -32,4 +33,4 @@ export default function s3UploadFile(key, path, publicPath, contentType) {
       resolve(s3.getPublicUrlHttp(s3Config.bucket, key));
     });
   });
-}
+};
