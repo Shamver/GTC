@@ -1,13 +1,13 @@
-import multer from 'multer';
-import gm from 'gm';
-import mkdirp from 'mkdirp';
-import path from 'path';
-import randToken from 'rand-token';
-import fs from 'fs';
+const multer = require('multer');
+const gm = require('gm');
+const mkdirp = require('mkdirp');
+const path = require('path');
+const randToken = require('rand-token');
+const fs = require('fs');
 
-import s3UploadFile from './s3';
-import async from './async';
-import { upload as uploadConfig } from '../config';
+const s3UploadFile = require('./s3');
+const async = require('./async');
+const { uploadConfig } = require('../config');
 
 function writeGM(gmObject, filename) {
   const filePath = path.resolve(uploadConfig.directory, filename);
@@ -24,11 +24,10 @@ function writeGM(gmObject, filename) {
 }
 
 // Create upload path first
-export const publicPath = uploadConfig.directoryPublic;
-export const uploadPath = path.resolve(__dirname, '../../../', uploadConfig.directory);
+const uploadPath = path.resolve(__dirname, '../../../', uploadConfig.directory);
 mkdirp.sync(uploadPath);
 // Init multer
-export const upload = multer({
+const upload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => cb(null, uploadConfig.directory),
     filename: (req, file, cb) => {
@@ -43,9 +42,8 @@ export const upload = multer({
 });
 
 const photoUpload = upload.fields(['photo']);
-
-export const nextHandler = async(async (req, res, next) => next());
-export const uploadHandler = async(async (req, res, next) => {
+const nextHandler = async(async (req, res, next) => next());
+const uploadHandler = async(async (req, res, next) => {
   // Process each file with graphicsmagick
   function createPromise(file) {
     const fileName = randToken.generate(32);
@@ -79,8 +77,12 @@ export const uploadHandler = async(async (req, res, next) => {
   }
   next();
 });
-
-export default function (req, res, next) {
+exports.publicPath = uploadConfig.directoryPublic;
+exports.uploadPath = uploadPath;
+exports.nextHandler = nextHandler;
+exports.uploadHandler = uploadHandler;
+exports.upload = upload;
+module.exports = function (req, res, next) {
   return photoUpload(req, res, (err) => {
     if (req.body.type === 'Image') {
       console.log('photoUpload Start');
@@ -88,4 +90,4 @@ export default function (req, res, next) {
       else uploadHandler(req, res, next);
     } else nextHandler(req, res, next);
   });
-}
+};
