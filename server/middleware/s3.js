@@ -1,7 +1,7 @@
 import s3 from '@faceleg/s3';
 import AWS from 'aws-sdk';
 import fs from 'fs';
-import { s3 as s3Config } from '../../../config';
+import { s3 as s3Config } from '../config';
 
 const awsS3Client = s3Config.enabled && new AWS.S3(s3Config);
 export const client = s3Config.enabled && s3.createClient({

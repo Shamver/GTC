@@ -7,7 +7,7 @@ import fs from 'fs';
 
 import s3UploadFile from './s3';
 import async from './async';
-import { upload as uploadConfig } from '../../../config';
+import { upload as uploadConfig } from '../config';
 
 function writeGM(gmObject, filename) {
   const filePath = path.resolve(uploadConfig.directory, filename);

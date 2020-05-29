@@ -29,6 +29,7 @@
     "express": "^5.0.0-alpha.7",
     "express-session": "^1.17.0",
     "fs": "0.0.1-security",
+    "gm": "^1.23.1",
     "history": "^4.10.1",
     "http-proxy-middleware": "^0.20.0",
     "jquery": "^3.4.1",
