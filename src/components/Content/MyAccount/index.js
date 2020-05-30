@@ -1,30 +1,20 @@
-import React, { useEffect } from 'react';
-import {
-  Container,
-} from 'reactstrap';
+import React, { useEffect, memo } from 'react';
+import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
 import useStores from '../../../stores/useStores';
 import MyAccountContent from './MyAccountContent';
 
 const MyAccount = () => {
-  const {
-    ComponentMyAccountStore, UtilStore, UtilLoadingStore,
-  } = useStores();
-  const {
-    setDefaultValue,
-  } = ComponentMyAccountStore;
-  const { loginCheck } = UtilStore;
-  const { doLoading } = UtilLoadingStore;
-
-  doLoading();
+  const { ComponentMyAccountStore, UtilLoadingStore } = useStores();
+  const { setDefaultValue } = ComponentMyAccountStore;
+  const { loadingProcess } = UtilLoadingStore;
 
   useEffect(() => {
-    if (loginCheck()) {
-      setDefaultValue();
-    }
-  }, [setDefaultValue, loginCheck]);
+    loadingProcess([
+      setDefaultValue,
+    ]);
+  }, [loadingProcess, setDefaultValue]);
 
   return (
     <MainContainer>
@@ -41,4 +31,4 @@ const MainContainer = styled(Container)`
   padding: 1rem !important;
 `;
 
-export default observer(MyAccount);
+export default memo(observer(MyAccount));

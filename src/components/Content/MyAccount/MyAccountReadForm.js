@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import {
   FormText, Col,
 } from 'reactstrap';
@@ -8,20 +8,8 @@ import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const MyAccountReadForm = () => {
-  const {
-    ComponentMyAccountStore, UserStore, UtilStore,
-  } = useStores();
-  const {
-    setDefaultValue,
-  } = ComponentMyAccountStore;
+  const { UserStore } = useStores();
   const { userData } = UserStore;
-  const { loginCheck } = UtilStore;
-
-  useEffect(() => {
-    if (loginCheck()) {
-      setDefaultValue();
-    }
-  }, [setDefaultValue, loginCheck]);
 
   return (
     <Col>
@@ -29,27 +17,14 @@ const MyAccountReadForm = () => {
         <Deform>
           <RegisterForm>
             <h4>수정 불가능한 정보</h4>
-            <FormTextLeft>
-              이름
-            </FormTextLeft>
+            <FormTextLeft>이름</FormTextLeft>
             <FormInput type="text" name="name" value={userData.name} readOnly />
-            <FormTextLeft>
-              이메일
-            </FormTextLeft>
+            <FormTextLeft>이메일</FormTextLeft>
             <FormInput type="text" name="email" value={userData.email} readOnly />
-            <FormTextLeft>
-              전화번호
-            </FormTextLeft>
+            <FormTextLeft>전화번호</FormTextLeft>
             <FormInput type="text" name="tel" value={userData.tel} maxLength="11" readOnly />
-            <FormTextLeft>
-              그로우토피아 닉네임
-            </FormTextLeft>
-            <FormInputWithText
-              type="text"
-              name="gtNickname"
-              value={userData.gtName}
-              readOnly
-            />
+            <FormTextLeft>그로우토피아 닉네임</FormTextLeft>
+            <FormInputWithText type="text" name="gtNickname" value={userData.gtName} readOnly />
           </RegisterForm>
         </Deform>
       </div>
@@ -109,4 +84,4 @@ const FormTextLeft = styled(FormText)`
   margin : 0 0 10px ;
 `;
 
-export default observer(MyAccountReadForm);
+export default memo(observer(MyAccountReadForm));
