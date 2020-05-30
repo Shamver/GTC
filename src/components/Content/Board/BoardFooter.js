@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button, InputGroup, InputGroupAddon, InputGroupText, Input,
 } from 'reactstrap';
@@ -8,44 +8,62 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import BoardPagination from './Pagination';
+import useStores from '../../../stores/useStores';
 
-const BoardFooter = ({path, noPagination, currentPage, temp}) => (
-  <>
-    <AbsolDiv>
-      {/*<AbsoluteLeftLink to={`${path}/best`}>*/}
-      <AbsoluteLeftLink to="#" onClick={() => temp(path)}>
-        <Button outline color="warning" size="sm">
-          <FontAwesomeIcon icon={faStar} />
-            &nbsp;&nbsp;인기 글
-        </Button>
-      </AbsoluteLeftLink>
-      <AbsoluteRightLink to={`${path}/post`}>
-        <Button color="danger" size="sm">
-          <FontAwesomeIcon icon={faPen} />
-            &nbsp;&nbsp;글 쓰기
-        </Button>
-      </AbsoluteRightLink>
-    </AbsolDiv>
-    <BoardPagination path={path} currentPage={currentPage} noPagination={noPagination} />
-    <InputGroupWrapper>
-      <InputGroupWidth>
-        <InputGroupAddon addonType="prepend">
-          <RightNoRadiusSelect type="select">
-            <option>제목</option>
-            <option>제목 + 내용</option>
-            <option>닉네임</option>
-          </RightNoRadiusSelect>
-        </InputGroupAddon>
-        <Input placeholder="검색어" />
-        <InputGroupAddon addonType="append">
-          <InputGroupButton>
-            <FontAwesomeIcon icon={faSearch} />
-          </InputGroupButton>
-        </InputGroupAddon>
-      </InputGroupWidth>
-    </InputGroupWrapper>
-  </>
-);
+const BoardFooter = ({ path, noPagination, currentPage }) => {
+  const { BoardPostStore } = useStores();
+  const { toggleBestPost, toggleBestPostToken } = BoardPostStore;
+
+  useEffect(() => {
+    console.log(toggleBestPostToken);
+  }, [toggleBestPost, toggleBestPostToken]);
+
+  return (
+    <>
+      <AbsolDiv>
+        <AbsoluteLeftLink to="#" onClick={() => toggleBestPost(path, currentPage)}>
+          { toggleBestPostToken
+            ? (
+              <Button color="warning" size="sm">
+                <FontAwesomeIcon icon={faStar} />
+                &nbsp;&nbsp;인기 글
+              </Button>
+            )
+            : (
+              <Button outline color="warning" size="sm">
+                <FontAwesomeIcon icon={faStar} />
+                &nbsp;&nbsp;인기 글
+              </Button>
+            )}
+        </AbsoluteLeftLink>
+        <AbsoluteRightLink to={`${path}/post`}>
+          <Button color="danger" size="sm">
+            <FontAwesomeIcon icon={faPen} />
+              &nbsp;&nbsp;글 쓰기
+          </Button>
+        </AbsoluteRightLink>
+      </AbsolDiv>
+      <BoardPagination path={path} currentPage={currentPage} noPagination={noPagination} />
+      <InputGroupWrapper>
+        <InputGroupWidth>
+          <InputGroupAddon addonType="prepend">
+            <RightNoRadiusSelect type="select">
+              <option>제목</option>
+              <option>제목 + 내용</option>
+              <option>닉네임</option>
+            </RightNoRadiusSelect>
+          </InputGroupAddon>
+          <Input placeholder="검색어" />
+          <InputGroupAddon addonType="append">
+            <InputGroupButton>
+              <FontAwesomeIcon icon={faSearch} />
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroupWidth>
+      </InputGroupWrapper>
+    </>
+  );
+};
 
 BoardFooter.propTypes = {
   path: Proptypes.string.isRequired,

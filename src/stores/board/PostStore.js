@@ -45,8 +45,20 @@ class PostStore {
     lower: '',
   };
 
+  @observable toggleBestPostToken = false;
+
   constructor(root) {
     this.root = root;
+  }
+
+  @action toggleBestPost = (board, currentPage) => {
+    this.toggleBestPostToken = !this.toggleBestPostToken;
+
+    if (this.toggleBestPostToken) {
+      this.getBoardBestPostList(board, currentPage);
+    } else {
+      this.getBoardPostList(board, currentPage);
+    }
   }
 
   @action setCurrentPostId = (postId) => {
@@ -147,6 +159,36 @@ class PostStore {
             };
 
             // 게시글 가져올때 MAX 카운트 셋
+            if (data.rows.length === 0) {
+              this.currentBoardMaxPage = 0;
+            } else {
+              const { pageCount } = data.rows[0];
+              this.currentBoardMaxPage = pageCount;
+            }
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
+
+  @action getBoardBestPostList = (board, currentPage) => {
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
+
+    axios.get('/api/board/post/best', { params: { board, userId, currentPage } })
+      .then((response) => {
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.boardPostList = {
+              ...this.boardPostList,
+              [board]: data.rows,
+            };
+
             if (data.rows.length === 0) {
               this.currentBoardMaxPage = 0;
             } else {
@@ -401,39 +443,6 @@ class PostStore {
       secretCommentAllowFl: 0,
     };
   }
-
-  @action temp = (board) => {
-    const { userData } = this.root.UserStore;
-    const userId = userData ? userData.id : null;
-
-    axios.get('/api/board/post/best', { params: { board, userId } })
-      .then((response) => {
-        const { data } = response;
-        console.log('best req');
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            // this.boardPostList = {
-            //   ...this.boardPostList,
-            //   [board]: data.rows,
-            // };
-            //
-            // // 게시글 가져올때 MAX 카운트 셋
-            // if (data.rows.length === 0) {
-            //   this.currentBoardMaxPage = 0;
-            // } else {
-            //   const { pageCount } = data.rows[0];
-            //   this.currentBoardMaxPage = pageCount;
-            // }
-            console.log(data.DATA);
-          } else {
-            toast.info(data.MESSAGE);
-          }
-        } else {
-          toast.error(data.MESSAGE);
-        }
-      })
-      .catch((response) => { console.log(response); });
-  };
 }
 
 export default PostStore;

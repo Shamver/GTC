@@ -40,6 +40,7 @@ class BoardStore {
 
   @action setCurrentBoard = (currentBoard) => {
     this.currentBoard = currentBoard;
+    this.root.BoardPostStore.toggleBestPostToken = false;
   };
 
   @action setCurrentBoardToId = (id) => {

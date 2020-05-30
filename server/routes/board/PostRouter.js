@@ -200,14 +200,14 @@ const SELECT_BEST_POST_LIST = `
     , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
-    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD') AS pageCount
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD' AND (SELECT COUNT(*) FROM GTC_POST_RECOMMEND WHERE POST_ID = GTC_POST.ID AND TYPE_CD = 'R01') >= 1) AS pageCount
   FROM 
     GTC_POST P
     , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
   WHERE 
-    BOARD_CD = 'free' 
+    BOARD_CD = ':BOARD_CD' 
     AND P.USER_ID != IFNULL((SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
-    AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= 20
+    AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= 1
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -241,9 +241,9 @@ router.get('/', (req, res) => {
 });
 
 router.get('/best', (req, res) => {
-  const { board, userId } = req.query;
-  const currentPage = 25;
-  const isHome = '';
+  let { currentPage } = req.query;
+  const { board, userId, isHome } = req.query;
+  currentPage = currentPage || 1;
 
   Database.execute(
     (database) => database.query(
@@ -260,7 +260,7 @@ router.get('/best', (req, res) => {
           SUCCESS: true,
           CODE: 1,
           MESSAGE: '인기 게시글 목록 조회',
-          DATA: rows,
+          rows,
         });
       }),
   ).then(() => {
