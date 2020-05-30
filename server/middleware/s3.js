@@ -7,10 +7,10 @@ const awsS3Client = s3Config.enabled && new AWS.S3(s3Config);
 const client = s3Config.enabled && s3.createClient({
   s3Client: awsS3Client,
 });
-exports.client = client;
-
-module.exports = function s3UploadFile(key, path, publicPath, contentType) {
+const s3UploadFile = (key, path, publicPath, contentType) => {
+  console.log(123);
   return new Promise((resolve, reject) => {
+    console.log(123);
     // Don't use S3 if not enabled
     if (!s3Config.enabled) return resolve(publicPath);
     const uploader = client.uploadFile({
@@ -22,7 +22,10 @@ module.exports = function s3UploadFile(key, path, publicPath, contentType) {
         ContentType: contentType,
       },
     });
-    uploader.on('error', (err) => reject(err));
+    uploader.on('error', (err) => {
+      console.log(err);
+      reject(err);
+    });
     uploader.on('end', () => {
       // Unlink file from the local filesystem. But, since the result doesn't
       // matter at all, use no-op callback
@@ -33,4 +36,9 @@ module.exports = function s3UploadFile(key, path, publicPath, contentType) {
       resolve(s3.getPublicUrlHttp(s3Config.bucket, key));
     });
   });
+};
+
+module.exports = {
+  client,
+  s3UploadFile,
 };

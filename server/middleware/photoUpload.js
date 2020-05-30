@@ -5,11 +5,11 @@ const path = require('path');
 const randToken = require('rand-token');
 const fs = require('fs');
 
-const s3UploadFile = require('./s3');
+const { s3UploadFile } = require('./s3');
 const async = require('./async');
 const { uploadConfig } = require('../config');
 
-function writeGM(gmObject, filename) {
+const writeGM = (gmObject, filename) => {
   const filePath = path.resolve(uploadConfig.directory, filename);
   const publicPath = path.resolve(uploadConfig.directoryPublic, filename);
   return new Promise((resolve, reject) => gmObject.write(filePath, (err) => {
@@ -21,7 +21,7 @@ function writeGM(gmObject, filename) {
   })).then(() =>
     // Upload the file to S3 bucket.
     s3UploadFile(`images/${filename}`, filePath, uploadConfig.url + publicPath));
-}
+};
 
 // Create upload path first
 const uploadPath = path.resolve(__dirname, '../../../', uploadConfig.directory);
@@ -61,6 +61,7 @@ const uploadHandler = async(async (req, res, next) => {
       throw v;
     });
   }
+  console.log(req.files);
   if (Array.isArray(req.files)) {
     req.photo = await Promise.all(req.files.map(createPromise));
   } else if (req.files != null) {

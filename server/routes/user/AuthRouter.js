@@ -6,8 +6,12 @@ const jwt = require('jsonwebtoken');
 
 const authMiddleware = require('../../middleware/auth');
 
+const { upload, uploadHandler } = require('../../middleware/photoUpload');
+
 const { info } = require('../../log-config');
 const Database = require('../../Database');
+
+const async = require('../../middleware/async');
 
 const SELECT_USER_FROM_TEL_EMAIL = `
   SELECT 
@@ -194,5 +198,10 @@ router.get('/check', (req, res) => {
     result: req.decoded,
   });
 });
+
+router.post('/test', upload.fields([{ name: 'image' }]), uploadHandler, async(async (req, res) => {
+  console.log(req.body);
+  res.json(req.body);
+}));
 
 module.exports = router;

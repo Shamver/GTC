@@ -1,7 +1,5 @@
 const express = require('express');
 
-const { upload, uploadHandler } = require('../../middleware/photoUpload');
-
 const router = express.Router();
 
 const { info } = require('../../log-config');
@@ -71,10 +69,6 @@ router.put('/info', (req, res) => {
   ).then(() => {
     info('[UPDATE, PUT /api/user/info] 유저 정보 업데이트');
   });
-});
-
-router.post('/test', upload.fields([{ name: 'image' }]), uploadHandler, (req, res) => {
-  res.json(req.photo.image);
 });
 
 module.exports = router;

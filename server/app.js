@@ -8,8 +8,14 @@ const { info } = require('./log-config');
 const app = express();
 
 app.use('/', express.static(`${__dirname}/../public`));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: false,
+  limit: '50mb',
+  parameterLimit: 1000000,
+}));
+app.use(bodyParser.json({
+  limit: '50mb',
+}));
 
 const boardApi = require('./routes/board/BoardRouter.js');
 const authApi = require('./routes/user/AuthRouter.js');
