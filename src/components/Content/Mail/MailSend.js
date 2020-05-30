@@ -10,9 +10,7 @@ import useStores from '../../../stores/useStores';
 
 const MailSend = () => {
   const { UserMailStore } = useStores();
-  const {
-    mailForm, onChangeValue, sendMail,
-  } = UserMailStore;
+  const { mailForm, onChangeValue, sendMail } = UserMailStore;
   const { mailTo, mailText } = mailForm;
 
   return (

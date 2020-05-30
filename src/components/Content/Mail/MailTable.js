@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 
-
 const MailTable = ({ data }) => {
   const { UserMailStore } = useStores();
   const { deleteMail, onView } = UserMailStore;

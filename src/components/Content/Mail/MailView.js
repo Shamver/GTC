@@ -1,7 +1,5 @@
 import React, { memo } from 'react';
-import {
-  Button, Table, TabPane,
-} from 'reactstrap';
+import { Button, Table, TabPane } from 'reactstrap';
 import styled from 'styled-components';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faTelegramPlane } from '@fortawesome/free-brands-svg-icons';
@@ -11,12 +9,11 @@ import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const MailView = () => {
-  const {
-    UserMailStore, UserStore, ComponentMailStore,
-  } = useStores();
+  const { UserMailStore, UserStore, ComponentMailStore } = useStores();
   const { viewMail, deleteMail } = UserMailStore;
   const { userData } = UserStore;
   const { setTab } = ComponentMailStore;
+
   if (viewMail.id === undefined) {
     setTab('get');
   }
@@ -51,13 +48,13 @@ const MailView = () => {
           <TableTr>
             <TableTh width={20}>Action</TableTh>
             <TableTd width={80}>
-              {targetName ? '' : (
+              {!targetName && (
                 <CustomBtn color="primary" size="sm" onClick={() => setTab('send', fromName)}>
                   <FontAwesomeIcon icon={faTelegramPlane} size="lg" /> 답장하기
                 </CustomBtn>
               )}
               &nbsp;
-              {readDate || fromName ? '' : (
+              {!(readDate || fromName) && (
                 <CustomBtn outline color="danger" size="sm" onClick={() => deleteMail(id)}>
                   <FontAwesomeIcon icon={faTrash} /> 삭제하기
                 </CustomBtn>
@@ -68,6 +65,14 @@ const MailView = () => {
       </ListTable>
     </TabPane>
   );
+};
+
+MailView.propTypes = {
+  match: Proptypes.shape({
+    params: Proptypes.shape({
+      id: Proptypes.string,
+    }),
+  }),
 };
 
 const TableTd = styled.td`
@@ -96,14 +101,6 @@ const ListTable = styled(Table)`
 const CustomBtn = styled(Button)`
   margin: -5px 0 !important;
 `;
-
-MailView.propTypes = {
-  match: Proptypes.shape({
-    params: Proptypes.shape({
-      id: Proptypes.string,
-    }),
-  }),
-};
 
 MailView.defaultProps = {
   match: null,

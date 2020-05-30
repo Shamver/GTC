@@ -1,7 +1,5 @@
 import React, { memo } from 'react';
-import {
-  Nav, NavItem, NavLink,
-} from 'reactstrap';
+import { Nav, NavItem, NavLink } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
@@ -17,13 +15,9 @@ const MailNav = () => {
   return (
     <Nav tabs>
       <NavItem>
-        <NavLinkBtn
-          className={(activeTab === 'get' ? 'active' : '')}
-          onClick={onActive}
-          name="get"
-        >
-          받은 쪽지&nbsp;
-          {getCount === 0 ? '' : (
+        <NavLinkBtn className={activeTab === 'get' ? 'active' : ''} onClick={onActive} name="get">
+          받은 쪽지 &nbsp;
+          {!getCount && (
             <CountSpan>
               {getCount}
             </CountSpan>
@@ -31,13 +25,9 @@ const MailNav = () => {
         </NavLinkBtn>
       </NavItem>
       <NavItem>
-        <NavLinkBtn
-          className={(activeTab === 'sent' ? 'active' : '')}
-          onClick={onActive}
-          name="sent"
-        >
-          보낸 쪽지&nbsp;
-          {sentCount === 0 ? '' : (
+        <NavLinkBtn className={activeTab === 'sent' ? 'active' : ''} onClick={onActive} name="sent">
+          보낸 쪽지 &nbsp;
+          {!sentCount && (
             <CountSpan>
               {sentCount}
             </CountSpan>
@@ -45,11 +35,7 @@ const MailNav = () => {
         </NavLinkBtn>
       </NavItem>
       <NavItem>
-        <NavLinkBtn
-          className={(activeTab === 'send' ? 'active' : '')}
-          onClick={onActive}
-          name="send"
-        >
+        <NavLinkBtn className={activeTab === 'send' ? 'active' : ''} onClick={onActive} name="send">
           쪽지 보내기
         </NavLinkBtn>
       </NavItem>

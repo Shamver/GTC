@@ -1,12 +1,8 @@
 import React, { useEffect, memo } from 'react';
-import {
-  Container,
-} from 'reactstrap';
+import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
 import useStores from '../../../stores/useStores';
-
 import MailNav from './MailNav';
 import MailTabContent from './MailTabContent';
 

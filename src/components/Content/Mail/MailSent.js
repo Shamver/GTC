@@ -1,18 +1,14 @@
 import React, { memo } from 'react';
-import {
-  TabPane, Table,
-} from 'reactstrap';
+import { TabPane, Table } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
 import MailTable from './MailTable';
 import useStores from '../../../stores/useStores';
 
 const MailSent = () => {
   const { UserMailStore } = useStores();
-  const { sentMailList, deleteMail, onView } = UserMailStore;
-
-  const MailSentData = sentMailList.map((v) => (MailTable('mailSent', v, deleteMail, onView)));
+  const { sentMailList } = UserMailStore;
+  const MailSentData = sentMailList.map((v) => <MailTable data={v} key={v.id} />);
 
   return (
     <TabPane tabId="sent">
