@@ -77,12 +77,7 @@ const uploadHandler = async(async (req, res, next) => {
   }
   next();
 });
-exports.publicPath = uploadConfig.directoryPublic;
-exports.uploadPath = uploadPath;
-exports.nextHandler = nextHandler;
-exports.uploadHandler = uploadHandler;
-exports.upload = upload;
-module.exports = function (req, res, next) {
+const defaultFunction = function (req, res, next) {
   return photoUpload(req, res, (err) => {
     if (req.body.type === 'Image') {
       console.log('photoUpload Start');
@@ -90,4 +85,13 @@ module.exports = function (req, res, next) {
       else uploadHandler(req, res, next);
     } else nextHandler(req, res, next);
   });
+};
+
+module.exports = {
+  publicPath: uploadConfig.directoryPublic,
+  uploadPath,
+  nextHandler,
+  uploadHandler,
+  upload,
+  defaultFunction,
 };
