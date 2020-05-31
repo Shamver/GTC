@@ -10,16 +10,24 @@ import Category from './components/layout/Category';
 import useStores from './stores/useStores';
 import CustomSidebar from './components/layout/Sidebar';
 
+const Inner = async () => {
 
-const App = ({ history }) => {
-  const { UtilRouteStore, UserStore } = useStores();
+};
+
+
+const App = async ({ history }) => {
+  const { UtilRouteStore, UserStore, UtilLoadingStore } = useStores();
   const { setRoute } = UtilRouteStore;
-  const { cookieCheck } = UserStore;
+  const { cookieCheck, sessionCheck } = UserStore;
+  const { loadingProcess } = UtilLoadingStore;
+  console.log('render session Check before');
+  const result = sessionCheck();
+  await Promise.all([result]);
+  console.log('렌더 직전');
 
   useEffect(() => {
-    setRoute(history);
-    cookieCheck();
-  }, [setRoute, history, cookieCheck]);
+    Inner();
+  }, []);
 
   return (
     <>

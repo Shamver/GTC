@@ -15,6 +15,8 @@ class UserStore {
 
   @observable userData;
 
+  @observable sessionAfterComponent;
+
   constructor(root) {
     this.root = root;
   }
@@ -113,13 +115,15 @@ class UserStore {
     return true;
   };
 
-  @action cookieCheck = () => {
-    axios.get('/api/auth/check', {})
+  @action cookieCheck = async () => {
+    console.log('로그인 체크 통신 시작!');
+    await axios.get('/api/auth/check')
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             this.userData = data.result;
+            console.log('로그인 체크 통신 끝');
           } else {
             toast.info(data.message);
           }
@@ -128,8 +132,13 @@ class UserStore {
         }
       })
       .catch((err) => { console.log(err); });
+  };
 
-    return true;
+  @action sessionCheck = async () => {
+    console.log('session check start!');
+    await this.cookieCheck();
+    console.log('session check stop!');
+    return false;
   };
 
   @action checkPermission = (level) => {
