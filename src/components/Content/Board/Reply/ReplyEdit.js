@@ -22,6 +22,9 @@ const ReplyEdit = () => {
       <CKEditor
         editor={ClassicEditor}
         data={text}
+        config={{
+          removePlugins: ['Table', 'Link', 'ImageUpload', 'MediaEmbed', 'BlockQuote'],
+        }}
         onChange={(event, editor) => {
           const ReplyContent = editor.getData();
           onChangeValue(ReplyContent);
