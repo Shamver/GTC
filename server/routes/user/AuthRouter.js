@@ -200,7 +200,6 @@ router.get('/check', (req, res) => {
 });
 
 router.post('/test', upload.fields([{ name: 'images' }]), uploadHandler, async(async (req, res) => {
-  console.log(upload);
   res.json(req.files);
 }));
 
