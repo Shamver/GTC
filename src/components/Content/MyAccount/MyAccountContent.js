@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Row, Button,
 } from 'reactstrap';
@@ -52,4 +52,4 @@ const FormButton = styled(Button)`
   transition: all 0.3 ease;
 `;
 
-export default observer(MyAccountContent);
+export default memo(observer(MyAccountContent));

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import {
   FormText, Col,
 } from 'reactstrap';
@@ -24,7 +24,7 @@ const MyAccountReadForm = () => {
   }, [setDefaultValue, loginCheck]);
 
   return (
-    <Col>
+    <Col xs="12" sm="6">
       <div>
         <Deform>
           <RegisterForm>
@@ -109,4 +109,4 @@ const FormTextLeft = styled(FormText)`
   margin : 0 0 10px ;
 `;
 
-export default observer(MyAccountReadForm);
+export default memo(observer(MyAccountReadForm));
