@@ -9,7 +9,7 @@ const app = express();
 
 app.use('/', express.static(`${__dirname}/../public`));
 app.use(bodyParser.urlencoded({
-  extended: false,
+  extended: true,
   limit: '50mb',
   parameterLimit: 1000000,
 }));
