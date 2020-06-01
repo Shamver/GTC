@@ -15,7 +15,6 @@ const BoardFooter = ({ path, noPagination, currentPage }) => {
   const { toggleBestPost, toggleBestPostToken } = BoardPostStore;
 
   useEffect(() => {
-    console.log(toggleBestPostToken);
   }, [toggleBestPost, toggleBestPostToken]);
 
   return (
