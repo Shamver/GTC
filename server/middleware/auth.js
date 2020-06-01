@@ -8,7 +8,7 @@ const authMiddleware = (req, res, next) => {
   // token does not exist
   if (!token) {
     return res.json({
-      success: false,
+      success: true,
       code: 0,
       message: '로그인 정보가 알맞지 않습니다.',
     });

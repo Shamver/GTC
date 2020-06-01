@@ -15,7 +15,7 @@ class UserStore {
 
   @observable userData;
 
-  @observable sessionAfterComponent;
+  @observable cookieChecked = false;
 
   constructor(root) {
     this.root = root;
@@ -115,30 +115,21 @@ class UserStore {
     return true;
   };
 
-  @action cookieCheck = async () => {
-    console.log('로그인 체크 통신 시작!');
-    await axios.get('/api/auth/check')
+  // 예외로 async, await이 필요 없음
+  @action cookieCheck = () => {
+    axios.get('/api/auth/check')
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             this.userData = data.result;
-            console.log('로그인 체크 통신 끝');
-          } else {
-            toast.info(data.message);
           }
+          this.cookieChecked = true;
         } else {
           this.userData = null;
         }
       })
       .catch((err) => { console.log(err); });
-  };
-
-  @action sessionCheck = async () => {
-    console.log('session check start!');
-    await this.cookieCheck();
-    console.log('session check stop!');
-    return false;
   };
 
   @action checkPermission = (level) => {

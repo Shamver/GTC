@@ -10,57 +10,48 @@ import Category from './components/layout/Category';
 import useStores from './stores/useStores';
 import CustomSidebar from './components/layout/Sidebar';
 
-const Inner = async () => {
-
-};
-
-
-const App = async ({ history }) => {
-  const { UtilRouteStore, UserStore, UtilLoadingStore } = useStores();
+const App = ({ history }) => {
+  const { UtilRouteStore, UserStore } = useStores();
   const { setRoute } = UtilRouteStore;
-  const { cookieCheck, sessionCheck } = UserStore;
-  const { loadingProcess } = UtilLoadingStore;
-  console.log('render session Check before');
-  const result = sessionCheck();
-  await Promise.all([result]);
-  console.log('렌더 직전');
-
+  const { cookieCheck, cookieChecked } = UserStore;
   useEffect(() => {
-    Inner();
-  }, []);
-
+    cookieCheck();
+    setRoute(history);
+  }, [cookieCheck, setRoute, history]);
   return (
     <>
-      <ContainerWrapper>
-        <div>
-          <Container>
-            <Header />
-            <UnderSection>
-              <P5Col>
-                <Category />
-              </P5Col>
-              <P5Col2>
-                <Content />
-              </P5Col2>
-            </UnderSection>
-          </Container>
-          <LayoutFooter>
-            © 2020-2020 GTC(Growtopia Community) <br />
-            <Link to="/">이용약관</Link>
-            &nbsp; | &nbsp;
-            <Link to="/">개인정보보호방침</Link>
-            &nbsp; | &nbsp;
-            <Link to="/">관리자 모집</Link>
-            &nbsp; | &nbsp;
-            <Link to="/">광고문의</Link>
-            &nbsp; | &nbsp;
-            <Link to="/">고객센터</Link> <br />
-            GTC(Growtopia Community)는 Growtopia에서 운영하는 사이트가 아닙니다. <br />
-            <br />
-          </LayoutFooter>
-          <CustomSidebar />
-        </div>
-      </ContainerWrapper>
+      { cookieChecked && (
+        <ContainerWrapper>
+          <div>
+            <Container>
+              <Header />
+              <UnderSection>
+                <P5Col>
+                  <Category />
+                </P5Col>
+                <P5Col2>
+                  <Content />
+                </P5Col2>
+              </UnderSection>
+            </Container>
+            <LayoutFooter>
+              © 2020-2020 GTC(Growtopia Community) <br />
+              <Link to="/">이용약관</Link>
+              &nbsp; | &nbsp;
+              <Link to="/">개인정보보호방침</Link>
+              &nbsp; | &nbsp;
+              <Link to="/">관리자 모집</Link>
+              &nbsp; | &nbsp;
+              <Link to="/">광고문의</Link>
+              &nbsp; | &nbsp;
+              <Link to="/">고객센터</Link> <br />
+              GTC(Growtopia Community)는 Growtopia에서 운영하는 사이트가 아닙니다. <br />
+              <br />
+            </LayoutFooter>
+            <CustomSidebar />
+          </div>
+        </ContainerWrapper>
+      )}
     </>
   );
 };

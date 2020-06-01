@@ -1,7 +1,5 @@
-import React, { useEffect, memo } from 'react';
-import {
-  FormText, Col,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { FormText, Col } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 

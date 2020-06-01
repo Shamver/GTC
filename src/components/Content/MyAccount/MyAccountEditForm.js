@@ -4,10 +4,8 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
 import avatarImg from '../../../resources/images/avatar.png';
 import anonymous from '../../../resources/images/anonymous.png';
-
 import useStores from '../../../stores/useStores';
 
 const MyAccountEditForm = () => {

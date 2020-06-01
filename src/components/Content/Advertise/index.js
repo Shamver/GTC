@@ -1,18 +1,26 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import styled from 'styled-components';
 import WorkOnAdvertise from './WorkOnAdvertise';
 import AdvertiseForm from './AdvertiseForm';
+import useStores from '../../../stores/useStores';
 
-const Advertise = () => (
-  <BoardWrapper>
-    <TableWrapper>
-      <AdvertiseForm />
-      <hr />
-      <h5>현재 진행중인 광고</h5>
-      <WorkOnAdvertise />
-    </TableWrapper>
-  </BoardWrapper>
-);
+const Advertise = () => {
+  const { UtilLoadingStore } = useStores();
+  const { loadingProcess } = UtilLoadingStore;
+  useEffect(() => {
+    loadingProcess([]);
+  }, [loadingProcess]);
+  return (
+    <BoardWrapper>
+      <TableWrapper>
+        <AdvertiseForm />
+        <hr />
+        <h5>현재 진행중인 광고</h5>
+        <WorkOnAdvertise />
+      </TableWrapper>
+    </BoardWrapper>
+  );
+};
 
 const BoardWrapper = styled.div`
   border-bottom: 2px solid #ebeae8;

@@ -25,7 +25,6 @@ const Content = () => {
 
   useEffect(() => {
   }, [userData]);
-
   return (
     <>
       { !!loading && (<Loading />)}
