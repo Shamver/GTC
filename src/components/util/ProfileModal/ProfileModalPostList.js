@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'reactstrap';
 import useStores from '../../../stores/useStores';

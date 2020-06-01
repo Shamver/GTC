@@ -23,6 +23,10 @@ class UtilStore {
     nickNameRows: 0,
   };
 
+  @observable tosToggle = false;
+
+  @observable privacyToggle = false;
+
   constructor(root) {
     this.root = root;
   }
@@ -73,6 +77,14 @@ class UtilStore {
 
   @action toggleTab = (tab) => {
     this.activeTab = tab;
+  }
+
+  @action toggleTos = () => {
+    this.tosToggle = !this.tosToggle;
+  }
+
+  @action togglePrivacy = () => {
+    this.privacyToggle = !this.privacyToggle;
   }
 }
 
