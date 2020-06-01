@@ -8,9 +8,7 @@ const client = s3Config.enabled && s3.createClient({
   s3Client: awsS3Client,
 });
 const s3UploadFile = (key, path, publicPath, contentType) => {
-  console.log(123);
   return new Promise((resolve, reject) => {
-    console.log(123);
     // Don't use S3 if not enabled
     if (!s3Config.enabled) return resolve(publicPath);
     const uploader = client.uploadFile({

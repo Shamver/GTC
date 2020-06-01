@@ -200,7 +200,7 @@ router.get('/check', (req, res) => {
 });
 
 router.post('/test', upload.fields([{ name: 'images' }]), uploadHandler, async(async (req, res) => {
-  res.json(req.files);
+  res.json(req.photo);
 }));
 
 module.exports = router;
