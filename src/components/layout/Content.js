@@ -23,8 +23,11 @@ const Content = () => {
   const { checkPermission, userData } = UserStore;
   const { loading } = UtilLoadingStore;
 
+  console.log('content 렌더링');
   useEffect(() => {
   }, [userData]);
+
+
   return (
     <>
       { !!loading && (<Loading />)}

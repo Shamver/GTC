@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 
 class LoadingStore {
-  @observable loading = 1;
+  @observable loading = 0;
 
   @observable test = 0;
 
@@ -12,11 +12,11 @@ class LoadingStore {
   }
 
   @action setTest = () => {
-    this.test = this.test + 1;
+    this.test += 1;
   };
 
   @action setTestB = () => {
-    this.testB = this.testB + 1;
+    this.testB += 1;
   };
 
   @action loadingProcess = async (ActionArr) => {
@@ -29,6 +29,7 @@ class LoadingStore {
     await Promise.all(promiseArr);
     setTimeout(() => {
       this.loading = 0;
+      console.log('로딩끝!');
     }, 0);
   };
 
