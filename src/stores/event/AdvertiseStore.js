@@ -35,7 +35,7 @@ class AdvertiseStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action getAdPostList = () => {
@@ -52,7 +52,7 @@ class AdvertiseStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action onChangeAdvertise = (event) => {

@@ -94,7 +94,7 @@ class PostStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -121,7 +121,7 @@ class PostStore {
           toast.success('😊 포스팅이 수정되었어요!');
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -139,7 +139,7 @@ class PostStore {
           toast.success('😊 포스팅이 삭제되었어요!');
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -172,7 +172,7 @@ class PostStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getBoardBestPostList = (board, currentPage) => {
@@ -202,7 +202,7 @@ class PostStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getHomePostList = (board) => {
@@ -222,7 +222,7 @@ class PostStore {
           };
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getPost = (id) => {
@@ -248,7 +248,7 @@ class PostStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getModifyPost = (id) => {
@@ -278,7 +278,7 @@ class PostStore {
           };
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getPostUpperLower = (id) => {
@@ -310,7 +310,7 @@ class PostStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action recommendPost = (postId, type) => {
@@ -331,7 +331,7 @@ class PostStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
 
@@ -424,7 +424,7 @@ class PostStore {
           }
         })
         .catch((response) => {
-          console.log(response);
+          toast.error(response.message);
         });
     } else {
       this.postMineList = [];

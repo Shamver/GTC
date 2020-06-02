@@ -53,7 +53,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -67,7 +67,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
   };
 
@@ -75,7 +75,7 @@ class CodeStore {
     if (!this.codeGroupValidationCheck()) {
       return false;
     }
-    console.log(this.codeGroup);
+
     axios.put('/api/system/code/group', this.codeGroup)
       .then((response) => {
         if (response.data) {
@@ -90,7 +90,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -116,7 +116,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -147,7 +147,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -167,7 +167,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
   };
 
@@ -194,7 +194,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -224,7 +224,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;

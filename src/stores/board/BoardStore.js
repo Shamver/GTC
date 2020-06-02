@@ -55,7 +55,7 @@ class BoardStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getBoardName = (path) => this.boardKinds[path];

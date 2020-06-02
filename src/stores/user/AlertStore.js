@@ -36,7 +36,7 @@ class AlertStore {
           }
         })
         .catch((response) => {
-          console.log(response);
+          toast.error(response.message);
         });
     } else {
       this.alertList = [];
@@ -60,7 +60,7 @@ class AlertStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   });
 
   @action onDeleteAlert = ((e) => {
@@ -81,7 +81,7 @@ class AlertStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   });
 
   @action onReadAlertAll = (() => {
@@ -104,7 +104,7 @@ class AlertStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   });
 }
 

@@ -73,7 +73,7 @@ class UserStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -94,7 +94,7 @@ class UserStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -118,7 +118,7 @@ class UserStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -137,7 +137,7 @@ class UserStore {
           this.userData = null;
         }
       })
-      .catch((err) => { console.log(err); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -219,7 +219,7 @@ class UserStore {
             toast.error(data.MESSAGE);
           }
         })
-        .catch((response) => { console.log(response); });
+        .catch((response) => { toast.error(response.message); });
     }
   };
 
@@ -253,7 +253,7 @@ class UserStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   }
 
   @action getProfile = (writerId) => {
@@ -272,17 +272,17 @@ class UserStore {
               profileInfo: data.DATA,
             };
           } else {
-            console.log(data.MESSAGE);
+            toast.error(data.MESSAGE);
           }
         } else {
-          console.log(data.MESSAGE);
+          toast.error(data.MESSAGE);
         }
       }).then(() => {
         this.getPostList(postIndex);
         this.getCommentList(commentIndex);
         this.getNickNameList(nickNameIndex);
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
     return true;
   }
 
@@ -308,13 +308,13 @@ class UserStore {
               postRows: data.DATA[0].rowCount,
             };
           } else {
-            console.log(data.MESSAGE);
+            toast.error(data.MESSAGE);
           }
         } else {
-          console.log(data.MESSAGE);
+          toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   }
 
   @action getCommentList = (index) => {
@@ -339,13 +339,13 @@ class UserStore {
               commentRows: data.DATA[0].rowCount,
             };
           } else {
-            console.log(data.MESSAGE);
+            toast.error(data.MESSAGE);
           }
         } else {
-          console.log(data.MESSAGE);
+          toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   }
 
   @action getNickNameList = (index) => {
@@ -370,13 +370,13 @@ class UserStore {
               nickNameRows: data.DATA[0].rowCount,
             };
           } else {
-            console.log(data.MESSAGE);
+            toast.error(data.MESSAGE);
           }
         } else {
-          console.log(data.MESSAGE);
+          toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   }
 }
 

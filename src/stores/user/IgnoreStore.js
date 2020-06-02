@@ -31,7 +31,7 @@ class IgnoreStore {
           }
         })
         .catch((response) => {
-          console.log(response);
+          toast.error(response.message);
         });
     } else {
       this.ignoreList = [];
@@ -67,7 +67,7 @@ class IgnoreStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action deleteIgnore = (() => {
@@ -96,7 +96,7 @@ class IgnoreStore {
             toast.error(data.MESSAGE);
           }
         })
-        .catch((response) => { console.log(response); });
+        .catch((response) => { toast.error(response.message); });
     } else {
       setTimeout(() => { // 딜레이를 안 주면 텍스트 할당이 안됨.. 대안 찾기.
         toggleAlert('아무것도 선택되지 않았습니다.');

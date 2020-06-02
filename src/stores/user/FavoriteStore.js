@@ -32,7 +32,7 @@ class FavoriteStore {
           }
         })
         .catch((response) => {
-          console.log(response);
+          toast.error(response.message);
         });
     } else {
       this.favoriteList = [];
@@ -61,7 +61,7 @@ class FavoriteStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   });
 
   @action deleteFavorite = ((id, type = 'post', e = null) => {
@@ -93,7 +93,7 @@ class FavoriteStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   });
 }
 

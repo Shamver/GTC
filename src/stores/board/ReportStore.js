@@ -39,7 +39,7 @@ class ReportStore {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
