@@ -123,6 +123,8 @@ class UserStore {
         if (data.success) {
           if (data.code === 1) {
             this.userData = data.result;
+          } else {
+            this.userData = null;
           }
           this.cookieChecked = true;
         } else {
