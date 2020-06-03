@@ -6,8 +6,9 @@ import Contents from '../Content';
 import Loading from '../util/Loading';
 import ScrollToTop from './ScrollToTop';
 
-const PrivacyPolicy = lazy(() => import('./Footer/PrivacyPolicy'));
-const TermOfService = lazy(() => import('./Footer/TermOfService'));
+import PrivacyPolicy from './Footer/PrivacyPolicy';
+import TermOfService from './Footer/TermOfService';
+
 const Home = lazy(() => import('../Content/Home'));
 const Posting = lazy(() => import('../Content/Board/Post/Posting'));
 const Alert = lazy(() => import('../util/Alert'));
@@ -64,8 +65,8 @@ const Content = () => (
         draggable
         pauseOnHover
       />
-      <TermOfService />
       <PrivacyPolicy />
+      <TermOfService />
     </Suspense>
   </BorderedDiv>
 );
