@@ -32,6 +32,8 @@ class BoardStore {
     name: '질문 & 답변',
   }];
 
+  @observable tempData = [];
+
   @observable currentBoard = '';
 
   constructor(root) {

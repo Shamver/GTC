@@ -25,19 +25,37 @@ const BoardOptions = () => {
   ));
 };
 
+const BoardCategoryOptions = () => {
+  const { SystemCodeStore } = useStores();
+  const { setCodeList } = SystemCodeStore;
+
+  return setCodeList.map((data) => (
+    <option
+      value={data.NAME}
+      key={data.CODE}
+    >
+      {data.NAME}
+    </option>
+  ));
+};
+
 const Posting = (props) => {
-  const { BoardStore, BoardPostStore, UtilRouteStore } = useStores();
+  const {
+    BoardStore, BoardPostStore, UtilRouteStore, SystemCodeStore,
+  } = useStores();
   const {
     post, setPostBoard, onChangeValue, addPost,
     getModifyPost, modifyPost, setPostClear,
   } = BoardPostStore;
   const { goBack } = UtilRouteStore;
+  const { getCodeComponent } = SystemCodeStore;
   const { match, isModify } = props;
   const { params } = match;
   const { board, id } = params;
 
   useEffect(() => {
     setPostClear();
+    getCodeComponent('BOARD_FREE_CATEGORY', board);
     setPostBoard(board);
     if (isModify) {
       getModifyPost(id);
@@ -54,9 +72,7 @@ const Posting = (props) => {
         </Col>
         <Col xs="2">
           <SelectInput type="select" name="category" value={post.category} onChange={onChangeValue}>
-            <option value="">선택</option>
-            <option value="FREE">자유</option>
-            <option value="TALK">잡담</option>
+            <BoardCategoryOptions />
           </SelectInput>
         </Col>
         <Col>

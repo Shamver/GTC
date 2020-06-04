@@ -4,16 +4,32 @@ import * as Proptypes from 'prop-types';
 import useStores from '../../../../stores/useStores';
 import Post from './index';
 
+const BoardCategoryOptions = () => {
+  const { SystemCodeStore } = useStores();
+  const { setCodeList } = SystemCodeStore;
+
+  return setCodeList.map((data) => (
+    <option
+      value={data.NAME}
+      key={data.CODE}
+    >
+      {data.NAME}
+    </option>
+  ));
+};
+
 const PostList = ({ path, currentPage }) => {
   const {
-    BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore,
+    BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore, SystemCodeStore,
   } = useStores();
   const { setCurrentBoard } = BoardStore;
   const { getBoardPostList, boardPostList } = BoardPostStore;
   const { onSet } = ComponentPostStore;
-  const { ignoreList } = UserIgnoreStore;
+  const { ignoreList } = UserIgnoreStore
+  const { getCodeComponent } = SystemCodeStore;
 
   useEffect(() => {
+    getCodeComponent('BOARD_FREE_CATEGORY', path);
     getBoardPostList(path, currentPage);
     setCurrentBoard(path);
   }, [path, getBoardPostList, setCurrentBoard, currentPage, ignoreList]);

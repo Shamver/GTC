@@ -158,6 +158,7 @@ class PostStore {
               [board]: data.rows,
             };
 
+
             // 게시글 가져올때 MAX 카운트 셋
             if (data.rows.length === 0) {
               this.currentBoardMaxPage = 0;
