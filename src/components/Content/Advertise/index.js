@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useLayoutEffect} from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import WorkOnAdvertise from './WorkOnAdvertise';
 import AdvertiseForm from './AdvertiseForm';
@@ -6,16 +6,11 @@ import useStores from '../../../stores/useStores';
 
 const Advertise = () => {
   const { UtilLoadingStore } = useStores();
-  const { loadingProcess, startLoading } = UtilLoadingStore;
-  useEffect(() => {
-    console.log('렌더링 완료!');
-    loadingProcess([]);
-  }, [loadingProcess]);
+  const { loadingProcess } = UtilLoadingStore;
 
   useLayoutEffect(() => {
-    startLoading();
-    console.log('로딩이시작되었습니다.');
-  }, []);
+    loadingProcess([]);
+  }, [loadingProcess]);
 
   return (
     <BoardWrapper>

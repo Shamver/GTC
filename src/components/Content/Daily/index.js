@@ -16,7 +16,7 @@ const Daily = () => {
       getDailyList,
       getDailyLast,
     ]);
-  }, []);
+  }, [loadingProcess, getDailyList, getDailyLast]);
 
   return (
     <MainContainer>

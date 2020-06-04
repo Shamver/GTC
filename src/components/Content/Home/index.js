@@ -1,4 +1,4 @@
-import React, { useEffect, memo } from 'react';
+import React, { useLayoutEffect, memo } from 'react';
 import { Row, Col } from 'reactstrap';
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,7 +14,7 @@ const Home = () => {
   const { getHomePostList } = BoardPostStore;
   const { userData } = UserStore;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadingProcess([
       () => getHomePostList('free'),
       () => getHomePostList('cash'),

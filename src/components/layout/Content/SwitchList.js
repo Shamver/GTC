@@ -1,5 +1,6 @@
 import React, { useEffect, lazy, memo } from 'react';
 import { Route, Switch } from 'react-router';
+import { observer } from 'mobx-react';
 import Contents from '../../Content';
 import useStores from '../../../stores/useStores';
 
@@ -76,4 +77,4 @@ const SwitchList = () => {
   );
 };
 
-export default memo(SwitchList);
+export default memo(observer(SwitchList));

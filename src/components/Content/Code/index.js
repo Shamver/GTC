@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { Table, Button } from 'reactstrap';
@@ -18,7 +18,7 @@ const Code = () => {
   } = SystemCodeStore;
   const { loadingProcess } = UtilLoadingStore;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadingProcess([
       getCodeGroupList,
     ]);

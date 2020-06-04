@@ -29,7 +29,6 @@ class LoadingStore {
     await Promise.all(promiseArr);
     setTimeout(() => {
       this.loading = 0;
-      console.log('로딩끝!');
     }, 0);
   };
 

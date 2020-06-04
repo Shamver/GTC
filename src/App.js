@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { Row, Col } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
 import Header from './components/layout/Header';
 import Content from './components/layout/Content';
 import Category from './components/layout/Category';
 import useStores from './stores/useStores';
 import CustomSidebar from './components/layout/Sidebar';
+import Footer from './components/layout/Footer';
 
 const App = ({ history }) => {
   const { UtilRouteStore, UserStore } = useStores();
@@ -34,20 +34,7 @@ const App = ({ history }) => {
                 </P5Col2>
               </UnderSection>
             </Container>
-            <LayoutFooter>
-              © 2020-2020 GTC(Growtopia Community) <br />
-              <Link to="/">이용약관</Link>
-              &nbsp; | &nbsp;
-              <Link to="/">개인정보보호방침</Link>
-              &nbsp; | &nbsp;
-              <Link to="/">관리자 모집</Link>
-              &nbsp; | &nbsp;
-              <Link to="/">광고문의</Link>
-              &nbsp; | &nbsp;
-              <Link to="/">고객센터</Link> <br />
-              GTC(Growtopia Community)는 Growtopia에서 운영하는 사이트가 아닙니다. <br />
-              <br />
-            </LayoutFooter>
+            <Footer />
             <CustomSidebar />
           </div>
         </ContainerWrapper>
@@ -60,11 +47,7 @@ App.propTypes = {
   history: Proptypes.shape({}).isRequired,
 };
 
-const LayoutFooter = styled.div`
-  text-align : center;
-  padding : 20px 40px 20px;
-  font-size : 14px;
-`;
+
 
 const ContainerWrapper = styled.div`
   background-color: rgb(243, 242, 240);

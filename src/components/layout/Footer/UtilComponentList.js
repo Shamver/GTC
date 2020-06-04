@@ -1,8 +1,7 @@
 import React, { lazy, memo, Suspense } from 'react';
-import { ToastContainer } from 'react-toastify';
 import styled from 'styled-components';
+import { ToastContainer } from 'react-toastify';
 import ScrollToTop from '../ScrollToTop';
-import 'react-toastify/dist/ReactToastify.css';
 
 const Alert = lazy(() => import('../../util/Alert'));
 const Sign = lazy(() => import('../../util/Sign'));
@@ -37,5 +36,6 @@ const ToastContainerCustom = styled(ToastContainer)`
   }
   width : auto !important;
 `;
+
 
 export default memo(UtilComponentList);

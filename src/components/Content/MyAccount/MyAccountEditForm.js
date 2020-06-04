@@ -4,8 +4,7 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import avatarImg from '../../../resources/images/avatar.png';
-import anonymous from '../../../resources/images/anonymous.png';
+import avatarImg from '../../../resources/images/anonymous.png';
 import useStores from '../../../stores/useStores';
 
 const MyAccountEditForm = () => {
@@ -41,7 +40,7 @@ const MyAccountEditForm = () => {
               <option value="F">여자</option>
             </FormSelect>
             <FormSwitch>
-              {profileYN === 'Y' ? (<Avatar src={avatarImg} />) : (<Avatar src={anonymous} />)}
+              {profileYN === 'Y' ? (<Avatar src={avatarImg} />) : (<Avatar src={avatarImg} />)}
               <InputProfile
                 type="switch"
                 id="profileSwitch"
