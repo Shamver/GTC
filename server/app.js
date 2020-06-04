@@ -32,6 +32,7 @@ const cookieLatelyApi = require('./routes/cookie/LatelyRouter');
 const eventDailyApi = require('./routes/event/DailyRouter');
 const eventAdvertiseApi = require('./routes/event/AdvertiseRouter');
 const systemCodeApi = require('./routes/system/CodeRouter');
+const fileApi = require('./routes/util/FileRouter');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -39,6 +40,9 @@ app.set('jwt-secret', jwtConfig.secret);
 
 // auth
 app.use('/api/auth', authApi);
+
+// util
+app.use('/api/util/file', fileApi);
 
 // user
 app.use('/api/user', authMiddleware);

@@ -74,7 +74,7 @@ const Posting = (props) => {
           {
             ckfinder: {
               // Upload the images to the server using the CKFinder QuickUpload command.
-              uploadUrl: 'http://naver.com',
+              uploadUrl: '/api/util/file/images',
             },
           }
         }
