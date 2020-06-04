@@ -9,7 +9,6 @@ import { observer } from 'mobx-react';
 import * as PropTypes from 'prop-types';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import ckeditor from '../../../util/ckeditor';
 import useStores from '../../../../stores/useStores';
 
 const BoardOptions = () => {
@@ -65,12 +64,20 @@ const Posting = (props) => {
         </Col>
       </PostingHeader>
       <CKEditor
-        editor={ckeditor}
+        editor={ClassicEditor}
         data={post.text}
         onChange={(event, editor) => {
           const data = editor.getData();
           onChangeValue(data);
         }}
+        config={
+          {
+            ckfinder: {
+              // Upload the images to the server using the CKFinder QuickUpload command.
+              uploadUrl: 'http://naver.com',
+            },
+          }
+        }
       />
       <PostingFooter>
         <CustomCheckbox type="checkbox" id="replyAllow" name="commentAllowFl" label="댓글 허용" value={post.commentAllowFl} onChange={onChangeValue} checked={post.commentAllowFl} />
