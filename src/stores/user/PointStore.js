@@ -13,41 +13,37 @@ class PointStore {
     this.root = root;
   }
 
-  @action getPoint = ((currentPage) => {
+  @action getPoint = async (currentPage) => {
     const { userData } = this.root.UserStore;
 
-    if (userData) {
-      axios.get('/api/user/point', {
-        params: {
-          userId: userData.id,
-          currentPage,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.success) {
-            if (data.code === 1) {
-              this.pointList = data.result;
-              if (data.result.length === 0) {
-                this.currentPointMaxPage = 0;
-              } else {
-                const { pageCount } = data.result[0];
-                this.currentPointMaxPage = pageCount;
-              }
+    await axios.get('/api/user/point', {
+      params: {
+        userId: userData.id,
+        currentPage,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.pointList = data.result;
+            if (data.result.length === 0) {
+              this.currentPointMaxPage = 0;
             } else {
-              toast.info(data.message);
+              const { pageCount } = data.result[0];
+              this.currentPointMaxPage = pageCount;
             }
           } else {
-            toast.error(data.message);
+            toast.info(data.message);
           }
-        })
-        .catch((response) => {
-          console.log(response);
-        });
-    } else {
-      this.pointList = [];
-    }
-  });
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+  };
 
   @action getTotalPointData = (() => {
     const { userData } = this.root.UserStore;

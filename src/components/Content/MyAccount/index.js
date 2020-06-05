@@ -1,4 +1,4 @@
-import React, { useEffect, memo } from 'react';
+import React, { useLayoutEffect, memo } from 'react';
 import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
@@ -10,7 +10,7 @@ const MyAccount = () => {
   const { setDefaultValue } = ComponentMyAccountStore;
   const { loadingProcess } = UtilLoadingStore;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadingProcess([
       setDefaultValue,
     ]);

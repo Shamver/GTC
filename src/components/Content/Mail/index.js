@@ -1,4 +1,4 @@
-import React, { useEffect, memo } from 'react';
+import React, { useLayoutEffect, memo } from 'react';
 import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
@@ -12,7 +12,7 @@ const Setting = () => {
   const { loadingProcess } = UtilLoadingStore;
   const { getMail, getSentMail } = UserMailStore;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadingProcess([
       getMail,
       getSentMail,

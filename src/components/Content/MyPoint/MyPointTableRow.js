@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
+import * as Proptypes from 'prop-types';
 
-const MyPointTableRow = (title, data) => {
+const MyPointTableRow = ({ data }) => {
   const {
-    id, type, point, date, postId,
+    type, point, date, postId,
   } = data;
 
   let desc;
@@ -19,7 +20,7 @@ const MyPointTableRow = (title, data) => {
   }
 
   return (
-    <tr key={title + id}>
+    <tr>
       <TableTh scope="row">
         { date }
       </TableTh>
@@ -32,6 +33,16 @@ const MyPointTableRow = (title, data) => {
     </tr>
   );
 };
+
+MyPointTableRow.propTypes = {
+  data: Proptypes.shape({
+    type: Proptypes.string,
+    point: Proptypes.number,
+    date: Proptypes.string,
+    postId: Proptypes.number,
+  }).isRequired,
+};
+
 
 const TableTh = styled.th`
   vertical-align: middle !important;
@@ -48,4 +59,4 @@ const TableTd = styled.td`
   padding: 8px !important;
 `;
 
-export default MyPointTableRow;
+export default memo(MyPointTableRow);

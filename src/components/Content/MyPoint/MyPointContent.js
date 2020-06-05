@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 
 import * as Proptypes from 'prop-types';
@@ -7,15 +7,8 @@ import useStores from '../../../stores/useStores';
 import PointPagination from './Pagination';
 
 const MyPointContent = ({ currentPage, noPagination }) => {
-  const { UserPointStore, UtilStore } = useStores();
-  const { loginCheck } = UtilStore;
-  const { pointList, totalPoint, getPoint } = UserPointStore;
-
-  useEffect(() => {
-    if (loginCheck()) {
-      getPoint(currentPage);
-    }
-  }, [loginCheck, getPoint, currentPage]);
+  const { UserPointStore } = useStores();
+  const { pointList, totalPoint } = UserPointStore;
 
   return (
     <>
@@ -36,4 +29,4 @@ MyPointContent.defaultProps = {
   noPagination: false,
 };
 
-export default observer(MyPointContent);
+export default memo(observer(MyPointContent));

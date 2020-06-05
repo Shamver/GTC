@@ -1,19 +1,21 @@
-import React from 'react';
-import {
-  Container,
-} from 'reactstrap';
+import React, { useLayoutEffect, memo } from 'react';
+import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
 import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import MyPointContent from './MyPointContent';
 
 const MyPoint = ({ currentPage, noPagination }) => {
-  const { UtilLoadingStore } = useStores();
-  const { doLoading } = UtilLoadingStore;
+  const { UtilLoadingStore, UserPointStore } = useStores();
+  const { loadingProcess } = UtilLoadingStore;
+  const { getPoint } = UserPointStore;
 
-  doLoading();
+  useLayoutEffect(() => {
+    loadingProcess([
+      () => getPoint(currentPage),
+    ]);
+  }, [loadingProcess, getPoint, currentPage]);
 
   return (
     <MainContainer>
@@ -40,4 +42,4 @@ MyPoint.defaultProps = {
   noPagination: false,
 };
 
-export default observer(MyPoint);
+export default memo(observer(MyPoint));

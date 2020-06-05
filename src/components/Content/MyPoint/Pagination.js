@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { PaginationItem, Pagination } from 'reactstrap';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
@@ -122,4 +122,4 @@ const PaginationCustom = styled(Pagination)`
   }
 `;
 
-export default PointPagination;
+export default memo(PointPagination);

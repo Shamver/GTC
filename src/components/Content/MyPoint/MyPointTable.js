@@ -1,23 +1,19 @@
-import React from 'react';
-import {
-  Table,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { Table } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import MyPointTableRow from './MyPointTableRow';
 import useStores from '../../../stores/useStores';
-import Loading from '../../util/Loading';
 
 const MyPointTable = () => {
   const { UserPointStore, UtilLoadingStore } = useStores();
   const { pointList } = UserPointStore;
   const { loading } = UtilLoadingStore;
-  const MyPointTableData = pointList.map((v) => (MyPointTableRow('myPoint', v)));
+  const MyPointTableData = pointList.map((v) => (<MyPointTableRow data={v} key={v.id} />));
 
   return (
     <>
-      <Loading loading={loading} />
-      <ListTable size="sm" bordered loading={loading}>
+      <ListTable size="sm" bordered>
         <thead>
           <tr>
             <TableTh width={22}>시간</TableTh>
@@ -46,8 +42,7 @@ const TableTh = styled.th`
 `;
 
 const ListTable = styled(Table)`
-  display: ${(props) => (props.loading ? 'none' : 'table')}
   border: 1px solid #c9c9c9 !important;
 `;
 
-export default observer(MyPointTable);
+export default memo(observer(MyPointTable));
