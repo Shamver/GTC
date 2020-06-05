@@ -73,7 +73,6 @@ const Posting = (props) => {
         config={
           {
             ckfinder: {
-              // Upload the images to the server using the CKFinder QuickUpload command.
               uploadUrl: '/api/util/file/images',
             },
           }
