@@ -1,11 +1,8 @@
-import React from 'react';
-import {
-  TabPane, CustomInput, Button,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { TabPane, CustomInput, Button } from 'reactstrap';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faExclamationTriangle, faExclamationCircle } from '@fortawesome/free-solid-svg-icons';
-
 import useStores from '../../../stores/useStores';
 
 const SettingWithdrawal = () => {
@@ -51,11 +48,7 @@ const SettingWithdrawal = () => {
         <Button
           color="danger"
           onClick={() => {
-            isCheckedWithdrawal(() => {
-              toggleConfirmAlert('정말 삭제하시겠어요?', () => {
-                withdrawal();
-              });
-            });
+            isCheckedWithdrawal(() => toggleConfirmAlert('정말 삭제하시겠어요?', () => withdrawal()));
           }}
         >
           <FontAwesomeIcon icon={faTrashAlt} /> 회원탈퇴
@@ -81,4 +74,4 @@ const P = styled.p`
   color: #c00;
 `;
 
-export default SettingWithdrawal;
+export default memo(SettingWithdrawal);

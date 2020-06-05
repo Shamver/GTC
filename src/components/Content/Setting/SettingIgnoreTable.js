@@ -1,25 +1,31 @@
-import React from 'react';
-import {
-  CustomInput,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { CustomInput } from 'reactstrap';
 import styled from 'styled-components';
+import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
 
-const SettingIgnoreTable = (title, data, onClickEvent) => {
-  const {
-    id, nickname, date,
-  } = data;
+const SettingIgnoreTable = ({ data }) => {
+  const { UserIgnoreStore } = useStores();
+  const { onChangeIgnore } = UserIgnoreStore;
+  const { id, nickname, date } = data;
 
   return (
-    <tr key={title + id}>
+    <tr>
       <TableTh scope="row">
-        <CustomInput type="checkbox" id={title + id} name={id} onClick={onClickEvent} />
+        <CustomInput type="checkbox" id={id} name={id} onClick={onChangeIgnore} />
       </TableTh>
-      <TableTd>
-        { nickname }
-      </TableTd>
+      <TableTd>{nickname}</TableTd>
       <TableTd>{date}</TableTd>
     </tr>
   );
+};
+
+SettingIgnoreTable.propTypes = {
+  data: Proptypes.shape({
+    id: Proptypes.number,
+    nickname: Proptypes.string,
+    date: Proptypes.string,
+  }).isRequired,
 };
 
 const TableTh = styled.th`
@@ -37,4 +43,4 @@ const TableTd = styled.td`
   padding: 8px !important;
 `;
 
-export default SettingIgnoreTable;
+export default memo(SettingIgnoreTable);

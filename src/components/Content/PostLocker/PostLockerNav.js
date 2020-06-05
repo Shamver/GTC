@@ -1,9 +1,7 @@
-import React from 'react';
-import {
-  Nav, NavItem, NavLink,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { Nav, NavItem, NavLink } from 'reactstrap';
 import styled from 'styled-components';
-
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const PostLockerNav = () => {
@@ -14,7 +12,7 @@ const PostLockerNav = () => {
     <Nav tabs>
       <NavItem>
         <NavLinkBtn
-          className={(activeTab === 'myPost' ? 'active' : '')}
+          className={activeTab === 'myPost' ? 'active' : ''}
           onClick={onActive}
           name="myPost"
         >
@@ -23,7 +21,7 @@ const PostLockerNav = () => {
       </NavItem>
       <NavItem>
         <NavLinkBtn
-          className={(activeTab === 'myReply' ? 'active' : '')}
+          className={activeTab === 'myReply' ? 'active' : ''}
           onClick={onActive}
           name="myReply"
         >
@@ -32,7 +30,7 @@ const PostLockerNav = () => {
       </NavItem>
       <NavItem>
         <NavLinkBtn
-          className={(activeTab === 'favorite' ? 'active' : '')}
+          className={activeTab === 'favorite' ? 'active' : ''}
           onClick={onActive}
           name="favorite"
         >
@@ -61,4 +59,4 @@ const NavLinkBtn = styled(NavLink)`
   }
 `;
 
-export default PostLockerNav;
+export default memo(observer(PostLockerNav));

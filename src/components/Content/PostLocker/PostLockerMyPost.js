@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   TabPane, Table,
 } from 'reactstrap';
@@ -11,8 +11,9 @@ import PostLockerMyPostTable from './PostLockerMyPostTable';
 const PostLockerMyPost = () => {
   const { BoardPostStore } = useStores();
   const { postMineList } = BoardPostStore;
-
-  const MyPostTableData = postMineList.map((v) => (PostLockerMyPostTable('myPost', v)));
+  const MyPostTableData = postMineList.map(
+    (v) => <PostLockerMyPostTable data={v} key={v.postId} />,
+  );
 
   return (
     <TabPane tabId="myPost">
@@ -58,4 +59,4 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
-export default observer(PostLockerMyPost);
+export default memo(observer(PostLockerMyPost));

@@ -1,32 +1,21 @@
-import React, { useEffect } from 'react';
-import {
-  Container,
-} from 'reactstrap';
+import React, { useEffect, memo } from 'react';
+import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
 import useStores from '../../../stores/useStores';
-
 import SettingNav from './SettingNav';
 import SettingTabContent from './SettingTabContent';
 
 const Setting = () => {
-  const {
-    UserIgnoreStore, ComponentSettingStore, UtilStore, UtilLoadingStore,
-  } = useStores();
-
+  const { UserIgnoreStore, UtilLoadingStore } = useStores();
   const { getIgnore } = UserIgnoreStore;
-  const { activeTab } = ComponentSettingStore;
-  const { loginCheck } = UtilStore;
-  const { doLoading } = UtilLoadingStore;
-
-  doLoading();
+  const { loadingProcess } = UtilLoadingStore;
 
   useEffect(() => {
-    if (loginCheck()) {
-      getIgnore();
-    }
-  }, [loginCheck, getIgnore, activeTab]);
+    loadingProcess([
+      getIgnore,
+    ]);
+  }, [loadingProcess, getIgnore]);
 
   return (
     <MainContainer>
@@ -43,4 +32,4 @@ const MainContainer = styled(Container)`
   padding: 14px !important;
 `;
 
-export default observer(Setting);
+export default memo(observer(Setting));

@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
-const PaginationList = observer(({ path, currentPage, noPagination }) => {
+const PaginationList = ({ path, currentPage, noPagination }) => {
   const { BoardPostStore } = useStores();
   const { currentBoardMaxPage } = BoardPostStore;
 
@@ -47,7 +47,7 @@ const PaginationList = observer(({ path, currentPage, noPagination }) => {
 
   // 추후 max 값 조정후 추가
   return array;
-});
+};
 
 PaginationList.propTypes = {
   path: Proptypes.string.isRequired,
@@ -123,4 +123,4 @@ const PaginationCustom = styled(Pagination)`
   }
 `;
 
-export default BoardPagination;
+export default observer(BoardPagination);

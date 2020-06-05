@@ -1,33 +1,36 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
-
 import { Link } from 'react-router-dom';
+import * as Proptypes from 'prop-types';
 
-const PostLockerMyPostTable = (title, data) => {
+const PostLockerMyPostTable = ({ data }) => {
   const {
-    postId, postTitle, postDate, postViews,
+    postId, postTitle, postDate, viewCnt,
   } = data;
 
   return (
-    <TableTr key={title + postId}>
+    <TableTr key={postId}>
       <TableTd scope="row">
         <b>{postId}</b>
       </TableTd>
       <TableTd>
         <Link to={`/post/${postId}`}>
-          <Text>
-            {postTitle}
-          </Text>
+          <Text>{postTitle}</Text>
         </Link>
       </TableTd>
-      <TableTd>
-        {postDate}
-      </TableTd>
-      <TableTd>
-        {postViews}
-      </TableTd>
+      <TableTd>{postDate}</TableTd>
+      <TableTd>{viewCnt}</TableTd>
     </TableTr>
   );
+};
+
+PostLockerMyPostTable.propTypes = {
+  data: Proptypes.shape({
+    postId: Proptypes.number,
+    postTitle: Proptypes.string,
+    postDate: Proptypes.string,
+    viewCnt: Proptypes.number,
+  }).isRequired,
 };
 
 const Text = styled.span`
@@ -52,4 +55,4 @@ const TableTd = styled.td`
   padding: 8px !important;
 `;
 
-export default PostLockerMyPostTable;
+export default memo(PostLockerMyPostTable);

@@ -9,35 +9,31 @@ class FavoriteStore {
     this.root = root;
   }
 
-  @action getFavorite = (() => {
+  @action getFavorite = async () => {
     const { userData } = this.root.UserStore;
 
-    if (userData) {
-      axios.get('/api/user/favorite', {
-        params: {
-          userId: userData.id,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.success) {
-            if (data.code === 1) {
-              this.favoriteList = data.result;
-            } else {
-              toast.info(data.message);
-            }
+    await axios.get('/api/user/favorite', {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.favoriteList = data.result;
           } else {
-            this.favoriteList = [];
-            toast.error(data.message);
+            toast.info(data.message);
           }
-        })
-        .catch((response) => {
-          console.log(response);
-        });
-    } else {
-      this.favoriteList = [];
-    }
-  });
+        } else {
+          this.favoriteList = [];
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+  };
 
   @action addFavorite = ((id) => {
     const { userData } = this.root.UserStore;

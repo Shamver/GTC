@@ -41,6 +41,10 @@ const SwitchList = () => {
       ) : null }
 
       { checkPermission(0) ? (
+        <Route exact path="/mypoint/page/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />
+      ) : null }
+
+      { checkPermission(0) ? (
         <Route exact path="/daily" render={() => <Contents.Daily />} />
       ) : null }
 

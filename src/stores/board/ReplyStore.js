@@ -25,34 +25,30 @@ class ReplyStore {
     this.root = root;
   }
 
-  @action getDataReplyMine = (() => {
+  @action getDataReplyMine = async () => {
     const { userData } = this.root.UserStore;
 
-    if (userData) {
-      axios.get('/api/board/reply/mine', {
-        params: {
-          userId: userData.id,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.success) {
-            if (data.code === 1) {
-              this.replyMineList = data.result;
-            } else {
-              toast.info(data.message);
-            }
+    await axios.get('/api/board/reply/mine', {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.replyMineList = data.result;
           } else {
-            toast.error(data.message);
+            toast.info(data.message);
           }
-        })
-        .catch((response) => {
-          console.log(response);
-        });
-    } else {
-      this.replyMineList = [];
-    }
-  });
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+  };
 
   @action setReplyEditId = (id) => {
     this.replyEditId = id;

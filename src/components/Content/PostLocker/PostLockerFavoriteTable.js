@@ -1,41 +1,44 @@
-import React from 'react';
-import {
-  Button,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { Button } from 'reactstrap';
 import styled from 'styled-components';
-
 import { Link } from 'react-router-dom';
+import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
 
-const PostLockerFavoriteTable = (title, data, onClickEvent) => {
+const PostLockerFavoriteTable = ({ data }) => {
+  const { UserFavoriteStore } = useStores();
+  const { deleteFavorite } = UserFavoriteStore;
+
   const {
     postId, postTitle, postDate, postViews,
   } = data;
 
   return (
-    <TableTr key={title + postId}>
+    <TableTr>
       <TableTd>
         <b>{postId}</b>
       </TableTd>
       <TableTd>
         <Link to={`/post/${postId}`}>
-          <Text>
-            {postTitle}
-          </Text>
+          <Text>{postTitle}</Text>
         </Link>
       </TableTd>
+      <TableTd>{postDate}</TableTd>
+      <TableTd>{postViews}</TableTd>
       <TableTd>
-        {postDate}
-      </TableTd>
-      <TableTd>
-        {postViews}
-      </TableTd>
-      <TableTd>
-        <DeleteBtn color="danger" size="sm" onClick={() => { onClickEvent(postId, 'postLocker'); }}>
-          삭제
-        </DeleteBtn>
+        <DeleteBtn color="danger" size="sm" onClick={() => deleteFavorite(postId, 'postLocker')}>삭제</DeleteBtn>
       </TableTd>
     </TableTr>
   );
+};
+
+PostLockerFavoriteTable.propTypes = {
+  data: Proptypes.shape({
+    postId: Proptypes.number,
+    postTitle: Proptypes.string,
+    postDate: Proptypes.string,
+    postViews: Proptypes.number,
+  }).isRequired,
 };
 
 const Text = styled.span`
@@ -64,4 +67,4 @@ const DeleteBtn = styled(Button)`
   margin: -5px 0 !important;
 `;
 
-export default PostLockerFavoriteTable;
+export default memo(PostLockerFavoriteTable);

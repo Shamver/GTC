@@ -1,22 +1,17 @@
-import React from 'react';
-import {
-  TabPane, Table, Button,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { TabPane, Table, Button } from 'reactstrap';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { observer } from 'mobx-react';
-
 import useStores from '../../../stores/useStores';
-
 import SettingIgnoreTable from './SettingIgnoreTable';
 
 const SettingIgnore = () => {
   const { UserIgnoreStore, UtilAlertStore } = useStores();
-  const { ignoreList, onChangeIgnore, deleteIgnore } = UserIgnoreStore;
+  const { ignoreList, deleteIgnore } = UserIgnoreStore;
   const { toggleConfirmAlert } = UtilAlertStore;
-
-  const IgnoreTableData = ignoreList.map((v) => (SettingIgnoreTable('ignore', v, onChangeIgnore)));
+  const IgnoreTableData = ignoreList.map((v) => <SettingIgnoreTable data={v} key={v.id} />);
 
   return (
     <TabPane tabId="ignore">
@@ -39,7 +34,7 @@ const SettingIgnore = () => {
         </tbody>
       </ListTable>
       {IgnoreTableData.length === 0 ? '' : (
-        <Button color="danger" onClick={() => { toggleConfirmAlert('정말 삭제하시겠어요?', deleteIgnore); }}>
+        <Button color="danger" onClick={() => toggleConfirmAlert('정말 삭제하시겠어요?', deleteIgnore)}>
           <FontAwesomeIcon icon={faTrashAlt} />  삭제하기
         </Button>
       )}
@@ -57,4 +52,4 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
-export default observer(SettingIgnore);
+export default memo(observer(SettingIgnore));

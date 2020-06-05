@@ -11,8 +11,9 @@ import PostLockerMyReplyTable from './PostLockerMyReplyTable';
 const PostLockerMyReply = () => {
   const { BoardReplyStore } = useStores();
   const { replyMineList } = BoardReplyStore;
-
-  const MyReplyTableData = replyMineList.map((v) => (PostLockerMyReplyTable('myReply', v)));
+  const MyReplyTableData = replyMineList.map(
+    (v) => <PostLockerMyReplyTable data={v} key={v.postId} />,
+  );
 
   return (
     <TabPane tabId="myReply">
@@ -27,9 +28,7 @@ const PostLockerMyReply = () => {
         <tbody>
           {MyReplyTableData.length === 0 ? (
             <tr>
-              <TableTd colSpan={3}>
-              작성한 댓글이 없습니다.
-              </TableTd>
+              <TableTd colSpan={3}>작성한 댓글이 없습니다.</TableTd>
             </tr>
           ) : MyReplyTableData}
         </tbody>

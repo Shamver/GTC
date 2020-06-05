@@ -9,34 +9,30 @@ class IgnoreStore {
     this.root = root;
   }
 
-  @action getIgnore = (() => {
+  @action getIgnore = async () => {
     const { userData } = this.root.UserStore;
 
-    if (userData) {
-      axios.get('/api/user/ignore', {
-        params: {
-          userId: userData.id,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.success) {
-            if (data.code === 1) {
-              this.ignoreList = data.result;
-            } else {
-              toast.info(data.message);
-            }
+    await axios.get('/api/user/ignore', {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.ignoreList = data.result;
           } else {
-            toast.error(data.message);
+            toast.info(data.message);
           }
-        })
-        .catch((response) => {
-          console.log(response);
-        });
-    } else {
-      this.ignoreList = [];
-    }
-  });
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
+  };
 
   @action onChangeIgnore = ((e) => {
     const { name } = e.target;

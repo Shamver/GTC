@@ -382,33 +382,29 @@ class PostStore {
     this.post.board = board.toUpperCase();
   };
 
-  @action getPostMine = () => {
+  @action getPostMine = async () => {
     const { userData } = this.root.UserStore;
 
-    if (userData) {
-      axios.get('/api/board/post/mine', {
-        params: {
-          userId: userData.id,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.success) {
-            if (data.code === 1) {
-              this.postMineList = data.result;
-            } else {
-              toast.info(data.message);
-            }
+    await axios.get('/api/board/post/mine', {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.postMineList = data.result;
           } else {
-            toast.error(data.message);
+            toast.info(data.message);
           }
-        })
-        .catch((response) => {
-          console.log(response);
-        });
-    } else {
-      this.postMineList = [];
-    }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        console.log(response);
+      });
   };
 
   @action setPostClear = () => {

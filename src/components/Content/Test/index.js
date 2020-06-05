@@ -1,22 +1,11 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import TestA from './TestA';
 
 const Test = () => {
   const { UtilLoadingStore } = useStores();
-  const { test, startLoading, stopLoading } = UtilLoadingStore;
-
-  useEffect(() => {
-    console.log('render 완료!');
-    stopLoading();
-  }, []);
-
-  useLayoutEffect(() => {
-    startLoading();
-  }, []);
-
-  console.log('Test 렌더링 시작!');
+  const { test } = UtilLoadingStore;
 
   return (
     <>

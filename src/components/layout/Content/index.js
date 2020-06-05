@@ -4,9 +4,7 @@ import { observer } from 'mobx-react';
 import Loading from '../../util/Loading';
 import useStores from '../../../stores/useStores';
 import SwitchList from './SwitchList';
-import UtilComponentList from '../Footer/UtilComponentList';
 import 'react-toastify/dist/ReactToastify.css';
-
 
 const Content = () => {
   const { UtilLoadingStore } = useStores();

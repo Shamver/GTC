@@ -1,35 +1,53 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
-
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { Link } from 'react-router-dom';
 import renderHTML from 'react-render-html';
+import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
 
-const NewAlertData = (data, onLink, onDelete) => {
+const NewAlertData = ({ data }) => {
+  const { UserAlertStore } = useStores();
+  const { onDeleteAlert, onClickAlert } = UserAlertStore;
+
   const {
-    id, isRead, replyId, postId, replyName, postTitle, replyDate,
+    id, isRead, replyId, postId, replyName,
+    postTitle, replyDate, replyContent, type,
   } = data;
 
   return (
-    <AlertWrapper className={(isRead === 'Y' ? '' : 'noRead')} key={`alertData${id}`}>
+    <AlertWrapper className={isRead === 'Y' ? '' : 'noRead'}>
       <AlertBox>
-        <LinkA to={`/post/${postId}#${replyId}`} name={`${id}`} onClick={onLink}>
+        <LinkA to={`/post/${postId}#${replyId}`} name={`${id}`} onClick={onClickAlert}>
           <StrongSpan>{replyName}</StrongSpan>님이 <StrongSpan>{postTitle}</StrongSpan>
           에 새&nbsp;
-          {data.type === 'reply' ? '댓글' : '대댓글'}을 달았습니다:&nbsp;
-          {renderHTML(data.replyContent)}
+          {type === 'reply' ? '댓글' : '댓글의 답글'}을 달았습니다:&nbsp;
+          {renderHTML(replyContent)}
         </LinkA>
         <DateSpan>{replyDate}</DateSpan>
       </AlertBox>
       <AlertActionBox>
-        <DeleteA onClick={onDelete} name={`${data.id}`}>
+        <DeleteA onClick={onDeleteAlert} name={`${id}`}>
           <FontAwesomeIcon icon={faTimes} />
         </DeleteA>
       </AlertActionBox>
     </AlertWrapper>
   );
+};
+
+NewAlertData.propTypes = {
+  data: Proptypes.shape({
+    id: Proptypes.number,
+    isRead: Proptypes.number,
+    replyId: Proptypes.number,
+    postId: Proptypes.number,
+    replyName: Proptypes.string,
+    postTitle: Proptypes.string,
+    replyDate: Proptypes.number,
+    replyContent: Proptypes.number,
+    type: Proptypes.string,
+  }).isRequired,
 };
 
 const AlertWrapper = styled.div`
@@ -85,4 +103,4 @@ const StrongSpan = styled.span`
   font-weight: 700;
 `;
 
-export default NewAlertData;
+export default memo(NewAlertData);

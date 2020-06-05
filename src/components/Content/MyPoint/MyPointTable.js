@@ -6,9 +6,8 @@ import MyPointTableRow from './MyPointTableRow';
 import useStores from '../../../stores/useStores';
 
 const MyPointTable = () => {
-  const { UserPointStore, UtilLoadingStore } = useStores();
+  const { UserPointStore } = useStores();
   const { pointList } = UserPointStore;
-  const { loading } = UtilLoadingStore;
   const MyPointTableData = pointList.map((v) => (<MyPointTableRow data={v} key={v.id} />));
 
   return (

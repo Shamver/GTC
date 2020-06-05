@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import renderHTML from 'react-render-html';
-
 import { Link } from 'react-router-dom';
+import * as Proptypes from 'prop-types';
 
 const PostLockerMyReplyTable = (title, data) => {
   const {
@@ -10,24 +10,28 @@ const PostLockerMyReplyTable = (title, data) => {
   } = data;
 
   return (
-    <TableTr key={title + replyId}>
+    <TableTr>
       <TableTd>
         <Link to={`/post/${postId}#${replyId}`}>
-          <Text post>
-            {postTitle}
-          </Text>
+          <Text post>{postTitle}</Text>
         </Link>
       </TableTd>
       <TableTd width={60}>
-        <Text>
-          {renderHTML(replyContent)}
-        </Text>
+        <Text>{renderHTML(replyContent)}</Text>
       </TableTd>
-      <TableTd>
-        {replyDate}
-      </TableTd>
+      <TableTd>{replyDate}</TableTd>
     </TableTr>
   );
+};
+
+PostLockerMyReplyTable.propTypes = {
+  data: Proptypes.shape({
+    postId: Proptypes.number,
+    replyId: Proptypes.number,
+    postTitle: Proptypes.string,
+    replyContent: Proptypes.string,
+    replyDate: Proptypes.string,
+  }).isRequired,
 };
 
 const Text = styled.span`
@@ -55,4 +59,4 @@ const TableTd = styled.td`
   padding: 8px !important;
 `;
 
-export default PostLockerMyReplyTable;
+export default memo(PostLockerMyReplyTable);
