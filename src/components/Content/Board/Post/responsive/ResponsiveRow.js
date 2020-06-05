@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faStar, faImage } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
@@ -12,14 +12,15 @@ const ResponsiveRow = ({
 }) => {
   const {
     id, recommendCount, categoryName, commentCount,
-    type, title, boardName,
+    type, title, boardName, isImage,
   } = data;
   const { ComponentPostStore } = useStores();
   const { onClickPost, isVisited } = ComponentPostStore;
 
   const IsBestPost = recommendCount >= 10
     ? (<Star icon={faStar} />)
-    : (<FontAwesomeIcon icon={faCommentDots} />);
+    : isImage ? (<FontAwesomeIcon icon={faImage} />)
+      : (<FontAwesomeIcon icon={faCommentDots} />);
   return (
     <>
       { path === 'all' ? (
@@ -55,6 +56,7 @@ ResponsiveRow.propTypes = {
     commentCount: Proptypes.number,
     type: Proptypes.string,
     boardName: Proptypes.string,
+    isImage: Proptypes.bool,
   }).isRequired,
   index: Proptypes.number.isRequired,
   path: Proptypes.string.isRequired,
