@@ -36,7 +36,7 @@ const PostViewFooter = () => {
         )}
       </TopBottomWrapper>
       <BoardContent path={currentBoard} />
-      <BoardFooter path={currentBoard} />
+      <BoardFooter path={currentBoard} isFooter />
     </>
   );
 };

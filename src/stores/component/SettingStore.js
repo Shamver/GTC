@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import {toast} from "react-toastify";
 
 class SettingStore {
   @observable activeTab = 'ignore';
@@ -22,12 +23,10 @@ class SettingStore {
   });
 
   @action isCheckedWithdrawal = ((next) => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     if (this.withdrawalIsChecked) {
       next();
     } else {
-      toggleAlert('내용 확인란에 체크를 해주셔야 합니다.');
+      toast.error('내용 확인란에 체크를 해주셔야 합니다.');
     }
   });
 }

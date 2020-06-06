@@ -1,38 +1,43 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faStar } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faStar, faImage } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import WriterDropdown from './WriterDropdown';
 import useStores from '../../../../../stores/useStores';
 
-const ResponsiveRow = ({ data, index, path }) => {
+const ResponsiveRow = ({
+  data, index, path, isNotice,
+}) => {
   const {
     id, recommendCount, categoryName, commentCount,
-    type, title, boardName,
+    type, title, boardName, isImage,
   } = data;
   const { ComponentPostStore } = useStores();
   const { onClickPost, isVisited } = ComponentPostStore;
 
+  // eslint-disable-next-line no-nested-ternary
   const IsBestPost = recommendCount >= 10
     ? (<Star icon={faStar} />)
-    : (<BottomIcon icon={faCommentDots} />);
+    : isImage ? (<FontAwesomeIcon icon={faImage} />)
+      : (<BottomIcon icon={faCommentDots} />);
+
   return (
     <>
       { path === 'all' ? (
         <DateTd>
-          { type !== 'notice' ? boardName : null}
+          {!isNotice ? boardName : ''}
         </DateTd>
       ) : null }
-      <DateTd>
-        <NoLineDiv>
-          { type !== 'notice' ? categoryName : null}
-        </NoLineDiv>
-      </DateTd>
-      <MiddleTd width="700">
+      { !isNotice ? (
+        <DateTd>
+          { type !== 'notice' ? categoryName : ''}
+        </DateTd>
+      ) : '' }
+      <MiddleTd width="700" colSpan={isNotice ? 2 : 1}>
         <MiddleSpan>
-          { type === 'notice' ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
+          { isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
           &nbsp;
           <PostTitle className={isVisited(id) ? 'color-gray' : ''} onClick={() => onClickPost(id)}>{title}</PostTitle>
           { commentCount > 0
@@ -64,17 +69,15 @@ ResponsiveRow.propTypes = {
     commentCount: Proptypes.number,
     type: Proptypes.string,
     boardName: Proptypes.string,
+    isImage: Proptypes.bool,
   }).isRequired,
   index: Proptypes.number.isRequired,
   path: Proptypes.string.isRequired,
+  isNotice: Proptypes.bool.isRequired,
 };
 
 const BottomIcon = styled(FontAwesomeIcon)`
   vertical-align : bottom;
-`;
-
-const NoLineDiv = styled.div`
-  line-height: normal;
 `;
 
 const MiddleSpan = styled.span`

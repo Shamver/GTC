@@ -298,15 +298,13 @@ class CodeStore {
   };
 
   @action codeGroupValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     if (!this.codeGroup.id.trim()) {
-      toggleAlert('코드 그룹을 입력하여 주세요.');
+      toast.error('코드 그룹을 입력하여 주세요.');
       return false;
     }
 
     if (!this.codeGroup.name.trim()) {
-      toggleAlert('코드 그룹명을 입력하여 주세요.');
+      toast.error('코드 그룹명을 입력하여 주세요.');
       return false;
     }
 
@@ -315,20 +313,18 @@ class CodeStore {
 
 
   @action codeValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     if (!this.code.id.trim()) {
-      toggleAlert('코드를 입력하여 주세요.');
+      toast.error('코드를 입력하여 주세요.');
       return false;
     }
 
     if (!this.code.name.trim()) {
-      toggleAlert('코드명을 입력하여 주세요.');
+      toast.error('코드명을 입력하여 주세요.');
       return false;
     }
 
     if (!this.code.order.trim() || Number.isNaN(Number(this.code.order.trim()))) {
-      toggleAlert('순서를 입력하지 않았거나 숫자형태가 아닙니다.');
+      toast.error('순서를 입력하지 않았거나 숫자형태가 아닙니다.');
       return false;
     }
 

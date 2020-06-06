@@ -64,15 +64,14 @@ class MailStore {
 
   @action sendMail = () => {
     const { userData } = this.root.UserStore;
-    const { toggleAlert } = this.root.UtilAlertStore;
     const { mailTo, mailText } = this.mailForm;
 
     if (!mailTo.trim() || !mailText) {
-      toggleAlert('공란이 있으므로 실패하였습니다.');
+      toast.error('공란이 있으므로 실패하였습니다.');
       return;
     }
     if (mailText.length > 499) {
-      toggleAlert(`500자 이상은 전송할 수 없습니다. 현재 글자수: ${mailText.length}`);
+      toast.error(`500자 이상은 전송할 수 없습니다. 현재 글자수: ${mailText.length}`);
       return;
     }
 

@@ -6,8 +6,12 @@ const jwt = require('jsonwebtoken');
 
 const authMiddleware = require('../../middleware/auth');
 
+const { upload, uploadHandler } = require('../../middleware/photoUpload');
+
 const { info } = require('../../log-config');
 const Database = require('../../Database');
+
+const async = require('../../middleware/async');
 
 const SELECT_USER_FROM_TEL_EMAIL = `
   SELECT 
@@ -20,8 +24,7 @@ const SELECT_USER_FROM_TEL_EMAIL = `
 
 const INSERT_NEW_USER = `
   INSERT INTO GTC_USER (
-    ID
-    , EMAIL
+    EMAIL
     , NAME
     , NICKNAME
     , TEL_NO
@@ -30,8 +33,7 @@ const INSERT_NEW_USER = `
     , GENDER_CD
     , CRT_DTTM
   ) VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID) + 1, 1) FROM GTC_USER) as temp)
-    , ':EMAIL'
+    ':EMAIL'
     , ':NAME'
     , ':NICKNAME'
     , ':TEL_NO'
@@ -196,5 +198,9 @@ router.get('/check', (req, res) => {
     result: req.decoded,
   });
 });
+
+router.post('/test', upload.fields([{ name: 'images' }]), uploadHandler, async(async (req, res) => {
+  res.json(req.photo);
+}));
 
 module.exports = router;

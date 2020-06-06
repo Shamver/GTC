@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import { toast } from 'react-toastify';
 
 class UtilStore {
   @observable signToggle = false;
@@ -25,16 +26,13 @@ class UtilStore {
 
   @action loginCheck = async () => {
     const { userData } = this.root.UserStore;
-    const { toggleAlert } = this.root.UtilAlertStore;
-    const { history } = this.root.UtilRouteStore;
     if (userData) {
       return true;
     }
 
-    history.push('/');
-    toggleAlert('로그인 후 이용 가능합니다.');
+    toast.error('로그인 후 이용 가능합니다.');
     return false;
-  }
+  };
 
   @action onSetSidebarOpen = (open) => {
     this.sidebarOpen = open;

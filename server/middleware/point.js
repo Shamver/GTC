@@ -10,15 +10,13 @@ const pointConfig = {
 
 const INSERT_POINT = `
   INSERT INTO GTC_USER_POINT (
-    ID
-    , USER_ID
+    USER_ID
     , TARGET_ID
     , TYPE_CD
     , COST
     , CRT_DTTM
   ) VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_USER_POINT) AS TEMP)
-    , :USER_ID
+    :USER_ID
     , :TARGET_ID
     , ':TYPE_CD'
     , :COST

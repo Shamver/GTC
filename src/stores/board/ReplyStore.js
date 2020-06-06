@@ -74,7 +74,7 @@ class ReplyStore {
     axios.post('/api/board/reply', {
       text: this.reply.text,
       writer: this.root.UserStore.userData.id,
-      bpId: this.reply.bpId,
+      bpId: this.root.BoardPostStore.postView.bpId,
       replyId: this.replyEditId === 0 ? null : this.replyEditId,
       depth: this.replyEditId === 0 ? 1 : 2,
       secretYN: this.reply.secretFl,
@@ -188,7 +188,8 @@ class ReplyStore {
     return true;
   };
 
-  @action likeReply = (replyId) => {
+  @action likeReply = (replyId, bpId) => {
+    const { getReply } = this;
     axios.post('/api/board/reply/like', {
       id: replyId,
       uId: this.root.UserStore.userData.id,
@@ -197,6 +198,7 @@ class ReplyStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
+            getReply(bpId);
             toast.success(data.message);
           } else {
             toast.info(data.message);
@@ -241,10 +243,8 @@ class ReplyStore {
   };
 
   replyValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     if (!this.reply.text.trim()) {
-      toggleAlert('댓글 내용을 입력해주세요.');
+      toast.error('댓글 내용을 입력해주세요.');
       return false;
     }
     return true;

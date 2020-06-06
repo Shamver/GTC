@@ -45,11 +45,9 @@ class ReportStore {
   };
 
   ReportValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     // board
     if (!this.reportData.reason) {
-      toggleAlert('신고 사유를 선택해주세요.');
+      toast.error('신고 사유를 선택해주세요.');
       return false;
     }
     return true;

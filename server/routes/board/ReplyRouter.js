@@ -170,7 +170,6 @@ router.post('/', authMiddleware, (req, res) => {
         },
       ))
       .then((rows) => {
-        point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
         const { postWriter } = rows[0];
 
         if (postWriter !== data.writer) {
@@ -179,11 +178,12 @@ router.post('/', authMiddleware, (req, res) => {
             {},
           );
         }
-        // 포인트 미지급 경우 다음 분기 다르게 하기
+        // 본인 게시물의 댓글일 경우 다음 분기 다르게 하기
         return Promise.reject();
       })
       .then((rows) => {
         const { ID } = rows[0];
+        point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
         return alertMiddleware(database, ID);
       }, () => {})
       .then(() => {
@@ -192,6 +192,9 @@ router.post('/', authMiddleware, (req, res) => {
           code: 1,
           message: '😊 댓글이 정상적으로 등록되었어요!',
         });
+      })
+      .catch((err) => {
+        console.log(err);
       }),
   ).then(() => {
     info('[INSERT, POST /api/board/reply] 댓글 등록 완료');

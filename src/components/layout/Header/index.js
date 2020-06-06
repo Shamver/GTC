@@ -127,9 +127,7 @@ const Header = () => {
               </DropdownIn>
             </ColNoP>
             <ColCenter xs="7">
-              <TextContainer>
-                <HeaderNoticeView />
-              </TextContainer>
+              <HeaderNoticeView />
             </ColCenter>
             <ColNoP>
               <SpanRight>
@@ -289,20 +287,6 @@ const InnerContainer = styled(Container)`
   max-width : none !important;
   border-bottom: 2px solid #ebeae8;
   border-right: 2px solid #ebeae8;
-`;
-
-const TextContainer = styled(Container)`
-  margin : 0 !important;
-  text-align : center;
-  height : 40px !important;
-  border-left : 1px solid #e6e6e6;
-  border-right : 1px solid #e6e6e6;
-  overflow : hidden;
-  text-overflow : ellipsis;
-  white-space:nowrap;
-  @media (max-width: 1200px) {
-    border : 0;
-  }
 `;
 
 const DropdownIn = styled(Dropdown)`

@@ -23,6 +23,7 @@ const SELECT_POST_LIST = `
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) AS commentCount
     , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD') AS pageCount
+    , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
   FROM 
     GTC_POST P
     , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
@@ -32,6 +33,24 @@ const SELECT_POST_LIST = `
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
+`;
+
+const SELECT_POST_NOTICE_LIST = `
+  SELECT 
+    P.ID AS id
+    , P.TITLE AS title
+    , P.USER_ID AS writerId
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
+    , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
+    , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
+    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
+    , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
+  FROM 
+    GTC_POST P
+  WHERE 
+    BOARD_CD = ':BOARD_CD' 
+    AND P.NOTICE_FL = 1
+  ORDER BY ID DESC
 `;
 
 const SELECT_POST_LIST_ALL = `
@@ -65,8 +84,7 @@ const SELECT_POST_LIST_ALL = `
 
 const INSERT_POST = `
   INSERT INTO GTC_POST (
-    ID
-    , BOARD_CD
+    BOARD_CD
     , CATEGORY_CD
     , TITLE
     , USER_ID
@@ -77,13 +95,12 @@ const INSERT_POST = `
     , COMMENT_ALLOW_FL
     , CRT_DTTM
   ) VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID) + 1, 1) FROM GTC_POST) AS TEMP)
-    , ':BOARD_CD'
+    ':BOARD_CD'
     , ':CATEGORY_CD'
     , ':TITLE'
     , :USER_ID
     , ':CONTENT'
-    , 0
+    , :NOTICE_FL
     , :SECRET_FL
     , :SECRET_COMMENT_ALLOW_FL
     , :COMMENT_ALLOW_FL
@@ -226,6 +243,10 @@ const SELECT_POST_WRITER = `
   WHERE ID = :POST_ID
 `;
 
+const SELECT_LAST_INDEX = `
+  SELECT LAST_INSERT_ID() as id;
+`;
+
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
   const { board, isHome } = req.query;
@@ -258,6 +279,33 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/notice', (req, res) => {
+  const { board } = req.query;
+  let { userId } = req.query;
+
+  if (!userId) userId = null;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_POST_NOTICE_LIST,
+      {
+        BOARD_CD: board.toUpperCase(),
+        USER_ID: userId,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '공지 게시글 목록 조회',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/board/post/notice] 공지 게시글 목록 조회');
+  });
+});
+
 router.post('/', authMiddleware, (req, res) => {
   const data = req.body;
 
@@ -273,10 +321,11 @@ router.post('/', authMiddleware, (req, res) => {
         SECRET_FL: data.secret,
         SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
         COMMENT_ALLOW_FL: data.replyAllow,
+        NOTICE_FL: data.notice,
       },
     )
       .then(() => database.query(
-        SELECT_POST_MAX_ID,
+        SELECT_LAST_INDEX,
         {},
       ))
       .then((rows) => {
@@ -328,17 +377,7 @@ router.put('/', authMiddleware, (req, res) => {
           },
         );
       })
-      .then(() => database.query(
-        SELECT_POST_MAX_ID,
-        {},
-      ))
-      .then((rows) => {
-        const postData = {
-          ...data,
-          bpId: rows[0].id,
-        };
-
-        point('addPost', 'POST', postData);
+      .then(() => {
         res.json({
           success: true,
           code: 1,

@@ -12,9 +12,23 @@ class PostStore {
     secretFl: 0,
     commentAllowFl: 1,
     secretCommentAllowFl: 0,
+    noticeFl: 0,
   };
 
   @observable boardPostList = {
+    '': [],
+    free: [],
+    trade: [],
+    notice: [],
+    cash: [],
+    qna: [],
+    faq: [],
+    consult: [],
+    crime: [],
+    all: [],
+  };
+
+  @observable boardPostNoticeList = {
     '': [],
     free: [],
     trade: [],
@@ -67,13 +81,14 @@ class PostStore {
       secret: this.post.secretFl,
       replyAllow: this.post.commentAllowFl,
       secretReplyAllow: this.post.secretCommentAllowFl,
+      notice: this.post.noticeFl,
     })
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             this.root.UtilRouteStore.history.push('/free');
-            toast.success('😊 포스팅이 등록되었어요!');
+            toast.success(data.message);
             this.setPostClear();
           } else {
             toast.info(data.message);
@@ -161,6 +176,30 @@ class PostStore {
               const { pageCount } = data.result[0];
               this.currentBoardMaxPage = pageCount;
             }
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { console.log(response); });
+  };
+
+  @action getBoardPostNoticeList = async (board) => {
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
+
+    await axios.get('/api/board/post/notice', { params: { board, userId } })
+      .then((response) => {
+        const { data } = response;
+        console.log(data);
+        if (data.success) {
+          if (data.code === 1) {
+            this.boardPostNoticeList = {
+              ...this.boardPostNoticeList,
+              [board]: data.result,
+            };
           } else {
             toast.info(data.message);
           }
@@ -303,6 +342,7 @@ class PostStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
+            this.getPost(postId);
             toast.success(data.message);
           } else {
             toast.info(data.message);
@@ -316,29 +356,27 @@ class PostStore {
 
 
   postValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     // board
     if (!this.post.board) {
-      toggleAlert('게시판을 선택해주세요.');
+      toast.error('게시판을 선택해주세요.');
       return false;
     }
 
     // category
     if (!this.post.category) {
-      toggleAlert('카테고리를 선택해주세요.');
+      toast.error('카테고리를 선택해주세요.');
       return false;
     }
 
     // title
     if (!this.post.title.trim()) {
-      toggleAlert('제목을 입력해주세요.');
+      toast.error('제목을 입력해주세요.');
       return false;
     }
 
     // text
     if (!this.post.text.trim()) {
-      toggleAlert('내용을 입력해주세요.');
+      toast.error('내용을 입력해주세요.');
       return false;
     }
 
@@ -417,6 +455,7 @@ class PostStore {
       secretFl: 0,
       commentAllowFl: 1,
       secretCommentAllowFl: 0,
+      noticeFl: 0,
     };
   }
 

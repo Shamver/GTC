@@ -8,7 +8,7 @@ import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import PostList from './Post/PostList';
 
-const BoardContent = ({ path, currentPage }) => (
+const BoardContent = ({ path, currentPage, isFooter }) => (
   <>
     <Div>
       <HeaderDiv>
@@ -22,6 +22,7 @@ const BoardContent = ({ path, currentPage }) => (
       </HeaderDiv>
       <ManginessTable bordered hover size="sm">
         <tbody>
+          { !isFooter ? (<PostList path={path} isNotice />) : '' }
           <PostList path={path} currentPage={currentPage} />
         </tbody>
       </ManginessTable>
@@ -32,6 +33,7 @@ const BoardContent = ({ path, currentPage }) => (
 BoardContent.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
+  isFooter: Proptypes.bool.isRequired,
 };
 
 BoardContent.defaultProps = {
@@ -56,7 +58,11 @@ const ManginessTable = styled(Table)`
   }
   
   & tr:hover {
+<<<<<<< HEAD
     background-color : #fff7d9 !important;
+=======
+    background-color : #fff7d9;
+>>>>>>> feat/notice
   }
 `;
 

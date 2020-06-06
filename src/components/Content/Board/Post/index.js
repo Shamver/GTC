@@ -2,26 +2,32 @@ import React from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import useStores from '../../../../stores/useStores';
 import ResponsiveRow from './responsive/ResponsiveRow';
 
-const Post = ({ data, index, path }) => {
+const Post = ({
+  data, index, path, isNotice = false,
+}) => {
   const { BoardPostStore } = useStores();
   const { currentPostId } = BoardPostStore;
   const { id, date, recommendCount } = data;
 
   return (
     <TableRow height="35" currentPostId={currentPostId} postId={id}>
-      <CenterTd width="40">
-        {currentPostId === id ? (<BlockIcon icon={faAngleDoubleRight} />) : (
-          <>
-            {!!recommendCount && <LikeCountSpan>{recommendCount}</LikeCountSpan>}
-          </>
-        )}
+      <CenterTd width="50">
+        {/* eslint-disable-next-line no-nested-ternary */}
+        {currentPostId === id ? '>>'
+          : isNotice ? (
+            <>
+              <span>공지</span>
+            </>
+          ) : (
+            <>
+              {recommendCount > 0 ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : ''}
+            </>
+          )}
       </CenterTd>
-      <ResponsiveRow data={data} index={index} path={path} />
+      <ResponsiveRow data={data} index={index} path={path} isNotice={isNotice} />
       <DateTd>
         <BlockInner>
           {date}
@@ -39,6 +45,7 @@ Post.propTypes = {
   }).isRequired,
   index: Proptypes.number.isRequired,
   path: Proptypes.string.isRequired,
+  isNotice: Proptypes.bool.isRequired,
 };
 
 const BlockInner = styled.span`
@@ -47,20 +54,19 @@ const BlockInner = styled.span`
   line-height : normal;
 `;
 
-const BlockIcon = styled(FontAwesomeIcon)`
-  display : block;
-  margin : auto auto;
-`;
-
 const DateTd = styled.td`
   white-space : pre;
   text-align : center;
   vertical-align : middle !important;
   padding : 0 0.5rem !important;
 `;
-
+// eslint-disable-next-line no-nested-ternary
 const TableRow = styled.tr`
-  background-color : ${(props) => (props.currentPostId === props.postId ? '#fff9e5;' : 'white')}
+  background-color : ${(props) => (props.currentPostId === props.postId ? '#fff9e5;'
+    : (props.isNotice ? '#ffd7d4' : 'white'))};
+  &:hover {
+    background-color: ${(props) => (props.isNotice ? '#ffd7d4' : '#fff7d9')} !important;
+  }
 `;
 
 const LikeCountSpan = styled.span`

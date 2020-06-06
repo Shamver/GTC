@@ -18,15 +18,13 @@ const SELECT_REPORT = `
 
 const INSERT_REPORT = `
   INSERT INTO GTC_REPORT (
-    ID
-    , TARGET_ID
+    TARGET_ID
     , USER_ID
     , TYPE_CD
     , REASON_CD
     , REASON_DESC
   ) VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_REPORT) as temp)
-    , :TARGET_ID
+    :TARGET_ID
     , :USER_ID
     , ':TYPE_CD'
     , ':REASON_CD'
