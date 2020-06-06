@@ -24,6 +24,9 @@ const ReplyEdit = () => {
         editor={ClassicEditor}
         data={text}
         disabled={!userData}
+        config={{
+          removePlugins: ['Table', 'Link', 'ImageUpload', 'MediaEmbed', 'BlockQuote'],
+        }}
         onChange={(event, editor) => {
           const ReplyContent = editor.getData();
           onChangeValue(ReplyContent);

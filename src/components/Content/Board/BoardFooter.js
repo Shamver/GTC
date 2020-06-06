@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button, InputGroup, InputGroupAddon, InputGroupText, Input,
 } from 'reactstrap';
@@ -8,27 +8,37 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import BoardPagination from './Pagination';
-import useStores from "../../../stores/useStores";
+import useStores from '../../../stores/useStores';
 
 const BoardFooter = ({ path, noPagination, currentPage }) => {
-  const {
-    UserStore,
-  } = useStores();
-  const { userData } = UserStore;
+  const { BoardPostStore } = useStores();
+  const { toggleBestPost, toggleBestPostToken } = BoardPostStore;
+
+  useEffect(() => {
+  }, [toggleBestPost, toggleBestPostToken]);
 
   return (
     <>
       <AbsolDiv>
-        <AbsoluteLeftLink to={`${path}/post`}>
-          <Button outline color="warning" size="sm">
-            <FontAwesomeIcon icon={faStar} />
-            &nbsp;&nbsp;인기 글
-          </Button>
+        <AbsoluteLeftLink to="#" onClick={() => toggleBestPost(path, currentPage)}>
+          { toggleBestPostToken
+            ? (
+              <Button color="warning" size="sm">
+                <FontAwesomeIcon icon={faStar} />
+                &nbsp;&nbsp;인기 글
+              </Button>
+            )
+            : (
+              <Button outline color="warning" size="sm">
+                <FontAwesomeIcon icon={faStar} />
+                &nbsp;&nbsp;인기 글
+              </Button>
+            )}
         </AbsoluteLeftLink>
         <AbsoluteRightLink to={`${path}/post`}>
-          <Button color="danger" size="sm" disabled={!userData}>
+          <Button color="danger" size="sm">
             <FontAwesomeIcon icon={faPen} />
-            &nbsp;&nbsp;글 쓰기
+              &nbsp;&nbsp;글 쓰기
           </Button>
         </AbsoluteRightLink>
       </AbsolDiv>

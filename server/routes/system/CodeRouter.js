@@ -91,6 +91,12 @@ const DELETE_CODE = `
     AND CODE = ':CODE'
 `;
 
+const SELECT_TEMP = `
+  SELECT *
+  FROM GTC_CODE
+  WHERE CODEGROUP_ID = ':TMP'
+`;
+
 
 router.post('/group', (req, res) => {
   const { id, name, desc } = req.body;
@@ -279,6 +285,24 @@ router.delete('/', (req, res) => {
       }),
   ).then(() => {
     info('[DELETE, DELETE /api/system/code] 시스템 코드 삭제');
+  });
+});
+
+router.get('/temp', (req, res) => {
+  const { getCodeGroup, temp } = req.query;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_TEMP,
+      {
+        TMP: getCodeGroup,
+      },
+    )
+      .then((rows) => {
+        res.send(rows);
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/system/code/temp] 시스템 공통 코드 조회');
   });
 });
 

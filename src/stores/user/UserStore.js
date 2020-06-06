@@ -17,6 +17,13 @@ class UserStore {
 
   @observable cookieChecked = false;
 
+  @observable profileData = {
+    profileInfo: {},
+    profilePostData: [],
+    profileCommentData: [],
+    profileNicknameHistory: [],
+  };
+
   constructor(root) {
     this.root = root;
   }
@@ -67,7 +74,7 @@ class UserStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -87,7 +94,9 @@ class UserStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
   };
 
   @action logout = (e, text = '😊 로그아웃 완료!') => {
@@ -109,7 +118,7 @@ class UserStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -130,7 +139,8 @@ class UserStore {
           this.userData = null;
         }
       })
-      .catch((err) => { console.log(err); });
+      .catch((response) => { toast.error(response.message); });
+    return true;
   };
 
   @action checkPermission = (level) => {
@@ -222,19 +232,20 @@ class UserStore {
             toast.error(data.message);
           }
         })
-        .catch((response) => { console.log(response); });
+        .catch((response) => { toast.error(response.message); });
     }
   };
 
   @action updateInfo = () => {
     const {
-      nickname, birth, gender, profileYN,
+      nickname, prevNickname, birth, gender, profileYN,
     } = this.root.ComponentMyAccountStore;
     const { userData } = this;
     const { history } = this.root.UtilRouteStore;
 
     axios.put('/api/user/info', {
       nickname: nickname.trim(),
+      prevNickname: prevNickname.trim(),
       birth,
       gender,
       profileYN,
@@ -254,7 +265,130 @@ class UserStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
+  }
+
+  @action getProfile = (writerId) => {
+    this.root.UtilStore.profileToggle = !this.root.UtilStore.profileToggle;
+    const { pageIndex } = this.root.UtilStore;
+    const { postIndex, commentIndex, nickNameIndex } = pageIndex;
+
+    axios.get(`/api/user/profile/${writerId}`, { params: { writerId } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileInfo: data.DATA,
+            };
+          } else {
+            toast.error(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
+      }).then(() => {
+        this.getPostList(postIndex);
+        this.getCommentList(commentIndex);
+        this.getNickNameList(nickNameIndex);
+      })
+      .catch((response) => { toast.error(response.message); });
+    return true;
+  }
+
+  @action getPostList = (index) => {
+    const writerId = this.profileData.profileInfo.userId;
+    this.root.UtilStore.pageIndex = {
+      ...this.root.UtilStore.pageIndex,
+      postIndex: index,
+    };
+
+    axios.get(`/api/user/profile/${writerId}/post/${index}`, { params: { writerId, index } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profilePostData: data.DATA,
+            };
+            this.root.UtilStore.rows = {
+              ...this.root.UtilStore.rows,
+              postRows: data.DATA[0].rowCount,
+            };
+          } else {
+            toast.error(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  }
+
+  @action getCommentList = (index) => {
+    const writerId = this.profileData.profileInfo.userId;
+    this.root.UtilStore.pageIndex = {
+      ...this.root.UtilStore.pageIndex,
+      commentIndex: index,
+    };
+
+    axios.get(`/api/user/profile/${writerId}/comment/${index}`, { params: { writerId, index } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileCommentData: data.DATA,
+            };
+            this.root.UtilStore.rows = {
+              ...this.root.UtilStore.rows,
+              commentRows: data.DATA[0].rowCount,
+            };
+          } else {
+            toast.error(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  }
+
+  @action getNickNameList = (index) => {
+    const writerId = this.profileData.profileInfo.userId;
+    this.root.UtilStore.pageIndex = {
+      ...this.root.UtilStore.pageIndex,
+      nickNameIndex: index,
+    };
+
+    axios.get(`/api/user/profile/${writerId}/nickname/${index}`, { params: { writerId, index } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileNicknameHistory: data.DATA,
+            };
+            this.root.UtilStore.rows = {
+              ...this.root.UtilStore.rows,
+              nickNameRows: data.DATA[0].rowCount,
+            };
+          } else {
+            toast.error(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
   }
 }
 

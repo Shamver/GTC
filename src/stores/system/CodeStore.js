@@ -30,6 +30,8 @@ class CodeStore {
     useYN: 1,
   };
 
+  @observable setCodeList = [];
+
   constructor(root) {
     this.root = root;
   }
@@ -48,7 +50,7 @@ class CodeStore {
             name: '',
             desc: '',
           };
-          this.getCodeGroupList();
+          this.getCodeGroupList().then();
           this.setIsAddCodeGroup(false);
           toast.success(data.message);
         } else {
@@ -56,7 +58,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -73,7 +75,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
   };
 
@@ -90,7 +92,7 @@ class CodeStore {
             name: '',
             desc: '',
           };
-          this.getCodeGroupList();
+          this.getCodeGroupList().then();
           this.setIsAddCodeGroup(false);
           toast.success(data.message);
         } else {
@@ -98,7 +100,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -118,7 +120,7 @@ class CodeStore {
             name: '',
             desc: '',
           };
-          this.getCodeGroupList();
+          this.getCodeGroupList().then();
           this.getCodeList('');
           this.setIsAddCodeGroup(false);
           toast.success(data.message);
@@ -127,7 +129,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -152,7 +154,7 @@ class CodeStore {
             desc: '',
             useYN: 1,
           };
-          this.getCodeGroupList();
+          this.getCodeGroupList().then();
           this.getCodeList(this.code.group);
           this.setIsAddCodeGroup(false);
           toast.success(data.message);
@@ -161,7 +163,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -184,7 +186,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
   };
 
@@ -197,7 +199,7 @@ class CodeStore {
       .then((response) => {
         const { data } = response;
         if (data.success) {
-          this.getCodeGroupList();
+          this.getCodeGroupList().then();
           this.getCodeList(this.code.group);
           this.setIsAddCode(false);
           toast.success(data.message);
@@ -214,7 +216,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -238,7 +240,7 @@ class CodeStore {
             desc: '',
             useYN: 1,
           };
-          this.getCodeGroupList();
+          this.getCodeGroupList().then();
           this.getCodeList(this.code.group);
           this.setIsAddCodeGroup(false);
           toast.success(data.message);
@@ -247,7 +249,7 @@ class CodeStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -330,6 +332,22 @@ class CodeStore {
 
     return true;
   }
+
+  @action getCodeComponent = (getCodeGroup, temp) => {
+    axios.get('/api/system/code/temp', {
+      params: {
+        getCodeGroup, temp,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          this.setCodeList = response.data;
+        }
+      })
+      .catch((response) => {
+        toast.error(response.message);
+      });
+  };
 }
 
 export default CodeStore;

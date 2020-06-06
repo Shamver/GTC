@@ -46,7 +46,7 @@ class ReplyStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
   };
 
@@ -98,7 +98,7 @@ class ReplyStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -125,7 +125,7 @@ class ReplyStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action modifyReply = () => {
@@ -150,7 +150,7 @@ class ReplyStore {
         toast.error(data.message);
       }
     })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -183,7 +183,7 @@ class ReplyStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -207,7 +207,7 @@ class ReplyStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action onChangeValue = (event) => {

@@ -31,7 +31,7 @@ class FavoriteStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
   };
 
@@ -47,17 +47,17 @@ class FavoriteStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            getPost(id);
+            getPost(id).then();
             toast.success(data.message);
           } else {
             toast.info(data.message);
           }
-          this.getFavorite();
+          this.getFavorite().then();
         } else {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   });
 
   @action deleteFavorite = ((id, type = 'post', e = null) => {
@@ -78,9 +78,9 @@ class FavoriteStore {
         if (data.success) {
           if (data.code === 1) {
             if (type === 'post') {
-              getPost(id);
+              getPost(id).then();
             }
-            this.getFavorite();
+            this.getFavorite().then();
             toast.success(data.message);
           } else {
             toast.info(data.message);
@@ -89,7 +89,7 @@ class FavoriteStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   });
 
   @action judgeFavorite = (isFavorite, id) => {

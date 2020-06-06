@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
-
 import BoardHeader from './BoardHeader';
 import BoardContent from './BoardContent';
 import BoardFooter from './BoardFooter';
@@ -16,7 +15,6 @@ const Board = ({ path, currentPage, noPagination }) => {
   useEffect(() => {
     setClearPostView();
   }, [setClearPostView]);
-
 
   return (
     <BoardWrapper>

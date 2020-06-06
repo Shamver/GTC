@@ -28,7 +28,7 @@ class DailyStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
   };
 
@@ -53,7 +53,7 @@ class DailyStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
 
     return true;
   };
@@ -72,8 +72,8 @@ class DailyStore {
           const { data } = response;
           if (data.success) {
             if (data.code === 1) {
-              this.getDailyLast();
-              this.getDailyList();
+              this.getDailyLast().then();
+              this.getDailyList().then();
               this.message = '';
               toast.success(data.message);
             } else {
@@ -84,7 +84,7 @@ class DailyStore {
           }
         })
         .catch((response) => {
-          console.log(response);
+          toast.error(response.message);
         });
     }
   });

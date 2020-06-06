@@ -15,7 +15,7 @@ const MyAccountEditForm = () => {
   } = ComponentMyAccountStore;
 
   return (
-    <Col>
+    <Col xs="12" sm="6">
       <div>
         <Deform>
           <RegisterForm>
@@ -96,6 +96,8 @@ const FormSelect = styled(Input)`
 
 const FormSwitch = styled.div`
   margin-top: 30px;
+  display: flex;
+  align-items: center;
 `;
 
 const Deform = styled.div`
@@ -125,14 +127,12 @@ const FormTextLeft = styled(FormText)`
 `;
 
 const Avatar = styled.img`
-  position: absolute;
   width : 64px;
   border-radius: 3px;
-  left: 40px;
 `;
 
 const InputProfile = styled(CustomInput)`
-  top: 17px;
+  margin-left: 10px;
 `;
 
 const AccentText = styled.span`

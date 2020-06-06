@@ -41,7 +41,7 @@ class PointStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
   };
 
@@ -68,7 +68,7 @@ class PointStore {
           }
         })
         .catch((response) => {
-          console.log(response);
+          toast.error(response.message);
         });
     } else {
       this.totalPoint = 0;

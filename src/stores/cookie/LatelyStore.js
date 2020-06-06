@@ -20,7 +20,7 @@ class LatelyStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action deleteLately = (e, id) => {
@@ -41,7 +41,7 @@ class LatelyStore {
           }
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 }
 

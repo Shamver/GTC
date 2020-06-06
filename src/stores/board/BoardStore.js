@@ -33,6 +33,8 @@ class BoardStore {
     name: '질문 & 답변',
   }];
 
+  @observable tempData = [];
+
   @observable currentBoard = '';
 
   constructor(root) {
@@ -41,6 +43,7 @@ class BoardStore {
 
   @action setCurrentBoard = (currentBoard) => {
     this.currentBoard = currentBoard;
+    this.root.BoardPostStore.toggleBestPostToken = false;
   };
 
   @action setCurrentBoardToId = (id) => {
@@ -55,7 +58,7 @@ class BoardStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getBoardName = (path) => this.boardKinds[path];

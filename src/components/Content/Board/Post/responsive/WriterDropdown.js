@@ -12,7 +12,7 @@ const WriterDropdown = ({ data, index }) => {
   } = useStores();
   const { dropdown, onActive } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
-  const { userData } = UserStore;
+  const { userData, getProfile } = UserStore;
   const { addIgnore } = UserIgnoreStore;
   const { writerName, writerId } = data;
 
@@ -20,7 +20,7 @@ const WriterDropdown = ({ data, index }) => {
     <WriterDropdownIn isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
       <WriterDropdownToggle name={`replyIndex${index}`}>{writerName}</WriterDropdownToggle>
       <WriterDropdownMenu>
-        <WriterDropdownItem>
+        <WriterDropdownItem onClick={() => getProfile(writerId)}>
           프로필
         </WriterDropdownItem>
         <WriterDropdownItem>

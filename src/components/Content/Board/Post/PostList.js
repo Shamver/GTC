@@ -5,9 +5,24 @@ import { toast } from 'react-toastify';
 import useStores from '../../../../stores/useStores';
 import Post from './index';
 
+const BoardCategoryOptions = () => {
+  const { SystemCodeStore } = useStores();
+  const { setCodeList } = SystemCodeStore;
+
+  return setCodeList.map((data) => (
+    <option
+      value={data.NAME}
+      key={data.CODE}
+    >
+      {data.NAME}
+    </option>
+  ));
+};
+
 const PostList = ({ path, currentPage, isNotice = false }) => {
   const {
     BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore, UtilRouteStore,
+    SystemCodeStore,
   } = useStores();
   const { setCurrentBoard } = BoardStore;
   const {
@@ -17,14 +32,16 @@ const PostList = ({ path, currentPage, isNotice = false }) => {
   const { onSet } = ComponentPostStore;
   const { ignoreList } = UserIgnoreStore;
   const { history } = UtilRouteStore;
+  const { getCodeComponent } = SystemCodeStore;
 
   useEffect(() => {
+    getCodeComponent('BOARD_FREE_CATEGORY', path);
+    setCurrentBoard(path);
     if (isNotice) {
       getBoardPostNoticeList(path);
     } else {
       getBoardPostList(path, currentPage);
     }
-    setCurrentBoard(path);
   }, [
     path, getBoardPostList, setCurrentBoard, currentPage, ignoreList,
     history, getBoardPostNoticeList,
@@ -37,7 +54,6 @@ const PostList = ({ path, currentPage, isNotice = false }) => {
   }
 
   if (isNotice) {
-    console.log('섹스');
     return boardPostNoticeList[path].map((data, index) => {
       onSet(index);
       return (

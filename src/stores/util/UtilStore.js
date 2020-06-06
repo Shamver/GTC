@@ -8,6 +8,26 @@ class UtilStore {
 
   @observable sidebarOpen = false;
 
+  @observable profileToggle = false;
+
+  @observable activeTab = '1';
+
+  @observable pageIndex = {
+    postIndex: 1,
+    commentIndex: 1,
+    nickNameIndex: 1,
+  };
+
+  @observable rows = {
+    postRows: 0,
+    commentRows: 0,
+    nickNameRows: 0,
+  };
+
+  @observable tosToggle = false;
+
+  @observable privacyToggle = false;
+
   constructor(root) {
     this.root = root;
   }
@@ -36,6 +56,32 @@ class UtilStore {
 
   @action onSetSidebarOpen = (open) => {
     this.sidebarOpen = open;
+  }
+
+  @action toggleProfile = () => {
+    this.profileToggle = !this.profileToggle;
+    this.pageIndex = {
+      postIndex: 1,
+      commentIndex: 1,
+      nickNameIndex: 1,
+    };
+    this.rows = {
+      postRows: 0,
+      commentRows: 0,
+      nickNameRows: 0,
+    };
+  }
+
+  @action toggleTab = (tab) => {
+    this.activeTab = tab;
+  }
+
+  @action toggleTos = () => {
+    this.tosToggle = !this.tosToggle;
+  }
+
+  @action togglePrivacy = () => {
+    this.privacyToggle = !this.privacyToggle;
   }
 }
 

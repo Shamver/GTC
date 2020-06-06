@@ -37,7 +37,7 @@ class MailStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action getMail = async () => {
@@ -59,7 +59,7 @@ class MailStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action sendMail = () => {
@@ -94,7 +94,7 @@ class MailStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action deleteMail = ((id) => {
@@ -120,7 +120,7 @@ class MailStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   });
 
   @action onView = ((dat) => {
@@ -145,7 +145,7 @@ class MailStore {
             toast.error(data.message);
           }
         })
-        .catch((response) => console.log(response));
+        .catch((response) => toast.error(response.message));
     }
 
     this.viewMail = dat;

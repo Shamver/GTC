@@ -14,6 +14,8 @@ const Code = lazy(() => import('./Code'));
 const Advertise = lazy(() => import('./Advertise'));
 const Home = lazy(() => import('./Home'));
 const Test = lazy(() => import('./Test'));
+const Advertising = lazy(() => import('../layout/Footer/Advertising'));
+const Team = lazy(() => import('../layout/Footer/Team'));
 
 export default {
   Board,
@@ -30,4 +32,6 @@ export default {
   Advertise,
   Home,
   Test,
+  Advertising,
+  Team,
 };

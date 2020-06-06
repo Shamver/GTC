@@ -30,7 +30,7 @@ class IgnoreStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
   };
 
@@ -55,7 +55,7 @@ class IgnoreStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.getIgnore();
+            this.getIgnore().then();
           } else {
             toast.info(data.message);
           }
@@ -63,7 +63,7 @@ class IgnoreStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action deleteIgnore = (() => {
@@ -83,7 +83,7 @@ class IgnoreStore {
           if (data.success) {
             if (data.code === 1) {
               toast.success(data.message);
-              this.getIgnore();
+              this.getIgnore().then();
             } else {
               toast.info(data.message);
             }
@@ -91,7 +91,7 @@ class IgnoreStore {
             toast.error(data.message);
           }
         })
-        .catch((response) => { console.log(response); });
+        .catch((response) => { toast.error(response.message); });
     } else {
       setTimeout(() => { // 딜레이를 안 주면 텍스트 할당이 안됨.. 대안 찾기.
         toast.error('아무것도 선택되지 않았습니다.');

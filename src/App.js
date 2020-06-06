@@ -47,8 +47,6 @@ App.propTypes = {
   history: Proptypes.shape({}).isRequired,
 };
 
-
-
 const ContainerWrapper = styled.div`
   background-color: rgb(243, 242, 240);
   min-height : 100vh;

@@ -23,7 +23,7 @@ const Reply = ({ data, index, bpId }) => {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
   } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
-  const { userData } = UserStore;
+  const { userData, getProfile } = UserStore;
   const { dropdown, onActive } = ComponentReplyStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { addIgnore } = UserIgnoreStore;
@@ -49,7 +49,7 @@ const Reply = ({ data, index, bpId }) => {
           <WriterDropdown isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
             <WriterDropdownToggle name={`replyIndex${index}`}> {data.writer} </WriterDropdownToggle>
             <WriterDropdownMenu>
-              <WriterDropdownItem>
+              <WriterDropdownItem onClick={() => getProfile(data.idWriter)}>
                 프로필
               </WriterDropdownItem>
               <WriterDropdownItem>

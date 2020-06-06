@@ -63,9 +63,25 @@ class PostStore {
     lower: '',
   };
 
+  @observable toggleBestPostToken = false;
+
   constructor(root) {
     this.root = root;
   }
+
+  @action toggleBestPost = (board, currentPage) => {
+    this.toggleBestPostToken = !this.toggleBestPostToken;
+
+    if (this.toggleBestPostToken) {
+      this.getBoardBestPostList(board, currentPage);
+    } else {
+      this.getBoardPostList(board, currentPage);
+    }
+  }
+
+  @action setCurrentPostId = (postId) => {
+    this.currentPostId = postId;
+  };
 
   @action addPost = () => {
     if (!this.postValidationCheck()) {
@@ -97,7 +113,7 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -129,7 +145,7 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -150,7 +166,7 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -168,7 +184,6 @@ class PostStore {
               ...this.boardPostList,
               [board]: data.result,
             };
-
             // 게시글 가져올때 MAX 카운트 셋
             if (data.result.length === 0) {
               this.currentBoardMaxPage = 0;
@@ -183,7 +198,7 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getBoardPostNoticeList = async (board) => {
@@ -193,7 +208,6 @@ class PostStore {
     await axios.get('/api/board/post/notice', { params: { board, userId } })
       .then((response) => {
         const { data } = response;
-        console.log(data);
         if (data.success) {
           if (data.code === 1) {
             this.boardPostNoticeList = {
@@ -207,7 +221,37 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
+  };
+
+  @action getBoardBestPostList = (board, currentPage) => {
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
+
+    axios.get('/api/board/post/best', { params: { board, userId, currentPage } })
+      .then((response) => {
+        const { data } = response;
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.boardPostList = {
+              ...this.boardPostList,
+              [board]: data.rows,
+            };
+
+            if (data.rows.length === 0) {
+              this.currentBoardMaxPage = 0;
+            } else {
+              const { pageCount } = data.rows[0];
+              this.currentBoardMaxPage = pageCount;
+            }
+          } else {
+            toast.info(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getHomePostList = async (board) => {
@@ -230,7 +274,7 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getPost = async (id) => {
@@ -257,7 +301,7 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getModifyPost = (id, isModify = false) => {
@@ -296,7 +340,7 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getPostUpperLower = async (id) => {
@@ -329,7 +373,7 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action recommendPost = (postId, type) => {
@@ -342,7 +386,7 @@ class PostStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            this.getPost(postId);
+            this.getPost(postId).then();
             toast.success(data.message);
           } else {
             toast.info(data.message);
@@ -351,7 +395,7 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
 
@@ -441,9 +485,9 @@ class PostStore {
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
-  };
+  }
 
   @action setPostClear = () => {
     this.post = {

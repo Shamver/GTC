@@ -2,7 +2,6 @@ import React, { memo } from 'react';
 import { FormText, Col } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
 import useStores from '../../../stores/useStores';
 
 const MyAccountReadForm = () => {
@@ -10,7 +9,7 @@ const MyAccountReadForm = () => {
   const { userData } = UserStore;
 
   return (
-    <Col>
+    <Col xs="12" sm="6">
       <div>
         <Deform>
           <RegisterForm>
