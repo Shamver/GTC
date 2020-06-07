@@ -27,7 +27,7 @@ const authMiddleware = (req, res, next) => {
   // if it has failed to verify, it will return an error message
   const onError = (error) => {
     res.json({
-      success: false,
+      success: true,
       code: 0,
       message: error.message,
     });
