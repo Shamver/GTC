@@ -74,7 +74,7 @@ class ReplyStore {
     axios.post('/api/board/reply', {
       text: this.reply.text,
       writer: this.root.UserStore.userData.id,
-      bpId: this.root.BoardPostStore.postView.bpId,
+      bpId: this.root.BoardPostStore.postView.id,
       replyId: this.replyEditId === 0 ? null : this.replyEditId,
       depth: this.replyEditId === 0 ? 1 : 2,
       secretYN: this.reply.secretFl,
@@ -86,10 +86,9 @@ class ReplyStore {
             toast.success(data.message);
             this.reply = {
               text: '',
-              bpId: this.reply.bpId,
               secretFl: 0,
             };
-            this.getReply(this.reply.bpId);
+            this.getReply(this.root.BoardPostStore.postView.id);
             this.setReplyEditId(0);
           } else {
             toast.info(data.message);
