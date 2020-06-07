@@ -136,10 +136,14 @@ class UserStore {
           }
           this.cookieChecked = true;
         } else {
+          // jwt expired 일시
           this.userData = null;
+          this.cookieChecked = true;
         }
       })
-      .catch((response) => { toast.error(response.message); });
+      .catch((response) => {
+        toast.error(response.message);
+      });
     return true;
   };
 

@@ -6,8 +6,7 @@ import App from './App';
 import unregister from './serviceWorker';
 import stores from './stores';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-
+import 'mobx-react-lite/batchingForReactDom';
 
 ReactDOM.render((
   <Provider
