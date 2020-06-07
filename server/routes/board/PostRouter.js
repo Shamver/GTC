@@ -271,17 +271,17 @@ router.get('/', (req, res) => {
   let { userId } = req.query;
   currentPage = currentPage || 1;
   if (!userId) userId = null;
-  const recommendStatus = recommend;
+  console.log(recommend);
 
   Database.execute(
     (database) => database.query(
-      board !== 'all' ? SELECT_BEST_POST_LIST : SELECT_POST_LIST_ALL,
+      board !== 'all' ? SELECT_POST_LIST : SELECT_POST_LIST_ALL,
       {
         BOARD_CD: board.toUpperCase(),
         CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
         PER_PAGE: isHome ? 9 : 25,
-        LIKES: recommendStatus,
+        LIKES: recommend ? 1 : 0,
       },
     )
       .then((rows) => {
