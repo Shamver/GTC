@@ -61,7 +61,8 @@ const TextContainer = styled(Container)`
   overflow : hidden;
   text-overflow : ellipsis;
   white-space:nowrap;
-  padding : 5px 0px !important;
+  padding : 5px 10px !important;
+  border: 1px solid #e6e6e6;
   @media (max-width: 1200px) {
     border : 0;
   }
