@@ -89,15 +89,15 @@ const Reply = ({ data, index, bpId }) => {
                     </>
                   )
                   : null }
-                <SpanLikeLink onClick={userData ? () => likeReply(data.id, bpId) : () => {}} className={userData ? 'enable' : 'disabled'}>
+                <SpanLikeLink onClick={likeReply(data.id, bpId)}>
                   { !data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
                 </SpanLikeLink>
                 &nbsp;·&nbsp;
-                <SpanLikeLink onClick={userData ? () => setReplyEditId(data.id) : () => {}} className={userData ? 'enable' : 'disabled'}>대댓글</SpanLikeLink>
+                <SpanLikeLink onClick={() => setReplyEditId(data.id)}>대댓글</SpanLikeLink>
                 &nbsp;·&nbsp;
                 { data.updateDate ? data.updateDate : data.date}
                 &nbsp;·&nbsp;
-                <SpanLikeLink onClick={userData ? () => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer) : () => {}} className={userData ? 'enable' : 'disabled'}>신고 #</SpanLikeLink>
+                <SpanLikeLink onClick={toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>신고 #</SpanLikeLink>
               </>
             ) : (
               <>
@@ -248,16 +248,10 @@ const ReplyDepthIcon = styled(FontAwesomeIcon)`
 `;
 
 const SpanLikeLink = styled.span`
-  &.enable {
-    color: #337ab7;
-    cursor : pointer;
-    &:hover {
-      color: #23527c;
-    }
-  }
-  &.disabled {
-    pointerEvents: none;
-    opacity: 0.4;
+  color: rgb(51, 122, 183);
+  cursor: pointer;
+  &:hover {
+    color: #23527c;
   }
 `;
 
