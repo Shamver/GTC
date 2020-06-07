@@ -24,6 +24,9 @@ const MyAccountContent = () => {
 
 const FormWrapper = styled.div`
   padding: 25px;
+  @media (max-width: 1200px) {
+    padding: 0px;
+  }
 `;
 
 const FormButton = styled(Button)`
