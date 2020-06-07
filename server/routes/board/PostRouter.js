@@ -31,6 +31,7 @@ const SELECT_POST_LIST = `
     BOARD_CD = ':BOARD_CD' 
     AND P.USER_ID NOT IN
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+    AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -266,21 +267,21 @@ const SELECT_BEST_POST_LIST = `
 
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
-  const { board, isHome } = req.query;
+  const { board, isHome, recommend } = req.query;
   let { userId } = req.query;
   currentPage = currentPage || 1;
-
-
   if (!userId) userId = null;
+  const recommendStatus = recommend;
 
   Database.execute(
     (database) => database.query(
-      board !== 'all' ? SELECT_POST_LIST : SELECT_POST_LIST_ALL,
+      board !== 'all' ? SELECT_BEST_POST_LIST : SELECT_POST_LIST_ALL,
       {
         BOARD_CD: board.toUpperCase(),
         CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
         PER_PAGE: isHome ? 9 : 25,
+        LIKES: recommendStatus,
       },
     )
       .then((rows) => {

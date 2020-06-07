@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { memo } from 'react';
+import { observer } from 'mobx-react';
 import {
   Button, InputGroup, InputGroupAddon, InputGroupText, Input,
 } from 'reactstrap';
@@ -14,13 +15,10 @@ const BoardFooter = ({ path, noPagination, currentPage }) => {
   const { BoardPostStore } = useStores();
   const { toggleBestPost, toggleBestPostToken } = BoardPostStore;
 
-  useEffect(() => {
-  }, [toggleBestPost, toggleBestPostToken]);
-
   return (
     <>
       <AbsolDiv>
-        <AbsoluteLeftLink to="#" onClick={() => toggleBestPost(path, currentPage)}>
+        <AbsoluteLeftLink to={`${path}?filter_mode=true`}>
           { toggleBestPostToken
             ? (
               <Button color="warning" size="sm">
@@ -114,4 +112,4 @@ const AbsoluteLeftLink = styled(RightLink)`
   margin : 0px;
 `;
 
-export default BoardFooter;
+export default memo(observer(BoardFooter));

@@ -171,11 +171,16 @@ class PostStore {
     return true;
   };
 
-  @action getBoardPostList = (board, currentPage) => {
+  @action getBoardPostList = (board, currentPage, queryString) => {
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
+    const recommend = queryString.filter_mode;
 
-    axios.get('/api/board/post', { params: { board, currentPage, userId } })
+    axios.get('/api/board/post', {
+      params: {
+        board, currentPage, userId, recommend,
+      },
+    })
       .then((response) => {
         const { data } = response;
         if (data.success) {
