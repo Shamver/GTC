@@ -18,6 +18,7 @@ const App = ({ history }) => {
     cookieCheck();
     setRoute(history);
   }, [cookieCheck, setRoute, history]);
+
   return (
     <>
       { cookieChecked && (
