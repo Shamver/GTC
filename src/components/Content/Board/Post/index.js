@@ -11,7 +11,6 @@ const Post = ({
   const { BoardPostStore } = useStores();
   const { currentPostId } = BoardPostStore;
   const { id, date, recommendCount } = data;
-  console.log(currentPostId);
 
   return (
     <TableRow height="35" currentPostId={currentPostId} postId={id}>

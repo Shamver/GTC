@@ -5,19 +5,19 @@ import { toast } from 'react-toastify';
 import useStores from '../../../../stores/useStores';
 import Post from './index';
 
-const BoardCategoryOptions = () => {
-  const { SystemCodeStore } = useStores();
-  const { setCodeList } = SystemCodeStore;
-
-  return setCodeList.map((data) => (
-    <option
-      value={data.NAME}
-      key={data.CODE}
-    >
-      {data.NAME}
-    </option>
-  ));
-};
+// const BoardCategoryOptions = () => {
+//   const { SystemCodeStore } = useStores();
+//   const { setCodeList } = SystemCodeStore;
+//
+//   return setCodeList.map((data) => (
+//     <option
+//       value={data.NAME}
+//       key={data.CODE}
+//     >
+//       {data.NAME}
+//     </option>
+//   ));
+// };
 
 const PostList = ({ path, currentPage, isNotice = false }) => {
   const {
@@ -44,7 +44,7 @@ const PostList = ({ path, currentPage, isNotice = false }) => {
     }
   }, [
     path, getBoardPostList, setCurrentBoard, currentPage, ignoreList,
-    history, getBoardPostNoticeList,
+    history, getBoardPostNoticeList, getCodeComponent, isNotice,
   ]);
 
   if (!boardPostList[path] || boardPostList[path] === undefined) {

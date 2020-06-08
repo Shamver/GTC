@@ -60,7 +60,10 @@ const Posting = (props) => {
     if (isModify) {
       getModifyPost(id, true);
     }
-  }, [BoardStore, board, setPostBoard, getModifyPost, id, isModify, setPostClear]);
+  }, [
+    BoardStore, board, setPostBoard, getModifyPost, id, isModify,
+    setPostClear, getCodeComponent,
+  ]);
 
   return (
     <PostingWrapper>
