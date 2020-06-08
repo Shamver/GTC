@@ -143,14 +143,11 @@ const CenterTdWriter = styled(CenterTd)`
 const PostTitle = styled.a`
   cursor: pointer
   color : black;
-<<<<<<< HEAD
   
   &.color-gray {
     color: #b0b0b0 !important;
   }
   
-=======
->>>>>>> feat/ui
   &:hover {
     text-decoration: none;
   }
