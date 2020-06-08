@@ -89,7 +89,7 @@ const Reply = ({ data, index, bpId }) => {
                     </>
                   )
                   : null }
-                <SpanLikeLink onClick={likeReply(data.id, bpId)}>
+                <SpanLikeLink onClick={() => likeReply(data.id, bpId)}>
                   { !data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
                 </SpanLikeLink>
                 &nbsp;·&nbsp;
