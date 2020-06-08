@@ -37,7 +37,7 @@ const Reply = ({ data, index, bpId }) => {
     : null;
 
   return (
-    <ReplyLayout hash={hash} commentId={id}>
+    <ReplyLayout>
       { data.tabFl ? (
         <Link to="/">
           <ReplyDepthIcon icon={faShare} />
@@ -106,7 +106,7 @@ const Reply = ({ data, index, bpId }) => {
             )}
           </span>
         </ReplyInHeader>
-        <ReplyInContent>
+        <ReplyInContent hash={hash} commentId={id}>
           {/* 수정의 경우의 수 */}
           { data.secretFl
             ? (<><SecretReply><FontAwesomeIcon icon={faLock} /> 비밀 댓글</SecretReply> <br /></>)
@@ -224,6 +224,7 @@ const ReplyInHeader = styled.div`
 
 const ReplyInContent = styled.div`
   padding: 0.7em;
+  background-color: ${(props) => (props.hash === props.commentId.toString() ? '#fff9e5' : 'default')}};
 `;
 
 const AvatarImg = styled.img`
@@ -240,7 +241,6 @@ const ReplyWrapper = styled.div`
 
 const ReplyLayout = styled.div`
   display : flex;
-  background-color: ${(props) => (props.hash === props.commentId.toString() ? '#fff9e5' : 'default')};
 `;
 
 const ReplyDepthIcon = styled(FontAwesomeIcon)`
