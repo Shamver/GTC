@@ -67,7 +67,6 @@ class AdvertiseStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 0) {
-            console.log(data.result);
             this.AdvertisePostList = data.result;
           } else {
             toast.info(data.message);
@@ -76,7 +75,7 @@ class AdvertiseStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action getAdPostListNow = () => {

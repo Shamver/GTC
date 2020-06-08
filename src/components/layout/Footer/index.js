@@ -22,7 +22,6 @@ const Footer = () => {
       <br />
       GTC(Growtopia Community)는 Growtopia에서 운영하는 사이트가 아닙니다. <br />
       문의사항은 shamver0114@gmail.com 로 메일 보내주세요.<br />
-      <br />
       <UtilComponentList />
     </LayoutFooter>
   );

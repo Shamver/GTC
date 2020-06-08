@@ -11,6 +11,7 @@ const Post = ({
   const { BoardPostStore } = useStores();
   const { currentPostId } = BoardPostStore;
   const { id, date, recommendCount } = data;
+  console.log(currentPostId);
 
   return (
     <TableRow height="35" currentPostId={currentPostId} postId={id}>
@@ -63,7 +64,7 @@ const TableRow = styled.tr`
   background-color : ${(props) => (props.currentPostId === props.postId ? '#fff9e5;'
     : (props.isNotice ? '#ffd7d4' : 'white'))};
   &:hover {
-    background-color: ${(props) => (props.isNotice ? '#ffd7d4' : '#fff7d9')} !important;
+    background-color: rgb(250, 250, 250) !important;
   }
 `;
 

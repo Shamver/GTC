@@ -193,9 +193,6 @@ router.post('/', authMiddleware, (req, res) => {
           code: 1,
           message: '😊 댓글이 정상적으로 등록되었어요!',
         });
-      })
-      .catch((err) => {
-        console.log(err);
       }),
   ).then(() => {
     info('[INSERT, POST /api/board/reply] 댓글 등록 완료');

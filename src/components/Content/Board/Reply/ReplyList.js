@@ -10,7 +10,6 @@ const ReplyList = () => {
 
   return postReplyList.map((data, index) => {
     onSet(`replyIndex${index}`);
-    console.log(data);
     return (
       <Reply id={`reply${data.id}`} key={data.id} data={data} index={index} bpId={data.bpId} />
     );
