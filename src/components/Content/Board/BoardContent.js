@@ -8,7 +8,9 @@ import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import PostList from './Post/PostList';
 
-const BoardContent = ({ path, currentPage, isFooter }) => (
+const BoardContent = ({
+  path, currentPage, isFooter, query,
+}) => (
   <>
     <Div>
       <HeaderDiv>
@@ -23,7 +25,7 @@ const BoardContent = ({ path, currentPage, isFooter }) => (
       <ManginessTable bordered hover size="sm">
         <tbody>
           { !isFooter ? (<PostList path={path} isNotice />) : '' }
-          <PostList path={path} currentPage={currentPage} />
+          <PostList path={path} currentPage={currentPage} query={query} />
         </tbody>
       </ManginessTable>
     </Div>
@@ -34,10 +36,14 @@ BoardContent.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
   isFooter: Proptypes.bool.isRequired,
+  query: Proptypes.shape({
+    filter_mode: Proptypes.bool,
+  }),
 };
 
 BoardContent.defaultProps = {
   currentPage: null,
+  query: '{filter_mode : false}',
 };
 
 const Div = styled.div`

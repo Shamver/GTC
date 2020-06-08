@@ -31,6 +31,7 @@ const SELECT_POST_LIST = `
     BOARD_CD = ':BOARD_CD' 
     AND P.USER_ID NOT IN
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+    AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -241,36 +242,11 @@ const SELECT_LAST_INDEX = `
   SELECT LAST_INSERT_ID() as id
 `;
 
-const SELECT_BEST_POST_LIST = `
-  SELECT 
-    @ROWNUM := @ROWNUM+1 as rn
-    , P.ID AS id
-    , P.TITLE AS title
-    , P.USER_ID AS writerId
-    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
-    , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
-    , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
-    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
-    , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
-    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD' AND (SELECT COUNT(*) FROM GTC_POST_RECOMMEND WHERE POST_ID = GTC_POST.ID AND TYPE_CD = 'R01') >= 1) AS pageCount
-  FROM 
-    GTC_POST P
-    , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
-  WHERE 
-    BOARD_CD = ':BOARD_CD' 
-    AND P.USER_ID != IFNULL((SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
-    AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= 1
-  ORDER BY ID DESC    
-  LIMIT :CURRENT_PAGE, :PER_PAGE
-`;
-
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
-  const { board, isHome } = req.query;
+  const { board, isHome, recommend } = req.query;
   let { userId } = req.query;
   currentPage = currentPage || 1;
-
-
   if (!userId) userId = null;
 
   Database.execute(
@@ -281,6 +257,7 @@ router.get('/', (req, res) => {
         CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
         PER_PAGE: isHome ? 9 : 25,
+        LIKES: recommend === undefined ? 0 : 1,
       },
     )
       .then((rows) => {
@@ -320,34 +297,6 @@ router.get('/notice', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, GET /api/board/post/notice] 공지 게시글 목록 조회');
-  });
-});
-
-router.get('/best', (req, res) => {
-  let { currentPage } = req.query;
-  const { board, userId, isHome } = req.query;
-  currentPage = currentPage || 1;
-
-  Database.execute(
-    (database) => database.query(
-      SELECT_BEST_POST_LIST,
-      {
-        BOARD_CD: board.toUpperCase(),
-        CURRENT_PAGE: ((currentPage - 1) * 25),
-        USER_ID: userId,
-        PER_PAGE: isHome ? 9 : 25,
-      },
-    )
-      .then((rows) => {
-        res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '인기 게시글 목록 조회',
-          rows,
-        });
-      }),
-  ).then(() => {
-    info('[SELECT, GET /api/board/post/best] 인기 게시글 목록 조회');
   });
 });
 

@@ -6,9 +6,12 @@ import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
-const PaginationList = ({ path, currentPage, noPagination }) => {
+const PaginationList = ({
+  path, currentPage, noPagination, query,
+}) => {
   const { BoardPostStore } = useStores();
   const { currentBoardMaxPage } = BoardPostStore;
+  const FilterMode = !!query.filter_mode;
 
   const currentPageNum = parseInt(currentPage, 0);
   const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
@@ -18,7 +21,7 @@ const PaginationList = ({ path, currentPage, noPagination }) => {
   if (currentPage > 1) {
     array.push(
       <PaginationItem key={0}>
-        <CustomLink className="page-link" activeClassName="active" to={`/${path}/page/${currentPageNum - 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={FilterMode ? `/${path}/page/${currentPageNum - 1}?filter_mode=true` : `/${path}/page/${currentPageNum - 1}`}>
           ‹
         </CustomLink>
       </PaginationItem>,
@@ -28,7 +31,7 @@ const PaginationList = ({ path, currentPage, noPagination }) => {
   for (let i = min; i <= max; i += 1) {
     array.push(
       <PaginationItem active={i === 1 && noPagination} key={i}>
-        <CustomLink className="page-link" activeClassName="active" to={`/${path}/page/${i}`}>
+        <CustomLink className="page-link" activeClassName="active" to={FilterMode ? `/${path}/page/${i}?filter_mode=true` : `/${path}/page/${i}`}>
           {i}
         </CustomLink>
       </PaginationItem>,
@@ -38,7 +41,7 @@ const PaginationList = ({ path, currentPage, noPagination }) => {
   if (currentPageNum !== currentBoardMaxPage) {
     array.push(
       <PaginationItem key={-1}>
-        <CustomLink className="page-link" activeClassName="active" to={`/${path}/page/${currentPageNum + 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={FilterMode ? `/${path}/page/${currentPageNum + 1}?filter_mode=true` : `/${path}/page/${currentPageNum + 1}`}>
           ›
         </CustomLink>
       </PaginationItem>,
@@ -53,6 +56,7 @@ PaginationList.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
   noPagination: Proptypes.bool,
+  query: Proptypes.string,
 };
 
 PaginationList.defaultProps = {
@@ -60,9 +64,16 @@ PaginationList.defaultProps = {
 };
 
 
-const BoardPagination = ({ path, noPagination, currentPage }) => (
+const BoardPagination = ({
+  path, noPagination, currentPage, query,
+}) => (
   <PaginationCustom>
-    <PaginationList currentPage={currentPage} path={path} noPagination={noPagination} />
+    <PaginationList
+      currentPage={currentPage}
+      path={path}
+      noPagination={noPagination}
+      query={query}
+    />
   </PaginationCustom>
 );
 
@@ -70,6 +81,7 @@ BoardPagination.propTypes = {
   path: Proptypes.string.isRequired,
   noPagination: Proptypes.bool,
   currentPage: Proptypes.string,
+  query: Proptypes.string.isRequired,
 };
 
 BoardPagination.defaultProps = {

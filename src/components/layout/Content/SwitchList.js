@@ -63,8 +63,8 @@ const SwitchList = () => {
       <Route exact path="/test" render={() => <Contents.Test />} />
 
       {/* ------------------------------- BOARD ------------------------------- */}
-      <Route exact path="/:board" render={({ match }) => <Contents.Board path={match.params.board} noPagination />} />
-      <Route exact path="/:board/page/:currentPage" render={({ match }) => <Contents.Board path={match.params.board} currentPage={match.params.currentPage} />} />
+      <Route exact path="/:board" render={({ match, location }) => <Contents.Board path={match.params.board} noPagination location={location} />} />
+      <Route exact path="/:board/page/:currentPage" render={({ match, location }) => <Contents.Board path={match.params.board} currentPage={match.params.currentPage} location={location} />} />
 
       { checkPermission(0) ? (
         <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />

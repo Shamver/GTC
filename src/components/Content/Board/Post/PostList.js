@@ -19,7 +19,9 @@ import Post from './index';
 //   ));
 // };
 
-const PostList = ({ path, currentPage, isNotice = false }) => {
+const PostList = ({
+  path, currentPage, isNotice = false, query,
+}) => {
   const {
     BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore, UtilRouteStore,
     SystemCodeStore,
@@ -40,11 +42,11 @@ const PostList = ({ path, currentPage, isNotice = false }) => {
     if (isNotice) {
       getBoardPostNoticeList(path);
     } else {
-      getBoardPostList(path, currentPage);
+      getBoardPostList(path, currentPage, query);
     }
   }, [
     path, getBoardPostList, setCurrentBoard, currentPage, ignoreList,
-    history, getBoardPostNoticeList, getCodeComponent, isNotice,
+    history, getBoardPostNoticeList, getCodeComponent, isNotice, query,
   ]);
 
   if (!boardPostList[path] || boardPostList[path] === undefined) {
@@ -81,6 +83,14 @@ PostList.propTypes = {
   path: Proptypes.string,
   currentPage: Proptypes.string,
   isNotice: Proptypes.bool,
+  query: Proptypes.shape({
+    filter_mode: Proptypes.bool,
+  }),
 };
+
+PostList.defaultProps = {
+  query: '{filter_mode : false}',
+};
+
 
 export default observer(PostList);
