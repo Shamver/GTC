@@ -11,36 +11,44 @@ import * as Proptypes from 'prop-types';
 import BoardPagination from './Pagination';
 import useStores from '../../../stores/useStores';
 
-const BoardFooter = ({ path, noPagination, currentPage }) => {
+const BoardFooter = ({
+  path, noPagination, currentPage, query,
+}) => {
   const { BoardPostStore } = useStores();
-  const { toggleBestPost, toggleBestPostToken } = BoardPostStore;
-
+  const { toggleBestPostToken } = BoardPostStore;
   return (
     <>
       <AbsolDiv>
-        <AbsoluteLeftLink to={`${path}?filter_mode=true`}>
-          { toggleBestPostToken
-            ? (
+        { toggleBestPostToken
+          ? (
+            <AbsoluteLeftLink to={`/${path}`}>
               <Button color="warning" size="sm">
                 <FontAwesomeIcon icon={faStar} />
                 &nbsp;&nbsp;인기 글
               </Button>
-            )
-            : (
+            </AbsoluteLeftLink>
+          )
+          : (
+            <AbsoluteLeftLink to={`/${path}?filter_mode=true`}>
               <Button outline color="warning" size="sm">
                 <FontAwesomeIcon icon={faStar} />
                 &nbsp;&nbsp;인기 글
               </Button>
-            )}
-        </AbsoluteLeftLink>
-        <AbsoluteRightLink to={`${path}/post`}>
+            </AbsoluteLeftLink>
+          )}
+        <AbsoluteRightLink to={`/${path}/post`}>
           <Button color="danger" size="sm">
             <FontAwesomeIcon icon={faPen} />
               &nbsp;&nbsp;글 쓰기
           </Button>
         </AbsoluteRightLink>
       </AbsolDiv>
-      <BoardPagination path={path} currentPage={currentPage} noPagination={noPagination} />
+      <BoardPagination
+        path={path}
+        currentPage={currentPage}
+        noPagination={noPagination}
+        query={query}
+      />
       <InputGroupWrapper>
         <InputGroupWidth>
           <InputGroupAddon addonType="prepend">
@@ -66,11 +74,15 @@ BoardFooter.propTypes = {
   path: Proptypes.string.isRequired,
   noPagination: Proptypes.bool,
   currentPage: Proptypes.string,
+  query: Proptypes.shape({
+    filter_mode: Proptypes.bool,
+  }),
 };
 
 BoardFooter.defaultProps = {
   noPagination: false,
   currentPage: '1',
+  query: '{filter_mode : false}',
 };
 
 const RightNoRadiusSelect = styled(Input)`

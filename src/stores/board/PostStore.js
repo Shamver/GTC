@@ -69,16 +69,6 @@ class PostStore {
     this.root = root;
   }
 
-  @action toggleBestPost = (board, currentPage) => {
-    this.toggleBestPostToken = !this.toggleBestPostToken;
-
-    if (this.toggleBestPostToken) {
-      this.getBoardBestPostList(board, currentPage);
-    } else {
-      this.getBoardPostList(board, currentPage);
-    }
-  }
-
   @action setCurrentPostId = (postId) => {
     this.currentPostId = postId;
   };
@@ -171,12 +161,18 @@ class PostStore {
     return true;
   };
 
-  @action getBoardPostList = (board, currentPage, queryString) => {
+  @action getBoardPostList = async (board, currentPage, queryString) => {
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
     const recommend = queryString.filter_mode;
 
-    axios.get('/api/board/post', {
+    if (recommend) {
+      this.toggleBestPostToken = true;
+    } else {
+      this.toggleBestPostToken = false;
+    }
+
+    await axios.get('/api/board/post', {
       params: {
         board, currentPage, userId, recommend,
       },
@@ -224,36 +220,6 @@ class PostStore {
           }
         } else {
           toast.error(data.message);
-        }
-      })
-      .catch((response) => { toast.error(response.message); });
-  };
-
-  @action getBoardBestPostList = (board, currentPage) => {
-    const { userData } = this.root.UserStore;
-    const userId = userData ? userData.id : null;
-
-    axios.get('/api/board/post/best', { params: { board, userId, currentPage } })
-      .then((response) => {
-        const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.boardPostList = {
-              ...this.boardPostList,
-              [board]: data.rows,
-            };
-
-            if (data.rows.length === 0) {
-              this.currentBoardMaxPage = 0;
-            } else {
-              const { pageCount } = data.rows[0];
-              this.currentBoardMaxPage = pageCount;
-            }
-          } else {
-            toast.info(data.MESSAGE);
-          }
-        } else {
-          toast.error(data.MESSAGE);
         }
       })
       .catch((response) => { toast.error(response.message); });

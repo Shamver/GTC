@@ -19,7 +19,9 @@ const BoardCategoryOptions = () => {
   ));
 };
 
-const PostList = ({ path, currentPage, isNotice = false, query }) => {
+const PostList = ({
+  path, currentPage, isNotice = false, query,
+}) => {
   const {
     BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore, UtilRouteStore,
     SystemCodeStore,
@@ -44,7 +46,7 @@ const PostList = ({ path, currentPage, isNotice = false, query }) => {
     }
   }, [
     path, getBoardPostList, setCurrentBoard, currentPage, ignoreList,
-    history, getBoardPostNoticeList, query
+    history, getBoardPostNoticeList, query,
   ]);
 
   if (!boardPostList[path] || boardPostList[path] === undefined) {
@@ -81,7 +83,14 @@ PostList.propTypes = {
   path: Proptypes.string,
   currentPage: Proptypes.string,
   isNotice: Proptypes.bool,
-  query: Proptypes.string,
+  query: Proptypes.shape({
+    filter_mode: Proptypes.bool,
+  }),
 };
+
+PostList.defaultProps = {
+  query: '{filter_mode : false}',
+};
+
 
 export default observer(PostList);

@@ -10,7 +10,7 @@ import BoardFooter from './BoardFooter';
 import useStores from '../../../stores/useStores';
 
 const Board = ({
-  path, currentPage, noPagination, location,
+  path, currentPage, noPagination, location, match
 }) => {
   const { BoardPostStore } = useStores();
   const { setClearPostView } = BoardPostStore;
@@ -25,7 +25,12 @@ const Board = ({
       <TableWrapper>
         <BoardHeader path={path} />
         <BoardContent path={path} currentPage={currentPage} query={query} />
-        <BoardFooter path={path} currentPage={currentPage} noPagination={noPagination} />
+        <BoardFooter
+          path={path}
+          currentPage={currentPage}
+          noPagination={noPagination}
+          query={query}
+        />
       </TableWrapper>
     </BoardWrapper>
   );
@@ -36,11 +41,15 @@ Board.propTypes = {
   currentPage: Proptypes.string,
   noPagination: Proptypes.bool,
   location: Proptypes.string.isRequired,
+  query: Proptypes.shape({
+    filter_mode: Proptypes.bool,
+  }),
 };
 
 Board.defaultProps = {
   currentPage: '1',
   noPagination: false,
+  query: '{filter_mode : false}',
 };
 
 const BoardWrapper = styled.div`

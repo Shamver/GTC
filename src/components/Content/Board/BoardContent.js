@@ -36,11 +36,14 @@ BoardContent.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
   isFooter: Proptypes.bool.isRequired,
-  query: Proptypes.string.isRequired,
+  query: Proptypes.shape({
+    filter_mode: Proptypes.bool,
+  }),
 };
 
 BoardContent.defaultProps = {
   currentPage: null,
+  query: '{filter_mode : false}',
 };
 
 const Div = styled.div`
