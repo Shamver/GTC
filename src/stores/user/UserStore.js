@@ -136,9 +136,8 @@ class UserStore {
           }
           this.cookieChecked = true;
         } else {
-          // jwt expired 일시
+          // 통신실패시
           this.userData = null;
-          this.cookieChecked = true;
         }
       })
       .catch((response) => {
