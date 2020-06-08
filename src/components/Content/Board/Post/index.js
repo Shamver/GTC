@@ -18,9 +18,7 @@ const Post = ({
         {/* eslint-disable-next-line no-nested-ternary */}
         {currentPostId === id ? '>>'
           : isNotice ? (
-            <>
-              <span>공지</span>
-            </>
+            <span>공지</span>
           ) : (
             <>
               {recommendCount > 0 ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : ''}

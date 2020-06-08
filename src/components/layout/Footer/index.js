@@ -18,12 +18,11 @@ const Footer = () => {
       &nbsp; | &nbsp;
       <Link to="/team">관리자 모집</Link>
       &nbsp; | &nbsp;
-      <Link to="/advertising">광고문의</Link>
+      <Link to="/">광고문의</Link>
       <br />
       GTC(Growtopia Community)는 Growtopia에서 운영하는 사이트가 아닙니다. <br />
-      shamver0114@gmail.com<br />
+      문의사항은 shamver0114@gmail.com 로 메일 보내주세요.<br />
       <br />
-      <Link to="/">모바일버전으로 전환하기</Link>
       <UtilComponentList />
     </LayoutFooter>
   );
