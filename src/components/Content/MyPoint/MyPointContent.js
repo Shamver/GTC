@@ -12,7 +12,12 @@ const MyPointContent = ({ currentPage, noPagination }) => {
 
   return (
     <>
-      <p>현재 보유중인 포인트는 <b>{totalPoint}</b> 점, 포인트는 다양한 활동을 하여 얻을 수 있어요.</p>
+      <p>
+        현재 보유중인 포인트는
+        {' '}
+        <b>{totalPoint}</b>
+        점, 포인트는 다양한 활동을 하여 얻을 수 있어요.
+      </p>
       <MyPointTable currentPage={currentPage} noPagination={noPagination} />
       {pointList.length > 0 ? (<PointPagination currentPage={currentPage} noPagination={noPagination} />) : ''}
     </>
