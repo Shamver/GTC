@@ -6,7 +6,7 @@ import useStores from '../../../../stores/useStores';
 import ResponsiveRow from './responsive/ResponsiveRow';
 
 const Post = ({
-  data, index, path, isNotice = false,
+  data, index, path, isNotice,
 }) => {
   const { BoardPostStore } = useStores();
   const { currentPostId } = BoardPostStore;
@@ -27,9 +27,7 @@ const Post = ({
       </CenterTd>
       <ResponsiveRow data={data} index={index} path={path} isNotice={isNotice} />
       <DateTd>
-        <BlockInner>
-          {date}
-        </BlockInner>
+        <BlockInner>{date}</BlockInner>
       </DateTd>
     </TableRow>
   );
@@ -43,7 +41,11 @@ Post.propTypes = {
   }).isRequired,
   index: Proptypes.number.isRequired,
   path: Proptypes.string.isRequired,
-  isNotice: Proptypes.bool.isRequired,
+  isNotice: Proptypes.bool,
+};
+
+Post.defaultProps = {
+  isNotice: false,
 };
 
 const BlockInner = styled.span`

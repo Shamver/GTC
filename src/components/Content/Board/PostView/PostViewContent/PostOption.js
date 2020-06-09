@@ -4,7 +4,7 @@ import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
-import useStores from '../../../../../../stores/useStores';
+import useStores from '../../../../../stores/useStores';
 
 const PostOption = () => {
   const { UtilAlertStore, BoardPostStore, BoardStore } = useStores();

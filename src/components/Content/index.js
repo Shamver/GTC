@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 const Setting = lazy(() => import('./Setting'));
 const Board = lazy(() => import('./Board'));
-const PostView = lazy(() => import('./Board/Post/PostView'));
+const PostView = lazy(() => import('./Board/PostView'));
 const PostLocker = lazy(() => import('./PostLocker'));
 const NewAlert = lazy(() => import('./NewAlert'));
 const MyAccount = lazy(() => import('./MyAccount'));

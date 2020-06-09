@@ -11,7 +11,7 @@ import { Button, Container } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import useStores from '../../../../../../stores/useStores';
+import useStores from '../../../../../stores/useStores';
 import PostVote from './PostVote';
 import PostOption from './PostOption';
 

@@ -76,13 +76,12 @@ BoardFooter.propTypes = {
   currentPage: Proptypes.string,
   query: Proptypes.shape({
     filter_mode: Proptypes.bool,
-  }),
+  }).isRequired,
 };
 
 BoardFooter.defaultProps = {
   noPagination: false,
   currentPage: '1',
-  query: '{filter_mode : false}',
 };
 
 const RightNoRadiusSelect = styled(Input)`

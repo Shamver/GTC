@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { Link } from 'react-router-dom';
@@ -41,4 +41,4 @@ const TableHead = styled.div`
   margin-bottom : 10px;
 `;
 
-export default BoardHeader;
+export default memo(BoardHeader);

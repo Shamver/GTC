@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import styled from 'styled-components';
-import useStores from '../../../../stores/useStores';
+import useStores from '../../../../../stores/useStores';
 
 const ReplyEdit = () => {
   const { BoardReplyStore, UserStore } = useStores();

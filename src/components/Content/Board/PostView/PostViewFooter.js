@@ -2,10 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import ReplyForm from '../../Reply/ReplyForm';
-import BoardContent from '../../BoardContent';
-import BoardFooter from '../../BoardFooter';
-import useStores from '../../../../../stores/useStores';
+import ReplyForm from './Reply/ReplyForm';
+import BoardContent from '../BoardContent';
+import BoardFooter from '../BoardFooter';
+import useStores from '../../../../stores/useStores';
 
 const PostViewFooter = () => {
   const { BoardStore, BoardPostStore } = useStores();

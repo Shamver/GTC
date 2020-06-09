@@ -84,13 +84,12 @@ PostList.propTypes = {
   currentPage: Proptypes.string,
   isNotice: Proptypes.bool,
   query: Proptypes.shape({
-    filter_mode: Proptypes.bool,
+    filter_mode: Proptypes.string,
   }),
 };
 
 PostList.defaultProps = {
-  query: '{filter_mode : false}',
+  query: null,
 };
-
 
 export default observer(PostList);

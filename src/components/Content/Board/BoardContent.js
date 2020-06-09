@@ -12,43 +12,37 @@ const BoardContent = ({
   path, currentPage, isFooter, query,
 }) => (
   <>
-    <Div>
-      <HeaderDiv>
-        <NavLink activeClassName="active" to={`/${path}`}>
-          <FontAwesomeIcon icon={faHome} />
-        </NavLink>
-        <NavLink activeClassName="active" to={`/${path}/freedom`}>자유</NavLink>
-        <NavLink activeClassName="active" to={`/${path}/talk`}>잡담</NavLink>
-        <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
-        <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
-      </HeaderDiv>
-      <ManginessTable bordered hover size="sm">
-        <tbody>
-          { !isFooter ? (<PostList path={path} isNotice />) : '' }
-          <PostList path={path} currentPage={currentPage} query={query} />
-        </tbody>
-      </ManginessTable>
-    </Div>
+    <HeaderDiv>
+      <NavLink activeClassName="active" to={`/${path}`}>
+        <FontAwesomeIcon icon={faHome} />
+      </NavLink>
+      <NavLink activeClassName="active" to={`/${path}/freedom`}>자유</NavLink>
+      <NavLink activeClassName="active" to={`/${path}/talk`}>잡담</NavLink>
+      <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
+      <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
+    </HeaderDiv>
+    <ManginessTable bordered hover size="sm">
+      <tbody>
+        { !isFooter ? (<PostList path={path} isNotice />) : '' }
+        <PostList path={path} currentPage={currentPage} query={query} />
+      </tbody>
+    </ManginessTable>
   </>
 );
 
 BoardContent.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
-  isFooter: Proptypes.bool.isRequired,
+  isFooter: Proptypes.bool,
   query: Proptypes.shape({
-    filter_mode: Proptypes.bool,
-  }),
+    filter_mode: Proptypes.string,
+  }).isRequired,
 };
 
 BoardContent.defaultProps = {
   currentPage: null,
-  query: '{filter_mode : false}',
+  isFooter: false,
 };
-
-const Div = styled.div`
-  display: ${(props) => (props.loading ? 'none' : 'block')}
-`;
 
 const ManginessTable = styled(Table)`
   margin : 0px !important;
@@ -64,11 +58,7 @@ const ManginessTable = styled(Table)`
   }
   
   & tr:hover {
-<<<<<<< HEAD
     background-color : #fff7d9 !important;
-=======
-    background-color : #fff7d9;
->>>>>>> feat/notice
   }
 `;
 

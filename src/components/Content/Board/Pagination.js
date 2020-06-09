@@ -56,7 +56,9 @@ PaginationList.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
   noPagination: Proptypes.bool,
-  query: Proptypes.string,
+  query: Proptypes.shape({
+    filter_mode: Proptypes.string,
+  }).isRequired,
 };
 
 PaginationList.defaultProps = {
@@ -81,7 +83,9 @@ BoardPagination.propTypes = {
   path: Proptypes.string.isRequired,
   noPagination: Proptypes.bool,
   currentPage: Proptypes.string,
-  query: Proptypes.string.isRequired,
+  query: Proptypes.shape({
+    filter_mode: Proptypes.string,
+  }).isRequired,
 };
 
 BoardPagination.defaultProps = {

@@ -17,39 +17,29 @@ const ResponsiveRow = ({
   const { ComponentPostStore } = useStores();
   const { onClickPost, isVisited } = ComponentPostStore;
 
-  // eslint-disable-next-line no-nested-ternary
-  const IsBestPost = recommendCount >= 10
-    ? (<Star icon={faStar} />)
-    : isImage ? (<FontAwesomeIcon icon={faImage} />)
-      : (<BottomIcon icon={faCommentDots} />);
+  const isImageComponent = isImage
+    ? (<FontAwesomeIcon icon={faImage} />)
+    : (<BottomIcon icon={faCommentDots} />);
+  const IsBestPost = recommendCount >= 10 ? (<Star icon={faStar} />) : isImageComponent;
 
   return (
     <>
       { path === 'all' ? (
-        <DateTd>
-          {!isNotice ? boardName : ''}
-        </DateTd>
+        <DateTd>{!isNotice ? boardName : null}</DateTd>
       ) : null }
-      { !isNotice ? (
-        <DateTd>
-          { type !== 'notice' ? categoryName : ''}
-        </DateTd>
-      ) : '' }
+      {!isNotice ? (<DateTd>{type !== 'notice' ? categoryName : null}</DateTd>) : null}
       <MiddleTd width="700" colSpan={isNotice ? 2 : 1}>
         <MiddleSpan>
-          { isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
+          {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
           &nbsp;
           <PostTitle className={isVisited(id) ? 'color-gray' : ''} onClick={() => onClickPost(id)}>{title}</PostTitle>
           { commentCount > 0
             ? (
-              <ReplyCountspan>
-                &nbsp;&nbsp;&nbsp;
-                [{commentCount}]
-              </ReplyCountspan>
+              <ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>
             ) : null}
           <MobileWriterDropdown>
             <WriterDropdown data={data} index={index} />
-            <TopSpan>{type !== 'notice' ? categoryName : ''}</TopSpan>
+            <TopSpan>{type !== 'notice' ? categoryName : null}</TopSpan>
           </MobileWriterDropdown>
         </MiddleSpan>
       </MiddleTd>
@@ -69,7 +59,7 @@ ResponsiveRow.propTypes = {
     commentCount: Proptypes.number,
     type: Proptypes.string,
     boardName: Proptypes.string,
-    isImage: Proptypes.bool,
+    isImage: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
   path: Proptypes.string.isRequired,

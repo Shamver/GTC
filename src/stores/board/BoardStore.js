@@ -37,6 +37,8 @@ class BoardStore {
 
   @observable currentBoard = '';
 
+  @observable currentBoardPath = '';
+
   constructor(root) {
     this.root = root;
   }

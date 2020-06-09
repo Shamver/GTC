@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
-import useStores from '../../../../../../stores/useStores';
+import useStores from '../../../../../stores/useStores';
 
 const PostVote = () => {
   const { BoardPostStore, UserStore } = useStores();

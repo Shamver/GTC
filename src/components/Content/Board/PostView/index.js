@@ -1,7 +1,7 @@
 import React, { useEffect, memo } from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
-import useStores from '../../../../../stores/useStores';
+import useStores from '../../../../stores/useStores';
 import PostViewHeader from './PostViewHeader';
 import PostViewContent from './PostViewContent';
 import PostViewFooter from './PostViewFooter';
