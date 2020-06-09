@@ -53,6 +53,7 @@ class AlertStore {
         if (data.success) {
           if (data.code === 1) {
             // 읽기 성공
+            this.getAlert();
           } else {
             toast.info(data.message);
           }
