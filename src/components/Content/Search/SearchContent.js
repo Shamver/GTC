@@ -1,10 +1,7 @@
-import React from 'react';
-import {
-  Row,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { Row } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
 import SearchContentItem from './SearchContentItem';
 import tmpThumb from '../../../resources/images/thumb.jpeg';
 
@@ -39,15 +36,13 @@ const SearchContent = () => {
     },
   ];
 
-  const Item = data.map((v) => (SearchContentItem('search', v)));
+  const Item = data.map((v) => <SearchContentItem data={v} key={v.id} />);
 
   return (
     <>
       <H5>게시글 (총 {}건)</H5>
       <Hr />
-      <ItemRow>
-        {Item}
-      </ItemRow>
+      <ItemRow>{Item}</ItemRow>
     </>
   );
 };
@@ -68,4 +63,4 @@ const Hr = styled.hr`
   height: 1px;
 `;
 
-export default observer(SearchContent);
+export default memo(observer(SearchContent));

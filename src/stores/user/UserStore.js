@@ -15,6 +15,15 @@ class UserStore {
 
   @observable userData;
 
+  @observable cookieChecked = false;
+
+  @observable profileData = {
+    profileInfo: {},
+    profilePostData: [],
+    profileCommentData: [],
+    profileNicknameHistory: [],
+  };
+
   constructor(root) {
     this.root = root;
   }
@@ -49,24 +58,23 @@ class UserStore {
   };
 
   @action register = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
     const { toggleSign } = this.root.UtilStore;
 
     axios.post('/api/auth/register', this.registerData)
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toggleAlert(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
             toggleSign();
           } else {
-            toggleAlert(data.MESSAGE);
+            toast.error(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -75,19 +83,18 @@ class UserStore {
     axios.post('/api/auth/login', { email })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(response.data.MESSAGE);
-            this.userData = response.data.token;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
             this.cookieCheck();
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -97,44 +104,61 @@ class UserStore {
     axios.post('/api/auth/logout', {})
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             toast.success(text);
             this.cookieCheck();
             if (history.location.pathname !== '/') {
               history.push('/');
             }
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
 
+  // 예외로 async, await이 필요 없음
   @action cookieCheck = () => {
-    axios.get('/api/auth/check', {})
+    axios.get('/api/auth/check')
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.userData = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.userData = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            this.userData = null;
           }
+          this.cookieChecked = true;
         } else {
+          // 통신실패시
           this.userData = null;
         }
       })
-      .catch((err) => { console.log(err); });
-
+      .catch((response) => {
+        toast.error(response.message);
+      });
     return true;
   };
 
+  @action checkPermission = (level) => {
+    // level 0: 사용자, level 1: 운영자, level2: 관리자
+    if (level === 0) {
+      return this.userData;
+    }
+    if (level === 1) {
+      return (this.userData && this.userData.operatorYN === 1);
+    }
+    if (level === 2) {
+      return (this.userData && this.userData.adminYN === 1);
+    }
+    return false;
+  };
 
   @action onRegisterChangeValue = (event) => {
     this.registerData = {
@@ -144,46 +168,44 @@ class UserStore {
   };
 
   registerValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     // name
     if (!this.registerData.name) {
-      toggleAlert('이름을 입력해주세요.');
+      toast.error('이름을 입력해주세요.');
       return false;
     }
 
     // nickname
     if (!this.registerData.nickname) {
-      toggleAlert('닉네임을 입력해주세요.');
+      toast.error('닉네임을 입력해주세요.');
       return false;
     }
 
     // tel
     if (!this.registerData.tel || Number.isNaN(this.registerData.tel)) {
-      toggleAlert('전화번호 형식을 맞추어서 입력해주세요.');
+      toast.error('전화번호 형식을 맞추어서 입력해주세요.');
       return false;
     }
 
     // birth
     if (!this.registerData.birth) {
-      toggleAlert('생년월일을 입력해주세요.');
+      toast.error('생년월일을 입력해주세요.');
       return false;
     }
 
     if (this.registerData.birth.substring(0, 4) === '1000') {
-      toggleAlert('생년월일을 제대로 입력해주세요.');
+      toast.error('생년월일을 제대로 입력해주세요.');
       return false;
     }
 
     // gender
     if (!this.registerData.gender) {
-      toggleAlert('성별을 입력해주세요.');
+      toast.error('성별을 입력해주세요.');
       return false;
     }
 
     // gtNickname
     if (!this.registerData.gtNickname) {
-      toggleAlert('그로우토피아 닉네임을 입력해주세요.');
+      toast.error('그로우토피아 닉네임을 입력해주세요.');
       return false;
     }
 
@@ -202,31 +224,31 @@ class UserStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
+          if (data.success) {
+            if (data.code === 1) {
               logout({}, '성공적으로 탈퇴되었습니다.\n30일 이후에 재가입이 가능합니다.\n감사합니다.');
               history.push('/');
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
-        .catch((response) => { console.log(response); });
+        .catch((response) => { toast.error(response.message); });
     }
   };
 
   @action updateInfo = () => {
     const {
-      nickname, birth, gender, profileYN,
+      nickname, prevNickname, birth, gender, profileYN,
     } = this.root.ComponentMyAccountStore;
     const { userData } = this;
-    const { toggleAlert } = this.root.UtilAlertStore;
     const { history } = this.root.UtilRouteStore;
 
     axios.put('/api/user/info', {
       nickname: nickname.trim(),
+      prevNickname: prevNickname.trim(),
       birth,
       gender,
       profileYN,
@@ -234,19 +256,142 @@ class UserStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toggleAlert('성공적으로 변경되었습니다.\n다시 로그인해주세요.');
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success('성공적으로 변경되었습니다.\n다시 로그인해주세요.');
             history.push('/');
             this.logout();
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => toast.error(response.message));
+  }
+
+  @action getProfile = (writerId) => {
+    this.root.UtilStore.profileToggle = !this.root.UtilStore.profileToggle;
+    const { pageIndex } = this.root.UtilStore;
+    const { postIndex, commentIndex, nickNameIndex } = pageIndex;
+
+    axios.get(`/api/user/profile/${writerId}`, { params: { writerId } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileInfo: data.DATA,
+            };
+          } else {
+            toast.error(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
+      }).then(() => {
+        this.getPostList(postIndex);
+        this.getCommentList(commentIndex);
+        this.getNickNameList(nickNameIndex);
+      })
+      .catch((response) => { toast.error(response.message); });
+    return true;
+  }
+
+  @action getPostList = (index) => {
+    const writerId = this.profileData.profileInfo.userId;
+    this.root.UtilStore.pageIndex = {
+      ...this.root.UtilStore.pageIndex,
+      postIndex: index,
+    };
+
+    axios.get(`/api/user/profile/${writerId}/post/${index}`, { params: { writerId, index } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profilePostData: data.DATA,
+            };
+            this.root.UtilStore.rows = {
+              ...this.root.UtilStore.rows,
+              postRows: data.DATA[0].rowCount,
+            };
+          } else {
+            toast.error(data.MESSAGE);
           }
         } else {
           toast.error(data.MESSAGE);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => { toast.error(response.message); });
+  }
+
+  @action getCommentList = (index) => {
+    const writerId = this.profileData.profileInfo.userId;
+    this.root.UtilStore.pageIndex = {
+      ...this.root.UtilStore.pageIndex,
+      commentIndex: index,
+    };
+
+    axios.get(`/api/user/profile/${writerId}/comment/${index}`, { params: { writerId, index } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileCommentData: data.DATA,
+            };
+            this.root.UtilStore.rows = {
+              ...this.root.UtilStore.rows,
+              commentRows: data.DATA[0].rowCount,
+            };
+          } else {
+            toast.error(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  }
+
+  @action getNickNameList = (index) => {
+    const writerId = this.profileData.profileInfo.userId;
+    this.root.UtilStore.pageIndex = {
+      ...this.root.UtilStore.pageIndex,
+      nickNameIndex: index,
+    };
+
+    axios.get(`/api/user/profile/${writerId}/nickname/${index}`, { params: { writerId, index } })
+      .then((response) => {
+        const { data } = response;
+
+        if (data.SUCCESS) {
+          if (data.CODE === 1) {
+            this.profileData = {
+              ...this.profileData,
+              profileNicknameHistory: data.DATA,
+            };
+            this.root.UtilStore.rows = {
+              ...this.root.UtilStore.rows,
+              nickNameRows: data.DATA[0].rowCount,
+            };
+          } else {
+            toast.error(data.MESSAGE);
+          }
+        } else {
+          toast.error(data.MESSAGE);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
   }
 }
 

@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
-import {
-  Container,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
@@ -9,18 +7,8 @@ import useStores from '../../../stores/useStores';
 import SearchContent from './SearchContent';
 
 const Search = () => {
-  const {
-    BoardSearchStore, UtilLoadingStore,
-  } = useStores();
-  const {
-    searchedText,
-  } = BoardSearchStore;
-  const { doLoading } = UtilLoadingStore;
-
-  doLoading();
-
-  useEffect(() => {
-  }, []);
+  const { BoardSearchStore } = useStores();
+  const { searchedText } = BoardSearchStore;
 
   return (
     <MainContainer>
@@ -41,4 +29,4 @@ const MainContainer = styled(Container)`
   padding: 1rem !important;
 `;
 
-export default observer(Search);
+export default memo(observer(Search));

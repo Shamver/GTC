@@ -1,8 +1,7 @@
-import React from 'react';
-import {
-  Nav, NavItem, NavLink,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { Nav, NavItem, NavLink } from 'reactstrap';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const SettingNav = () => {
@@ -51,4 +50,4 @@ const NavLinkBtn = styled(NavLink)`
   }
 `;
 
-export default SettingNav;
+export default memo(observer(SettingNav));

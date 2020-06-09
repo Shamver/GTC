@@ -1,18 +1,14 @@
-import React, { useEffect } from 'react';
-import {
-  Container,
-} from 'reactstrap';
+import React, { useLayoutEffect, memo } from 'react';
+import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
 import useStores from '../../../stores/useStores';
-
 import PostLockerNav from './PostLockerNav';
 import PostLockerTabContent from './PostLockerTabContent';
 
 const PostLocker = () => {
   const {
-    BoardPostStore, BoardReplyStore, UserFavoriteStore, ComponentPostLockerStore, UtilStore,
+    BoardPostStore, BoardReplyStore, UserFavoriteStore, ComponentPostLockerStore,
     UtilLoadingStore,
   } = useStores();
 
@@ -20,19 +16,16 @@ const PostLocker = () => {
   const { getDataReplyMine } = BoardReplyStore;
   const { getFavorite } = UserFavoriteStore;
   const { activeTab } = ComponentPostLockerStore;
-  const { loginCheck } = UtilStore;
-  const { doLoading } = UtilLoadingStore;
+  const { loadingProcess } = UtilLoadingStore;
 
-  doLoading();
-
-  useEffect(() => {
-    if (loginCheck()) {
-      getPostMine();
-      getDataReplyMine();
-      getFavorite();
-    }
+  useLayoutEffect(() => {
+    loadingProcess([
+      getPostMine,
+      getDataReplyMine,
+      getFavorite,
+    ]);
   }, [
-    loginCheck, getDataReplyMine, getPostMine, getFavorite, activeTab,
+    loadingProcess, getDataReplyMine, getPostMine, getFavorite, activeTab,
   ]);
 
   return (
@@ -50,4 +43,4 @@ const MainContainer = styled(Container)`
   padding: 14px !important;
 `;
 
-export default observer(PostLocker);
+export default memo(observer(PostLocker));

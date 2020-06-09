@@ -61,10 +61,10 @@ router.get('/', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '즐겨찾기 목록 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '즐겨찾기 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -87,9 +87,9 @@ router.post('/', (req, res) => {
       .then((rows) => {
         if (rows.length >= 1) {
           res.json({
-            SUCCESS: true,
-            CODE: 2,
-            MESSAGE: '😓 이미 즐겨찾기된 게시물입니다.',
+            success: true,
+            code: 2,
+            message: '😓 이미 즐겨찾기된 게시물입니다.',
           });
           throw new Error('이미 즐겨찾기된 게시물입니다.');
         } else {
@@ -104,9 +104,9 @@ router.post('/', (req, res) => {
       })
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 즐겨찾기에 해당 게시물이 추가되었습니다.',
+          success: true,
+          code: 1,
+          message: '😊 즐겨찾기에 해당 게시물이 추가되었습니다.',
         });
       }),
   ).then(() => {
@@ -128,9 +128,9 @@ router.delete('/', (req, res) => {
     )
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 즐겨찾기에서 해당 게시물이 삭제되었습니다.',
+          success: true,
+          code: 1,
+          message: '😊 즐겨찾기에서 해당 게시물이 삭제되었습니다.',
         });
       }),
   ).then(() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Button, Input } from 'reactstrap';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
@@ -57,4 +57,4 @@ const CenterPaddingTd = styled(CenterTd)`
   padding : .8rem !important;
 `;
 
-export default observer(NewCodeRow);
+export default memo(observer(NewCodeRow));

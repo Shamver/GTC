@@ -5,6 +5,8 @@ class MyAccountStore {
 
   @observable nickname = '';
 
+  @observable prevNickname = '';
+
   @observable birth = '';
 
   @observable gender = '';
@@ -41,7 +43,6 @@ class MyAccountStore {
       this.profileYN = 'Y';
     }
     this.disabled = true;
-
     this.timer = setTimeout(() => {
       this.checkValidation();
     }, 300);
@@ -67,6 +68,7 @@ class MyAccountStore {
     if (userData) {
       this.profileYN = userData.profileYN;
       this.nickname = userData.username;
+      this.prevNickname = userData.username;
       this.birth = userData.birth;
       this.gender = userData.gender;
     }

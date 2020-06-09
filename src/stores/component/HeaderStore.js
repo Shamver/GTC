@@ -10,6 +10,11 @@ class HeaderStore {
     login: false,
   };
 
+  @observable showIndex = 0;
+
+  // 0: 공지사항, 1: 광고
+  @observable showMode = 0;
+
   @observable searchOpen = false;
 
   constructor(root) {
@@ -18,9 +23,7 @@ class HeaderStore {
 
   @action openSearch = () => {
     this.searchOpen = !this.searchOpen;
-  }
-
-  @action
+  };
 
   @action onActive = (dropdown) => {
     if (this.dropdown[dropdown]) {
@@ -39,6 +42,27 @@ class HeaderStore {
       }
     }
   };
+
+  @action doCycleAds = () => setInterval(() => {
+    // 5초마다 싸이클로 돌리기
+    const { AdvertisePostListNow } = this.root.EventAdvertiseStore;
+    if (AdvertisePostListNow.length !== 0) {
+      if (this.showIndex < AdvertisePostListNow.length) {
+        this.showMode = 1;
+        this.showingHeader = AdvertisePostListNow[this.showIndex];
+        this.showIndex += 1;
+      } else {
+        this.showIndex = 0;
+        this.showMode = 0;
+      }
+      return true;
+    }
+
+    if (this.showingHeader !== null) {
+      this.showingHeader = null;
+    }
+    return false;
+  }, 5000);
 
   @action dropdownClear = () => {
     this.dropdown = {

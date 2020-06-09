@@ -1,17 +1,15 @@
-import React from 'react';
-import {
-  Col,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { Col } from 'reactstrap';
 import styled from 'styled-components';
-
 import { Link } from 'react-router-dom';
+import * as Proptypes from 'prop-types';
 
-const SearchContentItem = (text, data) => {
+const SearchContentItem = ({ data }) => {
   const {
     id, title, content, writer, date, replyCount, thumbnail,
   } = data;
   return (
-    <Item key={`${text}${id}`} sm={12}>
+    <Item sm={12}>
       <TableRow>
         {!thumbnail ? '' : (
           <TableCell img>
@@ -21,29 +19,31 @@ const SearchContentItem = (text, data) => {
         <TableCell>
           <div>
             <Link to={`/post/${id}`}>
-              <Span link>
-                {title}
-              </Span>
+              <Span link>{title}</Span>
             </Link>
-            <ReplyCountSpan>
-              &nbsp;[{replyCount}]
-            </ReplyCountSpan>
+            <ReplyCountSpan>&nbsp;[{replyCount}]</ReplyCountSpan>
           </div>
           <div>
-            <Span small>
-              {writer}
-            </Span>
-            <Span small>
-              |&nbsp;{date}
-            </Span>
+            <Span small>{writer}</Span>
+            <Span small>|&nbsp;{date}</Span>
           </div>
-          <div>
-            {content}
-          </div>
+          <div>{content}</div>
         </TableCell>
       </TableRow>
     </Item>
   );
+};
+
+SearchContentItem.propTypes = {
+  data: Proptypes.shape({
+    id: Proptypes.number,
+    title: Proptypes.string,
+    content: Proptypes.string,
+    writer: Proptypes.string,
+    date: Proptypes.string,
+    replyCount: Proptypes.number,
+    thumbnail: Proptypes.string,
+  }).isRequired,
 };
 
 const Img = styled.img`
@@ -88,4 +88,4 @@ const Item = styled(Col)`
   }
 `;
 
-export default SearchContentItem;
+export default memo(SearchContentItem);

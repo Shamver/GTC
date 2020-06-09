@@ -28,28 +28,26 @@ class ReportStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
             this.toggleReport();
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
 
   ReportValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     // board
     if (!this.reportData.reason) {
-      toggleAlert('신고 사유를 선택해주세요.');
+      toast.error('신고 사유를 선택해주세요.');
       return false;
     }
     return true;

@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, memo } from 'react';
 import styled from 'styled-components';
 import {
   InputGroup, InputGroupAddon, Button, Input,
-  Container, Row, Col, Badge,
+  Container, Row, Col,
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
 import {
@@ -17,11 +17,12 @@ import useStores from '../../../stores/useStores';
 import HeaderInProfile from './HeaderInProfile';
 import HeaderFavoriteItem from './HeaderFavoriteItem';
 import HeaderLatelyItem from './HeaderLatelyItem';
+import HeaderNoticeView from './HeaderNoticeView';
 
 const Header = () => {
   const {
     ComponentHeaderStore, UserFavoriteStore, UserStore, CookieLatelyStore,
-    BoardSearchStore, UtilStore,
+    BoardSearchStore, UtilStore, EventAdvertiseStore,
   } = useStores();
   const {
     onActive, dropdown, searchOpen, openSearch,
@@ -33,13 +34,15 @@ const Header = () => {
     onChange, searchText, onSubmit, search,
   } = BoardSearchStore;
   const { onSetSidebarOpen } = UtilStore;
+  const { getAdPostListNow } = EventAdvertiseStore;
 
   useEffect(() => {
     if (userData) {
       getFavorite();
     }
+    getAdPostListNow();
     getLately();
-  }, [getFavorite, getLately, userData]);
+  }, [getFavorite, getLately, userData, getAdPostListNow]);
 
   const FavoriteData = favoriteList.length === 0
     ? (<DropdownItem30 disabled>즐겨찾기한 게시물이 없습니다.</DropdownItem30>)
@@ -52,13 +55,13 @@ const Header = () => {
     <HeaderWrapper>
       <HeaderTop>
         <MobileMenu icon={faBars} onClick={() => onSetSidebarOpen(true)} />
-        <BlockLink to="/" searchOpen={searchOpen}>
+        <BlockLink to="/">
           <InH1>
             <Logo src={logo} alt="" />
           </InH1>
         </BlockLink>
         {/* 일반 서치 그룹 */}
-        <InputGroupWrapper searchOpen={searchOpen}>
+        <InputGroupWrapper searchopen={searchOpen ? 1 : 0}>
           <InputGroupA>
             <Input placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} />
             <InputGroupAddon addonType="append">
@@ -69,17 +72,17 @@ const Header = () => {
           </InputGroupA>
         </InputGroupWrapper>
         {/* 모바일 화면에서의 서치 그룹 */}
-        <ResponsiveInputGroupWrapper searchOpen={searchOpen}>
+        <ResponsiveInputGroupWrapper searchopen={searchOpen ? 1 : 0}>
           <InputGroupA>
-            <InputGroupAddon addonType="prepend" searchOpen={searchOpen}>
-              <ResponsiveButton color="danger" onClick={openSearch} searchOpen={searchOpen}>
+            <InputGroupAddon addonType="prepend" searchopen={searchOpen ? 1 : 0}>
+              <ResponsiveButton color="danger" onClick={openSearch} searchopen={searchOpen ? 1 : 0}>
                 { searchOpen ? (<MiddleIcon icon={faArrowRight} />)
                   : (<MiddleIcon icon={faSearch} />)}
               </ResponsiveButton>
             </InputGroupAddon>
-            <ResponsiveInput placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} searchOpen={searchOpen} />
-            <AppendAddOn addonType="append" searchOpen={searchOpen}>
-              <ResponsiveButton color="danger" onClick={search} searchOpen={searchOpen}>
+            <ResponsiveInput placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} searchopen={searchOpen ? 1 : 0} />
+            <AppendAddOn addonType="append" searchopen={searchOpen ? 1 : 0}>
+              <ResponsiveButton color="danger" onClick={search} searchopen={searchOpen ? 1 : 0}>
                 <MiddleIcon icon={faSearch} />
               </ResponsiveButton>
             </AppendAddOn>
@@ -119,17 +122,12 @@ const Header = () => {
                   <LinkNoDeco to="/advertise">
                     <DropdownItem30>포스팅 광고</DropdownItem30>
                   </LinkNoDeco>
-                  <DropdownItem30>포인트샵</DropdownItem30>
+                  <DropdownItem30>포인트샵(구현필요)</DropdownItem30>
                 </DropdownMenu>
               </DropdownIn>
             </ColNoP>
             <ColCenter xs="7">
-              <TextContainer>
-                <Badge color="danger">공지사항</Badge>
-                &nbsp;
-                최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
-                최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
-              </TextContainer>
+              <HeaderNoticeView />
             </ColCenter>
             <ColNoP>
               <SpanRight>
@@ -148,7 +146,7 @@ const MiddleIcon = styled(FontAwesomeIcon)`
 `;
 
 const AppendAddOn = styled(InputGroupAddon)`
-  display : ${(props) => (props.searchOpen ? 'inline-block' : 'none')} !important;
+  display : ${(props) => (props.searchopen ? 'inline-block' : 'none')} !important;
 `;
 
 
@@ -175,17 +173,17 @@ const HeaderTop = styled.div`
 
 const BlockLink = styled(Link)`
   @media (max-width: 600px) {
-    display : ${(props) => (props.searchOpen ? 'none' : 'inline-block')}
+    display : ${(props) => (props.searchopen ? 'none' : 'inline-block')}
   }
 `;
 
 const ResponsiveInput = styled(Input)`
-  display : ${(props) => (props.searchOpen ? 'inline-block' : 'none')} !important;
+  display : ${(props) => (props.searchopen ? 'inline-block' : 'none')} !important;
 `;
 
 const ResponsiveButton = styled(Button)`
   @media (max-width: 600px) {
-    border-radius : ${(props) => (props.searchOpen ? '' : '.25rem !important;')};
+    border-radius : ${(props) => (props.searchopen ? '' : '.25rem !important;')};
   }
 `;
 
@@ -291,22 +289,6 @@ const InnerContainer = styled(Container)`
   border-right: 2px solid #ebeae8;
 `;
 
-const TextContainer = styled(Container)`
-  margin : 0 !important;
-  padding : 5px !important;
-  text-align : center;
-  height : 40px !important;
-  border-left : 1px solid #e6e6e6;
-  border-right : 1px solid #e6e6e6;
-  overflow : hidden;
-  text-overflow : ellipsis;
-  white-space:nowrap;
-  padding : 5px 10px !important;
-  @media (max-width: 1200px) {
-    border : 0;
-  }
-`;
-
 const DropdownIn = styled(Dropdown)`
   display : inline;
   
@@ -340,4 +322,4 @@ const Logo = styled.img`
   width : 130px;
 `;
 
-export default observer(Header);
+export default memo(observer(Header));

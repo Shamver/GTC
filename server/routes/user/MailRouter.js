@@ -47,14 +47,12 @@ const SELECT_USER_FROM_NICKNAME = `
 
 const INSERT_USER_MAIL = `
   INSERT INTO GTC_USER_MAIL (
-    ID
-    , USER_ID
+    USER_ID
     , USER_ID_TARGET
     , MESSAGE
     , CRT_DTTM
   ) VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1, 1) FROM GTC_USER_MAIL) AS TEMP)
-    , :USER_ID
+    :USER_ID
     , :USER_ID_TARGET
     , ':MESSAGE'
     , SYSDATE()
@@ -91,10 +89,10 @@ router.get('/get', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '받은 쪽지 목록 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '받은 쪽지 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -114,10 +112,10 @@ router.get('/sent', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '보낸 쪽지 목록 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '보낸 쪽지 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -156,22 +154,22 @@ router.post('/', (req, res) => {
       })
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 쪽지가 전송되었습니다.',
+          success: true,
+          code: 1,
+          message: '😊 쪽지가 전송되었습니다.',
         });
       }, () => {
         if (code === 2) {
           res.json({
-            SUCCESS: true,
-            CODE: 2,
-            MESSAGE: '😓 본인에게는 쪽지를 보낼 수 없습니다!',
+            success: true,
+            code: 2,
+            message: '😓 본인에게는 쪽지를 보낼 수 없습니다!',
           });
         } else if (code === 3) {
           res.json({
-            SUCCESS: true,
-            CODE: 3,
-            MESSAGE: '😓 존재하지 않는 닉네임입니다',
+            success: true,
+            code: 3,
+            message: '😓 존재하지 않는 닉네임입니다',
           });
         }
       }),
@@ -194,9 +192,9 @@ router.put('/', (req, res) => {
     )
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '쪽지 읽기 완료',
+          success: true,
+          code: 1,
+          message: '쪽지 읽기 완료',
         });
       }),
   ).then(() => {
@@ -220,9 +218,9 @@ router.delete('/', (req, res) => {
     )
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '🚮 쪽지가 삭제되었습니다.',
+          success: true,
+          code: 1,
+          message: '🚮 쪽지가 삭제되었습니다.',
         });
       }),
   ).then(() => {

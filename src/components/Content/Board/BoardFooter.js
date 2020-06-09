@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { observer } from 'mobx-react';
 import {
   Button, InputGroup, InputGroupAddon, InputGroupText, Input,
 } from 'reactstrap';
@@ -8,53 +9,80 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import BoardPagination from './Pagination';
+import useStores from '../../../stores/useStores';
 
-const BoardFooter = ({ path, noPagination, currentPage }) => (
-  <>
-    <AbsolDiv>
-      <AbsoluteLeftLink to={`${path}/post`}>
-        <Button outline color="warning" size="sm">
-          <FontAwesomeIcon icon={faStar} />
-            &nbsp;&nbsp;인기 글
-        </Button>
-      </AbsoluteLeftLink>
-      <AbsoluteRightLink to={`${path}/post`}>
-        <Button color="danger" size="sm">
-          <FontAwesomeIcon icon={faPen} />
-            &nbsp;&nbsp;글 쓰기
-        </Button>
-      </AbsoluteRightLink>
-    </AbsolDiv>
-    <BoardPagination path={path} currentPage={currentPage} noPagination={noPagination} />
-    <InputGroupWrapper>
-      <InputGroupWidth>
-        <InputGroupAddon addonType="prepend">
-          <RightNoRadiusSelect type="select">
-            <option>제목</option>
-            <option>제목 + 내용</option>
-            <option>닉네임</option>
-          </RightNoRadiusSelect>
-        </InputGroupAddon>
-        <Input placeholder="검색어" />
-        <InputGroupAddon addonType="append">
-          <InputGroupButton>
-            <FontAwesomeIcon icon={faSearch} />
-          </InputGroupButton>
-        </InputGroupAddon>
-      </InputGroupWidth>
-    </InputGroupWrapper>
-  </>
-);
+const BoardFooter = ({
+  path, noPagination, currentPage, query,
+}) => {
+  const { BoardPostStore } = useStores();
+  const { toggleBestPostToken } = BoardPostStore;
+  return (
+    <>
+      <AbsolDiv>
+        { toggleBestPostToken
+          ? (
+            <AbsoluteLeftLink to={`/${path}`}>
+              <Button color="warning" size="sm">
+                <FontAwesomeIcon icon={faStar} />
+                &nbsp;&nbsp;인기 글
+              </Button>
+            </AbsoluteLeftLink>
+          )
+          : (
+            <AbsoluteLeftLink to={`/${path}?filter_mode=true`}>
+              <Button outline color="warning" size="sm">
+                <FontAwesomeIcon icon={faStar} />
+                &nbsp;&nbsp;인기 글
+              </Button>
+            </AbsoluteLeftLink>
+          )}
+        <AbsoluteRightLink to={`/${path}/post`}>
+          <Button color="danger" size="sm">
+            <FontAwesomeIcon icon={faPen} />
+              &nbsp;&nbsp;글 쓰기
+          </Button>
+        </AbsoluteRightLink>
+      </AbsolDiv>
+      <BoardPagination
+        path={path}
+        currentPage={currentPage}
+        noPagination={noPagination}
+        query={query}
+      />
+      <InputGroupWrapper>
+        <InputGroupWidth>
+          <InputGroupAddon addonType="prepend">
+            <RightNoRadiusSelect type="select">
+              <option>제목</option>
+              <option>제목 + 내용</option>
+              <option>닉네임</option>
+            </RightNoRadiusSelect>
+          </InputGroupAddon>
+          <Input placeholder="검색어" />
+          <InputGroupAddon addonType="append">
+            <InputGroupButton>
+              <FontAwesomeIcon icon={faSearch} />
+            </InputGroupButton>
+          </InputGroupAddon>
+        </InputGroupWidth>
+      </InputGroupWrapper>
+    </>
+  );
+};
 
 BoardFooter.propTypes = {
   path: Proptypes.string.isRequired,
   noPagination: Proptypes.bool,
   currentPage: Proptypes.string,
+  query: Proptypes.shape({
+    filter_mode: Proptypes.bool,
+  }),
 };
 
 BoardFooter.defaultProps = {
   noPagination: false,
   currentPage: '1',
+  query: '{filter_mode : false}',
 };
 
 const RightNoRadiusSelect = styled(Input)`
@@ -96,4 +124,4 @@ const AbsoluteLeftLink = styled(RightLink)`
   margin : 0px;
 `;
 
-export default BoardFooter;
+export default memo(observer(BoardFooter));

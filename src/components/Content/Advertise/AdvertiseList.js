@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import AdvertiseRow from './AdvertiseRow';
-import { observer } from 'mobx-react';
 
 const AdvertiseList = () => {
   const { EventAdvertiseStore } = useStores();
-  const { AdvertisePostList } = EventAdvertiseStore;
+  const { AdvertisePostListNow } = EventAdvertiseStore;
 
-  return AdvertisePostList.map((data) => (
+  if (AdvertisePostListNow.length === 0) {
+    return (
+      <tr>
+        <td colSpan="2">현재 광고중인 게시글이 없습니다.</td>
+      </tr>
+    );
+  }
+
+  return AdvertisePostListNow.map((data) => (
     <AdvertiseRow key={data.id} data={data} />
   ));
 };
 
-export default observer(AdvertiseList);
+export default memo(observer(AdvertiseList));

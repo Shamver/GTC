@@ -33,6 +33,8 @@ class BoardStore {
     name: '질문 & 답변',
   }];
 
+  @observable tempData = [];
+
   @observable currentBoard = '';
 
   constructor(root) {
@@ -41,21 +43,22 @@ class BoardStore {
 
   @action setCurrentBoard = (currentBoard) => {
     this.currentBoard = currentBoard;
+    this.root.BoardPostStore.toggleBestPostToken = false;
   };
 
   @action setCurrentBoardToId = (id) => {
     axios.get('/api/board', { params: { id } })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.currentBoard = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.currentBoard = data.result;
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action getBoardName = (path) => this.boardKinds[path];

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import * as PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -7,9 +7,17 @@ const AdvertiseRow = ({ data }) => (
   <tr>
     <BoldTd>{data.name}</BoldTd>
     <td>
-      <Link to={data.url}>
-        {data.message}
-      </Link>
+      {data.url ? (
+        <Link to={data.url}>
+          <Span>
+            (링크) {data.message}
+          </Span>
+        </Link>
+      ) : (
+        <span>
+          {data.message}
+        </span>
+      )}
     </td>
   </tr>
 );
@@ -22,8 +30,12 @@ AdvertiseRow.propTypes = {
   }).isRequired,
 };
 
+const Span = styled.span`
+  color: black;
+`;
+
 const BoldTd = styled.td`
   font-weight : bold;
 `;
 
-export default AdvertiseRow;
+export default memo(AdvertiseRow);

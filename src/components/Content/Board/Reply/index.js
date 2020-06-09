@@ -14,19 +14,23 @@ import useStores from '../../../../stores/useStores';
 import ReplyModify from './ReplyModify';
 import ReplyEdit from './ReplyEdit';
 
-const Reply = ({ data, index }) => {
+const Reply = ({ data, index, bpId }) => {
   const {
     UserStore, BoardReplyStore, BoardReportStore, ComponentReplyStore,
-    UtilAlertStore, UserIgnoreStore,
+    UtilAlertStore, UserIgnoreStore, UtilRouteStore,
   } = useStores();
   const {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
   } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
-  const { userData } = UserStore;
+  const { userData, getProfile } = UserStore;
   const { dropdown, onActive } = ComponentReplyStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { addIgnore } = UserIgnoreStore;
+  const { history } = UtilRouteStore;
+
+  const hash = history.location.hash ? history.location.hash.split('#')[1] : null;
+  const { id } = data;
 
   const ReplyContentText = !data.secretFl || (data.secretFl && data.idPostWriter === data.idWriter)
     ? renderHTML(`${data.content}`)
@@ -45,13 +49,13 @@ const Reply = ({ data, index }) => {
           <WriterDropdown isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
             <WriterDropdownToggle name={`replyIndex${index}`}> {data.writer} </WriterDropdownToggle>
             <WriterDropdownMenu>
-              <WriterDropdownItem>
+              <WriterDropdownItem onClick={() => getProfile(data.idWriter)}>
                 프로필
               </WriterDropdownItem>
               <WriterDropdownItem>
                 작성 글 보기
               </WriterDropdownItem>
-              {userData.id === data.idWriter ? '' : (
+              {!userData || userData.id === data.idWriter ? '' : (
                 <WriterDropdownItem
                   onClick={() => {
                     toggleConfirmAlert('정말 차단하시겠습니까?', () => {
@@ -68,7 +72,7 @@ const Reply = ({ data, index }) => {
           <span className="replyOption">
             { !data.deleteFl ? (
               <>
-                { userData.id === data.idWriter
+                { userData && userData.id === data.idWriter
                   ? (
                     <>
                       <SpanLikeLink onClick={() => modifyMode(data.id)}>수정</SpanLikeLink>
@@ -85,7 +89,7 @@ const Reply = ({ data, index }) => {
                     </>
                   )
                   : null }
-                <SpanLikeLink onClick={() => likeReply(data.id)}>
+                <SpanLikeLink onClick={() => likeReply(data.id, bpId)}>
                   { !data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
                 </SpanLikeLink>
                 &nbsp;·&nbsp;
@@ -102,7 +106,7 @@ const Reply = ({ data, index }) => {
             )}
           </span>
         </ReplyInHeader>
-        <ReplyInContent>
+        <ReplyInContent hash={hash} commentId={id}>
           {/* 수정의 경우의 수 */}
           { data.secretFl
             ? (<><SecretReply><FontAwesomeIcon icon={faLock} /> 비밀 댓글</SecretReply> <br /></>)
@@ -158,6 +162,7 @@ Reply.propTypes = {
     deleteFl: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
+  bpId: Proptypes.number.isRequired,
 };
 
 const WriterDropdown = styled(Dropdown)`
@@ -219,6 +224,7 @@ const ReplyInHeader = styled.div`
 
 const ReplyInContent = styled.div`
   padding: 0.7em;
+  background-color: ${(props) => (props.hash === props.commentId.toString() ? '#fff9e5' : 'default')}};
 `;
 
 const AvatarImg = styled.img`
@@ -242,8 +248,8 @@ const ReplyDepthIcon = styled(FontAwesomeIcon)`
 `;
 
 const SpanLikeLink = styled.span`
-  color: #337ab7;
-  cursor : pointer;
+  color: rgb(51, 122, 183);
+  cursor: pointer;
   &:hover {
     color: #23527c;
   }

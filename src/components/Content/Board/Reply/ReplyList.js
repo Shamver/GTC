@@ -1,24 +1,17 @@
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React from 'react';
 import useStores from '../../../../stores/useStores';
 import Reply from './index';
 
-const ReplyList = ({ bpId }) => {
-  const { BoardReplyStore, ComponentReplyStore, UserIgnoreStore } = useStores();
-  const { getReply, postReplyList } = BoardReplyStore;
+const ReplyList = () => {
+  const { BoardReplyStore, ComponentReplyStore } = useStores();
+  const { postReplyList } = BoardReplyStore;
   const { onSet } = ComponentReplyStore;
-  const { ignoreList } = UserIgnoreStore;
-
-  useEffect(() => {
-    getReply(bpId);
-  }, [getReply, bpId, ignoreList]);
-
 
   return postReplyList.map((data, index) => {
     onSet(`replyIndex${index}`);
-
     return (
-      <Reply id={`reply${data.id}`} key={data.id} data={data} index={index} />
+      <Reply id={`reply${data.id}`} key={data.id} data={data} index={index} bpId={data.bpId} />
     );
   });
 };

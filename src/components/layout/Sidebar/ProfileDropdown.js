@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import avatarImg from '../../../resources/images/avatar.png';
+import avatarImg from '../../../resources/images/anonymous.png';
 import Login from './LoginForm/Login';
 import useStores from '../../../stores/useStores';
 
@@ -47,10 +47,10 @@ const ProfileDropdown = () => {
                 <FontAwesomeIcon icon={faEnvelope} />
               </DropdownToggleC>
               <DropdownMenu>
-                <DropdownItem30>채팅</DropdownItem30>
                 <LinkNoDeco to="/mail">
                   <DropdownItem30>쪽지</DropdownItem30>
                 </LinkNoDeco>
+                <DropdownItem30>채팅(구현필요)</DropdownItem30>
               </DropdownMenu>
             </DropdownIn>
             <DropdownInRight isOpen={avatar} toggle={(e) => onActive('avatar', e)}>

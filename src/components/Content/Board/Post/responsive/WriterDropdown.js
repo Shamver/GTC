@@ -12,21 +12,21 @@ const WriterDropdown = ({ data, index }) => {
   } = useStores();
   const { dropdown, onActive } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
-  const { userData } = UserStore;
+  const { userData, getProfile } = UserStore;
   const { addIgnore } = UserIgnoreStore;
   const { writerName, writerId } = data;
 
   return (
     <WriterDropdownIn isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
-      <WriterDropdownToggle name={`replyIndex${index}`}> {writerName} </WriterDropdownToggle>
+      <WriterDropdownToggle name={`replyIndex${index}`}>{writerName}</WriterDropdownToggle>
       <WriterDropdownMenu>
-        <WriterDropdownItem>
+        <WriterDropdownItem onClick={() => getProfile(writerId)}>
           프로필
         </WriterDropdownItem>
         <WriterDropdownItem>
           작성 글 보기
         </WriterDropdownItem>
-        {userData.id === writerId ? '' : (
+        {!userData || userData.id === writerId ? '' : (
           <WriterDropdownItem
             onClick={() => {
               toggleConfirmAlert('정말 차단하시겠습니까?', () => {
@@ -51,7 +51,8 @@ WriterDropdown.propTypes = {
 };
 
 const WriterDropdownIn = styled(Dropdown)`
-  display : inline;
+  display : inline-block;
+  line-height : normal;
   
   & .dropdown-item:active {
     color: #fff !important;
@@ -79,10 +80,13 @@ const WriterDropdownMenu = styled(DropdownMenu)`
 `;
 
 const WriterDropdownToggle = styled(DropdownToggle)`
+  padding : 0px !important;
+  display : block !important;
+  line-height : normal !important;
   color : #DC3545 !important;
   font-weight : bold;
-  font-size : 0.8rem !important;
-  padding: 0 6px !important;
+  font-size : 14px !important;
+  margin : auto;
   background-color: transparent !important;
   border : 0 !important;
   height : 100%;

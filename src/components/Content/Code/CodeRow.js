@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Button, Input } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTimesCircle, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -103,9 +103,9 @@ CodeRow.propTypes = {
     code: Proptypes.string,
     codeGroup: Proptypes.string,
     codeName: Proptypes.string,
-    codeOrder: Proptypes.number,
+    codeOrder: Proptypes.string,
     codeDesc: Proptypes.string,
-    useYN: Proptypes.string,
+    useYN: Proptypes.number,
   }).isRequired,
 };
 
@@ -121,4 +121,4 @@ const CenterPaddingTd = styled(CenterTd)`
   padding : .4rem !important;
 `;
 
-export default observer(CodeRow);
+export default memo(observer(CodeRow));

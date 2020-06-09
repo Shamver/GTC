@@ -1,36 +1,20 @@
-import React from 'react';
-import {
-  TabContent,
-} from 'reactstrap';
-import styled from 'styled-components';
+import React, { memo } from 'react';
+import { TabContent } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
-
 import SettingIgnore from './SettingIgnore';
 import SettingWithdrawal from './SettingWithdrawal';
 
-import Loading from '../../util/Loading';
-
 const SettingTabContent = () => {
-  const { ComponentSettingStore, UtilLoadingStore } = useStores();
-  const { loading } = UtilLoadingStore;
+  const { ComponentSettingStore } = useStores();
   const { activeTab } = ComponentSettingStore;
 
   return (
-    <>
-      <Loading loading={loading} />
-      <Div loading={loading}>
-        <TabContent activeTab={activeTab}>
-          <SettingIgnore />
-          <SettingWithdrawal />
-        </TabContent>
-      </Div>
-    </>
+    <TabContent activeTab={activeTab}>
+      <SettingIgnore />
+      <SettingWithdrawal />
+    </TabContent>
   );
 };
 
-const Div = styled.div`
-  display: ${(props) => (props.loading ? 'none' : 'block')}
-`;
-
-export default observer(SettingTabContent);
+export default memo(observer(SettingTabContent));

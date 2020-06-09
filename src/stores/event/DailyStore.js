@@ -13,48 +13,50 @@ class DailyStore {
     this.root = root;
   }
 
-  @action getDailyList = (() => {
-    axios.get('/api/event/daily')
+  @action getDailyList = async () => {
+    await axios.get('/api/event/daily')
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.dailyList = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.dailyList = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
-  });
+  };
 
-  @action getDailyLast = (() => {
+  @action getDailyLast = async () => {
     const { userData } = this.root.UserStore;
-    axios.get('/api/event/daily/last', {
+    await axios.get('/api/event/daily/last', {
       params: {
         userId: userData.id,
       },
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             this.dailyLast = {
-              ...data.DATA[0],
+              ...data.result[0],
             };
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
-  });
+      .catch((response) => toast.error(response.message));
+
+    return true;
+  };
 
   @action addDaily = (() => {
     const { userData } = this.root.UserStore;
@@ -68,21 +70,21 @@ class DailyStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.getDailyLast();
-              this.getDailyList();
+          if (data.success) {
+            if (data.code === 1) {
+              this.getDailyLast().then();
+              this.getDailyList().then();
               this.message = '';
-              toast.success(data.MESSAGE);
+              toast.success(data.message);
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
         .catch((response) => {
-          console.log(response);
+          toast.error(response.message);
         });
     }
   });

@@ -1,30 +1,36 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
+import qs from 'query-string';
 import { observer } from 'mobx-react';
-
 import BoardHeader from './BoardHeader';
 import BoardContent from './BoardContent';
 import BoardFooter from './BoardFooter';
 
 import useStores from '../../../stores/useStores';
 
-const Board = ({ path, currentPage, noPagination }) => {
-  const { UtilLoadingStore, BoardPostStore } = useStores();
-  const { doLoading } = UtilLoadingStore;
-  const { setCurrentPostId } = BoardPostStore;
+const Board = ({
+  path, currentPage, noPagination, location, match
+}) => {
+  const { BoardPostStore } = useStores();
+  const { setClearPostView } = BoardPostStore;
+  const query = qs.parse(location.search);
 
   useEffect(() => {
-    setCurrentPostId(0);
-  }, [setCurrentPostId]);
+    setClearPostView();
+  }, [setClearPostView]);
 
-  doLoading();
   return (
     <BoardWrapper>
       <TableWrapper>
         <BoardHeader path={path} />
-        <BoardContent path={path} currentPage={currentPage} />
-        <BoardFooter path={path} currentPage={currentPage} noPagination={noPagination} />
+        <BoardContent path={path} currentPage={currentPage} query={query} />
+        <BoardFooter
+          path={path}
+          currentPage={currentPage}
+          noPagination={noPagination}
+          query={query}
+        />
       </TableWrapper>
     </BoardWrapper>
   );
@@ -34,11 +40,16 @@ Board.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
   noPagination: Proptypes.bool,
+  location: Proptypes.string.isRequired,
+  query: Proptypes.shape({
+    filter_mode: Proptypes.bool,
+  }),
 };
 
 Board.defaultProps = {
   currentPage: '1',
   noPagination: false,
+  query: '{filter_mode : false}',
 };
 
 const BoardWrapper = styled.div`

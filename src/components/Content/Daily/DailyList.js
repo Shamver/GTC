@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Table,
 } from 'reactstrap';
@@ -11,7 +11,10 @@ import useStores from '../../../stores/useStores';
 const DailyList = () => {
   const { EventDailyStore } = useStores();
   const { dailyList } = EventDailyStore;
-  const DailyListData = dailyList.map((v, index) => (DailyListRow('daily', v, index)));
+
+  const DailyListData = dailyList.map(
+    (v, index) => <DailyListRow data={v} index={index} key={v.id} />,
+  );
 
   return (
     <>
@@ -28,12 +31,13 @@ const DailyList = () => {
         </thead>
         <tbody>
           {DailyListData.length === 0 ? (
-            <tr>
+            <tr key={0}>
               <td colSpan={6}>
                 출석체크한 유저가 없습니다.
               </td>
             </tr>
           ) : DailyListData}
+
         </tbody>
       </ListTable>
     </>
@@ -50,4 +54,4 @@ const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
 
-export default observer(DailyList);
+export default memo(observer(DailyList));

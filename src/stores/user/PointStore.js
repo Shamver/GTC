@@ -13,41 +13,37 @@ class PointStore {
     this.root = root;
   }
 
-  @action getPoint = ((currentPage) => {
+  @action getPoint = async (currentPage) => {
     const { userData } = this.root.UserStore;
 
-    if (userData) {
-      axios.get('/api/user/point', {
-        params: {
-          userId: userData.id,
-          currentPage,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.pointList = data.DATA;
-              if (data.DATA.length === 0) {
-                this.currentPointMaxPage = 0;
-              } else {
-                const { pageCount } = data.DATA[0];
-                this.currentPointMaxPage = pageCount;
-              }
+    await axios.get('/api/user/point', {
+      params: {
+        userId: userData.id,
+        currentPage,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.pointList = data.result;
+            if (data.result.length === 0) {
+              this.currentPointMaxPage = 0;
             } else {
-              toast.info(data.MESSAGE);
+              const { pageCount } = data.result[0];
+              this.currentPointMaxPage = pageCount;
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.info(data.message);
           }
-        })
-        .catch((response) => {
-          console.log(response);
-        });
-    } else {
-      this.pointList = [];
-    }
-  });
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        toast.error(response.message);
+      });
+  };
 
   @action getTotalPointData = (() => {
     const { userData } = this.root.UserStore;
@@ -60,19 +56,19 @@ class PointStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.totalPoint = data.DATA;
+          if (data.success) {
+            if (data.code === 1) {
+              this.totalPoint = data.result;
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
             this.totalPoint = 0;
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
         .catch((response) => {
-          console.log(response);
+          toast.error(response.message);
         });
     } else {
       this.totalPoint = 0;

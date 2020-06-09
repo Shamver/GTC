@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
 import { observer } from 'mobx-react';
-
 import useStores from '../../../stores/useStores';
 
 const NewAlertHeader = () => {
@@ -17,7 +16,7 @@ const NewAlertHeader = () => {
         <Hr width={120} />
       </FlexDiv>
       <ReadAll>
-        <ReadAllButton onClick={() => { toggleConfirmAlert('모두 읽음 처리 하시겠습니까?', onReadAlertAll); }}>
+        <ReadAllButton onClick={() => toggleConfirmAlert('모두 읽음 처리 하시겠습니까?', onReadAlertAll)}>
           모두 읽음 처리
         </ReadAllButton>
       </ReadAll>
@@ -64,4 +63,4 @@ const ReadAllButton = styled(Button)`
   }
 `;
 
-export default observer(NewAlertHeader);
+export default memo(observer(NewAlertHeader));

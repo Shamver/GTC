@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { PaginationItem, Pagination } from 'reactstrap';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
@@ -6,7 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
-const PaginationList = observer(({ currentPage, noPagination }) => {
+const PaginationList = ({ currentPage, noPagination }) => {
   const { UserPointStore } = useStores();
   const { currentPointMaxPage } = UserPointStore;
 
@@ -47,7 +47,7 @@ const PaginationList = observer(({ currentPage, noPagination }) => {
 
   // 추후 max 값 조정후 추가
   return array;
-});
+};
 
 PaginationList.propTypes = {
   currentPage: Proptypes.string,
@@ -122,4 +122,4 @@ const PaginationCustom = styled(Pagination)`
   }
 `;
 
-export default PointPagination;
+export default memo(observer(PointPagination));

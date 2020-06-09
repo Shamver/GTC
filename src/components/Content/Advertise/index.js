@@ -1,18 +1,28 @@
-import React from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import WorkOnAdvertise from './WorkOnAdvertise';
 import AdvertiseForm from './AdvertiseForm';
+import useStores from '../../../stores/useStores';
 
-const Advertise = () => (
-  <BoardWrapper>
-    <TableWrapper>
-      <AdvertiseForm />
-      <hr />
-      <h5>현재 진행중인 광고</h5>
-      <WorkOnAdvertise />
-    </TableWrapper>
-  </BoardWrapper>
-);
+const Advertise = () => {
+  const { UtilLoadingStore } = useStores();
+  const { loadingProcess } = UtilLoadingStore;
+
+  useLayoutEffect(() => {
+    loadingProcess([]);
+  }, [loadingProcess]);
+
+  return (
+    <BoardWrapper>
+      <TableWrapper>
+        <AdvertiseForm />
+        <hr />
+        <h5>현재 진행중인 광고</h5>
+        <WorkOnAdvertise />
+      </TableWrapper>
+    </BoardWrapper>
+  );
+};
 
 const BoardWrapper = styled.div`
   border-bottom: 2px solid #ebeae8;
@@ -25,4 +35,4 @@ const TableWrapper = styled.div`
   font-size : 14px !important;
 `;
 
-export default Advertise;
+export default memo(Advertise);

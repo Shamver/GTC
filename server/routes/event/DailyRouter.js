@@ -7,7 +7,8 @@ const Database = require('../../Database');
 
 const SELECT_ATTENDANCE = `
   SELECT 
-    U.NICKNAME AS nickname
+    D.ID AS id
+    , U.NICKNAME AS nickname
     , D.MESSAGE AS message
     , D.POINT AS point
     , D.COMBO AS combo
@@ -46,15 +47,13 @@ const SELECT_ATTENDANCE_TODAY = `
 
 const INSERT_EVENT_DAILY = `
   INSERT INTO GTC_ATTENDANCE (
-    ID
-    , USER_ID
+    USER_ID
     , MESSAGE
     , POINT
     , COMBO
     , CRT_DTTM
   ) VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID)+1, 1) FROM GTC_ATTENDANCE) as temp)
-    , :USER_ID
+    :USER_ID
     , ':MESSAGE'
     , (CASE
        WHEN (SELECT * FROM (SELECT IFNULL(COMBO, 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) % 7 = 0 THEN 40
@@ -88,10 +87,10 @@ router.get('/', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '출석체크 목록 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '출석체크 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -111,10 +110,10 @@ router.get('/last', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '출석체크 마지막 한 날 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '출석체크 마지막 한 날 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -147,15 +146,15 @@ router.post('/', (req, res) => {
       })
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '출석체크가 완료되었습니다!',
+          success: true,
+          code: 1,
+          message: '출석체크가 완료되었습니다!',
         });
       }, () => {
         res.json({
-          SUCCESS: true,
-          CODE: 2,
-          MESSAGE: '😓 오늘은 이미 출석체크를 했습니다.',
+          success: true,
+          code: 2,
+          message: '😓 오늘은 이미 출석체크를 했습니다.',
         });
       }),
   ).then(() => {

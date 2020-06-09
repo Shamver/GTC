@@ -1,30 +1,18 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
-import styled from 'styled-components';
-
-import Loading from '../../util/Loading';
 import NewAlertData from './NewAlertData';
-
 import useStores from '../../../stores/useStores';
 
 const NewAlertContent = () => {
-  const { UserAlertStore, UtilLoadingStore } = useStores();
-  const { onDeleteAlert, onClickAlert, alertList } = UserAlertStore;
-  const { loading } = UtilLoadingStore;
+  const { UserAlertStore } = useStores();
+  const { alertList } = UserAlertStore;
 
-  const Alerts = alertList.map((v) => (NewAlertData(v, onClickAlert, onDeleteAlert)));
+  const Alerts = alertList.map((v) => <NewAlertData data={v} />);
   return (
-    <>
-      <Loading loading={loading} />
-      <Div loading={loading}>
-        {Alerts.length === 0 ? '새로운 알림이 없습니다.' : Alerts}
-      </Div>
-    </>
+    <div>
+      {Alerts.length === 0 ? '새로운 알림이 없습니다.' : Alerts}
+    </div>
   );
 };
 
-const Div = styled.div`
-  display: ${(props) => (props.loading ? 'none' : 'block')}
-`;
-
-export default observer(NewAlertContent);
+export default memo(observer(NewAlertContent));

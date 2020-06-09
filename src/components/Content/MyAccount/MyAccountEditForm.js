@@ -1,55 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { memo } from 'react';
 import {
   FormText, Input, Col, CustomInput,
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
-import avatarImg from '../../../resources/images/avatar.png';
-import anonymous from '../../../resources/images/anonymous.png';
-
+import avatarImg from '../../../resources/images/anonymous.png';
 import useStores from '../../../stores/useStores';
 
 const MyAccountEditForm = () => {
+  const { ComponentMyAccountStore } = useStores();
   const {
-    ComponentMyAccountStore, UtilStore,
-  } = useStores();
-  const {
-    profileYN, onChangeProfile, setDefaultValue, gender, nickname, birth,
+    profileYN, onChangeProfile, gender, nickname, birth,
     onChangeValue, nicknameValidation, birthValidation, genderValidation,
   } = ComponentMyAccountStore;
-  const { loginCheck } = UtilStore;
-
-  useEffect(() => {
-    if (loginCheck()) {
-      setDefaultValue();
-    }
-  }, [setDefaultValue, loginCheck]);
 
   return (
-    <Col>
+    <Col xs="12" sm="6">
       <div>
         <Deform>
           <RegisterForm>
             <h4>수정 가능한 정보</h4>
             <FormTextLeft>
               닉네임&nbsp;&nbsp;
-              <AccentText>{nicknameValidation.status ? '' : `❌${nicknameValidation.message}`}</AccentText>
+              <AccentText>{!nicknameValidation.status && `❌${nicknameValidation.message}`}</AccentText>
             </FormTextLeft>
-            <FormInput
-              type="text"
-              name="nickname"
-              value={nickname}
-              onChange={onChangeValue}
-            />
+            <FormInput type="text" name="nickname" value={nickname} onChange={onChangeValue} />
             <FormTextLeft>
               생년월일&nbsp;&nbsp;
-              <AccentText>{birthValidation.status ? '' : `❌${birthValidation.message}`}</AccentText>
+              <AccentText>{!birthValidation.status && `❌${birthValidation.message}`}</AccentText>
             </FormTextLeft>
             <FormInput type="date" name="birth" value={birth} onChange={onChangeValue} />
             <FormTextLeft>
               성별&nbsp;&nbsp;
-              <AccentText>{genderValidation.status ? '' : `❌${genderValidation.message}`}</AccentText>
+              <AccentText>{!genderValidation.status && `❌${genderValidation.message}`}</AccentText>
             </FormTextLeft>
             <FormSelect type="select" name="gender" value={gender} onChange={onChangeValue}>
               <option value="">성별 선택</option>
@@ -57,7 +40,7 @@ const MyAccountEditForm = () => {
               <option value="F">여자</option>
             </FormSelect>
             <FormSwitch>
-              {profileYN === 'Y' ? (<Avatar src={avatarImg} />) : (<Avatar src={anonymous} />)}
+              {profileYN === 'Y' ? (<Avatar src={avatarImg} />) : (<Avatar src={avatarImg} />)}
               <InputProfile
                 type="switch"
                 id="profileSwitch"
@@ -113,6 +96,8 @@ const FormSelect = styled(Input)`
 
 const FormSwitch = styled.div`
   margin-top: 30px;
+  display: flex;
+  align-items: center;
 `;
 
 const Deform = styled.div`
@@ -142,18 +127,16 @@ const FormTextLeft = styled(FormText)`
 `;
 
 const Avatar = styled.img`
-  position: absolute;
   width : 64px;
   border-radius: 3px;
-  left: 40px;
 `;
 
 const InputProfile = styled(CustomInput)`
-  top: 17px;
+  margin-left: 10px;
 `;
 
 const AccentText = styled.span`
   color : red !important;
 `;
 
-export default observer(MyAccountEditForm);
+export default memo(observer(MyAccountEditForm));

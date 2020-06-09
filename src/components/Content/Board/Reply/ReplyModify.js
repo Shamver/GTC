@@ -17,6 +17,9 @@ const ReplyModify = ({ content }) => {
         editor={ClassicEditor}
         data={content}
         onInit={() => {}}
+        config={{
+          removePlugins: ['Table', 'Link', 'ImageUpload', 'MediaEmbed', 'BlockQuote'],
+        }}
         onChange={(event, editor) => {
           const ReplyContent = editor.getData();
           onChangeValue(ReplyContent);

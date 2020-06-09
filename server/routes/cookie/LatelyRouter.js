@@ -30,10 +30,10 @@ router.get('/', (req, res) => {
       )
         .then((rows) => {
           res.json({
-            SUCCESS: true,
-            CODE: 1,
-            MESSAGE: '최근 게시물 리스트 조회',
-            DATA: rows,
+            success: true,
+            code: 1,
+            message: '최근 게시물 리스트 조회',
+            result: rows,
           });
         }),
     ).then(() => {
@@ -41,10 +41,10 @@ router.get('/', (req, res) => {
     });
   } else {
     res.json({
-      SUCCESS: true,
-      CODE: 2,
-      MESSAGE: '최근 읽은 게시물이 없습니다.',
-      DATA: [],
+      success: true,
+      code: 2,
+      message: '최근 읽은 게시물이 없습니다.',
+      result: [],
     });
   }
 });
@@ -57,9 +57,9 @@ router.delete('/', (req, res) => {
 
   res.cookie('lately', resetCookie, { httpOnly: true });
   res.json({
-    SUCCESS: true,
-    CODE: 1,
-    MESSAGE: '😊 성공적으로 기록이 삭제되었습니다!',
+    success: true,
+    code: 1,
+    message: '😊 성공적으로 기록이 삭제되었습니다!',
   });
 });
 

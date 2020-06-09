@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Input, Button,
 } from 'reactstrap';
@@ -13,16 +13,24 @@ const DailyInput = () => {
   const {
     message, onChangeValue, addDaily, dailyLast,
   } = EventDailyStore;
+  const { combo, isDoneToday, date } = dailyLast;
 
   return (
     <>
-      {!dailyLast.combo ? '' : (
+      {!combo ? '' : (
         <LastDailyDiv>
-          마지막 출첵 : {dailyLast.date}, {dailyLast.combo} Combo
+          마지막 출첵 : {date}, {combo} Combo
         </LastDailyDiv>
       )}
-      <CustomInput type="text" placeholder={dailyLast.isDoneToday === 'Y' ? '오늘 출석체크를 완료하셨습니다.' : '여기에 한마디를 입력해주세요.'} maxLength={20} value={message} onChange={onChangeValue} disabled={dailyLast.isDoneToday === 'Y'} />
-      <Button type="button" color="primary" onClick={addDaily} disabled={dailyLast.isDoneToday === 'Y'}>
+      <CustomInput
+        type="text"
+        placeholder={isDoneToday === 'Y' ? '오늘 출석체크를 완료하셨습니다.' : '여기에 한마디를 입력해주세요.'}
+        maxLength={20}
+        value={message}
+        onChange={onChangeValue}
+        disabled={isDoneToday === 'Y'}
+      />
+      <Button type="button" color="primary" onClick={addDaily} disabled={isDoneToday === 'Y'}>
         <FontAwesomeIcon icon={faPencilAlt} /> 출석체크 하기
       </Button>
     </>
@@ -43,4 +51,4 @@ const CustomInput = styled(Input)`
   margin-bottom: 1rem;
 `;
 
-export default observer(DailyInput);
+export default memo(observer(DailyInput));

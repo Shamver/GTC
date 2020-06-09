@@ -13,8 +13,32 @@ const point = require('../../middleware/point');
 // 추후 코드 테이블 조인 수정 예정
 const SELECT_POST_LIST = `
   SELECT 
-    @ROWNUM := @ROWNUM+1 as rn
+    @ROWNUM := @ROWNUM+1 AS rn
     , P.ID AS id
+    , P.TITLE AS title
+    , P.USER_ID AS writerId
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
+    , IF(CATEGORY_CD = 'FREE','자유','그외') AS categoryName
+    , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
+    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
+    , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) AS commentCount
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD') AS pageCount
+    , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
+  FROM 
+    GTC_POST P
+    , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
+  WHERE 
+    BOARD_CD = ':BOARD_CD' 
+    AND P.USER_ID NOT IN
+      (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+    AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+  ORDER BY ID DESC    
+  LIMIT :CURRENT_PAGE, :PER_PAGE
+`;
+
+const SELECT_POST_NOTICE_LIST = `
+  SELECT 
+    P.ID AS id
     , P.TITLE AS title
     , P.USER_ID AS writerId
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
@@ -22,21 +46,46 @@ const SELECT_POST_LIST = `
     , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
-    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD') AS pageCount
+  FROM 
+    GTC_POST P
+  WHERE 
+    BOARD_CD = ':BOARD_CD' 
+    AND P.NOTICE_FL = 1
+  ORDER BY ID DESC
+`;
+
+const SELECT_POST_LIST_ALL = `
+  SELECT 
+    @ROWNUM := @ROWNUM+1 as rn
+    , P.ID AS id
+    , P.TITLE AS title
+    , P.USER_ID AS writerId
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
+    , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
+    , CASE WHEN BOARD_CD = 'FREE' THEN '자유 게시판'
+        WHEN BOARD_CD = 'TRADE' THEN '아이템 거래'
+        WHEN BOARD_CD = 'CASH' THEN '월드락 거래'
+        WHEN BOARD_CD = 'QNA' THEN '질문 & 답변'
+       ELSE '그 외'
+    END AS boardName
+    , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
+    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
+    , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD NOT IN ('qna','faq','consult','crime')) AS pageCount
   FROM 
     GTC_POST P
     , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
   WHERE 
-    BOARD_CD = ':BOARD_CD' 
-    AND P.USER_ID != IFNULL((SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
+    BOARD_CD NOT IN ('qna','faq','consult','crime') 
+    AND P.USER_ID NOT IN 
+      (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
 
 const INSERT_POST = `
   INSERT INTO GTC_POST (
-    ID
-    , BOARD_CD
+    BOARD_CD
     , CATEGORY_CD
     , TITLE
     , USER_ID
@@ -47,24 +96,17 @@ const INSERT_POST = `
     , COMMENT_ALLOW_FL
     , CRT_DTTM
   ) VALUES (
-    (SELECT * FROM (SELECT IFNULL(MAX(ID) + 1, 1) FROM GTC_POST) AS TEMP)
-    , ':BOARD_CD'
+    ':BOARD_CD'
     , ':CATEGORY_CD'
     , ':TITLE'
     , :USER_ID
     , ':CONTENT'
-    , 0
+    , :NOTICE_FL
     , :SECRET_FL
     , :SECRET_COMMENT_ALLOW_FL
     , :COMMENT_ALLOW_FL
     , SYSDATE()
   )
-`;
-
-const SELECT_POST_MAX_ID = `
-  SELECT
-    IFNULL(MAX(ID), 1) AS id 
-  FROM GTC_POST
 `;
 
 const SELECT_POST_RECOMMEND_DUPLICATE_CHECK = `
@@ -189,27 +231,41 @@ const DELETE_POST = `
   WHERE ID = :POST_ID 
 `;
 
+const SELECT_POST_WRITER = `
+  SELECT 
+    IF(P.USER_ID = :USER_ID, 1, 0) AS isMyPost
+  FROM GTC_POST P 
+  WHERE ID = :POST_ID
+`;
+
+const SELECT_LAST_INDEX = `
+  SELECT LAST_INSERT_ID() as id
+`;
+
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
-  const { board, userId, isHome } = req.query;
+  const { board, isHome, recommend } = req.query;
+  let { userId } = req.query;
   currentPage = currentPage || 1;
+  if (!userId) userId = null;
 
   Database.execute(
     (database) => database.query(
-      SELECT_POST_LIST,
+      board !== 'all' ? SELECT_POST_LIST : SELECT_POST_LIST_ALL,
       {
         BOARD_CD: board.toUpperCase(),
         CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
         PER_PAGE: isHome ? 9 : 25,
+        LIKES: recommend === undefined ? 0 : 1,
       },
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '게시글 목록 조회',
-          rows,
+          success: true,
+          code: 1,
+          message: '게시글 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -217,8 +273,34 @@ router.get('/', (req, res) => {
   });
 });
 
-router.use('/', authMiddleware);
-router.post('/', (req, res) => {
+router.get('/notice', (req, res) => {
+  const { board } = req.query;
+  let { userId } = req.query;
+
+  if (!userId) userId = null;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_POST_NOTICE_LIST,
+      {
+        BOARD_CD: board.toUpperCase(),
+        USER_ID: userId,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '공지 게시글 목록 조회',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/board/post/notice] 공지 게시글 목록 조회');
+  });
+});
+
+router.post('/', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
@@ -233,10 +315,11 @@ router.post('/', (req, res) => {
         SECRET_FL: data.secret,
         SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
         COMMENT_ALLOW_FL: data.replyAllow,
+        NOTICE_FL: data.notice,
       },
     )
       .then(() => database.query(
-        SELECT_POST_MAX_ID,
+        SELECT_LAST_INDEX,
         {},
       ))
       .then((rows) => {
@@ -247,9 +330,9 @@ router.post('/', (req, res) => {
 
         point('addPost', 'POST', postData);
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 게시글이 등록되었어요!',
+          success: true,
+          code: 1,
+          message: '😊 게시글이 등록되었어요!',
         });
       }),
   ).then(() => {
@@ -257,43 +340,57 @@ router.post('/', (req, res) => {
   });
 });
 
-router.put('/', (req, res) => {
+router.put('/', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
     (database) => database.query(
-      UPDATE_POST,
+      SELECT_POST_WRITER,
       {
         POST_ID: data.id,
-        BOARD_CD: data.board,
-        CATEGORY_CD: data.category,
-        TITLE: data.title,
-        USER_ID: data.writer,
-        CONTENT: data.content,
-        SECRET_FL: data.secret,
-        SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
-        COMMENT_ALLOW_FL: data.replyAllow,
+        USER_ID: data.userId,
       },
     )
-      .then(() => database.query(
-        SELECT_POST_MAX_ID,
-        {},
-      ))
       .then((rows) => {
-        const postData = {
-          ...data,
-          bpId: rows[0].id,
-        };
-
-        point('addPost', 'POST', postData);
-        res.send(true);
+        if (!rows[0].isMyPost) {
+          // 본인 게시물이 아닐 경우 리젝
+          return Promise.reject();
+        }
+        return database.query(
+          UPDATE_POST,
+          {
+            POST_ID: data.id,
+            BOARD_CD: data.board,
+            CATEGORY_CD: data.category,
+            TITLE: data.title,
+            USER_ID: data.writer,
+            CONTENT: data.content,
+            SECRET_FL: data.secret,
+            SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
+            COMMENT_ALLOW_FL: data.replyAllow,
+          },
+        );
+      })
+      .then(() => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '😊 포스팅이 수정되었어요!',
+        });
+      })
+      .catch(() => {
+        res.json({
+          success: false,
+          code: 1,
+          message: '😳 본인의 게시물이 아닙니다.',
+        });
       }),
   ).then(() => {
     info('[SELECT, GET /api/board/post] 게시글 수정');
   });
 });
 
-router.delete('/', (req, res) => {
+router.delete('/', authMiddleware, (req, res) => {
   const data = req.query;
 
   Database.execute(
@@ -308,7 +405,11 @@ router.delete('/', (req, res) => {
           bpId: data.id,
           writer: data.writer,
         });
-        res.send(true);
+        res.json({
+          success: true,
+          code: 1,
+          message: '😊 포스팅이 삭제되었어요!',
+        });
       }),
   ).then(() => {
     info('[DELETE, DELETE /api/board/post] 게시글 삭제');
@@ -316,7 +417,7 @@ router.delete('/', (req, res) => {
 });
 
 // 게시글 추천
-router.post('/recommend', (req, res) => {
+router.post('/recommend', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
@@ -343,15 +444,15 @@ router.post('/recommend', (req, res) => {
       })
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😳 포스팅 투표 완료!',
+          success: true,
+          code: 1,
+          message: '😳 포스팅 투표 완료!',
         });
       }, () => {
         res.json({
-          SUCCESS: true,
-          CODE: 2,
-          MESSAGE: '😳 이미 해당 포스팅에 투표가 완료되었어요!',
+          success: true,
+          code: 2,
+          message: '😳 이미 해당 포스팅에 투표가 완료되었어요!',
         });
       }),
   ).then(() => {
@@ -359,7 +460,7 @@ router.post('/recommend', (req, res) => {
   });
 });
 
-router.get('/mine', (req, res) => {
+router.get('/mine', authMiddleware, (req, res) => {
   const { userId } = req.query;
 
   Database.execute(
@@ -371,10 +472,10 @@ router.get('/mine', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '내가 쓴 게시글 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '내가 쓴 게시글 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -390,7 +491,7 @@ router.get('/:id', (req, res) => {
       SELECT_POST_SINGLE,
       {
         POST_ID: req.params.id,
-        USER_ID: req.query.userId,
+        USER_ID: req.query.userId ? req.query.userId : null,
       },
     )
       .then((rows) => {
@@ -408,10 +509,10 @@ router.get('/:id', (req, res) => {
         res.cookie('lately', list, { httpOnly: true });
 
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '게시글 조회',
-          DATA: postItem,
+          success: true,
+          code: 1,
+          message: '게시글 조회',
+          result: postItem,
         });
       }),
   ).then(() => {
@@ -429,10 +530,10 @@ router.get('/:id/upperLower', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '게시글 위 아래 글 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '게시글 위 아래 글 조회',
+          result: rows,
         });
       }),
   ).then(() => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
@@ -42,4 +42,4 @@ const Content = styled.div`
   font-size : 14px !important;
 `;
 
-export default observer(CustomSidebar);
+export default memo(observer(CustomSidebar));

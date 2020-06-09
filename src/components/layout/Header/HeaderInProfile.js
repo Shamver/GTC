@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import avatarImg from '../../../resources/images/avatar.png';
+import avatarImg from '../../../resources/images/takagi.jpg';
 import KakaoSign from './KakaoSign';
 import useStores from '../../../stores/useStores';
 
@@ -20,9 +20,7 @@ const HeaderInProfile = () => {
   const { onActive, dropdown } = ComponentHeaderStore;
   const { mail, avatar } = dropdown;
   const { alertCount, getAlert } = UserAlertStore;
-  const {
-    totalPoint, getTotalPointData,
-  } = UserPointStore;
+  const { totalPoint, getTotalPointData } = UserPointStore;
 
   useEffect(() => {
     if (userData) {
@@ -47,10 +45,10 @@ const HeaderInProfile = () => {
                 <FontAwesomeIcon icon={faEnvelope} />
               </DropdownToggleC>
               <DropdownMenu>
-                <DropdownItem30>채팅</DropdownItem30>
                 <LinkNoDeco to="/mail">
                   <DropdownItem30>쪽지</DropdownItem30>
                 </LinkNoDeco>
+                <DropdownItem30>채팅(구현필요)</DropdownItem30>
               </DropdownMenu>
             </DropdownIn>
             <DropdownIn isOpen={avatar} toggle={(e) => onActive('avatar', e)}>

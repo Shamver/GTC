@@ -1,32 +1,24 @@
-import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
+import React, { memo } from 'react';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const HomePostList = ({ board }) => {
   const { BoardPostStore } = useStores();
-  const { getHomePostList, homePostList } = BoardPostStore;
-
-  useEffect(() => {
-    // getHomePostList(board);
-  }, [getHomePostList, board]);
+  const { homePostList } = BoardPostStore;
 
   return homePostList[board].map((data) => {
     const { id, title, commentCount } = data;
     return (
       <li key={data.id}>
         <div>
-          <Link to={`/post/${id}`}>
-            {title}
-          </Link>
+          <Link to={`/post/${id}`}>{title}</Link>
         </div>
         &nbsp;&nbsp;
         { commentCount > 0 ? (
-          <ReplyCount>
-            [{commentCount}]
-          </ReplyCount>
+          <ReplyCount>[{commentCount}]</ReplyCount>
         ) : null}
       </li>
     );
@@ -44,4 +36,4 @@ const ReplyCount = styled.div`
   vertical-align : text-bottom;
 `;
 
-export default observer(HomePostList);
+export default memo(observer(HomePostList));

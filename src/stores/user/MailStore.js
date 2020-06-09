@@ -18,61 +18,60 @@ class MailStore {
     this.root = root;
   }
 
-  @action getSentMail = () => {
+  @action getSentMail = async () => {
     const { userData } = this.root.UserStore;
-    axios.get('/api/user/mail/sent', {
+    await axios.get('/api/user/mail/sent', {
       params: {
         userId: userData.id,
       },
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.sentMailList = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.sentMailList = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
-  @action getMail = () => {
+  @action getMail = async () => {
     const { userData } = this.root.UserStore;
-    axios.get('/api/user/mail/get', {
+    await axios.get('/api/user/mail/get', {
       params: {
         userId: userData.id,
       },
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.getMailList = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.getMailList = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action sendMail = () => {
     const { userData } = this.root.UserStore;
-    const { toggleAlert } = this.root.UtilAlertStore;
     const { mailTo, mailText } = this.mailForm;
 
     if (!mailTo.trim() || !mailText) {
-      toggleAlert('공란이 있으므로 실패하였습니다.');
+      toast.error('공란이 있으므로 실패하였습니다.');
       return;
     }
     if (mailText.length > 499) {
-      toggleAlert(`500자 이상은 전송할 수 없습니다. 현재 글자수: ${mailText.length}`);
+      toast.error(`500자 이상은 전송할 수 없습니다. 현재 글자수: ${mailText.length}`);
       return;
     }
 
@@ -85,17 +84,17 @@ class MailStore {
         const { data } = response;
         this.mailForm.mailText = '';
         this.mailForm.mailTo = '';
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action deleteMail = ((id) => {
@@ -111,17 +110,17 @@ class MailStore {
         this.viewMail = {};
         this.getMail();
         this.getSentMail();
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   });
 
   @action onView = ((dat) => {
@@ -136,17 +135,17 @@ class MailStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
+          if (data.success) {
+            if (data.code === 1) {
               // 읽기 성공
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
-        .catch((response) => console.log(response));
+        .catch((response) => toast.error(response.message));
     }
 
     this.viewMail = dat;

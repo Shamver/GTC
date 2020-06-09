@@ -25,24 +25,45 @@ const BoardOptions = () => {
   ));
 };
 
+const BoardCategoryOptions = () => {
+  const { SystemCodeStore } = useStores();
+  const { setCodeList } = SystemCodeStore;
+
+  return setCodeList.map((data) => (
+    <option
+      value={data.NAME}
+      key={data.CODE}
+    >
+      {data.NAME}
+    </option>
+  ));
+};
+
 const Posting = (props) => {
-  const { BoardStore, BoardPostStore, UtilRouteStore } = useStores();
+  const {
+    BoardStore, BoardPostStore, UtilRouteStore, SystemCodeStore,
+  } = useStores();
   const {
     post, setPostBoard, onChangeValue, addPost,
     getModifyPost, modifyPost, setPostClear,
   } = BoardPostStore;
   const { goBack } = UtilRouteStore;
+  const { getCodeComponent } = SystemCodeStore;
   const { match, isModify } = props;
   const { params } = match;
   const { board, id } = params;
 
   useEffect(() => {
     setPostClear();
+    getCodeComponent('BOARD_FREE_CATEGORY', board);
     setPostBoard(board);
     if (isModify) {
-      getModifyPost(id);
+      getModifyPost(id, true);
     }
-  }, [BoardStore, board, setPostBoard, getModifyPost, id, isModify, setPostClear]);
+  }, [
+    BoardStore, board, setPostBoard, getModifyPost, id, isModify,
+    setPostClear, getCodeComponent,
+  ]);
 
   return (
     <PostingWrapper>
@@ -54,9 +75,7 @@ const Posting = (props) => {
         </Col>
         <Col xs="2">
           <SelectInput type="select" name="category" value={post.category} onChange={onChangeValue}>
-            <option value="">선택</option>
-            <option value="FREE">자유</option>
-            <option value="TALK">잡담</option>
+            <BoardCategoryOptions />
           </SelectInput>
         </Col>
         <Col>
@@ -70,11 +89,19 @@ const Posting = (props) => {
           const data = editor.getData();
           onChangeValue(data);
         }}
+        config={
+          {
+            ckfinder: {
+              uploadUrl: '/api/util/file/images',
+            },
+          }
+        }
       />
       <PostingFooter>
         <CustomCheckbox type="checkbox" id="replyAllow" name="commentAllowFl" label="댓글 허용" value={post.commentAllowFl} onChange={onChangeValue} checked={post.commentAllowFl} />
         <CustomCheckbox type="checkbox" id="secret" name="secretFl" label="비밀글" value={post.secretFl} onChange={onChangeValue} checked={post.secretFl} disabled />
         <CustomCheckbox type="checkbox" id="secretReplyAllow" name="secretCommentAllowFl" value={post.secretCommentAllowFl} label="비밀 댓글 허용" onChange={onChangeValue} checked={post.secretCommentAllowFl} />
+        <CustomCheckbox type="checkbox" id="noticeFl" name="noticeFl" value={post.noticeFl} label="공지 여부" onChange={onChangeValue} checked={post.noticeFl} />
       </PostingFooter>
       <PostingFooter>
         <MarginButton onClick={goBack} color="secondary">작성취소</MarginButton>

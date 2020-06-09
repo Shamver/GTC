@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 class ReplyStore {
   @observable reply = {
     text: '',
-    bpId: '',
     secretFl: 0,
   };
 
@@ -26,34 +25,30 @@ class ReplyStore {
     this.root = root;
   }
 
-  @action getDataReplyMine = (() => {
+  @action getDataReplyMine = async () => {
     const { userData } = this.root.UserStore;
 
-    if (userData) {
-      axios.get('/api/board/reply/mine', {
-        params: {
-          userId: userData.id,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.replyMineList = data.DATA;
-            } else {
-              toast.info(data.MESSAGE);
-            }
+    await axios.get('/api/board/reply/mine', {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.replyMineList = data.result;
           } else {
-            toast.error(data.MESSAGE);
+            toast.info(data.message);
           }
-        })
-        .catch((response) => {
-          console.log(response);
-        });
-    } else {
-      this.replyMineList = [];
-    }
-  });
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        toast.error(response.message);
+      });
+  };
 
   @action setReplyEditId = (id) => {
     this.replyEditId = id;
@@ -79,31 +74,30 @@ class ReplyStore {
     axios.post('/api/board/reply', {
       text: this.reply.text,
       writer: this.root.UserStore.userData.id,
-      bpId: this.reply.bpId,
+      bpId: this.root.BoardPostStore.postView.id,
       replyId: this.replyEditId === 0 ? null : this.replyEditId,
       depth: this.replyEditId === 0 ? 1 : 2,
       secretYN: this.reply.secretFl,
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
             this.reply = {
               text: '',
-              bpId: this.reply.bpId,
               secretFl: 0,
             };
-            this.getReply(this.reply.bpId);
+            this.getReply(this.root.BoardPostStore.postView.id);
             this.setReplyEditId(0);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -120,17 +114,17 @@ class ReplyStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            this.postReplyList = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            this.postReplyList = data.result;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action modifyReply = () => {
@@ -141,21 +135,21 @@ class ReplyStore {
       content: this.reply.text,
     }).then((response) => {
       const { data } = response;
-      if (data.SUCCESS) {
-        if (data.CODE === 1) {
-          toast.success(data.MESSAGE);
+      if (data.success) {
+        if (data.code === 1) {
+          toast.success(data.message);
           this.reply.text = '';
           this.getReply(this.reply.bpId);
           this.setReplyEditId(0);
           this.modifyModeId = 0;
         } else {
-          toast.info(data.MESSAGE);
+          toast.info(data.message);
         }
       } else {
-        toast.error(data.MESSAGE);
+        toast.error(data.message);
       }
     })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -171,46 +165,48 @@ class ReplyStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
             this.reply.text = '';
             this.getReply(this.reply.bpId);
             this.setReplyEditId(0);
             this.modifyModeId = 0;
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
           this.getReply(this.reply.bpId);
           this.setReplyEditId(0);
           this.modifyModeId = 0;
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
 
-  @action likeReply = (replyId) => {
+  @action likeReply = (replyId, bpId) => {
+    const { getReply } = this;
     axios.post('/api/board/reply/like', {
       id: replyId,
       uId: this.root.UserStore.userData.id,
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            getReply(bpId);
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action onChangeValue = (event) => {
@@ -246,10 +242,8 @@ class ReplyStore {
   };
 
   replyValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     if (!this.reply.text.trim()) {
-      toggleAlert('댓글 내용을 입력해주세요.');
+      toast.error('댓글 내용을 입력해주세요.');
       return false;
     }
     return true;

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
@@ -6,65 +6,44 @@ import styled from 'styled-components';
 import { Table } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
-import useStores from '../../../stores/useStores';
-import Loading from '../../util/Loading';
 import PostList from './Post/PostList';
-import Post from './Post';
 
-const BoardContent = ({ path, currentPage }) => {
-  const { UtilLoadingStore } = useStores();
-  const { loading, doLoading } = UtilLoadingStore;
-
-  useEffect(() => {
-    doLoading();
-  }, [doLoading]);
-
-  const tempData = {
-    id: 1,
-    title: '공지 채팅창 제재 기준입니다. (2018. 10. 19)',
-    writer: '배진영',
-    type: 'notice',
-    date: '01-28',
-    categoryName: '공지',
-    recommendCount: 0,
-    replyCount: 0,
-  };
-
-  return (
-    <>
-      <Loading loading={loading} />
-      <Div loading={loading}>
-        <HeaderDiv>
-          <NavLink activeClassName="active" to={`/${path}`}>
-            <FontAwesomeIcon icon={faHome} />
-          </NavLink>
-          <NavLink activeClassName="active" to={`/${path}/freedom`}>자유</NavLink>
-          <NavLink activeClassName="active" to={`/${path}/talk`}>잡담</NavLink>
-          <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
-          <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
-        </HeaderDiv>
-        <ManginessTableNoBorder bordered hover size="sm">
-          <tbody>
-            <Post data={tempData} index={-1} />
-          </tbody>
-        </ManginessTableNoBorder>
-        <ManginessTable bordered hover size="sm">
-          <tbody>
-            <PostList path={path} currentPage={currentPage} />
-          </tbody>
-        </ManginessTable>
-      </Div>
-    </>
-  );
-};
+const BoardContent = ({
+  path, currentPage, isFooter, query,
+}) => (
+  <>
+    <Div>
+      <HeaderDiv>
+        <NavLink activeClassName="active" to={`/${path}`}>
+          <FontAwesomeIcon icon={faHome} />
+        </NavLink>
+        <NavLink activeClassName="active" to={`/${path}/freedom`}>자유</NavLink>
+        <NavLink activeClassName="active" to={`/${path}/talk`}>잡담</NavLink>
+        <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
+        <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
+      </HeaderDiv>
+      <ManginessTable bordered hover size="sm">
+        <tbody>
+          { !isFooter ? (<PostList path={path} isNotice />) : '' }
+          <PostList path={path} currentPage={currentPage} query={query} />
+        </tbody>
+      </ManginessTable>
+    </Div>
+  </>
+);
 
 BoardContent.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
+  isFooter: Proptypes.bool.isRequired,
+  query: Proptypes.shape({
+    filter_mode: Proptypes.bool,
+  }),
 };
 
 BoardContent.defaultProps = {
   currentPage: null,
+  query: '{filter_mode : false}',
 };
 
 const Div = styled.div`
@@ -85,14 +64,11 @@ const ManginessTable = styled(Table)`
   }
   
   & tr:hover {
-    background-color : #fafafa !important;
-  }
-`;
-
-
-const ManginessTableNoBorder = styled(ManginessTable)`
-  & tr,td {
-    border-bottom: none !important;
+<<<<<<< HEAD
+    background-color : #fff7d9 !important;
+=======
+    background-color : #fff7d9;
+>>>>>>> feat/notice
   }
 `;
 

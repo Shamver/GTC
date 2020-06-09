@@ -91,6 +91,12 @@ const DELETE_CODE = `
     AND CODE = ':CODE'
 `;
 
+const SELECT_TEMP = `
+  SELECT *
+  FROM GTC_CODE
+  WHERE CODEGROUP_ID = ':TMP'
+`;
+
 
 router.post('/group', (req, res) => {
   const { id, name, desc } = req.body;
@@ -105,7 +111,11 @@ router.post('/group', (req, res) => {
       },
     )
       .then(() => {
-        res.send(true);
+        res.json({
+          success: true,
+          code: 0,
+          message: '😳 코드 그룹 추가 완료!',
+        });
       }),
   ).then(() => {
     info('[INSERT, GET /api/system/code/group] 시스템 코드그룹 추가');
@@ -118,7 +128,12 @@ router.get('/group', (req, res) => {
       SELECT_CODEGROUP,
     )
       .then((rows) => {
-        res.send(rows);
+        res.json({
+          success: true,
+          code: 0,
+          message: '코드 그룹 조회 완료',
+          result: rows,
+        });
       }),
   ).then(() => {
     info('[SELECT, GET /api/system/code/group] 시스템 코드그룹 조회');
@@ -137,7 +152,11 @@ router.put('/group', (req, res) => {
       },
     )
       .then(() => {
-        res.send(true);
+        res.json({
+          success: true,
+          code: 0,
+          message: '😳 코드 그룹 수정 완료!',
+        });
       }),
   ).then(() => {
     info('[UPDATE, PUT /api/system/code/group] 시스템 코드그룹 수정');
@@ -154,7 +173,11 @@ router.delete('/group', (req, res) => {
       },
     )
       .then(() => {
-        res.send(true);
+        res.json({
+          success: true,
+          code: 0,
+          message: '😳 코드 그룹 삭제 완료!',
+        });
       }),
   ).then(() => {
     info('[DELETE, DELETE /api/system/code/group] 시스템 코드그룹 삭제');
@@ -180,7 +203,11 @@ router.post('/', (req, res) => {
       },
     )
       .then(() => {
-        res.send(true);
+        res.json({
+          success: true,
+          code: 0,
+          message: '😳 코드 추가 완료!',
+        });
       }),
   ).then(() => {
     info('[INSERT, POST /api/system/code] 시스템 코드 추가');
@@ -198,7 +225,12 @@ router.get('/', (req, res) => {
       },
     )
       .then((rows) => {
-        res.send(rows);
+        res.json({
+          success: true,
+          code: 0,
+          message: '코드 조회 완료',
+          result: rows,
+        });
       }),
   ).then(() => {
     info('[SELECT, GET /api/system/code] 시스템 코드 조회');
@@ -223,7 +255,11 @@ router.put('/', (req, res) => {
       },
     )
       .then(() => {
-        res.send(true);
+        res.json({
+          success: true,
+          code: 0,
+          message: '😳 코드 수정 완료!',
+        });
       }),
   ).then(() => {
     info('[UPDATE, PUT /api/system/code] 시스템 코드 수정');
@@ -241,10 +277,32 @@ router.delete('/', (req, res) => {
       },
     )
       .then(() => {
-        res.send(true);
+        res.json({
+          success: true,
+          code: 0,
+          message: '😳 코드 삭제 완료!',
+        });
       }),
   ).then(() => {
     info('[DELETE, DELETE /api/system/code] 시스템 코드 삭제');
+  });
+});
+
+router.get('/temp', (req, res) => {
+  const { getCodeGroup, temp } = req.query;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_TEMP,
+      {
+        TMP: getCodeGroup,
+      },
+    )
+      .then((rows) => {
+        res.send(rows);
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/system/code/temp] 시스템 공통 코드 조회');
   });
 });
 

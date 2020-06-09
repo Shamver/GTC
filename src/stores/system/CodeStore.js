@@ -30,6 +30,8 @@ class CodeStore {
     useYN: 1,
   };
 
+  @observable setCodeList = [];
+
   constructor(root) {
     this.root = root;
   }
@@ -41,33 +43,39 @@ class CodeStore {
 
     axios.post('/api/system/code/group', this.codeGroup)
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.codeGroup = {
             id: '',
             name: '',
             desc: '',
           };
-          this.getCodeGroupList();
+          this.getCodeGroupList().then();
           this.setIsAddCodeGroup(false);
-          toast.success('😳 코드 그룹 추가 완료!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
   };
 
-  @action getCodeGroupList = () => {
-    axios.get('/api/system/code/group')
+  @action getCodeGroupList = async () => {
+    await axios.get('/api/system/code/group')
       .then((response) => {
-        if (response.data) {
-          this.codeGroupList = response.data;
+        const { data } = response;
+        if (data.success) {
+          this.codeGroupList = data.result;
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
   };
 
@@ -75,22 +83,24 @@ class CodeStore {
     if (!this.codeGroupValidationCheck()) {
       return false;
     }
-    console.log(this.codeGroup);
     axios.put('/api/system/code/group', this.codeGroup)
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.codeGroup = {
             id: '',
             name: '',
             desc: '',
           };
-          this.getCodeGroupList();
+          this.getCodeGroupList().then();
           this.setIsAddCodeGroup(false);
-          toast.success('😳 코드 그룹 수정 완료!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -103,20 +113,23 @@ class CodeStore {
       },
     })
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.codeGroup = {
             id: '',
             name: '',
             desc: '',
           };
-          this.getCodeGroupList();
+          this.getCodeGroupList().then();
           this.getCodeList('');
           this.setIsAddCodeGroup(false);
-          toast.success('😳 코드 그룹 삭제 완료!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -131,7 +144,8 @@ class CodeStore {
 
     axios.post('/api/system/code/', this.code)
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.code = {
             ...this.code,
             id: '',
@@ -140,14 +154,16 @@ class CodeStore {
             desc: '',
             useYN: 1,
           };
-          this.getCodeGroupList();
+          this.getCodeGroupList().then();
           this.getCodeList(this.code.group);
           this.setIsAddCodeGroup(false);
-          toast.success('😳 코드 추가 완료!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -160,14 +176,17 @@ class CodeStore {
       },
     })
       .then((response) => {
-        if (response.data) {
-          this.codeList = response.data;
+        const { data } = response;
+        if (data.success) {
+          this.codeList = data.result;
           this.code.group = codeGroup;
           this.setIsAddCode(false);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
   };
 
@@ -178,11 +197,12 @@ class CodeStore {
 
     axios.put('/api/system/code', this.code)
       .then((response) => {
-        if (response.data) {
-          this.getCodeGroupList();
+        const { data } = response;
+        if (data.success) {
+          this.getCodeGroupList().then();
           this.getCodeList(this.code.group);
           this.setIsAddCode(false);
-          toast.success('😳 코드 수정 완료!');
+          toast.success(data.message);
           this.code = {
             ...this.code,
             id: '',
@@ -191,10 +211,12 @@ class CodeStore {
             desc: '',
             useYN: 1,
           };
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -208,7 +230,8 @@ class CodeStore {
       },
     })
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.code = {
             ...this.code,
             id: '',
@@ -217,14 +240,16 @@ class CodeStore {
             desc: '',
             useYN: 1,
           };
-          this.getCodeGroupList();
+          this.getCodeGroupList().then();
           this.getCodeList(this.code.group);
           this.setIsAddCodeGroup(false);
-          toast.success('😳 코드 삭제 완료!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
       .catch((response) => {
-        console.log(response);
+        toast.error(response.message);
       });
 
     return true;
@@ -275,15 +300,13 @@ class CodeStore {
   };
 
   @action codeGroupValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     if (!this.codeGroup.id.trim()) {
-      toggleAlert('코드 그룹을 입력하여 주세요.');
+      toast.error('코드 그룹을 입력하여 주세요.');
       return false;
     }
 
     if (!this.codeGroup.name.trim()) {
-      toggleAlert('코드 그룹명을 입력하여 주세요.');
+      toast.error('코드 그룹명을 입력하여 주세요.');
       return false;
     }
 
@@ -292,25 +315,39 @@ class CodeStore {
 
 
   @action codeValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     if (!this.code.id.trim()) {
-      toggleAlert('코드를 입력하여 주세요.');
+      toast.error('코드를 입력하여 주세요.');
       return false;
     }
 
     if (!this.code.name.trim()) {
-      toggleAlert('코드명을 입력하여 주세요.');
+      toast.error('코드명을 입력하여 주세요.');
       return false;
     }
 
     if (!this.code.order.trim() || Number.isNaN(Number(this.code.order.trim()))) {
-      toggleAlert('순서를 입력하지 않았거나 숫자형태가 아닙니다.');
+      toast.error('순서를 입력하지 않았거나 숫자형태가 아닙니다.');
       return false;
     }
 
     return true;
   }
+
+  @action getCodeComponent = (getCodeGroup, temp) => {
+    axios.get('/api/system/code/temp', {
+      params: {
+        getCodeGroup, temp,
+      },
+    })
+      .then((response) => {
+        if (response.data) {
+          this.setCodeList = response.data;
+        }
+      })
+      .catch((response) => {
+        toast.error(response.message);
+      });
+  };
 }
 
 export default CodeStore;

@@ -24,10 +24,10 @@ router.get('/', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 0,
-          MESSAGE: '현재 게시판 조회 성공',
-          DATA: rows[0].currentBoard,
+          success: true,
+          code: 0,
+          message: '현재 게시판 조회 성공',
+          result: rows[0].currentBoard,
         });
       }),
   ).then(() => {

@@ -14,21 +14,51 @@ const SELECT_POST_ADVERTISE_LIST = `
   FROM GTC_POST_ADVERTISE AD
 `;
 
+const SELECT_POST_ADVERTISE_LIST_AFTER_NOW = `
+  SELECT
+      ID AS id
+      , (SELECT NAME FROM GTC_USER WHERE ID = AD.USER_ID) AS name
+      , MESSAGE AS message
+      , URL AS url
+  FROM GTC_POST_ADVERTISE AD
+  WHERE DATE_ADD(CRT_DTTM, INTERVAL HOURS HOUR) > now()
+`;
+
 const INSERT_POST_ADVERTISE = `
   INSERT INTO GTC_POST_ADVERTISE (
-    ID
-    , USER_ID
+    USER_ID
     , URL
     , MESSAGE
     , HOURS
     , CRT_DTTM
   ) VALUES (
-     (SELECT * FROM (SELECT IFNULL(MAX(ID)+1,1) FROM GTC_POST_ADVERTISE) as temp)
-     , :USER_ID
+     :USER_ID
      , ':URL'
      , ':MESSAGE'
      , :HOURS
      , SYSDATE()
+  )
+`;
+
+const SELECT_USER_POINT_SUM = `
+  SELECT SUM(COST) AS point
+  FROM GTC_USER_POINT
+  WHERE USER_ID = :USER_ID;
+`;
+
+const INSERT_POINT = `
+  INSERT INTO GTC_USER_POINT (
+    USER_ID
+    , TARGET_ID
+    , TYPE_CD
+    , COST
+    , CRT_DTTM
+  ) VALUES (
+    :USER_ID
+    , :TARGET_ID
+    , ':TYPE_CD'
+    , :COST
+    , SYSDATE()
   )
 `;
 
@@ -39,19 +69,49 @@ router.post('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_POST_ADVERTISE,
+      SELECT_USER_POINT_SUM,
       {
         USER_ID: userId,
-        MESSAGE: message,
-        URL: url,
-        HOURS: hours,
       },
     )
+      .then((rows) => {
+        // 테스트중 주석
+        if (rows[0].point < hours * 100) {
+          return Promise.reject();
+        }
+        return database.query(
+          INSERT_POST_ADVERTISE,
+          {
+            USER_ID: userId,
+            MESSAGE: message,
+            URL: url,
+            HOURS: hours,
+          },
+        );
+      })
+      .then(() => (
+        database.query(
+          INSERT_POINT,
+          {
+            TYPE_CD: 'ADVERTISE',
+            TARGET_ID: null,
+            COST: hours * 100,
+            USER_ID: userId,
+          },
+        )
+      ))
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 0,
-          MESSAGE: '😊 포스팅이 성공적으로 광고 목록에 삽입되었습니다.',
+          success: true,
+          code: 0,
+          message: '😊 포스팅이 성공적으로 광고 목록에 삽입되었습니다.',
+        });
+      })
+      .catch(() => {
+        res.json({
+          success: false,
+          code: 1,
+          message: '😳 포인트가 부족합니다.',
         });
       }),
   ).then(() => {
@@ -66,14 +126,33 @@ router.get('/', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 0,
-          MESSAGE: '출석체크 목록 조회',
-          rows,
+          success: true,
+          code: 0,
+          message: '광고 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/event/advertise] 현재 광고중인 목록 조회');
+    info('[SELECT, GET /api/event/advertise] 광고중인 목록 조회');
+  });
+});
+
+// 이 라우팅을 애드블락이 막음
+router.get('/now', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_POST_ADVERTISE_LIST_AFTER_NOW,
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 0,
+          message: '현재 광고중인 목록 조회',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/event/advertise/now] 현재 광고중인 목록 조회');
   });
 });
 

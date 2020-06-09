@@ -9,34 +9,30 @@ class IgnoreStore {
     this.root = root;
   }
 
-  @action getIgnore = (() => {
+  @action getIgnore = async () => {
     const { userData } = this.root.UserStore;
 
-    if (userData) {
-      axios.get('/api/user/ignore', {
-        params: {
-          userId: userData.id,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.ignoreList = data.DATA;
-            } else {
-              toast.info(data.MESSAGE);
-            }
+    await axios.get('/api/user/ignore', {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.ignoreList = data.result;
           } else {
-            toast.error(data.MESSAGE);
+            toast.info(data.message);
           }
-        })
-        .catch((response) => {
-          console.log(response);
-        });
-    } else {
-      this.ignoreList = [];
-    }
-  });
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        toast.error(response.message);
+      });
+  };
 
   @action onChangeIgnore = ((e) => {
     const { name } = e.target;
@@ -56,22 +52,21 @@ class IgnoreStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
-            this.getIgnore();
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            this.getIgnore().then();
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => console.log(response));
+      .catch((response) => toast.error(response.message));
   };
 
   @action deleteIgnore = (() => {
-    const { toggleAlert } = this.root.UtilAlertStore;
     const list = this.ignoreList.filter((item) => item.checked === true).map((v) => ({
       f_id: v.f_id,
       t_id: v.t_id,
@@ -85,21 +80,21 @@ class IgnoreStore {
       })
         .then((response) => {
           const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              toast.success(data.MESSAGE);
-              this.getIgnore();
+          if (data.success) {
+            if (data.code === 1) {
+              toast.success(data.message);
+              this.getIgnore().then();
             } else {
-              toast.info(data.MESSAGE);
+              toast.info(data.message);
             }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         })
-        .catch((response) => { console.log(response); });
+        .catch((response) => { toast.error(response.message); });
     } else {
       setTimeout(() => { // 딜레이를 안 주면 텍스트 할당이 안됨.. 대안 찾기.
-        toggleAlert('아무것도 선택되지 않았습니다.');
+        toast.error('아무것도 선택되지 않았습니다.');
       }, 100);
     }
   });

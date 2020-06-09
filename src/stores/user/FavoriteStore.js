@@ -9,35 +9,31 @@ class FavoriteStore {
     this.root = root;
   }
 
-  @action getFavorite = (() => {
+  @action getFavorite = async () => {
     const { userData } = this.root.UserStore;
 
-    if (userData) {
-      axios.get('/api/user/favorite', {
-        params: {
-          userId: userData.id,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.favoriteList = data.DATA;
-            } else {
-              toast.info(data.MESSAGE);
-            }
+    await axios.get('/api/user/favorite', {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.favoriteList = data.result;
           } else {
-            this.favoriteList = [];
-            toast.error(data.MESSAGE);
+            toast.info(data.message);
           }
-        })
-        .catch((response) => {
-          console.log(response);
-        });
-    } else {
-      this.favoriteList = [];
-    }
-  });
+        } else {
+          this.favoriteList = [];
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        toast.error(response.message);
+      });
+  };
 
   @action addFavorite = ((id) => {
     const { userData } = this.root.UserStore;
@@ -49,19 +45,19 @@ class FavoriteStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            getPost(id);
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            getPost(id).then();
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
-          this.getFavorite();
+          this.getFavorite().then();
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   });
 
   @action deleteFavorite = ((id, type = 'post', e = null) => {
@@ -79,22 +75,30 @@ class FavoriteStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             if (type === 'post') {
-              getPost(id);
+              getPost(id).then();
             }
-            this.getFavorite();
-            toast.success(data.MESSAGE);
+            this.getFavorite().then();
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   });
+
+  @action judgeFavorite = (isFavorite, id) => {
+    if (isFavorite) {
+      this.deleteFavorite(id);
+    } else {
+      this.addFavorite(id);
+    }
+  }
 }
 
 export default FavoriteStore;

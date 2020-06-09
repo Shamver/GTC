@@ -12,6 +12,7 @@ class PostStore {
     secretFl: 0,
     commentAllowFl: 1,
     secretCommentAllowFl: 0,
+    noticeFl: 0,
   };
 
   @observable boardPostList = {
@@ -21,6 +22,21 @@ class PostStore {
     notice: [],
     cash: [],
     qna: [],
+    faq: [],
+    consult: [],
+    crime: [],
+    all: [],
+  };
+
+  @observable boardPostNoticeList = {
+    '': [],
+    free: [],
+    trade: [],
+    notice: [],
+    cash: [],
+    qna: [],
+    faq: [],
+    consult: [],
     crime: [],
     all: [],
   };
@@ -36,16 +52,18 @@ class PostStore {
 
   @observable currentBoardMaxPage = 0;
 
-  @observable postView = {};
+  @observable postView = {
+    id: 0,
+  };
 
   @observable postMineList = [];
-
-  @observable currentPostId;
 
   @observable currentPostUpperLower = {
     upper: '',
     lower: '',
   };
+
+  @observable toggleBestPostToken = false;
 
   constructor(root) {
     this.root = root;
@@ -69,22 +87,23 @@ class PostStore {
       secret: this.post.secretFl,
       replyAllow: this.post.commentAllowFl,
       secretReplyAllow: this.post.secretCommentAllowFl,
+      notice: this.post.noticeFl,
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             this.root.UtilRouteStore.history.push('/free');
-            toast.success('😊 포스팅이 등록되었어요!');
+            toast.success(data.message);
             this.setPostClear();
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -93,6 +112,7 @@ class PostStore {
     if (!this.postValidationCheck()) {
       return false;
     }
+    const { userData } = this.root.UserStore;
 
     axios.put('/api/board/post', {
       id: this.post.id,
@@ -104,14 +124,18 @@ class PostStore {
       secret: this.post.secretFl,
       replyAllow: this.post.commentAllowFl,
       secretReplyAllow: this.post.secretCommentAllowFl,
+      userId: userData.id,
     })
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.root.UtilRouteStore.history.push('/free');
-          toast.success('😊 포스팅이 수정되었어요!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
@@ -124,71 +148,136 @@ class PostStore {
       },
     })
       .then((response) => {
-        if (response.data) {
+        const { data } = response;
+        if (data.success) {
           this.root.UtilRouteStore.history.push('/free');
-          toast.success('😊 포스팅이 삭제되었어요!');
+          toast.success(data.message);
+        } else {
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
 
     return true;
   };
 
-  @action getBoardPostList = (board, currentPage) => {
+  @action getBoardPostList = async (board, currentPage, queryString) => {
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
+    const recommend = queryString.filter_mode;
 
-    axios.get('/api/board/post', { params: { board, currentPage, userId } })
+    if (recommend) {
+      this.toggleBestPostToken = true;
+    } else {
+      this.toggleBestPostToken = false;
+    }
+
+    await axios.get('/api/board/post', {
+      params: {
+        board, currentPage, userId, recommend,
+      },
+    })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             this.boardPostList = {
               ...this.boardPostList,
-              [board]: data.rows,
+              [board]: data.result,
             };
-
             // 게시글 가져올때 MAX 카운트 셋
-            if (data.rows.length === 0) {
+            if (data.result.length === 0) {
               this.currentBoardMaxPage = 0;
             } else {
-              const { pageCount } = data.rows[0];
+              const { pageCount } = data.result[0];
               this.currentBoardMaxPage = pageCount;
             }
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
-  @action getHomePostList = (board) => {
+  @action getBoardPostNoticeList = async (board) => {
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
 
-    axios.get('/api/board/post', {
+    await axios.get('/api/board/post/notice', { params: { board, userId } })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.boardPostNoticeList = {
+              ...this.boardPostNoticeList,
+              [board]: data.result,
+            };
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  };
+
+  @action getHomePostList = async (board) => {
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
+
+    await axios.get('/api/board/post', {
       params: {
-        board, userId, currentPage: 1, isHome: true,
+        board,
+        userId,
+        currentPage: 1,
+        isHome: true,
       },
     })
       .then((response) => {
-        if (response.data) {
-          this.homePostList = {
-            ...this.homePostList,
-            [board]: response.data.rows,
-          };
+        const { data } = response;
+        if (data.success) {
+          this.homePostList[board] = data.result;
+        } else {
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
-  @action getPost = (id) => {
+  @action getPost = async (id) => {
     const { getLately } = this.root.CookieLatelyStore;
     const { userData } = this.root.UserStore;
+    const that = this;
 
+    await axios.get(`/api/board/post/${id}`, {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            const [post] = data.result;
+            that.postView = post;
+            getLately();
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  };
+
+  @action getModifyPost = (id, isModify = false) => {
+    const { userData } = this.root.UserStore;
+    const { history } = this.root.UtilRouteStore;
     axios.get(`/api/board/post/${id}`, {
       params: {
         userId: userData.id,
@@ -196,34 +285,16 @@ class PostStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            const [post] = data.DATA;
-            this.postView = post;
-            getLately();
-          } else {
-            toast.info(data.MESSAGE);
-          }
-        } else {
-          toast.error(data.MESSAGE);
-        }
-      })
-      .catch((response) => { console.log(response); });
-  };
-
-  @action getModifyPost = (id) => {
-    const { userData } = this.root.UserStore;
-    axios.get(`/api/board/post/${id}`, {
-      params: {
-        userId: userData.id,
-      },
-    })
-      .then((response) => {
-        if (response.data) {
+        if (data.success) {
           const {
             board, category, title, content,
-            secretFl, commentAllowFl, secretCommentAllowFl,
-          } = response.data.DATA[0];
+            secretFl, commentAllowFl, secretCommentAllowFl, isMyPost,
+          } = data.result[0];
+
+          if (isModify && !isMyPost) {
+            toast.error('수정권한이 없는 게시물입니다.');
+            history.push('/');
+          }
 
           this.post = {
             ...this.post,
@@ -236,21 +307,24 @@ class PostStore {
             secretCommentAllowFl,
             text: content,
           };
+        } else {
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
-  @action getPostUpperLower = (id) => {
-    axios.get(`/api/board/post/${id}/upperLower`, {})
+  @action getPostUpperLower = async (id) => {
+    const that = this;
+    await axios.get(`/api/board/post/${id}/upperLower`)
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            const array = data.DATA;
+        if (data.success) {
+          if (data.code === 1) {
+            const array = data.result;
 
             // 기존에 있던 데이터를 초기화
-            this.currentPostUpperLower = {
+            that.currentPostUpperLower = {
               upper: '',
               lower: '',
             };
@@ -258,19 +332,19 @@ class PostStore {
             for (let i = 0; i < array.length; i += 1) {
               const { isUpper } = array[i];
               if (isUpper) {
-                this.currentPostUpperLower.upper = array[i];
+                that.currentPostUpperLower.upper = array[i];
               } else {
-                this.currentPostUpperLower.lower = array[i];
+                that.currentPostUpperLower.lower = array[i];
               }
             }
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
   @action recommendPost = (postId, type) => {
@@ -281,44 +355,43 @@ class PostStore {
     })
       .then((response) => {
         const { data } = response;
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
-            toast.success(data.MESSAGE);
+        if (data.success) {
+          if (data.code === 1) {
+            this.getPost(postId).then();
+            toast.success(data.message);
           } else {
-            toast.info(data.MESSAGE);
+            toast.info(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
-      .catch((response) => { console.log(response); });
+      .catch((response) => { toast.error(response.message); });
   };
 
 
   postValidationCheck = () => {
-    const { toggleAlert } = this.root.UtilAlertStore;
-
     // board
     if (!this.post.board) {
-      toggleAlert('게시판을 선택해주세요.');
+      toast.error('게시판을 선택해주세요.');
       return false;
     }
 
     // category
     if (!this.post.category) {
-      toggleAlert('카테고리를 선택해주세요.');
+      toast.error('카테고리를 선택해주세요.');
       return false;
     }
 
     // title
     if (!this.post.title.trim()) {
-      toggleAlert('제목을 입력해주세요.');
+      toast.error('제목을 입력해주세요.');
       return false;
     }
 
     // text
     if (!this.post.text.trim()) {
-      toggleAlert('내용을 입력해주세요.');
+      toast.error('내용을 입력해주세요.');
       return false;
     }
 
@@ -362,34 +435,30 @@ class PostStore {
     this.post.board = board.toUpperCase();
   };
 
-  @action getPostMine = () => {
+  @action getPostMine = async () => {
     const { userData } = this.root.UserStore;
 
-    if (userData) {
-      axios.get('/api/board/post/mine', {
-        params: {
-          userId: userData.id,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.SUCCESS) {
-            if (data.CODE === 1) {
-              this.postMineList = data.DATA;
-            } else {
-              toast.info(data.MESSAGE);
-            }
+    await axios.get('/api/board/post/mine', {
+      params: {
+        userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.postMineList = data.result;
           } else {
-            toast.error(data.MESSAGE);
+            toast.info(data.message);
           }
-        })
-        .catch((response) => {
-          console.log(response);
-        });
-    } else {
-      this.postMineList = [];
-    }
-  };
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        toast.error(response.message);
+      });
+  }
 
   @action setPostClear = () => {
     this.post = {
@@ -401,7 +470,12 @@ class PostStore {
       secretFl: 0,
       commentAllowFl: 1,
       secretCommentAllowFl: 0,
+      noticeFl: 0,
     };
+  }
+
+  @action setClearPostView = () => {
+    this.postView = {};
   }
 }
 

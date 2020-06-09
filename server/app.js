@@ -8,8 +8,14 @@ const { info } = require('./log-config');
 const app = express();
 
 app.use('/', express.static(`${__dirname}/../public`));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+  extended: true,
+  limit: '50mb',
+  parameterLimit: 1000000,
+}));
+app.use(bodyParser.json({
+  limit: '50mb',
+}));
 
 const boardApi = require('./routes/board/BoardRouter.js');
 const authApi = require('./routes/user/AuthRouter.js');
@@ -26,6 +32,7 @@ const cookieLatelyApi = require('./routes/cookie/LatelyRouter');
 const eventDailyApi = require('./routes/event/DailyRouter');
 const eventAdvertiseApi = require('./routes/event/AdvertiseRouter');
 const systemCodeApi = require('./routes/system/CodeRouter');
+const fileApi = require('./routes/util/FileRouter');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -33,6 +40,9 @@ app.set('jwt-secret', jwtConfig.secret);
 
 // auth
 app.use('/api/auth', authApi);
+
+// util
+app.use('/api/util/file', fileApi);
 
 // user
 app.use('/api/user', authMiddleware);
@@ -48,7 +58,6 @@ app.use('/api/user/mail', userMailApi);
 app.use('/api/board/post', boardPostApi);
 
 // reply
-app.use('/api/board/reply', authMiddleware);
 app.use('/api/board/reply', boardReplyApi);
 
 // report
@@ -56,8 +65,6 @@ app.use('/api/board/report', authMiddleware);
 app.use('/api/board/report', boardReportApi);
 
 // board
-// authMiddleware 때문에 하단 위치
-app.use('/api/board', authMiddleware);
 app.use('/api/board', boardApi);
 
 app.use('/api/cookie/lately', cookieLatelyApi);

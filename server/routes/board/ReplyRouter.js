@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const alertMiddleware = require('../../middleware/alert');
+const authMiddleware = require('../../middleware/auth');
 
 const point = require('../../middleware/point');
 const Database = require('../../Database');
@@ -96,8 +97,12 @@ const SELECT_POST_COMMENT = `
     , A.DELETE_FL AS deleteFl
     , IF(A.ID = COMMENT_ID_UPPER, 0, 1) AS tabFl
     , (SELECT COUNT(*) FROM GTC_COMMENT_LIKE WHERE COMMENT_ID = A.ID) AS likeCount
+    , A.POST_ID AS bpId
     FROM GTC_COMMENT A, GTC_POST C
-  WHERE A.POST_ID = :POST_ID AND A.USER_ID != IFNULL(( SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID), -1)
+  WHERE 
+    A.POST_ID = :POST_ID 
+    AND A.USER_ID NOT IN 
+    (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
   AND A.DELETE_FL = 0
   AND C.ID = A.POST_ID
   ORDER BY A.COMMENT_ID_UPPER, A.ID
@@ -145,7 +150,7 @@ const UPDATE_COMMENT = `
   WHERE ID = :COMMENT_ID
 `;
 
-router.post('/', (req, res) => {
+router.post('/', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
@@ -166,7 +171,6 @@ router.post('/', (req, res) => {
         },
       ))
       .then((rows) => {
-        point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
         const { postWriter } = rows[0];
 
         if (postWriter !== data.writer) {
@@ -175,18 +179,19 @@ router.post('/', (req, res) => {
             {},
           );
         }
-        // 포인트 미지급 경우 다음 분기 다르게 하기
+        // 본인 게시물의 댓글일 경우 다음 분기 다르게 하기
         return Promise.reject();
       })
       .then((rows) => {
         const { ID } = rows[0];
+        point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
         return alertMiddleware(database, ID);
       }, () => {})
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 댓글이 정상적으로 등록되었어요!',
+          success: true,
+          code: 1,
+          message: '😊 댓글이 정상적으로 등록되었어요!',
         });
       }),
   ).then(() => {
@@ -202,15 +207,15 @@ router.get('/', (req, res) => {
       SELECT_POST_COMMENT,
       {
         POST_ID: data.bpId,
-        USER_ID: data.userId,
+        USER_ID: data.userId ? data.userId : null,
       },
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '댓글 목록 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '댓글 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -218,7 +223,7 @@ router.get('/', (req, res) => {
   });
 });
 
-router.put('/', (req, res) => {
+router.put('/', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
@@ -231,9 +236,9 @@ router.put('/', (req, res) => {
     )
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 댓글이 수정되었어요!',
+          success: true,
+          code: 1,
+          message: '😊 댓글이 수정되었어요!',
         });
       }),
   ).then(() => {
@@ -241,7 +246,7 @@ router.put('/', (req, res) => {
   });
 });
 
-router.delete('/', (req, res) => {
+router.delete('/', authMiddleware, (req, res) => {
   const data = req.query;
 
   Database.execute(
@@ -266,15 +271,15 @@ router.delete('/', (req, res) => {
       .then(() => {
         point('deleteReply', 'REPLY', data);
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 댓글이 삭제되었어요!',
+          success: true,
+          code: 1,
+          message: '😊 댓글이 삭제되었어요!',
         });
       }, () => {
         res.json({
-          SUCCESS: true,
-          CODE: 2,
-          MESSAGE: '😳 해당 댓글에 답글이 달려있어 삭제하지 못합니다.',
+          success: true,
+          code: 2,
+          message: '😳 해당 댓글에 답글이 달려있어 삭제하지 못합니다.',
         });
       }),
   ).then(() => {
@@ -283,7 +288,7 @@ router.delete('/', (req, res) => {
 });
 
 // 댓글 좋아요
-router.post('/like', (req, res) => {
+router.post('/like', authMiddleware, (req, res) => {
   const data = req.body;
 
   Database.execute(
@@ -309,15 +314,15 @@ router.post('/like', (req, res) => {
       })
       .then(() => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '😊 해당 댓글 좋아요 완료!',
+          success: true,
+          code: 1,
+          message: '😊 해당 댓글 좋아요 완료!',
         });
       }, () => {
         res.json({
-          SUCCESS: true,
-          CODE: 2,
-          MESSAGE: '😳 이미 해당 댓글을 좋아요를 누르셨습니다.',
+          success: true,
+          code: 2,
+          message: '😳 이미 해당 댓글을 좋아요를 누르셨습니다.',
         });
       }),
   ).then(() => {
@@ -326,7 +331,7 @@ router.post('/like', (req, res) => {
 });
 
 // 줄 길어지는거나 도배한거 어떻게 하냐.. 처리해야함.
-router.get('/mine', (req, res) => {
+router.get('/mine', authMiddleware, (req, res) => {
   const { userId } = req.query;
 
   Database.execute(
@@ -338,10 +343,10 @@ router.get('/mine', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '내가 쓴 댓글 목록 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '내가 쓴 댓글 목록 조회',
+          result: rows,
         });
       }),
   ).then(() => {
