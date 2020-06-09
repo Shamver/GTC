@@ -26,7 +26,7 @@ class AlertStore {
             if (data.code === 1) {
               this.alertList = data.result;
               if (data.result.length > 0) {
-                this.alertCount = data.result.filter((v) => v.isRead === 'N').length;
+                this.alertCount = data.result.filter((v) => v.isRead === 0).length;
               }
             } else {
               toast.info(data.message);
