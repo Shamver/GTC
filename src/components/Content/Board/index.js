@@ -10,26 +10,29 @@ import useStores from '../../../stores/useStores';
 const Board = ({
   path, currentPage, noPagination, location,
 }) => {
-  const { BoardPostStore, UtilLoadingStore } = useStores();
+  const { BoardPostStore, UtilLoadingStore, BoardStore } = useStores();
   const { setClearPostView } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
+  const { setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage } = BoardStore;
   const query = qs.parse(location.search);
+
   useLayoutEffect(() => {
     loadingProcess([
+      () => setCurrentBoardPath(path),
+      () => judgeFilterMode(query),
+      () => setCurrentBoardPage(currentPage),
       setClearPostView,
     ]);
-  }, [loadingProcess, setClearPostView]);
+  }, [
+    loadingProcess, setCurrentBoardPath, judgeFilterMode,
+    path, query, setClearPostView, setCurrentBoardPage, currentPage,
+  ]);
   return (
     <BoardWrapper>
       <TableWrapper>
-        <BoardHeader path={path} />
+        <BoardHeader />
         <BoardContent path={path} currentPage={currentPage} query={query} />
-        <BoardFooter
-          path={path}
-          currentPage={currentPage}
-          noPagination={noPagination}
-          query={query}
-        />
+        <BoardFooter noPagination={noPagination} />
       </TableWrapper>
     </BoardWrapper>
   );

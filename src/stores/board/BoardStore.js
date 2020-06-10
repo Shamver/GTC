@@ -39,8 +39,27 @@ class BoardStore {
 
   @observable currentBoardPath = '';
 
+  @observable currentBoardName = '';
+
+  @observable bestFilterMode = false;
+
+  @observable currentBoardPage = 1;
+
   constructor(root) {
     this.root = root;
+  }
+
+  @action setCurrentBoardPage = (currentBoardPage) => {
+    this.currentBoardPage = currentBoardPage;
+  }
+
+  @observable judgeFilterMode = (query) => {
+    this.bestFilterMode = !!(query && query.filter_mode && query.filter_mode === 'true');
+  }
+
+  @action setCurrentBoardPath = (path) => {
+    this.currentBoardPath = path;
+    this.currentBoardName = this.boardKinds[path];
   }
 
   @action setCurrentBoard = (currentBoard) => {

@@ -190,6 +190,7 @@ class PostStore {
               this.currentBoardMaxPage = 0;
             } else {
               const { pageCount } = data.result[0];
+              console.log(pageCount);
               this.currentBoardMaxPage = pageCount;
             }
           } else {
