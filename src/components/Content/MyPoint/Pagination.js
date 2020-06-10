@@ -19,7 +19,9 @@ const PaginationList = ({ currentPage, noPagination }) => {
     array.push(
       <PaginationItem key={0}>
         <CustomLink className="page-link" activeClassName="active" to={`/mypoint/page/${currentPageNum - 1}`}>
-          ‹
+          <SmallSpan>
+            ＜
+          </SmallSpan>
         </CustomLink>
       </PaginationItem>,
     );
@@ -39,7 +41,9 @@ const PaginationList = ({ currentPage, noPagination }) => {
     array.push(
       <PaginationItem key={-1}>
         <CustomLink className="page-link" activeClassName="active" to={`/mypoint/page/${currentPageNum + 1}`}>
-          ›
+          <SmallSpan>
+            ＞
+          </SmallSpan>
         </CustomLink>
       </PaginationItem>,
     );
@@ -84,6 +88,9 @@ PointPagination.defaultProps = {
   currentPage: '1',
 };
 
+const SmallSpan = styled.span`
+  font-size: 0.8rem;
+`;
 
 const CustomLink = styled(NavLink)`
   &.active {
