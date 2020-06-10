@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import { PaginationItem, Pagination } from 'reactstrap';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
@@ -60,12 +60,20 @@ PaginationList.defaultProps = {
 };
 
 
-const PointPagination = ({ noPagination, currentPage }) => (
-  <PaginationCustom>
-    <PaginationList currentPage={currentPage} noPagination={noPagination} />
-  </PaginationCustom>
-);
+const PointPagination = ({ noPagination, currentPage }) => {
+  const { UserPointStore } = useStores();
+  const { currentPointMaxPage } = UserPointStore;
 
+  useEffect(() => {
+
+  }, [currentPointMaxPage]);
+
+  return (
+    <PaginationCustom>
+      <PaginationList currentPage={currentPage} noPagination={noPagination} />
+    </PaginationCustom>
+  );
+};
 PointPagination.propTypes = {
   noPagination: Proptypes.bool,
   currentPage: Proptypes.string,
