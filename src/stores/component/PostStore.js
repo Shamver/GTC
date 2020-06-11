@@ -1,8 +1,7 @@
 import { observable, action } from 'mobx';
 
 class PostStore {
-  @observable dropdown = {
-  };
+  @observable dropdown = {};
 
   @observable postOptionOpen = false;
 

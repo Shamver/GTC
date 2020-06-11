@@ -1,15 +1,16 @@
 import React, { memo } from 'react';
 import { PaginationItem } from 'reactstrap';
 import styled from 'styled-components';
-import * as Proptypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
-const PaginationList = ({ noPagination }) => {
+const PaginationList = () => {
   const { BoardPostStore, BoardStore } = useStores();
   const { currentBoardMaxPage } = BoardPostStore;
-  const { bestFilterMode, currentBoardPath, currentBoardPage } = BoardStore;
+  const {
+    bestFilterMode, currentBoardPath, currentBoardPage, isPagination,
+  } = BoardStore;
 
   const currentPageNum = Number(currentBoardPage);
   const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
@@ -33,7 +34,7 @@ const PaginationList = ({ noPagination }) => {
   // 1부터 maximum 까지
   for (let i = min; i <= max; i += 1) {
     array.push(
-      <PaginationItem active={i === 1 && noPagination} key={i}>
+      <PaginationItem active={i === 1 && !isPagination} key={i}>
         <CustomLink className="page-link" activeClassName="active" to={bestFilterMode ? `${url}${i}${filterUrl}` : `${url}${i}`}>
           {i}
         </CustomLink>
@@ -54,10 +55,6 @@ const PaginationList = ({ noPagination }) => {
 
   // 추후 max 값 조정후 추가
   return array;
-};
-
-PaginationList.propTypes = {
-  noPagination: Proptypes.bool,
 };
 
 const CustomLink = styled(NavLink)`

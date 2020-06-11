@@ -7,11 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import * as Proptypes from 'prop-types';
 import BoardPagination from './Pagination';
 import useStores from '../../../stores/useStores';
 
-const BoardFooter = ({ noPagination }) => {
+const BoardFooter = () => {
   const { BoardStore } = useStores();
   const { currentBoardPath, bestFilterMode, currentBoardPage } = BoardStore;
   const filterQs = '?filter_mode=true';
@@ -27,14 +26,14 @@ const BoardFooter = ({ noPagination }) => {
             &nbsp;&nbsp;인기 글
           </Button>
         </AbsoluteLeftLink>
-        <AbsoluteRightLink to={`${currentBoardPath}/post`}>
+        <AbsoluteRightLink to={`/${currentBoardPath}/post`}>
           <Button color="danger" size="sm">
             <FontAwesomeIcon icon={faPen} />
               &nbsp;&nbsp;글 쓰기
           </Button>
         </AbsoluteRightLink>
       </AbsolDiv>
-      <BoardPagination noPagination={noPagination} />
+      <BoardPagination />
       <InputGroupWrapper>
         <InputGroupWidth>
           <InputGroupAddon addonType="prepend">
@@ -54,14 +53,6 @@ const BoardFooter = ({ noPagination }) => {
       </InputGroupWrapper>
     </>
   );
-};
-
-BoardFooter.propTypes = {
-  noPagination: Proptypes.bool,
-};
-
-BoardFooter.defaultProps = {
-  noPagination: false,
 };
 
 const RightNoRadiusSelect = styled(Input)`

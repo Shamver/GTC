@@ -161,20 +161,16 @@ class PostStore {
     return true;
   };
 
-  @action getBoardPostList = async (board, currentPage, queryString) => {
+  @action getBoardPostList = async (board, currentPage) => {
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
-    const recommend = queryString.filter_mode;
-
-    if (recommend) {
-      this.toggleBestPostToken = true;
-    } else {
-      this.toggleBestPostToken = false;
-    }
 
     await axios.get('/api/board/post', {
       params: {
-        board, currentPage, userId, recommend,
+        board,
+        currentPage,
+        userId,
+        recommend: this.root.BoardStore.bestFilterMode,
       },
     })
       .then((response) => {
@@ -190,7 +186,6 @@ class PostStore {
               this.currentBoardMaxPage = 0;
             } else {
               const { pageCount } = data.result[0];
-              console.log(pageCount);
               this.currentBoardMaxPage = pageCount;
             }
           } else {
@@ -203,7 +198,11 @@ class PostStore {
       .catch((response) => { toast.error(response.message); });
   };
 
-  @action getBoardPostNoticeList = async (board) => {
+  @action getBoardPostNoticeList = async (board, currentPage) => {
+    if (currentPage === 1) {
+      return;
+    }
+
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
 

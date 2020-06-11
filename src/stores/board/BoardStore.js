@@ -35,8 +35,6 @@ class BoardStore {
 
   @observable tempData = [];
 
-  @observable currentBoard = '';
-
   @observable currentBoardPath = '';
 
   @observable currentBoardName = '';
@@ -45,8 +43,14 @@ class BoardStore {
 
   @observable currentBoardPage = 1;
 
+  @observable isPagination = false;
+
   constructor(root) {
     this.root = root;
+  }
+
+  @action setIsPagination = (isPagination) => {
+    this.isPagination = isPagination;
   }
 
   @action setCurrentBoardPage = (currentBoardPage) => {
@@ -61,11 +65,6 @@ class BoardStore {
     this.currentBoardPath = path;
     this.currentBoardName = this.boardKinds[path];
   }
-
-  @action setCurrentBoard = (currentBoard) => {
-    this.currentBoard = currentBoard;
-    this.root.BoardPostStore.toggleBestPostToken = false;
-  };
 
   @action setCurrentBoardToId = (id) => {
     axios.get('/api/board', { params: { id } })

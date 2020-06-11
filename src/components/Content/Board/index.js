@@ -8,31 +8,40 @@ import BoardFooter from './BoardFooter';
 import useStores from '../../../stores/useStores';
 
 const Board = ({
-  path, currentPage, noPagination, location,
+  path, currentPage, isPagination, location,
 }) => {
   const { BoardPostStore, UtilLoadingStore, BoardStore } = useStores();
-  const { setClearPostView } = BoardPostStore;
+  const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
-  const { setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage } = BoardStore;
+  const {
+    setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage,
+    setIsPagination,
+  } = BoardStore;
   const query = qs.parse(location.search);
 
+  // 차단목록?
   useLayoutEffect(() => {
     loadingProcess([
       () => setCurrentBoardPath(path),
       () => judgeFilterMode(query),
       () => setCurrentBoardPage(currentPage),
+      () => setIsPagination(isPagination),
+      () => getBoardPostNoticeList(path, currentPage),
+      () => getBoardPostList(path, currentPage),
       setClearPostView,
     ]);
   }, [
-    loadingProcess, setCurrentBoardPath, judgeFilterMode,
-    path, query, setClearPostView, setCurrentBoardPage, currentPage,
+    loadingProcess, setCurrentBoardPath, path, judgeFilterMode,
+    query, setCurrentBoardPage, currentPage, setIsPagination, isPagination,
+    getBoardPostNoticeList, getBoardPostList, setClearPostView,
   ]);
+
   return (
     <BoardWrapper>
       <TableWrapper>
         <BoardHeader />
         <BoardContent path={path} currentPage={currentPage} query={query} />
-        <BoardFooter noPagination={noPagination} />
+        <BoardFooter />
       </TableWrapper>
     </BoardWrapper>
   );
@@ -41,7 +50,7 @@ const Board = ({
 Board.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
-  noPagination: Proptypes.bool,
+  isPagination: Proptypes.bool,
   location: Proptypes.shape({
     search: Proptypes.string,
   }).isRequired,
@@ -49,7 +58,7 @@ Board.propTypes = {
 
 Board.defaultProps = {
   currentPage: '1',
-  noPagination: false,
+  isPagination: false,
 };
 
 const BoardWrapper = styled.div`

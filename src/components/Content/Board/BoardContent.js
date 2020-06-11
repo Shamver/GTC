@@ -7,40 +7,38 @@ import { Table } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import PostList from './Post/PostList';
+import useStores from '../../../stores/useStores';
 
-const BoardContent = ({
-  path, currentPage, isFooter, query,
-}) => (
-  <>
-    <HeaderDiv>
-      <NavLink activeClassName="active" to={`/${path}`}>
-        <FontAwesomeIcon icon={faHome} />
-      </NavLink>
-      <NavLink activeClassName="active" to={`/${path}/freedom`}>자유</NavLink>
-      <NavLink activeClassName="active" to={`/${path}/talk`}>잡담</NavLink>
-      <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
-      <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
-    </HeaderDiv>
-    <ManginessTable bordered hover size="sm">
-      <tbody>
-        { !isFooter ? (<PostList path={path} isNotice />) : '' }
-        <PostList path={path} currentPage={currentPage} query={query} />
-      </tbody>
-    </ManginessTable>
-  </>
-);
+const BoardContent = ({ isFooter }) => {
+  const { BoardStore } = useStores();
+  const { currentBoardPath } = BoardStore;
+
+  return (
+    <>
+      <HeaderDiv>
+        <NavLink activeClassName="active" to={`/${currentBoardPath}`}>
+          <FontAwesomeIcon icon={faHome} />
+        </NavLink>
+        <NavLink activeClassName="active" to={`/${currentBoardPath}/freedom`}>자유</NavLink>
+        <NavLink activeClassName="active" to={`/${currentBoardPath}/talk`}>잡담</NavLink>
+        <NavLink activeClassName="active" to={`/${currentBoardPath}/toron`}>토론</NavLink>
+        <NavLink activeClassName="active" to={`/${currentBoardPath}/gunhee`}>건의</NavLink>
+      </HeaderDiv>
+      <ManginessTable bordered hover size="sm">
+        <tbody>
+          {!isFooter && (<PostList isNotice />)}
+          <PostList />
+        </tbody>
+      </ManginessTable>
+    </>
+  );
+};
 
 BoardContent.propTypes = {
-  path: Proptypes.string.isRequired,
-  currentPage: Proptypes.string,
   isFooter: Proptypes.bool,
-  query: Proptypes.shape({
-    filter_mode: Proptypes.string,
-  }).isRequired,
 };
 
 BoardContent.defaultProps = {
-  currentPage: null,
   isFooter: false,
 };
 

@@ -1,23 +1,14 @@
-import * as Proptypes from 'prop-types';
 import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Pagination } from 'reactstrap';
 import { observer } from 'mobx-react';
 import PaginationList from './PaginationList';
 
-const BoardPagination = ({ noPagination }) => (
+const BoardPagination = () => (
   <PaginationCustom>
-    <PaginationList noPagination={noPagination} />
+    <PaginationList />
   </PaginationCustom>
 );
-
-BoardPagination.propTypes = {
-  noPagination: Proptypes.bool,
-};
-
-BoardPagination.defaultProps = {
-  noPagination: false,
-};
 
 const PaginationCustom = styled(Pagination)`
   color : #DC3545;
