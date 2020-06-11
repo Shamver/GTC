@@ -334,6 +334,7 @@ class CodeStore {
   }
 
   @action getCodeComponent = (getCodeGroup, temp) => {
+    console.log(getCodeGroup)
     axios.get('/api/system/code/temp', {
       params: {
         getCodeGroup, temp,

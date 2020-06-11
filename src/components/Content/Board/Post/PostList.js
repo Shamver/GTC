@@ -5,20 +5,6 @@ import { toast } from 'react-toastify';
 import useStores from '../../../../stores/useStores';
 import Post from './index';
 
-// const BoardCategoryOptions = () => {
-//   const { SystemCodeStore } = useStores();
-//   const { setCodeList } = SystemCodeStore;
-//
-//   return setCodeList.map((data) => (
-//     <option
-//       value={data.NAME}
-//       key={data.CODE}
-//     >
-//       {data.NAME}
-//     </option>
-//   ));
-// };
-
 const PostList = ({
   path, currentPage, isNotice = false, query,
 }) => {
@@ -37,7 +23,6 @@ const PostList = ({
   const { getCodeComponent } = SystemCodeStore;
 
   useEffect(() => {
-    getCodeComponent('BOARD_FREE_CATEGORY', path);
     setCurrentBoard(path);
     if (isNotice) {
       getBoardPostNoticeList(path);
@@ -46,7 +31,7 @@ const PostList = ({
     }
   }, [
     path, getBoardPostList, setCurrentBoard, currentPage, ignoreList,
-    history, getBoardPostNoticeList, getCodeComponent, isNotice, query,
+    history, getBoardPostNoticeList, isNotice, query,
   ]);
 
   if (!boardPostList[path] || boardPostList[path] === undefined) {

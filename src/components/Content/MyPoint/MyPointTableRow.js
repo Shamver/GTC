@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
-
 const MyPointTableRow = ({ data }) => {
   const {
     type, point, date, postId,
