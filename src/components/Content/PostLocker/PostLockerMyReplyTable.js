@@ -4,7 +4,7 @@ import renderHTML from 'react-render-html';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 
-const PostLockerMyReplyTable = (title, data) => {
+const PostLockerMyReplyTable = ({ data }) => {
   const {
     postId, replyId, postTitle, replyContent, replyDate,
   } = data;
