@@ -12,6 +12,10 @@ module.exports.set = (cookie, id) => {
   if (cookie) {
     const datas = cookie.split('I');
 
+    if (id === undefined) {
+      return cookie || '';
+    }
+
     let returnData = '';
 
     const count = datas.length < 6 ? datas.length + 1 : maxSize;
