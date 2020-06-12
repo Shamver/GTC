@@ -13,7 +13,7 @@ const PostViewHeader = () => {
     board, boardName, categoryName, writerName, title,
   } = postView;
 
-  const link = board ? board.toLowerCase() : '';
+  const link = !!board && board.toLowerCase();
   return (
     <>
       <BoardLink to={`/${link}`}>

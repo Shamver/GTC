@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import { toast } from 'react-toastify';
@@ -34,7 +34,7 @@ const PostList = ({ isNotice }) => {
     return null;
   }
 
-  if (isNotice && currentBoardPage === '1') {
+  if (isNotice && Number(currentBoardPage) === 1) {
     return boardPostNoticeList[currentBoardPath].map((data, index) => {
       onSet(index);
       return (
@@ -72,4 +72,4 @@ PostList.defaultProps = {
   isNotice: false,
 };
 
-export default observer(PostList);
+export default memo(observer(PostList));

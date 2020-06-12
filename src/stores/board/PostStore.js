@@ -170,7 +170,7 @@ class PostStore {
         board,
         currentPage,
         userId,
-        recommend: this.root.BoardStore.bestFilterMode,
+        recommend: this.root.BoardStore.bestFilterMode ? 1 : 0 ,
       },
     })
       .then((response) => {

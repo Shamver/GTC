@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   Dropdown, DropdownToggle, DropdownMenu, DropdownItem,
 } from 'reactstrap';
@@ -26,4 +26,4 @@ const PostOptionDropDown = () => {
   );
 };
 
-export default PostOptionDropDown;
+export default memo(PostOptionDropDown);

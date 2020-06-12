@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
@@ -89,4 +89,4 @@ const CenterTd = styled(MiddleTd)`
   text-align : center;
 `;
 
-export default observer(Post);
+export default memo(observer(Post));

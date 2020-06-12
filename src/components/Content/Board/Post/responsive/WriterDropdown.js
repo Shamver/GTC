@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
@@ -20,20 +20,10 @@ const WriterDropdown = ({ data, index }) => {
     <WriterDropdownIn isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
       <WriterDropdownToggle name={`replyIndex${index}`}>{writerName}</WriterDropdownToggle>
       <WriterDropdownMenu>
-        <WriterDropdownItem onClick={() => getProfile(writerId)}>
-          프로필
-        </WriterDropdownItem>
-        <WriterDropdownItem>
-          작성 글 보기
-        </WriterDropdownItem>
-        {!userData || userData.id === writerId ? '' : (
-          <WriterDropdownItem
-            onClick={() => {
-              toggleConfirmAlert('정말 차단하시겠습니까?', () => {
-                addIgnore(writerId);
-              });
-            }}
-          >
+        <WriterDropdownItem onClick={() => getProfile(writerId)}>프로필</WriterDropdownItem>
+        <WriterDropdownItem>작성 글 보기</WriterDropdownItem>
+        {!(!userData || userData.id === writerId) && (
+          <WriterDropdownItem onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(writerId))}>
             차단하기
           </WriterDropdownItem>
         )}
@@ -96,4 +86,4 @@ const WriterDropdownToggle = styled(DropdownToggle)`
   }
 `;
 
-export default WriterDropdown;
+export default memo(WriterDropdown);

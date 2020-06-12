@@ -40,7 +40,7 @@ const Board = ({
     <BoardWrapper>
       <TableWrapper>
         <BoardHeader />
-        <BoardContent path={path} currentPage={currentPage} query={query} />
+        <BoardContent />
         <BoardFooter />
       </TableWrapper>
     </BoardWrapper>

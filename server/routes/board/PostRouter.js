@@ -79,6 +79,7 @@ const SELECT_POST_LIST_ALL = `
     BOARD_CD NOT IN ('qna','faq','consult','crime') 
     AND P.USER_ID NOT IN 
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+    AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -257,7 +258,7 @@ router.get('/', (req, res) => {
         CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
         PER_PAGE: isHome ? 9 : 25,
-        LIKES: recommend === undefined ? 0 : 1,
+        LIKES: Number(recommend) ? 1 : 0,
       },
     )
       .then((rows) => {

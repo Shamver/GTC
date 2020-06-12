@@ -5,7 +5,7 @@ import Contents from '../../Content';
 import useStores from '../../../stores/useStores';
 
 const Home = lazy(() => import('../../Content/Home'));
-const Posting = lazy(() => import('../../Content/Board/Post/Posting'));
+const Posting = lazy(() => import('../../Content/Board/Posting'));
 
 const SwitchList = () => {
   const { UserStore } = useStores();
