@@ -7,6 +7,7 @@ import {
 import styled from 'styled-components';
 import useStores from '../../stores/useStores';
 
+/*
 const ReportCode = () => {
   const { BoardReportStore, SystemCodeStore } = useStores();
   const { setCodeList } = SystemCodeStore;
@@ -16,20 +17,25 @@ const ReportCode = () => {
     <CustomInput type="radio" id={data.CODE} key={data.CODE} value={data.CODE} onChange={onChangeValue} name="reason" label={data.NAME} />
   ));
 };
+*/
 
 const Report = () => {
   const { BoardReportStore, SystemCodeStore } = useStores();
   const {
     reportToggle, toggleReport, reportData, report, onChangeValue,
   } = BoardReportStore;
-  const { getCodeComponent } = SystemCodeStore;
+  const { getCodeComponent, setCodeList } = SystemCodeStore;
   const {
     content, writer, description, type,
   } = reportData;
 
+  const reportCode = setCodeList.map((data) => (
+    <CustomInput type="radio" id={data.CODE} key={data.CODE} value={data.CODE} onChange={onChangeValue} name="reason" label={data.NAME} />
+  ));
+
   useEffect(() => {
     getCodeComponent('REPORT_CATEGORY', '');
-  }, [getCodeComponent]);
+  }, []);
 
   return (
     <ModalW630 isOpen={reportToggle} toggle={toggleReport}>
@@ -50,15 +56,7 @@ const Report = () => {
         <h5>신고사유 선택</h5>
         <FormGroup>
           <div>
-            <ReportCode />
-            {/*<CustomInput type="radio" id="RR01" value="RR01" onChange={onChangeValue} name="reason" label="욕설/비하" />*/}
-            {/*<CustomInput type="radio" id="RR02" value="RR02" onChange={onChangeValue} name="reason" label="음란성" />*/}
-            {/*<CustomInput type="radio" id="RR03" value="RR03" onChange={onChangeValue} name="reason" label="게시글/댓글 도배" />*/}
-            {/*<CustomInput type="radio" id="RR04" value="RR04" onChange={onChangeValue} name="reason" label="홍보성 콘텐츠" />*/}
-            {/*<CustomInput type="radio" id="RR05" value="RR05" onChange={onChangeValue} name="reason" label="타인의 개인정보 유포" />*/}
-            {/*<CustomInput type="radio" id="RR06" value="RR06" onChange={onChangeValue} name="reason" label="허위사실 유포" />*/}
-            {/*<CustomInput type="radio" id="RR07" value="RR07" onChange={onChangeValue} name="reason" label="명예훼손 관련" />*/}
-            {/*<CustomInput type="radio" id="RR08" value="RR08" onChange={onChangeValue} name="reason" label="기타" />*/}
+            {reportCode}
           </div>
         </FormGroup>
         <Input type="textarea" onChange={onChangeValue} value={description} name="description" placeholder="신고 사유 설명이 필요하신 경우 작성해주세요." />

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import {
   FormText, Input, Col, CustomInput,
 } from 'reactstrap';
@@ -7,12 +7,30 @@ import { observer } from 'mobx-react';
 import avatarImg from '../../../resources/images/anonymous.png';
 import useStores from '../../../stores/useStores';
 
+/* const GenderCode = () => {
+  const { SystemCodeStore } = useStores();
+  const { setCodeList } = SystemCodeStore;
+
+  return setCodeList.map((data) => (
+    <option id value={data.CODE} key={data.CODE}>{data.NAME}</option>
+  ));
+}; */
+
 const MyAccountEditForm = () => {
-  const { ComponentMyAccountStore } = useStores();
+  const { ComponentMyAccountStore, SystemCodeStore } = useStores();
+  const { getCodeComponent, setCodeList } = SystemCodeStore;
   const {
     profileYN, onChangeProfile, gender, nickname, birth,
     onChangeValue, nicknameValidation, birthValidation, genderValidation,
   } = ComponentMyAccountStore;
+
+  const GenderCode = setCodeList.map((data) => (
+    <option value={data.CODE} key={data.CODE}>{data.NAME}</option>
+  ));
+
+  useEffect(() => {
+    getCodeComponent('GENDER_CODE', '');
+  }, []);
 
   return (
     <Col xs="12" sm="6">
@@ -35,9 +53,7 @@ const MyAccountEditForm = () => {
               <AccentText>{!genderValidation.status && `❌${genderValidation.message}`}</AccentText>
             </FormTextLeft>
             <FormSelect type="select" name="gender" value={gender} onChange={onChangeValue}>
-              <option value="">성별 선택</option>
-              <option value="M">남자</option>
-              <option value="F">여자</option>
+              {GenderCode}
             </FormSelect>
             <FormSwitch>
               {profileYN === 'Y' ? (<Avatar src={avatarImg} />) : (<Avatar src={avatarImg} />)}

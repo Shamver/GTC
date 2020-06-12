@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { observer } from 'mobx-react';
 import {
   Modal, ModalHeader, ModalBody, FormText, Input,
@@ -6,13 +6,31 @@ import {
 import styled from 'styled-components';
 import useStores from '../../stores/useStores';
 
+/*const GenderCode = () => {
+  const { SystemCodeStore } = useStores();
+  const { setCodeList } = SystemCodeStore;
+
+  return setCodeList.map((data) => (
+    <option id value={data.CODE} key={data.CODE}>{data.NAME}</option>
+  ));
+};*/
+
 const Sign = () => {
-  const { UtilStore, UserStore } = useStores();
+  const { UtilStore, UserStore, SystemCodeStore } = useStores();
+  const { getCodeComponent, setCodeList } = SystemCodeStore;
   const { signToggle, toggleSign } = UtilStore;
   const { onRegisterChangeValue, registerData, registerCheck } = UserStore;
   const {
     email, nickname, birth, gender,
   } = registerData;
+
+  const GenderCode = setCodeList.map((data) => (
+    <option value={data.CODE} key={data.CODE}>{data.NAME}</option>
+  ));
+
+  useEffect(() => {
+    getCodeComponent('GENDER_CODE', '');
+  }, []);
 
   return (
     <Modal isOpen={signToggle} toggle={toggleSign}>
@@ -47,9 +65,7 @@ const Sign = () => {
                 생년월일을 입력해주세요.
               </FormTextLeft>
               <FormSelect type="select" onChange={onRegisterChangeValue} name="gender" value={gender}>
-                <option value="">성별 선택</option>
-                <option value="male">남자</option>
-                <option value="female">여자</option>
+                {GenderCode}
               </FormSelect>
               <FormInputWithText
                 type="text"
