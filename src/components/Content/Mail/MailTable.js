@@ -55,7 +55,7 @@ MailTable.propTypes = {
 
 const Text = styled.span`
   max-width: 550px;
-  line-height: 21px;
+  line-height: auto;
   display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
