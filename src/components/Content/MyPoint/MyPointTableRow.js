@@ -7,16 +7,16 @@ const MyPointTableRow = ({ data }) => {
   } = data;
 
   let desc;
-
-  if (type === 'POST' && point > 0) {
-    desc = '글 작성';
-  } else if (type === 'POST' && point < 0) {
-    desc = '글 삭제';
-  } else if (type === 'REPLY' && point > 0) {
-    desc = '댓글 작성';
-  } else if (type === 'REPLY' && point < 0) {
-    desc = '댓글 삭제';
-  }
+  //
+  // if (type === 'POST' && point > 0) {
+  //   desc = '글 작성';
+  // } else if (type === 'POST' && point < 0) {
+  //   desc = '글 삭제';
+  // } else if (type === 'REPLY' && point > 0) {
+  //   desc = '댓글 작성';
+  // } else if (type === 'REPLY' && point < 0) {
+  //   desc = '댓글 삭제';
+  // }
 
   return (
     <tr>

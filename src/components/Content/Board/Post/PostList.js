@@ -10,7 +10,6 @@ const PostList = ({
 }) => {
   const {
     BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore, UtilRouteStore,
-    SystemCodeStore,
   } = useStores();
   const { setCurrentBoard } = BoardStore;
   const {
@@ -20,7 +19,6 @@ const PostList = ({
   const { onSet } = ComponentPostStore;
   const { ignoreList } = UserIgnoreStore;
   const { history } = UtilRouteStore;
-  const { getCodeComponent } = SystemCodeStore;
 
   useEffect(() => {
     setCurrentBoard(path);

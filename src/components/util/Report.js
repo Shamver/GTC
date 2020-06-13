@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import {
   Modal, ModalHeader, ModalBody, ModalFooter, Button,
@@ -7,24 +7,12 @@ import {
 import styled from 'styled-components';
 import useStores from '../../stores/useStores';
 
-/*
-const ReportCode = () => {
-  const { BoardReportStore, SystemCodeStore } = useStores();
-  const { setCodeList } = SystemCodeStore;
-  const { onChangeValue } = BoardReportStore;
-
-  return setCodeList.map((data) => (
-    <CustomInput type="radio" id={data.CODE} key={data.CODE} value={data.CODE} onChange={onChangeValue} name="reason" label={data.NAME} />
-  ));
-};
-*/
-
 const Report = () => {
   const { BoardReportStore, SystemCodeStore } = useStores();
   const {
     reportToggle, toggleReport, reportData, report, onChangeValue,
   } = BoardReportStore;
-  const { getCodeComponent, setCodeList } = SystemCodeStore;
+  const { setCodeList } = SystemCodeStore;
   const {
     content, writer, description, type,
   } = reportData;
@@ -32,10 +20,6 @@ const Report = () => {
   const reportCode = setCodeList.map((data) => (
     <CustomInput type="radio" id={data.CODE} key={data.CODE} value={data.CODE} onChange={onChangeValue} name="reason" label={data.NAME} />
   ));
-
-  useEffect(() => {
-    getCodeComponent('REPORT_CATEGORY', '');
-  }, []);
 
   return (
     <ModalW630 isOpen={reportToggle} toggle={toggleReport}>

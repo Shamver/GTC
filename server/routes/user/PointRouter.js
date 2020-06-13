@@ -9,16 +9,21 @@ const SELECT_USER_POINT_LIST = `
   SELECT 
     @ROWNUM := @ROWNUM + 1 AS rn
     , (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_USER_POINT WHERE USER_ID = :USER_ID) AS pageCount
-    , ID AS id
-    , TARGET_ID AS postId
-    , TYPE_CD AS type
-    , COST AS point
-    , DATE_FORMAT(CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS date
+    , U.ID AS id
+    , U.TARGET_ID AS postId
+    , U.TYPE_CD AS type
+    , U.COST AS point
+    , CASE WHEN P.COST > 0 THEN 'PLUS'
+        ELSE 'MINUS' END as temp
+    , DATE_FORMAT(U.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS date
   FROM 
-    GTC_USER_POINT
+    GTC_USER_POINT AS U
     , (SELECT @ROWNUM := :ROWNUM) AS TEMP
-  WHERE USER_ID = :USER_ID
-  ORDER BY CRT_DTTM DESC
+  JOIN
+    GTC_CODE AS C
+  ON U.TYPE_CD = C.CODE
+  WHERE U.USER_ID = :USER_ID
+  ORDER BY U.CRT_DTTM DESC
   LIMIT :ROWNUM, :MAX_COUNT
 `;
 

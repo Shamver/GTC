@@ -27,8 +27,6 @@ const INSERT_POINT = `
 module.exports = (action, type, data) => {
   const replyId = data.replyId ? `'${data.replyId}'` : null;
   const cost = pointConfig[action];
-  console.log(action);
-  console.log(pointConfig[action]);
 
   Database.execute(
     (database) => database.query(
