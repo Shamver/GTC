@@ -12,7 +12,7 @@ const PostLockerMyReply = () => {
   const { BoardReplyStore } = useStores();
   const { replyMineList } = BoardReplyStore;
   const MyReplyTableData = replyMineList.map(
-    (v) => <PostLockerMyReplyTable data={v} key={v.postId} />,
+    (v) => <PostLockerMyReplyTable data={v} key={v.replyId} />,
   );
 
   return (
