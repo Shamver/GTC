@@ -5,13 +5,10 @@ import { observer } from 'mobx-react';
 import useStores from '../../../../stores/useStores';
 import ResponsiveRow from './responsive/ResponsiveRow';
 
-const Post = ({
-  data, index, path, isNotice,
-}) => {
+const Post = ({ data, index, isNotice }) => {
   const { BoardPostStore } = useStores();
   const { currentPostId } = BoardPostStore;
   const { id, date, recommendCount } = data;
-
   return (
     <TableRow height="35" currentPostId={currentPostId} postId={id}>
       <CenterTd width="50">
@@ -25,7 +22,7 @@ const Post = ({
             </>
           )}
       </CenterTd>
-      <ResponsiveRow data={data} index={index} path={path} isNotice={isNotice} />
+      <ResponsiveRow data={data} index={index} isNotice={isNotice} />
       <DateTd>
         <BlockInner>{date}</BlockInner>
       </DateTd>
@@ -40,7 +37,6 @@ Post.propTypes = {
     recommendCount: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
-  path: Proptypes.string.isRequired,
   isNotice: Proptypes.bool,
 };
 

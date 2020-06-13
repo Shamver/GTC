@@ -4,9 +4,10 @@ import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
 } from 'reactstrap';
 import * as Proptypes from 'prop-types';
+import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 
-const WriterDropdown = ({ data, index }) => {
+const WriterDropdown = ({ data, index, isNotice }) => {
   const {
     ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
   } = useStores();
@@ -15,10 +16,11 @@ const WriterDropdown = ({ data, index }) => {
   const { userData, getProfile } = UserStore;
   const { addIgnore } = UserIgnoreStore;
   const { writerName, writerId } = data;
+  const dropdownKey = isNotice ? `notice_${index}` : index.toString();
 
   return (
-    <WriterDropdownIn isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
-      <WriterDropdownToggle name={`replyIndex${index}`}>{writerName}</WriterDropdownToggle>
+    <WriterDropdownIn isOpen={dropdown[dropdownKey]} toggle={(e) => onActive(dropdownKey, e)}>
+      <WriterDropdownToggle>{writerName}</WriterDropdownToggle>
       <WriterDropdownMenu>
         <WriterDropdownItem onClick={() => getProfile(writerId)}>프로필</WriterDropdownItem>
         <WriterDropdownItem>작성 글 보기</WriterDropdownItem>
@@ -38,6 +40,7 @@ WriterDropdown.propTypes = {
     writerId: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
+  isNotice: Proptypes.bool.isRequired,
 };
 
 const WriterDropdownIn = styled(Dropdown)`
@@ -86,4 +89,4 @@ const WriterDropdownToggle = styled(DropdownToggle)`
   }
 `;
 
-export default memo(WriterDropdown);
+export default memo(observer(WriterDropdown));

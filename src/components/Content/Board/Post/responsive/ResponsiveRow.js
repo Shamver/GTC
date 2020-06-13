@@ -7,15 +7,14 @@ import * as Proptypes from 'prop-types';
 import WriterDropdown from './WriterDropdown';
 import useStores from '../../../../../stores/useStores';
 
-const ResponsiveRow = ({
-  data, index, path, isNotice,
-}) => {
+const ResponsiveRow = ({ data, index, isNotice }) => {
   const {
     id, recommendCount, categoryName, commentCount,
     type, title, boardName, isImage,
   } = data;
-  const { ComponentPostStore } = useStores();
+  const { ComponentPostStore, BoardStore } = useStores();
   const { onClickPost, isVisited } = ComponentPostStore;
+  const { currentBoardPath } = BoardStore;
 
   const isImageComponent = isImage
     ? (<FontAwesomeIcon icon={faImage} />)
@@ -24,7 +23,7 @@ const ResponsiveRow = ({
 
   return (
     <>
-      { path === 'all' ? (
+      { currentBoardPath === 'all' ? (
         <DateTd>{!isNotice ? boardName : null}</DateTd>
       ) : null }
       {!isNotice ? (<DateTd>{type !== 'notice' ? categoryName : null}</DateTd>) : null}
@@ -32,19 +31,17 @@ const ResponsiveRow = ({
         <MiddleSpan>
           {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
           &nbsp;
-          <PostTitle className={isVisited(id) ? 'color-gray' : ''} onClick={() => onClickPost(id)}>{title}</PostTitle>
+          <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>{title}</PostTitle>
           { commentCount > 0
-            ? (
-              <ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>
-            ) : null}
+            ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>) : null}
           <MobileWriterDropdown>
-            <WriterDropdown data={data} index={index} />
+            <WriterDropdown data={data} index={index} isNotice={isNotice} />
             <TopSpan>{type !== 'notice' ? categoryName : null}</TopSpan>
           </MobileWriterDropdown>
         </MiddleSpan>
       </MiddleTd>
       <CenterTdWriter>
-        <WriterDropdown data={data} index={index} />
+        <WriterDropdown data={data} index={index} isNotice={isNotice} />
       </CenterTdWriter>
     </>
   );
@@ -62,7 +59,6 @@ ResponsiveRow.propTypes = {
     isImage: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
-  path: Proptypes.string.isRequired,
   isNotice: Proptypes.bool.isRequired,
 };
 
@@ -115,7 +111,6 @@ const MiddleTd = styled.td`
   @media (max-width: 992px) {
     height : 50px;
   }
-  
 `;
 
 const CenterTd = styled(MiddleTd)`

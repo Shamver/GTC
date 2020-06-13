@@ -36,16 +36,9 @@ const PostList = ({ isNotice }) => {
 
   if (isNotice && Number(currentBoardPage) === 1) {
     return boardPostNoticeList[currentBoardPath].map((data, index) => {
-      onSet(index);
+      onSet(`notice_${index}`);
       return (
-        <Post
-          key={data.id}
-          data={data}
-          index={index}
-          path={currentBoardPath}
-          currentPage={currentBoardPage}
-          isNotice
-        />
+        <Post key={data.id} data={data} index={index} isNotice />
       );
     });
   }
@@ -53,13 +46,7 @@ const PostList = ({ isNotice }) => {
   return boardPostList[currentBoardPath].map((data, index) => {
     onSet(index);
     return (
-      <Post
-        key={data.id}
-        data={data}
-        index={index}
-        path={currentBoardPath}
-        currentPage={currentBoardPage}
-      />
+      <Post key={data.id} data={data} index={index} />
     );
   });
 };

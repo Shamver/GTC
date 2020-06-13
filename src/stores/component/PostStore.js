@@ -35,9 +35,9 @@ class PostStore {
   //   }
   // };
 
-  @action onActive = (dropdown) => {
-    if (this.dropdown[dropdown]) {
-      this.dropdown[dropdown] = false;
+  @action onActive = (index) => {
+    if (this.dropdown[index]) {
+      this.dropdown[index] = false;
       return;
     }
 
@@ -47,10 +47,11 @@ class PostStore {
 
     for (let i = 0; i < keyList.length; i += 1) {
       key = keyList[i];
-      if (key === dropdown) {
-        this.dropdown[dropdown] = true;
+      if (key === index) {
+        this.dropdown[index] = true;
       }
     }
+    console.log(this.dropdown[index]);
   };
 
   @action onSet = (id) => {
