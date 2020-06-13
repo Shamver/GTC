@@ -45,10 +45,10 @@ const MailTable = ({ data }) => {
 MailTable.propTypes = {
   data: Proptypes.shape({
     id: Proptypes.number,
-    message: Proptypes.number,
-    fromName: Proptypes.number,
-    targetName: Proptypes.number,
-    date: Proptypes.number,
+    message: Proptypes.string,
+    fromName: Proptypes.string,
+    targetName: Proptypes.string,
+    date: Proptypes.string,
     readDate: Proptypes.string,
   }).isRequired,
 };
