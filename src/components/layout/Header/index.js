@@ -65,7 +65,7 @@ const Header = () => {
           <InputGroupA>
             <Input placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} />
             <InputGroupAddon addonType="append">
-              <ResponsiveButton color="danger" onClick={search}>
+              <ResponsiveButton color="danger" onClick={() => search(1)}>
                 <MiddleIcon icon={faSearch} />
               </ResponsiveButton>
             </InputGroupAddon>
