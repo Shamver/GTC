@@ -242,6 +242,34 @@ const SELECT_LAST_INDEX = `
   SELECT LAST_INSERT_ID() as id
 `;
 
+
+const SELECT_POST_LIST_SEARCH = `
+  SELECT 
+    @ROWNUM := @ROWNUM+1 AS rn
+    , P.ID AS id
+    , P.TITLE AS title
+    , P.USER_ID AS writerId
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
+    , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
+    , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) AS commentCount
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD') AS pageCount
+    , P.CONTENT AS content
+    , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
+  FROM 
+    GTC_POST P
+    , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
+  WHERE 
+    P.USER_ID NOT IN
+      (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+    AND (
+      P.CONTENT LIKE '%:KEYWORD%'
+      OR P.TITLE LIKE '%:KEYWORD%'
+      OR P.WRITER LIKE '%:KEYWORD%'
+    )
+  ORDER BY ID DESC    
+  LIMIT :CURRENT_PAGE, :PER_PAGE
+`;
+
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
   const { board, isHome, recommend } = req.query;
@@ -270,6 +298,36 @@ router.get('/', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, GET /api/board/post] 게시글 목록 조회');
+  });
+});
+
+router.get('/search', (req, res) => {
+  let { currentPage } = req.query;
+  const { keyword } = req.query;
+  let { userId } = req.query;
+  currentPage = currentPage || 1;
+  if (!userId) userId = null;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_POST_LIST_SEARCH,
+      {
+        CURRENT_PAGE: ((currentPage - 1) * 25),
+        USER_ID: userId,
+        PER_PAGE: 25,
+        KEYWORD: keyword,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '게시글 목록 검색 조회',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/board/post/search] 게시글 목록 검색 조회');
   });
 });
 
