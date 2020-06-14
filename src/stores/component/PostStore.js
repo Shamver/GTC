@@ -36,8 +36,10 @@ class PostStore {
   // };
 
   @action onActive = (index) => {
+    console.log(index);
     if (this.dropdown[index]) {
       this.dropdown[index] = false;
+      console.log('이미 열려잇음');
       return;
     }
 
@@ -51,7 +53,6 @@ class PostStore {
         this.dropdown[index] = true;
       }
     }
-    console.log(this.dropdown[index]);
   };
 
   @action onSet = (id) => {

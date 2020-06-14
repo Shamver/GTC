@@ -9,6 +9,8 @@ const Post = ({ data, index, isNotice }) => {
   const { BoardPostStore } = useStores();
   const { currentPostId } = BoardPostStore;
   const { id, date, recommendCount } = data;
+
+
   return (
     <TableRow height="35" currentPostId={currentPostId} postId={id}>
       <CenterTd width="50">

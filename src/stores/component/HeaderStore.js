@@ -26,8 +26,10 @@ class HeaderStore {
   };
 
   @action onActive = (dropdown) => {
+    console.log(dropdown);
     if (this.dropdown[dropdown]) {
       this.dropdown[dropdown] = false;
+      console.log('이미 열려잇음');
       return;
     }
 

@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
 import styled from 'styled-components';
 import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
@@ -11,12 +11,19 @@ const WriterDropdown = ({ data, index, isNotice }) => {
   const {
     ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
   } = useStores();
-  const { dropdown, onActive } = ComponentPostStore;
+  const { dropdown, onActive, onSet } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { userData, getProfile } = UserStore;
   const { addIgnore } = UserIgnoreStore;
   const { writerName, writerId } = data;
   const dropdownKey = isNotice ? `notice_${index}` : index.toString();
+
+  // 하나하나 로우 드롭다운이 생성될때마다 그에 대한 드롭다운 객체 생성;
+  useEffect(() => {
+    console.log('useEffect 렌더링');
+    onSet(dropdownKey);
+  }, [onSet, dropdownKey]);
+  console.log('writer 렌더링');
 
   return (
     <WriterDropdownIn isOpen={dropdown[dropdownKey]} toggle={(e) => onActive(dropdownKey, e)}>

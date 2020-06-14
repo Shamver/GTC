@@ -20,12 +20,9 @@ import Post from '.';
 // };
 
 const PostList = ({ isNotice }) => {
-  const {
-    BoardStore, BoardPostStore, ComponentPostStore, UtilRouteStore,
-  } = useStores();
+  const { BoardStore, BoardPostStore, UtilRouteStore } = useStores();
   const { currentBoardPath, currentBoardPage } = BoardStore;
   const { boardPostList, boardPostNoticeList } = BoardPostStore;
-  const { onSet } = ComponentPostStore;
   const { history } = UtilRouteStore;
 
   if (!boardPostList[currentBoardPath] || boardPostList[currentBoardPath] === undefined) {
@@ -35,20 +32,14 @@ const PostList = ({ isNotice }) => {
   }
 
   if (isNotice && Number(currentBoardPage) === 1) {
-    return boardPostNoticeList[currentBoardPath].map((data, index) => {
-      onSet(`notice_${index}`);
-      return (
-        <Post key={data.id} data={data} index={index} isNotice />
-      );
-    });
+    return boardPostNoticeList[currentBoardPath].map((data, index) => (
+      <Post key={data.id} data={data} index={index} isNotice />
+    ));
   }
 
-  return boardPostList[currentBoardPath].map((data, index) => {
-    onSet(index);
-    return (
-      <Post key={data.id} data={data} index={index} />
-    );
-  });
+  return boardPostList[currentBoardPath].map((data, index) => (
+    <Post key={data.id} data={data} index={index} />
+  ));
 };
 
 PostList.propTypes = {
