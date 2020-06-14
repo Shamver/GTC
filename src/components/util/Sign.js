@@ -6,15 +6,6 @@ import {
 import styled from 'styled-components';
 import useStores from '../../stores/useStores';
 
-/*const GenderCode = () => {
-  const { SystemCodeStore } = useStores();
-  const { setCodeList } = SystemCodeStore;
-
-  return setCodeList.map((data) => (
-    <option id value={data.CODE} key={data.CODE}>{data.NAME}</option>
-  ));
-};*/
-
 const Sign = () => {
   const { UtilStore, UserStore, SystemCodeStore } = useStores();
   const { getCodeComponent, setCodeList } = SystemCodeStore;
@@ -25,7 +16,7 @@ const Sign = () => {
   } = registerData;
 
   const GenderCode = setCodeList.map((data) => (
-    <option value={data.CODE} key={data.CODE}>{data.NAME}</option>
+    <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
   ));
 
   useEffect(() => {

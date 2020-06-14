@@ -333,17 +333,17 @@ class CodeStore {
     return true;
   }
 
-  @action getCodeComponent = (getCodeGroup, temp) => {
-    console.log(getCodeGroup)
-    axios.get('/api/system/code/temp', {
+  @action getCodeComponent = (codeGroup, temp) => {
+    axios.get('/api/system/code', {
       params: {
-        getCodeGroup, temp,
+        codeGroup, temp,
       },
     })
       .then((response) => {
-        console.log(response.data);
-        if (response.data) {
-          this.setCodeList = response.data;
+        const { data } = response;
+        if (data.result) {
+          this.setCodeList = data.result;
+          console.log(data.result);
         }
       })
       .catch((response) => {

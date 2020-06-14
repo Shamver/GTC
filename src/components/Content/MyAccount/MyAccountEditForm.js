@@ -25,7 +25,7 @@ const MyAccountEditForm = () => {
   } = ComponentMyAccountStore;
 
   const GenderCode = setCodeList.map((data) => (
-    <option value={data.CODE} key={data.CODE}>{data.NAME}</option>
+    <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
   ));
 
   useEffect(() => {

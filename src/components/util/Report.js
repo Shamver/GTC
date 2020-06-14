@@ -18,7 +18,7 @@ const Report = () => {
   } = reportData;
 
   const reportCode = setCodeList.map((data) => (
-    <CustomInput type="radio" id={data.CODE} key={data.CODE} value={data.CODE} onChange={onChangeValue} name="reason" label={data.NAME} />
+    <CustomInput type="radio" id={data.code} key={data.codeOrder} value={data.code} onChange={onChangeValue} name="reason" label={data.codeName} />
   ));
 
   return (
