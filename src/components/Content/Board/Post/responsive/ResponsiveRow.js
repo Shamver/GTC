@@ -35,7 +35,7 @@ const ResponsiveRow = ({ data, index, isNotice }) => {
           { commentCount > 0
             ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>) : null}
           <MobileWriterDropdown>
-            <WriterDropdown data={data} index={index} isNotice={isNotice} />
+            <WriterDropdown data={data} index={index} isNotice={isNotice} isMobile />
             <TopSpan>{type !== 'notice' ? categoryName : null}</TopSpan>
           </MobileWriterDropdown>
         </MiddleSpan>

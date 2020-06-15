@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
@@ -7,7 +7,7 @@ import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 
-const WriterDropdown = ({ data, index, isNotice }) => {
+const WriterDropdown = ({ data, index, isNotice, isMobile }) => {
   const {
     ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
   } = useStores();
@@ -17,16 +17,15 @@ const WriterDropdown = ({ data, index, isNotice }) => {
   const { addIgnore } = UserIgnoreStore;
   const { writerName, writerId } = data;
   const dropdownKey = isNotice ? `notice_${index}` : index.toString();
+  const lastKey = isMobile ? 'mobile_'.concat(dropdownKey) : dropdownKey;
 
   // 하나하나 로우 드롭다운이 생성될때마다 그에 대한 드롭다운 객체 생성;
-  useEffect(() => {
-    console.log('useEffect 렌더링');
-    onSet(dropdownKey);
-  }, [onSet, dropdownKey]);
-  console.log('writer 렌더링');
+  useLayoutEffect(() => {
+    onSet(lastKey);
+  }, [onSet, lastKey]);
 
   return (
-    <WriterDropdownIn isOpen={dropdown[dropdownKey]} toggle={(e) => onActive(dropdownKey, e)}>
+    <WriterDropdownIn isOpen={dropdown[lastKey]} toggle={(e) => onActive(lastKey, e)}>
       <WriterDropdownToggle>{writerName}</WriterDropdownToggle>
       <WriterDropdownMenu>
         <WriterDropdownItem onClick={() => getProfile(writerId)}>프로필</WriterDropdownItem>
@@ -48,6 +47,11 @@ WriterDropdown.propTypes = {
   }).isRequired,
   index: Proptypes.number.isRequired,
   isNotice: Proptypes.bool.isRequired,
+  isMobile: Proptypes.bool,
+};
+
+WriterDropdown.defaultProps = {
+  isMobile: false,
 };
 
 const WriterDropdownIn = styled(Dropdown)`

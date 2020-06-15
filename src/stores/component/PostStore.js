@@ -13,33 +13,9 @@ class PostStore {
     this.postOptionOpen = !this.postOptionOpen;
   };
 
-  // @action onActive = (target) => {
-  //   const keys = Object.keys(this.dropdown);
-  //
-  //   for (let i = 0; i < keys.length; i += 1) {
-  //     this.dropdown = {
-  //       ...this.dropdown,
-  //       [keys[i]]: false,
-  //     };
-  //   }
-  //
-  //   let name;
-  //   if (typeof target.currentTarget.getAttribute === 'function') {
-  //     name = target.currentTarget.getAttribute('name');
-  //   }
-  //   if (name !== undefined) {
-  //     this.dropdown = {
-  //       ...this.dropdown,
-  //       [name]: !this.dropdown[name],
-  //     };
-  //   }
-  // };
-
   @action onActive = (index) => {
-    console.log(index);
     if (this.dropdown[index]) {
       this.dropdown[index] = false;
-      console.log('이미 열려잇음');
       return;
     }
 
