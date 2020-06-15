@@ -3,44 +3,18 @@ import { Row } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import SearchContentItem from './SearchContentItem';
-import tmpThumb from '../../../resources/images/thumb.jpeg';
+import useStores from '../../../stores/useStores';
 
 const SearchContent = () => {
-  const data = [
-    {
-      id: 0,
-      title: '제목0',
-      writer: '작성자0',
-      replyCount: 1,
-      content: 'ㅁㄴ알ㄴㅇ마ㅓ룬아룬ㅇ말ㄴㅇ맒ㄴ',
-      date: '2020-02-02 10:10:10',
-      thumbnail: null,
-    },
-    {
-      id: 1,
-      title: '제목1',
-      writer: '작성자1',
-      replyCount: 0,
-      content: 'ㅁㄴㅁㄴㅁㄻ알ㄴㅇ마ㅓ룬아룬ㅇ말ㄴㅇ맒ㄴ',
-      date: '2020-02-01 10:10:10',
-      thumbnail: tmpThumb,
-    },
-    {
-      id: 2,
-      title: '제목2',
-      writer: '작성자2',
-      replyCount: 5,
-      content: 'ㅁㄴ알ㄴㅇ마ㅓ룬아룬ㅇ말ㅁㄴㅇㅁㄴㄴㅇ맒ㄴ',
-      date: '2020-02-01 09:10:10',
-      thumbnail: null,
-    },
-  ];
+  const { BoardSearchStore } = useStores();
 
-  const Item = data.map((v) => <SearchContentItem data={v} key={v.id} />);
+  const { foundCount, foundList } = BoardSearchStore;
+
+  const Item = foundList.map((v) => <SearchContentItem data={v} key={v.id} />);
 
   return (
     <>
-      <H5>게시글 (총 {}건)</H5>
+      <H5>게시글 (총 {foundCount}건)</H5>
       <Hr />
       <ItemRow>{Item}</ItemRow>
     </>

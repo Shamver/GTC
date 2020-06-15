@@ -6,14 +6,17 @@ import * as Proptypes from 'prop-types';
 
 const SearchContentItem = ({ data }) => {
   const {
-    id, title, content, writer, date, replyCount, thumbnail,
+    id, title, content, writerName, date, commentCount, isImage,
   } = data;
+
+  const src = !isImage ? null : content.split('<figure class="image"><img src="')[1].split('"></figure>')[0];
+
   return (
     <Item sm={12}>
       <TableRow>
-        {!thumbnail ? '' : (
+        {!isImage ? '' : (
           <TableCell img>
-            <Img src={thumbnail} alt="a" />
+            <Img src={src} alt="a" />
           </TableCell>
         )}
         <TableCell>
@@ -21,11 +24,11 @@ const SearchContentItem = ({ data }) => {
             <Link to={`/post/${id}`}>
               <Span link>{title}</Span>
             </Link>
-            <ReplyCountSpan>&nbsp;[{replyCount}]</ReplyCountSpan>
+            <ReplyCountSpan>&nbsp;[{commentCount}]</ReplyCountSpan>
           </div>
           <div>
-            <Span small>{writer}</Span>
-            <Span small>|&nbsp;{date}</Span>
+            <Span small>{writerName}</Span>
+            <Span small>&nbsp;|&nbsp;{date}</Span>
           </div>
           <div>{content}</div>
         </TableCell>
@@ -39,10 +42,11 @@ SearchContentItem.propTypes = {
     id: Proptypes.number,
     title: Proptypes.string,
     content: Proptypes.string,
-    writer: Proptypes.string,
+    writerId: Proptypes.number,
+    writerName: Proptypes.string,
     date: Proptypes.string,
-    replyCount: Proptypes.number,
-    thumbnail: Proptypes.string,
+    commentCount: Proptypes.number,
+    isImage: Proptypes.bool,
   }).isRequired,
 };
 
