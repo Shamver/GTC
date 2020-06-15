@@ -44,7 +44,6 @@ class SearchStore {
       .then((response) => {
         const { data } = response;
         if (data.success) {
-          console.log(data.result);
           this.foundList = data.result;
           if (data.result.length > 0) {
             this.foundMaxPage = data.result[0].pageCount;

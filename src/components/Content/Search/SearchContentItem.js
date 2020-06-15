@@ -3,13 +3,20 @@ import { Col } from 'reactstrap';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
+import renderHTML from 'react-render-html';
 
 const SearchContentItem = ({ data }) => {
   const {
-    id, title, content, writerName, date, commentCount, isImage,
+    id, title, writerName, date, commentCount, isImage,
   } = data;
 
+  let { content } = data;
+
   const src = !isImage ? null : content.split('<figure class="image"><img src="')[1].split('"></figure>')[0];
+
+  const contentArr = content.split('<figure class="image"><img src="');
+
+  content = !isImage ? content : contentArr[0] + contentArr[1].split('"></figure>')[1];
 
   return (
     <Item sm={12}>
@@ -30,7 +37,7 @@ const SearchContentItem = ({ data }) => {
             <Span small>{writerName}</Span>
             <Span small>&nbsp;|&nbsp;{date}</Span>
           </div>
-          <div>{content}</div>
+          <div>{renderHTML(content)}</div>
         </TableCell>
       </TableRow>
     </Item>
@@ -46,7 +53,7 @@ SearchContentItem.propTypes = {
     writerName: Proptypes.string,
     date: Proptypes.string,
     commentCount: Proptypes.number,
-    isImage: Proptypes.bool,
+    isImage: Proptypes.number,
   }).isRequired,
 };
 

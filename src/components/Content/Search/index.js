@@ -8,11 +8,11 @@ import SearchContent from './SearchContent';
 
 const Search = () => {
   const { BoardSearchStore } = useStores();
-  const { searchedText } = BoardSearchStore;
+  const { foundText } = BoardSearchStore;
 
   return (
     <MainContainer>
-      <H3>검색 결과 - {searchedText}</H3>
+      <H3>검색 결과 - {foundText}</H3>
       <SearchContent />
     </MainContainer>
   );
