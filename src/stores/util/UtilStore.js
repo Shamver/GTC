@@ -35,6 +35,7 @@ class UtilStore {
   @action toggleSign = (result) => {
     if (result && result.profile) {
       this.root.UserStore.setRegisterData(result);
+      this.root.SystemCodeStore.getCodeComponent('GENDER_CODE', '');
     }
 
     this.signToggle = !this.signToggle;

@@ -6,21 +6,23 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 import useStores from '../../stores/useStores';
+import code from "@ckeditor/ckeditor5-basic-styles/src/code";
 
 const Report = () => {
-  const { BoardReportStore, SystemCodeStore } = useStores();
+  const { BoardReportStore } = useStores();
   const {
-    reportToggle, toggleReport, reportData, report, onChangeValue,
+    reportToggle, toggleReport, reportData, report, onChangeValue, codeList,
   } = BoardReportStore;
-  const { setCodeList } = SystemCodeStore;
   const {
     content, writer, description, type,
   } = reportData;
 
-  const reportCode = setCodeList.map((data) => (
+  const reportCode = codeList.map((data) => (
     <CustomInput type="radio" id={data.code} key={data.codeOrder} value={data.code} onChange={onChangeValue} name="reason" label={data.codeName} />
   ));
 
+  console.log(codeList);
+  console.log(reportCode);
   return (
     <ModalW630 isOpen={reportToggle} toggle={toggleReport}>
       <ModalHeaderBack toggle={toggleReport}><b>신고하기</b></ModalHeaderBack>
@@ -40,7 +42,7 @@ const Report = () => {
         <h5>신고사유 선택</h5>
         <FormGroup>
           <div>
-            {reportCode}
+            {/*{reportCode}*/}
           </div>
         </FormGroup>
         <Input type="textarea" onChange={onChangeValue} value={description} name="description" placeholder="신고 사유 설명이 필요하신 경우 작성해주세요." />

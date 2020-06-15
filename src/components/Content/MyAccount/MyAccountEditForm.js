@@ -7,15 +7,6 @@ import { observer } from 'mobx-react';
 import avatarImg from '../../../resources/images/anonymous.png';
 import useStores from '../../../stores/useStores';
 
-/* const GenderCode = () => {
-  const { SystemCodeStore } = useStores();
-  const { setCodeList } = SystemCodeStore;
-
-  return setCodeList.map((data) => (
-    <option id value={data.CODE} key={data.CODE}>{data.NAME}</option>
-  ));
-}; */
-
 const MyAccountEditForm = () => {
   const { ComponentMyAccountStore, SystemCodeStore } = useStores();
   const { getCodeComponent, setCodeList } = SystemCodeStore;

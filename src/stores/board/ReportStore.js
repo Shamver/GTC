@@ -14,6 +14,8 @@ class ReportStore {
     description: '',
   };
 
+  @observable codeList = [];
+
   constructor(root) {
     this.root = root;
   }
@@ -61,8 +63,16 @@ class ReportStore {
     };
   };
 
+  @action setCodeList = (code) => {
+    console.log(code);
+    this.codeList = {
+      ...this.codeList,
+      code,
+    };
+  }
+
   @action toggleReport = (targetId, type, content, writer) => {
-    this.root.SystemCodeStore.getCodeComponent('REPORT_CATEGORY', '');
+    this.root.SystemCodeStore.getCodeComponent('REPORT_CATEGORY', this.setCodeList);
     if (targetId) {
       this.reportData = {
         targetId,

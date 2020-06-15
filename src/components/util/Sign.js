@@ -8,20 +8,16 @@ import useStores from '../../stores/useStores';
 
 const Sign = () => {
   const { UtilStore, UserStore, SystemCodeStore } = useStores();
-  const { getCodeComponent, setCodeList } = SystemCodeStore;
+  const { setCodeList } = SystemCodeStore;
   const { signToggle, toggleSign } = UtilStore;
   const { onRegisterChangeValue, registerData, registerCheck } = UserStore;
   const {
     email, nickname, birth, gender,
   } = registerData;
 
-  const GenderCode = setCodeList.map((data) => (
-    <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
-  ));
-
-  useEffect(() => {
-    getCodeComponent('GENDER_CODE', '');
-  }, []);
+  // const GenderCode = setCodeList.map((data) => (
+  //   <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
+  // ));
 
   return (
     <Modal isOpen={signToggle} toggle={toggleSign}>
@@ -56,7 +52,7 @@ const Sign = () => {
                 생년월일을 입력해주세요.
               </FormTextLeft>
               <FormSelect type="select" onChange={onRegisterChangeValue} name="gender" value={gender}>
-                {GenderCode}
+                {/*{GenderCode}*/}
               </FormSelect>
               <FormInputWithText
                 type="text"

@@ -13,15 +13,16 @@ const SELECT_USER_POINT_LIST = `
     , U.TARGET_ID AS postId
     , U.TYPE_CD AS type
     , U.COST AS point
-    , CASE WHEN P.COST > 0 THEN 'PLUS'
-        ELSE 'MINUS' END as temp
+    , CASE WHEN U.COST > 0
+        THEN CASE WHEN U.TYPE_CD = 'R01' THEN '글 작성'
+            ELSE '댓글 작성' END
+        ELSE CASE WHEN U.TYPE_CD = 'R01' THEN '글 삭제'
+            ELSE '댓글 삭제' END
+        END AS pointType
     , DATE_FORMAT(U.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS date
   FROM 
     GTC_USER_POINT AS U
     , (SELECT @ROWNUM := :ROWNUM) AS TEMP
-  JOIN
-    GTC_CODE AS C
-  ON U.TYPE_CD = C.CODE
   WHERE U.USER_ID = :USER_ID
   ORDER BY U.CRT_DTTM DESC
   LIMIT :ROWNUM, :MAX_COUNT

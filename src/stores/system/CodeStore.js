@@ -30,8 +30,6 @@ class CodeStore {
     useYN: 1,
   };
 
-  @observable setCodeList = [];
-
   constructor(root) {
     this.root = root;
   }
@@ -333,17 +331,17 @@ class CodeStore {
     return true;
   }
 
-  @action getCodeComponent = (codeGroup, temp) => {
+  @action getCodeComponent = (codeGroup, setCodeList) => {
     axios.get('/api/system/code', {
       params: {
-        codeGroup, temp,
+        codeGroup,
       },
     })
       .then((response) => {
         const { data } = response;
         if (data.result) {
-          this.setCodeList = data.result;
-          console.log(data.result);
+          setCodeList(data.result);
+          // temp = data.result;
         }
       })
       .catch((response) => {
