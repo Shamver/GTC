@@ -1,11 +1,17 @@
 import { action, observable } from 'mobx';
 import { toast } from 'react-toastify';
-import axios from "axios";
+import axios from 'axios';
 
 class SearchStore {
   @observable searchText = '';
 
-  @observable searchedText = '';
+  @observable foundText = '';
+
+  @observable foundMaxPage = 0;
+
+  @observable foundCount = 0;
+
+  @observable foundList = [];
 
   constructor(root) {
     this.root = root;
@@ -26,19 +32,27 @@ class SearchStore {
       toast.error('❗ 검색어는 2자 이상 입력해주세요.');
       return;
     }
-    this.searchedText = this.searchText;
+    this.foundText = this.searchText;
 
     await axios.get('/api/board/post/search', {
       params: {
         userId,
         currentPage: page,
-        keyword: this.searchedText,
+        keyword: this.foundText,
       },
     })
       .then((response) => {
         const { data } = response;
         if (data.success) {
           console.log(data.result);
+          this.foundList = data.result;
+          if (data.result.length > 0) {
+            this.foundMaxPage = data.result[0].pageCount;
+            this.foundCount = data.result[0].count;
+          } else {
+            this.foundMaxPage = 0;
+            this.foundCount = 0;
+          }
         } else {
           toast.error(data.message);
         }
