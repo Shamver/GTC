@@ -19,20 +19,25 @@ class SearchStore {
 
   @action onSubmit = (e) => {
     if (e.key === 'Enter') {
-      this.search(1).then(() => {});
+      this.onSearch();
     }
   };
 
-  @action search = async (page) => {
+  @action onSearch = () => {
     const { history } = this.root.UtilRouteStore;
-    const { userData } = this.root.UserStore;
-    const userId = userData ? userData.id : null;
 
     if (this.searchText.length < 2) {
       toast.error('❗ 검색어는 2자 이상 입력해주세요.');
       return;
     }
     this.foundText = this.searchText;
+
+    history.push('/search');
+  };
+
+  @action search = async (page) => {
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
 
     await axios.get('/api/board/post/search', {
       params: {
@@ -57,8 +62,6 @@ class SearchStore {
         }
       })
       .catch((response) => { toast.error(response.message); });
-
-    history.push('/search');
   };
 
   @action onChange = (e) => {

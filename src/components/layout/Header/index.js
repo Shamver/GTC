@@ -31,7 +31,7 @@ const Header = () => {
   const { userData } = UserStore;
   const { latelyList, getLately, deleteLately } = CookieLatelyStore;
   const {
-    onChange, searchText, onSubmit, search,
+    onChange, searchText, onSubmit, onSearch,
   } = BoardSearchStore;
   const { onSetSidebarOpen } = UtilStore;
   const { getAdPostListNow } = EventAdvertiseStore;
@@ -65,7 +65,7 @@ const Header = () => {
           <InputGroupA>
             <Input placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} />
             <InputGroupAddon addonType="append">
-              <ResponsiveButton color="danger" onClick={() => search(1)}>
+              <ResponsiveButton color="danger" onClick={onSearch}>
                 <MiddleIcon icon={faSearch} />
               </ResponsiveButton>
             </InputGroupAddon>
@@ -82,7 +82,7 @@ const Header = () => {
             </InputGroupAddon>
             <ResponsiveInput placeholder="GTC 검색" onKeyPress={onSubmit} value={searchText} onChange={onChange} searchopen={searchOpen ? 1 : 0} />
             <AppendAddOn addonType="append" searchopen={searchOpen ? 1 : 0}>
-              <ResponsiveButton color="danger" onClick={search} searchopen={searchOpen ? 1 : 0}>
+              <ResponsiveButton color="danger" onClick={onSearch} searchopen={searchOpen ? 1 : 0}>
                 <MiddleIcon icon={faSearch} />
               </ResponsiveButton>
             </AppendAddOn>

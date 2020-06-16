@@ -8,11 +8,14 @@ import useStores from '../../../stores/useStores';
 import SearchContent from './SearchContent';
 
 const Search = ({ currentPage, noPagination }) => {
-  const { BoardSearchStore } = useStores();
-  const { foundText } = BoardSearchStore;
+  const { UtilLoadingStore, BoardSearchStore } = useStores();
+  const { loadingProcess } = UtilLoadingStore;
+  const { foundText, search } = BoardSearchStore;
 
   useLayoutEffect(() => {
-
+    loadingProcess([
+      () => search(currentPage),
+    ]);
   }, [currentPage]);
 
   return (
