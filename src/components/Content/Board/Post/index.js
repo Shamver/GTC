@@ -9,20 +9,16 @@ const Post = ({ data, index, isNotice }) => {
   const { BoardPostStore } = useStores();
   const { currentPostId } = BoardPostStore;
   const { id, date, recommendCount } = data;
+  const RecommentComponent = recommendCount > 0
+    && (<LikeCountSpan>{recommendCount}</LikeCountSpan>);
+  const NoticeComponent = isNotice ? (<span>공지</span>) : RecommentComponent;
 
+  const noticeStyle = isNotice ? '#ffd7d4' : '#ffffff';
 
   return (
-    <TableRow height="35" currentPostId={currentPostId} postId={id}>
+    <TableRow height="35" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle}>
       <CenterTd width="50">
-        {/* eslint-disable-next-line no-nested-ternary */}
-        {currentPostId === id ? '>>'
-          : isNotice ? (
-            <span>공지</span>
-          ) : (
-            <>
-              {recommendCount > 0 ? <LikeCountSpan>{recommendCount}</LikeCountSpan> : ''}
-            </>
-          )}
+        {currentPostId === id ? '>>' : NoticeComponent}
       </CenterTd>
       <ResponsiveRow data={data} index={index} isNotice={isNotice} />
       <DateTd>
@@ -58,10 +54,9 @@ const DateTd = styled.td`
   vertical-align : middle !important;
   padding : 0 0.5rem !important;
 `;
-// eslint-disable-next-line no-nested-ternary
+
 const TableRow = styled.tr`
-  background-color : ${(props) => (props.currentPostId === props.postId ? '#fff9e5;'
-    : (props.isNotice ? '#ffd7d4' : 'white'))};
+  background-color : ${(props) => props.backgroundColor};
   &:hover {
     background-color: rgb(250, 250, 250) !important;
   }

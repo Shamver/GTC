@@ -7,7 +7,9 @@ import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 
-const WriterDropdown = ({ data, index, isNotice, isMobile }) => {
+const WriterDropdown = ({
+  data, index, isNotice, isMobile,
+}) => {
   const {
     ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
   } = useStores();

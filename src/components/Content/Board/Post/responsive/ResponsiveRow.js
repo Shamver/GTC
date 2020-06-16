@@ -23,20 +23,20 @@ const ResponsiveRow = ({ data, index, isNotice }) => {
 
   return (
     <>
-      { currentBoardPath === 'all' ? (
-        <DateTd>{!isNotice ? boardName : null}</DateTd>
-      ) : null }
-      {!isNotice ? (<DateTd>{type !== 'notice' ? categoryName : null}</DateTd>) : null}
+      { currentBoardPath === 'all' && (
+        <DateTd>{!isNotice && boardName}</DateTd>
+      )}
+      {!isNotice && (<DateTd>{type !== 'notice' && categoryName}</DateTd>)}
       <MiddleTd width="700" colSpan={isNotice ? 2 : 1}>
         <MiddleSpan>
           {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
           &nbsp;
           <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>{title}</PostTitle>
           { commentCount > 0
-            ? (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>) : null}
+           && (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>)}
           <MobileWriterDropdown>
             <WriterDropdown data={data} index={index} isNotice={isNotice} isMobile />
-            <TopSpan>{type !== 'notice' ? categoryName : null}</TopSpan>
+            <TopSpan>{type !== 'notice' && categoryName}</TopSpan>
           </MobileWriterDropdown>
         </MiddleSpan>
       </MiddleTd>
@@ -128,11 +128,9 @@ const CenterTdWriter = styled(CenterTd)`
 const PostTitle = styled.a`
   cursor: pointer
   color : black;
-  
   &.color-gray {
     color: #b0b0b0 !important;
   }
-  
   &:hover {
     text-decoration: none;
   }
