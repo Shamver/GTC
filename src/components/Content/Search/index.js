@@ -16,7 +16,7 @@ const Search = ({ currentPage, noPagination }) => {
     loadingProcess([
       () => search(currentPage),
     ]);
-  }, [currentPage]);
+  }, [loadingProcess, search, currentPage]);
 
   return (
     <MainContainer>

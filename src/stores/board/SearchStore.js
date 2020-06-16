@@ -32,6 +32,8 @@ class SearchStore {
     }
     this.foundText = this.searchText;
 
+    this.search(1).then(() => {});
+
     history.push('/search');
   };
 
