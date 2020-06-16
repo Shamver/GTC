@@ -32,8 +32,14 @@ class MyAccountStore {
     message: '',
   };
 
+  @observable userGenderCodeList = [];
+
   constructor(root) {
     this.root = root;
+  }
+
+  @action setUserGenderCodeList = (code) => {
+    this.userGenderCodeList = code;
   }
 
   @action onChangeProfile = (() => {

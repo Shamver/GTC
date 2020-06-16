@@ -341,7 +341,6 @@ class CodeStore {
         const { data } = response;
         if (data.result) {
           setCodeList(data.result);
-          // temp = data.result;
         }
       })
       .catch((response) => {

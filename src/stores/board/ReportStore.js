@@ -14,7 +14,7 @@ class ReportStore {
     description: '',
   };
 
-  @observable codeList = [];
+  @observable reportCodeList = [];
 
   constructor(root) {
     this.root = root;
@@ -64,11 +64,7 @@ class ReportStore {
   };
 
   @action setCodeList = (code) => {
-    console.log(code);
-    this.codeList = {
-      ...this.codeList,
-      code,
-    };
+    this.reportCodeList = code;
   }
 
   @action toggleReport = (targetId, type, content, writer) => {

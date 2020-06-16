@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { observer } from 'mobx-react';
 import {
   Modal, ModalHeader, ModalBody, FormText, Input,
@@ -7,17 +7,16 @@ import styled from 'styled-components';
 import useStores from '../../stores/useStores';
 
 const Sign = () => {
-  const { UtilStore, UserStore, SystemCodeStore } = useStores();
-  const { setCodeList } = SystemCodeStore;
-  const { signToggle, toggleSign } = UtilStore;
+  const { UtilStore, UserStore } = useStores();
+  const { signToggle, toggleSign, userGenderCodeList } = UtilStore;
   const { onRegisterChangeValue, registerData, registerCheck } = UserStore;
   const {
     email, nickname, birth, gender,
   } = registerData;
 
-  // const GenderCode = setCodeList.map((data) => (
-  //   <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
-  // ));
+  const GenderCode = userGenderCodeList.map((data) => (
+    <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
+  ));
 
   return (
     <Modal isOpen={signToggle} toggle={toggleSign}>
@@ -52,7 +51,7 @@ const Sign = () => {
                 생년월일을 입력해주세요.
               </FormTextLeft>
               <FormSelect type="select" onChange={onRegisterChangeValue} name="gender" value={gender}>
-                {/*{GenderCode}*/}
+                {GenderCode}
               </FormSelect>
               <FormInputWithText
                 type="text"
