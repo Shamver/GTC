@@ -1,19 +1,24 @@
-import React, { memo } from 'react';
+import React, { useLayoutEffect, memo } from 'react';
 import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
 
 import useStores from '../../../stores/useStores';
 import SearchContent from './SearchContent';
 
-const Search = () => {
+const Search = ({ currentPage, noPagination }) => {
   const { BoardSearchStore } = useStores();
   const { foundText } = BoardSearchStore;
+
+  useLayoutEffect(() => {
+
+  }, [currentPage]);
 
   return (
     <MainContainer>
       <H3>검색 결과 - {foundText}</H3>
-      <SearchContent />
+      <SearchContent noPagination={noPagination} currentPage={currentPage} />
     </MainContainer>
   );
 };
@@ -28,5 +33,15 @@ const MainContainer = styled(Container)`
   background-color: white;
   padding: 1rem !important;
 `;
+
+Search.propTypes = {
+  currentPage: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+Search.defaultProps = {
+  currentPage: '1',
+  noPagination: false,
+};
 
 export default memo(observer(Search));

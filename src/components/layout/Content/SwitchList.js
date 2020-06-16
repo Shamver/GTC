@@ -56,8 +56,15 @@ const SwitchList = () => {
         <Route exact path="/code" render={() => <Contents.Code />} />
       ) : null }
 
+      { checkPermission(0) ? (
+        <Route exact path="/search" render={() => <Contents.Search noPagination />} />
+      ) : null }
+
+      { checkPermission(0) ? (
+        <Route exact path="/search/page/:currentPage" render={({ match }) => <Contents.Search currentPage={match.params.currentPage} />} />
+      ) : null }
+
       <Route exact path="/" render={() => <Home />} />
-      <Route exact path="/search" render={() => <Contents.Search />} />
 
       {/* ------------------------------- Test Component ------------------------------- */}
       <Route exact path="/test" render={() => <Contents.Test />} />

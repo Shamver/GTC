@@ -2,10 +2,13 @@ import React, { memo } from 'react';
 import { Row } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
+
 import SearchContentItem from './SearchContentItem';
 import useStores from '../../../stores/useStores';
+import SearchPagination from './SearchPagination';
 
-const SearchContent = () => {
+const SearchContent = ({ currentPage, noPagination }) => {
   const { BoardSearchStore } = useStores();
 
   const { foundCount, foundList } = BoardSearchStore;
@@ -17,6 +20,7 @@ const SearchContent = () => {
       <H5>게시글 (총 {foundCount}건)</H5>
       <Hr />
       <ItemRow>{Item}</ItemRow>
+      {foundList.length > 0 ? (<SearchPagination currentPage={currentPage} noPagination={noPagination} />) : ''}
     </>
   );
 };
@@ -36,5 +40,15 @@ const Hr = styled.hr`
   margin: 6px 0 0;
   height: 1px;
 `;
+
+SearchContent.propTypes = {
+  currentPage: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+SearchContent.defaultProps = {
+  currentPage: '1',
+  noPagination: false,
+};
 
 export default memo(observer(SearchContent));
