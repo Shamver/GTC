@@ -25,7 +25,7 @@ const PostView = ({ match }) => {
     <PostWrapper>
       <ViewWrapper>
         <PostViewHeader />
-        <PostViewContent match={match} />
+        <PostViewContent />
         <PostViewFooter />
       </ViewWrapper>
     </PostWrapper>
