@@ -75,7 +75,7 @@ class PostStore {
 
   @action addPost = (match) => {
     const { board } = match.params;
-    console.log(match)
+
     if (!this.postValidationCheck()) {
       return false;
     }
@@ -110,7 +110,9 @@ class PostStore {
     return true;
   };
 
-  @action modifyPost = () => {
+  @action modifyPost = (match) => {
+    const { board } = match.params;
+
     if (!this.postValidationCheck()) {
       return false;
     }
@@ -131,7 +133,7 @@ class PostStore {
       .then((response) => {
         const { data } = response;
         if (data.success) {
-          this.root.UtilRouteStore.history.push('/free');
+          this.root.UtilRouteStore.history.push(`/${board}`);
           toast.success(data.message);
         } else {
           toast.error(data.message);
@@ -142,7 +144,7 @@ class PostStore {
     return true;
   };
 
-  @action deletePost = (id) => {
+  @action deletePost = (id, path) => {
     axios.delete('/api/board/post', {
       params: {
         id,
@@ -152,7 +154,7 @@ class PostStore {
       .then((response) => {
         const { data } = response;
         if (data.success) {
-          this.root.UtilRouteStore.history.push('/free');
+          this.root.UtilRouteStore.history.push(`/${path}`);
           toast.success(data.message);
         } else {
           toast.error(data.message);
@@ -168,11 +170,7 @@ class PostStore {
     const userId = userData ? userData.id : null;
     const recommend = queryString.filter_mode;
 
-    if (recommend) {
-      this.toggleBestPostToken = true;
-    } else {
-      this.toggleBestPostToken = false;
-    }
+    this.toggleBestPostToken = !!recommend;
 
     await axios.get('/api/board/post', {
       params: {

@@ -107,7 +107,7 @@ const Posting = (props) => {
         <MarginButton onClick={goBack} color="secondary">작성취소</MarginButton>
         { isModify
           ? (
-            <RightButton color="danger" onClick={modifyPost}>
+            <RightButton color="danger" onClick={() => modifyPost(match)}>
               <FontAwesomeIcon icon={faPen} />
               &nbsp;수정하기
             </RightButton>

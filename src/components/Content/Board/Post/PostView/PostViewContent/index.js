@@ -63,7 +63,7 @@ const PostViewContent = () => {
             <GreyButton outline={!isFavorite} color="secondary" size="sm" onClick={() => judgeFavorite(isFavorite, id)} disabled={!userData}>
               <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} /> 즐겨찾기
             </GreyButton>
-            { !!isMyPost && <PostOption />}
+            { !!isMyPost && <PostOption path={board} />}
           </RightSpan>
         </ContentFooter>
       </ContentWrapper>

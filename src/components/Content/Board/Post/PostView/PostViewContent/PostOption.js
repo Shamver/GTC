@@ -4,20 +4,20 @@ import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
+import * as Proptypes from 'prop-types';
 import useStores from '../../../../../../stores/useStores';
 
-const PostOption = () => {
+const PostOption = ({ path }) => {
   const { UtilAlertStore, BoardPostStore, BoardStore } = useStores();
   const { toggleConfirmAlert } = UtilAlertStore;
   const { deletePost, postView } = BoardPostStore;
   const { currentBoard } = BoardStore;
   const { id } = postView;
 
-
   return (
     <>
       <RightSpan>
-        <GreyButton color="secondary" size="sm" outline onClick={() => toggleConfirmAlert('해당 포스트를 삭제하시겠습니까?', () => deletePost(id))}>
+        <GreyButton color="secondary" size="sm" outline onClick={() => toggleConfirmAlert('해당 포스트를 삭제하시겠습니까?', () => deletePost(id, path))}>
           <FontAwesomeIcon icon={faTrash} /> 삭제
         </GreyButton>
       </RightSpan>
@@ -30,6 +30,10 @@ const PostOption = () => {
       </RightSpan>
     </>
   );
+};
+
+PostOption.propTypes = {
+  path: Proptypes.string.isRequired,
 };
 
 const RightSpan = styled.span`
