@@ -39,7 +39,7 @@ const ResponsiveRow = ({
         <MiddleSpan>
           { isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
           &nbsp;
-          <PostTitle className={isVisited(id) ? 'color-gray' : ''} onClick={() => onClickPost(id, path)}>{title}</PostTitle>
+          <PostTitle className={isVisited(id) ? 'color-gray' : ''} onClick={() => onClickPost(id)}>{title}</PostTitle>
           { commentCount > 0
             ? (
               <ReplyCountspan>
