@@ -10,38 +10,13 @@ import * as PropTypes from 'prop-types';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import useStores from '../../../../stores/useStores';
+import BoardOptionList from './BoardOptionList';
+import BoardCategoryOptionList from './BoardCategoryOptionList';
 
-const BoardOptions = () => {
-  const { BoardStore } = useStores();
-  const { boards } = BoardStore;
-
-  return boards.map((data) => (
-    <option
-      value={data.value}
-      key={data.value}
-    >
-      {data.name}
-    </option>
-  ));
-};
-
-const BoardCategoryOptions = () => {
-  const { SystemCodeStore } = useStores();
-  const { setCodeList } = SystemCodeStore;
-
-  return setCodeList.map((data) => (
-    <option
-      value={data.NAME}
-      key={data.CODE}
-    >
-      {data.NAME}
-    </option>
-  ));
-};
-
-const Posting = (props) => {
+const Posting = ({ match, isModify }) => {
   const {
-    BoardStore, BoardPostStore, UtilRouteStore, SystemCodeStore,
+    BoardPostStore, UtilRouteStore, UtilLoadingStore,
+    SystemCodeStore,
   } = useStores();
   const {
     post, setPostBoard, onChangeValue, addPost,
@@ -49,20 +24,20 @@ const Posting = (props) => {
   } = BoardPostStore;
   const { goBack } = UtilRouteStore;
   const { getCodeComponent } = SystemCodeStore;
-  const { match, isModify } = props;
+  const { loadingProcess } = UtilLoadingStore;
   const { params } = match;
   const { board, id } = params;
 
   useLayoutEffect(() => {
-    setPostClear();
-    getCodeComponent('BOARD_FREE_CATEGORY', board);
-    setPostBoard(board);
-    if (isModify) {
-      getModifyPost(id, true);
-    }
+    loadingProcess([
+      setPostClear,
+      () => setPostBoard(board),
+      () => getModifyPost(id, isModify),
+      () => getCodeComponent(`BOARD_${board.toUpperCase()}_CATEGORY`),
+    ]);
   }, [
-    BoardStore, board, setPostBoard, getModifyPost, id, isModify,
-    setPostClear, getCodeComponent,
+    loadingProcess, setPostClear, setPostBoard, board, getModifyPost,
+    isModify, id,
   ]);
 
   return (
@@ -70,12 +45,12 @@ const Posting = (props) => {
       <PostingHeader>
         <Col xs="12">
           <SelectInput type="select" name="board" value={post.board} onChange={onChangeValue}>
-            <BoardOptions />
+            <BoardOptionList />
           </SelectInput>
         </Col>
         <Col xs="2">
           <SelectInput type="select" name="category" value={post.category} onChange={onChangeValue}>
-            <BoardCategoryOptions />
+            <BoardCategoryOptionList />
           </SelectInput>
         </Col>
         <Col>
@@ -146,7 +121,7 @@ const PostingWrapper = styled.div`
   
   & .ck-content {
     height : 500px;
-    font-family: 'Nanum Gothic',sans-serif !important;
+    font-family: 'Jeju Gothic', sans-serif !important;
   }
 `;
 

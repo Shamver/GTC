@@ -289,7 +289,7 @@ router.delete('/', (req, res) => {
 });
 
 router.get('/temp', (req, res) => {
-  const { getCodeGroup, temp } = req.query;
+  const { getCodeGroup } = req.query;
 
   Database.execute(
     (database) => database.query(

@@ -56,7 +56,7 @@ const PostWrapper = styled.div`
   
   & .ck-content {
     height : 100px;
-    font-family: 'Nanum Gothic',sans-serif !important;
+    font-family: 'Jeju Gothic',sans-serif !important;
   }
   
   & .ck.ck-editor {

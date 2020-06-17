@@ -58,7 +58,8 @@ class BoardStore {
   }
 
   @observable judgeFilterMode = (query) => {
-    this.bestFilterMode = !!(query && query.filter_mode && query.filter_mode === 'true');
+    const { filter_mode: filterMode } = query;
+    this.bestFilterMode = !!(query && filterMode && filterMode === 'true');
   }
 
   @action setCurrentBoardPath = (path) => {
