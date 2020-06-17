@@ -25,7 +25,7 @@ const PostViewContent = () => {
   const { toggleReport } = BoardReportStore;
   const { judgeFavorite } = UserFavoriteStore;
   const { userData } = UserStore;
-
+  console.log(postView);
   const {
     id, title, writerName, board, date,
     viewCnt, content,
@@ -54,9 +54,11 @@ const PostViewContent = () => {
               <FontAwesomeIcon icon={faBars} /> 목록
             </GreyButton>
           </StylessLink>
-          <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'RP01', title, writerName)}>
-            <FontAwesomeIcon icon={faBellSlash} /> 신고
-          </Button>
+          { isMyPost === 1 ? '' : (
+            <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'RP01', title, writerName)}>
+              <FontAwesomeIcon icon={faBellSlash} /> 신고
+            </Button>
+          )}
           <RightSpan>
             <GreyButton outline={!isFavorite} color="secondary" size="sm" onClick={() => judgeFavorite(isFavorite, id)} disabled={!userData}>
               <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} /> 즐겨찾기

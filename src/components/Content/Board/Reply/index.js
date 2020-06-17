@@ -97,7 +97,7 @@ const Reply = ({ data, index, bpId }) => {
                 &nbsp;·&nbsp;
                 { data.updateDate ? data.updateDate : data.date}
                 &nbsp;·&nbsp;
-                <SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>신고 #</SpanLikeLink>
+                { userData.id === data.idWriter ? '' : (<SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>신고 #</SpanLikeLink>)}
               </>
             ) : (
               <>
