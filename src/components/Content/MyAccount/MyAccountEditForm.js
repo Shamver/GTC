@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import {
-  FormText, Input, Col, CustomInput,
+  FormText, Input, Col, CustomInput, Button,
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
@@ -41,14 +41,19 @@ const MyAccountEditForm = () => {
             </FormSelect>
             <FormSwitch>
               {profileYN === 'Y' ? (<Avatar src={avatarImg} />) : (<Avatar src={avatarImg} />)}
-              <InputProfile
-                type="switch"
-                id="profileSwitch"
-                name="Switch"
-                checked={profileYN === 'Y'}
-                onChange={onChangeProfile}
-                label="프로필 사진 공개 유무"
-              />
+              <ProfileDiv>
+                <InputProfile
+                  type="switch"
+                  id="profileSwitch"
+                  name="Switch"
+                  checked={profileYN === 'Y'}
+                  onChange={onChangeProfile}
+                  label="프로필 사진 공개 유무"
+                />
+                <ProfileChangeButton size="sm">
+                  사진 변경
+                </ProfileChangeButton>
+              </ProfileDiv>
             </FormSwitch>
           </RegisterForm>
         </Deform>
@@ -133,6 +138,14 @@ const Avatar = styled.img`
 
 const InputProfile = styled(CustomInput)`
   margin-left: 10px;
+`;
+
+const ProfileChangeButton = styled(Button)`
+  margin-left: 10px;
+`;
+
+const ProfileDiv = styled.div`
+  text-align: left;
 `;
 
 const AccentText = styled.span`
