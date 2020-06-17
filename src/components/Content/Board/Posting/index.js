@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect, memo } from 'react';
 import styled from 'styled-components';
 import {
   CustomInput, Button, Input, Row, Col,
@@ -53,7 +53,7 @@ const Posting = (props) => {
   const { params } = match;
   const { board, id } = params;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setPostClear();
     getCodeComponent('BOARD_FREE_CATEGORY', board);
     setPostBoard(board);
@@ -175,4 +175,4 @@ const SelectInput = styled(Input)`
   margin-bottom : 10px;
 `;
 
-export default observer(Posting);
+export default memo(observer(Posting));
