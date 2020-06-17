@@ -73,7 +73,9 @@ class PostStore {
     this.currentPostId = postId;
   };
 
-  @action addPost = () => {
+  @action addPost = (match) => {
+    const { board } = match.params;
+    console.log(match)
     if (!this.postValidationCheck()) {
       return false;
     }
@@ -93,7 +95,7 @@ class PostStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            this.root.UtilRouteStore.history.push('/free');
+            this.root.UtilRouteStore.history.push(`/${board}`);
             toast.success(data.message);
             this.setPostClear();
           } else {

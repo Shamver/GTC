@@ -113,7 +113,7 @@ const Posting = (props) => {
             </RightButton>
           )
           : (
-            <RightButton color="danger" onClick={addPost}>
+            <RightButton color="danger" onClick={() => addPost(match)}>
               <FontAwesomeIcon icon={faPen} />
               &nbsp;쓰기
             </RightButton>
