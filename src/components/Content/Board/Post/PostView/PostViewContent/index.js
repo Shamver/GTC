@@ -25,7 +25,7 @@ const PostViewContent = () => {
   const { toggleReport } = BoardReportStore;
   const { judgeFavorite } = UserFavoriteStore;
   const { userData } = UserStore;
-  console.log(postView);
+
   const {
     id, title, writerName, board, date,
     viewCnt, content,
