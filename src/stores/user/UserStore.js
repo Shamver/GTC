@@ -241,19 +241,23 @@ class UserStore {
 
   @action updateInfo = () => {
     const {
-      nickname, prevNickname, birth, gender, profileYN,
+      nickname, prevNickname, birth, gender, profileYN, uploadImage,
     } = this.root.ComponentMyAccountStore;
     const { userData } = this;
     const { history } = this.root.UtilRouteStore;
 
-    axios.put('/api/user/info', {
-      nickname: nickname.trim(),
-      prevNickname: prevNickname.trim(),
-      birth,
-      gender,
-      profileYN,
-      userId: userData.id,
-    })
+    const formData = new FormData();
+
+    formData.append('nickname', nickname.trim());
+    formData.append('prevNickname', prevNickname.trim());
+    formData.append('birth', birth);
+    formData.append('gender', gender);
+    formData.append('profileYN', profileYN);
+    formData.append('userId', userData.id);
+
+    if (uploadImage !== '') formData.append('images', uploadImage);
+
+    axios.put('/api/user/info', formData)
       .then((response) => {
         const { data } = response;
         if (data.success) {
