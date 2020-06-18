@@ -3,6 +3,8 @@ import { observable, action } from 'mobx';
 class MyAccountStore {
   @observable profileYN = '';
 
+  @observable profile = '';
+
   @observable nickname = '';
 
   @observable prevNickname = '';
@@ -16,6 +18,10 @@ class MyAccountStore {
   @observable timer;
 
   @observable disabled = true;
+
+  @observable uploadImage = '';
+
+  @observable uploadImagePreview = null;
 
   @observable nicknameValidation = {
     status: true,
@@ -48,6 +54,20 @@ class MyAccountStore {
     }, 300);
   });
 
+  @action onChangeProfileImage = ((e) => {
+    const image = e.target.files[0];
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      this.uploadImagePreview = event.target.result;
+    };
+
+    reader.readAsDataURL(image);
+
+    this.uploadImage = image;
+  });
+
   @action onChangeValue = ((e) => {
     this[e.target.name] = e.target.value;
     this.disabled = true;
@@ -71,6 +91,7 @@ class MyAccountStore {
       this.prevNickname = userData.username;
       this.birth = userData.birth;
       this.gender = userData.gender;
+      this.profile = userData.profile;
     }
   });
 

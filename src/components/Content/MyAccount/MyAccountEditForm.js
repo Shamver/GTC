@@ -12,6 +12,7 @@ const MyAccountEditForm = () => {
   const {
     profileYN, onChangeProfile, gender, nickname, birth,
     onChangeValue, nicknameValidation, birthValidation, genderValidation,
+    profile, onChangeProfileImage, uploadImagePreview,
   } = ComponentMyAccountStore;
 
   return (
@@ -40,7 +41,7 @@ const MyAccountEditForm = () => {
               <option value="F">여자</option>
             </FormSelect>
             <FormSwitch>
-              {profileYN === 'Y' ? (<Avatar src={avatarImg} />) : (<Avatar src={avatarImg} />)}
+              {profileYN === 'Y' ? (<Avatar src={uploadImagePreview || profile} />) : (<Avatar src={avatarImg} />)}
               <ProfileDiv>
                 <InputProfile
                   type="switch"
@@ -50,9 +51,7 @@ const MyAccountEditForm = () => {
                   onChange={onChangeProfile}
                   label="프로필 사진 공개 유무"
                 />
-                <ProfileChangeButton size="sm">
-                  사진 변경
-                </ProfileChangeButton>
+                <Input type="file" name="file" id="profileUpload" size="sm" onChange={(e) => onChangeProfileImage(e)} />
               </ProfileDiv>
             </FormSwitch>
           </RegisterForm>
@@ -141,7 +140,7 @@ const InputProfile = styled(CustomInput)`
 `;
 
 const ProfileChangeButton = styled(Button)`
-  margin-left: 10px;
+  margin-left: 12px;
 `;
 
 const ProfileDiv = styled.div`
