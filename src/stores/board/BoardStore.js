@@ -29,7 +29,7 @@ class BoardStore {
     value: 'CRIME',
     name: '신고 게시판',
   }, {
-    value: 'Q&A',
+    value: 'QNA',
     name: '질문 & 답변',
   }];
 

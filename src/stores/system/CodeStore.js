@@ -342,19 +342,6 @@ class CodeStore {
       .then((response) => {
         if (response.data) {
           this.setCodeList = response.data;
-          const zero = {
-            CODE: '',
-            CODEGROUP_ID: '',
-            CRT_DTTM: '',
-            DESC: '',
-            NAME: '선택',
-            ORDER: 0,
-            USE_FL: 1,
-          };
-
-          const tempa = response.data;
-          tempa.slice(0, 1, zero);
-          console.log(tempa);
         }
       })
       .catch((response) => {

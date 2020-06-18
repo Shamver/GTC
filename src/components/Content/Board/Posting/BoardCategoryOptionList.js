@@ -6,14 +6,21 @@ const BoardCategoryOptionList = () => {
   const { SystemCodeStore } = useStores();
   const { setCodeList } = SystemCodeStore;
 
-  return setCodeList.map((data) => (
-    <option
-      value={data.NAME}
-      key={data.CODE}
-    >
-      {data.NAME}
-    </option>
+  const categoryArr = [];
+  categoryArr.push(<option>선택</option>);
+
+  setCodeList.map((data) => (
+    categoryArr.push(
+      <option
+        value={data.NAME}
+        key={data.CODE}
+      >
+        {data.NAME}
+      </option>,
+    )
   ));
+
+  return categoryArr;
 };
 
 export default memo(observer(BoardCategoryOptionList));

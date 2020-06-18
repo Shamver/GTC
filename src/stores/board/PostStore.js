@@ -320,7 +320,12 @@ class PostStore {
 
   @action getPostUpperLower = async (id) => {
     const that = this;
-    await axios.get(`/api/board/post/${id}/upperLower`)
+    const { userData } = this.root.UserStore;
+    await axios.get(`/api/board/post/${id}/upperLower`, {
+      params: {
+        userId: userData.id,
+      },
+    })
       .then((response) => {
         const { data } = response;
         if (data.success) {
