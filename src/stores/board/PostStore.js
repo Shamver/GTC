@@ -154,7 +154,7 @@ class PostStore {
       .then((response) => {
         const { data } = response;
         if (data.success) {
-          this.root.UtilRouteStore.history.push(`/${path}`);
+          this.root.UtilRouteStore.history.push(`/${path.toLowerCase()}`);
           toast.success(data.message);
         } else {
           toast.error(data.message);
