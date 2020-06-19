@@ -1,7 +1,9 @@
 import { observable, action } from 'mobx';
 
 class MyAccountStore {
-  @observable profileYN = '';
+  @observable profileYN = 0;
+
+  @observable profile = '';
 
   @observable nickname = '';
 
@@ -16,6 +18,10 @@ class MyAccountStore {
   @observable timer;
 
   @observable disabled = true;
+
+  @observable uploadImage = '';
+
+  @observable uploadImagePreview = null;
 
   @observable nicknameValidation = {
     status: true,
@@ -37,15 +43,29 @@ class MyAccountStore {
   }
 
   @action onChangeProfile = (() => {
-    if (this.profileYN === 'Y') {
-      this.profileYN = 'N';
+    if (this.profileYN) {
+      this.profileYN = 0;
     } else {
-      this.profileYN = 'Y';
+      this.profileYN = 1;
     }
     this.disabled = true;
     this.timer = setTimeout(() => {
       this.checkValidation();
     }, 300);
+  });
+
+  @action onChangeProfileImage = ((e) => {
+    const image = e.target.files[0];
+
+    const reader = new FileReader();
+
+    reader.onload = (event) => {
+      this.uploadImagePreview = event.target.result;
+    };
+
+    reader.readAsDataURL(image);
+
+    this.uploadImage = image;
   });
 
   @action onChangeValue = ((e) => {
@@ -71,6 +91,7 @@ class MyAccountStore {
       this.prevNickname = userData.username;
       this.birth = userData.birth;
       this.gender = userData.gender;
+      this.profile = userData.profile;
     }
   });
 

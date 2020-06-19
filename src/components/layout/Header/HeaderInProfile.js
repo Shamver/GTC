@@ -54,7 +54,7 @@ const HeaderInProfile = () => {
             <DropdownIn isOpen={avatar} toggle={(e) => onActive('avatar', e)}>
               <AvatarDropdownToggleC name="avatar" caret>
                 { alertCount > 0 ? (<NewAlertCountSpan>{alertCount}</NewAlertCountSpan>) : ''}
-                <Avatar src={avatarImg} />
+                <Avatar src={(userData.profileYN && userData.profile) || avatarImg} />
               </AvatarDropdownToggleC>
               <DropdownMenuLeft>
                 <DropdownItemTitle>

@@ -12,6 +12,7 @@ const MyAccountEditForm = () => {
   const {
     profileYN, onChangeProfile, gender, nickname, birth,
     onChangeValue, nicknameValidation, birthValidation, genderValidation,
+    profile, onChangeProfileImage, uploadImagePreview,
   } = ComponentMyAccountStore;
 
   return (
@@ -40,15 +41,19 @@ const MyAccountEditForm = () => {
               <option value="F">여자</option>
             </FormSelect>
             <FormSwitch>
-              {profileYN === 'Y' ? (<Avatar src={avatarImg} />) : (<Avatar src={avatarImg} />)}
-              <InputProfile
-                type="switch"
-                id="profileSwitch"
-                name="Switch"
-                checked={profileYN === 'Y'}
-                onChange={onChangeProfile}
-                label="프로필 사진 공개 유무"
-              />
+              {profileYN
+                ? (<Avatar src={uploadImagePreview || profile} />) : (<Avatar src={avatarImg} />)}
+              <ProfileDiv>
+                <InputProfile
+                  type="switch"
+                  id="profileSwitch"
+                  name="Switch"
+                  checked={profileYN}
+                  onChange={onChangeProfile}
+                  label="프로필 사진 공개 유무"
+                />
+                <Input type="file" name="file" id="profileUpload" size="sm" onChange={(e) => onChangeProfileImage(e)} />
+              </ProfileDiv>
             </FormSwitch>
           </RegisterForm>
         </Deform>
@@ -133,6 +138,10 @@ const Avatar = styled.img`
 
 const InputProfile = styled(CustomInput)`
   margin-left: 10px;
+`;
+
+const ProfileDiv = styled.div`
+  text-align: left;
 `;
 
 const AccentText = styled.span`

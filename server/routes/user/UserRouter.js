@@ -2,6 +2,11 @@ const express = require('express');
 
 const router = express.Router();
 
+
+const { upload, uploadHandler } = require('../../middleware/photoUpload');
+
+const async = require('../../middleware/async');
+
 const { info } = require('../../log-config');
 const Database = require('../../Database');
 
@@ -17,7 +22,8 @@ const UPDATE_USER_INFO = `
     NICKNAME = ':NICKNAME'
     , BIRTH_DT = ':BIRTH_DT'
     , GENDER_CD = ':GENDER_CD'
-    , PROFILE_FL = :PROFILE_FL
+    , PROFILE_FL = ':PROFILE_FL'
+    , PROFILE = IF(':PROFILE'='', GTC_USER.PROFILE, ':PROFILE')
   WHERE ID = :USER_ID
 `;
 
@@ -121,10 +127,14 @@ router.delete('/withdrawal', (req, res) => {
   });
 });
 
-router.put('/info', (req, res) => {
+router.put('/info', upload.fields([{ name: 'images' }]), uploadHandler, async(async (req, res) => {
   const {
     nickname, birth, gender, profileYN, userId, prevNickname,
   } = req.body;
+
+  console.log(profileYN);
+
+  const profile = req.photo.images && req.photo.images.length > 0 ? req.photo.images[0] : '';
 
   Database.execute(
     (database) => database.query(
@@ -135,6 +145,7 @@ router.put('/info', (req, res) => {
         BIRTH_DT: birth,
         GENDER_CD: gender,
         PROFILE_FL: profileYN,
+        PROFILE: profile,
       },
     )
       .then(() => database.query(
@@ -154,7 +165,7 @@ router.put('/info', (req, res) => {
   ).then(() => {
     info('[UPDATE, PUT /api/user/info] 유저 정보 업데이트');
   });
-});
+}));
 
 router.get('/profile/:writerId', (req, res) => {
   Database.execute(
