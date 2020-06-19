@@ -14,7 +14,8 @@ const PaginationList = () => {
 
   const currentPageNum = Number(currentBoardPage);
   const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
-  const max = (currentPageNum + 3) > currentBoardMaxPage ? currentBoardMaxPage : currentPageNum + 3;
+  let max = (currentPageNum + 3) > currentBoardMaxPage ? currentBoardMaxPage : currentPageNum + 3;
+  max = min > max ? min : max;
   const array = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 1);
 
   const url = `/${currentBoardPath}/page/`;
@@ -43,10 +44,10 @@ const PaginationList = () => {
   }
 
   // 현재 페이지가 맥시멈 페이지가 아니면 > 페이지 표시
-  if (currentPageNum !== currentBoardMaxPage) {
+  if (currentPageNum < currentBoardMaxPage) {
     array.push(
       <PaginationItem key={-1}>
-        <CustomLink className="page-link" activeClassName="active" to={bestFilterMode ? `${url}${currentPageNum + 1}${filterUrl}` : `${url}${currentPageNum + 1}${filterUrl}`}>
+        <CustomLink className="page-link" activeClassName="active" to={bestFilterMode ? `${url}${currentPageNum + 1}${filterUrl}` : `${url}${currentPageNum + 1}`}>
           ＞
         </CustomLink>
       </PaginationItem>,

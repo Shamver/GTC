@@ -12,7 +12,6 @@ import useStores from '../../../stores/useStores';
 const BoardContent = ({ isFooter }) => {
   const { BoardStore } = useStores();
   const { currentBoardPath } = BoardStore;
-
   return (
     <>
       <HeaderDiv>
@@ -26,7 +25,7 @@ const BoardContent = ({ isFooter }) => {
       </HeaderDiv>
       <ManginessTable bordered hover size="sm">
         <tbody>
-          {!isFooter && (<PostList isNotice />)}
+          {!isFooter && <PostList isNotice />}
           <PostList />
         </tbody>
       </ManginessTable>
@@ -84,7 +83,6 @@ const HeaderDiv = styled.div`
   & > a.active {
     background-color : white;
   }
-  
 `;
 
 

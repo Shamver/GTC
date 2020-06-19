@@ -333,8 +333,8 @@ class CodeStore {
     return true;
   }
 
-  @action getCodeComponent = (getCodeGroup, temp) => {
-    axios.get('/api/system/code/temp', {
+  @action getCodeComponent = async (getCodeGroup, temp) => {
+    await axios.get('/api/system/code/temp', {
       params: {
         getCodeGroup, temp,
       },

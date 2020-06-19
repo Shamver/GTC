@@ -31,10 +31,18 @@ const PostList = ({ isNotice }) => {
     return null;
   }
 
+  if(isNotice) {
+    console.log(`isNotice ${isNotice}`);
+    console.log(Number(currentBoardPage));
+    console.log(` Number(currentBoardPage) === 1 ${Number(currentBoardPage) === 1}`);
+  }
+
   if (isNotice && Number(currentBoardPage) === 1) {
     return boardPostNoticeList[currentBoardPath].map((data, index) => (
       <Post key={data.id} data={data} index={index} isNotice />
     ));
+  } else if (isNotice) {
+    return null;
   }
 
   return boardPostList[currentBoardPath].map((data, index) => (

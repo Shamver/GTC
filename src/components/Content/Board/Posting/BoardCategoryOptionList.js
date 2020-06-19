@@ -7,12 +7,12 @@ const BoardCategoryOptionList = () => {
   const { setCodeList } = SystemCodeStore;
 
   const categoryArr = [];
-  categoryArr.push(<option>선택</option>);
+  categoryArr.push(<option key={0}>선택</option>);
 
   setCodeList.map((data) => (
     categoryArr.push(
       <option
-        value={data.NAME}
+        value={data.CODE}
         key={data.CODE}
       >
         {data.NAME}

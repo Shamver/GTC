@@ -69,10 +69,6 @@ class PostStore {
     this.root = root;
   }
 
-  @action setCurrentPostId = (postId) => {
-    this.currentPostId = postId;
-  };
-
   @action addPost = () => {
     if (!this.postValidationCheck()) {
       return false;
@@ -108,13 +104,13 @@ class PostStore {
     return true;
   };
 
-  @action modifyPost = () => {
+  @action modifyPost = async () => {
     if (!this.postValidationCheck()) {
       return false;
     }
     const { userData } = this.root.UserStore;
 
-    axios.put('/api/board/post', {
+    await axios.put('/api/board/post', {
       id: this.post.id,
       board: this.post.board,
       category: this.post.category,
@@ -170,7 +166,7 @@ class PostStore {
         board,
         currentPage,
         userId,
-        recommend: this.root.BoardStore.bestFilterMode ? 1 : 0 ,
+        recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
       },
     })
       .then((response) => {
@@ -178,7 +174,6 @@ class PostStore {
         if (data.success) {
           if (data.code === 1) {
             this.boardPostList = {
-              ...this.boardPostList,
               [board]: data.result,
             };
             // 게시글 가져올때 MAX 카운트 셋
