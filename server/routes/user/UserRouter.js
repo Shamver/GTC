@@ -23,7 +23,7 @@ const UPDATE_USER_INFO = `
     , BIRTH_DT = ':BIRTH_DT'
     , GENDER_CD = ':GENDER_CD'
     , PROFILE_FL = ':PROFILE_FL'
-    , PROFILE = ':PROFILE'
+    , PROFILE = IF(':PROFILE'='', GTC_USER.PROFILE, ':PROFILE')
   WHERE ID = :USER_ID
 `;
 
@@ -132,7 +132,9 @@ router.put('/info', upload.fields([{ name: 'images' }]), uploadHandler, async(as
     nickname, birth, gender, profileYN, userId, prevNickname,
   } = req.body;
 
-  const profile = req.photo && req.photo.images.length > 0 ? req.photo.images[0] : '';
+  console.log(profileYN);
+
+  const profile = req.photo.images && req.photo.images.length > 0 ? req.photo.images[0] : '';
 
   Database.execute(
     (database) => database.query(

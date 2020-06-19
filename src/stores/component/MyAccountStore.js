@@ -1,7 +1,7 @@
 import { observable, action } from 'mobx';
 
 class MyAccountStore {
-  @observable profileYN = '';
+  @observable profileYN = 0;
 
   @observable profile = '';
 
@@ -43,10 +43,10 @@ class MyAccountStore {
   }
 
   @action onChangeProfile = (() => {
-    if (this.profileYN === 'Y') {
-      this.profileYN = 'N';
+    if (this.profileYN) {
+      this.profileYN = 0;
     } else {
-      this.profileYN = 'Y';
+      this.profileYN = 1;
     }
     this.disabled = true;
     this.timer = setTimeout(() => {

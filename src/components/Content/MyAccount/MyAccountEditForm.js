@@ -41,13 +41,14 @@ const MyAccountEditForm = () => {
               <option value="F">여자</option>
             </FormSelect>
             <FormSwitch>
-              {profileYN === 'Y' ? (<Avatar src={uploadImagePreview || profile} />) : (<Avatar src={avatarImg} />)}
+              {profileYN
+                ? (<Avatar src={uploadImagePreview || profile} />) : (<Avatar src={avatarImg} />)}
               <ProfileDiv>
                 <InputProfile
                   type="switch"
                   id="profileSwitch"
                   name="Switch"
-                  checked={profileYN === 'Y'}
+                  checked={profileYN}
                   onChange={onChangeProfile}
                   label="프로필 사진 공개 유무"
                 />
