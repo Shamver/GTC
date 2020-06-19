@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import {
-  FormText, Input, Col, CustomInput, Button,
+  FormText, Input, Col, CustomInput,
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
@@ -138,10 +138,6 @@ const Avatar = styled.img`
 
 const InputProfile = styled(CustomInput)`
   margin-left: 10px;
-`;
-
-const ProfileChangeButton = styled(Button)`
-  margin-left: 12px;
 `;
 
 const ProfileDiv = styled.div`
