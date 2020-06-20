@@ -12,7 +12,6 @@ const Post = ({ data, index, isNotice }) => {
   const RecommentComponent = recommendCount > 0
     && (<LikeCountSpan>{recommendCount}</LikeCountSpan>);
   const NoticeComponent = isNotice ? (<span>공지</span>) : RecommentComponent;
-
   const noticeStyle = isNotice ? '#ffd7d4' : '#ffffff';
 
   return (

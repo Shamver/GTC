@@ -174,6 +174,7 @@ class PostStore {
         if (data.success) {
           if (data.code === 1) {
             this.boardPostList = {
+              ...this.boardPostList,
               [board]: data.result,
             };
             // 게시글 가져올때 MAX 카운트 셋

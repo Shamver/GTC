@@ -20,31 +20,23 @@ import Post from '.';
 // };
 
 const PostList = ({ isNotice }) => {
-  const { BoardStore, BoardPostStore, UtilRouteStore } = useStores();
-  const { currentBoardPath, currentBoardPage } = BoardStore;
+  const { BoardStore, BoardPostStore } = useStores();
+  const { currentBoardPath, currentBoardPage, boardCheck } = BoardStore;
   const { boardPostList, boardPostNoticeList } = BoardPostStore;
-  const { history } = UtilRouteStore;
-
-  if (!boardPostList[currentBoardPath] || boardPostList[currentBoardPath] === undefined) {
-    toast.error('아직 구현되지 않은 route 입니다.');
-    history.push('/');
-    return null;
-  }
-
-  if(isNotice) {
-    console.log(`isNotice ${isNotice}`);
-    console.log(Number(currentBoardPage));
-    console.log(` Number(currentBoardPage) === 1 ${Number(currentBoardPage) === 1}`);
+  if (!boardCheck()) {
+    return (<></>);
   }
 
   if (isNotice && Number(currentBoardPage) === 1) {
     return boardPostNoticeList[currentBoardPath].map((data, index) => (
       <Post key={data.id} data={data} index={index} isNotice />
     ));
-  } else if (isNotice) {
+  } if (isNotice) {
     return null;
   }
 
+  console.log(currentBoardPath);
+  console.log(boardPostList[currentBoardPath]);
   return boardPostList[currentBoardPath].map((data, index) => (
     <Post key={data.id} data={data} index={index} />
   ));
