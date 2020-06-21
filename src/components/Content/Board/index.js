@@ -15,13 +15,14 @@ const Board = ({
   const { loadingProcess } = UtilLoadingStore;
   const {
     setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage,
-    setIsPagination,
+    setIsPagination, boardPathCheck,
   } = BoardStore;
   const query = qs.parse(location.search);
 
   // 차단목록?
   useLayoutEffect(() => {
     loadingProcess([
+      () => boardPathCheck(path),
       () => setCurrentBoardPath(path),
       () => judgeFilterMode(query),
       () => setCurrentBoardPage(currentPage),

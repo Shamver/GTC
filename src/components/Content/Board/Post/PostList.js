@@ -21,11 +21,8 @@ import Post from '.';
 
 const PostList = ({ isNotice }) => {
   const { BoardStore, BoardPostStore } = useStores();
-  const { currentBoardPath, currentBoardPage, boardCheck } = BoardStore;
+  const { currentBoardPath, currentBoardPage } = BoardStore;
   const { boardPostList, boardPostNoticeList } = BoardPostStore;
-  if (!boardCheck()) {
-    return (<></>);
-  }
 
   if (isNotice && Number(currentBoardPage) === 1) {
     return boardPostNoticeList[currentBoardPath].map((data, index) => (
@@ -35,8 +32,6 @@ const PostList = ({ isNotice }) => {
     return null;
   }
 
-  console.log(currentBoardPath);
-  console.log(boardPostList[currentBoardPath]);
   return boardPostList[currentBoardPath].map((data, index) => (
     <Post key={data.id} data={data} index={index} />
   ));

@@ -88,17 +88,13 @@ class BoardStore {
     this.root.UtilRouteStore.history.setCurrentBoardToId('/'.concat(path.toLowerCase()));
   };
 
-  @action boardCheck = () => {
+  @action boardPathCheck = (path) => {
     const { boardPostList } = this.root.BoardPostStore;
-    const { currentBoardPath } = this.root.BoardStore;
     const { history } = this.root.UtilRouteStore;
-    if (boardPostList[currentBoardPath] === undefined) {
-      toast.error('아직 구현되지 않은 route 입니다.');
+    if (!boardPostList[path]) {
+      toast.warn('😳 존재하지 않는 게시판입니다.');
       history.push('/');
-      console.log('여기까지 오긴오니?')
-      return false;
     }
-    return true;
   }
 }
 
