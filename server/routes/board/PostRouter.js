@@ -22,7 +22,11 @@ const SELECT_POST_LIST = `
     , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) AS commentCount
-    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD = ':BOARD_CD') AS pageCount
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST PT WHERE PT.BOARD_CD = ':BOARD_CD' 
+        AND PT.USER_ID NOT IN
+        (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+        AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = PT.ID AND TYPE_CD = 'R01') >= :LIKES
+      ) AS pageCount
     , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
   FROM 
     GTC_POST P
@@ -79,6 +83,7 @@ const SELECT_POST_LIST_ALL = `
     BOARD_CD NOT IN ('qna','faq','consult','crime') 
     AND P.USER_ID NOT IN 
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+    AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -188,6 +193,8 @@ const SELECT_POST_UPPER_AND_LOWER = `
       , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writer
     FROM GTC_POST P, (SELECT @ROWNUM := 0) AS TEMP
     WHERE BOARD_CD = (SELECT BOARD_CD FROM GTC_POST WHERE ID = :POST_ID)
+    AND P.USER_ID NOT IN
+      (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
     ORDER BY ID DESC    
   ) AS B
   WHERE B.RN IN (
@@ -197,6 +204,8 @@ const SELECT_POST_UPPER_AND_LOWER = `
           , P.ID AS ID
         FROM GTC_POST P, (SELECT @ROWNUM2 := 0) AS TEMP
         WHERE P.BOARD_CD = (SELECT BOARD_CD FROM GTC_POST WHERE ID = :POST_ID)
+        AND P.USER_ID NOT IN
+          (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
         ORDER BY ID DESC   
       ) AS A
       WHERE A.ID = :POST_ID) + 1),
@@ -206,6 +215,8 @@ const SELECT_POST_UPPER_AND_LOWER = `
             , P.ID AS ID
             FROM GTC_POST P, (SELECT @ROWNUM3 := 0) AS TEMP
             WHERE P.BOARD_CD = (SELECT BOARD_CD FROM GTC_POST WHERE ID = :POST_ID)
+            AND P.USER_ID NOT IN
+              (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
             ORDER BY ID DESC   
       ) AS A
       WHERE A.ID = :POST_ID) - 1
@@ -304,7 +315,7 @@ router.get('/', (req, res) => {
         CURRENT_PAGE: ((currentPage - 1) * 25),
         USER_ID: userId,
         PER_PAGE: isHome ? 9 : 25,
-        LIKES: recommend === undefined ? 0 : 1,
+        LIKES: Number(recommend) ? 1 : 0,
       },
     )
       .then((rows) => {
@@ -603,6 +614,7 @@ router.get('/:id/upperLower', (req, res) => {
       SELECT_POST_UPPER_AND_LOWER,
       {
         POST_ID: req.params.id,
+        USER_ID: req.query.userId ? req.query.userId : null,
       },
     )
       .then((rows) => {

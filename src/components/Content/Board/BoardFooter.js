@@ -7,48 +7,33 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import * as Proptypes from 'prop-types';
 import BoardPagination from './Pagination';
 import useStores from '../../../stores/useStores';
 
-const BoardFooter = ({
-  path, noPagination, currentPage, query,
-}) => {
-  const { BoardPostStore } = useStores();
-  const { toggleBestPostToken } = BoardPostStore;
+const BoardFooter = () => {
+  const { BoardStore } = useStores();
+  const { currentBoardPath, bestFilterMode, currentBoardPage } = BoardStore;
+  const filterQs = '?filter_mode=true';
+  const pageUrl = Number(currentBoardPage) > 1 ? `/${currentBoardPath}/page/${currentBoardPage}` : `/${currentBoardPath}`;
+  const bestFilterUrl = bestFilterMode ? pageUrl : pageUrl.concat(filterQs);
+
   return (
     <>
       <AbsolDiv>
-        { toggleBestPostToken
-          ? (
-            <AbsoluteLeftLink to={`/${path}`}>
-              <Button color="warning" size="sm">
-                <FontAwesomeIcon icon={faStar} />
-                &nbsp;&nbsp;인기 글
-              </Button>
-            </AbsoluteLeftLink>
-          )
-          : (
-            <AbsoluteLeftLink to={`/${path}?filter_mode=true`}>
-              <Button outline color="warning" size="sm">
-                <FontAwesomeIcon icon={faStar} />
-                &nbsp;&nbsp;인기 글
-              </Button>
-            </AbsoluteLeftLink>
-          )}
-        <AbsoluteRightLink to={`/${path}/post`}>
+        <AbsoluteLeftLink to={bestFilterUrl}>
+          <Button outline={!bestFilterMode} color="warning" size="sm">
+            <FontAwesomeIcon icon={faStar} />
+            &nbsp;&nbsp;인기 글
+          </Button>
+        </AbsoluteLeftLink>
+        <AbsoluteRightLink to={`/${currentBoardPath}/post`}>
           <Button color="danger" size="sm">
             <FontAwesomeIcon icon={faPen} />
               &nbsp;&nbsp;글 쓰기
           </Button>
         </AbsoluteRightLink>
       </AbsolDiv>
-      <BoardPagination
-        path={path}
-        currentPage={currentPage}
-        noPagination={noPagination}
-        query={query}
-      />
+      <BoardPagination />
       <InputGroupWrapper>
         <InputGroupWidth>
           <InputGroupAddon addonType="prepend">
@@ -68,21 +53,6 @@ const BoardFooter = ({
       </InputGroupWrapper>
     </>
   );
-};
-
-BoardFooter.propTypes = {
-  path: Proptypes.string.isRequired,
-  noPagination: Proptypes.bool,
-  currentPage: Proptypes.string,
-  query: Proptypes.shape({
-    filter_mode: Proptypes.bool,
-  }),
-};
-
-BoardFooter.defaultProps = {
-  noPagination: false,
-  currentPage: '1',
-  query: '{filter_mode : false}',
 };
 
 const RightNoRadiusSelect = styled(Input)`

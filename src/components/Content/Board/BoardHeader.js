@@ -1,24 +1,21 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
-import * as Proptypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
-const BoardHeader = ({ path }) => {
+
+const BoardHeader = () => {
   const { BoardStore } = useStores();
-  const { getBoardName } = BoardStore;
-  const BoardName = getBoardName(path);
+  const { currentBoardName, currentBoardPath } = BoardStore;
+
   return (
     <TableHead>
-      <BoardLink to={path}>
-        <h4>{BoardName}</h4>
+      <BoardLink to={currentBoardPath}>
+        <h4>{currentBoardName}</h4>
       </BoardLink>
     </TableHead>
   );
-};
-
-BoardHeader.propTypes = {
-  path: Proptypes.string.isRequired,
 };
 
 const BoardLink = styled(Link)`
@@ -41,4 +38,4 @@ const TableHead = styled.div`
   margin-bottom : 10px;
 `;
 
-export default BoardHeader;
+export default memo(observer(BoardHeader));

@@ -1,36 +1,48 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect, memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import qs from 'query-string';
-import { observer } from 'mobx-react';
 import BoardHeader from './BoardHeader';
 import BoardContent from './BoardContent';
 import BoardFooter from './BoardFooter';
-
 import useStores from '../../../stores/useStores';
 
 const Board = ({
-  path, currentPage, noPagination, location, match
+  path, currentPage, isPagination, location,
 }) => {
-  const { BoardPostStore } = useStores();
-  const { setClearPostView } = BoardPostStore;
+  const { BoardPostStore, UtilLoadingStore, BoardStore } = useStores();
+  const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
+  const { loadingProcess } = UtilLoadingStore;
+  const {
+    setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage,
+    setIsPagination, boardPathCheck,
+  } = BoardStore;
   const query = qs.parse(location.search);
 
-  useEffect(() => {
-    setClearPostView();
-  }, [setClearPostView]);
+  // 차단목록?
+  useLayoutEffect(() => {
+    loadingProcess([
+      () => boardPathCheck(path),
+      () => setCurrentBoardPath(path),
+      () => judgeFilterMode(query),
+      () => setCurrentBoardPage(currentPage),
+      () => setIsPagination(isPagination),
+      () => getBoardPostNoticeList(path, currentPage),
+      () => getBoardPostList(path, currentPage),
+      setClearPostView,
+    ]);
+  }, [
+    loadingProcess, setCurrentBoardPath, path, judgeFilterMode,
+    query, setCurrentBoardPage, currentPage, setIsPagination, isPagination,
+    getBoardPostNoticeList, getBoardPostList, setClearPostView,
+  ]);
 
   return (
     <BoardWrapper>
       <TableWrapper>
-        <BoardHeader path={path} />
-        <BoardContent path={path} currentPage={currentPage} query={query} />
-        <BoardFooter
-          path={path}
-          currentPage={currentPage}
-          noPagination={noPagination}
-          query={query}
-        />
+        <BoardHeader />
+        <BoardContent />
+        <BoardFooter />
       </TableWrapper>
     </BoardWrapper>
   );
@@ -39,17 +51,15 @@ const Board = ({
 Board.propTypes = {
   path: Proptypes.string.isRequired,
   currentPage: Proptypes.string,
-  noPagination: Proptypes.bool,
-  location: Proptypes.string.isRequired,
-  query: Proptypes.shape({
-    filter_mode: Proptypes.bool,
-  }),
+  isPagination: Proptypes.bool,
+  location: Proptypes.shape({
+    search: Proptypes.string,
+  }).isRequired,
 };
 
 Board.defaultProps = {
   currentPage: '1',
-  noPagination: false,
-  query: '{filter_mode : false}',
+  isPagination: false,
 };
 
 const BoardWrapper = styled.div`
@@ -63,4 +73,4 @@ const TableWrapper = styled.div`
   font-size : 13px !important;
 `;
 
-export default observer(Board);
+export default memo(Board);

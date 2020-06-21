@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHome } from '@fortawesome/free-solid-svg-icons';
@@ -7,48 +7,39 @@ import { Table } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import PostList from './Post/PostList';
+import useStores from '../../../stores/useStores';
 
-const BoardContent = ({
-  path, currentPage, isFooter, query,
-}) => (
-  <>
-    <Div>
+const BoardContent = ({ isFooter }) => {
+  const { BoardStore } = useStores();
+  const { currentBoardPath } = BoardStore;
+  return (
+    <>
       <HeaderDiv>
-        <NavLink activeClassName="active" to={`/${path}`}>
+        <NavLink activeClassName="active" to={`/${currentBoardPath}`}>
           <FontAwesomeIcon icon={faHome} />
         </NavLink>
-        <NavLink activeClassName="active" to={`/${path}/freedom`}>자유</NavLink>
-        <NavLink activeClassName="active" to={`/${path}/talk`}>잡담</NavLink>
-        <NavLink activeClassName="active" to={`/${path}/toron`}>토론</NavLink>
-        <NavLink activeClassName="active" to={`/${path}/gunhee`}>건의</NavLink>
+        <NavLink activeClassName="active" to={`/${currentBoardPath}/freedom`}>자유</NavLink>
+        <NavLink activeClassName="active" to={`/${currentBoardPath}/talk`}>잡담</NavLink>
+        <NavLink activeClassName="active" to={`/${currentBoardPath}/toron`}>토론</NavLink>
+        <NavLink activeClassName="active" to={`/${currentBoardPath}/gunhee`}>건의</NavLink>
       </HeaderDiv>
       <ManginessTable bordered hover size="sm">
         <tbody>
-          { !isFooter ? (<PostList path={path} isNotice />) : '' }
-          <PostList path={path} currentPage={currentPage} query={query} />
+          {!isFooter && <PostList isNotice />}
+          <PostList />
         </tbody>
       </ManginessTable>
-    </Div>
-  </>
-);
+    </>
+  );
+};
 
 BoardContent.propTypes = {
-  path: Proptypes.string.isRequired,
-  currentPage: Proptypes.string,
-  isFooter: Proptypes.bool.isRequired,
-  query: Proptypes.shape({
-    filter_mode: Proptypes.bool,
-  }),
+  isFooter: Proptypes.bool,
 };
 
 BoardContent.defaultProps = {
-  currentPage: null,
-  query: '{filter_mode : false}',
+  isFooter: false,
 };
-
-const Div = styled.div`
-  display: ${(props) => (props.loading ? 'none' : 'block')}
-`;
 
 const ManginessTable = styled(Table)`
   margin : 0px !important;
@@ -64,11 +55,7 @@ const ManginessTable = styled(Table)`
   }
   
   & tr:hover {
-<<<<<<< HEAD
     background-color : #fff7d9 !important;
-=======
-    background-color : #fff7d9;
->>>>>>> feat/notice
   }
 `;
 
@@ -96,8 +83,7 @@ const HeaderDiv = styled.div`
   & > a.active {
     background-color : white;
   }
-  
 `;
 
 
-export default observer(BoardContent);
+export default memo(observer(BoardContent));

@@ -1,8 +1,7 @@
 import { observable, action } from 'mobx';
 
 class PostStore {
-  @observable dropdown = {
-  };
+  @observable dropdown = {};
 
   @observable postOptionOpen = false;
 
@@ -14,25 +13,21 @@ class PostStore {
     this.postOptionOpen = !this.postOptionOpen;
   };
 
-  @action onActive = (target) => {
-    const keys = Object.keys(this.dropdown);
-
-    for (let i = 0; i < keys.length; i += 1) {
-      this.dropdown = {
-        ...this.dropdown,
-        [keys[i]]: false,
-      };
+  @action onActive = (index) => {
+    if (this.dropdown[index]) {
+      this.dropdown[index] = false;
+      return;
     }
 
-    let name;
-    if (typeof target.currentTarget.getAttribute === 'function') {
-      name = target.currentTarget.getAttribute('name');
-    }
-    if (name !== undefined) {
-      this.dropdown = {
-        ...this.dropdown,
-        [name]: !this.dropdown[name],
-      };
+    const keyList = Object.keys(this.dropdown);
+    let key;
+    this.dropdownClear();
+
+    for (let i = 0; i < keyList.length; i += 1) {
+      key = keyList[i];
+      if (key === index) {
+        this.dropdown[index] = true;
+      }
     }
   };
 
@@ -42,6 +37,16 @@ class PostStore {
       [id]: false,
     };
   };
+
+  @action dropdownClear = () => {
+    const keyList = Object.keys(this.dropdown);
+    let key;
+
+    for (let i = 0; i < keyList.length; i += 1) {
+      key = keyList[i];
+      this.dropdown[key] = false;
+    }
+  }
 
   @action onClickPost = (id) => {
     const { history } = this.root.UtilRouteStore;

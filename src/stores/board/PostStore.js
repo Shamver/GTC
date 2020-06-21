@@ -69,13 +69,7 @@ class PostStore {
     this.root = root;
   }
 
-  @action setCurrentPostId = (postId) => {
-    this.currentPostId = postId;
-  };
-
-  @action addPost = (match) => {
-    const { board } = match.params;
-
+  @action addPost = () => {
     if (!this.postValidationCheck()) {
       return false;
     }
@@ -95,7 +89,7 @@ class PostStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            this.root.UtilRouteStore.history.push(`/${board}`);
+            this.root.UtilRouteStore.goBack();
             toast.success(data.message);
             this.setPostClear();
           } else {
@@ -110,15 +104,13 @@ class PostStore {
     return true;
   };
 
-  @action modifyPost = (match) => {
-    const { board } = match.params;
-
+  @action modifyPost = async () => {
     if (!this.postValidationCheck()) {
       return false;
     }
     const { userData } = this.root.UserStore;
 
-    axios.put('/api/board/post', {
+    await axios.put('/api/board/post', {
       id: this.post.id,
       board: this.post.board,
       category: this.post.category,
@@ -133,7 +125,7 @@ class PostStore {
       .then((response) => {
         const { data } = response;
         if (data.success) {
-          this.root.UtilRouteStore.history.push(`/${board}`);
+          this.root.UtilRouteStore.goBack();
           toast.success(data.message);
         } else {
           toast.error(data.message);
@@ -165,16 +157,16 @@ class PostStore {
     return true;
   };
 
-  @action getBoardPostList = async (board, currentPage, queryString) => {
+  @action getBoardPostList = async (board, currentPage) => {
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
-    const recommend = queryString.filter_mode;
-
-    this.toggleBestPostToken = !!recommend;
 
     await axios.get('/api/board/post', {
       params: {
-        board, currentPage, userId, recommend,
+        board,
+        currentPage,
+        userId,
+        recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
       },
     })
       .then((response) => {
@@ -202,7 +194,11 @@ class PostStore {
       .catch((response) => { toast.error(response.message); });
   };
 
-  @action getBoardPostNoticeList = async (board) => {
+  @action getBoardPostNoticeList = async (board, currentPage) => {
+    if (currentPage === 1) {
+      return;
+    }
+
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
 
@@ -275,7 +271,11 @@ class PostStore {
       .catch((response) => { toast.error(response.message); });
   };
 
-  @action getModifyPost = (id, isModify = false) => {
+  @action getModifyPost = (id, isModify) => {
+    if (!isModify) {
+      return;
+    }
+
     const { userData } = this.root.UserStore;
     const { history } = this.root.UtilRouteStore;
     axios.get(`/api/board/post/${id}`, {
@@ -291,7 +291,7 @@ class PostStore {
             secretFl, commentAllowFl, secretCommentAllowFl, isMyPost,
           } = data.result[0];
 
-          if (isModify && !isMyPost) {
+          if (!isMyPost) {
             toast.error('수정권한이 없는 게시물입니다.');
             history.push('/');
           }
@@ -316,7 +316,12 @@ class PostStore {
 
   @action getPostUpperLower = async (id) => {
     const that = this;
-    await axios.get(`/api/board/post/${id}/upperLower`)
+    const { userData } = this.root.UserStore;
+    await axios.get(`/api/board/post/${id}/upperLower`, {
+      params: {
+        userId: userData.id,
+      },
+    })
       .then((response) => {
         const { data } = response;
         if (data.success) {

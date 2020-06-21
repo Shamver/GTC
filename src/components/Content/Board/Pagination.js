@@ -1,109 +1,14 @@
-import React from 'react';
-import { PaginationItem, Pagination } from 'reactstrap';
+import React, { memo } from 'react';
 import styled from 'styled-components';
-import * as Proptypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+import { Pagination } from 'reactstrap';
 import { observer } from 'mobx-react';
-import useStores from '../../../stores/useStores';
+import PaginationList from './PaginationList';
 
-const PaginationList = ({
-  path, currentPage, noPagination, query,
-}) => {
-  const { BoardPostStore } = useStores();
-  const { currentBoardMaxPage } = BoardPostStore;
-  const FilterMode = !!query.filter_mode;
-
-  const currentPageNum = parseInt(currentPage, 0);
-  const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
-  const max = (currentPageNum + 3) > currentBoardMaxPage ? currentBoardMaxPage : currentPageNum + 3;
-  const array = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 1);
-
-  if (currentPage > 1) {
-    array.push(
-      <PaginationItem key={0}>
-        <CustomLink className="page-link" activeClassName="active" to={FilterMode ? `/${path}/page/${currentPageNum - 1}?filter_mode=true` : `/${path}/page/${currentPageNum - 1}`}>
-          ‹
-        </CustomLink>
-      </PaginationItem>,
-    );
-  }
-
-  for (let i = min; i <= max; i += 1) {
-    array.push(
-      <PaginationItem active={i === 1 && noPagination} key={i}>
-        <CustomLink className="page-link" activeClassName="active" to={FilterMode ? `/${path}/page/${i}?filter_mode=true` : `/${path}/page/${i}`}>
-          {i}
-        </CustomLink>
-      </PaginationItem>,
-    );
-  }
-
-  if (currentPageNum !== currentBoardMaxPage) {
-    array.push(
-      <PaginationItem key={-1}>
-        <CustomLink className="page-link" activeClassName="active" to={FilterMode ? `/${path}/page/${currentPageNum + 1}?filter_mode=true` : `/${path}/page/${currentPageNum + 1}`}>
-          ›
-        </CustomLink>
-      </PaginationItem>,
-    );
-  }
-
-  // 추후 max 값 조정후 추가
-  return array;
-};
-
-PaginationList.propTypes = {
-  path: Proptypes.string.isRequired,
-  currentPage: Proptypes.string,
-  noPagination: Proptypes.bool,
-  query: Proptypes.string,
-};
-
-PaginationList.defaultProps = {
-  currentPage: '1',
-};
-
-
-const BoardPagination = ({
-  path, noPagination, currentPage, query,
-}) => (
+const BoardPagination = () => (
   <PaginationCustom>
-    <PaginationList
-      currentPage={currentPage}
-      path={path}
-      noPagination={noPagination}
-      query={query}
-    />
+    <PaginationList />
   </PaginationCustom>
 );
-
-BoardPagination.propTypes = {
-  path: Proptypes.string.isRequired,
-  noPagination: Proptypes.bool,
-  currentPage: Proptypes.string,
-  query: Proptypes.string.isRequired,
-};
-
-BoardPagination.defaultProps = {
-  noPagination: false,
-  currentPage: '1',
-};
-
-
-const CustomLink = styled(NavLink)`
-  &.active {
-    z-index: 1;
-    color: #fff !important;
-    background-color: #DC3545;
-    border-color: #DC3545;
-  }
-  
-  &.active:hover {
-    background-color: #DC3545;
-    border-color: #DC3545;
-  } 
-`;
-
 
 const PaginationCustom = styled(Pagination)`
   color : #DC3545;
@@ -135,4 +40,4 @@ const PaginationCustom = styled(Pagination)`
   }
 `;
 
-export default observer(BoardPagination);
+export default memo(observer(BoardPagination));

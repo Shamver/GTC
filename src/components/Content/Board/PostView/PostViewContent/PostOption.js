@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
 import * as Proptypes from 'prop-types';
-import useStores from '../../../../../../stores/useStores';
+import useStores from '../../../../../stores/useStores';
 
 const PostOption = ({ path }) => {
   const { UtilAlertStore, BoardPostStore, BoardStore } = useStores();
+  const { currentBoardPath } = BoardStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { deletePost, postView } = BoardPostStore;
-  const { currentBoard } = BoardStore;
   const { id } = postView;
 
   return (
@@ -22,7 +22,7 @@ const PostOption = ({ path }) => {
         </GreyButton>
       </RightSpan>
       <RightSpan>
-        <Link to={`/${currentBoard}/modify/${id}`}>
+        <Link to={`/${currentBoardPath}/modify/${id}`}>
           <GreyButton color="secondary" size="sm" outline>
             <FontAwesomeIcon icon={faPen} /> 수정
           </GreyButton>

@@ -1,7 +1,7 @@
 import React, { useEffect, memo } from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
-import useStores from '../../../../../stores/useStores';
+import useStores from '../../../../stores/useStores';
 import PostViewHeader from './PostViewHeader';
 import PostViewContent from './PostViewContent';
 import PostViewFooter from './PostViewFooter';
@@ -56,7 +56,7 @@ const PostWrapper = styled.div`
   
   & .ck-content {
     height : 100px;
-    font-family: 'Nanum Gothic',sans-serif !important;
+    font-family: 'Jeju Gothic',sans-serif !important;
   }
   
   & .ck.ck-editor {

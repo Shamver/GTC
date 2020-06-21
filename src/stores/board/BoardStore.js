@@ -29,22 +29,43 @@ class BoardStore {
     value: 'CRIME',
     name: '신고 게시판',
   }, {
-    value: 'Q&A',
+    value: 'QNA',
     name: '질문 & 답변',
   }];
 
   @observable tempData = [];
 
-  @observable currentBoard = '';
+  @observable currentBoardPath = '';
+
+  @observable currentBoardName = '';
+
+  @observable bestFilterMode = false;
+
+  @observable currentBoardPage = 1;
+
+  @observable isPagination = false;
 
   constructor(root) {
     this.root = root;
   }
 
-  @action setCurrentBoard = (currentBoard) => {
-    this.currentBoard = currentBoard;
-    this.root.BoardPostStore.toggleBestPostToken = false;
-  };
+  @action setIsPagination = (isPagination) => {
+    this.isPagination = isPagination;
+  }
+
+  @action setCurrentBoardPage = (currentBoardPage) => {
+    this.currentBoardPage = currentBoardPage;
+  }
+
+  @observable judgeFilterMode = (query) => {
+    const { filter_mode: filterMode } = query;
+    this.bestFilterMode = !!(query && filterMode && filterMode === 'true');
+  }
+
+  @action setCurrentBoardPath = (path) => {
+    this.currentBoardPath = path;
+    this.currentBoardName = this.boardKinds[path];
+  }
 
   @action setCurrentBoardToId = (id) => {
     axios.get('/api/board', { params: { id } })
@@ -66,6 +87,15 @@ class BoardStore {
   @action moveBoard = (path) => {
     this.root.UtilRouteStore.history.setCurrentBoardToId('/'.concat(path.toLowerCase()));
   };
+
+  @action boardPathCheck = (path) => {
+    const { boardPostList } = this.root.BoardPostStore;
+    const { history } = this.root.UtilRouteStore;
+    if (!boardPostList[path]) {
+      toast.warn('😳 존재하지 않는 게시판입니다.');
+      history.push('/');
+    }
+  }
 }
 
 export default BoardStore;

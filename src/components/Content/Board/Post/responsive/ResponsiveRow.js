@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faStar, faImage } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
@@ -7,54 +7,41 @@ import * as Proptypes from 'prop-types';
 import WriterDropdown from './WriterDropdown';
 import useStores from '../../../../../stores/useStores';
 
-const ResponsiveRow = ({
-  data, index, path, isNotice,
-}) => {
+const ResponsiveRow = ({ data, index, isNotice }) => {
   const {
     id, recommendCount, categoryName, commentCount,
     type, title, boardName, isImage,
   } = data;
-  const { ComponentPostStore } = useStores();
+  const { ComponentPostStore, BoardStore } = useStores();
   const { onClickPost, isVisited } = ComponentPostStore;
+  const { currentBoardPath } = BoardStore;
 
-  // eslint-disable-next-line no-nested-ternary
-  const IsBestPost = recommendCount >= 10
-    ? (<Star icon={faStar} />)
-    : isImage ? (<FontAwesomeIcon icon={faImage} />)
-      : (<BottomIcon icon={faCommentDots} />);
+  const isImageComponent = isImage
+    ? (<FontAwesomeIcon icon={faImage} />)
+    : (<BottomIcon icon={faCommentDots} />);
+  const IsBestPost = recommendCount >= 10 ? (<Star icon={faStar} />) : isImageComponent;
 
   return (
     <>
-      { path === 'all' ? (
-        <DateTd>
-          {!isNotice ? boardName : ''}
-        </DateTd>
-      ) : null }
-      { !isNotice ? (
-        <DateTd>
-          { type !== 'notice' ? categoryName : ''}
-        </DateTd>
-      ) : '' }
+      { currentBoardPath === 'all' && (
+        <DateTd>{!isNotice && boardName}</DateTd>
+      )}
+      {!isNotice && (<DateTd>{type !== 'notice' && categoryName}</DateTd>)}
       <MiddleTd width="700" colSpan={isNotice ? 2 : 1}>
         <MiddleSpan>
-          { isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
+          {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
           &nbsp;
-          <PostTitle className={isVisited(id) ? 'color-gray' : ''} onClick={() => onClickPost(id)}>{title}</PostTitle>
+          <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>{title}</PostTitle>
           { commentCount > 0
-            ? (
-              <ReplyCountspan>
-                &nbsp;&nbsp;&nbsp;
-                [{commentCount}]
-              </ReplyCountspan>
-            ) : null}
+           && (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>)}
           <MobileWriterDropdown>
-            <WriterDropdown data={data} index={index} />
-            <TopSpan>{type !== 'notice' ? categoryName : ''}</TopSpan>
+            <WriterDropdown data={data} index={index} isNotice={isNotice} isMobile />
+            <TopSpan>{type !== 'notice' && categoryName}</TopSpan>
           </MobileWriterDropdown>
         </MiddleSpan>
       </MiddleTd>
       <CenterTdWriter>
-        <WriterDropdown data={data} index={index} />
+        <WriterDropdown data={data} index={index} isNotice={isNotice} />
       </CenterTdWriter>
     </>
   );
@@ -69,10 +56,9 @@ ResponsiveRow.propTypes = {
     commentCount: Proptypes.number,
     type: Proptypes.string,
     boardName: Proptypes.string,
-    isImage: Proptypes.bool,
+    isImage: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
-  path: Proptypes.string.isRequired,
   isNotice: Proptypes.bool.isRequired,
 };
 
@@ -125,7 +111,6 @@ const MiddleTd = styled.td`
   @media (max-width: 992px) {
     height : 50px;
   }
-  
 `;
 
 const CenterTd = styled(MiddleTd)`
@@ -143,14 +128,12 @@ const CenterTdWriter = styled(CenterTd)`
 const PostTitle = styled.a`
   cursor: pointer
   color : black;
-  
   &.color-gray {
     color: #b0b0b0 !important;
   }
-  
   &:hover {
     text-decoration: none;
   }
 `;
 
-export default ResponsiveRow;
+export default memo(ResponsiveRow);

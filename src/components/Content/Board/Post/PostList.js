@@ -1,9 +1,9 @@
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
-import React, { useEffect } from 'react';
 import * as Proptypes from 'prop-types';
 import { toast } from 'react-toastify';
 import useStores from '../../../../stores/useStores';
-import Post from './index';
+import Post from '.';
 
 // const BoardCategoryOptions = () => {
 //   const { SystemCodeStore } = useStores();
@@ -19,78 +19,30 @@ import Post from './index';
 //   ));
 // };
 
-const PostList = ({
-  path, currentPage, isNotice = false, query,
-}) => {
-  const {
-    BoardStore, BoardPostStore, ComponentPostStore, UserIgnoreStore, UtilRouteStore,
-    SystemCodeStore,
-  } = useStores();
-  const { setCurrentBoard } = BoardStore;
-  const {
-    getBoardPostList, boardPostList,
-    getBoardPostNoticeList, boardPostNoticeList,
-  } = BoardPostStore;
-  const { onSet } = ComponentPostStore;
-  const { ignoreList } = UserIgnoreStore;
-  const { history } = UtilRouteStore;
-  const { getCodeComponent } = SystemCodeStore;
+const PostList = ({ isNotice }) => {
+  const { BoardStore, BoardPostStore } = useStores();
+  const { currentBoardPath, currentBoardPage } = BoardStore;
+  const { boardPostList, boardPostNoticeList } = BoardPostStore;
 
-  useEffect(() => {
-    getCodeComponent('BOARD_FREE_CATEGORY', path);
-    setCurrentBoard(path);
-    if (isNotice) {
-      getBoardPostNoticeList(path);
-    } else {
-      getBoardPostList(path, currentPage, query);
-    }
-  }, [
-    path, getBoardPostList, setCurrentBoard, currentPage, ignoreList,
-    history, getBoardPostNoticeList, getCodeComponent, isNotice, query,
-  ]);
-
-  if (!boardPostList[path] || boardPostList[path] === undefined) {
-    toast.error('아직 구현되지 않은 route 입니다.');
-    history.push('/');
+  if (isNotice && Number(currentBoardPage) === 1) {
+    return boardPostNoticeList[currentBoardPath].map((data, index) => (
+      <Post key={data.id} data={data} index={index} isNotice />
+    ));
+  } if (isNotice) {
     return null;
   }
 
-  if (isNotice) {
-    return boardPostNoticeList[path].map((data, index) => {
-      onSet(index);
-      return (
-        <Post
-          key={data.id}
-          data={data}
-          index={index}
-          path={path}
-          currentPage={currentPage}
-          isNotice
-        />
-      );
-    });
-  }
-
-  return boardPostList[path].map((data, index) => {
-    onSet(index);
-    return (
-      <Post key={data.id} data={data} index={index} path={path} currentPage={currentPage} />
-    );
-  });
+  return boardPostList[currentBoardPath].map((data, index) => (
+    <Post key={data.id} data={data} index={index} />
+  ));
 };
 
 PostList.propTypes = {
-  path: Proptypes.string,
-  currentPage: Proptypes.string,
   isNotice: Proptypes.bool,
-  query: Proptypes.shape({
-    filter_mode: Proptypes.bool,
-  }),
 };
 
 PostList.defaultProps = {
-  query: '{filter_mode : false}',
+  isNotice: false,
 };
 
-
-export default observer(PostList);
+export default memo(observer(PostList));

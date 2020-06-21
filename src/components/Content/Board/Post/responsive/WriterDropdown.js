@@ -1,39 +1,39 @@
-import React from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
 } from 'reactstrap';
 import * as Proptypes from 'prop-types';
+import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 
-const WriterDropdown = ({ data, index }) => {
+const WriterDropdown = ({
+  data, index, isNotice, isMobile,
+}) => {
   const {
     ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
   } = useStores();
-  const { dropdown, onActive } = ComponentPostStore;
+  const { dropdown, onActive, onSet } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { userData, getProfile } = UserStore;
   const { addIgnore } = UserIgnoreStore;
   const { writerName, writerId } = data;
+  const dropdownKey = isNotice ? `notice_${index}` : index.toString();
+  const lastKey = isMobile ? 'mobile_'.concat(dropdownKey) : dropdownKey;
+
+  // 하나하나 로우 드롭다운이 생성될때마다 그에 대한 드롭다운 객체 생성;
+  useLayoutEffect(() => {
+    onSet(lastKey);
+  }, [onSet, lastKey]);
 
   return (
-    <WriterDropdownIn isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
-      <WriterDropdownToggle name={`replyIndex${index}`}>{writerName}</WriterDropdownToggle>
+    <WriterDropdownIn isOpen={dropdown[lastKey]} toggle={(e) => onActive(lastKey, e)}>
+      <WriterDropdownToggle>{writerName}</WriterDropdownToggle>
       <WriterDropdownMenu>
-        <WriterDropdownItem onClick={() => getProfile(writerId)}>
-          프로필
-        </WriterDropdownItem>
-        <WriterDropdownItem>
-          작성 글 보기
-        </WriterDropdownItem>
-        {!userData || userData.id === writerId ? '' : (
-          <WriterDropdownItem
-            onClick={() => {
-              toggleConfirmAlert('정말 차단하시겠습니까?', () => {
-                addIgnore(writerId);
-              });
-            }}
-          >
+        <WriterDropdownItem onClick={() => getProfile(writerId)}>프로필</WriterDropdownItem>
+        <WriterDropdownItem>작성 글 보기</WriterDropdownItem>
+        {!(!userData || userData.id === writerId) && (
+          <WriterDropdownItem onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(writerId))}>
             차단하기
           </WriterDropdownItem>
         )}
@@ -48,6 +48,12 @@ WriterDropdown.propTypes = {
     writerId: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
+  isNotice: Proptypes.bool.isRequired,
+  isMobile: Proptypes.bool,
+};
+
+WriterDropdown.defaultProps = {
+  isMobile: false,
 };
 
 const WriterDropdownIn = styled(Dropdown)`
@@ -96,4 +102,4 @@ const WriterDropdownToggle = styled(DropdownToggle)`
   }
 `;
 
-export default WriterDropdown;
+export default memo(observer(WriterDropdown));
