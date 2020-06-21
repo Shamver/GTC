@@ -66,6 +66,10 @@ class MyAccountStore {
     reader.readAsDataURL(image);
 
     this.uploadImage = image;
+    this.disabled = true;
+    this.timer = setTimeout(() => {
+      this.checkValidation();
+    }, 300);
   });
 
   @action onChangeValue = ((e) => {
@@ -92,7 +96,10 @@ class MyAccountStore {
       this.birth = userData.birth;
       this.gender = userData.gender;
       this.profile = userData.profile;
+      this.uploadImagePreview = null;
     }
+
+    this.checkValidation();
   });
 
   @action checkValidation = (() => {
@@ -136,11 +143,12 @@ class MyAccountStore {
     this.disabled = this.nickname === userData.username
       && this.birth === userData.birth
       && this.gender === userData.gender
-      && this.profileYN === userData.profileYN;
+      && this.profileYN === userData.profileYN
+      && this.uploadImagePreview === null;
 
     this.isAllValidationChecked = this.nicknameValidation.status
-    && this.birthValidation.status
-    && this.genderValidation.status;
+      && this.birthValidation.status
+      && this.genderValidation.status;
   });
 }
 
