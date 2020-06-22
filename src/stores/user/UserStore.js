@@ -276,7 +276,7 @@ class UserStore {
   }
 
   @action getProfile = (writerId) => {
-    this.root.UtilStore.profileToggle = !this.root.UtilStore.profileToggle;
+    const that = this;
     const { pageIndex } = this.root.UtilStore;
     const { postIndex, commentIndex, nickNameIndex } = pageIndex;
 
@@ -284,115 +284,144 @@ class UserStore {
       .then((response) => {
         const { data } = response;
 
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             this.profileData = {
               ...this.profileData,
-              profileInfo: data.DATA,
+              profileInfo: data.result,
             };
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       }).then(() => {
-        this.getPostList(postIndex);
-        this.getCommentList(commentIndex);
-        this.getNickNameList(nickNameIndex);
+        const postPromise = this.getPostList(postIndex);
+        const commentPromise = this.getCommentList(commentIndex);
+        const nickNamePromise = this.getNickNameList(nickNameIndex);
+
+        Promise.all([postPromise, commentPromise, nickNamePromise]).then(() => {
+          that.root.UtilStore.profileToggle = !that.root.UtilStore.profileToggle;
+        });
       })
       .catch((response) => { toast.error(response.message); });
-    return true;
   }
 
-  @action getPostList = (index) => {
+  @action getPostList = async (index) => {
     const writerId = this.profileData.profileInfo.userId;
     this.root.UtilStore.pageIndex = {
       ...this.root.UtilStore.pageIndex,
       postIndex: index,
     };
 
-    axios.get(`/api/user/profile/${writerId}/post/${index}`, { params: { writerId, index } })
+    await axios.get(`/api/user/profile/${writerId}/post/${index}`, { params: { writerId, index } })
       .then((response) => {
         const { data } = response;
 
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             this.profileData = {
               ...this.profileData,
-              profilePostData: data.DATA,
+              profilePostData: data.result,
             };
-            this.root.UtilStore.rows = {
-              ...this.root.UtilStore.rows,
-              postRows: data.DATA[0].rowCount,
-            };
+
+            if (data.result[0]) {
+              const { rowCount } = data.result[0];
+              this.root.UtilStore.rows = {
+                ...this.root.UtilStore.rows,
+                postRows: rowCount,
+              };
+            } else {
+              this.root.UtilStore.rows = {
+                ...this.root.UtilStore.rows,
+                postRows: 0,
+              };
+            }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { toast.error(response.message); });
   }
 
-  @action getCommentList = (index) => {
+  @action getCommentList = async (index) => {
     const writerId = this.profileData.profileInfo.userId;
     this.root.UtilStore.pageIndex = {
       ...this.root.UtilStore.pageIndex,
       commentIndex: index,
     };
 
-    axios.get(`/api/user/profile/${writerId}/comment/${index}`, { params: { writerId, index } })
+    await axios.get(`/api/user/profile/${writerId}/comment/${index}`, { params: { writerId, index } })
       .then((response) => {
         const { data } = response;
 
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             this.profileData = {
               ...this.profileData,
-              profileCommentData: data.DATA,
+              profileCommentData: data.result,
             };
-            this.root.UtilStore.rows = {
-              ...this.root.UtilStore.rows,
-              commentRows: data.DATA[0].rowCount,
-            };
+            if (data.result[0]) {
+              const { rowCount } = data.result[0];
+              this.root.UtilStore.rows = {
+                ...this.root.UtilStore.rows,
+                commentRows: rowCount,
+              };
+            } else {
+              this.root.UtilStore.rows = {
+                ...this.root.UtilStore.rows,
+                commentRows: 0,
+              };
+            }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { toast.error(response.message); });
   }
 
-  @action getNickNameList = (index) => {
+  @action getNickNameList = async (index) => {
     const writerId = this.profileData.profileInfo.userId;
     this.root.UtilStore.pageIndex = {
       ...this.root.UtilStore.pageIndex,
       nickNameIndex: index,
     };
 
-    axios.get(`/api/user/profile/${writerId}/nickname/${index}`, { params: { writerId, index } })
+    await axios.get(`/api/user/profile/${writerId}/nickname/${index}`, { params: { writerId, index } })
       .then((response) => {
         const { data } = response;
 
-        if (data.SUCCESS) {
-          if (data.CODE === 1) {
+        if (data.success) {
+          if (data.code === 1) {
             this.profileData = {
               ...this.profileData,
-              profileNicknameHistory: data.DATA,
+              profileNicknameHistory: data.result,
             };
-            this.root.UtilStore.rows = {
-              ...this.root.UtilStore.rows,
-              nickNameRows: data.DATA[0].rowCount,
-            };
+
+            if (data.result[0]) {
+              const { rowCount } = data.result[0];
+              this.root.UtilStore.rows = {
+                ...this.root.UtilStore.rows,
+                nickNameRows: rowCount,
+              };
+            } else {
+              this.root.UtilStore.rows = {
+                ...this.root.UtilStore.rows,
+                nickNameRows: 0,
+              };
+            }
           } else {
-            toast.error(data.MESSAGE);
+            toast.error(data.message);
           }
         } else {
-          toast.error(data.MESSAGE);
+          toast.error(data.message);
         }
       })
       .catch((response) => { toast.error(response.message); });
