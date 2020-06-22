@@ -26,21 +26,21 @@ const ProfileModal = () => {
   const { profileInfo } = profileData;
   const {
     userCreated, userEmail, postCount, commentCount,
+    nickname, profile,
   } = profileInfo;
-
 
   return (
     <Modal isOpen={profileToggle} toggle={toggleProfile}>
       <ModalHeaderBack toggle={toggleProfile}>
         <b>
-          {profileInfo.nickname}
+          {nickname}
           님의 프로필
         </b>
       </ModalHeaderBack>
       <ModalBodyBox>
         <ProfileInfoBox>
           <ProfileAvatarWrap>
-            <Avatar src={avatarImg} />
+            <Avatar src={profile || avatarImg} />
           </ProfileAvatarWrap>
           <ProfileInfoWrap>
             <ProfileInfo>

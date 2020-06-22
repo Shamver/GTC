@@ -47,6 +47,7 @@ const GET_USER_PROFILE = `
     , DATE_FORMAT(GTC_USER.CRT_DTTM, '%Y-%m-%d') userCreated
     , (SELECT COUNT(GTC_POST.ID) FROM GTC_POST WHERE GTC_POST.USER_ID = :USER_ID) AS postCount
     , (SELECT COUNT(GTC_COMMENT.ID) AS 'cnt' FROM GTC_COMMENT WHERE GTC_COMMENT.USER_ID = :USER_ID) AS commentCount
+    , GTC_USER.PROFILE AS profile
   FROM GTC_USER
   WHERE GTC_USER.ID = :USER_ID
 `;
@@ -131,8 +132,6 @@ router.put('/info', upload.fields([{ name: 'images' }]), uploadHandler, async(as
   const {
     nickname, birth, gender, profileYN, userId, prevNickname,
   } = req.body;
-
-  console.log(profileYN);
 
   const profile = req.photo.images && req.photo.images.length > 0 ? req.photo.images[0] : '';
 
