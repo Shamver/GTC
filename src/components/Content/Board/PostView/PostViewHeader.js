@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Col, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
@@ -96,4 +96,4 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-export default observer(PostViewHeader);
+export default memo(observer(PostViewHeader));

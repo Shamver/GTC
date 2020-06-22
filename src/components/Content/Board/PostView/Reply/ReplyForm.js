@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
@@ -44,4 +44,4 @@ const ReplyHeader = styled.div`
   color : #DC3545;
 `;
 
-export default observer(ReplyForm);
+export default memo(observer(ReplyForm));

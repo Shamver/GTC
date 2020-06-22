@@ -1,13 +1,12 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
-import * as Proptypes from 'prop-types';
 import useStores from '../../../../../stores/useStores';
 
-const PostOption = ({ path }) => {
+const PostOption = () => {
   const { UtilAlertStore, BoardPostStore, BoardStore } = useStores();
   const { currentBoardPath } = BoardStore;
   const { toggleConfirmAlert } = UtilAlertStore;
@@ -15,25 +14,20 @@ const PostOption = ({ path }) => {
   const { id } = postView;
 
   return (
-    <>
-      <RightSpan>
-        <GreyButton color="secondary" size="sm" outline onClick={() => toggleConfirmAlert('해당 포스트를 삭제하시겠습니까?', () => deletePost(id, path))}>
+    <>      <RightSpan>
+        <Button color="secondary" size="sm" outline onClick={() => toggleConfirmAlert('해당 포스트를 삭제하시겠습니까?', () => deletePost(id))}>
           <FontAwesomeIcon icon={faTrash} /> 삭제
-        </GreyButton>
+        </Button>
       </RightSpan>
       <RightSpan>
         <Link to={`/${currentBoardPath}/modify/${id}`}>
-          <GreyButton color="secondary" size="sm" outline>
+          <Button color="secondary" size="sm" outline>
             <FontAwesomeIcon icon={faPen} /> 수정
-          </GreyButton>
+          </Button>
         </Link>
       </RightSpan>
     </>
   );
-};
-
-PostOption.propTypes = {
-  path: Proptypes.string.isRequired,
 };
 
 const RightSpan = styled.span`
@@ -55,9 +49,4 @@ const RightSpan = styled.span`
   }
 `;
 
-const GreyButton = styled(Button)`
-
-`;
-
-
-export default PostOption;
+export default memo(PostOption);

@@ -1,4 +1,4 @@
-import React, { useEffect, memo } from 'react';
+import React, { useLayoutEffect, memo } from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import useStores from '../../../../stores/useStores';
@@ -14,7 +14,7 @@ const PostView = ({ match }) => {
   const { params } = match;
   const { id } = params;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadingProcess([
       () => getPost(id),
       () => getPostUpperLower(id),
@@ -49,7 +49,6 @@ const ViewWrapper = styled.div`
 `;
 
 const PostWrapper = styled.div`
-  display :  ${(props) => (props.loading ? 'none' : 'block')}
   background-color : white;
   border-bottom: 2px solid #ebeae8;
   border-right: 2px solid #ebeae8;

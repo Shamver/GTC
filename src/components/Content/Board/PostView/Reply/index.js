@@ -29,20 +29,20 @@ const Reply = ({ data, index, bpId }) => {
   const { addIgnore } = UserIgnoreStore;
   const { history } = UtilRouteStore;
 
-  const hash = history.location.hash ? history.location.hash.split('#')[1] : null;
+  const hash = history.location.hash && history.location.hash.split('#')[1];
   const { id } = data;
 
-  const ReplyContentText = !data.secretFl || (data.secretFl && data.idPostWriter === data.idWriter)
-    ? renderHTML(`${data.content}`)
-    : null;
+  const ReplyContentText = (!data.secretFl
+    || (data.secretFl && data.idPostWriter === data.idWriter))
+    && renderHTML(`${data.content}`);
 
   return (
     <ReplyLayout>
-      { data.tabFl ? (
+      { !!data.tabFl && (
         <Link to="/">
           <ReplyDepthIcon icon={faShare} />
         </Link>
-      ) : ''}
+      )}
       <ReplyWrapper>
         <ReplyInHeader>
           <AvatarImg src={avatar} />
@@ -55,20 +55,16 @@ const Reply = ({ data, index, bpId }) => {
               <WriterDropdownItem>
                 작성 글 보기
               </WriterDropdownItem>
-              {!userData || userData.id === data.idWriter ? '' : (
+              {!(!userData || userData.id === data.idWriter) && (
                 <WriterDropdownItem
-                  onClick={() => {
-                    toggleConfirmAlert('정말 차단하시겠습니까?', () => {
-                      addIgnore(data.idWriter);
-                    });
-                  }}
+                  onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(data.idWriter))}
                 >
                   차단하기
                 </WriterDropdownItem>
               )}
             </WriterDropdownMenu>
           </WriterDropdown>
-          { data.idPostWriter === data.idWriter ? (<Writer>(글쓴이)</Writer>) : ''}
+          { data.idPostWriter === data.idWriter && (<Writer>(글쓴이)</Writer>)}
           <span className="replyOption">
             { !data.deleteFl ? (
               <>

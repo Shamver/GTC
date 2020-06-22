@@ -3,7 +3,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { Button } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
+import React, { memo } from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import useStores from '../../../../../stores/useStores';
@@ -16,9 +16,8 @@ const ReplyModify = ({ content }) => {
       <CKEditor
         editor={ClassicEditor}
         data={content}
-        onInit={() => {}}
         config={{
-          removePlugins: ['Table', 'Link', 'ImageUpload', 'MediaEmbed', 'BlockQuote'],
+          toolbar: ['heading', '|', 'bold', 'italic', '|', 'undo', 'redo'],
         }}
         onChange={(event, editor) => {
           const ReplyContent = editor.getData();
@@ -43,4 +42,4 @@ const RightButton = styled(Button)`
   float : right;
 `;
 
-export default ReplyModify;
+export default memo(ReplyModify);

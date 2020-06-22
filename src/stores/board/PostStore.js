@@ -136,7 +136,7 @@ class PostStore {
     return true;
   };
 
-  @action deletePost = (id, path) => {
+  @action deletePost = (id) => {
     axios.delete('/api/board/post', {
       params: {
         id,
@@ -146,7 +146,7 @@ class PostStore {
       .then((response) => {
         const { data } = response;
         if (data.success) {
-          this.root.UtilRouteStore.history.push(`/${path.toLowerCase()}`);
+          this.root.UtilRouteStore.goBack();
           toast.success(data.message);
         } else {
           toast.error(data.message);
