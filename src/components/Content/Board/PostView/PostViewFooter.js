@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
@@ -8,9 +8,8 @@ import BoardFooter from '../BoardFooter';
 import useStores from '../../../../stores/useStores';
 
 const PostViewFooter = () => {
-  const { BoardStore, BoardPostStore } = useStores();
+  const { BoardPostStore } = useStores();
   const { currentPostUpperLower } = BoardPostStore;
-  const { currentBoard } = BoardStore;
 
   const { upper, lower } = currentPostUpperLower;
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
@@ -35,8 +34,8 @@ const PostViewFooter = () => {
           </div>
         )}
       </TopBottomWrapper>
-      <BoardContent path={currentBoard} />
-      <BoardFooter path={currentBoard} isFooter />
+      <BoardContent />
+      <BoardFooter isFooter />
     </>
   );
 };
@@ -61,7 +60,7 @@ const TopBottomWrapper = styled.div`
   }
 `;
 
-const TopBottomWriter = styled.span`
+const TopBottomWriter = styled.span`  
   float : right;
   color : #aaa;
   font-weight : bold;
@@ -73,4 +72,4 @@ const TopBottomDiv = styled.div`
   font-weight : bold;
 `;
 
-export default observer(PostViewFooter);
+export default memo(observer(PostViewFooter));

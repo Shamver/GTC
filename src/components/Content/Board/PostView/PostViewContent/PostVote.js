@@ -1,22 +1,22 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
+import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 
 const PostVote = () => {
-  const { BoardPostStore, UserStore } = useStores();
+  const { BoardPostStore } = useStores();
   const { recommendPost, postView } = BoardPostStore;
   const { id, recommendCount, notRecommendCount } = postView;
-  const { userData } = UserStore;
   return (
     <VoteWrapper>
-      <Button outline color="success" onClick={() => recommendPost(id, 'R01')} disabled={!userData}>
+      <Button outline color="success" onClick={() => recommendPost(id, 'R01')}>
         <FontAwesomeIcon icon={faThumbsUp} />
         추천 {recommendCount}
       </Button>
-      <Button outline color="primary" onClick={() => recommendPost(id, 'R02')} disabled={!userData}>
+      <Button outline color="primary" onClick={() => recommendPost(id, 'R02')}>
         <FontAwesomeIcon icon={faThumbsDown} />
         비추천 {notRecommendCount}
       </Button>
@@ -39,4 +39,4 @@ const VoteWrapper = styled.div`
   }
 `;
 
-export default PostVote;
+export default memo(observer(PostVote));

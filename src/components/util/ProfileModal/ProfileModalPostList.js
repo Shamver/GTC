@@ -14,8 +14,9 @@ const ProfileModalPostList = () => {
   const { postRows } = rows;
   const { profilePostData } = profileData;
   const { postIndex } = pageIndex;
-  const postList = profilePostData.map((index) => (
-    <ProfileModalPost postData={index} key={index.postId} />
+
+  const postList = profilePostData.map((data) => (
+    <ProfileModalPost postData={data} key={data.postId} />
   ));
 
   return (

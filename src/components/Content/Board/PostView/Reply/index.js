@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, memo } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { faShare, faThumbsUp, faLock } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +14,7 @@ import useStores from '../../../../../stores/useStores';
 import ReplyModify from './ReplyModify';
 import ReplyEdit from './ReplyEdit';
 
-const Reply = ({ data, index, bpId }) => {
+const Reply = ({ data, index }) => {
   const {
     UserStore, BoardReplyStore, BoardReportStore, ComponentReplyStore,
     UtilAlertStore, UserIgnoreStore, UtilRouteStore,
@@ -24,108 +24,90 @@ const Reply = ({ data, index, bpId }) => {
   } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
   const { userData, getProfile } = UserStore;
-  const { dropdown, onActive } = ComponentReplyStore;
+  const { dropdown, onActive, onSet } = ComponentReplyStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { addIgnore } = UserIgnoreStore;
   const { history } = UtilRouteStore;
+  const dropdownKey = index.toString();
 
-  const hash = history.location.hash ? history.location.hash.split('#')[1] : null;
+  const hash = history.location.hash && history.location.hash.split('#')[1];
   const { id } = data;
 
-  const ReplyContentText = !data.secretFl || (data.secretFl && data.idPostWriter === data.idWriter)
-    ? renderHTML(`${data.content}`)
-    : null;
+  const ReplyContentText = (!data.secretFl
+    || (data.secretFl && data.idPostWriter === data.idWriter))
+    && renderHTML(`${data.content}`);
+
+  // 하나하나 로우 드롭다운이 생성될때마다 그에 대한 드롭다운 객체 생성;
+  useLayoutEffect(() => {
+    onSet(dropdownKey);
+  }, [onSet, dropdownKey]);
 
   return (
     <ReplyLayout>
-      { data.tabFl ? (
+      {!!data.tabFl && (
         <Link to="/">
           <ReplyDepthIcon icon={faShare} />
         </Link>
-      ) : ''}
+      )}
       <ReplyWrapper>
         <ReplyInHeader>
           <AvatarImg src={avatar} />
-          <WriterDropdown isOpen={dropdown[`replyIndex${index}`]} toggle={onActive}>
-            <WriterDropdownToggle name={`replyIndex${index}`}> {data.writer} </WriterDropdownToggle>
+          <WriterDropdown isOpen={dropdown[dropdownKey]} toggle={(e) => onActive(dropdownKey, e)}>
+            <WriterDropdownToggle>{data.writer}</WriterDropdownToggle>
             <WriterDropdownMenu>
               <WriterDropdownItem onClick={() => getProfile(data.idWriter)}>
                 프로필
               </WriterDropdownItem>
-              <WriterDropdownItem>
-                작성 글 보기
-              </WriterDropdownItem>
-              {!userData || userData.id === data.idWriter ? '' : (
+              {!(!userData || userData.id === data.idWriter) && (
                 <WriterDropdownItem
-                  onClick={() => {
-                    toggleConfirmAlert('정말 차단하시겠습니까?', () => {
-                      addIgnore(data.idWriter);
-                    });
-                  }}
+                  onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(data.idWriter))}
                 >
                   차단하기
                 </WriterDropdownItem>
               )}
             </WriterDropdownMenu>
           </WriterDropdown>
-          { data.idPostWriter === data.idWriter ? (<Writer>(글쓴이)</Writer>) : ''}
+          { data.idPostWriter === data.idWriter && (<Writer>(글쓴이)</Writer>)}
           <span className="replyOption">
             { !data.deleteFl ? (
               <>
                 { userData && userData.id === data.idWriter
-                  ? (
+                  && (
                     <>
                       <SpanLikeLink onClick={() => modifyMode(data.id)}>수정</SpanLikeLink>
                       &nbsp;·&nbsp;
-                      <SpanLikeLink onClick={() => {
-                        toggleConfirmAlert('정말 삭제 하시겠습니까?', () => {
-                          deleteReply(data.id);
-                        });
-                      }}
-                      >
-                        삭제
-                      </SpanLikeLink>
+                      <SpanLikeLink onClick={() => toggleConfirmAlert('정말 삭제 하시겠습니까?', () => deleteReply(data.id))}>삭제</SpanLikeLink>
                       &nbsp;·&nbsp;
                     </>
-                  )
-                  : null }
-                <SpanLikeLink onClick={() => likeReply(data.id, bpId)}>
-                  { !data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
+                  )}
+                <SpanLikeLink onClick={() => likeReply(data.id)}>
+                  {!data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
                 </SpanLikeLink>
                 &nbsp;·&nbsp;
                 <SpanLikeLink onClick={() => setReplyEditId(data.id)}>대댓글</SpanLikeLink>
                 &nbsp;·&nbsp;
                 { data.updateDate ? data.updateDate : data.date}
-                &nbsp;·&nbsp;
-                { userData.id === data.idWriter ? '' : (<SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>신고 #</SpanLikeLink>)}
+                &nbsp;
+                { userData.id === data.idWriter ? '' : (<SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>·&nbsp;신고 #</SpanLikeLink>)}
               </>
-            ) : (
-              <>
-                { data.updateDate ? data.updateDate : data.date }
-              </>
-            )}
+            ) : (<>{data.updateDate ? data.updateDate : data.date}</>)}
           </span>
         </ReplyInHeader>
         <ReplyInContent hash={hash} commentId={id}>
           {/* 수정의 경우의 수 */}
-          { data.secretFl
-            ? (<><SecretReply><FontAwesomeIcon icon={faLock} /> 비밀 댓글</SecretReply> <br /></>)
-            : '' }
-
+          { !!data.secretFl
+            && (<><SecretReply><FontAwesomeIcon icon={faLock} />비밀 댓글</SecretReply><br /></>)}
           <SpanLikeLink>
-            {data.commentReplyName && data.commentReplyName !== 'DELETED' ? (
+            {(data.commentReplyName && data.commentReplyName !== 'DELETED') && (
+              <>@{data.commentReplyName}<br /></>)}
+          </SpanLikeLink>
+          <Writer>
+            {(data.commentReplyName && data.commentReplyName === 'DELETED' && data.tabFl) && (
               <>
-                @{data.commentReplyName}
+                [삭제된 댓글의 답글]
                 <br />
               </>
-            ) : null}
-          </SpanLikeLink>
-          <Writer>{data.commentReplyName && data.commentReplyName === 'DELETED' && data.tabFl ? (
-            <>
-              [삭제된 댓글의 답글]
-              <br />
-            </>
-          ) : ''}
+            )}
           </Writer>
           { modifyModeId === data.id
             ? (<ReplyModify content={data.content} />)
@@ -137,9 +119,7 @@ const Reply = ({ data, index, bpId }) => {
               </>
             )}
           {/* 대댓글의 경우의 수 */}
-          { replyEditId === data.id
-            ? (<ReplyEdit />)
-            : ''}
+          { replyEditId === data.id && (<ReplyEdit />)}
         </ReplyInContent>
       </ReplyWrapper>
     </ReplyLayout>
@@ -162,7 +142,6 @@ Reply.propTypes = {
     deleteFl: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
-  bpId: Proptypes.number.isRequired,
 };
 
 const WriterDropdown = styled(Dropdown)`
@@ -264,4 +243,4 @@ const SecretReply = styled(Writer)`
   color : #e89717;
 `;
 
-export default observer(Reply);
+export default memo(observer(Reply));

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import {
   faBellSlash, faClock, faEye, faStar as farStar,
 } from '@fortawesome/free-regular-svg-icons';
@@ -18,19 +18,19 @@ import PostOption from './PostOption';
 const PostViewContent = () => {
   const {
     BoardPostStore, BoardReplyStore, BoardReportStore,
-    UserFavoriteStore, UserStore,
+    UserFavoriteStore,
   } = useStores();
   const { postView } = BoardPostStore;
   const { postReplyList } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
   const { judgeFavorite } = UserFavoriteStore;
-  const { userData } = UserStore;
-
   const {
     id, title, writerName, board, date,
     viewCnt, content,
     recommendCount, isFavorite, isMyPost,
   } = postView;
+
+  const realBoardPath = board ? board.toLowerCase() : board;
 
   return (
     <>
@@ -49,21 +49,21 @@ const PostViewContent = () => {
           <PostVote />
         </ContentMain>
         <ContentFooter>
-          <StylessLink to={`/${board}`}>
+          <StylessLink to={`/${realBoardPath}`}>
             <GreyButton outline color="secondary" size="sm">
               <FontAwesomeIcon icon={faBars} /> 목록
             </GreyButton>
           </StylessLink>
-          { isMyPost === 1 ? '' : (
+          {!!isMyPost && (
             <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'RP01', title, writerName)}>
               <FontAwesomeIcon icon={faBellSlash} /> 신고
             </Button>
           )}
           <RightSpan>
-            <GreyButton outline={!isFavorite} color="secondary" size="sm" onClick={() => judgeFavorite(isFavorite, id)} disabled={!userData}>
+            <GreyButton outline={!isFavorite} color="secondary" size="sm" onClick={() => judgeFavorite(isFavorite, id)}>
               <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} /> 즐겨찾기
             </GreyButton>
-            { !!isMyPost && <PostOption path={board} />}
+            { !!isMyPost && <PostOption />}
           </RightSpan>
         </ContentFooter>
       </ContentWrapper>
@@ -130,4 +130,4 @@ const ContentMain = styled.div`
   padding : 14px;
 `;
 
-export default observer(PostViewContent);
+export default memo(observer(PostViewContent));

@@ -176,10 +176,10 @@ router.get('/profile/:writerId', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '유저 프로필 조회',
-          DATA: rows[0],
+          success: true,
+          code: 1,
+          message: '유저 프로필 조회',
+          result: rows[0],
         });
       }),
   ).then(() => {
@@ -201,10 +201,10 @@ router.get('/profile/:writerId/nickname/:currentPage', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '유저 닉네임 변경 이력 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '유저 닉네임 변경 이력 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -226,10 +226,10 @@ router.get('/profile/:writerId/post/:currentPage', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '유저 작성 글 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '유저 작성 글 조회',
+          result: rows,
         });
       }),
   ).then(() => {
@@ -251,10 +251,10 @@ router.get('/profile/:writerId/comment/:currentPage', (req, res) => {
     )
       .then((rows) => {
         res.json({
-          SUCCESS: true,
-          CODE: 1,
-          MESSAGE: '유저 작성 댓글 조회',
-          DATA: rows,
+          success: true,
+          code: 1,
+          message: '유저 작성 댓글 조회',
+          result: rows,
         });
       }),
   ).then(() => {

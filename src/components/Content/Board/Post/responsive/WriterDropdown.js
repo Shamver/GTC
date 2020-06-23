@@ -31,7 +31,6 @@ const WriterDropdown = ({
       <WriterDropdownToggle>{writerName}</WriterDropdownToggle>
       <WriterDropdownMenu>
         <WriterDropdownItem onClick={() => getProfile(writerId)}>프로필</WriterDropdownItem>
-        <WriterDropdownItem>작성 글 보기</WriterDropdownItem>
         {!(!userData || userData.id === writerId) && (
           <WriterDropdownItem onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(writerId))}>
             차단하기

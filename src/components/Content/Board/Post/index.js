@@ -58,7 +58,7 @@ const TableRow = styled.tr`
   background-color : ${(props) => props.backgroundColor};
   &:hover {
     background-color: rgb(250, 250, 250) !important;
-  }
+  }i
 `;
 
 const LikeCountSpan = styled.span`
@@ -74,7 +74,7 @@ const LikeCountSpan = styled.span`
 const MiddleTd = styled.td`
   padding : 0px 0.5rem !important;
   vertical-align : middle !important;
-  font-size : 14px;
+  font-size : 14px; 
 `;
 
 const CenterTd = styled(MiddleTd)`
