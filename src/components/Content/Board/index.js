@@ -34,7 +34,7 @@ const Board = ({
   }, [
     loadingProcess, setCurrentBoardPath, path, judgeFilterMode,
     query, setCurrentBoardPage, currentPage, setIsPagination, isPagination,
-    getBoardPostNoticeList, getBoardPostList, setClearPostView,
+    getBoardPostNoticeList, getBoardPostList, setClearPostView, boardPathCheck,
   ]);
 
   return (

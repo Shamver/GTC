@@ -1,7 +1,6 @@
 import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
-import { toast } from 'react-toastify';
 import useStores from '../../../../stores/useStores';
 import Post from '.';
 
