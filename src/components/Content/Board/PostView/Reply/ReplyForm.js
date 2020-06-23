@@ -23,9 +23,8 @@ const ReplyForm = () => {
       <ReplyListWrapper>
         <ReplyList />
       </ReplyListWrapper>
-      { replyEditId === 0 && modifyModeId === 0 && commentAllowFl
-        ? (<ReplyEdit />)
-        : ''}
+      {(replyEditId === 0 && modifyModeId === 0 && commentAllowFl)
+        && (<ReplyEdit />)}
     </>
   );
 };

@@ -19,16 +19,12 @@ const ReplyModify = ({ content }) => {
         config={{
           toolbar: ['heading', '|', 'bold', 'italic', '|', 'undo', 'redo'],
         }}
-        onChange={(event, editor) => {
-          const ReplyContent = editor.getData();
-          onChangeValue(ReplyContent);
-        }}
+        onChange={(event, editor) => onChangeValue(editor.getData())}
       />
       <Button size="sm" outline onClick={() => modifyMode(0)}>취소</Button>
       <RightButton size="sm" color="info" onClick={modifyReply}>
         <FontAwesomeIcon icon={faPen} />
-        &nbsp;
-        댓글 수정
+        &nbsp; 댓글 수정
       </RightButton>
     </>
   );

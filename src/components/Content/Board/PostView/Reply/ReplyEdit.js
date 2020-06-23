@@ -29,13 +29,12 @@ const ReplyEdit = () => {
       />
       { !!secretCommentAllowFl
         && (<CustomCheckbox type="checkbox" id="secretFl" name="secretFl" value={secretFl} onChange={onChangeValue} label="비밀 댓글 🔒 " checked={secretFl} />)}
-      { !(replyEditId === 0 && modifyModeId === 0) && (
+      {!(replyEditId === 0 && modifyModeId === 0) && (
         <Button size="sm" outline onClick={() => setReplyEditId(0)}>취소</Button>
       )}
       <RightButton size="sm" color="info" onClick={addReply}>
         <FontAwesomeIcon icon={faPen} />
-        &nbsp;
-        댓글 쓰기
+        &nbsp; 댓글 쓰기
       </RightButton>
     </>
   );

@@ -3,13 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
+import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 
 const PostVote = () => {
   const { BoardPostStore } = useStores();
   const { recommendPost, postView } = BoardPostStore;
   const { id, recommendCount, notRecommendCount } = postView;
-
   return (
     <VoteWrapper>
       <Button outline color="success" onClick={() => recommendPost(id, 'R01')}>
@@ -39,4 +39,4 @@ const VoteWrapper = styled.div`
   }
 `;
 
-export default memo(PostVote);
+export default memo(observer(PostVote));

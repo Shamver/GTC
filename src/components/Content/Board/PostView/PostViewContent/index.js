@@ -24,12 +24,13 @@ const PostViewContent = () => {
   const { postReplyList } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
   const { judgeFavorite } = UserFavoriteStore;
-
   const {
     id, title, writerName, board, date,
     viewCnt, content,
     recommendCount, isFavorite, isMyPost,
   } = postView;
+
+  const realBoardPath = board ? board.toLowerCase() : board;
 
   return (
     <>
@@ -48,12 +49,12 @@ const PostViewContent = () => {
           <PostVote />
         </ContentMain>
         <ContentFooter>
-          <StylessLink to={`/${board}`}>
+          <StylessLink to={`/${realBoardPath}`}>
             <GreyButton outline color="secondary" size="sm">
               <FontAwesomeIcon icon={faBars} /> 목록
             </GreyButton>
           </StylessLink>
-          { !(isMyPost === 1) && (
+          {!!isMyPost && (
             <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'RP01', title, writerName)}>
               <FontAwesomeIcon icon={faBellSlash} /> 신고
             </Button>

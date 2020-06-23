@@ -88,7 +88,7 @@ class ReplyStore {
               text: '',
               secretFl: 0,
             };
-            this.getReply(this.root.BoardPostStore.postView.id);
+            this.getReply(this.root.BoardPostStore.postView.id).then();
             this.setReplyEditId(0);
           } else {
             toast.info(data.message);
@@ -102,11 +102,11 @@ class ReplyStore {
     return true;
   };
 
-  @action getReply = (id) => {
+  @action getReply = async (id) => {
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
 
-    axios.get('/api/board/reply/', {
+    await axios.get('/api/board/reply/', {
       params: {
         bpId: id,
         userId,
@@ -139,7 +139,7 @@ class ReplyStore {
         if (data.code === 1) {
           toast.success(data.message);
           this.reply.text = '';
-          this.getReply(this.reply.bpId);
+          this.getReply(this.root.BoardPostStore.postView.id).then();
           this.setReplyEditId(0);
           this.modifyModeId = 0;
         } else {
@@ -169,13 +169,13 @@ class ReplyStore {
           if (data.code === 1) {
             toast.success(data.message);
             this.reply.text = '';
-            this.getReply(this.reply.bpId);
+            this.getReply(this.reply.bpId).then();
             this.setReplyEditId(0);
             this.modifyModeId = 0;
           } else {
             toast.info(data.message);
           }
-          this.getReply(this.reply.bpId);
+          this.getReply(this.reply.bpId).then();
           this.setReplyEditId(0);
           this.modifyModeId = 0;
         } else {
@@ -187,7 +187,7 @@ class ReplyStore {
     return true;
   };
 
-  @action likeReply = (replyId, bpId) => {
+  @action likeReply = (replyId) => {
     const { getReply } = this;
     axios.post('/api/board/reply/like', {
       id: replyId,
@@ -197,7 +197,7 @@ class ReplyStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            getReply(bpId);
+            getReply(this.root.BoardPostStore.postView.id).then();
             toast.success(data.message);
           } else {
             toast.info(data.message);
@@ -215,8 +215,10 @@ class ReplyStore {
         ...this.reply,
         text: event,
       };
+
       return;
     }
+
 
     // Flag 형식의 checkbox 값 변경시
     if (event.target.name.indexOf('Fl') > -1) {
