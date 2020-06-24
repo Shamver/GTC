@@ -39,7 +39,7 @@ const ProfilePaginationList = observer(({ rows, index, req }) => {
       </CustomPaginationItem>,
     );
   }
-  console.log(arr);
+
   return arr;
 });
 
