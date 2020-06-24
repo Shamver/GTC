@@ -5,12 +5,10 @@ import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 
 const ProfilePaginationList = observer(({ rows, index, req }) => {
-  console.log(rows);
-  const item = rows > 5 ? 5 : rows;
-  const arr = new Array(item);
-
-  const min = index > 5 ? index : 1;
-  const max = min > 5 ? item : rows;
+  const min = (index - 3) <= 0 ? 1 : index - 3;
+  let max = (index + 3) > rows ? rows : index + 3;
+  max = min > max ? min : max;
+  const arr = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 3);
 
   if (index > 1) {
     arr.push(
@@ -41,7 +39,7 @@ const ProfilePaginationList = observer(({ rows, index, req }) => {
       </CustomPaginationItem>,
     );
   }
-
+  console.log(arr);
   return arr;
 });
 
