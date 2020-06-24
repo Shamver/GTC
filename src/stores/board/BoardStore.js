@@ -45,27 +45,29 @@ class BoardStore {
 
   @observable isPagination = false;
 
+  @observable searchKeyword = '';
+
   constructor(root) {
     this.root = root;
   }
 
   @action setIsPagination = (isPagination) => {
     this.isPagination = isPagination;
-  }
+  };
 
   @action setCurrentBoardPage = (currentBoardPage) => {
     this.currentBoardPage = currentBoardPage;
-  }
+  };
 
   @observable judgeFilterMode = (query) => {
     const { filter_mode: filterMode } = query;
     this.bestFilterMode = !!(query && filterMode && filterMode === 'true');
-  }
+  };
 
   @action setCurrentBoardPath = (path) => {
     this.currentBoardPath = path;
     this.currentBoardName = this.boardKinds[path];
-  }
+  };
 
   @action setCurrentBoardToId = (id) => {
     axios.get('/api/board', { params: { id } })
@@ -95,6 +97,54 @@ class BoardStore {
       toast.warn('😳 존재하지 않는 게시판입니다.');
       history.push('/');
     }
+  };
+
+  @action onSubmit = (e) => {
+    if (e.key === 'Enter') {
+      this.onSearch();
+    }
+  };
+
+  @action onSearch = () => {
+    if (this.searchKeyword.length < 2) {
+      toast.error('❗ 검색어는 2자 이상 입력해주세요.');
+      return;
+    }
+
+    this.search(1).then(() => {});
+  };
+
+  @action search = async (page) => {
+    const { userData } = this.root.UserStore;
+    const userId = userData ? userData.id : null;
+
+    await axios.get('/api/board/post/search', {
+      params: {
+        userId,
+        currentPage: page,
+        keyword: this.searchKeyword,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          this.foundList = data.result;
+          if (data.result.length > 0) {
+            this.foundMaxPage = data.result[0].pageCount;
+            this.foundCount = data.result[0].count;
+          } else {
+            this.foundMaxPage = 0;
+            this.foundCount = 0;
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  };
+
+  @action onChange = (e) => {
+    this.searchKeyword = e.target.value;
   }
 }
 

@@ -12,7 +12,10 @@ import useStores from '../../../stores/useStores';
 
 const BoardFooter = () => {
   const { BoardStore } = useStores();
-  const { currentBoardPath, bestFilterMode, currentBoardPage } = BoardStore;
+  const {
+    currentBoardPath, bestFilterMode, currentBoardPage,
+    searchKeyword, onSubmit, onChange, onSearch,
+  } = BoardStore;
   const filterQs = '?filter_mode=true';
   const pageUrl = Number(currentBoardPage) > 1 ? `/${currentBoardPath}/page/${currentBoardPage}` : `/${currentBoardPath}`;
   const bestFilterUrl = bestFilterMode ? pageUrl : pageUrl.concat(filterQs);
@@ -43,9 +46,9 @@ const BoardFooter = () => {
               <option>닉네임</option>
             </RightNoRadiusSelect>
           </InputGroupAddon>
-          <Input placeholder="검색어" />
+          <Input placeholder="검색어" onKeyPress={onSubmit} value={searchKeyword} onChange={onChange} />
           <InputGroupAddon addonType="append">
-            <InputGroupButton>
+            <InputGroupButton onClick={onSearch}>
               <FontAwesomeIcon icon={faSearch} />
             </InputGroupButton>
           </InputGroupAddon>
