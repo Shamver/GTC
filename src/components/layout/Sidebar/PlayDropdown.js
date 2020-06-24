@@ -20,16 +20,11 @@ const PlayDropdown = () => {
       </DropdownToggleC>
       <DropdownMenu>
         <LinkNoDeco to="/daily">
-          <DropdownItem30>
-            출석체크
-          </DropdownItem30>
+          <DropdownItem30>출석체크</DropdownItem30>
         </LinkNoDeco>
         <LinkNoDeco to="/advertise">
-          <DropdownItem30>
-              포스팅 광고
-          </DropdownItem30>
+          <DropdownItem30>포스팅 광고</DropdownItem30>
         </LinkNoDeco>
-        <DropdownItem30>포인트샵(구현필요)</DropdownItem30>
       </DropdownMenu>
     </DropdownIn>
   );

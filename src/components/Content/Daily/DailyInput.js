@@ -17,7 +17,7 @@ const DailyInput = () => {
 
   return (
     <>
-      {!combo ? '' : (
+      {!!combo && (
         <LastDailyDiv>
           마지막 출첵 : {date}, {combo} Combo
         </LastDailyDiv>

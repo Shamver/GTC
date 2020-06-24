@@ -21,17 +21,17 @@ const MailTable = ({ data }) => {
       <TableTd width={15}>
         {fromName || targetName}
       </TableTd>
-      <TableTd width={60}>
+      <TableTd width={50}>
         <MessageBtn onClick={() => onView(data)}>
           <Text>
             {message}
           </Text>
         </MessageBtn>
       </TableTd>
-      <TableTd width={15}>
+      <TableTd width={20}>
         {date}
       </TableTd>
-      <TableTd width={5}>
+      <TableTd width={10}>
         {!readDate && (
           <DeleteBtn color="danger" size="sm" onClick={() => deleteMail(id)}>
             <FontAwesomeIcon icon={faTrash} /> 삭제
@@ -57,8 +57,6 @@ const Text = styled.span`
   max-width: 550px;
   line-height: auto;
   display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
   vertical-align: middle !important;
 `;
 
@@ -66,8 +64,6 @@ const TableTd = styled.td`
   vertical-align: middle !important;
   width: ${(props) => props.width}%;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   text-align: ${(props) => (props.center ? 'center' : 'left')};
   padding: 6px !important;
 `;

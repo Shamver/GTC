@@ -40,8 +40,6 @@ const TableTd = styled.td`
   vertical-align: middle !important;
   width: ${(props) => props.width}%;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   padding: 8px !important;
 `;
 

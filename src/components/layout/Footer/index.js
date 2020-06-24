@@ -12,9 +12,9 @@ const Footer = () => {
   return (
     <LayoutFooter>
       © 2020-2020 GTC(Growtopia Community) <br />
-      <Button onClick={toggleTos}>이용약관</Button>
+      <LinkButton onClick={toggleTos}>이용약관</LinkButton>
       &nbsp; | &nbsp;
-      <Button onClick={togglePrivacy}>개인정보보호방침</Button>
+      <LinkButton onClick={togglePrivacy}>개인정보보호방침</LinkButton>
       &nbsp; | &nbsp;
       <Link to="/team">관리자 모집</Link>
       &nbsp; | &nbsp;
@@ -26,6 +26,25 @@ const Footer = () => {
     </LayoutFooter>
   );
 };
+
+const LinkButton = styled(Button)`
+  background-color: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+  display: inline !important;
+  color: #007bff !important;
+  font-size: 14px !important;
+  vertical-align: baseline !important;
+  transition: none !important;
+  &:hover {
+    color: #0056b3 !important;
+    text-decoration: underline !important;
+  }
+  &:focus {
+    box-shadow: none !important;
+  }
+`;
+
 
 const LayoutFooter = styled.div`
   text-align : center;

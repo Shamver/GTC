@@ -79,8 +79,6 @@ const TableTd = styled.td`
   vertical-align: middle !important;
   width: ${(props) => props.width}%;
   overflow: hidden;
-  white-space: ${(props) => (props.message ? 'pre-line' : 'nowrap')};
-  text-overflow: ellipsis;
   padding: 8px !important;
 `;
 

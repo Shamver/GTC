@@ -37,8 +37,6 @@ const Text = styled.span`
   max-width: 550px;
   line-height: 21px;
   display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
   vertical-align: middle !important;
 `;
 
@@ -50,8 +48,6 @@ const TableTd = styled.td`
   vertical-align: middle !important;
   width: ${(props) => props.width}%;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   padding: 8px !important;
 `;
 

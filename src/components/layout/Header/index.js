@@ -55,7 +55,7 @@ const Header = () => {
     <HeaderWrapper>
       <HeaderTop>
         <MobileMenu icon={faBars} onClick={() => onSetSidebarOpen(true)} />
-        <BlockLink to="/">
+        <BlockLink to="/" searchopen={searchOpen ? 1 : 0}>
           <InH1>
             <Logo src={logo} alt="" />
           </InH1>
@@ -122,7 +122,6 @@ const Header = () => {
                   <LinkNoDeco to="/advertise">
                     <DropdownItem30>포스팅 광고</DropdownItem30>
                   </LinkNoDeco>
-                  <DropdownItem30>포인트샵(구현필요)</DropdownItem30>
                 </DropdownMenu>
               </DropdownIn>
             </ColNoP>
@@ -183,7 +182,7 @@ const ResponsiveInput = styled(Input)`
 
 const ResponsiveButton = styled(Button)`
   @media (max-width: 600px) {
-    border-radius : ${(props) => (props.searchopen ? '' : '.25rem !important;')};
+    border-radius : ${(props) => (props.searchopen ? 'none' : '.25rem !important;')};
   }
 `;
 
@@ -193,7 +192,6 @@ const LinkNoDeco = styled(Link)`
 
 const InputGroupWrapper = styled.div`
   display : inline-block;
-  position : relative;
   float : right;
   margin-top : 15.065px;
   @media (max-width: 600px) {
@@ -203,9 +201,10 @@ const InputGroupWrapper = styled.div`
 `;
 
 const ResponsiveInputGroupWrapper = styled(InputGroupWrapper)`
-  display : none;
+  display: none;
   @media (max-width: 600px) {
     display : inline-block;
+    width: ${(props) => (props.searchopen ? '80%' : 'unset')};
   }
 `;
 

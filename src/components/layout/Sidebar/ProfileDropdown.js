@@ -50,7 +50,6 @@ const ProfileDropdown = () => {
                 <LinkNoDeco to="/mail">
                   <DropdownItem30>쪽지</DropdownItem30>
                 </LinkNoDeco>
-                <DropdownItem30>채팅(구현필요)</DropdownItem30>
               </DropdownMenu>
             </DropdownIn>
             <DropdownInRight isOpen={avatar} toggle={(e) => onActive('avatar', e)}>
