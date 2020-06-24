@@ -47,6 +47,8 @@ class BoardStore {
 
   @observable searchKeyword = '';
 
+  @observable searchTarget = 'title';
+
   constructor(root) {
     this.root = root;
   }
@@ -112,6 +114,10 @@ class BoardStore {
     }
 
     this.search(1).then(() => {});
+  };
+
+  @action onChangeTarget = (e) => {
+    this.searchTarget = e.target.value;
   };
 
   @action search = async (page) => {
