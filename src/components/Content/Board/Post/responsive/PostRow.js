@@ -26,17 +26,20 @@ const PostRow = ({ data, index, isNotice }) => {
       { currentBoardPath === 'all' && (
         <DateTd>{!isNotice && boardName}</DateTd>
       )}
-      {!isNotice && (<DateTd>{type !== 'notice' && categoryName}</DateTd>)}
-      <MiddleTd width="700" colSpan={isNotice ? 2 : 1}>
+      {/*{!isNotice && (<DateTd width={0}>{type !== 'notice' && categoryName}</DateTd>)}*/}
+      <MiddleTd width={5}>{type !== 'notice' && categoryName}</MiddleTd>
+      <MiddleTd width={80}>
         <MiddleSpan>
-          {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
-          &nbsp;
-          <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>{title}</PostTitle>
-          { commentCount > 0
-          && (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>)}
+          <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>
+            {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
+            &nbsp;
+            {title}
+            { commentCount > 0
+            && (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>)}
+          </PostTitle>
         </MiddleSpan>
       </MiddleTd>
-      <CenterTdWriter>
+      <CenterTdWriter width={10}>
         <WriterDropdown data={data} index={index} isNotice={isNotice} />
       </CenterTdWriter>
     </>
@@ -68,13 +71,6 @@ const MiddleSpan = styled.span`
   line-height : normal;
 `;
 
-const DateTd = styled.td`
-  white-space : pre;
-  text-align : center;
-  vertical-align : middle !important;
-  padding : 0rem 0.5rem !important;
-`;
-
 const Star = styled(FontAwesomeIcon)`
   color : #efc839;
 `;
@@ -84,7 +80,18 @@ const ReplyCountspan = styled.span`
   font-weight: bold;
 `;
 
-const MiddleTd = styled.td`
+const PercentTd = styled.td`
+  width: ${(props) => props.width}% !important;
+`;
+
+const DateTd = styled(PercentTd)`
+  white-space : pre;
+  text-align : center;
+  vertical-align : middle !important;
+  padding : 0rem 0.5rem !important;
+`;
+
+const MiddleTd = styled(PercentTd)`
   padding : 0px 0.5rem !important;
   vertical-align : middle !important;
   font-size : 14px;
@@ -99,9 +106,13 @@ const CenterTdWriter = styled(CenterTd)`
   font-weight : bold;
 `;
 
-const PostTitle = styled.a`
-  cursor: pointer
-  color : black;
+const PostTitle = styled.div`
+  cursor: pointer;
+  color: black;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; 
+
   &.color-gray {
     color: #b0b0b0 !important;
   }

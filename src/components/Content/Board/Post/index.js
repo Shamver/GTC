@@ -19,13 +19,13 @@ const Post = ({ data, index, isNotice }) => {
     <>
       {/* 데스크톱 화면에서의 로우 */}
       <TableRow height="35" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle}>
-        <CenterTd width="50">
+        <CenterTd width={5}>
           {currentPostId === id ? '>>' : NoticeComponent}
         </CenterTd>
         {/* 데스크톱 화면에서의 로우 */ }
         <PostRow data={data} index={index} isNotice={isNotice} />
         {/* 모바일 화면에서의 로우 */}
-        <DateTd>
+        <DateTd width={5}>
           <BlockInner>{date}</BlockInner>
         </DateTd>
       </TableRow>
@@ -63,12 +63,7 @@ const BlockInner = styled.span`
   line-height : normal;
 `;
 
-const DateTd = styled.td`
-  white-space : pre;
-  text-align : center;
-  vertical-align : middle !important;
-  padding : 0 0.5rem !important;
-`;
+
 
 const TableRow = styled.tr`
   background-color : ${(props) => props.backgroundColor};
@@ -105,7 +100,18 @@ const LikeCountSpan = styled.span`
   font-size: 10px;
 `;
 
-const MiddleTd = styled.td`
+const PercentTd = styled.td`
+  width: ${(props) => props.width}% !important;
+`;
+
+const DateTd = styled(PercentTd)`
+  white-space : pre;
+  text-align : center;
+  vertical-align : middle !important;
+  padding : 0 0.5rem !important;
+`;
+
+const MiddleTd = styled(PercentTd)`
   padding : 0px 0.5rem !important;
   vertical-align : middle !important;
   font-size : 14px; 
