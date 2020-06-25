@@ -45,6 +45,7 @@ const GET_USER_PROFILE = `
     , GTC_USER.NAME AS name
     , GTC_USER.NICKNAME AS nickname
     , DATE_FORMAT(GTC_USER.CRT_DTTM, '%Y-%m-%d') userCreated
+    , (SELECT COUNT(GTC_USER_NICKNAME.ID) FROM GTC_USER_NICKNAME WHERE GTC_USER_NICKNAME.USER_ID = :USER_ID) AS changeCount
     , (SELECT COUNT(GTC_POST.ID) FROM GTC_POST WHERE GTC_POST.USER_ID = :USER_ID) AS postCount
     , (SELECT COUNT(GTC_COMMENT.ID) AS 'cnt' FROM GTC_COMMENT WHERE GTC_COMMENT.USER_ID = :USER_ID) AS commentCount
     , GTC_USER.PROFILE AS profile
@@ -63,6 +64,7 @@ const GET_USER_NICKNAME_HISTORY = `
   END AS nicknameChanged
     , (SELECT COUNT(GTC_USER_NICKNAME.ID) FROM GTC_USER_NICKNAME WHERE GTC_USER_NICKNAME.USER_ID = :USER_ID) AS changeCount
     , (SELECT CEIL(COUNT(*)/5) FROM GTC_USER_NICKNAME WHERE GTC_USER_NICKNAME.USER_ID = :USER_ID) AS rowCount
+    , FLOOR(( :CNT - 1 ) / 5 ) * 5 + 1 AS startPage
   FROM GTC_USER_NICKNAME N
   WHERE N.USER_ID = :USER_ID
   ORDER BY id DESC
@@ -81,6 +83,7 @@ const GET_USER_POST_LIST = `
   END AS postCreated
     , (SELECT COUNT(GTC_COMMENT.ID) FROM GTC_COMMENT WHERE GTC_COMMENT.POST_ID = A.ID) AS postCommentCount
     , (SELECT CEIL(COUNT(*)/5) FROM GTC_POST WHERE GTC_POST.USER_ID = :USER_ID) AS rowCount
+    , FLOOR(( :CNT - 1 ) / 5 ) * 5 + 1 AS startPage
   FROM GTC_POST A
   WHERE A.USER_ID = :USER_ID
   ORDER BY ID DESC
@@ -100,6 +103,7 @@ const GET_USER_COMMENT_LIST = `
     ELSE CONCAT(TIMESTAMPDIFF(YEAR, B.CRT_DTTM, SYSDATE()),'년 전')
   END AS commentCreated
     , (SELECT CEIL(COUNT(*)/5) FROM GTC_COMMENT WHERE GTC_COMMENT.USER_ID = :USER_ID) AS rowCount
+    , FLOOR(( :CNT - 1 ) / 5 ) * 5 + 1 AS startPage
   FROM GTC_COMMENT B
   WHERE B.USER_ID = :USER_ID
   ORDER BY ID DESC
@@ -188,15 +192,15 @@ router.get('/profile/:writerId', (req, res) => {
 });
 
 router.get('/profile/:writerId/nickname/:currentPage', (req, res) => {
-  let { index } = req.query;
-  index = (index === 1) ? 0 : (index - 1) * 5;
+  const { index } = req.query;
 
   Database.execute(
     (database) => database.query(
       GET_USER_NICKNAME_HISTORY,
       {
         USER_ID: req.params.writerId,
-        INDEX: index,
+        CNT: index,
+        INDEX: index - 1,
       },
     )
       .then((rows) => {
@@ -213,15 +217,15 @@ router.get('/profile/:writerId/nickname/:currentPage', (req, res) => {
 });
 
 router.get('/profile/:writerId/post/:currentPage', (req, res) => {
-  let { index } = req.query;
-  index = (index === 1) ? 0 : (index - 1) * 5;
+  const { index } = req.query;
 
   Database.execute(
     (database) => database.query(
       GET_USER_POST_LIST,
       {
         USER_ID: req.params.writerId,
-        INDEX: index,
+        CNT: index,
+        INDEX: index - 1,
       },
     )
       .then((rows) => {
@@ -238,15 +242,15 @@ router.get('/profile/:writerId/post/:currentPage', (req, res) => {
 });
 
 router.get('/profile/:writerId/comment/:currentPage', (req, res) => {
-  let { index } = req.query;
-  index = (index === 1) ? 0 : (index - 1) * 5;
+  const { index } = req.query;
 
   Database.execute(
     (database) => database.query(
       GET_USER_COMMENT_LIST,
       {
         USER_ID: req.params.writerId,
-        INDEX: index,
+        CNT: index,
+        INDEX: index - 1,
       },
     )
       .then((rows) => {

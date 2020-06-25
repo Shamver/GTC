@@ -10,11 +10,14 @@ const ProfileModalNickNameHistory = () => {
   const { UserStore, UtilStore } = useStores();
   const { profileData, getNickNameList } = UserStore;
   const {
-    pageIndex, rows,
+    pageIndex, rows, startPage,
   } = UtilStore;
   const { nickNameRows } = rows;
+  const { nickNameStart } = startPage;
   const { nickNameIndex } = pageIndex;
-  const { profileNicknameHistory } = profileData;
+  const { profileNicknameHistory, profileInfo } = profileData;
+  const { changeCount } = profileInfo;
+
   const nicknameList = profileNicknameHistory.map((index) => (
     <ProfileModalNickName NickNameData={index} key={index.id} />
   ));
@@ -30,7 +33,7 @@ const ProfileModalNickNameHistory = () => {
           ? nicknameList
           : <NoPost>변경 이력이 없습니다.</NoPost>}
       </TableBox>
-      <ModalPagination rows={nickNameRows} pageIndex={nickNameIndex} req={getNickNameList} />
+      <ModalPagination rows={nickNameRows} pageIndex={nickNameIndex} req={getNickNameList} count={changeCount} postStart={nickNameStart} />
     </>
   );
 };

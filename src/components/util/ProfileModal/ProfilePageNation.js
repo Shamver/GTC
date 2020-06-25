@@ -4,11 +4,17 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 
-const ProfilePaginationList = observer(({ rows, index, req }) => {
-  const min = (index - 3) <= 0 ? 1 : index - 3;
-  let max = (index + 3) > rows ? rows : index + 3;
-  max = min > max ? min : max;
-  const arr = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 3);
+const ProfilePaginationList = observer(({ rows, index, req, count, postStart}) => {
+  const min = postStart;
+  console.log(postStart)
+  let max = min + 5 - 1;
+  max = max > count ? count : max;
+  const arr = new Array(max);
+
+  // const min = (index - 3) <= 0 ? 1 : index - 3;
+  // let max = (index + 3) > rows ? rows : index + 3;
+  // max = min > max ? min : max;
+  // const arr = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 3);
 
   if (index > 1) {
     arr.push(
@@ -30,7 +36,7 @@ const ProfilePaginationList = observer(({ rows, index, req }) => {
     );
   }
 
-  if (index < rows) {
+  if (index < count) {
     arr.push(
       <CustomPaginationItem key={-1}>
         <CustomLink className="page-link" activeClassName="active" onClick={() => req(index + 1)}>
@@ -43,9 +49,9 @@ const ProfilePaginationList = observer(({ rows, index, req }) => {
   return arr;
 });
 
-const ModalPagination = ({ rows, pageIndex, req }) => (
+const ModalPagination = ({ rows, pageIndex, req, count, postStart }) => (
   <PaginationListWrap>
-    <ProfilePaginationList rows={rows} index={pageIndex} req={req} />
+    <ProfilePaginationList rows={rows} index={pageIndex} req={req} count={count} postStart={postStart} />
   </PaginationListWrap>
 );
 
