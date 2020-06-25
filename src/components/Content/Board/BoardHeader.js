@@ -19,8 +19,13 @@ const BoardHeader = () => {
 };
 
 const BoardLink = styled(Link)`
-  color : black;
-  text-decoration : none;
+  color: black;
+  text-decoration: none;
+  display: block;
+  @media (max-width: 992px) {
+    padding : 10px;
+  }
+  
   &:hover {
     color : black;
     text-decoration : none;

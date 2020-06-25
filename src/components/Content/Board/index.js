@@ -71,6 +71,9 @@ const BoardWrapper = styled.div`
 const TableWrapper = styled.div`
   padding : 20px;
   font-size : 13px !important;
+  @media (max-width: 992px) {
+    padding : 0px;
+  }
 `;
 
 export default memo(Board);

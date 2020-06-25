@@ -53,12 +53,25 @@ const ManginessTable = styled(Table)`
   & td:last-child {
     border-right : none;
   }
+  
+  @media (max-width: 992px) {
+    & td:last-child {
+      border-left : none;
+    }
+    & td:first-child {
+      border-right : none;
+    }
+  }
 `;
 
 const HeaderDiv = styled.div`
-  border-top : 2px solid #DC3545;
-  background-color : #ffd7d4;
-  margin-top : 40px;
+  border-top: 2px solid #DC3545;
+  background-color: #ffd7d4;
+  margin-top: 40px;
+  
+  @media (max-width: 992px) {
+    margin-top: 15px;
+  }
 
   & > a {
     display: inline-block;

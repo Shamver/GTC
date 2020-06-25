@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faStar, faImage } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
@@ -7,7 +7,7 @@ import * as Proptypes from 'prop-types';
 import WriterDropdown from './WriterDropdown';
 import useStores from '../../../../../stores/useStores';
 
-const ResponsiveRow = ({ data, index, isNotice }) => {
+const PostRow = ({ data, index, isNotice }) => {
   const {
     id, recommendCount, categoryName, commentCount,
     type, title, boardName, isImage,
@@ -33,11 +33,7 @@ const ResponsiveRow = ({ data, index, isNotice }) => {
           &nbsp;
           <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>{title}</PostTitle>
           { commentCount > 0
-           && (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>)}
-          <MobileWriterDropdown>
-            <WriterDropdown data={data} index={index} isNotice={isNotice} isMobile />
-            <TopSpan>{type !== 'notice' && categoryName}</TopSpan>
-          </MobileWriterDropdown>
+          && (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>)}
         </MiddleSpan>
       </MiddleTd>
       <CenterTdWriter>
@@ -47,7 +43,7 @@ const ResponsiveRow = ({ data, index, isNotice }) => {
   );
 };
 
-ResponsiveRow.propTypes = {
+PostRow.propTypes = {
   data: Proptypes.shape({
     id: Proptypes.number,
     title: Proptypes.string,
@@ -72,27 +68,11 @@ const MiddleSpan = styled.span`
   line-height : normal;
 `;
 
-const TopSpan = styled.span`
-  margin-left : 10px;
-  vertical-align : top;
-`;
-
-const MobileWriterDropdown = styled.div`
-  display : none !important;
-  padding-top: 5px;
-  @media (max-width: 992px) {
-    display : block !important;
-  }
-`;
-
 const DateTd = styled.td`
   white-space : pre;
   text-align : center;
   vertical-align : middle !important;
   padding : 0rem 0.5rem !important;
-  @media (max-width: 992px) {
-    display : none;
-  }
 `;
 
 const Star = styled(FontAwesomeIcon)`
@@ -108,9 +88,6 @@ const MiddleTd = styled.td`
   padding : 0px 0.5rem !important;
   vertical-align : middle !important;
   font-size : 14px;
-  @media (max-width: 992px) {
-    height : 50px;
-  }
 `;
 
 const CenterTd = styled(MiddleTd)`
@@ -120,9 +97,6 @@ const CenterTd = styled(MiddleTd)`
 const CenterTdWriter = styled(CenterTd)`
   color : #DC3545;
   font-weight : bold;
-  @media (max-width: 992px) {
-    display : none;
-  }
 `;
 
 const PostTitle = styled.a`
@@ -136,4 +110,4 @@ const PostTitle = styled.a`
   }
 `;
 
-export default memo(ResponsiveRow);
+export default memo(PostRow);

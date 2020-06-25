@@ -3,7 +3,8 @@ import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import useStores from '../../../../stores/useStores';
-import ResponsiveRow from './responsive/ResponsiveRow';
+import PostRow from './responsive/PostRow';
+import ResponsivePostRow from './responsive/ResponsivePostRow';
 
 const Post = ({ data, index, isNotice }) => {
   const { BoardPostStore } = useStores();
@@ -15,15 +16,30 @@ const Post = ({ data, index, isNotice }) => {
   const noticeStyle = isNotice ? '#ffd7d4' : '#ffffff';
 
   return (
-    <TableRow height="35" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle}>
-      <CenterTd width="50">
-        {currentPostId === id ? '>>' : NoticeComponent}
-      </CenterTd>
-      <ResponsiveRow data={data} index={index} isNotice={isNotice} />
-      <DateTd>
-        <BlockInner>{date}</BlockInner>
-      </DateTd>
-    </TableRow>
+    <>
+      {/* 데스크톱 화면에서의 로우 */}
+      <TableRow height="35" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle}>
+        <CenterTd width="50">
+          {currentPostId === id ? '>>' : NoticeComponent}
+        </CenterTd>
+        {/* 데스크톱 화면에서의 로우 */ }
+        <PostRow data={data} index={index} isNotice={isNotice} />
+        {/* 모바일 화면에서의 로우 */}
+        <DateTd>
+          <BlockInner>{date}</BlockInner>
+        </DateTd>
+      </TableRow>
+      {/* 모바일 화면에서의 로우 */}
+      <MobileTableRow height="35" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle}>
+        <CenterTd>
+          {currentPostId === id ? '>>' : NoticeComponent}
+        </CenterTd>
+        <ResponsivePostRow data={data} index={index} isNotice={isNotice} />
+        <DateTd>
+          <BlockInner>{date}</BlockInner>
+        </DateTd>
+      </MobileTableRow>
+    </>
   );
 };
 
@@ -58,17 +74,35 @@ const TableRow = styled.tr`
   background-color : ${(props) => props.backgroundColor};
   &:hover {
     background-color: rgb(250, 250, 250) !important;
-  }i
+  }
+  @media (max-width: 992px) {
+    display : none !important;
+  }
+`;
+
+const MobileTableRow = styled.tr`
+  background-color : ${(props) => props.backgroundColor};
+  &:hover {
+    background-color: rgb(250, 250, 250) !important;
+  }
+  display: none !important;
+  @media (max-width: 992px) {
+    display : table-row !important;
+  }
+  
+  ${BlockInner} {
+    font-size: 8px;
+  }
 `;
 
 const LikeCountSpan = styled.span`
-  display : block;
+  display : inline-block;
   background-color : #DC3545;
   color: #fff;
   font-weight: bold;
-  padding: 1px 5px;
+  padding : 1px 6px;
+  border-radius: 50%;
   font-size: 10px;
-  border-radius: 100px;
 `;
 
 const MiddleTd = styled.td`
@@ -78,7 +112,8 @@ const MiddleTd = styled.td`
 `;
 
 const CenterTd = styled(MiddleTd)`
-  text-align : center;
+  text-align: center;
+  white-space: nowrap;
 `;
 
 export default memo(observer(Post));
