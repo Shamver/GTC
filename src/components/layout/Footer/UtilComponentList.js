@@ -40,6 +40,12 @@ const ToastContainerCustom = styled(ToastContainer)`
     font-family: 'Jeju Gothic', sans-serif !important;
     padding : 10px !important;
   }
+  
+  @media only screen and (max-width: 480px) {
+      left: 1em !important;
+      bottom: 1em !important;
+  }
+  
   width : auto !important;
 `;
 
