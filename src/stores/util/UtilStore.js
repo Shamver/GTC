@@ -24,12 +24,6 @@ class UtilStore {
     nickNameRows: 0,
   };
 
-  @observable startPage = {
-    postStart: 0,
-    commentStart: 0,
-    nickNameStart: 0,
-  };
-
   @observable tosToggle = false;
 
   @observable privacyToggle = false;
@@ -70,16 +64,6 @@ class UtilStore {
       postIndex: 1,
       commentIndex: 1,
       nickNameIndex: 1,
-    };
-    this.rows = {
-      postRows: 0,
-      commentRows: 0,
-      nickNameRows: 0,
-    };
-    this.startPage = {
-      postStart: 0,
-      commentStart: 0,
-      nickNameStart: 0,
     };
   }
 

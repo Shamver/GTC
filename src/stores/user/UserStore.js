@@ -327,23 +327,15 @@ class UserStore {
             };
 
             if (data.result[0]) {
-              const { rowCount, startPage } = data.result[0];
+              const { rowCount } = data.result[0];
               this.root.UtilStore.rows = {
                 ...this.root.UtilStore.rows,
                 postRows: rowCount,
-              };
-              this.root.UtilStore.startPage = {
-                ...this.root.UtilStore.startPage,
-                postStart: startPage,
               };
             } else {
               this.root.UtilStore.rows = {
                 ...this.root.UtilStore.rows,
                 postRows: 0,
-              };
-              this.root.UtilStore.startPage = {
-                ...this.root.UtilStore.startPage,
-                postStart: 0,
               };
             }
           } else {
@@ -373,24 +365,17 @@ class UserStore {
               ...this.profileData,
               profileCommentData: data.result,
             };
+
             if (data.result[0]) {
-              const { rowCount, startPage } = data.result[0];
+              const { rowCount } = data.result[0];
               this.root.UtilStore.rows = {
                 ...this.root.UtilStore.rows,
                 commentRows: rowCount,
-              };
-              this.root.UtilStore.startPage = {
-                ...this.root.UtilStore.startPage,
-                commentStart: startPage,
               };
             } else {
               this.root.UtilStore.rows = {
                 ...this.root.UtilStore.rows,
                 commentRows: 0,
-              };
-              this.root.UtilStore.startPage = {
-                ...this.root.UtilStore.startPage,
-                commentStart: 0,
               };
             }
           } else {
@@ -422,23 +407,15 @@ class UserStore {
             };
 
             if (data.result[0]) {
-              const { rowCount, startPage } = data.result[0];
+              const { rowCount } = data.result[0];
               this.root.UtilStore.rows = {
                 ...this.root.UtilStore.rows,
                 nickNameRows: rowCount,
-              };
-              this.root.UtilStore.startPage = {
-                ...this.root.UtilStore.startPage,
-                nickNameStart: startPage,
               };
             } else {
               this.root.UtilStore.rows = {
                 ...this.root.UtilStore.rows,
                 nickNameRows: 0,
-              };
-              this.root.UtilStore.startPage = {
-                ...this.root.UtilStore.startPage,
-                nickNameStart: 0,
               };
             }
           } else {
