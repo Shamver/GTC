@@ -108,45 +108,18 @@ class BoardStore {
   };
 
   @action onSearch = () => {
+    const { search } = this.root.BoardPostStore;
+
     if (this.searchKeyword.length < 2) {
       toast.error('❗ 검색어는 2자 이상 입력해주세요.');
       return;
     }
 
-    this.search(1).then(() => {});
+    search();
   };
 
   @action onChangeTarget = (e) => {
     this.searchTarget = e.target.value;
-  };
-
-  @action search = async (page) => {
-    const { userData } = this.root.UserStore;
-    const userId = userData ? userData.id : null;
-
-    await axios.get('/api/board/post/search', {
-      params: {
-        userId,
-        currentPage: page,
-        keyword: this.searchKeyword,
-      },
-    })
-      .then((response) => {
-        const { data } = response;
-        if (data.success) {
-          this.foundList = data.result;
-          if (data.result.length > 0) {
-            this.foundMaxPage = data.result[0].pageCount;
-            this.foundCount = data.result[0].count;
-          } else {
-            this.foundMaxPage = 0;
-            this.foundCount = 0;
-          }
-        } else {
-          toast.error(data.message);
-        }
-      })
-      .catch((response) => { toast.error(response.message); });
   };
 
   @action onChange = (e) => {

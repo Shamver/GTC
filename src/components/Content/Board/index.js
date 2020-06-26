@@ -6,12 +6,15 @@ import BoardHeader from './BoardHeader';
 import BoardContent from './BoardContent';
 import BoardFooter from './BoardFooter';
 import useStores from '../../../stores/useStores';
+import {observer} from "mobx-react";
 
 const Board = ({
   path, currentPage, isPagination, location,
 }) => {
   const { BoardPostStore, UtilLoadingStore, BoardStore } = useStores();
-  const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
+  const {
+    setClearPostView, getBoardPostNoticeList, getBoardPostList, isSearch,
+  } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
   const {
     setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage,
@@ -35,6 +38,7 @@ const Board = ({
     loadingProcess, setCurrentBoardPath, path, judgeFilterMode,
     query, setCurrentBoardPage, currentPage, setIsPagination, isPagination,
     getBoardPostNoticeList, getBoardPostList, setClearPostView, boardPathCheck,
+    isSearch,
   ]);
 
   return (
@@ -73,4 +77,4 @@ const TableWrapper = styled.div`
   font-size : 13px !important;
 `;
 
-export default memo(Board);
+export default memo(observer(Board));

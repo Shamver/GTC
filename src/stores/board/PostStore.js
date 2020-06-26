@@ -65,6 +65,8 @@ class PostStore {
 
   @observable toggleBestPostToken = false;
 
+  @observable isSearch = false;
+
   constructor(root) {
     this.root = root;
   }
@@ -159,39 +161,81 @@ class PostStore {
 
   @action getBoardPostList = async (board, currentPage) => {
     const { userData } = this.root.UserStore;
+    const { searchKeyword, searchTarget } = this.root.BoardStore;
     const userId = userData ? userData.id : null;
 
-    await axios.get('/api/board/post', {
-      params: {
-        board,
-        currentPage,
-        userId,
-        recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
-      },
-    })
-      .then((response) => {
-        const { data } = response;
-        if (data.success) {
-          if (data.code === 1) {
-            this.boardPostList = {
-              ...this.boardPostList,
-              [board]: data.result,
-            };
-            // 게시글 가져올때 MAX 카운트 셋
-            if (data.result.length === 0) {
-              this.currentBoardMaxPage = 0;
+    if (this.isSearch) {
+      await axios.get('/api/board/post/search', {
+        params: {
+          board,
+          currentPage,
+          userId,
+          recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
+          keyword: searchKeyword,
+          target: searchTarget,
+        },
+      })
+        .then((response) => {
+          const { data } = response;
+          if (data.success) {
+            if (data.code === 1) {
+              this.boardPostList = {
+                ...this.boardPostList,
+                [board]: data.result,
+              };
+              // 게시글 가져올때 MAX 카운트 셋
+              if (data.result.length === 0) {
+                this.currentBoardMaxPage = 0;
+              } else {
+                const { pageCount } = data.result[0];
+                this.currentBoardMaxPage = pageCount;
+              }
             } else {
-              const { pageCount } = data.result[0];
-              this.currentBoardMaxPage = pageCount;
+              toast.info(data.message);
             }
           } else {
-            toast.info(data.message);
+            toast.error(data.message);
           }
-        } else {
-          toast.error(data.message);
-        }
+        })
+        .catch((response) => { toast.error(response.message); });
+    } else {
+      await axios.get('/api/board/post', {
+        params: {
+          board,
+          currentPage,
+          userId,
+          recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
+        },
       })
-      .catch((response) => { toast.error(response.message); });
+        .then((response) => {
+          const { data } = response;
+          if (data.success) {
+            if (data.code === 1) {
+              this.boardPostList = {
+                ...this.boardPostList,
+                [board]: data.result,
+              };
+              // 게시글 가져올때 MAX 카운트 셋
+              if (data.result.length === 0) {
+                this.currentBoardMaxPage = 0;
+              } else {
+                const { pageCount } = data.result[0];
+                this.currentBoardMaxPage = pageCount;
+              }
+            } else {
+              toast.info(data.message);
+            }
+          } else {
+            toast.error(data.message);
+          }
+        })
+        .catch((response) => { toast.error(response.message); });
+    }
+  };
+
+  @action search = () => {
+    this.isSearch = false;
+    this.isSearch = true;
   };
 
   @action getBoardPostNoticeList = async (board, currentPage) => {
