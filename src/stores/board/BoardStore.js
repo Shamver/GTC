@@ -124,6 +124,10 @@ class BoardStore {
 
   @action onChange = (e) => {
     this.searchKeyword = e.target.value;
+  };
+
+  @action setKeywordDefault = () => {
+    this.searchKeyword = '';
   }
 }
 

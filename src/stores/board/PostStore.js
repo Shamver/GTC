@@ -234,8 +234,14 @@ class PostStore {
   };
 
   @action search = () => {
-    this.isSearch = false;
+    this.isSearch = false; // useEffect
     this.isSearch = true;
+  };
+
+  @action searchOff = () => {
+    const { setKeywordDefault } = this.root.BoardStore;
+    this.isSearch = false;
+    setKeywordDefault();
   };
 
   @action getBoardPostNoticeList = async (board, currentPage) => {
