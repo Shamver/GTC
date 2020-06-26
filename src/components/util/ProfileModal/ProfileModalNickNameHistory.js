@@ -15,6 +15,7 @@ const ProfileModalNickNameHistory = () => {
   const { nickNameRows } = rows;
   const { nickNameIndex } = pageIndex;
   const { profileNicknameHistory } = profileData;
+
   const nicknameList = profileNicknameHistory.map((index) => (
     <ProfileModalNickName NickNameData={index} key={index.id} />
   ));

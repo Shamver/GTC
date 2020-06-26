@@ -65,11 +65,6 @@ class UtilStore {
       commentIndex: 1,
       nickNameIndex: 1,
     };
-    this.rows = {
-      postRows: 0,
-      commentRows: 0,
-      nickNameRows: 0,
-    };
   }
 
   @action toggleTab = (tab) => {

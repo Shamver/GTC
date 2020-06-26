@@ -365,6 +365,7 @@ class UserStore {
               ...this.profileData,
               profileCommentData: data.result,
             };
+
             if (data.result[0]) {
               const { rowCount } = data.result[0];
               this.root.UtilStore.rows = {

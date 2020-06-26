@@ -5,13 +5,36 @@ import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 
 const ProfilePaginationList = observer(({ rows, index, req }) => {
-  const arr = new Array(rows);
+  const min = Math.floor((index - 1) / 5) * 5 + 1;
+  let max = min + 5 - 1;
+  max = max > rows ? rows : max;
+  const arr = new Array(max - min === 0 ? 1 : max - min);
 
-  for (let i = 1; i <= rows; i += 1) {
+  if (index > 1) {
+    arr.push(
+      <CustomPaginationItem key={0}>
+        <CustomLink className="page-link" activeClassName="active" onClick={() => req(index - 1)}>
+          ＜
+        </CustomLink>
+      </CustomPaginationItem>,
+    );
+  }
+
+  for (let i = min; i <= max; i += 1) {
     arr.push(
       <CustomPaginationItem active={i === index} key={i}>
         <CustomLink className="page-link" activeClassName="active" onClick={() => req(i)}>
           {i}
+        </CustomLink>
+      </CustomPaginationItem>,
+    );
+  }
+
+  if (index < rows) {
+    arr.push(
+      <CustomPaginationItem key={-1}>
+        <CustomLink className="page-link" activeClassName="active" onClick={() => req(index + 1)}>
+          ＞
         </CustomLink>
       </CustomPaginationItem>,
     );
@@ -33,7 +56,7 @@ ModalPagination.propTypes = {
 };
 
 ModalPagination.defaultProps = {
-  rows: 1,
+  rows: 0,
   pageIndex: 1,
   req: 'req(1)',
 };

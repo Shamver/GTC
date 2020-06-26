@@ -14,7 +14,6 @@ const ProfileModalCommentList = () => {
   const { commentRows } = rows;
   const { profileCommentData } = profileData;
   const { commentIndex } = pageIndex;
-
   const commentList = profileCommentData.map((index) => (
     <ProfileModalComment commentData={index} key={index.commentId} />
   ));
