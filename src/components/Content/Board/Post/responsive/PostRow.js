@@ -1,4 +1,4 @@
-import React, { memo, Fragment } from 'react';
+import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faStar, faImage } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
@@ -23,12 +23,9 @@ const PostRow = ({ data, index, isNotice }) => {
 
   return (
     <>
-      { currentBoardPath === 'all' && (
-        <DateTd>{!isNotice && boardName}</DateTd>
-      )}
-      {/*{!isNotice && (<DateTd width={0}>{type !== 'notice' && categoryName}</DateTd>)}*/}
-      <MiddleTd width={5}>{type !== 'notice' && categoryName}</MiddleTd>
-      <MiddleTd width={80}>
+      {currentBoardPath === 'all' && (<CenterTd width={7}>{!isNotice && boardName}</CenterTd>)}
+      {!isNotice ? (<CenterTd width={0}>{type !== 'notice' && categoryName}</CenterTd>) : null}
+      <MiddleTd width={50} colSpan={isNotice ? 2 : 1}>
         <MiddleSpan>
           <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>
             {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
@@ -39,7 +36,7 @@ const PostRow = ({ data, index, isNotice }) => {
           </PostTitle>
         </MiddleSpan>
       </MiddleTd>
-      <CenterTdWriter width={10}>
+      <CenterTdWriter width={6}>
         <WriterDropdown data={data} index={index} isNotice={isNotice} />
       </CenterTdWriter>
     </>
@@ -82,13 +79,6 @@ const ReplyCountspan = styled.span`
 
 const PercentTd = styled.td`
   width: ${(props) => props.width}% !important;
-`;
-
-const DateTd = styled(PercentTd)`
-  white-space : pre;
-  text-align : center;
-  vertical-align : middle !important;
-  padding : 0rem 0.5rem !important;
 `;
 
 const MiddleTd = styled(PercentTd)`

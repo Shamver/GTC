@@ -19,13 +19,13 @@ const Post = ({ data, index, isNotice }) => {
     <>
       {/* 데스크톱 화면에서의 로우 */}
       <TableRow height="35" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle}>
-        <CenterTd width={5}>
+        <CenterTd width={3}>
           {currentPostId === id ? '>>' : NoticeComponent}
         </CenterTd>
         {/* 데스크톱 화면에서의 로우 */ }
         <PostRow data={data} index={index} isNotice={isNotice} />
         {/* 모바일 화면에서의 로우 */}
-        <DateTd width={5}>
+        <DateTd width={4}>
           <BlockInner>{date}</BlockInner>
         </DateTd>
       </TableRow>
