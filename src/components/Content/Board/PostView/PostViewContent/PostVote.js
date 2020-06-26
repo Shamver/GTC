@@ -9,14 +9,17 @@ import useStores from '../../../../../stores/useStores';
 const PostVote = () => {
   const { BoardPostStore } = useStores();
   const { recommendPost, postView } = BoardPostStore;
-  const { id, recommendCount, notRecommendCount } = postView;
+  const {
+    id, recommendCount, notRecommendCount, recommendCheck,
+  } = postView;
+
   return (
     <VoteWrapper>
-      <Button outline color="success" onClick={() => recommendPost(id, 'R01')}>
+      <Button outline={recommendCheck !== 'R01'} color="success" onClick={() => recommendPost(id, 'R01')}>
         <FontAwesomeIcon icon={faThumbsUp} />
         추천 {recommendCount}
       </Button>
-      <Button outline color="primary" onClick={() => recommendPost(id, 'R02')}>
+      <Button outline={recommendCheck !== 'R02'} color="primary" onClick={() => recommendPost(id, 'R02')}>
         <FontAwesomeIcon icon={faThumbsDown} />
         비추천 {notRecommendCount}
       </Button>
