@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import {toast} from "react-toastify";
+import { toast } from 'react-toastify';
 
 class SettingStore {
   @observable activeTab = 'ignore';
