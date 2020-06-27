@@ -77,11 +77,6 @@ const SidebarContent = () => {
                 </LinkNoDeco>
               </MarginList>
               <MarginList>
-                <LinkNoDeco to="/faq">
-                  자주 묻는 질문
-                </LinkNoDeco>
-              </MarginList>
-              <MarginList>
                 <LinkNoDeco to="/consult">
                   1:1 문의
                 </LinkNoDeco>

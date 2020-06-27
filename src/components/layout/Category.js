@@ -64,11 +64,6 @@ const Category = () => {
             <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
           </MenuDiv>
         </MenuLink>
-        <MenuLink to="/faq" activeClassName="active">
-          <MenuDiv>
-            <FaiPink icon={faQuestion} className="fa-fw" />&nbsp;&nbsp; 자주 묻는 질문
-          </MenuDiv>
-        </MenuLink>
         <MenuLink to="/consult" activeClassName="active">
           <MenuDiv>
             <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
