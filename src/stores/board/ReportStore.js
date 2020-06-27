@@ -31,6 +31,8 @@ class ReportStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
+            //rp01
+            //rp02
             this.toggleReport();
           } else {
             toast.info(data.message);
