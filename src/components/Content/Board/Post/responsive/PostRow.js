@@ -21,16 +21,19 @@ const PostRow = ({ data, index, isNotice }) => {
     : (<BottomIcon icon={faCommentDots} />);
   const IsBestPost = recommendCount >= 10 ? (<Star icon={faStar} />) : isImageComponent;
 
+  const weight = currentBoardPath === 'all' ? 8 : 9;
   return (
     <>
-      {currentBoardPath === 'all' && (<CenterTd width={7}>{!isNotice && boardName}</CenterTd>)}
-      {!isNotice ? (<CenterTd width={0}>{type !== 'notice' && categoryName}</CenterTd>) : null}
-      <MiddleTd width={50} colSpan={isNotice ? 2 : 1}>
+      {currentBoardPath === 'all' && (<CenterTd width={6}>{!isNotice && boardName}</CenterTd>)}
+      {!isNotice ? (<CenterTd width={5} colSpan={1}>{type !== 'notice' && categoryName}</CenterTd>) : null}
+      <MiddleTd width={40} colSpan={isNotice ? 10 : weight}>
         <MiddleSpan>
           <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>
             {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
             &nbsp;
             {title}
+          </PostTitle>
+          <PostTitle>
             { commentCount > 0
             && (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>)}
           </PostTitle>
@@ -63,7 +66,6 @@ const BottomIcon = styled(FontAwesomeIcon)`
 `;
 
 const MiddleSpan = styled.span`
-  vertical-align : middle !important;
   display : block;
   line-height : normal;
 `;
@@ -89,19 +91,26 @@ const MiddleTd = styled(PercentTd)`
 
 const CenterTd = styled(MiddleTd)`
   text-align : center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; 
 `;
 
-const CenterTdWriter = styled(CenterTd)`
+const CenterTdWriter = styled(MiddleTd)`
+  text-align : center;
   color : #DC3545;
   font-weight : bold;
 `;
 
 const PostTitle = styled.div`
+  display: inline-block;
+  vertical-align : bottom; 
   cursor: pointer;
   color: black;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis; 
+  max-width : 90%;
 
   &.color-gray {
     color: #b0b0b0 !important;
