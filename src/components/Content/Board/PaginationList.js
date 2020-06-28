@@ -28,13 +28,15 @@ const PaginationList = () => {
     filterUrl = `?search=${searchKeyword}&search_target=${searchTarget}`;
   } else if (bestFilterMode) {
     filterUrl = '?filter_mode=true';
+  } else {
+    filterUrl = '';
   }
 
   // 1이 아닌이상 무조건 < 페이지는 표시해야 함.
   if (currentPageNum > 1) {
     array.push(
       <PaginationItem key={0}>
-        <CustomLink className="page-link" activeClassName="active" to={bestFilterMode ? `${url}${currentPageNum - 1}${filterUrl}` : `${url}${currentPageNum - 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`${url}${currentPageNum - 1}${filterUrl}`}>
           ＜
         </CustomLink>
       </PaginationItem>,
@@ -45,7 +47,7 @@ const PaginationList = () => {
   for (let i = min; i <= max; i += 1) {
     array.push(
       <PaginationItem active={i === 1 && !isPagination} key={i}>
-        <CustomLink className="page-link" activeClassName="active" to={bestFilterMode ? `${url}${i}${filterUrl}` : `${url}${i}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`${url}${i}${filterUrl}`}>
           {i}
         </CustomLink>
       </PaginationItem>,
@@ -56,7 +58,7 @@ const PaginationList = () => {
   if (currentPageNum < currentBoardMaxPage) {
     array.push(
       <PaginationItem key={-1}>
-        <CustomLink className="page-link" activeClassName="active" to={bestFilterMode ? `${url}${currentPageNum + 1}${filterUrl}` : `${url}${currentPageNum + 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`${url}${currentPageNum + 1}${filterUrl}`}>
           ＞
         </CustomLink>
       </PaginationItem>,

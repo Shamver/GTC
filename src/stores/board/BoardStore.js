@@ -120,6 +120,7 @@ class BoardStore {
       return;
     }
 
+    this.searchMode = true;
     search();
   };
 

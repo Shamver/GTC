@@ -234,8 +234,25 @@ class PostStore {
   };
 
   @action search = () => {
-    this.isSearch = false; // useEffect
-    this.isSearch = true;
+    const { history } = this.root.UtilRouteStore;
+    const {
+      bestFilterMode, searchMode, searchTarget, searchKeyword,
+      currentBoardPath,
+    } = this.root.BoardStore;
+
+    const url = `/${currentBoardPath}/page/`;
+    let filterUrl;
+
+    if (bestFilterMode && searchMode) {
+      filterUrl = `?filter_mode=true&search=${searchKeyword}&search_target=${searchTarget}`;
+    } else if (searchMode) {
+      filterUrl = `?search=${searchKeyword}&search_target=${searchTarget}`;
+    } else if (bestFilterMode) {
+      filterUrl = '?filter_mode=true';
+    } else {
+      filterUrl = '';
+    }
+    history.push(`${url}1${filterUrl}`);
   };
 
   @action searchOff = () => {
