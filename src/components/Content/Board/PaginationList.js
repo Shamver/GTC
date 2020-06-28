@@ -10,6 +10,7 @@ const PaginationList = () => {
   const { currentBoardMaxPage } = BoardPostStore;
   const {
     bestFilterMode, currentBoardPath, currentBoardPage, isPagination,
+    searchMode, searchKeyword, searchTarget,
   } = BoardStore;
 
   const currentPageNum = Number(currentBoardPage);
@@ -19,7 +20,15 @@ const PaginationList = () => {
   const array = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 1);
 
   const url = `/${currentBoardPath}/page/`;
-  const filterUrl = '?filter_mode=true';
+  let filterUrl;
+
+  if (bestFilterMode && searchMode) {
+    filterUrl = `?filter_mode=true&search=${searchKeyword}&search_target=${searchTarget}`;
+  } else if (searchMode) {
+    filterUrl = `?search=${searchKeyword}&search_target=${searchTarget}`;
+  } else if (bestFilterMode) {
+    filterUrl = '?filter_mode=true';
+  }
 
   // 1이 아닌이상 무조건 < 페이지는 표시해야 함.
   if (currentPageNum > 1) {
