@@ -103,6 +103,9 @@ const WriterDropdownToggle = styled(DropdownToggle)`
   &:focus {
     box-shadow : none !important;
   }
+  @media (max-width: 992px) {
+    display: none !important;
+  }
 `;
 
 export default memo(observer(WriterDropdown));

@@ -7,8 +7,9 @@ import PostRow from './responsive/PostRow';
 import ResponsivePostRow from './responsive/ResponsivePostRow';
 
 const Post = ({ data, index, isNotice }) => {
-  const { BoardPostStore } = useStores();
+  const { BoardPostStore, ComponentPostStore } = useStores();
   const { currentPostId } = BoardPostStore;
+  const { onClickPost } = ComponentPostStore;
   const { id, date, recommendCount } = data;
   const RecommentComponent = recommendCount > 0
     && (<LikeCountSpan>{recommendCount}</LikeCountSpan>);
@@ -30,12 +31,12 @@ const Post = ({ data, index, isNotice }) => {
         </DateTd>
       </TableRow>
       {/* 모바일 화면에서의 로우 */}
-      <MobileTableRow height="35" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle}>
-        <CenterTd>
+      <MobileTableRow height="50" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle} onClick={() => onClickPost(id)}>
+        <CenterTd width={5}>
           {currentPostId === id ? '>>' : NoticeComponent}
         </CenterTd>
         <ResponsivePostRow data={data} index={index} isNotice={isNotice} />
-        <DateTd>
+        <DateTd width={5}>
           <BlockInner>{date}</BlockInner>
         </DateTd>
       </MobileTableRow>
@@ -63,8 +64,6 @@ const BlockInner = styled.span`
   line-height : normal;
 `;
 
-
-
 const TableRow = styled.tr`
   background-color : ${(props) => props.backgroundColor};
   &:hover {
@@ -77,6 +76,7 @@ const TableRow = styled.tr`
 
 const MobileTableRow = styled.tr`
   background-color : ${(props) => props.backgroundColor};
+  cursor: pointer;
   &:hover {
     background-color: rgb(250, 250, 250) !important;
   }
