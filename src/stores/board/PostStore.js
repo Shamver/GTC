@@ -22,7 +22,6 @@ class PostStore {
     notice: [],
     cash: [],
     qna: [],
-    faq: [],
     consult: [],
     crime: [],
     all: [],
@@ -35,7 +34,6 @@ class PostStore {
     notice: [],
     cash: [],
     qna: [],
-    faq: [],
     consult: [],
     crime: [],
     all: [],
@@ -64,6 +62,8 @@ class PostStore {
   };
 
   @observable toggleBestPostToken = false;
+
+  @observable replyLockerHash;
 
   constructor(root) {
     this.root = root;
@@ -481,6 +481,10 @@ class PostStore {
 
   @action setClearPostView = () => {
     this.postView = {};
+  }
+
+  @action getHash = (hash) => {
+    this.replyLockerHash = hash;
   }
 }
 

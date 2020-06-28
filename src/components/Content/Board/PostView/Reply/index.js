@@ -16,8 +16,8 @@ import ReplyEdit from './ReplyEdit';
 
 const Reply = ({ data, index }) => {
   const {
-    UserStore, BoardReplyStore, BoardReportStore, ComponentReplyStore,
-    UtilAlertStore, UserIgnoreStore, UtilRouteStore,
+    UserStore, BoardReplyStore, BoardReportStore, BoardPostStore, ComponentReplyStore,
+    UtilAlertStore, UserIgnoreStore,
   } = useStores();
   const {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
@@ -27,10 +27,9 @@ const Reply = ({ data, index }) => {
   const { dropdown, onActive, onSet } = ComponentReplyStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { addIgnore } = UserIgnoreStore;
-  const { history } = UtilRouteStore;
+  const { replyLockerHash } = BoardPostStore;
   const dropdownKey = index.toString();
-
-  const hash = history.location.hash && history.location.hash.split('#')[1];
+  const hash = replyLockerHash.split('#')[1];
   const { id } = data;
 
   const ReplyContentText = (!data.secretFl
