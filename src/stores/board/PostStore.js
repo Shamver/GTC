@@ -161,10 +161,10 @@ class PostStore {
 
   @action getBoardPostList = async (board, currentPage) => {
     const { userData } = this.root.UserStore;
-    const { searchKeyword, searchTarget } = this.root.BoardStore;
+    const { searchMode, searchKeyword, searchTarget } = this.root.BoardStore;
     const userId = userData ? userData.id : null;
 
-    if (this.isSearch) {
+    if (searchMode) {
       await axios.get('/api/board/post/search', {
         params: {
           board,

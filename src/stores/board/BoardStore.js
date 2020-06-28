@@ -41,6 +41,8 @@ class BoardStore {
 
   @observable bestFilterMode = false;
 
+  @observable searchMode = false;
+
   @observable currentBoardPage = 1;
 
   @observable isPagination = false;
@@ -62,8 +64,11 @@ class BoardStore {
   };
 
   @observable judgeFilterMode = (query) => {
-    const { filter_mode: filterMode } = query;
+    const { filter_mode: filterMode, search, search_target: searchTarget } = query;
     this.bestFilterMode = !!(query && filterMode && filterMode === 'true');
+    this.searchMode = !!(query && search);
+    this.searchKeyword = query && search ? search : '';
+    this.searchTarget = query && searchTarget ? searchTarget : 'title';
   };
 
   @action setCurrentBoardPath = (path) => {

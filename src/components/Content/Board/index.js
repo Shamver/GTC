@@ -2,16 +2,18 @@ import React, { useLayoutEffect, memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import qs from 'query-string';
+import { observer } from 'mobx-react';
 import BoardHeader from './BoardHeader';
 import BoardContent from './BoardContent';
 import BoardFooter from './BoardFooter';
 import useStores from '../../../stores/useStores';
-import {observer} from "mobx-react";
 
 const Board = ({
   path, currentPage, isPagination, location,
 }) => {
-  const { BoardPostStore, UtilLoadingStore, BoardStore } = useStores();
+  const {
+    BoardPostStore, UtilLoadingStore, BoardStore,
+  } = useStores();
   const {
     setClearPostView, getBoardPostNoticeList, getBoardPostList, isSearch,
   } = BoardPostStore;
