@@ -40,10 +40,10 @@ const INSERT_POST_ADVERTISE = `
   )
 `;
 
-const SELECT_USER_POINT_SUM = `
-  SELECT SUM(COST) AS point
-  FROM GTC_USER_POINT
-  WHERE USER_ID = :USER_ID;
+const SELECT_URL_VALIDATION = `
+  SELECT ID AS postId
+  FROM GTC_POST
+  WHERE ID = :URL;
 `;
 
 const INSERT_POINT = `
@@ -64,19 +64,18 @@ const INSERT_POINT = `
 
 router.post('/', (req, res) => {
   const {
-    userId, message, url, hours,
+    userId, message, url, hours, postId,
   } = req.body;
 
   Database.execute(
     (database) => database.query(
-      SELECT_USER_POINT_SUM,
+      SELECT_URL_VALIDATION,
       {
-        USER_ID: userId,
+        URL: postId,
       },
     )
       .then((rows) => {
-        // 테스트중 주석
-        if (rows[0].point < hours * 100) {
+        if (!rows[0].postId) {
           return Promise.reject();
         }
         return database.query(
@@ -111,7 +110,7 @@ router.post('/', (req, res) => {
         res.json({
           success: false,
           code: 1,
-          message: '😳 포인트가 부족합니다.',
+          message: '😳 존재하지 않는 게시물 입니다.',
         });
       }),
   ).then(() => {

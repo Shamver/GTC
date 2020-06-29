@@ -57,6 +57,7 @@ class AdvertiseStore {
     axios.post('/api/event/advertise', {
       ...this.AdvertisePost,
       userId: userData.id,
+      postId: linkUrl[1],
     })
       .then((response) => {
         const { data } = response;
