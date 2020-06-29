@@ -319,6 +319,7 @@ const SELECT_POST_LIST_BOARD_SEARCH = `
         AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
         :query
       ) AS pageCount
+    :ALL_QUERY
     , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
   FROM 
     GTC_POST P
@@ -414,6 +415,14 @@ router.get('/search', (req, res) => {
     }
   }
 
+  const ALL_QUERY = board && board === 'all'
+    ? `, CASE WHEN P.BOARD_CD = 'FREE' THEN '자유 게시판'
+        WHEN P.BOARD_CD = 'TRADE' THEN '아이템 거래'
+        WHEN P.BOARD_CD = 'CASH' THEN '월드락 거래'
+        WHEN P.BOARD_CD = 'QNA' THEN '질문 & 답변'
+       ELSE '그 외'
+    END AS boardName` : '';
+
   // eslint-disable-next-line no-nested-ternary
   const params = board === undefined ? {
     CURRENT_PAGE: ((currentPage - 1) * 25),
@@ -426,6 +435,7 @@ router.get('/search', (req, res) => {
     USER_ID: userId,
     PER_PAGE: 25,
     LIKES: Number(recommend) ? 1 : 0,
+    ALL_QUERY,
     query,
   } : {
     BOARD_CD: '\'notice\', \'free\', \'trade\', \'cash\', \'crime\', \'qna\'', // 후에 코드성으로 모두 가져오게끔 해서 처리
@@ -433,6 +443,7 @@ router.get('/search', (req, res) => {
     USER_ID: userId,
     PER_PAGE: 25,
     LIKES: Number(recommend) ? 1 : 0,
+    ALL_QUERY,
     query,
   };
 
