@@ -421,14 +421,14 @@ router.get('/search', (req, res) => {
     PER_PAGE: 25,
     query,
   } : board && board !== 'all' ? {
-    BOARD_CD: `('${board.toUpperCase()}')`,
+    BOARD_CD: `'${board.toUpperCase()}'`,
     CURRENT_PAGE: ((currentPage - 1) * 25),
     USER_ID: userId,
     PER_PAGE: 25,
     LIKES: Number(recommend) ? 1 : 0,
     query,
   } : {
-    BOARD_CD: '(\'notice\', \'free\', \'trade\', \'cash\', \'crime\', \'qna\')', // 후에 코드성으로 모두 가져오게끔 해서 처리
+    BOARD_CD: '\'notice\', \'free\', \'trade\', \'cash\', \'crime\', \'qna\'', // 후에 코드성으로 모두 가져오게끔 해서 처리
     CURRENT_PAGE: ((currentPage - 1) * 25),
     USER_ID: userId,
     PER_PAGE: 25,
