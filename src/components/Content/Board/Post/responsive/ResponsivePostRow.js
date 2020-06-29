@@ -29,14 +29,14 @@ const ResponsivePostRow = ({ data, isNotice }) => {
           {title}
         </PostTitle>
         <PostTitle>
-          { commentCount > 0
-          && (<RedBoldSpan>&nbsp;[{commentCount}]</RedBoldSpan>)}
+          {commentCount > 0 && (<RedBoldSpan>&nbsp;[{commentCount}]</RedBoldSpan>)}
         </PostTitle>
         <br />
         <RedSpan>{writerName}</RedSpan>
+        &nbsp;
         {!isNotice && (type !== 'notice' && (<TextSpan>{categoryName}</TextSpan>))}
         &nbsp;
-        { currentBoardPath === 'all' && (!isNotice && (<TextSpan>·&nbsp;{boardName}</TextSpan>))}
+        {currentBoardPath === 'all' && (!isNotice && (<TextSpan>·&nbsp;{boardName}</TextSpan>))}
       </MiddleSpan>
     </MiddleTd>
   );

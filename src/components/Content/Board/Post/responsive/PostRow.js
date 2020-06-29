@@ -25,7 +25,7 @@ const PostRow = ({ data, index, isNotice }) => {
   return (
     <>
       {currentBoardPath === 'all' && (<CenterTd width={6}>{!isNotice && boardName}</CenterTd>)}
-      {!isNotice ? (<CenterTd width={5} colSpan={1}>{type !== 'notice' && categoryName}</CenterTd>) : null}
+      {!isNotice && (<CenterTd width={5} colSpan={1}>{type !== 'notice' && categoryName}</CenterTd>)}
       <MiddleTd width={40} colSpan={isNotice ? 10 : weight}>
         <MiddleSpan>
           <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>

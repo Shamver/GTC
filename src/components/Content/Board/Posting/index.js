@@ -48,7 +48,7 @@ const Posting = ({ match, isModify }) => {
             <BoardOptionList />
           </SelectInput>
         </Col>
-        <Col xs="2">
+        <Col xs="3">
           <SelectInput type="select" name="category" value={post.category} onChange={onChangeValue}>
             <BoardCategoryOptionList />
           </SelectInput>
@@ -60,10 +60,7 @@ const Posting = ({ match, isModify }) => {
       <CKEditor
         editor={ClassicEditor}
         data={post.text}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          onChangeValue(data);
-        }}
+        onChange={(event, editor) => onChangeValue(editor.getData())}
         config={
           {
             ckfinder: {
@@ -93,7 +90,6 @@ const Posting = ({ match, isModify }) => {
               &nbsp;쓰기
             </RightButton>
           )}
-
       </PostingFooter>
     </PostingWrapper>
   );
