@@ -6,16 +6,18 @@ import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
-const PaginationList = ({ currentPage, noPagination }) => {
+const PaginationList = () => {
   const { BoardSearchStore } = useStores();
-  const { foundMaxPage } = BoardSearchStore;
+  const {
+    foundMaxPage, currentSearchPage, isPagination,
+  } = BoardSearchStore;
 
-  const currentPageNum = parseInt(currentPage, 0);
+  const currentPageNum = parseInt(currentSearchPage, 0);
   const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
   const max = (currentPageNum + 3) > foundMaxPage ? foundMaxPage : currentPageNum + 3;
   const array = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 1);
 
-  if (currentPage > 1) {
+  if (currentSearchPage > 1) {
     array.push(
       <PaginationItem key={0}>
         <CustomLink className="page-link" activeClassName="active" to={`/search/page/${currentPageNum - 1}`}>
@@ -29,7 +31,7 @@ const PaginationList = ({ currentPage, noPagination }) => {
 
   for (let i = min; i <= max; i += 1) {
     array.push(
-      <PaginationItem active={i === 1 && noPagination} key={i}>
+      <PaginationItem active={i === 1 && !isPagination} key={i}>
         <CustomLink className="page-link" activeClassName="active" to={`/search/page/${i}`}>
           {i}
         </CustomLink>
@@ -66,11 +68,13 @@ PaginationList.defaultProps = {
 
 const SearchPagination = ({ noPagination, currentPage }) => {
   const { BoardSearchStore } = useStores();
-  const { foundMaxPage } = BoardSearchStore;
+  const {
+    foundMaxPage, currentSearchPage, isPagination,
+  } = BoardSearchStore;
 
   useEffect(() => {
 
-  }, [foundMaxPage]);
+  }, [foundMaxPage, currentSearchPage, isPagination]);
 
   return (
     <PaginationCustom>

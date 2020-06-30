@@ -428,7 +428,7 @@ router.get('/search', (req, res) => {
     CURRENT_PAGE: ((currentPage - 1) * 25),
     USER_ID: userId,
     PER_PAGE: 25,
-    query,
+    KEYWORD: keyword,
   } : board && board !== 'all' ? {
     BOARD_CD: `'${board.toUpperCase()}'`,
     CURRENT_PAGE: ((currentPage - 1) * 25),
