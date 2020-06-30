@@ -48,11 +48,11 @@ const Posting = ({ match, isModify }) => {
             <BoardOptionList />
           </SelectInput>
         </Col>
-        <Col xs="3">
+        <RightMarginlessCol xs="3">
           <SelectInput type="select" name="category" value={post.category} onChange={onChangeValue}>
             <BoardCategoryOptionList />
           </SelectInput>
-        </Col>
+        </RightMarginlessCol>
         <Col>
           <Input value={post.title} name="title" placeholder="제목을 입력해주세요..." onChange={onChangeValue} />
         </Col>
@@ -109,6 +109,10 @@ Posting.defaultProps = {
   isModify: false,
 };
 
+const RightMarginlessCol = styled(Col)`
+  padding-right: 0 !important;
+`;
+
 const PostingWrapper = styled.div`
   border-bottom: 2px solid #ebeae8;
   border-right: 2px solid #ebeae8;
@@ -122,7 +126,7 @@ const PostingWrapper = styled.div`
 `;
 
 const CustomCheckbox = styled(CustomInput)`
-  display : inline !important;
+  display : inline-block !important;
   margin-right : 10px;
 `;
 

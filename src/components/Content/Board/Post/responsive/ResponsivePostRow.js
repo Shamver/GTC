@@ -21,7 +21,7 @@ const ResponsivePostRow = ({ data, isNotice }) => {
   const IsBestPost = recommendCount >= 10 ? (<Star icon={faStar} />) : isImageComponent;
 
   return (
-    <MiddleTd width={180} colSpan={2}>
+    <MiddleTd width={120} colSpan={2}>
       <MiddleSpan>
         <PostTitle className={isVisited(id) && 'color-gray'}>
           {isNotice ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}
@@ -82,7 +82,7 @@ const RedSpan = styled(TextSpan)`
 const RedBoldSpan = styled(RedSpan)`
   max-width: 100%;
   font-weight: bold;
-  vertical-align: sub;
+  vertical-align: middle;
 `;
 
 const MiddleTd = styled.td`
