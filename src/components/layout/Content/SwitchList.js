@@ -53,6 +53,10 @@ const SwitchList = () => {
       ) : null }
 
       { checkPermission(2) ? (
+        <Route exact path="/report" render={() => <Contents.Report />} />
+      ) : null }
+
+      { checkPermission(2) ? (
         <Route exact path="/code" render={() => <Contents.Code />} />
       ) : null }
 

@@ -22,7 +22,7 @@ class ReportStore {
     if (!this.ReportValidationCheck()) {
       return false;
     }
-    axios.post('/api/board/report', {
+    axios.post('/api/board/Report', {
       ...this.reportData,
       writerId: this.root.UserStore.userData.id,
     })

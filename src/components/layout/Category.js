@@ -4,7 +4,7 @@ import {
   Container, Row,
 } from 'reactstrap';
 import {
-  faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock, faQuestion, faComments, faAt,
+  faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock, faBellSlash, faComments, faAt,
   faExclamationTriangle, faCode,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -69,6 +69,13 @@ const Category = () => {
             <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
           </MenuDiv>
         </MenuLink>
+        { checkPermission(2) ? (
+          <MenuLink to="/report" activeClassName="active">
+            <MenuDiv>
+              <FaiPink icon={faBellSlash} className="fa-fw" />&nbsp;&nbsp; 신고 관리
+            </MenuDiv>
+          </MenuLink>
+        ) : null }
         { checkPermission(2) ? (
           <MenuLink to="/code" activeClassName="active">
             <MenuDiv>
