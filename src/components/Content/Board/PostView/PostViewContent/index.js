@@ -1,4 +1,4 @@
-import React, { memo, useLayoutEffect } from 'react';
+import React, { memo } from 'react';
 import {
   faBellSlash, faClock, faEye, faStar as farStar,
 } from '@fortawesome/free-regular-svg-icons';
@@ -20,7 +20,7 @@ const PostViewContent = () => {
     BoardPostStore, BoardReplyStore, BoardReportStore,
     UserFavoriteStore,
   } = useStores();
-  const { postView, getEmbedMedia } = BoardPostStore;
+  const { postView } = BoardPostStore;
   const { postReplyList } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
   const { judgeFavorite } = UserFavoriteStore;
@@ -29,10 +29,6 @@ const PostViewContent = () => {
     viewCnt, content,
     recommendCount, isFavorite, isMyPost,
   } = postView;
-
-  useLayoutEffect(() => {
-    getEmbedMedia();
-  }, [getEmbedMedia]);
 
   const realBoardPath = board ? board.toLowerCase() : board;
 
