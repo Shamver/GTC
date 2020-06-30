@@ -9,7 +9,7 @@ import useStores from '../../../stores/useStores';
 const PaginationList = () => {
   const { BoardSearchStore } = useStores();
   const {
-    foundMaxPage, currentSearchPage, isPagination,
+    foundMaxPage, currentSearchPage, isPagination, foundText,
   } = BoardSearchStore;
 
   const currentPageNum = parseInt(currentSearchPage, 0);
@@ -20,7 +20,7 @@ const PaginationList = () => {
   if (currentSearchPage > 1) {
     array.push(
       <PaginationItem key={0}>
-        <CustomLink className="page-link" activeClassName="active" to={`/search/page/${currentPageNum - 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/search/page/${currentPageNum - 1}?search=${foundText}`}>
           <SmallSpan>
             ＜
           </SmallSpan>
@@ -32,7 +32,7 @@ const PaginationList = () => {
   for (let i = min; i <= max; i += 1) {
     array.push(
       <PaginationItem active={i === 1 && !isPagination} key={i}>
-        <CustomLink className="page-link" activeClassName="active" to={`/search/page/${i}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/search/page/${i}?search=${foundText}`}>
           {i}
         </CustomLink>
       </PaginationItem>,
@@ -42,7 +42,7 @@ const PaginationList = () => {
   if (currentPageNum !== foundMaxPage) {
     array.push(
       <PaginationItem key={-1}>
-        <CustomLink className="page-link" activeClassName="active" to={`/search/page/${currentPageNum + 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/search/page/${currentPageNum + 1}?search=${foundText}`}>
           <SmallSpan>
             ＞
           </SmallSpan>
@@ -66,7 +66,7 @@ PaginationList.defaultProps = {
 };
 
 
-const SearchPagination = ({ noPagination, currentPage }) => {
+const SearchPagination = () => {
   const { BoardSearchStore } = useStores();
   const {
     foundMaxPage, currentSearchPage, isPagination,
@@ -78,19 +78,9 @@ const SearchPagination = ({ noPagination, currentPage }) => {
 
   return (
     <PaginationCustom>
-      <PaginationList currentPage={currentPage} noPagination={noPagination} />
+      <PaginationList />
     </PaginationCustom>
   );
-};
-
-SearchPagination.propTypes = {
-  noPagination: Proptypes.bool,
-  currentPage: Proptypes.string,
-};
-
-SearchPagination.defaultProps = {
-  noPagination: false,
-  currentPage: '1',
 };
 
 const SmallSpan = styled.span`
