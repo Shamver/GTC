@@ -51,23 +51,25 @@ const Reply = ({ data, index }) => {
       )}
       <ReplyWrapper>
         <ReplyInHeader>
-          <AvatarImg src={avatar} />
-          <WriterDropdown isOpen={dropdown[dropdownKey]} toggle={(e) => onActive(dropdownKey, e)}>
-            <WriterDropdownToggle>{data.writer}</WriterDropdownToggle>
-            <WriterDropdownMenu>
-              <WriterDropdownItem onClick={() => getProfile(data.idWriter)}>
-                프로필
-              </WriterDropdownItem>
-              {!(!userData || userData.id === data.idWriter) && (
-                <WriterDropdownItem
-                  onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(data.idWriter))}
-                >
-                  차단하기
+          <ReplyProfileWrapper>
+            <AvatarImg src={avatar} />
+            <WriterDropdown isOpen={dropdown[dropdownKey]} toggle={(e) => onActive(dropdownKey, e)}>
+              <WriterDropdownToggle>{data.writer}</WriterDropdownToggle>
+              <WriterDropdownMenu>
+                <WriterDropdownItem onClick={() => getProfile(data.idWriter)}>
+                  프로필
                 </WriterDropdownItem>
-              )}
-            </WriterDropdownMenu>
-          </WriterDropdown>
-          { data.idPostWriter === data.idWriter && (<Writer>(글쓴이)</Writer>)}
+                {!(!userData || userData.id === data.idWriter) && (
+                  <WriterDropdownItem
+                    onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(data.idWriter))}
+                  >
+                    차단하기
+                  </WriterDropdownItem>
+                )}
+              </WriterDropdownMenu>
+            </WriterDropdown>
+            { data.idPostWriter === data.idWriter && (<Writer>(글쓴이)</Writer>)}
+          </ReplyProfileWrapper>
           <span className="replyOption">
             { !data.deleteFl ? (
               <>
@@ -92,6 +94,7 @@ const Reply = ({ data, index }) => {
               </>
             ) : (<>{data.updateDate ? data.updateDate : data.date}</>)}
           </span>
+          <ClearFix />
         </ReplyInHeader>
         <ReplyInContent hash={hash} commentId={id}>
           {/* 수정의 경우의 수 */}
@@ -143,6 +146,18 @@ Reply.propTypes = {
   }).isRequired,
   index: Proptypes.number.isRequired,
 };
+
+const ClearFix = styled.div`
+  clear: both;
+  display: block;
+  content: "";
+  height: 0;
+`;
+
+const ReplyProfileWrapper = styled.div`
+  display: inline-block;
+  float: left;
+`;
 
 const WriterDropdown = styled(Dropdown)`
   display : inline;
