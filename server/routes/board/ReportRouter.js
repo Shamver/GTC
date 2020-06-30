@@ -16,6 +16,16 @@ const SELECT_REPORT = `
     AND TYPE_CD = ':TYPE_CD'
 `;
 
+const SELECT_ALL_REPORT = `
+  SELECT ID AS reportId
+    , TARGET_ID AS targetId
+    , USER_ID AS userId
+    , TYPE_CD AS type
+    , REASON_CD AS reason
+    , REASON_DESC AS reasonDetail
+  FROM GTC_REPORT
+`;
+
 const INSERT_REPORT = `
   INSERT INTO GTC_REPORT (
     TARGET_ID
@@ -75,7 +85,25 @@ router.post('/', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[INSERT, POST /api/board/report] 게시글 신고');
+    info('[INSERT, POST /api/board/Report] 게시글 신고');
+  });
+});
+
+router.get('/', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_ALL_REPORT,
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '신고 이력 조회',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/board/Report] 신고 이력 조회');
   });
 });
 

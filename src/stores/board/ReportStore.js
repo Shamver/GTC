@@ -14,6 +14,8 @@ class ReportStore {
     description: '',
   };
 
+  @observable reportDataList = [];
+
   constructor(root) {
     this.root = root;
   }
@@ -31,8 +33,6 @@ class ReportStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            //rp01
-            //rp02
             this.toggleReport();
           } else {
             toast.info(data.message);
@@ -76,6 +76,26 @@ class ReportStore {
 
     this.reportToggle = !this.reportToggle;
   }
+
+  @action getReportList = async () => {
+    await axios.get('/api/board/Report')
+      .then((response) => {
+        const { data } = response;
+        const { result } = data;
+        if (data.success) {
+          if (data.code === 1) {
+            this.reportDataList = result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
 }
 
 export default ReportStore;
