@@ -13,9 +13,26 @@ class SearchStore {
 
   @observable foundList = [];
 
+  @observable currentSearchPage = 1;
+
+  @observable isPagination = false;
+
   constructor(root) {
     this.root = root;
   }
+
+  @action setIsPagination = (isPagination) => {
+    this.isPagination = isPagination;
+  };
+
+  @action setCurrentSearchPage = (currentSearchPage) => {
+    this.currentSearchPage = currentSearchPage;
+  };
+
+  @observable judgeFilterMode = (query) => {
+    const { search } = query;
+    this.foundText = query && search ? search : '';
+  };
 
   @action onSubmit = (e) => {
     if (e.key === 'Enter') {

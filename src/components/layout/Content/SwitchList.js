@@ -57,11 +57,11 @@ const SwitchList = () => {
       ) : null }
 
       { checkPermission(0) ? (
-        <Route exact path="/search" render={() => <Contents.Search noPagination />} />
+        <Route exact path="/search" render={({ location }) => <Contents.Search location={location} />} />
       ) : null }
 
       { checkPermission(0) ? (
-        <Route exact path="/search/page/:currentPage" render={({ match }) => <Contents.Search currentPage={match.params.currentPage} />} />
+        <Route exact path="/search/page/:currentPage" render={({ match, location }) => <Contents.Search currentPage={match.params.currentPage} isPagination location={location} />} />
       ) : null }
 
       <Route exact path="/" render={() => <Home />} />
