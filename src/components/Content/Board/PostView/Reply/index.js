@@ -50,7 +50,7 @@ const Reply = ({ data, index }) => {
       )}
       <ReplyWrapper>
         <ReplyInHeader>
-          <AvatarImg src={avatar} />
+          <AvatarImg src={data.writerProfile || avatar} />
           <WriterDropdown isOpen={dropdown[dropdownKey]} toggle={(e) => onActive(dropdownKey, e)}>
             <WriterDropdownToggle>{data.writer}</WriterDropdownToggle>
             <WriterDropdownMenu>
@@ -132,6 +132,7 @@ Reply.propTypes = {
     idPostWriter: Proptypes.number,
     likeCount: Proptypes.number,
     writer: Proptypes.string,
+    writerProfile: Proptypes.string,
     content: Proptypes.string,
     tabFl: Proptypes.number,
     date: Proptypes.string,
