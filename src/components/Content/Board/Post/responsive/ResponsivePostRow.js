@@ -21,7 +21,7 @@ const ResponsivePostRow = ({ data, isNotice }) => {
   const IsBestPost = recommendCount >= 10 ? (<Star icon={faStar} />) : isImageComponent;
 
   return (
-    <MiddleTd width={120} colSpan={2}>
+    <MiddleTd width={80} colSpan={2}>
       <MiddleSpan>
         <PostTitle className={isVisited(id) && 'color-gray'}>
           {isNotice ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}

@@ -8,8 +8,9 @@ import ResponsivePostRow from './responsive/ResponsivePostRow';
 
 const Post = ({ data, index, isNotice }) => {
   const { BoardPostStore, ComponentPostStore } = useStores();
-  const { currentPostId } = BoardPostStore;
+  const { postView } = BoardPostStore;
   const { onClickPost } = ComponentPostStore;
+  const { id: currentPostId } = postView;
   const { id, date, recommendCount } = data;
   const RecommentComponent = recommendCount > 0
     && (<LikeCountSpan>{recommendCount}</LikeCountSpan>);

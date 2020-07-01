@@ -77,19 +77,17 @@ const Posting = ({ match, isModify }) => {
       </PostingFooter>
       <PostingFooter>
         <MarginButton onClick={goBack} color="secondary">작성취소</MarginButton>
-        { isModify
-          ? (
-            <RightButton color="danger" onClick={() => modifyPost(match)}>
-              <FontAwesomeIcon icon={faPen} />
-              &nbsp;수정하기
-            </RightButton>
-          )
-          : (
-            <RightButton color="danger" onClick={() => addPost(match)}>
-              <FontAwesomeIcon icon={faPen} />
-              &nbsp;쓰기
-            </RightButton>
-          )}
+        {!isModify ? (
+          <RightButton color="danger" onClick={() => addPost(match)}>
+            <FontAwesomeIcon icon={faPen} />
+            &nbsp;쓰기
+          </RightButton>
+        ) : (
+          <RightButton color="danger" onClick={() => modifyPost(match)}>
+            <FontAwesomeIcon icon={faPen} />
+            &nbsp;수정하기
+          </RightButton>
+        )}
       </PostingFooter>
     </PostingWrapper>
   );

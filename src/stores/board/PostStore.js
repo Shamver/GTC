@@ -173,9 +173,10 @@ class PostStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
+            const realBoard = board.toLowerCase();
             this.boardPostList = {
               ...this.boardPostList,
-              [board]: data.result,
+              [realBoard]: data.result,
             };
             // 게시글 가져올때 MAX 카운트 셋
             if (data.result.length === 0) {
@@ -261,6 +262,11 @@ class PostStore {
             const [post] = data.result;
             that.postView = post;
             getLately();
+            const { currentBoardPage } = this.root.BoardStore.currentBoardPage;
+            const { setCurrentBoardPath } = this.root.BoardStore;
+            this.getBoardPostList(post.board.toLowerCase(), currentBoardPage).then(() => {
+              setCurrentBoardPath(post.board.toLowerCase());
+            });
           } else {
             toast.info(data.message);
           }
