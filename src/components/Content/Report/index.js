@@ -1,17 +1,31 @@
-import React, { memo } from 'react';
+import React, { useLayoutEffect, memo } from 'react';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import ReportTable from './ReportTable';
+import useStores from '../../../stores/useStores';
 
-const Report = () => (
-  <BoardWrapper>
-    <TableWrapper>
-      <h3>신고 관리</h3>
-      <ReportTableCol>
-        <ReportTable />
-      </ReportTableCol>
-    </TableWrapper>
-  </BoardWrapper>
-);
+const Report = () => {
+  const { BoardReportStore, UtilLoadingStore } = useStores();
+  const { loadingProcess } = UtilLoadingStore;
+  const { getReportList } = BoardReportStore;
+
+  useLayoutEffect(() => {
+    loadingProcess([
+      getReportList,
+    ]);
+  }, [loadingProcess, getReportList]);
+
+  return (
+    <BoardWrapper>
+      <TableWrapper>
+        <h3>신고 관리</h3>
+        <ReportTableCol>
+          <ReportTable />
+        </ReportTableCol>
+      </TableWrapper>
+    </BoardWrapper>
+  );
+};
 
 const BoardWrapper = styled.div`
   border-bottom: 2px solid #ebeae8;
@@ -28,4 +42,4 @@ const ReportTableCol = styled.div`
   width : 100%;
 `;
 
-export default memo(Report);
+export default memo(observer(Report));

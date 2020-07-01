@@ -81,10 +81,9 @@ class ReportStore {
     await axios.get('/api/board/Report')
       .then((response) => {
         const { data } = response;
-        const { result } = data;
         if (data.success) {
           if (data.code === 1) {
-            this.reportDataList = result;
+            this.reportDataList = data.result;
           } else {
             toast.info(data.message);
           }

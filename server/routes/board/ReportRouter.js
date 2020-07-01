@@ -17,13 +17,15 @@ const SELECT_REPORT = `
 `;
 
 const SELECT_ALL_REPORT = `
-  SELECT ID AS reportId
-    , TARGET_ID AS targetId
-    , USER_ID AS userId
-    , TYPE_CD AS type
-    , REASON_CD AS reason
-    , REASON_DESC AS reasonDetail
-  FROM GTC_REPORT
+ SELECT R.ID AS reportId
+    , R.TYPE_CD AS typeCode
+    , R.TARGET_ID AS targetId
+    , (SELECT NICKNAME FROM GTC_USER WHERE GTC_USER.ID = R.USER_ID) AS userId
+    , R.REASON_CD AS reasonCode
+    , (SELECT NAME FROM GTC_CODE WHERE GTC_CODE.CODE = R.REASON_CD) AS reason
+    , R.REASON_DESC AS reasonDetail
+    , DATE_FORMAT(R.CRT_DTTM, '%Y-%m-%d') AS reportDate
+  FROM GTC_REPORT R
 `;
 
 const INSERT_REPORT = `

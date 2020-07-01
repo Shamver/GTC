@@ -60,9 +60,9 @@ app.use('/api/board/post', boardPostApi);
 // reply
 app.use('/api/board/reply', boardReplyApi);
 
-// report
-app.use('/api/board/report', authMiddleware);
-app.use('/api/board/report', boardReportApi);
+// Report
+app.use('/api/board/Report', authMiddleware);
+app.use('/api/board/Report', boardReportApi);
 
 // board
 app.use('/api/board', boardApi);

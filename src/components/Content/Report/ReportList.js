@@ -1,22 +1,50 @@
 import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import { Table } from 'reactstrap';
+import {Button, InputGroup} from 'reactstrap';
+import * as Proptypes from 'prop-types';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUserTimes } from '@fortawesome/free-solid-svg-icons';
 
-const ReportList = ( reportData ) => {
-  const{ reportId } = reportData;
-  console.log(reportId)
+const ReportList = ({ data, index }) => {
+  const {
+    userId, reason, reasonDetail, typeCode, reportDate,
+  } = data;
+
   return (
     <tr>
-      <td></td>
-      <td>2</td>
-      <td>3</td>
-      <td>4</td>
-      <td>5</td>
-      <td>6</td>
-      <td>7</td>
+      <TdCenter>{index}</TdCenter>
+      <td>{reason}</td>
+      <td>{reasonDetail}</td>
+      <td>{userId}</td>
+      <td />
+      <td>{typeCode}</td>
+      <td>{reportDate}</td>
+      <TdCenter>
+        <ButtonCustom color="danger" size="sm">
+          <FontAwesomeIcon icon={faUserTimes} />
+          &nbsp;&nbsp;사용자 밴
+        </ButtonCustom>
+      </TdCenter>
     </tr>
   );
 };
+
+ReportList.propTypes = {
+  data: Proptypes.shape({
+    userId: Proptypes.string,
+    reason: Proptypes.string,
+    reasonDetail: Proptypes.string,
+    typeCode: Proptypes.string,
+  }).isRequired,
+  index: Proptypes.number.isRequired,
+};
+
+const TdCenter = styled.td`
+  text-align: center;
+`;
+
+const ButtonCustom = styled(Button)`
+`;
 
 export default memo(ReportList);
