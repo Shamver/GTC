@@ -10,7 +10,7 @@ const PostViewHeader = () => {
   const { BoardPostStore } = useStores();
   const { postView } = BoardPostStore;
   const {
-    board, boardName, categoryName, writerName, title,
+    board, boardName, categoryName, writerName, title, writerProfile,
   } = postView;
 
   const link = !!board && board.toLowerCase();
@@ -28,7 +28,7 @@ const PostViewHeader = () => {
         </CategoryAndTitle>
         <ProfileWrapper>
           <b>{writerName}</b>님
-          <img src={anonymous} alt="프로필 사진" />
+          <img src={writerProfile || anonymous} alt="프로필 사진" />
         </ProfileWrapper>
       </div>
     </>
