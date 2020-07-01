@@ -2,6 +2,7 @@ import React, { useLayoutEffect, memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import qs from 'query-string';
+import { observer } from 'mobx-react';
 import BoardHeader from './BoardHeader';
 import BoardContent from './BoardContent';
 import BoardFooter from './BoardFooter';
@@ -10,8 +11,12 @@ import useStores from '../../../stores/useStores';
 const Board = ({
   path, currentPage, isPagination, location,
 }) => {
-  const { BoardPostStore, UtilLoadingStore, BoardStore } = useStores();
-  const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
+  const {
+    BoardPostStore, UtilLoadingStore, BoardStore,
+  } = useStores();
+  const {
+    setClearPostView, getBoardPostNoticeList, getBoardPostList,
+  } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
   const {
     setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage,
@@ -76,4 +81,4 @@ const TableWrapper = styled.div`
   }
 `;
 
-export default memo(Board);
+export default memo(observer(Board));

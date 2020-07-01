@@ -13,9 +13,26 @@ class SearchStore {
 
   @observable foundList = [];
 
+  @observable currentSearchPage = 1;
+
+  @observable isPagination = false;
+
   constructor(root) {
     this.root = root;
   }
+
+  @action setIsPagination = (isPagination) => {
+    this.isPagination = isPagination;
+  };
+
+  @action setCurrentSearchPage = (currentSearchPage) => {
+    this.currentSearchPage = currentSearchPage;
+  };
+
+  @observable judgeFilterMode = (query) => {
+    const { search } = query;
+    this.foundText = query && search ? search : '';
+  };
 
   @action onSubmit = (e) => {
     if (e.key === 'Enter') {
@@ -32,9 +49,7 @@ class SearchStore {
     }
     this.foundText = this.searchText;
 
-    this.search(1).then(() => {});
-
-    history.push('/search');
+    history.push(`/search?search=${this.foundText}`);
   };
 
   @action search = async (page) => {

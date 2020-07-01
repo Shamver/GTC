@@ -46,7 +46,7 @@ class PostStore {
       key = keyList[i];
       this.dropdown[key] = false;
     }
-  }
+  };
 
   @action onClickPost = (id) => {
     const { history } = this.root.UtilRouteStore;
