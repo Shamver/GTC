@@ -8,7 +8,7 @@ import { faUserTimes } from '@fortawesome/free-solid-svg-icons';
 
 const ReportList = ({ data, index }) => {
   const {
-    userId, reason, reasonDetail, typeCode, reportDate,
+    userId, reason, reasonDetail, typeCode, reportDate, targetName,
   } = data;
 
   return (
@@ -17,7 +17,7 @@ const ReportList = ({ data, index }) => {
       <td>{reason}</td>
       <td>{reasonDetail}</td>
       <td>{userId}</td>
-      <td />
+      <td>{targetName}</td>
       <td>{typeCode}</td>
       <td>{reportDate}</td>
       <TdCenter>
@@ -36,6 +36,8 @@ ReportList.propTypes = {
     reason: Proptypes.string,
     reasonDetail: Proptypes.string,
     typeCode: Proptypes.string,
+    reportDate: Proptypes.string,
+    targetName: Proptypes.string,
   }).isRequired,
   index: Proptypes.number.isRequired,
 };
