@@ -18,7 +18,7 @@ const BoardFooter = () => {
   const bestFilterUrl = bestFilterMode ? pageUrl : pageUrl.concat(filterQs);
 
   return (
-    <>
+    <FooterWrapper>
       <AbsolDiv>
         <AbsoluteLeftLink to={bestFilterUrl}>
           <Button outline={!bestFilterMode} color="warning" size="sm">
@@ -51,9 +51,15 @@ const BoardFooter = () => {
           </InputGroupAddon>
         </InputGroupWidth>
       </InputGroupWrapper>
-    </>
+    </FooterWrapper>
   );
 };
+
+const FooterWrapper = styled.div`
+  @media (max-width: 992px) {
+    margin: 10px;
+  }
+`
 
 const RightNoRadiusSelect = styled(Input)`
   border-bottom-right-radius: 0px !important;
@@ -63,6 +69,7 @@ const RightNoRadiusSelect = styled(Input)`
 const InputGroupWrapper = styled.div`
   text-align : center;
   margin-top : 20px;
+
 `;
 
 const InputGroupWidth = styled(InputGroup)`
