@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import { toast } from 'react-toastify';
 
 class MyAccountStore {
   @observable profileYN = 0;
@@ -69,6 +70,7 @@ class MyAccountStore {
     this.disabled = true;
     this.timer = setTimeout(() => {
       this.checkValidation();
+      toast.success('이미지는 1:1 비율로 강제 변환됩니다.');
     }, 300);
   });
 

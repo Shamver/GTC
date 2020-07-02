@@ -132,7 +132,8 @@ const FormTextLeft = styled(FormText)`
 `;
 
 const Avatar = styled.img`
-  width : 64px;
+  width: 64px;
+  height: 64px;
   border-radius: 3px;
 `;
 
