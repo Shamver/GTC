@@ -60,6 +60,17 @@ class MyAccountStore {
 
     const reader = new FileReader();
 
+    const maxSize = 1024 * 1024; // 1MB
+
+    if (image === undefined) {
+      return false; // 이미지 선택 후 변경 할 때 아무것도 선택하지 않을 경우의 처리
+    }
+
+    if (image && image.size > maxSize) {
+      toast.error('이미지의 용량은 1MB를 초과할 수 없습니다.');
+      return false;
+    }
+
     reader.onload = (event) => {
       this.uploadImagePreview = event.target.result;
     };
