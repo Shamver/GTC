@@ -207,7 +207,8 @@ const ReplyInContent = styled.div`
 `;
 
 const AvatarImg = styled.img`
-  height : 30px;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   margin-right : 1px;
 `;
