@@ -22,7 +22,6 @@ class PostStore {
     notice: [],
     cash: [],
     qna: [],
-    faq: [],
     consult: [],
     crime: [],
     all: [],
@@ -35,7 +34,6 @@ class PostStore {
     notice: [],
     cash: [],
     qna: [],
-    faq: [],
     consult: [],
     crime: [],
     all: [],
@@ -64,6 +62,10 @@ class PostStore {
   };
 
   @observable toggleBestPostToken = false;
+
+  @observable replyLockerHash;
+
+  @observable isSearch = false;
 
   constructor(root) {
     this.root = root;
@@ -159,40 +161,105 @@ class PostStore {
 
   @action getBoardPostList = async (board, currentPage) => {
     const { userData } = this.root.UserStore;
+    const { searchMode, searchKeyword, searchTarget } = this.root.BoardStore;
     const userId = userData ? userData.id : null;
 
-    await axios.get('/api/board/post', {
-      params: {
-        board,
-        currentPage,
-        userId,
-        recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
-      },
-    })
-      .then((response) => {
-        const { data } = response;
-        if (data.success) {
-          if (data.code === 1) {
-            const realBoard = board.toLowerCase();
-            this.boardPostList = {
-              ...this.boardPostList,
-              [realBoard]: data.result,
-            };
-            // 게시글 가져올때 MAX 카운트 셋
-            if (data.result.length === 0) {
-              this.currentBoardMaxPage = 0;
+    if (searchMode) {
+      await axios.get('/api/board/post/search', {
+        params: {
+          board,
+          currentPage,
+          userId,
+          recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
+          keyword: searchKeyword,
+          target: searchTarget,
+        },
+      })
+        .then((response) => {
+          const { data } = response;
+          if (data.success) {
+            if (data.code === 1) {
+              const realBoard = board.toLowerCase();
+              this.boardPostList = {
+                ...this.boardPostList,
+                [realBoard]: data.result,
+              };
+              // 게시글 가져올때 MAX 카운트 셋
+              if (data.result.length === 0) {
+                this.currentBoardMaxPage = 0;
+              } else {
+                const { pageCount } = data.result[0];
+                this.currentBoardMaxPage = pageCount;
+              }
             } else {
-              const { pageCount } = data.result[0];
-              this.currentBoardMaxPage = pageCount;
+              toast.info(data.message);
             }
           } else {
-            toast.info(data.message);
+            toast.error(data.message);
           }
-        } else {
-          toast.error(data.message);
-        }
+        })
+        .catch((response) => { toast.error(response.message); });
+    } else {
+      await axios.get('/api/board/post', {
+        params: {
+          board,
+          currentPage,
+          userId,
+          recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
+        },
       })
-      .catch((response) => { toast.error(response.message); });
+        .then((response) => {
+          const { data } = response;
+          if (data.success) {
+            if (data.code === 1) {
+              this.boardPostList = {
+                ...this.boardPostList,
+                [board]: data.result,
+              };
+              // 게시글 가져올때 MAX 카운트 셋
+              if (data.result.length === 0) {
+                this.currentBoardMaxPage = 0;
+              } else {
+                const { pageCount } = data.result[0];
+                this.currentBoardMaxPage = pageCount;
+              }
+            } else {
+              toast.info(data.message);
+            }
+          } else {
+            toast.error(data.message);
+          }
+        })
+        .catch((response) => { toast.error(response.message); });
+    }
+  };
+
+  @action search = () => {
+    const { history } = this.root.UtilRouteStore;
+    const {
+      bestFilterMode, searchMode, searchTarget, searchKeyword,
+      currentBoardPath,
+    } = this.root.BoardStore;
+
+    const url = `/${currentBoardPath}/page/`;
+    let filterUrl;
+
+    if (bestFilterMode && searchMode) {
+      filterUrl = `?filter_mode=true&search=${searchKeyword}&search_target=${searchTarget}`;
+    } else if (searchMode) {
+      filterUrl = `?search=${searchKeyword}&search_target=${searchTarget}`;
+    } else if (bestFilterMode) {
+      filterUrl = '?filter_mode=true';
+    } else {
+      filterUrl = '';
+    }
+    history.push(`${url}1${filterUrl}`);
+  };
+
+  @action searchOff = () => {
+    const { setKeywordDefault } = this.root.BoardStore;
+    this.isSearch = false;
+    setKeywordDefault();
   };
 
   @action getBoardPostNoticeList = async (board, currentPage) => {
@@ -497,6 +564,10 @@ class PostStore {
 
   @action setClearPostView = () => {
     this.postView = {};
+  }
+
+  @action getHash = (hash) => {
+    this.replyLockerHash = hash;
   }
 }
 

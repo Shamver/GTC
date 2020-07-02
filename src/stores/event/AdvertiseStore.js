@@ -21,6 +21,11 @@ class AdvertiseStore {
     const { userData } = this.root.UserStore;
     const { totalPoint } = this.root.UserPointStore;
 
+    const linkUrl = this.AdvertisePost.url.split('/post/');
+    const regexp = /^\d+$/;
+    const urlNumValidation = regexp.test(linkUrl[1]);
+    const urlValidation = this.AdvertisePost.url.startsWith('/post/');
+
     if (!userData) {
       toast.error('로그인 후 이용 가능합니다.');
       return;
@@ -40,10 +45,19 @@ class AdvertiseStore {
       toast.error('포인트가 충분하지 않습니다.');
       return;
     }
+    if (this.AdvertisePost.url !== '' && !urlValidation) {
+      toast.error('링크는 "/post/"으로 시작해야 합니다.');
+      return;
+    }
+    if (this.AdvertisePost.url !== '' && !urlNumValidation) {
+      toast.error('올바른 게시글의 ID 숫자를 입력해 주세요.');
+      return;
+    }
 
     axios.post('/api/event/advertise', {
       ...this.AdvertisePost,
       userId: userData.id,
+      postId: linkUrl[1],
     })
       .then((response) => {
         const { data } = response;

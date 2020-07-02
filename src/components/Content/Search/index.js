@@ -4,24 +4,35 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 
+import qs from 'query-string';
 import useStores from '../../../stores/useStores';
 import SearchContent from './SearchContent';
 
-const Search = ({ currentPage, noPagination }) => {
+const Search = ({ currentPage, isPagination, location }) => {
   const { UtilLoadingStore, BoardSearchStore } = useStores();
   const { loadingProcess } = UtilLoadingStore;
-  const { foundText, search } = BoardSearchStore;
+  const {
+    foundText, search, setIsPagination, setCurrentSearchPage, judgeFilterMode,
+  } = BoardSearchStore;
+
+  const query = qs.parse(location.search);
 
   useLayoutEffect(() => {
     loadingProcess([
+      () => judgeFilterMode(query),
+      () => setCurrentSearchPage(currentPage),
+      () => setIsPagination(isPagination),
       () => search(currentPage),
     ]);
-  }, [loadingProcess, search, currentPage]);
+  }, [
+    loadingProcess, search, currentPage, setCurrentSearchPage,
+    setIsPagination, isPagination, query, judgeFilterMode,
+  ]);
 
   return (
     <MainContainer>
       <H3>검색 결과 - {foundText}</H3>
-      <SearchContent noPagination={noPagination} currentPage={currentPage} />
+      <SearchContent />
     </MainContainer>
   );
 };
@@ -39,12 +50,15 @@ const MainContainer = styled(Container)`
 
 Search.propTypes = {
   currentPage: Proptypes.string,
-  noPagination: Proptypes.bool,
+  isPagination: Proptypes.bool,
+  location: Proptypes.shape({
+    search: Proptypes.string,
+  }).isRequired,
 };
 
 Search.defaultProps = {
   currentPage: '1',
-  noPagination: false,
+  isPagination: false,
 };
 
 export default memo(observer(Search));

@@ -57,11 +57,11 @@ const SwitchList = () => {
       ) : null }
 
       { checkPermission(0) ? (
-        <Route exact path="/search" render={() => <Contents.Search noPagination />} />
+        <Route exact path="/search" render={({ location }) => <Contents.Search location={location} />} />
       ) : null }
 
       { checkPermission(0) ? (
-        <Route exact path="/search/page/:currentPage" render={({ match }) => <Contents.Search currentPage={match.params.currentPage} />} />
+        <Route exact path="/search/page/:currentPage" render={({ match, location }) => <Contents.Search currentPage={match.params.currentPage} isPagination location={location} />} />
       ) : null }
 
       <Route exact path="/" render={() => <Home />} />
@@ -74,7 +74,7 @@ const SwitchList = () => {
       <Route exact path="/:board/page/:currentPage" render={({ match, location }) => <Contents.Board path={match.params.board} isPagination currentPage={match.params.currentPage} location={location} />} />
 
       { checkPermission(0) ? (
-        <Route exact path="/post/:id" render={({ match }) => <Contents.PostView match={match} />} />
+        <Route exact path="/post/:id" render={({ match, location }) => <Contents.PostView match={match} location={location} />} />
       ) : null }
 
       { checkPermission(0) ? (

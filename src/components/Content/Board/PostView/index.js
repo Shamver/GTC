@@ -6,21 +6,23 @@ import PostViewHeader from './PostViewHeader';
 import PostViewContent from './PostViewContent';
 import PostViewFooter from './PostViewFooter';
 
-const PostView = ({ match }) => {
+const PostView = ({ match, location }) => {
   const { BoardPostStore, UtilLoadingStore, BoardReplyStore } = useStores();
-  const { getPost, getPostUpperLower } = BoardPostStore;
+  const { getPost, getPostUpperLower, getHash } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
   const { getReply } = BoardReplyStore;
   const { params } = match;
   const { id } = params;
+  const { hash } = location;
 
   useLayoutEffect(() => {
     loadingProcess([
+      () => getHash(hash),
       () => getPost(id),
       () => getPostUpperLower(id),
       () => getReply(id),
     ]);
-  }, [loadingProcess, getPost, getPostUpperLower, getReply, id]);
+  }, [loadingProcess, getPost, getPostUpperLower, getReply, id, hash, getHash]);
   return (
     <PostWrapper>
       <ViewWrapper>
@@ -37,6 +39,9 @@ PostView.propTypes = {
     params: Proptypes.shape({
       id: Proptypes.string,
     }),
+  }).isRequired,
+  location: Proptypes.shape({
+    hash: Proptypes.string,
   }).isRequired,
 };
 

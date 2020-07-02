@@ -41,9 +41,15 @@ class BoardStore {
 
   @observable bestFilterMode = false;
 
+  @observable searchMode = false;
+
   @observable currentBoardPage = 1;
 
   @observable isPagination = false;
+
+  @observable searchKeyword = '';
+
+  @observable searchTarget = 'title';
 
   constructor(root) {
     this.root = root;
@@ -51,21 +57,24 @@ class BoardStore {
 
   @action setIsPagination = (isPagination) => {
     this.isPagination = isPagination;
-  }
+  };
 
   @action setCurrentBoardPage = (currentBoardPage) => {
     this.currentBoardPage = currentBoardPage;
-  }
+  };
 
   @observable judgeFilterMode = (query) => {
-    const { filter_mode: filterMode } = query;
+    const { filter_mode: filterMode, search, search_target: searchTarget } = query;
     this.bestFilterMode = !!(query && filterMode && filterMode === 'true');
-  }
+    this.searchMode = !!(query && search);
+    this.searchKeyword = query && search ? search : '';
+    this.searchTarget = query && searchTarget ? searchTarget : 'title';
+  };
 
   @action setCurrentBoardPath = (path) => {
     this.currentBoardPath = path;
     this.currentBoardName = this.boardKinds[path];
-  }
+  };
 
   @action setCurrentBoardToId = (id) => {
     axios.get('/api/board', { params: { id } })
@@ -95,6 +104,36 @@ class BoardStore {
       toast.warn('😳 존재하지 않는 게시판입니다.');
       history.push('/');
     }
+  };
+
+  @action onSubmit = (e) => {
+    if (e.key === 'Enter') {
+      this.onSearch();
+    }
+  };
+
+  @action onSearch = () => {
+    const { search } = this.root.BoardPostStore;
+
+    if (this.searchKeyword.length < 2) {
+      toast.error('❗ 검색어는 2자 이상 입력해주세요.');
+      return;
+    }
+
+    this.searchMode = true;
+    search();
+  };
+
+  @action onChangeTarget = (e) => {
+    this.searchTarget = e.target.value;
+  };
+
+  @action onChange = (e) => {
+    this.searchKeyword = e.target.value;
+  };
+
+  @action setKeywordDefault = () => {
+    this.searchKeyword = '';
   }
 }
 
