@@ -1,37 +1,31 @@
 import React, { memo } from 'react';
-import { observer } from 'mobx-react';
 import styled from 'styled-components';
-import {Button, InputGroup} from 'reactstrap';
 import * as Proptypes from 'prop-types';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUserTimes } from '@fortawesome/free-solid-svg-icons';
+import useStores from '../../../stores/useStores';
 
 const ReportList = ({ data, index }) => {
+  const { BoardReportStore } = useStores();
+  const { getDetailReport } = BoardReportStore;
   const {
-    userId, reason, reasonDetail, typeCode, reportDate, targetName,
+    userId, reason, reasonDetail, typeCode, reportId, reportDate, targetName,
   } = data;
 
   return (
-    <tr>
-      <TdCenter>{index}</TdCenter>
+    <tr onClick={() => getDetailReport(reportId)}>
+      <TdCenter>{index + 1}</TdCenter>
       <td>{reason}</td>
       <td>{reasonDetail}</td>
       <td>{userId}</td>
       <td>{targetName}</td>
       <td>{typeCode}</td>
       <td>{reportDate}</td>
-      <TdCenter>
-        <ButtonCustom color="danger" size="sm">
-          <FontAwesomeIcon icon={faUserTimes} />
-          &nbsp;&nbsp;사용자 밴
-        </ButtonCustom>
-      </TdCenter>
     </tr>
   );
 };
 
 ReportList.propTypes = {
   data: Proptypes.shape({
+    reportId: Proptypes.number,
     userId: Proptypes.string,
     reason: Proptypes.string,
     reasonDetail: Proptypes.string,
@@ -44,9 +38,6 @@ ReportList.propTypes = {
 
 const TdCenter = styled.td`
   text-align: center;
-`;
-
-const ButtonCustom = styled(Button)`
 `;
 
 export default memo(ReportList);

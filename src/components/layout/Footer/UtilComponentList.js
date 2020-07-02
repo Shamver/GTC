@@ -10,6 +10,7 @@ const Sign = lazy(() => import('../../util/Sign'));
 const ConfirmAlert = lazy(() => import('../../util/ConfirmAlert'));
 const Report = lazy(() => import('../../util/Report'));
 const ProfileModal = lazy(() => import('../../util/ProfileModal'));
+const ReportDetail = lazy(() => import('../../Content/Report/ReportDetail'));
 
 const UtilComponentList = () => (
   <Suspense fallback={<></>}>
@@ -32,6 +33,7 @@ const UtilComponentList = () => (
     <PrivacyPolicy />
     <TermOfService />
     <ProfileModal />
+    <ReportDetail />
   </Suspense>
 );
 

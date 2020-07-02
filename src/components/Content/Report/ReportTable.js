@@ -19,11 +19,10 @@ const ReportTable = () => {
           <ThCenter width="6%">순서</ThCenter>
           <th width="20%">신고 사유</th>
           <th width="20%">신고 상세 사유</th>
-          <th width="10%">신고자</th>
-          <th width="10%">피신고자</th>
+          <th width="11%">신고자</th>
+          <th width="11%">피신고자</th>
           <th width="7%">컨텐츠</th>
           <th width="12%">신고 날짜</th>
-          <th width="18%">처리</th>
         </tr>
       </thead>
       <tbody>

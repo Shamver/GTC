@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 class ReportStore {
   @observable reportToggle;
 
+  @observable reportDetailToggle;
+
   @observable reportData = {
     targetId: '',
     type: '',
@@ -15,6 +17,8 @@ class ReportStore {
   };
 
   @observable reportDataList = [];
+
+  @observable reportDetailData = '';
 
   constructor(root) {
     this.root = root;
@@ -75,6 +79,34 @@ class ReportStore {
     }
 
     this.reportToggle = !this.reportToggle;
+  }
+
+  @action toggleDetailReport = () => {
+    this.reportDetailToggle = !this.reportDetailToggle;
+  }
+
+  @action getDetailReport = async (reportId) => {
+    await axios.get('/api/board/Report/detail', {
+      params: {
+        reportId,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.reportDetailData = data.result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .then(() => { this.toggleDetailReport(); })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
   }
 
   @action getReportList = async () => {

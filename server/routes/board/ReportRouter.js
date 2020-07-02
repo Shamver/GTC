@@ -55,6 +55,29 @@ const INSERT_REPORT = `
   )
 `;
 
+const SELECT_DEATAIL_REPORT = `
+ SELECT R.ID AS reportId
+    , R.TYPE_CD AS typeCode
+    , R.TARGET_ID AS targetContentsId
+    , CASE
+        WHEN R.TYPE_CD = 'RP01' THEN (SELECT C.NICKNAME FROM GTC_USER C WHERE C.ID = (SELECT USER_ID FROM GTC_POST WHERE ID = R.TARGET_ID))
+        WHEN R.TYPE_CD = 'RP02' THEN (SELECT C.NICKNAME FROM GTC_USER C WHERE C.ID = (SELECT USER_ID FROM GTC_COMMENT WHERE COMMENT_ID = R.TARGET_ID))
+        ELSE (SELECT C.NICKNAME FROM GTC_USER C WHERE C.ID = (SELECT USER_ID FROM GTC_COMMENT WHERE COMMENT_ID = R.TARGET_ID)) END /* <- 유저 대상 넣을 곳 임시 주석 */
+        AS targetName
+    , CASE
+        WHEN R.TYPE_CD = 'RP01' THEN (SELECT C.ID FROM GTC_USER C WHERE C.ID = (SELECT USER_ID FROM GTC_POST WHERE ID = R.TARGET_ID))
+        WHEN R.TYPE_CD = 'RP02' THEN (SELECT C.ID FROM GTC_USER C WHERE C.ID = (SELECT USER_ID FROM GTC_COMMENT WHERE COMMENT_ID = R.TARGET_ID))
+        ELSE (SELECT C.ID FROM GTC_USER C WHERE C.ID = (SELECT USER_ID FROM GTC_COMMENT WHERE COMMENT_ID = R.TARGET_ID)) END /* <- 유저 대상 넣을 곳 임시 주석 */
+        AS targetUserId
+    , (SELECT NICKNAME FROM GTC_USER WHERE GTC_USER.ID = R.USER_ID) AS userId
+    , R.REASON_CD AS reasonCode
+    , (SELECT NAME FROM GTC_CODE WHERE GTC_CODE.CODE = R.REASON_CD) AS reason
+    , R.REASON_DESC AS reasonDetail
+    , DATE_FORMAT(R.CRT_DTTM, '%Y-%m-%d') AS reportDate
+  FROM GTC_REPORT R
+  WHERE R.ID = :REPORT_ID
+`;
+
 router.post('/', (req, res) => {
   const {
     targetId, writerId, type, reason, description,
@@ -117,6 +140,29 @@ router.get('/', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, GET /api/board/Report] 신고 이력 조회');
+  });
+});
+
+router.get('/detail', (req, res) => {
+  const { reportId } = req.query;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_DEATAIL_REPORT,
+      {
+        REPORT_ID: reportId,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '신고 이력 상세 조회',
+          result: rows[0],
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/board/Report/detail] 신고 이력 상세 조회');
   });
 });
 
