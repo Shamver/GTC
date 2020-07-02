@@ -14,7 +14,8 @@ const PostOption = () => {
   const { id } = postView;
 
   return (
-    <>      <RightSpan>
+    <>
+      <RightSpan>
         <Button color="secondary" size="sm" outline onClick={() => toggleConfirmAlert('해당 포스트를 삭제하시겠습니까?', () => deletePost(id))}>
           <FontAwesomeIcon icon={faTrash} /> 삭제
         </Button>

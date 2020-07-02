@@ -56,8 +56,9 @@ WriterDropdown.defaultProps = {
 };
 
 const WriterDropdownIn = styled(Dropdown)`
-  display : inline-block;
+  display : block;
   line-height : normal;
+
   
   & .dropdown-item:active {
     color: #fff !important;
@@ -87,6 +88,7 @@ const WriterDropdownMenu = styled(DropdownMenu)`
 const WriterDropdownToggle = styled(DropdownToggle)`
   padding : 0px !important;
   display : block !important;
+  width: 100% !important;
   line-height : normal !important;
   color : #DC3545 !important;
   font-weight : bold;
@@ -95,9 +97,14 @@ const WriterDropdownToggle = styled(DropdownToggle)`
   background-color: transparent !important;
   border : 0 !important;
   height : 100%;
-  white-space : pre;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   &:focus {
     box-shadow : none !important;
+  }
+  @media (max-width: 992px) {
+    display: none !important;
   }
 `;
 

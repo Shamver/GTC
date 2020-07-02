@@ -49,27 +49,37 @@ const PostViewContent = () => {
           <PostVote />
         </ContentMain>
         <ContentFooter>
-          <StylessLink to={`/${realBoardPath}`}>
-            <GreyButton outline color="secondary" size="sm">
-              <FontAwesomeIcon icon={faBars} /> 목록
-            </GreyButton>
-          </StylessLink>
-          {!isMyPost && (
-            <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'RP01', title, writerName)}>
-              <FontAwesomeIcon icon={faBellSlash} /> 신고
-            </Button>
-          )}
+          <LeftSpan>
+            <StylessLink to={`/${realBoardPath}`}>
+              <GreyButton outline color="secondary" size="sm">
+                <FontAwesomeIcon icon={faBars} /> 목록
+              </GreyButton>
+            </StylessLink>
+            {!!isMyPost && (
+              <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'RP01', title, writerName)}>
+                <FontAwesomeIcon icon={faBellSlash} /> 신고
+              </Button>
+            )}
+          </LeftSpan>
           <RightSpan>
             <GreyButton outline={!isFavorite} color="secondary" size="sm" onClick={() => judgeFavorite(isFavorite, id)}>
               <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} /> 즐겨찾기
             </GreyButton>
             { !!isMyPost && <PostOption />}
           </RightSpan>
+          <ClearFix />
         </ContentFooter>
       </ContentWrapper>
     </>
   );
 };
+
+const ClearFix = styled.div`
+  clear: both;
+  display: block;
+  content: "";
+  height: 0;
+`;
 
 const GreyButton = styled(Button)`
   background-color : white !important;
@@ -101,15 +111,13 @@ const NavLine = styled.hr`
 
 const ContentHeader = styled(Container)`
   margin : 0 !important;
-  padding : 0 3px !important;
-  height : 35px;
+  padding : 0px 3px !important;
   max-width : none !important;
   background: #f6f6f6;
   padding: 0.6em 0.8em !important;
 `;
 
 const ContentFooter = styled(ContentHeader)`
-  height : 47px;
 `;
 
 const ContentWrapper = styled.div`
@@ -118,16 +126,23 @@ const ContentWrapper = styled.div`
   margin-bottom : 20px;
 `;
 
+const LeftSpan = styled.div`
+  display: inline-block;
+  float : left;
+  margin-bottom: 2.5px;
+`;
+
 const RightSpan = styled.span`
-  margin-left : 5px;
-  float : right;
+  margin-left: 5px;
+  float: right;
+  margin-top: 2.5px;
   & > svg {
-    margin-left : 5px;
+    margin-left: 5px;
   }
 `;
 
 const ContentMain = styled.div`
-  padding : 14px;
+  padding: 14px;
 `;
 
 export default memo(observer(PostViewContent));

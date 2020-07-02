@@ -7,8 +7,10 @@ import PostRow from './responsive/PostRow';
 import ResponsivePostRow from './responsive/ResponsivePostRow';
 
 const Post = ({ data, index, isNotice }) => {
-  const { BoardPostStore } = useStores();
-  const { currentPostId } = BoardPostStore;
+  const { BoardPostStore, ComponentPostStore } = useStores();
+  const { postView } = BoardPostStore;
+  const { onClickPost } = ComponentPostStore;
+  const { id: currentPostId } = postView;
   const { id, date, recommendCount } = data;
   const RecommentComponent = recommendCount > 0
     && (<LikeCountSpan>{recommendCount}</LikeCountSpan>);
@@ -19,23 +21,23 @@ const Post = ({ data, index, isNotice }) => {
     <>
       {/* 데스크톱 화면에서의 로우 */}
       <TableRow height="35" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle}>
-        <CenterTd width="50">
+        <CenterTd width={3}>
           {currentPostId === id ? '>>' : NoticeComponent}
         </CenterTd>
         {/* 데스크톱 화면에서의 로우 */ }
         <PostRow data={data} index={index} isNotice={isNotice} />
         {/* 모바일 화면에서의 로우 */}
-        <DateTd>
+        <DateTd width={4}>
           <BlockInner>{date}</BlockInner>
         </DateTd>
       </TableRow>
       {/* 모바일 화면에서의 로우 */}
-      <MobileTableRow height="35" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle}>
-        <CenterTd>
+      <MobileTableRow height="50" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle} onClick={() => onClickPost(id)}>
+        <CenterTd width={5}>
           {currentPostId === id ? '>>' : NoticeComponent}
         </CenterTd>
         <ResponsivePostRow data={data} index={index} isNotice={isNotice} />
-        <DateTd>
+        <DateTd width={5}>
           <BlockInner>{date}</BlockInner>
         </DateTd>
       </MobileTableRow>
@@ -63,13 +65,6 @@ const BlockInner = styled.span`
   line-height : normal;
 `;
 
-const DateTd = styled.td`
-  white-space : pre;
-  text-align : center;
-  vertical-align : middle !important;
-  padding : 0 0.5rem !important;
-`;
-
 const TableRow = styled.tr`
   background-color : ${(props) => props.backgroundColor};
   &:hover {
@@ -82,6 +77,7 @@ const TableRow = styled.tr`
 
 const MobileTableRow = styled.tr`
   background-color : ${(props) => props.backgroundColor};
+  cursor: pointer;
   &:hover {
     background-color: rgb(250, 250, 250) !important;
   }
@@ -105,7 +101,18 @@ const LikeCountSpan = styled.span`
   font-size: 10px;
 `;
 
-const MiddleTd = styled.td`
+const PercentTd = styled.td`
+  width: ${(props) => props.width}% !important;
+`;
+
+const DateTd = styled(PercentTd)`
+  white-space : pre;
+  text-align : center;
+  vertical-align : middle !important;
+  padding : 0 0.5rem !important;
+`;
+
+const MiddleTd = styled(PercentTd)`
   padding : 0px 0.5rem !important;
   vertical-align : middle !important;
   font-size : 14px; 

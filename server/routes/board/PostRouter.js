@@ -18,7 +18,7 @@ const SELECT_POST_LIST = `
     , P.TITLE AS title
     , P.USER_ID AS writerId
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
-    , IF(CATEGORY_CD = 'FREE','자유','그외') AS categoryName
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = ('BOARD_' || ':BOARD_CD' || '_CATEGORY') AND CODE = P.CATEGORY_CD) AS categoryName
     , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) AS commentCount
@@ -46,7 +46,7 @@ const SELECT_POST_NOTICE_LIST = `
     , P.TITLE AS title
     , P.USER_ID AS writerId
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
-    , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = ('BOARD_' || ':BOARD_CD' || '_CATEGORY') AND CODE = P.CATEGORY_CD) AS categoryName
     , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
@@ -65,7 +65,7 @@ const SELECT_POST_LIST_ALL = `
     , P.TITLE AS title
     , P.USER_ID AS writerId
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
-    , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = ('BOARD_' || ':BOARD_CD' || '_CATEGORY') AND CODE = P.CATEGORY_CD) AS categoryName
     , CASE WHEN BOARD_CD = 'FREE' THEN '자유 게시판'
         WHEN BOARD_CD = 'TRADE' THEN '아이템 거래'
         WHEN BOARD_CD = 'CASH' THEN '월드락 거래'
@@ -152,7 +152,7 @@ const SELECT_POST_SINGLE = `
     , P.BOARD_CD AS board
     , IF(P.BOARD_CD = 'FREE','자유 게시판','그외') AS boardName
     , CATEGORY_CD AS category
-    , IF(P.CATEGORY_CD = 'FREE','자유','그외') AS categoryName
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = ('BOARD_' || ':BOARD_CD' || '_CATEGORY') AND CODE = P.CATEGORY_CD) AS categoryName
     , IF((SELECT F.POST_ID FROM GTC_USER_FAVORITE F WHERE F.USER_ID = :USER_ID AND F.POST_ID = P.ID), 1, 0) AS isFavorite
     , P.TITLE AS title
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName

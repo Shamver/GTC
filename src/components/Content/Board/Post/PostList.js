@@ -4,20 +4,6 @@ import * as Proptypes from 'prop-types';
 import useStores from '../../../../stores/useStores';
 import Post from '.';
 
-// const BoardCategoryOptions = () => {
-//   const { SystemCodeStore } = useStores();
-//   const { setCodeList } = SystemCodeStore;
-//
-//   return setCodeList.map((data) => (
-//     <option
-//       value={data.NAME}
-//       key={data.CODE}
-//     >
-//       {data.NAME}
-//     </option>
-//   ));
-// };
-
 const PostList = ({ isNotice }) => {
   const { BoardStore, BoardPostStore } = useStores();
   const { currentBoardPath, currentBoardPage } = BoardStore;

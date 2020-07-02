@@ -17,7 +17,6 @@ const PaginationList = () => {
   let max = (currentPageNum + 3) > currentBoardMaxPage ? currentBoardMaxPage : currentPageNum + 3;
   max = min > max ? min : max;
   const array = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 1);
-
   const url = `/${currentBoardPath}/page/`;
   const filterUrl = '?filter_mode=true';
 
@@ -35,7 +34,7 @@ const PaginationList = () => {
   // 1부터 maximum 까지
   for (let i = min; i <= max; i += 1) {
     array.push(
-      <PaginationItem active={i === 1 && !isPagination} key={i}>
+      <PaginationItem active={(i === 1 && !isPagination) || currentPageNum === i} key={i}>
         <CustomLink className="page-link" activeClassName="active" to={bestFilterMode ? `${url}${i}${filterUrl}` : `${url}${i}`}>
           {i}
         </CustomLink>

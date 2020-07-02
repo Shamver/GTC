@@ -54,21 +54,29 @@ const Category = () => {
             <FaiPink icon={faLock} className="fa-fw" />&nbsp;&nbsp; 월드락 거래
           </MenuDiv>
         </MenuLink>
-        <MenuLink to="/crime" activeClassName="active">
-          <MenuDiv>
-            <FaiPink icon={faExclamationTriangle} className="fa-fw" />&nbsp;&nbsp; 신고 게시판
-          </MenuDiv>
-        </MenuLink>
         <MenuLink to="/qna" activeClassName="active">
           <MenuDiv>
-            <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
+            <FaiPink icon={faComments} className="fa-fw"/>&nbsp;&nbsp; 질문&답변
           </MenuDiv>
         </MenuLink>
+        {/*
+          <MenuLink to="/crime" activeClassName="active">
+            <MenuDiv>
+              <FaiPink icon={faExclamationTriangle} className="fa-fw" />&nbsp;&nbsp; 신고 게시판
+            </MenuDiv>
+          </MenuLink>
+
+          <MenuLink to="/faq" activeClassName="active">
+          <MenuDiv>
+          <FaiPink icon={faQuestion} className="fa-fw" />&nbsp;&nbsp; 자주 묻는 질문
+          </MenuDiv>
+          </MenuLink>
         <MenuLink to="/consult" activeClassName="active">
           <MenuDiv>
             <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
           </MenuDiv>
         </MenuLink>
+        */}
         { checkPermission(2) ? (
           <MenuLink to="/code" activeClassName="active">
             <MenuDiv>

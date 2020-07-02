@@ -1,4 +1,4 @@
-import React, { memo, Fragment } from 'react';
+import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faStar, faImage } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
@@ -21,22 +21,25 @@ const PostRow = ({ data, index, isNotice }) => {
     : (<BottomIcon icon={faCommentDots} />);
   const IsBestPost = recommendCount >= 10 ? (<Star icon={faStar} />) : isImageComponent;
 
+  const weight = currentBoardPath === 'all' ? 8 : 9;
   return (
     <>
-      { currentBoardPath === 'all' && (
-        <DateTd>{!isNotice && boardName}</DateTd>
-      )}
-      {!isNotice && (<DateTd>{type !== 'notice' && categoryName}</DateTd>)}
-      <MiddleTd width="700" colSpan={isNotice ? 2 : 1}>
+      {currentBoardPath === 'all' && (<CenterTd width={6}>{!isNotice && boardName}</CenterTd>)}
+      {!isNotice && (<CenterTd width={5} colSpan={1}>{type !== 'notice' && categoryName}</CenterTd>)}
+      <MiddleTd width={40} colSpan={isNotice ? 10 : weight}>
         <MiddleSpan>
-          {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
-          &nbsp;
-          <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>{title}</PostTitle>
-          { commentCount > 0
-          && (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>)}
+          <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>
+            {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
+            &nbsp;
+            {title}
+          </PostTitle>
+          <PostTitle>
+            { commentCount > 0
+            && (<ReplyCountspan>&nbsp;&nbsp;&nbsp;[{commentCount}]</ReplyCountspan>)}
+          </PostTitle>
         </MiddleSpan>
       </MiddleTd>
-      <CenterTdWriter>
+      <CenterTdWriter width={6}>
         <WriterDropdown data={data} index={index} isNotice={isNotice} />
       </CenterTdWriter>
     </>
@@ -63,16 +66,8 @@ const BottomIcon = styled(FontAwesomeIcon)`
 `;
 
 const MiddleSpan = styled.span`
-  vertical-align : middle !important;
   display : block;
   line-height : normal;
-`;
-
-const DateTd = styled.td`
-  white-space : pre;
-  text-align : center;
-  vertical-align : middle !important;
-  padding : 0rem 0.5rem !important;
 `;
 
 const Star = styled(FontAwesomeIcon)`
@@ -84,7 +79,11 @@ const ReplyCountspan = styled.span`
   font-weight: bold;
 `;
 
-const MiddleTd = styled.td`
+const PercentTd = styled.td`
+  width: ${(props) => props.width}% !important;
+`;
+
+const MiddleTd = styled(PercentTd)`
   padding : 0px 0.5rem !important;
   vertical-align : middle !important;
   font-size : 14px;
@@ -92,16 +91,27 @@ const MiddleTd = styled.td`
 
 const CenterTd = styled(MiddleTd)`
   text-align : center;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; 
 `;
 
-const CenterTdWriter = styled(CenterTd)`
+const CenterTdWriter = styled(MiddleTd)`
+  text-align : center;
   color : #DC3545;
   font-weight : bold;
 `;
 
-const PostTitle = styled.a`
-  cursor: pointer
-  color : black;
+const PostTitle = styled.div`
+  display: inline-block;
+  vertical-align : bottom; 
+  cursor: pointer;
+  color: black;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; 
+  max-width : 90%;
+
   &.color-gray {
     color: #b0b0b0 !important;
   }
