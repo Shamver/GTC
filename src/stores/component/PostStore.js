@@ -5,8 +5,14 @@ class PostStore {
 
   @observable postOptionOpen = false;
 
+  @observable profileDropdown = false;
+
   constructor(root) {
     this.root = root;
+  }
+
+  @action toggleProfileDropdown = () => {
+    this.profileDropdown = !this.profileDropdown;
   }
 
   @action openPostOption = () => {
