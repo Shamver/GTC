@@ -58,6 +58,13 @@ class MyAccountStore {
   @action onChangeProfileImage = ((e) => {
     const image = e.target.files[0];
 
+    const imageFilter = ['image/png', 'image/jpeg'];
+
+    if (image && !imageFilter.includes(image.type)) {
+      toast.error('이미지 파일만 업로드 가능합니다.');
+      return false;
+    }
+
     const reader = new FileReader();
 
     const maxSize = 1024 * 1024; // 1MB
