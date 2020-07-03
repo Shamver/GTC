@@ -1,17 +1,22 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import {
   Button, Modal, ModalBody, ModalHeader,
 } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
+import renderHTML from 'react-render-html';
 
 const ReportDetail = () => {
   const { BoardReportStore } = useStores();
   const { reportDetailToggle, toggleDetailReport, reportDetailData } = BoardReportStore;
   const {
-    targetName, userId, reason, reasonDetail, reportDate,
+    targetUserName, userId, reason, reasonDetail, targetContentsLink,
+    reportDate, targetContents, typeCode,
   } = reportDetailData;
+
+  const ContentText = typeCode === 'RP02' ? renderHTML(`${targetContents}`) : targetContents;
 
   return (
     <Modal isOpen={reportDetailToggle} toggle={toggleDetailReport}>
@@ -37,12 +42,14 @@ const ReportDetail = () => {
             </Flex1>
             <Flex1>
               <ReportInfoLabel>피신고자</ReportInfoLabel>
-              <ReportInfoDesc>{targetName}</ReportInfoDesc>
+              <ReportInfoDesc>{targetUserName}</ReportInfoDesc>
             </Flex1>
           </ReportInfoRow>
           <ReportInfoRow2>
-            <ReportInfoLabel>게시물</ReportInfoLabel>
-            <ReportInfoDesc>{}</ReportInfoDesc>
+            <ReportInfoLabel>{typeCode === 'RP01' ? '게시물' : '댓글'}</ReportInfoLabel>
+            <ReportInfoLink to={`/post/${targetContentsLink}`} onClick={toggleDetailReport}>{ContentText}
+              <InlineLink>&gt;</InlineLink>
+            </ReportInfoLink>
           </ReportInfoRow2>
           <ReportInfoRow2>
             <ReportInfoLabel>상세 사유</ReportInfoLabel>
@@ -77,6 +84,7 @@ const ReportInfoRow = styled.div`
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+  
   &:last-child {
     margin-top: 30px !important;
     margin-bottom: 0 !important;
@@ -97,6 +105,28 @@ const ReportInfoDesc = styled.div`
   font-size: 14px;
 `;
 
+const ReportInfoLink = styled(Link)`
+  font-size: 14px;
+  cursor: pointer;
+  display: block;
+  color: #212529 !important;
+  text-decoration: none !important;
+  
+  & :hover {
+    opacity: 0.7;
+    text-decoration: none !important;
+  }
+  
+  & p {
+    margin: 0 !important;
+    display: inline !important;
+  }
+  
+  & p:hover {
+    text-decoration: none !important;
+  }
+`;
+
 const Flex1 = styled.div`
   display: flex;
   align-items: center;
@@ -105,6 +135,17 @@ const Flex1 = styled.div`
 
 const ButtonCustom = styled(Button)`
   margin-right: 10px;
+`;
+
+const InlineLink = styled.span`
+  margin-left: 6px;
+  font-size: 8px;
+  color: #ffffff;
+  background: #dc3545;
+  padding: 2px 2px 1px 3px;
+  border-radius: 23px;
+  vertical-align: text-top;
+  
 `;
 
 export default memo(observer(ReportDetail));

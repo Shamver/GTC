@@ -7,7 +7,7 @@ const ReportList = ({ data, index }) => {
   const { BoardReportStore } = useStores();
   const { getDetailReport } = BoardReportStore;
   const {
-    userId, reason, reasonDetail, typeCode, reportId, reportDate, targetName,
+    userId, reason, reasonDetail, reportId, reportDate, targetName, targetContents,
   } = data;
 
   return (
@@ -17,7 +17,7 @@ const ReportList = ({ data, index }) => {
       <td>{reasonDetail}</td>
       <td>{userId}</td>
       <td>{targetName}</td>
-      <td>{typeCode}</td>
+      <td>{targetContents}</td>
       <td>{reportDate}</td>
     </tr>
   );
@@ -29,7 +29,7 @@ ReportList.propTypes = {
     userId: Proptypes.string,
     reason: Proptypes.string,
     reasonDetail: Proptypes.string,
-    typeCode: Proptypes.string,
+    targetContents: Proptypes.string,
     reportDate: Proptypes.string,
     targetName: Proptypes.string,
   }).isRequired,
