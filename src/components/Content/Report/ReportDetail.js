@@ -5,17 +5,16 @@ import {
   Button, Modal, ModalBody, ModalHeader,
 } from 'reactstrap';
 import { observer } from 'mobx-react';
-import useStores from '../../../stores/useStores';
 import renderHTML from 'react-render-html';
+import useStores from '../../../stores/useStores';
 
 const ReportDetail = () => {
   const { BoardReportStore } = useStores();
   const { reportDetailToggle, toggleDetailReport, reportDetailData } = BoardReportStore;
   const {
     targetUserName, userId, reason, reasonDetail, targetContentsLink,
-    reportDate, targetContents, typeCode,
+    reportDate, targetContents, typeCode, targetContentsId,
   } = reportDetailData;
-
   const ContentText = typeCode === 'RP02' ? renderHTML(`${targetContents}`) : targetContents;
 
   return (
@@ -46,8 +45,9 @@ const ReportDetail = () => {
             </Flex1>
           </ReportInfoRow>
           <ReportInfoRow2>
-            <ReportInfoLabel>{typeCode === 'RP01' ? '게시물' : '댓글'}</ReportInfoLabel>
-            <ReportInfoLink to={`/post/${targetContentsLink}`} onClick={toggleDetailReport}>{ContentText}
+            <ReportInfoLabel>{typeCode === 'RP01' ? '게시글' : '댓글'}</ReportInfoLabel>
+            <ReportInfoLink to={typeCode === 'RP01' ? `/post/${targetContentsLink}` : `/post/${targetContentsLink}#${targetContentsId}`} onClick={toggleDetailReport}>
+              {ContentText}
               <InlineLink>&gt;</InlineLink>
             </ReportInfoLink>
           </ReportInfoRow2>
