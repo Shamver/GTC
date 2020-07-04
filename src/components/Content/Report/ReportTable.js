@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
-import {Table, TabPane} from 'reactstrap';
+import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
 import ReportList from './ReportList';
 import useStores from '../../../stores/useStores';

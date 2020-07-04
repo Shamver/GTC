@@ -1,8 +1,8 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
-import {observer} from "mobx-react";
 
 const ReportList = ({ data, index }) => {
   const { BoardReportStore } = useStores();
