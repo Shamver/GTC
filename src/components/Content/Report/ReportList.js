@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
+import {observer} from "mobx-react";
 
 const ReportList = ({ data, index }) => {
   const { BoardReportStore } = useStores();
@@ -40,4 +41,4 @@ const TdCenter = styled.td`
   text-align: center;
 `;
 
-export default memo(ReportList);
+export default memo(observer(ReportList));

@@ -3,6 +3,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 class ReportStore {
+  @observable activeTab = 'reportTable';
+
   @observable reportToggle;
 
   @observable reportDetailToggle;
@@ -23,6 +25,14 @@ class ReportStore {
   constructor(root) {
     this.root = root;
   }
+
+  @action onActive = ((e) => {
+    const { name } = e.target;
+
+    if (this.activeTab !== name) {
+      this.activeTab = name;
+    }
+  });
 
   @action report = () => {
     if (!this.ReportValidationCheck()) {

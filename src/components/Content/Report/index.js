@@ -1,8 +1,9 @@
 import React, { useLayoutEffect, memo } from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import ReportTable from './ReportTable';
 import useStores from '../../../stores/useStores';
+import ReportTabContent from './ReportTabContent';
+import ReportNav from './ReportNav';
 
 const Report = () => {
   const { BoardReportStore, UtilLoadingStore } = useStores();
@@ -20,7 +21,8 @@ const Report = () => {
       <TableWrapper>
         <h3>신고 관리</h3>
         <ReportTableCol>
-          <ReportTable />
+          <ReportNav />
+          <ReportTabContent />
         </ReportTableCol>
       </TableWrapper>
     </BoardWrapper>
