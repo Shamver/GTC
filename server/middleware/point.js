@@ -45,9 +45,13 @@ module.exports = (action, type, data) => {
         USER_ID: data.writer,
       },
     )
-      .then(() => {
-
-      }),
+      .then(() => database.query(
+        INSERT_USER_POINT,
+        {
+          COST: cost,
+          USER_ID: data.writer,
+        },
+      )),
   ).then(() => {
     info('[INSERT, MIDDLEWARE POINT] 포인트 이벤트');
   });
