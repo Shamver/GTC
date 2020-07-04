@@ -24,6 +24,12 @@ const INSERT_POINT = `
   )
 `;
 
+const INSERT_USER_POINT = `
+  UPDATE GTC_USER_POINT
+    SET POINT = POINT + :COST
+    WHERE USER_ID = :USER_ID
+`;
+
 module.exports = (action, type, data) => {
   const replyId = data.replyId ? `'${data.replyId}'` : null;
   const cost = pointConfig[action];
