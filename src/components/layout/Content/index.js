@@ -5,6 +5,7 @@ import Loading from '../../util/Loading';
 import useStores from '../../../stores/useStores';
 import SwitchList from './SwitchList';
 import 'react-toastify/dist/ReactToastify.css';
+import SuspenseLoading from './SuspenseLoading';
 
 const Content = () => {
   const { UtilLoadingStore } = useStores();
@@ -14,7 +15,7 @@ const Content = () => {
     <>
       { !!loading && (<Loading />)}
       <BorderedDiv loading={loading}>
-        <Suspense fallback={<></>}>
+        <Suspense fallback={<SuspenseLoading />}>
           <SwitchList />
         </Suspense>
       </BorderedDiv>
