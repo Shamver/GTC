@@ -180,7 +180,8 @@ const ProfileId = styled.span`
 `;
 
 const Avatar = styled.img`
-  width : 28px;
+  width: 28px;
+  height: 28px;
   border-radius: 3px;
 `;
 

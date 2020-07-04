@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 import anonymous from '../../../../../resources/images/anonymous.png';
-import WriterDropdown from './WriterDropdown';;
+import WriterDropdown from './WriterDropdown';
 
 const Index = () => {
   const { BoardPostStore } = useStores();
   const { postView } = BoardPostStore;
   const {
-    board, boardName, categoryName, writerName, title,
+    board, boardName, categoryName, title, writerProfile,
   } = postView;
 
   const link = !!board && board.toLowerCase();
@@ -29,7 +29,7 @@ const Index = () => {
         </CategoryAndTitle>
         <ProfileWrapper>
           <WriterDropdown />
-          <img src={anonymous} alt="프로필 사진" />
+          <img src={writerProfile || anonymous} alt="프로필 사진" />
         </ProfileWrapper>
       </div>
     </>

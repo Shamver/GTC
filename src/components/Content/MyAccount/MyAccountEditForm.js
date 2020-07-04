@@ -52,7 +52,7 @@ const MyAccountEditForm = () => {
                   onChange={onChangeProfile}
                   label="프로필 사진 공개 유무"
                 />
-                <Input type="file" name="file" id="profileUpload" bsSize="sm" onChange={(e) => onChangeProfileImage(e)} />
+                <Input type="file" name="file" id="profileUpload" bsSize="sm" onChange={(e) => onChangeProfileImage(e)} accept="image/jpeg, image/png" />
               </ProfileDiv>
             </FormSwitch>
           </RegisterForm>
@@ -132,7 +132,8 @@ const FormTextLeft = styled(FormText)`
 `;
 
 const Avatar = styled.img`
-  width : 64px;
+  width: 64px;
+  height: 64px;
   border-radius: 3px;
 `;
 

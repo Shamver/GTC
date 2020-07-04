@@ -1,4 +1,5 @@
 import { observable, action } from 'mobx';
+import { toast } from 'react-toastify';
 
 class MyAccountStore {
   @observable profileYN = 0;
@@ -57,7 +58,25 @@ class MyAccountStore {
   @action onChangeProfileImage = ((e) => {
     const image = e.target.files[0];
 
+    const imageFilter = ['image/png', 'image/jpeg'];
+
+    if (image && !imageFilter.includes(image.type)) {
+      toast.error('이미지 파일만 업로드 가능합니다.');
+      return false;
+    }
+
     const reader = new FileReader();
+
+    const maxSize = 1024 * 1024; // 1MB
+
+    if (image === undefined) {
+      return false; // 이미지 선택 후 변경 할 때 아무것도 선택하지 않을 경우의 처리
+    }
+
+    if (image && image.size > maxSize) {
+      toast.error('이미지의 용량은 1MB를 초과할 수 없습니다.');
+      return false;
+    }
 
     reader.onload = (event) => {
       this.uploadImagePreview = event.target.result;
@@ -69,6 +88,7 @@ class MyAccountStore {
     this.disabled = true;
     this.timer = setTimeout(() => {
       this.checkValidation();
+      toast.success('이미지는 1:1 비율로 강제 변환됩니다.');
     }, 300);
   });
 
