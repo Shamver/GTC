@@ -146,7 +146,7 @@ class UserStore {
     return true;
   };
 
-  @action checkPermission = (level) => {
+          @action RouterAuthCheck = (level) => {
     // level 0: 사용자, level 1: 운영자, level2: 관리자
     if (level === 0) {
       return this.userData;
