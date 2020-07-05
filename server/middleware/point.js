@@ -6,7 +6,6 @@ const pointConfig = {
   deletePost: -10,
   addReply: 1,
   deleteReply: -1,
-  dailyEvent: 20,
 };
 
 const INSERT_POINT = `
@@ -33,7 +32,7 @@ const INSERT_USER_POINT = `
 
 module.exports = (action, type, data) => {
   const replyId = data.replyId ? `'${data.replyId}'` : null;
-  const cost = pointConfig[action];
+  const cost = action === 'custom' ? data.cost : pointConfig[action];
 
   let target;
 
