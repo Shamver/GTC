@@ -5,6 +5,8 @@ const router = express.Router();
 const { info } = require('../../log-config');
 const Database = require('../../Database');
 
+const point = require('../../middleware/point');
+
 const SELECT_ATTENDANCE = `
   SELECT 
     D.ID AS id
@@ -145,6 +147,9 @@ router.post('/', (req, res) => {
         );
       })
       .then(() => {
+        point('dailyEvent', 'DAILY', {
+          writer: userId,
+        });
         res.json({
           success: true,
           code: 1,
