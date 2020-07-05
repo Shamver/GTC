@@ -427,6 +427,28 @@ class UserStore {
       })
       .catch((response) => { toast.error(response.message); });
   }
+
+  @action userBanned = async (reportId, targetUserId) => {
+    axios.put('/api/user/banned', {
+      reportId, targetUserId,
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            this.root.BoardReportStore.toggleDetailReport();
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
 }
 
 export default UserStore;

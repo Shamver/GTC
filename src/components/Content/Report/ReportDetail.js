@@ -9,11 +9,14 @@ import renderHTML from 'react-render-html';
 import useStores from '../../../stores/useStores';
 
 const ReportDetail = () => {
-  const { BoardReportStore } = useStores();
-  const { reportDetailToggle, toggleDetailReport, reportDetailData } = BoardReportStore;
+  const { BoardReportStore, UserStore } = useStores();
   const {
-    targetUserName, userId, reason, reasonDetail, targetContentsLink,
-    reportDate, targetContents, typeCode, targetContentsId,
+    reportDetailToggle, toggleDetailReport, reportDetailData, reportReject,
+  } = BoardReportStore;
+  const { userBanned } = UserStore;
+  const {
+    reportId, reportDate, userId, reason, reasonDetail, targetContentsLink,
+    targetContents, typeCode, targetContentsId, targetUserName, targetUserId,
   } = reportDetailData;
   const ContentText = typeCode === 'RP02' ? renderHTML(`${targetContents}`) : targetContents;
 
@@ -56,10 +59,10 @@ const ReportDetail = () => {
             <ReportInfoDesc>{reasonDetail}</ReportInfoDesc>
           </ReportInfoRow2>
           <ReportInfoRow>
-            <ButtonCustom color="danger" size="sm">
+            <ButtonCustom color="danger" size="sm" onClick={() => userBanned(targetUserId)}>
               영구 정지
             </ButtonCustom>
-            <ButtonCustom color="secondary" size="sm">
+            <ButtonCustom color="secondary" size="sm" onClick={() => reportReject(reportId)}>
               반려 처리
             </ButtonCustom>
           </ReportInfoRow>

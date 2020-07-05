@@ -119,13 +119,35 @@ class ReportStore {
     return true;
   }
 
-  @action getReportList = async () => {
+  @action getReportList = async (categoryNum) => {
     await axios.get('/api/board/Report')
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             this.reportDataList = data.result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
+  @action reportReject = async (reportId) => {
+    axios.put('/api/board/Report/reject', {
+      reportId,
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            this.toggleDetailReport();
           } else {
             toast.info(data.message);
           }

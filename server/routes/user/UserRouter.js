@@ -107,6 +107,34 @@ const GET_USER_COMMENT_LIST = `
   LIMIT :INDEX, 5
 `;
 
+const UPDATE_USER_BANNED = `
+  UPDATE GTC_USER
+  SET BANNED_FL = 1
+  WHERE ID = :USER_ID;
+`;
+
+router.put('/banned', (req, res) => {
+  const { targetUserId } = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      UPDATE_USER_BANNED,
+      {
+        USER_ID: targetUserId,
+      },
+    )
+      .then(() => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '😊 해당 유저를 밴 처리 하였습니다.',
+        });
+      }),
+  ).then(() => {
+    info('[UPDATE, PUT /api/user/banned] 신고 유저 밴 처리');
+  });
+});
+
 router.delete('/withdrawal', (req, res) => {
   const { userId } = req.body;
 
