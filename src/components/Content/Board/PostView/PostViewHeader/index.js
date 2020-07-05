@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 import anonymous from '../../../../../resources/images/anonymous.png';
-import WriterDropdown from './WriterDropdown';;
+import WriterDropdown from './WriterDropdown';
 
 const Index = () => {
   const { BoardPostStore } = useStores();
   const { postView } = BoardPostStore;
   const {
-    board, boardName, categoryName, writerName, title,
+    board, boardName, categoryName, title,
   } = postView;
 
   const link = !!board && board.toLowerCase();

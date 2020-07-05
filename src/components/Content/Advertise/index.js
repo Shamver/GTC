@@ -6,11 +6,11 @@ import useStores from '../../../stores/useStores';
 
 const Advertise = () => {
   const { UtilLoadingStore } = useStores();
-  const { loadingProcess } = UtilLoadingStore;
+  const { stopLoading } = UtilLoadingStore;
 
   useLayoutEffect(() => {
-    loadingProcess([]);
-  }, [loadingProcess]);
+    stopLoading();
+  }, [stopLoading]);
 
   return (
     <BoardWrapper>

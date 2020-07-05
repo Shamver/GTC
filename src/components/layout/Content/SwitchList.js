@@ -17,31 +17,16 @@ const SwitchList = () => {
 
   return (
     <Switch>
-      { RouterAuthCheck(0) ? (
-        <Route exact path="/mail" render={() => <Contents.Mail />} />
-      ) : null }
-
-      { RouterAuthCheck(0) ? (
-        <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
-      ) : null }
-
-      { RouterAuthCheck(0) ? (
-        <Route exact path="/setting" render={() => <Contents.Setting />} />
-      ) : null }
-
+      <AuthRouter Component={Contents.Mail} level={0} path="/mail" />
+      <AuthRouter Component={Contents.PostLocker} level={0} path="/postlocker" />
+      <AuthRouter Component={Contents.Setting} level={0} path="/setting" />
       <AuthRouter Component={Contents.NewAlert} level={0} path="/newalert" />
+      <AuthRouter Component={Contents.MyAccount} level={0} path="/myaccount" />
+      <AuthRouter Component={Contents.MyPoint} level={0} path="/mypoint" />
 
-      {/*{ RouterAuthCheck(0) ? (*/}
-      {/*  <Route exact path="/newalert" render={() => <Contents.NewAlert />} />*/}
-      {/*) : null }*/}
-
-      { RouterAuthCheck(0) ? (
-        <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
-      ) : null }
-
-      { RouterAuthCheck(0) ? (
+      {/* RouterAuthCheck(0) ? (
         <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
-      ) : null }
+      ) : null */}
 
       { RouterAuthCheck(0) ? (
         <Route exact path="/mypoint/page/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />

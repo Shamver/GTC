@@ -11,9 +11,8 @@ const AuthRouter = ({ level, Component, path }) => {
     return null;
   }
 
-  console.log(Component);
   return (
-    <Route exact path={path} render={() => <Component />} />
+    <Route exact path={path} render={() => (<Component />)} />
   );
 };
 
