@@ -17,6 +17,8 @@ const MyPointTableRow = ({ data }) => {
     desc = '댓글 작성';
   } else if (type === 'REPLY' && point < 0) {
     desc = '댓글 삭제';
+  } else if (type === 'DAILY') {
+    desc = '출석체크 이벤트';
   }
 
   return (
@@ -28,7 +30,7 @@ const MyPointTableRow = ({ data }) => {
         { point } 점
       </TableTd>
       <TableTd>
-        { desc } (#{ postId })
+        { desc } {type !== 'DAILY' ? `(# ${postId})` : '' }
       </TableTd>
     </tr>
   );
