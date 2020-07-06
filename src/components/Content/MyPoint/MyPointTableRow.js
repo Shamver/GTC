@@ -8,6 +8,7 @@ const MyPointTableRow = ({ data }) => {
   } = data;
 
   let desc;
+  const isEtc = !['POST', 'REPLY'].includes(type);
 
   if (type === 'POST' && point > 0) {
     desc = '글 작성';
@@ -19,6 +20,8 @@ const MyPointTableRow = ({ data }) => {
     desc = '댓글 삭제';
   } else if (type === 'DAILY') {
     desc = '출석체크 이벤트';
+  } else if (type === 'ADVERTISE') {
+    desc = '광고 게시';
   }
 
   return (
@@ -30,7 +33,7 @@ const MyPointTableRow = ({ data }) => {
         { point } 점
       </TableTd>
       <TableTd>
-        { desc } {type !== 'DAILY' ? `(# ${postId})` : '' }
+        { desc } {isEtc ? '' : `(# ${postId})` }
       </TableTd>
     </tr>
   );
