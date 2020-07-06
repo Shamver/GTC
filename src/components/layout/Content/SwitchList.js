@@ -17,12 +17,13 @@ const SwitchList = () => {
 
   return (
     <Switch>
-      <AuthRouter Component={Contents.Mail} level={0} path="/mail" />
-      <AuthRouter Component={Contents.PostLocker} level={0} path="/postlocker" />
-      <AuthRouter Component={Contents.Setting} level={0} path="/setting" />
-      <AuthRouter Component={Contents.NewAlert} level={0} path="/newalert" />
-      <AuthRouter Component={Contents.MyAccount} level={0} path="/myaccount" />
-      <AuthRouter Component={Contents.MyPoint} level={0} path="/mypoint" />
+      <AuthRouter exact Component={Contents.Mail} level={0} path="/mail" />
+      <AuthRouter exact Component={Contents.PostLocker} level={0} path="/postlocker" />
+      <AuthRouter exact Component={Contents.Setting} level={0} path="/setting" />
+      <AuthRouter exact Component={Contents.NewAlert} level={0} path="/newalert" />
+      <AuthRouter exact Component={Contents.MyAccount} level={0} path="/myaccount" />
+      <AuthRouter exact Component={Contents.MyPoint} level={0} path="/mypoint" noPagination />
+      <AuthRouter exact Component={Contents.MyPoint} level={0} path="/mypoint/page/:currentPage" />
 
       {/* RouterAuthCheck(0) ? (
         <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />

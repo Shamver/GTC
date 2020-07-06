@@ -6,10 +6,13 @@ import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import MyPointContent from './MyPointContent';
 
-const MyPoint = ({ currentPage, noPagination }) => {
+const MyPoint = (props) => {
+  const { match, parentProps } = props;
+  const { noPagination, currentPage } = parentProps;
   const { UtilLoadingStore, UserPointStore } = useStores();
   const { loadingProcess } = UtilLoadingStore;
   const { getPoint } = UserPointStore;
+
 
   useLayoutEffect(() => {
     loadingProcess([
@@ -33,13 +36,17 @@ const MainContainer = styled(Container)`
 `;
 
 MyPoint.propTypes = {
-  currentPage: Proptypes.string,
-  noPagination: Proptypes.bool,
+  parentProps: Proptypes.shape({
+    currentPage: Proptypes.string,
+    noPagination: Proptypes.bool,
+  }),
 };
 
 MyPoint.defaultProps = {
-  currentPage: '1',
-  noPagination: false,
+  parentProps: {
+    currentPage: '1',
+    noPagination: false,
+  },
 };
 
 export default memo(observer(MyPoint));
