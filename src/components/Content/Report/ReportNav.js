@@ -28,6 +28,15 @@ const ReportNav = () => {
           처리 결과
         </NavLinkBtn>
       </NavItem>
+      <NavItem>
+        <NavLinkBtn
+          className={(activeTab === 'ReportUser' ? 'active' : '')}
+          onClick={onActive}
+          name="ReportUser"
+        >
+          유저 관리
+        </NavLinkBtn>
+      </NavItem>
     </Nav>
   );
 };

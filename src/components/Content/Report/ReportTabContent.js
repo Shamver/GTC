@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import ReportTable from './ReportTable';
 import ReportResult from './ReportResult';
+import ReportUser from './ReportUser';
 
 const ReportTabContent = () => {
   const { BoardReportStore } = useStores();
@@ -13,6 +14,7 @@ const ReportTabContent = () => {
     <TabContent activeTab={activeTab}>
       <ReportTable />
       <ReportResult />
+      <ReportUser />
     </TabContent>
   );
 };

@@ -2,9 +2,9 @@ import React, { memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 
-const ReportResultList = ({ data, index }) => {
+const ReportUserList = ({ data, index }) => {
   const {
-    userId, reason, reportDate, targetName, targetContents, reportResult,
+    userId, reason, reportDate, targetName, targetContents,
   } = data;
 
   return (
@@ -16,12 +16,12 @@ const ReportResultList = ({ data, index }) => {
       <td>{targetContents}</td>
       <td>{reportDate}</td>
       <td>{reportDate}</td>
-      <td>{reportResult}</td>
+      <td>{}</td>
     </tr>
   );
 };
 
-ReportResultList.propTypes = {
+ReportUserList.propTypes = {
   data: Proptypes.shape({
     reportId: Proptypes.number,
     userId: Proptypes.string,
@@ -30,7 +30,6 @@ ReportResultList.propTypes = {
     targetContents: Proptypes.string,
     reportDate: Proptypes.string,
     targetName: Proptypes.string,
-    reportResult: Proptypes.string,
   }).isRequired,
   index: Proptypes.number.isRequired,
 };
@@ -39,4 +38,4 @@ const TdCenter = styled.td`
   text-align: center;
 `;
 
-export default memo(ReportResultList);
+export default memo(ReportUserList);

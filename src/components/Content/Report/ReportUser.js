@@ -1,16 +1,16 @@
-import React, {memo, useLayoutEffect} from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
-import ReportResultList from './ReportResultList';
+import ReportUserList from './ReportUserList';
 
-const ReportResult = () => {
+const ReportUser = () => {
   const { BoardReportStore, UtilLoadingStore } = useStores();
   const { loadingProcess } = UtilLoadingStore;
   const { getReportList, reportDataList, activeTab } = BoardReportStore;
-  const reportResultList = reportDataList.map(
-    (v, index) => (<ReportResultList data={v} key={v.reportId} index={index} />),
+  const reportUserList = reportDataList.map(
+    (v, index) => (<ReportUserList data={v} key={v.reportId} index={index} />),
   );
 
   useLayoutEffect(() => {
@@ -20,7 +20,7 @@ const ReportResult = () => {
   }, [activeTab, getReportList]);
 
   return (
-    <TabPane tabId="ReportResult">
+    <TabPane tabId="ReportUser">
       <CodeTable bordered hover>
         <thead>
           <tr>
@@ -35,7 +35,7 @@ const ReportResult = () => {
           </tr>
         </thead>
         <tbody>
-          {reportResultList}
+          {reportUserList}
         </tbody>
       </CodeTable>
     </TabPane>
@@ -56,4 +56,4 @@ const ThCenter = styled.td`
   text-align: center;
 `;
 
-export default memo(observer(ReportResult));
+export default memo(observer(ReportUser));

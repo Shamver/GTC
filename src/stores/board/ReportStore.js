@@ -119,8 +119,12 @@ class ReportStore {
     return true;
   }
 
-  @action getReportList = async (categoryNum) => {
-    await axios.get('/api/board/Report')
+  @action getReportList = async () => {
+    await axios.get('/api/board/Report', {
+      params: {
+        tab: this.activeTab,
+      },
+    })
       .then((response) => {
         const { data } = response;
         if (data.success) {
