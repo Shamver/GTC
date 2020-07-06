@@ -24,7 +24,7 @@ const INSERT_POINT = `
   )
 `;
 
-const INSERT_USER_POINT = `
+const UPDATE_USER_POINT = `
   UPDATE GTC_USER
     SET POINT = POINT + :COST
     WHERE ID = :USER_ID
@@ -56,7 +56,7 @@ module.exports = (action, type, data) => {
       },
     )
       .then(() => database.query(
-        INSERT_USER_POINT,
+        UPDATE_USER_POINT,
         {
           COST: cost,
           USER_ID: data.writer,
