@@ -94,7 +94,7 @@ router.post('/', (req, res) => {
           {
             TYPE_CD: 'ADVERTISE',
             TARGET_ID: null,
-            COST: hours * 100,
+            COST: hours * -100,
             USER_ID: userId,
           },
         )
