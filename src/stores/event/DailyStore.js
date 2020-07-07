@@ -59,7 +59,7 @@ class DailyStore {
   };
 
   @action addDaily = (() => {
-    const { userData } = this.root.UserStore;
+    const { userData, cookieCheck } = this.root.UserStore;
 
     if (userData) {
       axios.post('/api/event/daily', {
@@ -74,6 +74,7 @@ class DailyStore {
             if (data.code === 1) {
               this.getDailyLast().then();
               this.getDailyList().then();
+              cookieCheck();
               this.message = '';
               toast.success(data.message);
             } else {
