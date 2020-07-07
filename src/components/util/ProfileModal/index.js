@@ -26,7 +26,7 @@ const ProfileModal = () => {
   const { profileInfo } = profileData;
   const {
     userCreated, userEmail, postCount, commentCount,
-    nickname, profile,
+    nickname, profile, profileFl,
   } = profileInfo;
 
   return (
@@ -40,7 +40,7 @@ const ProfileModal = () => {
       <ModalBodyBox>
         <ProfileInfoBox>
           <ProfileAvatarWrap>
-            <Avatar src={profile || avatarImg} />
+            <Avatar src={profileFl ? (profile || avatarImg) : avatarImg} />
           </ProfileAvatarWrap>
           <ProfileInfoWrap>
             <ProfileInfo>
