@@ -1,35 +1,39 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
+import { Button } from 'reactstrap';
+import useStores from '../../../stores/useStores';
 
 const ReportUserList = ({ data, index }) => {
+  const { UserStore } = useStores();
+  const { userBanned } = UserStore;
   const {
-    userId, reason, reportDate, targetName, targetContents,
+    userId, userEmail, userName, userNickName, GTName,
   } = data;
 
   return (
     <tr>
       <TdCenter>{index + 1}</TdCenter>
-      <td>{reason}</td>
-      <td>{userId}</td>
-      <td>{targetName}</td>
-      <td>{targetContents}</td>
-      <td>{reportDate}</td>
-      <td>{reportDate}</td>
-      <td>{}</td>
+      <td>{userName}</td>
+      <td>{userNickName}</td>
+      <td>{GTName}</td>
+      <td>{userEmail}</td>
+      <td>
+        <Button color="danger" size="sm" onClick={() => userBanned(userId, 'CANCEL')}>
+          정지 해제
+        </Button>
+      </td>
     </tr>
   );
 };
 
 ReportUserList.propTypes = {
   data: Proptypes.shape({
-    reportId: Proptypes.number,
-    userId: Proptypes.string,
-    reason: Proptypes.string,
-    reasonDetail: Proptypes.string,
-    targetContents: Proptypes.string,
-    reportDate: Proptypes.string,
-    targetName: Proptypes.string,
+    userId: Proptypes.number,
+    userEmail: Proptypes.string,
+    userName: Proptypes.string,
+    userNickName: Proptypes.string,
+    GTName: Proptypes.string,
   }).isRequired,
   index: Proptypes.number.isRequired,
 };

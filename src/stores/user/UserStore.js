@@ -15,6 +15,8 @@ class UserStore {
 
   @observable userData;
 
+  @observable banUserList = [];
+
   @observable cookieChecked = false;
 
   @observable profileData = {
@@ -428,16 +430,39 @@ class UserStore {
       .catch((response) => { toast.error(response.message); });
   }
 
-  @action userBanned = async (reportId, targetUserId) => {
+  @action getUserBanned = async () => {
+    axios.get('/api/user/banned')
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.banUserList = data.result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
+  @action userBanned = async (targetUserId, actionFlag) => {
     axios.put('/api/user/banned', {
-      reportId, targetUserId,
+      targetUserId, actionFlag,
     })
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.root.BoardReportStore.toggleDetailReport();
+            if (actionFlag === 'BAN') {
+              this.root.BoardReportStore.toggleDetailReport();
+            }
+            this.root.BoardReportStore.getReportList();
+            this.getUserBanned();
           } else {
             toast.info(data.message);
           }

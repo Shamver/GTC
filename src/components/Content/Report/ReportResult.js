@@ -1,4 +1,4 @@
-import React, {memo, useLayoutEffect} from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
@@ -17,7 +17,7 @@ const ReportResult = () => {
     loadingProcess([
       getReportList,
     ]);
-  }, [activeTab, getReportList]);
+  }, [activeTab, getReportList, loadingProcess]);
 
   return (
     <TabPane tabId="ReportResult">

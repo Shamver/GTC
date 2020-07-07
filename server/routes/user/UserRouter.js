@@ -107,27 +107,59 @@ const GET_USER_COMMENT_LIST = `
   LIMIT :INDEX, 5
 `;
 
+const SELECT_USER_BANNED = `
+  SELECT U.ID AS userId
+    , U.EMAIL AS userEmail
+    , U.NAME AS userName
+    , U.NICKNAME as userNickName
+    , U.GT_NICKNAME as GTName
+    , U.BANNED_FL as userBanned
+  FROM GTC_USER U
+  WHERE U.BANNED_FL = 1
+`;
+
 const UPDATE_USER_BANNED = `
   UPDATE GTC_USER
-  SET BANNED_FL = 1
+  SET BANNED_FL = 
+    CASE WHEN ':ACTION' = 'BAN' THEN 1
+    WHEN ':ACTION' = 'CANCEL' THEN 0 END
   WHERE ID = :USER_ID;
 `;
 
+router.get('/banned', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_USER_BANNED,
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '밴 유저 목록 조회',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/user/banned] 밴 유저 목록 조회');
+  });
+});
+
 router.put('/banned', (req, res) => {
-  const { targetUserId } = req.body;
+  const { targetUserId, actionFlag } = req.body;
 
   Database.execute(
     (database) => database.query(
       UPDATE_USER_BANNED,
       {
         USER_ID: targetUserId,
+        ACTION: actionFlag,
       },
     )
       .then(() => {
         res.json({
           success: true,
           code: 1,
-          message: '😊 해당 유저를 밴 처리 하였습니다.',
+          message: actionFlag === 'BAN' ? '😊 해당 유저를 밴 처리 하였습니다.' : '😊 해당 유저의 밴 처리를 취소 하였습니다.',
         });
       }),
   ).then(() => {
