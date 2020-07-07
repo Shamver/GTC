@@ -6,7 +6,9 @@ import useStores from '../../../stores/useStores';
 const AuthRouter = (props) => {
   const { UserStore } = useStores();
   const { RouterAuthCheck } = UserStore;
-  const { level, Component, path, exact } = props;
+  const {
+    level, Component, path, exact,
+  } = props;
 
   if (!RouterAuthCheck(level)) {
     return null;
