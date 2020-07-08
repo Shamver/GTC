@@ -59,6 +59,7 @@ const SELECT_USER_FROM_EMAIL = `
     , OPERATOR_FL AS operatorYN
     , ADMIN_FL AS adminYN
     , PROFILE AS profile
+    , BANNED_FL AS banned
   FROM GTC_USER
   WHERE EMAIL = ':EMAIL'
 `;
@@ -129,9 +130,16 @@ router.post('/login', (req, res) => {
           const {
             id, nickname, gtNickname, deletedDate,
             email, tel, birth, gender, profileYN, name,
-            operatorYN, adminYN, profile,
+            operatorYN, adminYN, profile, banned,
           } = resultData;
           if (deletedDate === null) {
+            if (banned === 1) {
+              res.json({
+                success: true,
+                code: 2,
+                message: '해당 유저는 영구 정지 상태 입니다. 자세한 사항은 운영자에게 문의하세요.',
+              });
+            }
             jwt.sign(
               {
                 id,
@@ -165,14 +173,14 @@ router.post('/login', (req, res) => {
           } else {
             res.json({
               success: true,
-              code: 2,
+              code: 3,
               message: '해당 아이디는 회원탈퇴 상태입니다. 탈퇴일로부터 30일이 지난 후에 재가입해주세요.',
             });
           }
         } else {
           res.json({
             success: true,
-            code: 3,
+            code: 4,
             message: '해당 이메일로 가입된 계정이 존재하지 않습니다. 회원가입 후 진행해주세요.',
           });
         }

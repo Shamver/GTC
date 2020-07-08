@@ -89,6 +89,7 @@ class UserStore {
           if (data.code === 1) {
             toast.success(data.message);
             this.cookieCheck();
+            console.log(data);
           } else {
             toast.info(data.message);
           }
