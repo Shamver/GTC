@@ -57,11 +57,11 @@ router.post('/', (req, res) => {
     (database) => database.query(
       SELECT_URL_VALIDATION,
       {
-        URL: postId,
+        URL: postId || null,
       },
     )
       .then((rows) => {
-        if (!rows[0].postId) {
+        if (rows.length !== 0 && !rows[0].postId) {
           return Promise.reject();
         }
         return database.query(
