@@ -4,7 +4,7 @@ import * as Proptypes from 'prop-types';
 
 const ReportResultList = ({ data, index }) => {
   const {
-    userId, reason, reportDate, targetName, targetContents, reportResult,
+    userId, reason, reportDate, targetName, targetContents, reportResult, rejectDate,
   } = data;
 
   return (
@@ -15,7 +15,7 @@ const ReportResultList = ({ data, index }) => {
       <td>{targetName}</td>
       <td>{targetContents}</td>
       <td>{reportDate}</td>
-      <td>{reportDate}</td>
+      <td>{rejectDate}</td>
       <td>{reportResult}</td>
     </tr>
   );
@@ -29,6 +29,7 @@ ReportResultList.propTypes = {
     reasonDetail: Proptypes.string,
     targetContents: Proptypes.string,
     reportDate: Proptypes.string,
+    rejectDate: Proptypes.string,
     targetName: Proptypes.string,
     reportResult: Proptypes.string,
   }).isRequired,

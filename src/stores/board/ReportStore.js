@@ -152,6 +152,7 @@ class ReportStore {
           if (data.code === 1) {
             toast.success(data.message);
             this.toggleDetailReport();
+            this.getReportList();
           } else {
             toast.info(data.message);
           }
