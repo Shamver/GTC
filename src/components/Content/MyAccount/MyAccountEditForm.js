@@ -12,7 +12,7 @@ const MyAccountEditForm = () => {
   const {
     profileYN, onChangeProfile, gender, nickname, birth,
     onChangeValue, nicknameValidation, birthValidation, genderValidation,
-    profile, onChangeProfileImage, uploadImagePreview,
+    profile, onChangeProfileImage, uploadImagePreview, gtName,
   } = ComponentMyAccountStore;
 
   return (
@@ -21,6 +21,8 @@ const MyAccountEditForm = () => {
         <Deform>
           <RegisterForm>
             <h4>수정 가능한 정보</h4>
+            <FormTextLeft>그로우토피아 닉네임</FormTextLeft>
+            <FormInput type="text" name="gtName" value={gtName} onChange={onChangeValue} />
             <FormTextLeft>
               닉네임&nbsp;&nbsp;
               <AccentText>{!nicknameValidation.status && `❌${nicknameValidation.message}`}</AccentText>

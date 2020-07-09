@@ -8,6 +8,8 @@ class MyAccountStore {
 
   @observable nickname = '';
 
+  @observable gtName = '';
+
   @observable prevNickname = '';
 
   @observable birth = '';
@@ -116,6 +118,7 @@ class MyAccountStore {
       this.birth = userData.birth;
       this.gender = userData.gender;
       this.profile = userData.profile;
+      this.gtName = userData.gtName;
       this.uploadImagePreview = null;
     }
 
