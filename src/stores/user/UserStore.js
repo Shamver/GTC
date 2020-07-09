@@ -82,6 +82,8 @@ class UserStore {
   };
 
   @action login = (email) => {
+    const { toggleAlert } = this.root.UtilAlertStore;
+
     axios.post('/api/auth/login', { email })
       .then((response) => {
         const { data } = response;
@@ -89,7 +91,8 @@ class UserStore {
           if (data.code === 1) {
             toast.success(data.message);
             this.cookieCheck();
-            console.log(data);
+          } else if (data.code === 2) {
+            toggleAlert(`해당 계정은 ${data.message}의 사유로 영구 정지 처리 되었습니다. 자세한 사항은 운영자에게 문의하세요.`);
           } else {
             toast.info(data.message);
           }
@@ -450,9 +453,9 @@ class UserStore {
     return true;
   };
 
-  @action userBanned = async (targetUserId, actionFlag) => {
+  @action userBanned = async (targetUserId, actionFlag, reason) => {
     axios.put('/api/user/banned', {
-      targetUserId, actionFlag,
+      targetUserId, actionFlag, reason,
     })
       .then((response) => {
         const { data } = response;

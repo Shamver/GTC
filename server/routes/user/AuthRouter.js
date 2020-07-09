@@ -60,6 +60,7 @@ const SELECT_USER_FROM_EMAIL = `
     , ADMIN_FL AS adminYN
     , PROFILE AS profile
     , BANNED_FL AS banned
+    , BAN_REASON AS banReason
   FROM GTC_USER
   WHERE EMAIL = ':EMAIL'
 `;
@@ -130,14 +131,14 @@ router.post('/login', (req, res) => {
           const {
             id, nickname, gtNickname, deletedDate,
             email, tel, birth, gender, profileYN, name,
-            operatorYN, adminYN, profile, banned,
+            operatorYN, adminYN, profile, banned, banReason,
           } = resultData;
           if (deletedDate === null) {
             if (banned === 1) {
               res.json({
                 success: true,
                 code: 2,
-                message: '해당 유저는 영구 정지 상태 입니다. 자세한 사항은 운영자에게 문의하세요.',
+                message: banReason,
               });
             }
             jwt.sign(

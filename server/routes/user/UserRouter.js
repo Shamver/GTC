@@ -120,9 +120,13 @@ const SELECT_USER_BANNED = `
 
 const UPDATE_USER_BANNED = `
   UPDATE GTC_USER
-  SET BANNED_FL = 
-    CASE WHEN ':ACTION' = 'BAN' THEN 1
-    WHEN ':ACTION' = 'CANCEL' THEN 0 END
+  SET
+    BANNED_FL =
+      CASE WHEN ':ACTION' = 'BAN' THEN 1
+      WHEN ':ACTION' = 'CANCEL' THEN 0 END,
+    BAN_REASON =
+      CASE WHEN ':ACTION' = 'BAN' THEN ':REASON'
+      WHEN ':ACTION' = 'CANCEL' THEN '' END,
   WHERE ID = :USER_ID;
 `;
 
@@ -145,7 +149,7 @@ router.get('/banned', (req, res) => {
 });
 
 router.put('/banned', (req, res) => {
-  const { targetUserId, actionFlag } = req.body;
+  const { targetUserId, actionFlag, reason } = req.body;
 
   Database.execute(
     (database) => database.query(
@@ -153,6 +157,7 @@ router.put('/banned', (req, res) => {
       {
         USER_ID: targetUserId,
         ACTION: actionFlag,
+        REASON: reason,
       },
     )
       .then(() => {

@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import {
-  Button, Modal, ModalBody, ModalHeader,
+  Button, FormGroup, Input, Modal, ModalBody, ModalHeader,
 } from 'reactstrap';
 import { observer } from 'mobx-react';
 import renderHTML from 'react-render-html';
@@ -11,13 +11,14 @@ import useStores from '../../../stores/useStores';
 const ReportDetail = () => {
   const { BoardReportStore, UserStore } = useStores();
   const {
-    reportDetailToggle, toggleDetailReport, reportDetailData, reportReject,
+    reportDetailToggle, toggleDetailReport, reportDetailData, reportReject, onChangeValue, reportData,
   } = BoardReportStore;
   const { userBanned } = UserStore;
   const {
     reportId, reportDate, userId, reason, reasonDetail, targetContentsLink,
     targetContents, typeCode, targetContentsId, targetUserName, targetUserId,
   } = reportDetailData;
+  const { description } = reportData;
   const ContentText = typeCode === 'RP02' ? renderHTML(`${targetContents}`) : targetContents;
 
   return (
@@ -58,8 +59,14 @@ const ReportDetail = () => {
             <ReportInfoLabel>상세 사유</ReportInfoLabel>
             <ReportInfoDesc>{reasonDetail}</ReportInfoDesc>
           </ReportInfoRow2>
+          <ReportInfoRow2>
+            <ReportInfoLabel>정지 사유 입력</ReportInfoLabel>
+            <ReportInfoDesc>
+              <Input type="textarea" onChange={onChangeValue} value={description} name="description" placeholder="정지 사유 입력" maxlength="200" />
+            </ReportInfoDesc>
+          </ReportInfoRow2>
           <ReportInfoRow>
-            <ButtonCustom color="danger" size="sm" onClick={() => userBanned(targetUserId, 'BAN')}>
+            <ButtonCustom color="danger" size="sm" onClick={() => userBanned(targetUserId, 'BAN', description)}>
               영구 정지
             </ButtonCustom>
             <ButtonCustom color="secondary" size="sm" onClick={() => reportReject(reportId)}>
