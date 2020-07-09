@@ -20,7 +20,7 @@ const AuthRouter = (props) => {
       exact={exact}
       path={path}
       render={({ match, location }) => (
-        <Component match={match} location={location} />
+        <Component match={match} location={location} parentProps={props} />
       )}
     />
   );
@@ -30,7 +30,7 @@ AuthRouter.propTypes = {
   level: Proptypes.number.isRequired,
   Component: Proptypes.shape({}).isRequired,
   path: Proptypes.string.isRequired,
-  exact: Proptypes.bool.isRequired
+  exact: Proptypes.bool.isRequired,
 };
 
 export default AuthRouter;

@@ -5,18 +5,9 @@ import Contents from '../../../Content';
 
 const PointRouter = () => (
   <Switch>
-    <AuthRouter exact Component={Contents.Home} level={1} path="/" />
-    <AuthRouter exact Component={Contents.Home} level={1} path="/" />
+    <AuthRouter exact Component={Contents.MyPoint} level={1} path="/mypoint" noPagination />
+    <AuthRouter exact Component={Contents.MyPoint} level={1} path="/mypoint/page/:currentPage" />
   </Switch>
 );
 
 export default PointRouter;
-
-{/* RouterAuthCheck(0) ? (
-        <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
-      ) : null */}
-
-{/* RouterAuthCheck(0) ? (
-        <Route exact path="/mypoint/page/:currentPage" render={({ match }) =>
-        <Contents.MyPoint currentPage={match.params.currentPage} />} />
-      ) : null */}
