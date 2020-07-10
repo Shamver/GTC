@@ -55,7 +55,7 @@ const PostViewContent = () => {
             </GreyButton>
           </StylessLink>
           {!isMyPost && (
-            <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'RP01', title, writerName)}>
+            <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'P01', title, writerName)}>
               <FontAwesomeIcon icon={faBellSlash} /> 신고
             </Button>
           )}

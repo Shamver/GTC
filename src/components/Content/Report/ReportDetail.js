@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import {
-  Button, FormGroup, Input, Modal, ModalBody, ModalHeader,
+  Button, Input, Modal, ModalBody, ModalHeader,
 } from 'reactstrap';
 import { observer } from 'mobx-react';
 import renderHTML from 'react-render-html';
@@ -11,7 +11,8 @@ import useStores from '../../../stores/useStores';
 const ReportDetail = () => {
   const { BoardReportStore, UserStore } = useStores();
   const {
-    reportDetailToggle, toggleDetailReport, reportDetailData, reportReject, onChangeValue, reportData,
+    reportDetailToggle, toggleDetailReport, reportDetailData,
+    reportReject, onChangeValue, reportData,
   } = BoardReportStore;
   const { userBanned } = UserStore;
   const {
@@ -19,7 +20,7 @@ const ReportDetail = () => {
     targetContents, typeCode, targetContentsId, targetUserName, targetUserId,
   } = reportDetailData;
   const { description } = reportData;
-  const ContentText = typeCode === 'RP02' ? renderHTML(`${targetContents}`) : targetContents;
+  const ContentText = typeCode === 'P02' ? renderHTML(`${targetContents}`) : targetContents;
 
   return (
     <Modal isOpen={reportDetailToggle} toggle={toggleDetailReport}>
@@ -49,8 +50,8 @@ const ReportDetail = () => {
             </Flex1>
           </ReportInfoRow>
           <ReportInfoRow2>
-            <ReportInfoLabel>{typeCode === 'RP01' ? '게시글' : '댓글'}</ReportInfoLabel>
-            <ReportInfoLink to={typeCode === 'RP01' ? `/post/${targetContentsLink}` : `/post/${targetContentsLink}#${targetContentsId}`} onClick={toggleDetailReport}>
+            <ReportInfoLabel>{typeCode === 'P01' ? '게시글' : '댓글'}</ReportInfoLabel>
+            <ReportInfoLink to={typeCode === 'P01' ? `/post/${targetContentsLink}` : `/post/${targetContentsLink}#${targetContentsId}`} onClick={toggleDetailReport}>
               {ContentText}
               <InlineLink>&gt;</InlineLink>
             </ReportInfoLink>
