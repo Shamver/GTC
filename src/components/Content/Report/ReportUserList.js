@@ -4,16 +4,16 @@ import * as Proptypes from 'prop-types';
 import { Button } from 'reactstrap';
 import useStores from '../../../stores/useStores';
 
-const ReportUserList = ({ data, index }) => {
+const ReportUserList = ({ data }) => {
   const { UserStore } = useStores();
   const { userBanned } = UserStore;
   const {
-    userId, userEmail, userName, userNickName, GTName,
+    userId, userEmail, userName, userNickName, GTName, reportId
   } = data;
 
   return (
     <tr>
-      <TdCenter>{index + 1}</TdCenter>
+      <TdCenter>{reportId}</TdCenter>
       <td>{userName}</td>
       <td>{userNickName}</td>
       <td>{GTName}</td>
@@ -29,6 +29,7 @@ const ReportUserList = ({ data, index }) => {
 
 ReportUserList.propTypes = {
   data: Proptypes.shape({
+    reportId: Proptypes.number,
     userId: Proptypes.number,
     userEmail: Proptypes.string,
     userName: Proptypes.string,

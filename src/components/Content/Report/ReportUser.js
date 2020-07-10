@@ -1,4 +1,4 @@
-import React, { memo, useLayoutEffect, useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import styled from 'styled-components';
 import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
@@ -25,12 +25,12 @@ const ReportUser = () => {
       <CodeTable bordered hover>
         <thead>
           <tr>
-            <ThCenter width="6%">순서</ThCenter>
-            <th>이름</th>
-            <th>닉네임</th>
-            <th>그로우토피아 닉네임</th>
-            <th>이메일</th>
-            <th>처리</th>
+            <ThCenter width="8%">신고ID</ThCenter>
+            <th width="18%">이름</th>
+            <th width="18%">닉네임</th>
+            <th width="18%">그로우토피아 닉네임</th>
+            <th width="28%">이메일</th>
+            <th width="10%">처리</th>
           </tr>
         </thead>
         <tbody>

@@ -24,14 +24,14 @@ const ReportResult = () => {
       <CodeTable bordered hover>
         <thead>
           <tr>
-            <ThCenter width="6%">순서</ThCenter>
+            <ThCenter width="7%">신고ID</ThCenter>
             <th width="20%">신고 사유</th>
-            <th width="11%">신고자</th>
-            <th width="11%">피신고자</th>
-            <th width="7%">컨텐츠</th>
+            <th width="10%">신고자</th>
+            <th width="10%">피신고자</th>
+            <th width="8%">컨텐츠</th>
             <th width="12%">신고 날짜</th>
             <th width="12%">처리 날짜</th>
-            <th width="20%">처리 결과</th>
+            <th width="10%">처리 결과</th>
           </tr>
         </thead>
         <tbody>

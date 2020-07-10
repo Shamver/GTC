@@ -4,21 +4,20 @@ import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
-const ReportList = ({ data, index }) => {
+const ReportList = ({ data }) => {
   const { BoardReportStore } = useStores();
   const { getDetailReport } = BoardReportStore;
   const {
-    userId, reason, reasonDetail, reportId, reportDate, targetName, targetContents,
+    userId, reason, reportId, reportDate, targetName, contents,
   } = data;
 
   return (
     <tr onClick={() => getDetailReport(reportId)}>
-      <TdCenter>{index + 1}</TdCenter>
+      <TdCenter>{reportId}</TdCenter>
       <td>{reason}</td>
-      <td>{reasonDetail}</td>
       <td>{userId}</td>
       <td>{targetName}</td>
-      <td>{targetContents}</td>
+      <td>{contents}</td>
       <td>{reportDate}</td>
     </tr>
   );
@@ -30,11 +29,10 @@ ReportList.propTypes = {
     userId: Proptypes.string,
     reason: Proptypes.string,
     reasonDetail: Proptypes.string,
-    targetContents: Proptypes.string,
     reportDate: Proptypes.string,
     targetName: Proptypes.string,
+    contents: Proptypes.string,
   }).isRequired,
-  index: Proptypes.number.isRequired,
 };
 
 const TdCenter = styled.td`
