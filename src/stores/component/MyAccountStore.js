@@ -10,7 +10,7 @@ class MyAccountStore {
 
   @observable gtName = '';
 
-  @observable prevNickname = '';
+  @observable prevGtNickname = '';
 
   @observable birth = '';
 
@@ -27,6 +27,11 @@ class MyAccountStore {
   @observable uploadImagePreview = null;
 
   @observable nicknameValidation = {
+    status: true,
+    message: '',
+  };
+
+  @observable gtNicknameValidation = {
     status: true,
     message: '',
   };
@@ -114,7 +119,7 @@ class MyAccountStore {
     if (userData) {
       this.profileYN = userData.profileYN;
       this.nickname = userData.username;
-      this.prevNickname = userData.username;
+      this.prevGtNickname = userData.gtName;
       this.birth = userData.birth;
       this.gender = userData.gender;
       this.profile = userData.profile;
@@ -134,6 +139,18 @@ class MyAccountStore {
       };
     } else {
       this.nicknameValidation = {
+        status: true,
+        message: '',
+      };
+    }
+
+    if (this.gtName.trim() === '') {
+      this.gtNicknameValidation = {
+        status: false,
+        message: '공백 그토 닉네임은 불가능합니다.',
+      };
+    } else {
+      this.gtNicknameValidation = {
         status: true,
         message: '',
       };
@@ -167,6 +184,7 @@ class MyAccountStore {
       && this.birth === userData.birth
       && this.gender === userData.gender
       && this.profileYN === userData.profileYN
+      && this.gtName === userData.gtName
       && this.uploadImagePreview === null;
 
     this.isAllValidationChecked = this.nicknameValidation.status

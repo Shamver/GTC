@@ -241,7 +241,7 @@ class UserStore {
 
   @action updateInfo = () => {
     const {
-      nickname, prevNickname, birth, gender, profileYN, uploadImage,
+      nickname, birth, gender, profileYN, uploadImage, gtName, prevGtNickname,
     } = this.root.ComponentMyAccountStore;
     const { userData } = this;
     const { history } = this.root.UtilRouteStore;
@@ -249,11 +249,12 @@ class UserStore {
     const formData = new FormData();
 
     formData.append('nickname', nickname.trim());
-    formData.append('prevNickname', prevNickname.trim());
+    formData.append('prevGtNickname', prevGtNickname.trim());
     formData.append('birth', birth);
     formData.append('gender', gender);
     formData.append('profileYN', profileYN);
     formData.append('userId', userData.id);
+    formData.append('gtNickname', gtName);
 
     if (uploadImage !== '') formData.append('images', uploadImage);
 

@@ -39,6 +39,18 @@ const INSERT_USER_NICKNAME = `
   )
 `;
 
+const INSERT_USER_GT_NICKNAME = `
+  INSERT INTO GTC_USER_GT_NICKNAME (
+    USER_ID
+    , PREV_GT_NICKNAME
+    , CRT_DTTM
+  ) VALUES (
+    :USER_ID
+    , ':PREV_GT_NICKNAME'
+    , SYSDATE()
+  )
+`;
+
 const GET_USER_PROFILE = `
   SELECT GTC_USER.ID AS userId
     , GTC_USER.EMAIL AS userEmail
@@ -132,7 +144,7 @@ router.delete('/withdrawal', (req, res) => {
 
 router.put('/info', upload.fields([{ name: 'images' }]), uploadHandler, async(async (req, res) => {
   const {
-    nickname, birth, gender, profileYN, userId, prevNickname,
+    nickname, birth, gender, profileYN, userId, prevGtNickname, gtNickname,
   } = req.body;
 
   const profile = req.photo.images && req.photo.images.length > 0 ? req.photo.images[0] : '';
