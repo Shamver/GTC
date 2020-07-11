@@ -99,7 +99,6 @@ const INSERT_POST = `
     , SECRET_FL
     , SECRET_COMMENT_ALLOW_FL
     , COMMENT_ALLOW_FL
-    , CRT_DTTM
   ) VALUES (
     ':BOARD_CD'
     , ':CATEGORY_CD'
@@ -110,7 +109,6 @@ const INSERT_POST = `
     , :SECRET_FL
     , :SECRET_COMMENT_ALLOW_FL
     , :COMMENT_ALLOW_FL
-    , SYSDATE()
   )
 `;
 

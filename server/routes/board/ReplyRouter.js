@@ -34,7 +34,6 @@ const INSERT_COMMENT = `
     , USER_ID
     , CONTENT
     , SECRET_FL
-    , CRT_DTTM
   ) VALUES (
     :POST_ID
     , IFNULL(
@@ -48,7 +47,6 @@ const INSERT_COMMENT = `
     , :USER_ID 
     , ':CONTENT'
     , :SECRET_FL
-    , SYSDATE()
   );
 `;
 

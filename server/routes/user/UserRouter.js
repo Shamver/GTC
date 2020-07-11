@@ -31,11 +31,9 @@ const INSERT_USER_NICKNAME = `
   INSERT INTO GTC_USER_NICKNAME (
     USER_ID
     , PREV_NICKNAME
-    , CRT_DTTM
   ) VALUES (
     :USER_ID
     , ':PREV_NICKNAME'
-    , SYSDATE()
   )
 `;
 

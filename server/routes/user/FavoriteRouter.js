@@ -33,11 +33,9 @@ const INSERT_USER_FAVORITE = `
   INSERT INTO GTC_USER_FAVORITE (
     USER_ID
     , POST_ID
-    , CRT_DTTM
   ) VALUES (
     :USER_ID
     , :POST_ID
-    , SYSDATE()
   )
 `;
 
