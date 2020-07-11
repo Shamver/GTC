@@ -24,19 +24,8 @@ const UPDATE_USER_INFO = `
     , GENDER_CD = ':GENDER_CD'
     , PROFILE_FL = ':PROFILE_FL'
     , PROFILE = IF(':PROFILE'='', GTC_USER.PROFILE, ':PROFILE')
+    , GT_NICKNAME = ':GT_NICKNAME'
   WHERE ID = :USER_ID
-`;
-
-const INSERT_USER_NICKNAME = `
-  INSERT INTO GTC_USER_NICKNAME (
-    USER_ID
-    , PREV_NICKNAME
-    , CRT_DTTM
-  ) VALUES (
-    :USER_ID
-    , ':PREV_NICKNAME'
-    , SYSDATE()
-  )
 `;
 
 const INSERT_USER_GT_NICKNAME = `
@@ -120,6 +109,15 @@ const GET_USER_COMMENT_LIST = `
   LIMIT :INDEX, 5
 `;
 
+const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
+  SELECT
+  IF(count(*) = 0, 1, 0) AS isCanChange
+  FROM GTC_USER_GT_NICKNAME
+  WHERE
+    USER_ID = :USER_ID
+    AND CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(), INTERVAL -30 DAY), '%Y-%m-%d %H:%i:%s');
+`;
+
 router.delete('/withdrawal', (req, res) => {
   const { userId } = req.body;
 
@@ -151,21 +149,35 @@ router.put('/info', upload.fields([{ name: 'images' }]), uploadHandler, async(as
 
   Database.execute(
     (database) => database.query(
-      UPDATE_USER_INFO,
+      SELECT_USER_CAN_CHANGE_GT_NICKNAME,
       {
         USER_ID: userId,
-        NICKNAME: nickname,
-        BIRTH_DT: birth,
-        GENDER_CD: gender,
-        PROFILE_FL: profileYN,
-        PROFILE: profile,
       },
     )
+      .then((rows) => {
+        const { isCanChange } = rows[0];
+
+        if (isCanChange) {
+          return database.query(
+            UPDATE_USER_INFO,
+            {
+              USER_ID: userId,
+              NICKNAME: nickname,
+              BIRTH_DT: birth,
+              GENDER_CD: gender,
+              PROFILE_FL: profileYN,
+              PROFILE: profile,
+              GT_NICKNAME: gtNickname,
+            },
+          );
+        }
+        return Promise.reject();
+      })
       .then(() => database.query(
-        INSERT_USER_NICKNAME,
+        INSERT_USER_GT_NICKNAME,
         {
           USER_ID: userId,
-          PREV_NICKNAME: prevNickname,
+          PREV_GT_NICKNAME: prevGtNickname,
         },
       ))
       .then(() => {
@@ -173,6 +185,13 @@ router.put('/info', upload.fields([{ name: 'images' }]), uploadHandler, async(as
           success: true,
           code: 1,
           message: '회원정보 수정완료',
+        });
+      })
+      .catch(() => {
+        res.json({
+          success: false,
+          code: 1,
+          message: '😳 그토 닉네임을 변경한지 30일이 되지 않았습니다.',
         });
       }),
   ).then(() => {
