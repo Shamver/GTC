@@ -277,12 +277,12 @@ class UserStore {
   };
 
   @action getIsCanChangeGtNickname = () => {
-    const { userData } = this.userData;
-    const { userId } = userData;
+    const { userData } = this;
+    const { id } = userData;
 
     const { setIsCanChangeGtNickname } = this.root.ComponentMyAccountStore;
 
-    axios.put(`/api/user/gtnickname/${userId}`)
+    axios.get(`/api/user/gtnickname/${id}`)
       .then((response) => {
         const { data } = response;
         if (data.success) {
