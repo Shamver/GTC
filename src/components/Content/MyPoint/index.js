@@ -13,9 +13,8 @@ const MyPoint = (props) => {
   const { loadingProcess } = UtilLoadingStore;
   const { getPoint } = UserPointStore;
   const { params } = match;
-  const { currentPage } = params;
-  console.log(props);
-
+  let { currentPage } = params;
+  currentPage = currentPage || '1';
 
   useLayoutEffect(() => {
     loadingProcess([
@@ -50,11 +49,6 @@ MyPoint.propTypes = {
 };
 
 MyPoint.defaultProps = {
-  match: {
-    params: {
-      currentPage: '1',
-    },
-  },
   parentProps: {
     noPagination: false,
   },

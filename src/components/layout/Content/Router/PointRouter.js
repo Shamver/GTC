@@ -1,13 +1,15 @@
 import React from 'react';
-import { Switch } from 'react-router';
 import AuthRouter from '../AuthRouter';
 import Contents from '../../../Content';
 
-const PointRouter = () => (
-  <Switch>
-    <AuthRouter exact Component={Contents.MyPoint} level={1} path="/mypoint" noPagination />
-    <AuthRouter exact Component={Contents.MyPoint} level={1} path="/mypoint/page/:currentPage" />
-  </Switch>
-);
+const PointRouter = (props) => {
+  console.log(props);
+  return (
+    <>
+      <AuthRouter exact Component={Contents.MyPoint} level={1} path="/mypoint/page/:currentPage" />
+      <AuthRouter exact Component={Contents.MyPoint} level={1} path="/mypoint" noPagination />
+    </>
+  );
+};
 
 export default PointRouter;

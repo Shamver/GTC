@@ -10,17 +10,19 @@ const AuthRouter = (props) => {
     level, Component, path, exact,
   } = props;
 
+  console.log('AuthRouter' + path);
   // 0: 비회원, 1: 회원, 2: 운영자, 3:관리자
   if (!RouterAuthCheck(level)) {
     return null;
   }
 
+  console.log('AuthRouter' + path);
   return (
     <Route
       exact={exact}
       path={path}
       render={({ match, location }) => (
-        <Component match={match} location={location} parentProps={props} />
+        <Component location={location} match={match} parentProps={props} />
       )}
     />
   );
@@ -28,7 +30,7 @@ const AuthRouter = (props) => {
 
 AuthRouter.propTypes = {
   level: Proptypes.number.isRequired,
-  Component: Proptypes.shape({}).isRequired,
+  Component: Proptypes.elementType.isRequired,
   path: Proptypes.string.isRequired,
   exact: Proptypes.bool.isRequired,
 };
