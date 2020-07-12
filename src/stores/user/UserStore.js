@@ -274,6 +274,28 @@ class UserStore {
         }
       })
       .catch((response) => toast.error(response.message));
+  };
+
+  @action getIsCanChangeGtNickname = () => {
+    const { userData } = this.userData;
+    const { userId } = userData;
+
+    const { setIsCanChangeGtNickname } = this.root.ComponentMyAccountStore;
+
+    axios.put(`/api/user/gtnickname/${userId}`)
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            setIsCanChangeGtNickname(data.result.isCanChange);
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => toast.error(response.message));
   }
 
   @action getProfile = (writerId) => {

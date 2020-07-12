@@ -22,6 +22,8 @@ class MyAccountStore {
 
   @observable disabled = true;
 
+  @observable isCanChangeGtNickname = false;
+
   @observable uploadImage = '';
 
   @observable uploadImagePreview = null;
@@ -60,6 +62,10 @@ class MyAccountStore {
     this.timer = setTimeout(() => {
       this.checkValidation();
     }, 300);
+  });
+
+  @action setIsCanChangeGtNickname = ((index) => {
+    this.isCanChangeGtNickname = index;
   });
 
   @action onChangeProfileImage = ((e) => {

@@ -13,6 +13,7 @@ const MyAccountEditForm = () => {
     profileYN, onChangeProfile, gender, nickname, birth,
     onChangeValue, nicknameValidation, birthValidation, genderValidation,
     profile, onChangeProfileImage, uploadImagePreview, gtName, gtNicknameValidation,
+    isCanChangeGtNickname,
   } = ComponentMyAccountStore;
 
   return (
@@ -23,9 +24,11 @@ const MyAccountEditForm = () => {
             <h4>수정 가능한 정보</h4>
             <FormTextLeft>
               그로우토피아 닉네임&nbsp;&nbsp;
-              <AccentText>{!gtNicknameValidation.status && `❌${gtNicknameValidation.message}`}</AccentText>
+              <AccentText>{isCanChangeGtNickname ? (!gtNicknameValidation.status && `❌${gtNicknameValidation.message}`)
+                : '❌변경한 지 30일이 지나지 않아 변경할 수 없습니다.'}
+              </AccentText>
             </FormTextLeft>
-            <FormInput type="text" name="gtName" value={gtName} onChange={onChangeValue} />
+            <FormInput readOnly={!isCanChangeGtNickname} disabled={!isCanChangeGtNickname} type="text" name="gtName" value={gtName} onChange={onChangeValue} />
             <FormTextLeft>
               닉네임&nbsp;&nbsp;
               <AccentText>{!nicknameValidation.status && `❌${nicknameValidation.message}`}</AccentText>

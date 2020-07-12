@@ -220,6 +220,27 @@ router.get('/profile/:writerId', (req, res) => {
   });
 });
 
+router.get('/gtnickname/:userId', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_USER_CAN_CHANGE_GT_NICKNAME,
+      {
+        USER_ID: req.params.userId,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '유저 그토 닉네임 변경 가능 여부 조회',
+          result: rows[0],
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/user/gtnickname/:userId] 유저 그토 닉네임 변경 가능 여부 조회');
+  });
+});
+
 router.get('/profile/:writerId/nickname/:currentPage', (req, res) => {
   let { index } = req.query;
   index = (index === 1) ? 0 : (index - 1) * 5;
