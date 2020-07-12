@@ -55,18 +55,18 @@ const GET_USER_PROFILE = `
   WHERE GTC_USER.ID = :USER_ID
 `;
 
-const GET_USER_NICKNAME_HISTORY = `
+const GET_USER_GT_NICKNAME_HISTORY = `
   SELECT N.ID as id
     , N.USER_ID AS userId
-    , N.PREV_NICKNAME AS nicknameHistory
+    , N.PREV_GT_NICKNAME AS nicknameHistory
     , CASE WHEN N.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇 초 전'
       WHEN N.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, N.CRT_DTTM, SYSDATE()),'분 전')
       WHEN N.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR, N.CRT_DTTM, SYSDATE()),'시간 전')
     ELSE DATE_FORMAT(N.CRT_DTTM, '%m-%d')
   END AS nicknameChanged
-    , (SELECT COUNT(GTC_USER_NICKNAME.ID) FROM GTC_USER_NICKNAME WHERE GTC_USER_NICKNAME.USER_ID = :USER_ID) AS changeCount
-    , (SELECT CEIL(COUNT(*)/5) FROM GTC_USER_NICKNAME WHERE GTC_USER_NICKNAME.USER_ID = :USER_ID) AS rowCount
-  FROM GTC_USER_NICKNAME N
+    , (SELECT COUNT(GTC_USER_GT_NICKNAME.ID) FROM GTC_USER_GT_NICKNAME WHERE GTC_USER_GT_NICKNAME.USER_ID = :USER_ID) AS changeCount
+    , (SELECT CEIL(COUNT(*)/5) FROM GTC_USER_GT_NICKNAME WHERE GTC_USER_GT_NICKNAME.USER_ID = :USER_ID) AS rowCount
+  FROM GTC_USER_GT_NICKNAME N
   WHERE N.USER_ID = :USER_ID
   ORDER BY id DESC
   LIMIT :INDEX, 5
@@ -241,13 +241,13 @@ router.get('/gtnickname/:userId', (req, res) => {
   });
 });
 
-router.get('/profile/:writerId/nickname/:currentPage', (req, res) => {
+router.get('/profile/:writerId/gtnickname/:currentPage', (req, res) => {
   let { index } = req.query;
   index = (index === 1) ? 0 : (index - 1) * 5;
 
   Database.execute(
     (database) => database.query(
-      GET_USER_NICKNAME_HISTORY,
+      GET_USER_GT_NICKNAME_HISTORY,
       {
         USER_ID: req.params.writerId,
         INDEX: index,
@@ -257,12 +257,12 @@ router.get('/profile/:writerId/nickname/:currentPage', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          message: '유저 닉네임 변경 이력 조회',
+          message: '유저 그토 닉네임 변경 이력 조회',
           result: rows,
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/user/profile/nickname] 유저 닉네임 변경 이력 조회');
+    info('[SELECT, GET /api/user/profile/gtnickname] 유저 그토 닉네임 변경 이력 조회');
   });
 });
 

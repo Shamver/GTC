@@ -418,7 +418,7 @@ class UserStore {
       nickNameIndex: index,
     };
 
-    await axios.get(`/api/user/profile/${writerId}/nickname/${index}`, { params: { writerId, index } })
+    await axios.get(`/api/user/profile/${writerId}/gtnickname/${index}`, { params: { writerId, index } })
       .then((response) => {
         const { data } = response;
 

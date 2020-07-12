@@ -8,7 +8,8 @@ import ModalPagination from './ProfilePageNation';
 
 const ProfileModalNickNameHistory = () => {
   const { UserStore, UtilStore } = useStores();
-  const { profileData, getNickNameList } = UserStore;
+  const { profileData, getNickNameList, userData } = UserStore;
+  const { gtName } = userData;
   const {
     pageIndex, rows,
   } = UtilStore;
@@ -24,7 +25,7 @@ const ProfileModalNickNameHistory = () => {
     <>
       <TableBox xs="12">
         <TableHeader>
-          <Col xs="9">닉네임</Col>
+          <Col xs="9">닉네임 <SmallSpan>(사용중 GT닉네임: {gtName})</SmallSpan></Col>
           <Col xs="3">마지막 사용일</Col>
         </TableHeader>
         { nicknameList.length > 0
@@ -38,6 +39,11 @@ const ProfileModalNickNameHistory = () => {
 
 const TableBox = styled(Col)`
   padding: 5px;
+`;
+
+const SmallSpan = styled.span`
+  font-size: 0.7rem;
+  color: gray;
 `;
 
 const TableHeader = styled(Row)`
