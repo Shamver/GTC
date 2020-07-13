@@ -30,7 +30,7 @@ const PostLockerMyPost = () => {
           {MyPostTableData.length === 0 ? (
             <tr>
               <TableTd colSpan={4}>
-              작성한 글이 없습니다.
+                작성한 글이 없습니다.
               </TableTd>
             </tr>
           ) : MyPostTableData}

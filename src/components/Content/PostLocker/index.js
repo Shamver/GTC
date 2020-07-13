@@ -2,11 +2,12 @@ import React, { useLayoutEffect, memo } from 'react';
 import { Container } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import PostLockerNav from './PostLockerNav';
 import PostLockerTabContent from './PostLockerTabContent';
 
-const PostLocker = () => {
+const PostLocker = ({ currentPage, noPagination, currentTab }) => {
   const {
     BoardPostStore, BoardReplyStore, UserFavoriteStore, ComponentPostLockerStore,
     UtilLoadingStore,
@@ -42,5 +43,17 @@ const MainContainer = styled(Container)`
   background-color: white;
   padding: 14px !important;
 `;
+
+PostLocker.propTypes = {
+  currentPage: Proptypes.string,
+  currentTab: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+PostLocker.defaultProps = {
+  currentPage: '1',
+  currentTab: 'myPost',
+  noPagination: false,
+};
 
 export default memo(observer(PostLocker));

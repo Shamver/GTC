@@ -21,10 +21,6 @@ const SwitchList = () => {
       ) : null }
 
       { checkPermission(0) ? (
-        <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
-      ) : null }
-
-      { checkPermission(0) ? (
         <Route exact path="/setting" render={() => <Contents.Setting />} />
       ) : null }
 
@@ -42,6 +38,14 @@ const SwitchList = () => {
 
       { checkPermission(0) ? (
         <Route exact path="/mypoint/page/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />
+      ) : null }
+
+      { checkPermission(0) ? (
+        <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
+      ) : null }
+
+      { checkPermission(0) ? (
+        <Route exact path="/postlocker/:currentTab/:currentPage" render={({ match }) => <Contents.PostLocker currentPage={match.params.currentPage} currentTab={match.params.currentTab} />} />
       ) : null }
 
       { checkPermission(0) ? (
