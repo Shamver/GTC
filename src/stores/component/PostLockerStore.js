@@ -1,18 +1,15 @@
-import { observable, action } from 'mobx';
+import { action } from 'mobx';
 
 class PostLockerStore {
-  @observable activeTab = 'myPost';
-
   constructor(root) {
     this.root = root;
   }
 
   @action onActive = ((e) => {
     const { name } = e.target;
+    const { history } = this.root.UtilRouteStore;
 
-    if (this.activeTab !== name) {
-      this.activeTab = name;
-    }
+    history.push(`/postlocker/${name}`);
   });
 }
 

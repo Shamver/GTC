@@ -2,17 +2,18 @@ import React, { memo } from 'react';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 
-const PostLockerNav = () => {
+const PostLockerNav = ({ currentTab }) => {
   const { ComponentPostLockerStore } = useStores();
-  const { activeTab, onActive } = ComponentPostLockerStore;
+  const { onActive } = ComponentPostLockerStore;
 
   return (
     <Nav tabs>
       <NavItem>
         <NavLinkBtn
-          className={activeTab === 'myPost' ? 'active' : ''}
+          className={currentTab === 'myPost' ? 'active' : ''}
           onClick={onActive}
           name="myPost"
         >
@@ -21,7 +22,7 @@ const PostLockerNav = () => {
       </NavItem>
       <NavItem>
         <NavLinkBtn
-          className={activeTab === 'myReply' ? 'active' : ''}
+          className={currentTab === 'myReply' ? 'active' : ''}
           onClick={onActive}
           name="myReply"
         >
@@ -30,7 +31,7 @@ const PostLockerNav = () => {
       </NavItem>
       <NavItem>
         <NavLinkBtn
-          className={activeTab === 'favorite' ? 'active' : ''}
+          className={currentTab === 'favorite' ? 'active' : ''}
           onClick={onActive}
           name="favorite"
         >
@@ -58,5 +59,13 @@ const NavLinkBtn = styled(NavLink)`
     border-bottom-color: transparent !important;
   }
 `;
+
+PostLockerNav.propTypes = {
+  currentTab: Proptypes.string,
+};
+
+PostLockerNav.defaultProps = {
+  currentTab: 'myPost',
+};
 
 export default memo(observer(PostLockerNav));
