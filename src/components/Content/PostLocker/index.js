@@ -32,7 +32,11 @@ const PostLocker = ({ currentPage, noPagination, currentTab }) => {
   return (
     <MainContainer>
       <PostLockerNav />
-      <PostLockerTabContent />
+      <PostLockerTabContent
+        currentPage={currentPage}
+        noPagination={noPagination}
+        currentTab={currentTab}
+      />
     </MainContainer>
   );
 };

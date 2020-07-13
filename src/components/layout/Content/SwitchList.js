@@ -45,6 +45,10 @@ const SwitchList = () => {
       ) : null }
 
       { checkPermission(0) ? (
+        <Route exact path="/postlocker/:currentTab/" render={({ match }) => <Contents.PostLocker noPagination currentTab={match.params.currentTab} />} />
+      ) : null }
+
+      { checkPermission(0) ? (
         <Route exact path="/postlocker/:currentTab/:currentPage" render={({ match }) => <Contents.PostLocker currentPage={match.params.currentPage} currentTab={match.params.currentTab} />} />
       ) : null }
 
