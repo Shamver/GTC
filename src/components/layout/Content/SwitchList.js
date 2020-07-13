@@ -27,33 +27,13 @@ const SwitchList = () => {
       <AuthRouter exact Component={Contents.Home} level={0} path="/" />
 
       {/* --------------------------- Pointer Router Component --------------------------- */}
-      <AuthRouter exact Component={Router.PointRouter} level={1} path="/mypoint" />
+      <AuthRouter exact={false} Component={Router.PointRouter} level={1} path="/mypoint" />
 
       {/* ---------------------------- Search Router Component --------------------------- */}
-      <AuthRouter exact Component={Router.SearchRouter} level={1} path="/search" />
+      <AuthRouter exact={false} Component={Router.SearchRouter} level={1} path="/search" />
 
       {/* ---------------------------- Board Router Component ---------------------------- */}
-      <AuthRouter exact Component={Router.BoardRouter} level={0} path="/:board" />
-
-      {/* RouterAuthCheck(0) ? (
-        <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
-      ) : null */}
-
-      {/* RouterAuthCheck(0) ? (
-        <Route exact path="/mypoint/page/:currentPage" render={({ match }) =>
-        <Contents.MyPoint currentPage={match.params.currentPage} />} />
-      ) : null */}
-
-      {/* RouterAuthCheck(0) ? (
-        <Route exact path="/search" render={({ location }) => <Contents.Search
-        location={location} />} />
-      ) : null */}
-
-      {/* RouterAuthCheck(0) ? (
-        <Route exact path="/search/page/:currentPage" render={({ match, location }) =>
-        <Contents.Search currentPage={match.params.currentPage} isPagination
-         location={location} />} />
-      ) : null */}
+      <AuthRouter exact={false} Component={Router.BoardRouter} level={0} path="/:board" />
 
       {/*
         <Route exact path="/:board" render={({ match, location }) => <Contents.Board

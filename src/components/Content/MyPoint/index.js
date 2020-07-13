@@ -8,12 +8,13 @@ import MyPointContent from './MyPointContent';
 
 const MyPoint = (props) => {
   const { match, parentProps } = props;
-  const { noPagination } = parentProps;
   const { UtilLoadingStore, UserPointStore } = useStores();
   const { loadingProcess } = UtilLoadingStore;
   const { getPoint } = UserPointStore;
   const { params } = match;
+  let { noPagination } = parentProps;
   let { currentPage } = params;
+  noPagination = noPagination !== undefined;
   currentPage = currentPage || '1';
 
   useLayoutEffect(() => {
@@ -45,13 +46,7 @@ MyPoint.propTypes = {
   }).isRequired,
   parentProps: Proptypes.shape({
     noPagination: Proptypes.bool,
-  }),
-};
-
-MyPoint.defaultProps = {
-  parentProps: {
-    noPagination: false,
-  },
+  }).isRequired,
 };
 
 export default memo(observer(MyPoint));

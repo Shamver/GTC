@@ -8,12 +8,17 @@ import qs from 'query-string';
 import useStores from '../../../stores/useStores';
 import SearchContent from './SearchContent';
 
-const Search = ({ currentPage, isPagination, location }) => {
+const Search = (props) => {
+  const { parentProps, match, location } = props;
+  const { isPagination } = parentProps;
   const { UtilLoadingStore, BoardSearchStore } = useStores();
   const { loadingProcess } = UtilLoadingStore;
   const {
     foundText, search, setIsPagination, setCurrentSearchPage, judgeFilterMode,
   } = BoardSearchStore;
+  const { params } = match;
+  let { currentPage } = params;
+  currentPage = currentPage || '1';
 
   const query = qs.parse(location.search);
 
@@ -51,6 +56,11 @@ const MainContainer = styled(Container)`
 Search.propTypes = {
   currentPage: Proptypes.string,
   isPagination: Proptypes.bool,
+  match: Proptypes.shape({
+    params: Proptypes.shape({
+      currentPage: Proptypes.string,
+    }).isRequired,
+  }).isRequired,
   location: Proptypes.shape({
     search: Proptypes.string,
   }).isRequired,
