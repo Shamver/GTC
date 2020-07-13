@@ -11,11 +11,12 @@ const WriterDropdown = ({
   data, index, isNotice, isMobile,
 }) => {
   const {
-    ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
+    ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore, BoardReportStore,
   } = useStores();
   const { dropdown, onActive, onSet } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { userData, getProfile } = UserStore;
+  const { toggleReport } = BoardReportStore;
   const { addIgnore } = UserIgnoreStore;
   const { writerName, writerId } = data;
   const dropdownKey = isNotice ? `notice_${index}` : index.toString();

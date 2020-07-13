@@ -25,12 +25,12 @@ const ReportUser = () => {
       <CodeTable bordered hover>
         <thead>
           <tr>
-            <ThCenter width="8%">신고ID</ThCenter>
+            <ThCenter width="8%">유저ID</ThCenter>
             <th width="18%">이름</th>
             <th width="18%">닉네임</th>
             <th width="18%">그로우토피아 닉네임</th>
-            <th width="28%">이메일</th>
-            <th width="10%">처리</th>
+            <th width="26%">이메일</th>
+            <th width="12%">처리</th>
           </tr>
         </thead>
         <tbody>
