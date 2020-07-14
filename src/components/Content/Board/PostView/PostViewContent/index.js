@@ -65,11 +65,19 @@ const PostViewContent = () => {
             </GreyButton>
             { !!isMyPost && <PostOption />}
           </RightSpan>
+          <ClearFix />
         </ContentFooter>
       </ContentWrapper>
     </>
   );
 };
+
+const ClearFix = styled.div`
+  clear: both;
+  display: block;
+  content: "";
+  height: 0;
+`;
 
 const GreyButton = styled(Button)`
   background-color : white !important;
@@ -101,15 +109,13 @@ const NavLine = styled.hr`
 
 const ContentHeader = styled(Container)`
   margin : 0 !important;
-  padding : 0 3px !important;
-  height : 35px;
+  padding : 0px 3px !important;
   max-width : none !important;
   background: #f6f6f6;
   padding: 0.6em 0.8em !important;
 `;
 
 const ContentFooter = styled(ContentHeader)`
-  height : 47px;
 `;
 
 const ContentWrapper = styled.div`
@@ -119,15 +125,16 @@ const ContentWrapper = styled.div`
 `;
 
 const RightSpan = styled.span`
-  margin-left : 5px;
-  float : right;
+  margin-left: 5px;
+  float: right;
+  margin-top: 2.5px;
   & > svg {
-    margin-left : 5px;
+    margin-left: 5px;
   }
 `;
 
 const ContentMain = styled.div`
-  padding : 14px;
+  padding: 14px;
 `;
 
 export default memo(observer(PostViewContent));

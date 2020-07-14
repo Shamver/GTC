@@ -12,13 +12,17 @@ import useStores from '../../../stores/useStores';
 
 const BoardFooter = () => {
   const { BoardStore } = useStores();
-  const { currentBoardPath, bestFilterMode, currentBoardPage } = BoardStore;
+  const {
+    currentBoardPath, bestFilterMode, currentBoardPage,
+    searchKeyword, onSubmit, onChange, onSearch, searchTarget,
+    onChangeTarget,
+  } = BoardStore;
   const filterQs = '?filter_mode=true';
   const pageUrl = Number(currentBoardPage) > 1 ? `/${currentBoardPath}/page/${currentBoardPage}` : `/${currentBoardPath}`;
   const bestFilterUrl = bestFilterMode ? pageUrl : pageUrl.concat(filterQs);
 
   return (
-    <>
+    <FooterWrapper>
       <AbsolDiv>
         <AbsoluteLeftLink to={bestFilterUrl}>
           <Button outline={!bestFilterMode} color="warning" size="sm">
@@ -37,23 +41,29 @@ const BoardFooter = () => {
       <InputGroupWrapper>
         <InputGroupWidth>
           <InputGroupAddon addonType="prepend">
-            <RightNoRadiusSelect type="select">
-              <option>제목</option>
-              <option>제목 + 내용</option>
-              <option>닉네임</option>
+            <RightNoRadiusSelect type="select" value={searchTarget} onChange={onChangeTarget}>
+              <option value="title">제목</option>
+              <option value="titleText">제목 + 내용</option>
+              <option value="nickname">닉네임</option>
             </RightNoRadiusSelect>
           </InputGroupAddon>
-          <Input placeholder="검색어" />
+          <Input placeholder="검색어" onKeyPress={onSubmit} value={searchKeyword} onChange={onChange} />
           <InputGroupAddon addonType="append">
-            <InputGroupButton>
+            <InputGroupButton onClick={onSearch}>
               <FontAwesomeIcon icon={faSearch} />
             </InputGroupButton>
           </InputGroupAddon>
         </InputGroupWidth>
       </InputGroupWrapper>
-    </>
+    </FooterWrapper>
   );
 };
+
+const FooterWrapper = styled.div`
+  @media (max-width: 992px) {
+    margin: 10px;
+  }
+`
 
 const RightNoRadiusSelect = styled(Input)`
   border-bottom-right-radius: 0px !important;
@@ -63,6 +73,7 @@ const RightNoRadiusSelect = styled(Input)`
 const InputGroupWrapper = styled.div`
   text-align : center;
   margin-top : 20px;
+
 `;
 
 const InputGroupWidth = styled(InputGroup)`

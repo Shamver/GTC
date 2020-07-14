@@ -35,13 +35,19 @@ const PostViewFooter = () => {
         )}
       </TopBottomWrapper>
       <BoardContent />
-      <BoardFooter isFooter />
+      <BoardFooter />
     </>
   );
 };
 
 const TopBottomLink = styled(Link)`
   color : inherit !important;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  display: inline-block;
+  width: 50%;
+  vertical-align: middle;
   text-decoration : none;
   &:hover {
     text-decoration : none !important; 

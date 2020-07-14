@@ -8,12 +8,20 @@ import avatarImg from '../../../resources/images/anonymous.png';
 import useStores from '../../../stores/useStores';
 
 const MyAccountEditForm = () => {
-  const { ComponentMyAccountStore } = useStores();
+  const { ComponentMyAccountStore, SystemCodeStore } = useStores();
+  const { getCodeComponent } = SystemCodeStore;
   const {
-    profileYN, onChangeProfile, gender, nickname, birth,
+    profileYN, onChangeProfile, gender, nickname, birth, setUserGenderCodeList, userGenderCodeList,
     onChangeValue, nicknameValidation, birthValidation, genderValidation,
-    profile, onChangeProfileImage, uploadImagePreview,
+    profile, onChangeProfileImage, uploadImagePreview, gtName, gtNicknameValidation,
+    isCanChangeGtNickname,
   } = ComponentMyAccountStore;
+
+  const GenderCode = userGenderCodeList.map((data) => (
+    <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
+  ));
+
+  getCodeComponent('GENDER_CODE', setUserGenderCodeList);
 
   return (
     <Col xs="12" sm="6">
@@ -21,6 +29,13 @@ const MyAccountEditForm = () => {
         <Deform>
           <RegisterForm>
             <h4>수정 가능한 정보</h4>
+            <FormTextLeft>
+              그로우토피아 닉네임&nbsp;&nbsp;
+              <AccentText>{isCanChangeGtNickname ? (!gtNicknameValidation.status && `❌${gtNicknameValidation.message}`)
+                : '❌변경한 지 30일이 지나지 않아 변경할 수 없습니다.'}
+              </AccentText>
+            </FormTextLeft>
+            <FormInput readOnly={!isCanChangeGtNickname} disabled={!isCanChangeGtNickname} type="text" name="gtName" value={gtName} onChange={onChangeValue} />
             <FormTextLeft>
               닉네임&nbsp;&nbsp;
               <AccentText>{!nicknameValidation.status && `❌${nicknameValidation.message}`}</AccentText>
@@ -36,9 +51,7 @@ const MyAccountEditForm = () => {
               <AccentText>{!genderValidation.status && `❌${genderValidation.message}`}</AccentText>
             </FormTextLeft>
             <FormSelect type="select" name="gender" value={gender} onChange={onChangeValue}>
-              <option value="">성별 선택</option>
-              <option value="M">남자</option>
-              <option value="F">여자</option>
+              {GenderCode}
             </FormSelect>
             <FormSwitch>
               {profileYN
@@ -52,7 +65,7 @@ const MyAccountEditForm = () => {
                   onChange={onChangeProfile}
                   label="프로필 사진 공개 유무"
                 />
-                <Input type="file" name="file" id="profileUpload" bsSize="sm" onChange={(e) => onChangeProfileImage(e)} />
+                <Input type="file" name="file" id="profileUpload" bsSize="sm" onChange={(e) => onChangeProfileImage(e)} accept="image/jpeg, image/png" />
               </ProfileDiv>
             </FormSwitch>
           </RegisterForm>
@@ -132,7 +145,8 @@ const FormTextLeft = styled(FormText)`
 `;
 
 const Avatar = styled.img`
-  width : 64px;
+  width: 64px;
+  height: 64px;
   border-radius: 3px;
 `;
 

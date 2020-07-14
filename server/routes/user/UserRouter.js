@@ -24,17 +24,18 @@ const UPDATE_USER_INFO = `
     , GENDER_CD = ':GENDER_CD'
     , PROFILE_FL = ':PROFILE_FL'
     , PROFILE = IF(':PROFILE'='', GTC_USER.PROFILE, ':PROFILE')
+    , GT_NICKNAME = ':GT_NICKNAME'
   WHERE ID = :USER_ID
 `;
 
-const INSERT_USER_NICKNAME = `
-  INSERT INTO GTC_USER_NICKNAME (
+const INSERT_USER_GT_NICKNAME = `
+  INSERT INTO GTC_USER_GT_NICKNAME (
     USER_ID
-    , PREV_NICKNAME
+    , PREV_GT_NICKNAME
     , CRT_DTTM
   ) VALUES (
     :USER_ID
-    , ':PREV_NICKNAME'
+    , ':PREV_GT_NICKNAME'
     , SYSDATE()
   )
 `;
@@ -49,22 +50,23 @@ const GET_USER_PROFILE = `
     , (SELECT COUNT(GTC_POST.ID) FROM GTC_POST WHERE GTC_POST.USER_ID = :USER_ID) AS postCount
     , (SELECT COUNT(GTC_COMMENT.ID) AS 'cnt' FROM GTC_COMMENT WHERE GTC_COMMENT.USER_ID = :USER_ID) AS commentCount
     , GTC_USER.PROFILE AS profile
+    , GTC_USER.PROFILE_FL AS profileFl
   FROM GTC_USER
   WHERE GTC_USER.ID = :USER_ID
 `;
 
-const GET_USER_NICKNAME_HISTORY = `
+const GET_USER_GT_NICKNAME_HISTORY = `
   SELECT N.ID as id
     , N.USER_ID AS userId
-    , N.PREV_NICKNAME AS nicknameHistory
+    , N.PREV_GT_NICKNAME AS nicknameHistory
     , CASE WHEN N.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇 초 전'
       WHEN N.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, N.CRT_DTTM, SYSDATE()),'분 전')
       WHEN N.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR, N.CRT_DTTM, SYSDATE()),'시간 전')
     ELSE DATE_FORMAT(N.CRT_DTTM, '%m-%d')
   END AS nicknameChanged
-    , (SELECT COUNT(GTC_USER_NICKNAME.ID) FROM GTC_USER_NICKNAME WHERE GTC_USER_NICKNAME.USER_ID = :USER_ID) AS changeCount
-    , (SELECT CEIL(COUNT(*)/5) FROM GTC_USER_NICKNAME WHERE GTC_USER_NICKNAME.USER_ID = :USER_ID) AS rowCount
-  FROM GTC_USER_NICKNAME N
+    , (SELECT COUNT(GTC_USER_GT_NICKNAME.ID) FROM GTC_USER_GT_NICKNAME WHERE GTC_USER_GT_NICKNAME.USER_ID = :USER_ID) AS changeCount
+    , (SELECT CEIL(COUNT(*)/5) FROM GTC_USER_GT_NICKNAME WHERE GTC_USER_GT_NICKNAME.USER_ID = :USER_ID) AS rowCount
+  FROM GTC_USER_GT_NICKNAME N
   WHERE N.USER_ID = :USER_ID
   ORDER BY id DESC
   LIMIT :INDEX, 5
@@ -172,6 +174,15 @@ router.put('/banned', (req, res) => {
   });
 });
 
+const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
+  SELECT
+  IF(count(*) = 0, 1, 0) AS isCanChange
+  FROM GTC_USER_GT_NICKNAME
+  WHERE
+    USER_ID = :USER_ID
+    AND CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(), INTERVAL -30 DAY), '%Y-%m-%d %H:%i:%s');
+`;
+
 router.delete('/withdrawal', (req, res) => {
   const { userId } = req.body;
 
@@ -196,28 +207,42 @@ router.delete('/withdrawal', (req, res) => {
 
 router.put('/info', upload.fields([{ name: 'images' }]), uploadHandler, async(async (req, res) => {
   const {
-    nickname, birth, gender, profileYN, userId, prevNickname,
+    nickname, birth, gender, profileYN, userId, prevGtNickname, gtNickname,
   } = req.body;
 
   const profile = req.photo.images && req.photo.images.length > 0 ? req.photo.images[0] : '';
 
   Database.execute(
     (database) => database.query(
-      UPDATE_USER_INFO,
+      SELECT_USER_CAN_CHANGE_GT_NICKNAME,
       {
         USER_ID: userId,
-        NICKNAME: nickname,
-        BIRTH_DT: birth,
-        GENDER_CD: gender,
-        PROFILE_FL: profileYN,
-        PROFILE: profile,
       },
     )
+      .then((rows) => {
+        const { isCanChange } = rows[0];
+
+        if (isCanChange) {
+          return database.query(
+            UPDATE_USER_INFO,
+            {
+              USER_ID: userId,
+              NICKNAME: nickname,
+              BIRTH_DT: birth,
+              GENDER_CD: gender,
+              PROFILE_FL: profileYN,
+              PROFILE: profile,
+              GT_NICKNAME: gtNickname,
+            },
+          );
+        }
+        return Promise.reject();
+      })
       .then(() => database.query(
-        INSERT_USER_NICKNAME,
+        INSERT_USER_GT_NICKNAME,
         {
           USER_ID: userId,
-          PREV_NICKNAME: prevNickname,
+          PREV_GT_NICKNAME: prevGtNickname,
         },
       ))
       .then(() => {
@@ -225,6 +250,13 @@ router.put('/info', upload.fields([{ name: 'images' }]), uploadHandler, async(as
           success: true,
           code: 1,
           message: '회원정보 수정완료',
+        });
+      })
+      .catch(() => {
+        res.json({
+          success: false,
+          code: 1,
+          message: '😳 그토 닉네임을 변경한지 30일이 되지 않았습니다.',
         });
       }),
   ).then(() => {
@@ -253,13 +285,34 @@ router.get('/profile/:writerId', (req, res) => {
   });
 });
 
-router.get('/profile/:writerId/nickname/:currentPage', (req, res) => {
+router.get('/gtnickname/:userId', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_USER_CAN_CHANGE_GT_NICKNAME,
+      {
+        USER_ID: req.params.userId,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '유저 그토 닉네임 변경 가능 여부 조회',
+          result: rows[0],
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/user/gtnickname/:userId] 유저 그토 닉네임 변경 가능 여부 조회');
+  });
+});
+
+router.get('/profile/:writerId/gtnickname/:currentPage', (req, res) => {
   let { index } = req.query;
   index = (index === 1) ? 0 : (index - 1) * 5;
 
   Database.execute(
     (database) => database.query(
-      GET_USER_NICKNAME_HISTORY,
+      GET_USER_GT_NICKNAME_HISTORY,
       {
         USER_ID: req.params.writerId,
         INDEX: index,
@@ -269,12 +322,12 @@ router.get('/profile/:writerId/nickname/:currentPage', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          message: '유저 닉네임 변경 이력 조회',
+          message: '유저 그토 닉네임 변경 이력 조회',
           result: rows,
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/user/profile/nickname] 유저 닉네임 변경 이력 조회');
+    info('[SELECT, GET /api/user/profile/gtnickname] 유저 그토 닉네임 변경 이력 조회');
   });
 });
 

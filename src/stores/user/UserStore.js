@@ -247,7 +247,7 @@ class UserStore {
 
   @action updateInfo = () => {
     const {
-      nickname, prevNickname, birth, gender, profileYN, uploadImage,
+      nickname, birth, gender, profileYN, uploadImage, gtName, prevGtNickname,
     } = this.root.ComponentMyAccountStore;
     const { userData } = this;
     const { history } = this.root.UtilRouteStore;
@@ -255,11 +255,12 @@ class UserStore {
     const formData = new FormData();
 
     formData.append('nickname', nickname.trim());
-    formData.append('prevNickname', prevNickname.trim());
+    formData.append('prevGtNickname', prevGtNickname.trim());
     formData.append('birth', birth);
     formData.append('gender', gender);
     formData.append('profileYN', profileYN);
     formData.append('userId', userData.id);
+    formData.append('gtNickname', gtName);
 
     if (uploadImage !== '') formData.append('images', uploadImage);
 
@@ -271,6 +272,28 @@ class UserStore {
             toast.success('성공적으로 변경되었습니다.\n다시 로그인해주세요.');
             history.push('/');
             this.logout();
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => toast.error(response.message));
+  };
+
+  @action getIsCanChangeGtNickname = () => {
+    const { userData } = this;
+    const { id } = userData;
+
+    const { setIsCanChangeGtNickname } = this.root.ComponentMyAccountStore;
+
+    axios.get(`/api/user/gtnickname/${id}`)
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            setIsCanChangeGtNickname(data.result.isCanChange);
           } else {
             toast.info(data.message);
           }
@@ -401,7 +424,7 @@ class UserStore {
       nickNameIndex: index,
     };
 
-    await axios.get(`/api/user/profile/${writerId}/nickname/${index}`, { params: { writerId, index } })
+    await axios.get(`/api/user/profile/${writerId}/gtnickname/${index}`, { params: { writerId, index } })
       .then((response) => {
         const { data } = response;
 

@@ -10,11 +10,13 @@ import useStores from '../../../stores/useStores';
 const ProfileModalComment = ({ commentData }) => {
   const { UtilStore } = useStores();
   const { toggleProfile } = UtilStore;
-  const { commentId, commentContent, commentCreated } = commentData;
+  const {
+    postCommentId, commentId, commentContent, commentCreated
+  } = commentData;
   const commentContentText = renderHTML(`${commentContent}`);
 
   return (
-    <TableBody to={`/post/${commentId}`} onClick={toggleProfile}>
+    <TableBody to={`/post/${postCommentId}#${commentId}`} onClick={toggleProfile}>
       <Row>
         <ContentsBodyTitle xs="9">
           <ContentsTitle>{commentContentText}</ContentsTitle>
@@ -27,6 +29,7 @@ const ProfileModalComment = ({ commentData }) => {
 
 ProfileModalComment.propTypes = {
   commentData: Proptypes.shape({
+    postCommentId: Proptypes.number,
     commentId: Proptypes.number,
     commentContent: Proptypes.string,
     commentCreated: Proptypes.string,

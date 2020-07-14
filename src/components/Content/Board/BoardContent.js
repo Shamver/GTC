@@ -45,6 +45,7 @@ const ManginessTable = styled(Table)`
   margin : 0px !important;
   margin-top : 0px !important;
   border : none !important;
+  table-layout: fixed;
   
   & td:first-child {
     border-left : none;

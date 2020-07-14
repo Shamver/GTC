@@ -5,8 +5,14 @@ class PostStore {
 
   @observable postOptionOpen = false;
 
+  @observable profileDropdown = false;
+
   constructor(root) {
     this.root = root;
+  }
+
+  @action toggleProfileDropdown = () => {
+    this.profileDropdown = !this.profileDropdown;
   }
 
   @action openPostOption = () => {
@@ -46,7 +52,7 @@ class PostStore {
       key = keyList[i];
       this.dropdown[key] = false;
     }
-  }
+  };
 
   @action onClickPost = (id) => {
     const { history } = this.root.UtilRouteStore;

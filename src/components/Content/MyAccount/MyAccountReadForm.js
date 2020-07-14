@@ -20,8 +20,6 @@ const MyAccountReadForm = () => {
             <FormInput type="text" name="email" value={userData.email} readOnly />
             <FormTextLeft>전화번호</FormTextLeft>
             <FormInput type="text" name="tel" value={userData.tel} maxLength="11" readOnly />
-            <FormTextLeft>그로우토피아 닉네임</FormTextLeft>
-            <FormInputWithText type="text" name="gtNickname" value={userData.gtName} readOnly />
           </RegisterForm>
         </Deform>
       </div>
@@ -49,10 +47,6 @@ const FormInput = styled.input`
   font-size: 14px;
   
   color: ${(props) => (props.readOnly ? 'gray' : 'black')}
-`;
-
-const FormInputWithText = styled(FormInput)`
-  margin : 0;
 `;
 
 const Deform = styled.div`

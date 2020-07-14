@@ -18,7 +18,7 @@ const SELECT_POST_LIST = `
     , P.TITLE AS title
     , P.USER_ID AS writerId
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
-    , IF(CATEGORY_CD = 'FREE','자유','그외') AS categoryName
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = ('BOARD_' || ':BOARD_CD' || '_CATEGORY') AND CODE = P.CATEGORY_CD) AS categoryName
     , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) AS commentCount
@@ -46,7 +46,7 @@ const SELECT_POST_NOTICE_LIST = `
     , P.TITLE AS title
     , P.USER_ID AS writerId
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
-    , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = ('BOARD_' || ':BOARD_CD' || '_CATEGORY') AND CODE = P.CATEGORY_CD) AS categoryName
     , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
@@ -65,7 +65,7 @@ const SELECT_POST_LIST_ALL = `
     , P.TITLE AS title
     , P.USER_ID AS writerId
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
-    , IF(CATEGORY_CD = 'FREE','자유','그외') as categoryName
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = ('BOARD_' || ':BOARD_CD' || '_CATEGORY') AND CODE = P.CATEGORY_CD) AS categoryName
     , CASE WHEN BOARD_CD = 'FREE' THEN '자유 게시판'
         WHEN BOARD_CD = 'TRADE' THEN '아이템 거래'
         WHEN BOARD_CD = 'CASH' THEN '월드락 거래'
@@ -152,10 +152,12 @@ const SELECT_POST_SINGLE = `
     , P.BOARD_CD AS board
     , IF(P.BOARD_CD = 'FREE','자유 게시판','그외') AS boardName
     , CATEGORY_CD AS category
-    , IF(P.CATEGORY_CD = 'FREE','자유','그외') AS categoryName
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = ('BOARD_' || ':BOARD_CD' || '_CATEGORY') AND CODE = P.CATEGORY_CD) AS categoryName
     , IF((SELECT F.POST_ID FROM GTC_USER_FAVORITE F WHERE F.USER_ID = :USER_ID AND F.POST_ID = P.ID), 1, 0) AS isFavorite
     , P.TITLE AS title
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
+    , P.USER_ID AS writerId
+    , (SELECT U.PROFILE FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerProfile
     , IF(P.USER_ID = :USER_ID, 1, 0) AS isMyPost
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R02') AS notRecommendCount
@@ -301,6 +303,42 @@ const SELECT_POST_LIST_SEARCH = `
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
 
+const SELECT_POST_LIST_BOARD_SEARCH = `
+  SELECT 
+    @ROWNUM := @ROWNUM+1 AS rn
+    , P.ID AS id
+    , P.TITLE AS title
+    , P.USER_ID AS writerId
+    , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerName
+    , IF(CATEGORY_CD = 'FREE','자유','그외') AS categoryName
+    , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
+    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
+    , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) AS commentCount
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST P
+        WHERE
+        P.BOARD_CD IN (:BOARD_CD) 
+        AND P.USER_ID NOT IN
+          (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+        AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+        :query
+      ) AS pageCount
+    :ALL_QUERY
+    , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
+  FROM 
+    GTC_POST P
+    LEFT JOIN GTC_USER GU
+    ON P.USER_ID = GU.ID
+    , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
+  WHERE 
+    BOARD_CD IN (:BOARD_CD)
+    AND P.USER_ID NOT IN
+      (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+    AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+    :query
+  ORDER BY ID DESC    
+  LIMIT :CURRENT_PAGE, :PER_PAGE
+`;
+
 router.get('/', (req, res) => {
   let { currentPage } = req.query;
   const { board, isHome, recommend } = req.query;
@@ -334,20 +372,88 @@ router.get('/', (req, res) => {
 
 router.get('/search', (req, res) => {
   let { currentPage } = req.query;
-  const { keyword } = req.query;
+  const {
+    target, keyword, board, recommend,
+  } = req.query;
   let { userId } = req.query;
   currentPage = currentPage || 1;
   if (!userId) userId = null;
 
+  let query;
+
+  if (board === undefined) {
+    query = `AND (
+      P.CONTENT LIKE '%${keyword}%'
+      OR P.TITLE LIKE '%${keyword}%'
+      OR GU.NICKNAME LIKE '%${keyword}%'
+    )`;
+  } else {
+    switch (target) {
+      case 'title':
+        query = `AND (
+          P.TITLE LIKE '%${keyword}%'
+        )`;
+        break;
+
+      case 'titleText':
+        query = `AND (
+          P.CONTENT LIKE '%${keyword}%'
+          OR P.TITLE LIKE '%${keyword}%'
+        )`;
+        break;
+
+      case 'nickname':
+        query = `AND (
+          GU.NICKNAME LIKE '%${keyword}%'
+        )`;
+        break;
+
+      default:
+        query = `AND (
+          P.CONTENT LIKE '%${keyword}%'
+          OR P.TITLE LIKE '%${keyword}%'
+          OR GU.NICKNAME LIKE '%${keyword}%'
+        )`;
+        break;
+    }
+  }
+
+  const ALL_QUERY = board && board === 'all'
+    ? `, CASE WHEN P.BOARD_CD = 'FREE' THEN '자유 게시판'
+        WHEN P.BOARD_CD = 'TRADE' THEN '아이템 거래'
+        WHEN P.BOARD_CD = 'CASH' THEN '월드락 거래'
+        WHEN P.BOARD_CD = 'QNA' THEN '질문 & 답변'
+       ELSE '그 외'
+    END AS boardName` : '';
+
+  // eslint-disable-next-line no-nested-ternary
+  const params = board === undefined ? {
+    CURRENT_PAGE: ((currentPage - 1) * 25),
+    USER_ID: userId,
+    PER_PAGE: 25,
+    KEYWORD: keyword,
+  } : board && board !== 'all' ? {
+    BOARD_CD: `'${board.toUpperCase()}'`,
+    CURRENT_PAGE: ((currentPage - 1) * 25),
+    USER_ID: userId,
+    PER_PAGE: 25,
+    LIKES: Number(recommend) ? 1 : 0,
+    ALL_QUERY,
+    query,
+  } : {
+    BOARD_CD: '\'notice\', \'free\', \'trade\', \'cash\', \'crime\', \'qna\'', // 후에 코드성으로 모두 가져오게끔 해서 처리
+    CURRENT_PAGE: ((currentPage - 1) * 25),
+    USER_ID: userId,
+    PER_PAGE: 25,
+    LIKES: Number(recommend) ? 1 : 0,
+    ALL_QUERY,
+    query,
+  };
+
   Database.execute(
     (database) => database.query(
-      SELECT_POST_LIST_SEARCH,
-      {
-        CURRENT_PAGE: ((currentPage - 1) * 25),
-        USER_ID: userId,
-        PER_PAGE: 25,
-        KEYWORD: keyword,
-      },
+      board === undefined ? SELECT_POST_LIST_SEARCH : SELECT_POST_LIST_BOARD_SEARCH,
+      params,
     )
       .then((rows) => {
         res.json({
@@ -417,7 +523,7 @@ router.post('/', authMiddleware, (req, res) => {
           bpId: rows[0].id,
         };
 
-        point('addPost', 'POST', postData);
+        point('addPost', 'R01', postData);
         res.json({
           success: true,
           code: 1,
@@ -490,7 +596,7 @@ router.delete('/', authMiddleware, (req, res) => {
       },
     )
       .then(() => {
-        point('deletePost', 'POST', {
+        point('deletePost', 'R01', {
           bpId: data.id,
           writer: data.writer,
         });

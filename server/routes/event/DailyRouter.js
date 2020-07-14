@@ -5,6 +5,8 @@ const router = express.Router();
 const { info } = require('../../log-config');
 const Database = require('../../Database');
 
+const point = require('../../middleware/point');
+
 const SELECT_ATTENDANCE = `
   SELECT 
     D.ID AS id
@@ -45,21 +47,9 @@ const SELECT_ATTENDANCE_TODAY = `
     AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') > DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000'))
 `;
 
-const INSERT_EVENT_DAILY = `
-  INSERT INTO GTC_ATTENDANCE (
-    USER_ID
-    , MESSAGE
-    , POINT
-    , COMBO
-    , CRT_DTTM
-  ) VALUES (
-    :USER_ID
-    , ':MESSAGE'
-    , (CASE
-       WHEN (SELECT * FROM (SELECT IFNULL(COMBO, 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) % 7 = 0 THEN 40
-       WHEN (SELECT * FROM (SELECT IFNULL(COMBO, 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) % 30 = 0 THEN 120
-       ELSE 20 END
-      ) + (
+const SELECT_EVENT_DAILY_COST = `
+  SELECT
+    (
         CASE
          WHEN (SELECT * FROM (SELECT COUNT(*)
                FROM GTC_ATTENDANCE
@@ -71,7 +61,27 @@ const INSERT_EVENT_DAILY = `
                FROM GTC_ATTENDANCE
                WHERE date_format(CRT_DTTM, '%Y%m%d%H%i%S') >= DATE_FORMAT(SYSDATE(), '%Y%m%d000000')) AS a) = 2 THEN 10
          ELSE 0 END
-      )
+      ) AS rank
+    , (CASE
+       WHEN (SELECT * FROM (SELECT IFNULL(COMBO, 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) % 7 = 0 THEN 40
+       WHEN (SELECT * FROM (SELECT IFNULL(COMBO, 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) % 30 = 0 THEN 120
+       ELSE 20 END
+      ) AS combo
+    FROM GTC_ATTENDANCE
+    LIMIT 0, 1
+`;
+
+const INSERT_EVENT_DAILY = `
+  INSERT INTO GTC_ATTENDANCE (
+    USER_ID
+    , MESSAGE
+    , POINT
+    , COMBO
+    , CRT_DTTM
+  ) VALUES (
+    :USER_ID
+    , ':MESSAGE'
+    , :COST
     , (SELECT CASE WHEN (SELECT * FROM (SELECT IFNULL(MAX(COMBO), 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C) > 0 THEN
       (SELECT * FROM (SELECT IFNULL(MAX(COMBO), 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C)
       ELSE 1
@@ -137,10 +147,25 @@ router.post('/', (req, res) => {
         }
 
         return database.query(
+          SELECT_EVENT_DAILY_COST,
+          {
+            USER_ID: userId,
+          },
+        );
+      })
+      .then((rows) => {
+        const { rank, combo } = rows[0];
+        const cost = rank + combo;
+        point('custom', 'DAILY', {
+          writer: userId,
+          cost,
+        });
+        return database.query(
           INSERT_EVENT_DAILY,
           {
             USER_ID: userId,
             MESSAGE: message,
+            COST: cost,
           },
         );
       })

@@ -68,6 +68,7 @@ const SELECT_POST_COMMENT = `
     , C.USER_ID AS idPostWriter
     , A.USER_ID AS idWriter
     , (SELECT U.NICKNAME FROM GTC_USER U WHERE U.ID = A.USER_ID) AS writer
+    , (SELECT U.PROFILE FROM GTC_USER U WHERE U.ID = A.USER_ID) AS writerProfile
     , CASE WHEN A.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇 초 전'
         WHEN A.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, A.CRT_DTTM, SYSDATE()),'분 전')
         WHEN A.CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(),INTERVAL -1 DAY),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(HOUR, A.CRT_DTTM, SYSDATE()),'시간 전')
@@ -184,7 +185,7 @@ router.post('/', authMiddleware, (req, res) => {
       })
       .then((rows) => {
         const { ID } = rows[0];
-        point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
+        point('addReply', 'R02', { ...data, replyId: rows[0].replyId });
         return alertMiddleware(database, ID);
       }, () => {})
       .then(() => {
@@ -269,7 +270,7 @@ router.delete('/', authMiddleware, (req, res) => {
         );
       })
       .then(() => {
-        point('deleteReply', 'REPLY', data);
+        point('deleteReply', 'R02', data);
         res.json({
           success: true,
           code: 1,

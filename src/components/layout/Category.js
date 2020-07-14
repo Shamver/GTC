@@ -4,8 +4,8 @@ import {
   Container, Row,
 } from 'reactstrap';
 import {
-  faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock, faBellSlash, faComments, faAt,
-  faExclamationTriangle, faCode,
+  faBars, faFlag, faList, faGlobeAsia, faTshirt,
+  faCode, faLock, faBellSlash, faComments,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
@@ -13,9 +13,9 @@ import { NavLink } from 'react-router-dom';
 import useStores from '../../stores/useStores';
 
 const Category = () => {
-  const { UserStore } = useStores();
+  const { UserStore, BoardPostStore } = useStores();
   const { userData, checkPermission } = UserStore;
-
+  const { searchOff } = BoardPostStore;
 
   useEffect(() => {
   }, [userData]);
@@ -29,46 +29,53 @@ const Category = () => {
             <TopText>GTC 전체 메뉴</TopText>
           </MenuDivTop>
         </MenuRowTop>
-        <MenuLink to="/notice" activeClassName="active">
+        <MenuLink to="/notice" onClick={searchOff} activeClassName="active">
           <MenuDiv>
             <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
           </MenuDiv>
         </MenuLink>
-        <MenuLink to="/all" activeClassName="active">
+        <MenuLink to="/all" onClick={searchOff} activeClassName="active">
           <MenuDiv>
             <FaiPink icon={faList} className="fa-fw" />&nbsp;&nbsp; 전체글 보기
           </MenuDiv>
         </MenuLink>
-        <MenuLink to="/free" activeClassName="active">
+        <MenuLink to="/free" onClick={searchOff} activeClassName="active">
           <MenuDiv>
             <FaiPink icon={faGlobeAsia} className="fa-fw" />&nbsp;&nbsp; 자유 게시판
           </MenuDiv>
         </MenuLink>
-        <MenuLink to="/trade" activeClassName="active">
+        <MenuLink to="/trade" onClick={searchOff} activeClassName="active">
           <MenuDiv>
             <FaiPink icon={faTshirt} className="fa-fw" />&nbsp;&nbsp; 아이템 거래
           </MenuDiv>
         </MenuLink>
-        <MenuLink to="/cash" activeClassName="active">
+        <MenuLink to="/cash" onClick={searchOff} activeClassName="active">
           <MenuDiv>
             <FaiPink icon={faLock} className="fa-fw" />&nbsp;&nbsp; 월드락 거래
           </MenuDiv>
         </MenuLink>
-        <MenuLink to="/crime" activeClassName="active">
-          <MenuDiv>
-            <FaiPink icon={faExclamationTriangle} className="fa-fw" />&nbsp;&nbsp; 신고 게시판
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink to="/qna" activeClassName="active">
+        <MenuLink to="/qna" onClick={searchOff} activeClassName="active">
           <MenuDiv>
             <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
           </MenuDiv>
         </MenuLink>
+        {/*
+          <MenuLink to="/crime"  activeClassName="active">
+            <MenuDiv>
+              <FaiPink icon={faExclamationTriangle} className="fa-fw" />&nbsp;&nbsp; 신고 게시판
+            </MenuDiv>
+          </MenuLink>
+          <MenuLink to="/faq" activeClassName="active">
+          <MenuDiv>
+          <FaiPink icon={faQuestion} className="fa-fw" />&nbsp;&nbsp; 자주 묻는 질문
+          </MenuDiv>
+          </MenuLink>
         <MenuLink to="/consult" activeClassName="active">
           <MenuDiv>
             <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
           </MenuDiv>
         </MenuLink>
+        */}
         { checkPermission(2) ? (
           <MenuLink to="/report" activeClassName="active">
             <MenuDiv>

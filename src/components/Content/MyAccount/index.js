@@ -6,13 +6,15 @@ import useStores from '../../../stores/useStores';
 import MyAccountContent from './MyAccountContent';
 
 const MyAccount = () => {
-  const { ComponentMyAccountStore, UtilLoadingStore } = useStores();
+  const { ComponentMyAccountStore, UtilLoadingStore, UserStore } = useStores();
   const { setDefaultValue } = ComponentMyAccountStore;
+  const { getIsCanChangeGtNickname } = UserStore;
   const { loadingProcess } = UtilLoadingStore;
 
   useLayoutEffect(() => {
     loadingProcess([
       setDefaultValue,
+      getIsCanChangeGtNickname,
     ]);
   }, [loadingProcess, setDefaultValue]);
 

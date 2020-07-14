@@ -5,6 +5,8 @@ const router = express.Router();
 const { info } = require('../../log-config');
 const Database = require('../../Database');
 
+const point = require('../../middleware/point');
+
 const SELECT_POST_ADVERTISE_LIST = `
   SELECT
       ID AS id
@@ -46,22 +48,6 @@ const SELECT_URL_VALIDATION = `
   WHERE ID = :URL;
 `;
 
-const INSERT_POINT = `
-  INSERT INTO GTC_USER_POINT (
-    USER_ID
-    , TARGET_ID
-    , TYPE_CD
-    , COST
-    , CRT_DTTM
-  ) VALUES (
-    :USER_ID
-    , :TARGET_ID
-    , ':TYPE_CD'
-    , :COST
-    , SYSDATE()
-  )
-`;
-
 router.post('/', (req, res) => {
   const {
     userId, message, url, hours, postId,
@@ -71,11 +57,11 @@ router.post('/', (req, res) => {
     (database) => database.query(
       SELECT_URL_VALIDATION,
       {
-        URL: postId,
+        URL: postId || null,
       },
     )
       .then((rows) => {
-        if (!rows[0].postId) {
+        if (rows.length !== 0 && !rows[0].postId) {
           return Promise.reject();
         }
         return database.query(
@@ -88,17 +74,12 @@ router.post('/', (req, res) => {
           },
         );
       })
-      .then(() => (
-        database.query(
-          INSERT_POINT,
-          {
-            TYPE_CD: 'ADVERTISE',
-            TARGET_ID: null,
-            COST: hours * 100,
-            USER_ID: userId,
-          },
-        )
-      ))
+      .then(() => {
+        point('custom', 'ADVERTISE', {
+          writer: userId,
+          cost: hours * -100,
+        });
+      })
       .then(() => {
         res.json({
           success: true,

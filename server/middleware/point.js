@@ -24,24 +24,44 @@ const INSERT_POINT = `
   )
 `;
 
+const UPDATE_USER_POINT = `
+  UPDATE GTC_USER
+    SET POINT = POINT + :COST
+    WHERE ID = :USER_ID
+`;
+
 module.exports = (action, type, data) => {
   const replyId = data.replyId ? `'${data.replyId}'` : null;
-  const cost = pointConfig[action];
+  const cost = action === 'custom' ? data.cost : pointConfig[action];
+
+  let target;
+
+  if (replyId) {
+    target = replyId;
+  } else if (data.bpId) {
+    target = data.bpId;
+  } else {
+    target = null;
+  }
 
   Database.execute(
     (database) => database.query(
       INSERT_POINT,
       {
         TYPE_CD: type,
-        POST_ID: data.bpId,
-        TARGET_ID: !replyId ? data.bpId : replyId,
+        POST_ID: data.bpId || null,
+        TARGET_ID: target,
         COST: cost,
         USER_ID: data.writer,
       },
     )
-      .then(() => {
-
-      }),
+      .then(() => database.query(
+        UPDATE_USER_POINT,
+        {
+          COST: cost,
+          USER_ID: data.writer,
+        },
+      )),
   ).then(() => {
     info('[INSERT, MIDDLEWARE POINT] 포인트 이벤트');
   });

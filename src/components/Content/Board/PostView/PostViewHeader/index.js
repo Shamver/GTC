@@ -3,14 +3,15 @@ import styled from 'styled-components';
 import { Col, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import useStores from '../../../../stores/useStores';
-import anonymous from '../../../../resources/images/anonymous.png';
+import useStores from '../../../../../stores/useStores';
+import anonymous from '../../../../../resources/images/anonymous.png';
+import WriterDropdown from './WriterDropdown';
 
-const PostViewHeader = () => {
+const Index = () => {
   const { BoardPostStore } = useStores();
   const { postView } = BoardPostStore;
   const {
-    board, boardName, categoryName, writerName, title,
+    board, boardName, categoryName, title, writerProfile,
   } = postView;
 
   const link = !!board && board.toLowerCase();
@@ -27,8 +28,8 @@ const PostViewHeader = () => {
           </Row>
         </CategoryAndTitle>
         <ProfileWrapper>
-          <b>{writerName}</b>님
-          <img src={anonymous} alt="프로필 사진" />
+          <WriterDropdown />
+          <img src={writerProfile || anonymous} alt="프로필 사진" />
         </ProfileWrapper>
       </div>
     </>
@@ -96,4 +97,4 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-export default memo(observer(PostViewHeader));
+export default memo(observer(Index));
