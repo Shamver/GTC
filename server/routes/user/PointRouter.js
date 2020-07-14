@@ -9,16 +9,22 @@ const SELECT_USER_POINT_LIST = `
   SELECT 
     @ROWNUM := @ROWNUM + 1 AS rn
     , (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_USER_POINT WHERE USER_ID = :USER_ID) AS pageCount
-    , ID AS id
-    , TARGET_ID AS postId
-    , TYPE_CD AS type
-    , COST AS point
-    , DATE_FORMAT(CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS date
+    , U.ID AS id
+    , U.TARGET_ID AS postId
+    , U.TYPE_CD AS type
+    , U.COST AS point
+    , CASE WHEN U.COST > 0
+        THEN CASE WHEN U.TYPE_CD = 'R01' THEN '글 작성'
+            ELSE '댓글 작성' END
+        ELSE CASE WHEN U.TYPE_CD = 'R01' THEN '글 삭제'
+            ELSE '댓글 삭제' END
+        END AS pointType
+    , DATE_FORMAT(U.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS date
   FROM 
-    GTC_USER_POINT
+    GTC_USER_POINT AS U
     , (SELECT @ROWNUM := :ROWNUM) AS TEMP
-  WHERE USER_ID = :USER_ID
-  ORDER BY CRT_DTTM DESC
+  WHERE U.USER_ID = :USER_ID
+  ORDER BY U.CRT_DTTM DESC
   LIMIT :ROWNUM, :MAX_COUNT
 `;
 

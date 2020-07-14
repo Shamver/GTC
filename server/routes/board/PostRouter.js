@@ -523,7 +523,7 @@ router.post('/', authMiddleware, (req, res) => {
           bpId: rows[0].id,
         };
 
-        point('addPost', 'POST', postData);
+        point('addPost', 'R01', postData);
         res.json({
           success: true,
           code: 1,
@@ -596,7 +596,7 @@ router.delete('/', authMiddleware, (req, res) => {
       },
     )
       .then(() => {
-        point('deletePost', 'POST', {
+        point('deletePost', 'R01', {
           bpId: data.id,
           writer: data.writer,
         });

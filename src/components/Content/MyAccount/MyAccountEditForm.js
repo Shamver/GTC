@@ -8,13 +8,20 @@ import avatarImg from '../../../resources/images/anonymous.png';
 import useStores from '../../../stores/useStores';
 
 const MyAccountEditForm = () => {
-  const { ComponentMyAccountStore } = useStores();
+  const { ComponentMyAccountStore, SystemCodeStore } = useStores();
+  const { getCodeComponent } = SystemCodeStore;
   const {
-    profileYN, onChangeProfile, gender, nickname, birth,
+    profileYN, onChangeProfile, gender, nickname, birth, setUserGenderCodeList, userGenderCodeList,
     onChangeValue, nicknameValidation, birthValidation, genderValidation,
     profile, onChangeProfileImage, uploadImagePreview, gtName, gtNicknameValidation,
     isCanChangeGtNickname,
   } = ComponentMyAccountStore;
+
+  const GenderCode = userGenderCodeList.map((data) => (
+    <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
+  ));
+
+  getCodeComponent('GENDER_CODE', setUserGenderCodeList);
 
   return (
     <Col xs="12" sm="6">
@@ -44,9 +51,7 @@ const MyAccountEditForm = () => {
               <AccentText>{!genderValidation.status && `❌${genderValidation.message}`}</AccentText>
             </FormTextLeft>
             <FormSelect type="select" name="gender" value={gender} onChange={onChangeValue}>
-              <option value="">성별 선택</option>
-              <option value="M">남자</option>
-              <option value="F">여자</option>
+              {GenderCode}
             </FormSelect>
             <FormSwitch>
               {profileYN
