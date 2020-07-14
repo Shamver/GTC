@@ -35,7 +35,10 @@ const WriterDropdown = ({
         {!(!userData || userData.id === writerId) && (
           <WriterDropdownItem onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(writerId))}>
             차단하기
-          </WriterDropdownItem>
+          </WriterDropdownItem>,
+            <WriterDropdownItem onClick={() => toggleReport(writerId, 'RT03', '', writerName)}>
+              신고하기
+            </WriterDropdownItem>
         )}
       </WriterDropdownMenu>
     </WriterDropdownIn>

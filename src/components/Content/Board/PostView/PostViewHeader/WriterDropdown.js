@@ -3,16 +3,16 @@ import styled from 'styled-components';
 import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
 } from 'reactstrap';
-import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 
 const WriterDropdown = () => {
   const {
     ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
-    BoardPostStore,
+    BoardPostStore, BoardReportStore,
   } = useStores();
   const { postView } = BoardPostStore;
+  const { toggleReport } = BoardReportStore;
   const { writerId, writerName } = postView;
   const { dropdown, onActive, onSet } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
@@ -32,7 +32,10 @@ const WriterDropdown = () => {
         {!(!userData || userData.id === writerId) && (
           <WriterDropdownItem onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(writerId))}>
             차단하기
-          </WriterDropdownItem>
+          </WriterDropdownItem>,
+            <WriterDropdownItem onClick={() => toggleReport(writerId, 'RT03', '', writerName)}>
+              신고하기
+            </WriterDropdownItem>
         )}
       </WriterDropdownMenu>
     </WriterDropdownIn>

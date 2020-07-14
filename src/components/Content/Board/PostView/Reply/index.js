@@ -63,7 +63,10 @@ const Reply = ({ data, index }) => {
                     onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(data.idWriter))}
                   >
                     차단하기
-                  </WriterDropdownItem>
+                  </WriterDropdownItem>,
+                    <WriterDropdownItem onClick={() => toggleReport(userData.id, 'RT03', '', data.writer)}>
+                      신고하기
+                    </WriterDropdownItem>
                 )}
               </WriterDropdownMenu>
             </WriterDropdown>
@@ -89,7 +92,7 @@ const Reply = ({ data, index }) => {
                 &nbsp;·&nbsp;
                 { data.updateDate ? data.updateDate : data.date}
                 &nbsp;
-                { userData.id === data.idWriter ? '' : (<SpanLikeLink onClick={() => toggleReport(data.id, 'P02', renderHTML(`${data.content}`), data.writer)}>·&nbsp;신고 #</SpanLikeLink>)}
+                { userData.id === data.idWriter ? '' : (<SpanLikeLink onClick={() => toggleReport(data.id, 'RT02', renderHTML(`${data.content}`), data.writer)}>·&nbsp;신고 #</SpanLikeLink>)}
               </>
             ) : (<>{data.updateDate ? data.updateDate : data.date}</>)}
           </span>

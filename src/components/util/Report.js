@@ -31,7 +31,7 @@ const Report = () => {
               <td>{writer}</td>
             </tr>
             <tr>
-              <th>{type === 'P01' ? '제목' : '댓글'}</th>
+              <th>{type === 'RT01' ? '제목' : '댓글'}</th>
               <td>{content}</td>
             </tr>
           </tbody>
