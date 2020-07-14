@@ -6,8 +6,7 @@ import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import MyPointContent from './MyPointContent';
 
-const MyPoint = (props) => {
-  const { match, parentProps } = props;
+const MyPoint = ({ match, parentProps }) => {
   const { UtilLoadingStore, UserPointStore } = useStores();
   const { loadingProcess } = UtilLoadingStore;
   const { getPoint } = UserPointStore;

@@ -15,6 +15,8 @@ const SwitchList = () => {
 
   return (
     <Switch>
+      <AuthRouter exact Component={Contents.Home} level={0} path="/" />
+
       <AuthRouter exact Component={Contents.Mail} level={1} path="/mail" />
       <AuthRouter exact Component={Contents.PostLocker} level={1} path="/postlocker" />
       <AuthRouter exact Component={Contents.Setting} level={1} path="/setting" />
@@ -22,9 +24,7 @@ const SwitchList = () => {
       <AuthRouter exact Component={Contents.MyAccount} level={1} path="/myaccount" />
       <AuthRouter exact Component={Contents.Daily} level={1} path="/daily" />
       <AuthRouter exact Component={Contents.Advertise} level={1} path="/advertise" />
-      <AuthRouter exact Component={Contents.Code} level={3} path="/code" />
-      <AuthRouter exact Component={Contents.Test} level={3} path="/test" />
-      <AuthRouter exact Component={Contents.Home} level={0} path="/" />
+      <AuthRouter exact Component={Contents.PostView} level={1} path="/post/:id" />
 
       {/* --------------------------- Pointer Router Component --------------------------- */}
       <AuthRouter exact={false} Component={Router.PointRouter} level={1} path="/mypoint" />
@@ -35,30 +35,9 @@ const SwitchList = () => {
       {/* ---------------------------- Board Router Component ---------------------------- */}
       <AuthRouter exact={false} Component={Router.BoardRouter} level={0} path="/:board" />
 
-      {/*
-        <Route exact path="/:board" render={({ match, location }) => <Contents.Board
-        path={match.params.board}
-        location={location} />} />
-        <Route exact path="/:board/page/:currentPage" render={({ match, location }) =>
-        <Contents.Board path={match.params.board}
-        isPagination currentPage={match.params.currentPage} location={location} />} />
+      <AuthRouter exact Component={Contents.Code} level={3} path="/code" />
+      <AuthRouter exact Component={Contents.Test} level={3} path="/test" />
 
-        { RouterAuthCheck(0) ? (
-          <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
-        ) : null }
-
-        { RouterAuthCheck(0) ? (
-          <Route exact path="/:board/modify/:id" render={({ match }) => <Posting
-          match={match}
-          isModify />} />
-        ) : null }
-
-        { RouterAuthCheck(0) ? (
-          <Route exact path="/post/:id" render={({ match, location }) => <Contents.PostView
-          match={match}
-          location={location} />} />
-        ) : null }
-      */}
     </Switch>
   );
 };

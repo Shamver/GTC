@@ -8,15 +8,16 @@ import BoardContent from './BoardContent';
 import BoardFooter from './BoardFooter';
 import useStores from '../../../stores/useStores';
 
-const Board = ({
-  path, currentPage, isPagination, location,
-}) => {
-  const {
-    BoardPostStore, UtilLoadingStore, BoardStore,
-  } = useStores();
-  const {
-    setClearPostView, getBoardPostNoticeList, getBoardPostList,
-  } = BoardPostStore;
+const Board = ({ parentProps, location, match }) => {
+  const { BoardPostStore, UtilLoadingStore, BoardStore } = useStores();
+  const { params } = match;
+  const { path } = params;
+  let { isPagination } = parentProps;
+  let { currentPage } = params;
+  isPagination = !!isPagination;
+  currentPage = currentPage || '1';
+
+  const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
   const {
     setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage,
@@ -54,17 +55,18 @@ const Board = ({
 };
 
 Board.propTypes = {
-  path: Proptypes.string.isRequired,
-  currentPage: Proptypes.string,
-  isPagination: Proptypes.bool,
+  match: Proptypes.shape({
+    params: Proptypes.shape({
+      path: Proptypes.string,
+      currentPage: Proptypes.string,
+    }).isRequired,
+  }).isRequired,
+  parentProps: Proptypes.shape({
+    isPagination: Proptypes.bool,
+  }).isRequired,
   location: Proptypes.shape({
     search: Proptypes.string,
   }).isRequired,
-};
-
-Board.defaultProps = {
-  currentPage: '1',
-  isPagination: false,
 };
 
 const BoardWrapper = styled.div`
