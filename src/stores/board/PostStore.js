@@ -513,12 +513,13 @@ class PostStore {
     this.post.board = board.toUpperCase();
   };
 
-  @action getPostMine = async () => {
+  @action getPostMine = async (currentPage) => {
     const { userData } = this.root.UserStore;
 
     await axios.get('/api/board/post/mine', {
       params: {
         userId: userData.id,
+        currentPage,
       },
     })
       .then((response) => {
@@ -536,7 +537,7 @@ class PostStore {
       .catch((response) => {
         toast.error(response.message);
       });
-  }
+  };
 
   @action getEmbedMedia = async () => {
     await axios.get('iframe.ly/api/oembed?url=https://www.youtube.com/watch?v=iMTblJbmam4&api_key=0037428c3f77431216045c')

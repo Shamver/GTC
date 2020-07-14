@@ -5,10 +5,12 @@ import {
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
+import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import PostLockerMyPostTable from './PostLockerMyPostTable';
+import Pagination from './Pagination';
 
-const PostLockerMyPost = () => {
+const PostLockerMyPost = ({ currentPage, noPagination, currentTab }) => {
   const { BoardPostStore } = useStores();
   const { postMineList } = BoardPostStore;
   const MyPostTableData = postMineList.map(
@@ -36,8 +38,25 @@ const PostLockerMyPost = () => {
           ) : MyPostTableData}
         </tbody>
       </ListTable>
+      <Pagination
+        currentPage={currentPage}
+        noPagination={noPagination}
+        path={currentTab}
+      />
     </TabPane>
   );
+};
+
+PostLockerMyPost.propTypes = {
+  currentPage: Proptypes.string,
+  currentTab: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+PostLockerMyPost.defaultProps = {
+  currentPage: '1',
+  currentTab: 'myPost',
+  noPagination: false,
 };
 
 const TableTh = styled.th`

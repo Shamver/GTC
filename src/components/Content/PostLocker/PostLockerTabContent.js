@@ -8,9 +8,21 @@ import PostLockerFavorite from './PostLockerFavorite';
 
 const PostLockerTabContent = ({ currentPage, noPagination, currentTab }) => (
   <TabContent activeTab={currentTab}>
-    <PostLockerMyPost currentPage={currentPage} noPagination={noPagination} />
-    <PostLockerMyReply currentPage={currentPage} noPagination={noPagination} />
-    <PostLockerFavorite currentPage={currentPage} noPagination={noPagination} />
+    <PostLockerMyPost
+      currentPage={currentPage}
+      noPagination={noPagination}
+      currentTab={currentTab}
+    />
+    <PostLockerMyReply
+      currentPage={currentPage}
+      noPagination={noPagination}
+      currentTab={currentTab}
+    />
+    <PostLockerFavorite
+      currentPage={currentPage}
+      noPagination={noPagination}
+      currentTab={currentTab}
+    />
   </TabContent>
 );
 
