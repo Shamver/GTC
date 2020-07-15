@@ -16,6 +16,8 @@ class ReplyStore {
 
   @observable replyMineList = [];
 
+  @observable replyMineMaxPage = 0;
+
   @observable CurrentReplyOption = {
     commentAllowFl: '',
     secretCommentAllowFl: '',
@@ -25,12 +27,13 @@ class ReplyStore {
     this.root = root;
   }
 
-  @action getDataReplyMine = async () => {
+  @action getDataReplyMine = async (currentPage) => {
     const { userData } = this.root.UserStore;
 
     await axios.get('/api/board/reply/mine', {
       params: {
         userId: userData.id,
+        currentPage,
       },
     })
       .then((response) => {
@@ -38,6 +41,12 @@ class ReplyStore {
         if (data.success) {
           if (data.code === 1) {
             this.replyMineList = data.result;
+            if (data.result.length === 0) {
+              this.replyMineMaxPage = 0;
+            } else {
+              const { pageCount } = data.result[0];
+              this.replyMineMaxPage = pageCount;
+            }
           } else {
             toast.info(data.message);
           }

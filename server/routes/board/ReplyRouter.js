@@ -111,17 +111,24 @@ const SELECT_POST_COMMENT = `
 
 const SELECT_MY_POST = `
   SELECT 
-    GBP.ID AS postId
+    @ROWNUM := @ROWNUM+1 AS rn
+    , GBP.ID AS postId
     , GBP.TITLE AS postTitle
     , GBR.ID AS replyId
     , GBR.CONTENT AS replyContent
     , DATE_FORMAT(GBR.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS replyDate
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST GBP 
+    LEFT JOIN GTC_COMMENT GBR
+    ON GBP.ID = GBR.POST_ID WHERE GBR.USER_ID = :USER_ID
+      ) AS pageCount
   FROM 
     GTC_POST GBP 
     LEFT JOIN GTC_COMMENT GBR
     ON GBP.ID = GBR.POST_ID
+    , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
   WHERE GBR.USER_ID = :USER_ID
   ORDER BY GBR.CRT_DTTM DESC
+  LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
 
 const SELECT_COMMENT_LIKE_DUPLICATE_CHECK = `
@@ -333,13 +340,15 @@ router.post('/like', authMiddleware, (req, res) => {
 
 // 줄 길어지는거나 도배한거 어떻게 하냐.. 처리해야함.
 router.get('/mine', authMiddleware, (req, res) => {
-  const { userId } = req.query;
+  const { userId, currentPage } = req.query;
 
   Database.execute(
     (database) => database.query(
       SELECT_MY_POST,
       {
         USER_ID: userId,
+        CURRENT_PAGE: ((currentPage - 1) * 25),
+        PER_PAGE: 25,
       },
     )
       .then((rows) => {
