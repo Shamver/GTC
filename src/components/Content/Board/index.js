@@ -11,7 +11,8 @@ import useStores from '../../../stores/useStores';
 const Board = ({ parentProps, location, match }) => {
   const { BoardPostStore, UtilLoadingStore, BoardStore } = useStores();
   const { params } = match;
-  const { path } = params;
+  const { board } = params;
+
   let { isPagination } = parentProps;
   let { currentPage } = params;
   isPagination = !!isPagination;
@@ -28,17 +29,17 @@ const Board = ({ parentProps, location, match }) => {
   // 차단목록?
   useLayoutEffect(() => {
     loadingProcess([
-      () => boardPathCheck(path),
-      () => setCurrentBoardPath(path),
+      () => boardPathCheck(board),
+      () => setCurrentBoardPath(board),
       () => judgeFilterMode(query),
       () => setCurrentBoardPage(currentPage),
       () => setIsPagination(isPagination),
-      () => getBoardPostNoticeList(path, currentPage),
-      () => getBoardPostList(path, currentPage),
+      () => getBoardPostNoticeList(board, currentPage),
+      () => getBoardPostList(board, currentPage),
       setClearPostView,
     ]);
   }, [
-    loadingProcess, setCurrentBoardPath, path, judgeFilterMode,
+    loadingProcess, setCurrentBoardPath, board, judgeFilterMode,
     query, setCurrentBoardPage, currentPage, setIsPagination, isPagination,
     getBoardPostNoticeList, getBoardPostList, setClearPostView, boardPathCheck,
   ]);
@@ -57,7 +58,7 @@ const Board = ({ parentProps, location, match }) => {
 Board.propTypes = {
   match: Proptypes.shape({
     params: Proptypes.shape({
-      path: Proptypes.string,
+      board: Proptypes.string,
       currentPage: Proptypes.string,
     }).isRequired,
   }).isRequired,
