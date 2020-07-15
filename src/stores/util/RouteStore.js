@@ -14,6 +14,7 @@ class RouteStore {
   @action goBack = () => {
     this.history.goBack();
   };
+
 }
 
 export default RouteStore;

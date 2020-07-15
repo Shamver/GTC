@@ -1,89 +1,43 @@
-import React, { useEffect, lazy, memo } from 'react';
-import { Route, Switch } from 'react-router';
+import React, { useEffect, memo } from 'react';
+import { Switch } from 'react-router';
 import { observer } from 'mobx-react';
 import Contents from '../../Content';
 import useStores from '../../../stores/useStores';
-
-const Home = lazy(() => import('../../Content/Home'));
-const Posting = lazy(() => import('../../Content/Board/Posting'));
+import AuthRouter from './AuthRouter';
+import Router from './Router';
 
 const SwitchList = () => {
   const { UserStore } = useStores();
-  const { checkPermission, userData } = UserStore;
+  const { userData } = UserStore;
 
   useEffect(() => {
   }, [userData]);
 
   return (
     <Switch>
-      { checkPermission(0) ? (
-        <Route exact path="/mail" render={() => <Contents.Mail />} />
-      ) : null }
+      <AuthRouter exact Component={Contents.Home} level={0} path="/" />
 
-      { checkPermission(0) ? (
-        <Route exact path="/postlocker" render={() => <Contents.PostLocker />} />
-      ) : null }
+      <AuthRouter exact Component={Contents.Mail} level={1} path="/mail" />
+      <AuthRouter exact Component={Contents.PostLocker} level={1} path="/postlocker" />
+      <AuthRouter exact Component={Contents.Setting} level={1} path="/setting" />
+      <AuthRouter exact Component={Contents.NewAlert} level={1} path="/newalert" />
+      <AuthRouter exact Component={Contents.MyAccount} level={1} path="/myaccount" />
+      <AuthRouter exact Component={Contents.Daily} level={1} path="/daily" />
+      <AuthRouter exact Component={Contents.Advertise} level={1} path="/advertise" />
+      <AuthRouter exact Component={Contents.PostView} level={1} path="/post/:id" />
 
-      { checkPermission(0) ? (
-        <Route exact path="/setting" render={() => <Contents.Setting />} />
-      ) : null }
+      {/* --------------------------- Pointer Router Component --------------------------- */}
+      <AuthRouter exact={false} Component={Router.PointRouter} level={1} path="/mypoint" />
 
-      { checkPermission(0) ? (
-        <Route exact path="/newalert" render={() => <Contents.NewAlert />} />
-      ) : null }
+      {/* ---------------------------- Search Router Component --------------------------- */}
+      <AuthRouter exact={false} Component={Router.SearchRouter} level={1} path="/search" />
 
-      { checkPermission(0) ? (
-        <Route exact path="/myaccount" render={() => <Contents.MyAccount />} />
-      ) : null }
+      {/* ---------------------------- Board Router Component ---------------------------- */}
+      <AuthRouter exact={false} Component={Router.BoardRouter} level={0} path="/:board" />
 
-      { checkPermission(0) ? (
-        <Route exact path="/mypoint" render={() => <Contents.MyPoint noPagination />} />
-      ) : null }
+      <AuthRouter exact Component={Contents.Code} level={3} path="/code" />
+      <AuthRouter exact Component={Contents.Test} level={3} path="/test" />
 
-      { checkPermission(0) ? (
-        <Route exact path="/mypoint/page/:currentPage" render={({ match }) => <Contents.MyPoint currentPage={match.params.currentPage} />} />
-      ) : null }
-
-      { checkPermission(0) ? (
-        <Route exact path="/daily" render={() => <Contents.Daily />} />
-      ) : null }
-
-      { checkPermission(0) ? (
-        <Route exact path="/advertise" render={() => <Contents.Advertise />} />
-      ) : null }
-
-      { checkPermission(2) ? (
-        <Route exact path="/code" render={() => <Contents.Code />} />
-      ) : null }
-
-      { checkPermission(0) ? (
-        <Route exact path="/search" render={({ location }) => <Contents.Search location={location} />} />
-      ) : null }
-
-      { checkPermission(0) ? (
-        <Route exact path="/search/page/:currentPage" render={({ match, location }) => <Contents.Search currentPage={match.params.currentPage} isPagination location={location} />} />
-      ) : null }
-
-      <Route exact path="/" render={() => <Home />} />
-
-      {/* ------------------------------- Test Component ------------------------------- */}
-      <Route exact path="/test" render={() => <Contents.Test />} />
-
-      {/* ------------------------------- BOARD ------------------------------- */}
-      <Route exact path="/:board" render={({ match, location }) => <Contents.Board path={match.params.board} location={location} />} />
-      <Route exact path="/:board/page/:currentPage" render={({ match, location }) => <Contents.Board path={match.params.board} isPagination currentPage={match.params.currentPage} location={location} />} />
-
-      { checkPermission(0) ? (
-        <Route exact path="/post/:id" render={({ match, location }) => <Contents.PostView match={match} location={location} />} />
-      ) : null }
-
-      { checkPermission(0) ? (
-        <Route exact path="/:board/post" render={({ match }) => <Posting match={match} />} />
-      ) : null }
-
-      { checkPermission(0) ? (
-        <Route exact path="/:board/modify/:id" render={({ match }) => <Posting match={match} isModify />} />
-      ) : null }
     </Switch>
   );
 };

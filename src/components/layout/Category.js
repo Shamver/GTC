@@ -1,11 +1,9 @@
 import React, { useEffect, memo } from 'react';
 import styled from 'styled-components';
+import { Container, Row } from 'reactstrap';
 import {
-  Container, Row,
-} from 'reactstrap';
-import {
-  faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock, faQuestion, faComments, faAt,
-  faExclamationTriangle, faCode,
+  faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock,
+  faComments, faCode,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
@@ -14,7 +12,7 @@ import useStores from '../../stores/useStores';
 
 const Category = () => {
   const { UserStore, BoardPostStore } = useStores();
-  const { userData, checkPermission } = UserStore;
+  const { userData, RouterAuthCheck } = UserStore;
   const { searchOff } = BoardPostStore;
 
   useEffect(() => {
@@ -76,7 +74,7 @@ const Category = () => {
           </MenuDiv>
         </MenuLink>
         */}
-        { checkPermission(2) && (
+        { RouterAuthCheck(2) && (
           <MenuLink to="/code" activeClassName="active">
             <MenuDiv>
               <FaiPink icon={faCode} className="fa-fw" />&nbsp;&nbsp; 코드 관리

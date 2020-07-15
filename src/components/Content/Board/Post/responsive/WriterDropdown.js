@@ -59,7 +59,6 @@ const WriterDropdownIn = styled(Dropdown)`
   display : block;
   line-height : normal;
 
-  
   & .dropdown-item:active {
     color: #fff !important;
     text-decoration: none !important;

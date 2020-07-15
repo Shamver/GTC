@@ -146,15 +146,18 @@ class UserStore {
     return true;
   };
 
-  @action checkPermission = (level) => {
-    // level 0: 사용자, level 1: 운영자, level2: 관리자
+  @action RouterAuthCheck = (level) => {
+    // 0: 비회원, 1: 회원, 2: 운영자, 3:관리자
     if (level === 0) {
-      return this.userData;
+      return true;
     }
     if (level === 1) {
-      return (this.userData && this.userData.operatorYN === 1);
+      return this.userData;
     }
     if (level === 2) {
+      return (this.userData && this.userData.operatorYN === 1);
+    }
+    if (level === 3) {
       return (this.userData && this.userData.adminYN === 1);
     }
     return false;

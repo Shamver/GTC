@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
 } from 'reactstrap';
-import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 
