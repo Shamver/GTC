@@ -5,12 +5,14 @@ import {
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
+import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import PostLockerMyReplyTable from './PostLockerMyReplyTable';
+import Pagination from './Pagination';
 
-const PostLockerMyReply = () => {
+const PostLockerMyReply = ({ currentPage, noPagination, currentTab }) => {
   const { BoardReplyStore } = useStores();
-  const { replyMineList } = BoardReplyStore;
+  const { replyMineList, replyMineMaxPage } = BoardReplyStore;
   const MyReplyTableData = replyMineList.map(
     (v) => <PostLockerMyReplyTable data={v} key={v.replyId} />,
   );
@@ -33,6 +35,12 @@ const PostLockerMyReply = () => {
           ) : MyReplyTableData}
         </tbody>
       </ListTable>
+      <Pagination
+        currentPage={currentPage}
+        noPagination={noPagination}
+        path={currentTab}
+        maxPage={replyMineMaxPage}
+      />
     </TabPane>
   );
 };
@@ -53,5 +61,17 @@ const TableTd = styled.td`
 const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
+
+PostLockerMyReply.propTypes = {
+  currentPage: Proptypes.string,
+  currentTab: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+PostLockerMyReply.defaultProps = {
+  currentPage: '1',
+  currentTab: 'myPost',
+  noPagination: false,
+};
 
 export default observer(PostLockerMyReply);

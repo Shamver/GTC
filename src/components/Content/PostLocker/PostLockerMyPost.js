@@ -48,18 +48,6 @@ const PostLockerMyPost = ({ currentPage, noPagination, currentTab }) => {
   );
 };
 
-PostLockerMyPost.propTypes = {
-  currentPage: Proptypes.string,
-  currentTab: Proptypes.string,
-  noPagination: Proptypes.bool,
-};
-
-PostLockerMyPost.defaultProps = {
-  currentPage: '1',
-  currentTab: 'myPost',
-  noPagination: false,
-};
-
 const TableTh = styled.th`
   vertical-align: middle !important;
   width: ${(props) => props.width}%;
@@ -75,5 +63,17 @@ const TableTd = styled.td`
 const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
+
+PostLockerMyPost.propTypes = {
+  currentPage: Proptypes.string,
+  currentTab: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+PostLockerMyPost.defaultProps = {
+  currentPage: '1',
+  currentTab: 'myPost',
+  noPagination: false,
+};
 
 export default memo(observer(PostLockerMyPost));

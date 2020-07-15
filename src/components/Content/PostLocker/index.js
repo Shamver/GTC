@@ -21,7 +21,7 @@ const PostLocker = ({ currentPage, noPagination, currentTab }) => {
   useLayoutEffect(() => {
     loadingProcess([
       () => getPostMine(currentPage),
-      getDataReplyMine,
+      () => getDataReplyMine(currentPage),
       getFavorite,
     ]);
   }, [
