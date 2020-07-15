@@ -20,7 +20,7 @@ const ReportDetail = () => {
     targetContents, typeCode, targetContentsId, targetUserName, targetUserId,
   } = reportDetailData;
   const { description } = reportData;
-  const ContentText = typeCode === 'P02' ? renderHTML(`${targetContents}`) : targetContents;
+  const ContentText = typeCode === 'RT02' ? renderHTML(`${targetContents}`) : targetContents;
 
   return (
     <Modal isOpen={reportDetailToggle} toggle={toggleDetailReport}>
@@ -49,13 +49,16 @@ const ReportDetail = () => {
               <ReportInfoDesc>{targetUserName}</ReportInfoDesc>
             </Flex1>
           </ReportInfoRow>
-          <ReportInfoRow2>
-            <ReportInfoLabel>{typeCode === 'P01' ? '게시글' : '댓글'}</ReportInfoLabel>
-            <ReportInfoLink to={typeCode === 'P01' ? `/post/${targetContentsLink}` : `/post/${targetContentsLink}#${targetContentsId}`} onClick={toggleDetailReport}>
-              {ContentText}
-              <InlineLink>&gt;</InlineLink>
-            </ReportInfoLink>
-          </ReportInfoRow2>
+          {typeCode === 'RT03' ? ''
+            : (
+              <ReportInfoRow2>
+                <ReportInfoLabel>{typeCode === 'RT01' ? '게시글' : '댓글'}</ReportInfoLabel>
+                <ReportInfoLink to={typeCode === 'RT01' ? `/post/${targetContentsLink}` : `/post/${targetContentsLink}#${targetContentsId}`} onClick={toggleDetailReport}>
+                  {ContentText}
+                  <InlineLink>&gt;</InlineLink>
+                </ReportInfoLink>
+              </ReportInfoRow2>
+            )}
           <ReportInfoRow2>
             <ReportInfoLabel>상세 사유</ReportInfoLabel>
             <ReportInfoDesc>{reasonDetail}</ReportInfoDesc>
