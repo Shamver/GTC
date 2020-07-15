@@ -56,6 +56,8 @@ class PostStore {
 
   @observable postMineList = [];
 
+  @observable postMineMaxPage = 0;
+
   @observable currentPostUpperLower = {
     upper: '',
     lower: '',
@@ -527,6 +529,12 @@ class PostStore {
         if (data.success) {
           if (data.code === 1) {
             this.postMineList = data.result;
+            if (data.result.length === 0) {
+              this.postMineMaxPage = 0;
+            } else {
+              const { pageCount } = data.result[0];
+              this.postMineMaxPage = pageCount;
+            }
           } else {
             toast.info(data.message);
           }

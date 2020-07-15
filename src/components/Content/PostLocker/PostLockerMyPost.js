@@ -12,7 +12,7 @@ import Pagination from './Pagination';
 
 const PostLockerMyPost = ({ currentPage, noPagination, currentTab }) => {
   const { BoardPostStore } = useStores();
-  const { postMineList } = BoardPostStore;
+  const { postMineList, postMineMaxPage } = BoardPostStore;
   const MyPostTableData = postMineList.map(
     (v) => <PostLockerMyPostTable data={v} key={v.postId} />,
   );
@@ -42,6 +42,7 @@ const PostLockerMyPost = ({ currentPage, noPagination, currentTab }) => {
         currentPage={currentPage}
         noPagination={noPagination}
         path={currentTab}
+        maxPage={postMineMaxPage}
       />
     </TabPane>
   );

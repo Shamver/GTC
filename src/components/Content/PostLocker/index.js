@@ -9,14 +9,13 @@ import PostLockerTabContent from './PostLockerTabContent';
 
 const PostLocker = ({ currentPage, noPagination, currentTab }) => {
   const {
-    BoardPostStore, BoardReplyStore, UserFavoriteStore, ComponentPostLockerStore,
+    BoardPostStore, BoardReplyStore, UserFavoriteStore,
     UtilLoadingStore,
   } = useStores();
 
   const { getPostMine } = BoardPostStore;
   const { getDataReplyMine } = BoardReplyStore;
   const { getFavorite } = UserFavoriteStore;
-  const { activeTab } = ComponentPostLockerStore;
   const { loadingProcess } = UtilLoadingStore;
 
   useLayoutEffect(() => {
@@ -26,7 +25,7 @@ const PostLocker = ({ currentPage, noPagination, currentTab }) => {
       getFavorite,
     ]);
   }, [
-    loadingProcess, getDataReplyMine, getPostMine, getFavorite, activeTab,
+    loadingProcess, getDataReplyMine, getPostMine, getFavorite, currentTab, currentPage,
   ]);
 
   return (
