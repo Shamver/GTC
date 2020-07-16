@@ -6,6 +6,7 @@ import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
+import CodeFlag from './CodeFlag';
 
 const CodeRow = ({ data }) => {
   const { SystemCodeStore, UtilAlertStore } = useStores();
@@ -37,8 +38,7 @@ const CodeRow = ({ data }) => {
         </td>
         <td>
           <Input type="select" bsSize="sm" onChange={onChangeCode} name="useYN" value={useYN}>
-            <option value={1}>Y</option>
-            <option value={0}>N</option>
+            <CodeFlag />
           </Input>
         </td>
         <CenterPaddingEditTd>
@@ -72,7 +72,7 @@ const CodeRow = ({ data }) => {
       <td>{codeName}</td>
       <CenterTd>{codeOrder}</CenterTd>
       <td>{codeDesc}</td>
-      <CenterTd>{codeUseYN ? '사용' : '미사용'}</CenterTd>
+      <CenterTd>{codeUseYN}</CenterTd>
       <CenterPaddingTd>
         <Button
           size="sm"

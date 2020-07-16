@@ -74,7 +74,7 @@ const Category = () => {
           </MenuDiv>
         </MenuLink>
         */}
-        { RouterAuthCheck(2) && (
+        { RouterAuthCheck(3) && (
           <MenuLink to="/code" activeClassName="active">
             <MenuDiv>
               <FaiPink icon={faCode} className="fa-fw" />&nbsp;&nbsp; 코드 관리

@@ -14,12 +14,13 @@ const Code = () => {
   const { SystemCodeStore, UtilLoadingStore } = useStores();
   const {
     isAddCodeGroup, setIsAddCodeGroup, setIsAddCode, isAddCode,
-    getCodeGroupList,
+    getCodeGroupList, getCodeComponent,
   } = SystemCodeStore;
   const { loadingProcess } = UtilLoadingStore;
 
   useLayoutEffect(() => {
     loadingProcess([
+      () => getCodeComponent('YN_FLAG'),
       getCodeGroupList,
     ]);
   }, [loadingProcess, getCodeGroupList]);

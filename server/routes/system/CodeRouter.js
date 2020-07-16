@@ -67,7 +67,7 @@ const SELECT_CODE = `
     , NAME AS codeName
     , \`DESC\` AS codeDesc
     , CAST(\`ORDER\` AS CHAR) AS codeOrder
-    , USE_FL AS useYN
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = USE_FL) AS useYN
   FROM GTC_CODE
   WHERE CODEGROUP_ID = ':CODEGROUP_ID'
 `;

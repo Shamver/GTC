@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { faTimesCircle, faSave } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useStores from '../../../stores/useStores';
+import CodeFlag from './CodeFlag';
 
 const NewCodeRow = () => {
   const { SystemCodeStore } = useStores();
@@ -14,6 +15,7 @@ const NewCodeRow = () => {
   const {
     id, name, desc, order, useYN,
   } = code;
+
   return (
     <tr>
       <td>
@@ -30,8 +32,7 @@ const NewCodeRow = () => {
       </td>
       <td>
         <Input type="select" bsSize="sm" onChange={onChangeCode} name="useYN" value={useYN}>
-          <option value={1}>Y</option>
-          <option value={0}>N</option>
+          <CodeFlag />
         </Input>
       </td>
       <CenterPaddingTd>
