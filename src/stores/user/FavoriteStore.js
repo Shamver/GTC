@@ -5,6 +5,10 @@ import { toast } from 'react-toastify';
 class FavoriteStore {
   @observable favoriteList = [];
 
+  @observable myFavoriteList = [];
+
+  @observable favoriteMaxPage = 0;
+
   constructor(root) {
     this.root = root;
   }
@@ -15,6 +19,33 @@ class FavoriteStore {
     await axios.get('/api/user/favorite', {
       params: {
         userId: userData.id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.favoriteList = data.result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          this.favoriteList = [];
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        toast.error(response.message);
+      });
+  };
+
+  @action getMyFavorite = async (currentPage) => {
+    const { userData } = this.root.UserStore;
+
+    await axios.get('/api/user/favorite/mine', {
+      params: {
+        userId: userData.id,
+        currentPage,
       },
     })
       .then((response) => {
