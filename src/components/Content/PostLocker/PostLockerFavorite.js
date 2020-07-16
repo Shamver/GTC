@@ -39,12 +39,15 @@ const PostLockerFavorite = ({ currentPage, noPagination, currentTab }) => {
           ) : FavoriteTableData}
         </tbody>
       </ListTable>
-      <Pagination
-        currentPage={currentPage}
-        noPagination={noPagination}
-        path={currentTab}
-        maxPage={favoriteMaxPage}
-      />
+      {favoriteMaxPage !== 0
+        ? (
+          <Pagination
+            currentPage={currentPage}
+            noPagination={noPagination}
+            path={currentTab}
+            maxPage={favoriteMaxPage}
+          />
+        ) : null}
     </TabPane>
   );
 };

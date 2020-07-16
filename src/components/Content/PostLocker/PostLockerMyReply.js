@@ -35,12 +35,15 @@ const PostLockerMyReply = ({ currentPage, noPagination, currentTab }) => {
           ) : MyReplyTableData}
         </tbody>
       </ListTable>
-      <Pagination
-        currentPage={currentPage}
-        noPagination={noPagination}
-        path={currentTab}
-        maxPage={replyMineMaxPage}
-      />
+      {replyMineMaxPage !== 0
+        ? (
+          <Pagination
+            currentPage={currentPage}
+            noPagination={noPagination}
+            path={currentTab}
+            maxPage={replyMineMaxPage}
+          />
+        ) : null}
     </TabPane>
   );
 };

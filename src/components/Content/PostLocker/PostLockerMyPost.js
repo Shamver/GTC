@@ -38,12 +38,15 @@ const PostLockerMyPost = ({ currentPage, noPagination, currentTab }) => {
           ) : MyPostTableData}
         </tbody>
       </ListTable>
-      <Pagination
-        currentPage={currentPage}
-        noPagination={noPagination}
-        path={currentTab}
-        maxPage={postMineMaxPage}
-      />
+      {postMineMaxPage !== 0
+        ? (
+          <Pagination
+            currentPage={currentPage}
+            noPagination={noPagination}
+            path={currentTab}
+            maxPage={postMineMaxPage}
+          />
+        ) : null}
     </TabPane>
   );
 };

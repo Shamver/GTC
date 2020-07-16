@@ -15,17 +15,17 @@ const PostLocker = ({ currentPage, noPagination, currentTab }) => {
 
   const { getPostMine } = BoardPostStore;
   const { getDataReplyMine } = BoardReplyStore;
-  const { getFavorite } = UserFavoriteStore;
+  const { getMyFavorite } = UserFavoriteStore;
   const { loadingProcess } = UtilLoadingStore;
 
   useLayoutEffect(() => {
     loadingProcess([
       () => getPostMine(currentPage),
       () => getDataReplyMine(currentPage),
-      () => getFavorite(currentPage),
+      () => getMyFavorite(currentPage),
     ]);
   }, [
-    loadingProcess, getDataReplyMine, getPostMine, getFavorite, currentTab, currentPage,
+    loadingProcess, getDataReplyMine, getPostMine, getMyFavorite, currentTab, currentPage,
   ]);
 
   return (
