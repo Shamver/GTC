@@ -476,9 +476,9 @@ class UserStore {
     return true;
   };
 
-  @action userBanned = async (targetUserId, actionFlag, reason) => {
+  @action userBanned = async (reportId, targetUserId, actionFlag, reason) => {
     axios.put('/api/user/banned', {
-      targetUserId, actionFlag, reason,
+      reportId, targetUserId, actionFlag, reason,
     })
       .then((response) => {
         const { data } = response;

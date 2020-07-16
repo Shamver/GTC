@@ -132,6 +132,21 @@ const UPDATE_USER_BANNED = `
   WHERE ID = :USER_ID;
 `;
 
+const UPDATE_REPORT_CANCEL = `
+  UPDATE GTC_REPORT
+  SET
+    REJECT_FL = 1,
+    MFT_DTTM = SYSDATE()
+  WHERE ID = :ID;
+`;
+
+const UPDATE_REPORT_DATE = `
+  UPDATE GTC_REPORT
+  SET
+    MFT_DTTM = SYSDATE()
+  WHERE ID = :ID;
+`;
+
 router.get('/banned', (req, res) => {
   Database.execute(
     (database) => database.query(
@@ -151,7 +166,7 @@ router.get('/banned', (req, res) => {
 });
 
 router.put('/banned', (req, res) => {
-  const { targetUserId, actionFlag, reason } = req.body;
+  const { reportId, targetUserId, actionFlag, reason } = req.body;
 
   Database.execute(
     (database) => database.query(
@@ -162,6 +177,22 @@ router.put('/banned', (req, res) => {
         REASON: reason,
       },
     )
+      .then(() => {
+        if (actionFlag === 'CANCEL') {
+          return database.query(
+            UPDATE_REPORT_CANCEL,
+            {
+              ID: reportId,
+            },
+          );
+        }
+        return database.query(
+          UPDATE_REPORT_DATE,
+          {
+            ID: reportId,
+          },
+        );
+      })
       .then(() => {
         res.json({
           success: true,

@@ -122,6 +122,14 @@ router.post('/', (req, res) => {
   const {
     targetId, writerId, type, reason, description,
   } = req.body;
+  let msg;
+  if (type === 'RT01') {
+    msg = '😊 해당 포스팅 신고가 완료되었어요.';
+  } else if (type === 'RT02') {
+    msg = '😊 해당 댓글 신고가 완료되었어요.';
+  } else {
+    msg = '😊 해당 유저 신고가 완료되었어요.';
+  }
 
   Database.execute(
     (database) => database.query(
@@ -157,7 +165,7 @@ router.post('/', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          message: type === 'P01' ? '😊 해당 포스팅에 신고가 완료되었어요.' : '😊 해당 댓글에 신고가 완료되었어요.',
+          message: msg,
         });
       }),
   ).then(() => {

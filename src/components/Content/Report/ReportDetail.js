@@ -70,7 +70,7 @@ const ReportDetail = () => {
             </ReportInfoDesc>
           </ReportInfoRow2>
           <ReportInfoRow>
-            <ButtonCustom color="danger" size="sm" onClick={() => userBanned(targetUserId, 'BAN', description)}>
+            <ButtonCustom color="danger" size="sm" onClick={() => userBanned(reportId, targetUserId, 'BAN', description)}>
               영구 정지
             </ButtonCustom>
             <ButtonCustom color="secondary" size="sm" onClick={() => reportReject(reportId)}>
