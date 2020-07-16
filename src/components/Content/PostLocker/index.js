@@ -22,7 +22,7 @@ const PostLocker = ({ currentPage, noPagination, currentTab }) => {
     loadingProcess([
       () => getPostMine(currentPage),
       () => getDataReplyMine(currentPage),
-      getFavorite,
+      () => getFavorite(currentPage),
     ]);
   }, [
     loadingProcess, getDataReplyMine, getPostMine, getFavorite, currentTab, currentPage,
