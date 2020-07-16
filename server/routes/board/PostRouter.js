@@ -137,13 +137,19 @@ const INSERT_POST_RECOMMEND = `
 
 const SELECT_MINE_POST = `
   SELECT 
-    ID AS postId
+    @ROWNUM := @ROWNUM+1 AS rn
+    , ID AS postId
     , TITLE AS postTitle
     , DATE_FORMAT(CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS postDate
     , VIEW_CNT AS viewCnt
-  FROM GTC_POST
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST PT WHERE USER_ID = :USER_ID
+      ) AS pageCount
+  FROM
+    GTC_POST
+    , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
   WHERE USER_ID = :USER_ID
   ORDER BY ID DESC
+  LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
 
 const SELECT_POST_SINGLE = `
@@ -656,13 +662,15 @@ router.post('/recommend', authMiddleware, (req, res) => {
 });
 
 router.get('/mine', authMiddleware, (req, res) => {
-  const { userId } = req.query;
+  const { userId, currentPage } = req.query;
 
   Database.execute(
     (database) => database.query(
       SELECT_MINE_POST,
       {
         USER_ID: userId,
+        CURRENT_PAGE: ((currentPage - 1) * 25),
+        PER_PAGE: 25,
       },
     )
       .then((rows) => {

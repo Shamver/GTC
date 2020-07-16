@@ -20,6 +20,28 @@ const SELECT_USER_FAVORITE_LIST = `
   ORDER BY GUF.CRT_DTTM DESC
 `;
 
+const SELECT_USER_MINE_FAVORITE_LIST = `
+  SELECT 
+    @ROWNUM := @ROWNUM+1 AS rn
+    , GBP.TITLE AS postTitle
+    , GUF.POST_ID AS postId
+    , DATE_FORMAT(GBP.CRT_DTTM, '%Y-%m-%d %H:%i:%s') AS postDate
+    , GUF.CRT_DTTM AS favoriteDate
+    , GBP.VIEW_CNT AS postViews
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_USER_FAVORITE GUF 
+    LEFT JOIN GTC_POST GBP
+    ON GUF.POST_ID = GBP.ID WHERE GUF.USER_ID = :USER_ID
+      ) AS pageCount
+  FROM 
+    GTC_USER_FAVORITE GUF 
+    LEFT JOIN GTC_POST GBP
+    ON GUF.POST_ID = GBP.ID
+    , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
+  WHERE GUF.USER_ID = :USER_ID
+  ORDER BY GUF.CRT_DTTM DESC
+  LIMIT :CURRENT_PAGE, :PER_PAGE
+`;
+
 const SELECT_USER_FAVORITE = `
   SELECT 
     * 
@@ -135,6 +157,31 @@ router.delete('/', (req, res) => {
       }),
   ).then(() => {
     info('[DELETE, DELETE /api/user/favorite] 유저 즐겨찾기 삭제');
+  });
+});
+
+router.get('/mine', (req, res) => {
+  const { userId, currentPage } = req.query;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_USER_MINE_FAVORITE_LIST,
+      {
+        USER_ID: userId,
+        CURRENT_PAGE: ((currentPage - 1) * 25),
+        PER_PAGE: 25,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '나의 즐겨찾기 목록 조회',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/user/favorite/mine] 유저 나의 즐겨찾기 목록 조회');
   });
 });
 

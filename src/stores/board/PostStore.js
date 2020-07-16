@@ -56,6 +56,8 @@ class PostStore {
 
   @observable postMineList = [];
 
+  @observable postMineMaxPage = 0;
+
   @observable currentPostUpperLower = {
     upper: '',
     lower: '',
@@ -513,12 +515,13 @@ class PostStore {
     this.post.board = board.toUpperCase();
   };
 
-  @action getPostMine = async () => {
+  @action getPostMine = async (currentPage) => {
     const { userData } = this.root.UserStore;
 
     await axios.get('/api/board/post/mine', {
       params: {
         userId: userData.id,
+        currentPage,
       },
     })
       .then((response) => {
@@ -526,6 +529,12 @@ class PostStore {
         if (data.success) {
           if (data.code === 1) {
             this.postMineList = data.result;
+            if (data.result.length === 0) {
+              this.postMineMaxPage = 0;
+            } else {
+              const { pageCount } = data.result[0];
+              this.postMineMaxPage = pageCount;
+            }
           } else {
             toast.info(data.message);
           }
@@ -536,7 +545,7 @@ class PostStore {
       .catch((response) => {
         toast.error(response.message);
       });
-  }
+  };
 
   @action getEmbedMedia = async () => {
     await axios.get('iframe.ly/api/oembed?url=https://www.youtube.com/watch?v=iMTblJbmam4&api_key=0037428c3f77431216045c')

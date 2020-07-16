@@ -5,12 +5,14 @@ import {
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
+import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import PostLockerMyPostTable from './PostLockerMyPostTable';
+import Pagination from './Pagination';
 
-const PostLockerMyPost = () => {
+const PostLockerMyPost = ({ currentPage, noPagination, currentTab }) => {
   const { BoardPostStore } = useStores();
-  const { postMineList } = BoardPostStore;
+  const { postMineList, postMineMaxPage } = BoardPostStore;
   const MyPostTableData = postMineList.map(
     (v) => <PostLockerMyPostTable data={v} key={v.postId} />,
   );
@@ -30,12 +32,21 @@ const PostLockerMyPost = () => {
           {MyPostTableData.length === 0 ? (
             <tr>
               <TableTd colSpan={4}>
-              작성한 글이 없습니다.
+                작성한 글이 없습니다.
               </TableTd>
             </tr>
           ) : MyPostTableData}
         </tbody>
       </ListTable>
+      {postMineMaxPage !== 0
+        ? (
+          <Pagination
+            currentPage={currentPage}
+            noPagination={noPagination}
+            path={currentTab}
+            maxPage={postMineMaxPage}
+          />
+        ) : null}
     </TabPane>
   );
 };
@@ -55,5 +66,17 @@ const TableTd = styled.td`
 const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
+
+PostLockerMyPost.propTypes = {
+  currentPage: Proptypes.string,
+  currentTab: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+PostLockerMyPost.defaultProps = {
+  currentPage: '1',
+  currentTab: 'myPost',
+  noPagination: false,
+};
 
 export default memo(observer(PostLockerMyPost));

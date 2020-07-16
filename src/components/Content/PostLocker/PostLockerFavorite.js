@@ -3,13 +3,15 @@ import { TabPane, Table } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
+import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import PostLockerFavoriteTable from './PostLockerFavoriteTable';
+import Pagination from './Pagination';
 
-const PostLockerFavorite = () => {
+const PostLockerFavorite = ({ currentPage, noPagination, currentTab }) => {
   const { UserFavoriteStore } = useStores();
-  const { favoriteList } = UserFavoriteStore;
-  const FavoriteTableData = favoriteList.map(
+  const { myFavoriteList, favoriteMaxPage } = UserFavoriteStore;
+  const FavoriteTableData = myFavoriteList.map(
     (v) => <PostLockerFavoriteTable data={v} key={v.postId} />,
   );
 
@@ -29,12 +31,21 @@ const PostLockerFavorite = () => {
           {FavoriteTableData.length === 0 ? (
             <tr>
               <TableTd colSpan={5}>
-              즐겨찾기한 게시물이 없습니다.
+                즐겨찾기한 게시물이 없습니다.
               </TableTd>
             </tr>
           ) : FavoriteTableData}
         </tbody>
       </ListTable>
+      {favoriteMaxPage !== 0
+        ? (
+          <Pagination
+            currentPage={currentPage}
+            noPagination={noPagination}
+            path={currentTab}
+            maxPage={favoriteMaxPage}
+          />
+        ) : null}
     </TabPane>
   );
 };
@@ -55,5 +66,17 @@ const TableTd = styled.td`
 const ListTable = styled(Table)`
   border: 1px solid #c9c9c9 !important;
 `;
+
+PostLockerFavorite.propTypes = {
+  currentPage: Proptypes.string,
+  currentTab: Proptypes.string,
+  noPagination: Proptypes.bool,
+};
+
+PostLockerFavorite.defaultProps = {
+  currentPage: '1',
+  currentTab: 'myPost',
+  noPagination: false,
+};
 
 export default memo(observer(PostLockerFavorite));
