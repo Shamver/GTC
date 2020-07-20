@@ -39,6 +39,8 @@ class BoardStore {
 
   @observable currentBoardName = '';
 
+  @observable currentBoardCategories = [];
+
   @observable bestFilterMode = false;
 
   @observable searchMode = false;
@@ -92,6 +94,34 @@ class BoardStore {
   };
 
   @action getBoardName = (path) => this.boardKinds[path];
+
+  @action getBoardCategory = async () => {
+    // 후에 코드성 게시판 목록 완성되면 마저 코드로 엮기
+    let codeGroupId = '';
+    switch (this.currentBoardPath) {
+      case 'notice':
+        codeGroupId = 'BOARD_NOTICE_CATEGORY';
+        break;
+      case 'free':
+        codeGroupId = 'BOARD_FREE_CATEGORY';
+        break;
+      default:
+        codeGroupId = 'BOARD_FREE_CATEGORY';
+    }
+
+    await axios.get('/api/system/code', { params: { codeGroup: codeGroupId } })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.currentBoardCategories = data.result;
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  };
 
   @action moveBoard = (path) => {
     this.root.UtilRouteStore.history.setCurrentBoardToId('/'.concat(path.toLowerCase()));

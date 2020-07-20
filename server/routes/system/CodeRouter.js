@@ -113,7 +113,7 @@ router.post('/group', (req, res) => {
       .then(() => {
         res.json({
           success: true,
-          code: 0,
+          code: 1,
           message: '😳 코드 그룹 추가 완료!',
         });
       }),
@@ -130,7 +130,7 @@ router.get('/group', (req, res) => {
       .then((rows) => {
         res.json({
           success: true,
-          code: 0,
+          code: 1,
           message: '코드 그룹 조회 완료',
           result: rows,
         });
@@ -154,7 +154,7 @@ router.put('/group', (req, res) => {
       .then(() => {
         res.json({
           success: true,
-          code: 0,
+          code: 1,
           message: '😳 코드 그룹 수정 완료!',
         });
       }),
@@ -175,7 +175,7 @@ router.delete('/group', (req, res) => {
       .then(() => {
         res.json({
           success: true,
-          code: 0,
+          code: 1,
           message: '😳 코드 그룹 삭제 완료!',
         });
       }),
@@ -205,7 +205,7 @@ router.post('/', (req, res) => {
       .then(() => {
         res.json({
           success: true,
-          code: 0,
+          code: 1,
           message: '😳 코드 추가 완료!',
         });
       }),
@@ -227,7 +227,7 @@ router.get('/', (req, res) => {
       .then((rows) => {
         res.json({
           success: true,
-          code: 0,
+          code: 1,
           message: '코드 조회 완료',
           result: rows,
         });
@@ -257,7 +257,7 @@ router.put('/', (req, res) => {
       .then(() => {
         res.json({
           success: true,
-          code: 0,
+          code: 1,
           message: '😳 코드 수정 완료!',
         });
       }),
@@ -279,7 +279,7 @@ router.delete('/', (req, res) => {
       .then(() => {
         res.json({
           success: true,
-          code: 0,
+          code: 1,
           message: '😳 코드 삭제 완료!',
         });
       }),

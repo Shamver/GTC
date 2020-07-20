@@ -22,7 +22,7 @@ const Board = ({ parentProps, location, match }) => {
   const { loadingProcess } = UtilLoadingStore;
   const {
     setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage,
-    setIsPagination, boardPathCheck,
+    setIsPagination, boardPathCheck, getBoardCategory,
   } = BoardStore;
   const query = qs.parse(location.search);
 
@@ -36,10 +36,11 @@ const Board = ({ parentProps, location, match }) => {
       () => setIsPagination(isPagination),
       () => getBoardPostNoticeList(board, currentPage),
       () => getBoardPostList(board, currentPage),
+      getBoardCategory,
       setClearPostView,
     ]);
   }, [
-    loadingProcess, setCurrentBoardPath, board, judgeFilterMode,
+    loadingProcess, setCurrentBoardPath, board, judgeFilterMode, getBoardCategory,
     query, setCurrentBoardPage, currentPage, setIsPagination, isPagination,
     getBoardPostNoticeList, getBoardPostList, setClearPostView, boardPathCheck,
   ]);

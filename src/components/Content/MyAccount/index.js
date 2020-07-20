@@ -16,7 +16,7 @@ const MyAccount = () => {
       setDefaultValue,
       getIsCanChangeGtNickname,
     ]);
-  }, [loadingProcess, setDefaultValue]);
+  }, [loadingProcess, setDefaultValue, getIsCanChangeGtNickname]);
 
   return (
     <MainContainer>
