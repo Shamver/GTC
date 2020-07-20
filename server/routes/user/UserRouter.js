@@ -136,15 +136,31 @@ const UPDATE_REPORT_CANCEL = `
   UPDATE GTC_REPORT
   SET
     REJECT_FL = 1,
-    MFT_DTTM = SYSDATE()
+    MFY_DTTM = SYSDATE()
   WHERE ID = :ID;
 `;
 
 const UPDATE_REPORT_DATE = `
   UPDATE GTC_REPORT
   SET
-    MFT_DTTM = SYSDATE()
+    MFY_DTTM = SYSDATE()
   WHERE ID = :ID;
+`;
+
+const DELETE_USER_REPORT = `
+  DELETE FROM GTC_REPORT
+  WHERE CASE WHEN ':TYPE_CD' = 'RT01' THEN TARGET_ID IN ((SELECT P.ID FROM GTC_POST P WHERE P.USER_ID = :TARGET_USER_ID))
+    WHEN ':TYPE_CD' = 'RT02' THEN TARGET_ID IN ((SELECT P.ID FROM GTC_COMMENT P WHERE P.USER_ID = :TARGET_USER_ID))
+    WHEN ':TYPE_CD' = 'RT03' THEN TARGET_ID IN ((SELECT P.ID FROM GTC_USER P WHERE P.ID = :TARGET_USER_ID)) END
+`;
+
+const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
+  SELECT
+  IF(count(*) = 0, 1, 0) AS isCanChange
+  FROM GTC_USER_GT_NICKNAME
+  WHERE
+    USER_ID = :USER_ID
+    AND CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(), INTERVAL -30 DAY), '%Y-%m-%d %H:%i:%s');
 `;
 
 router.get('/banned', (req, res) => {
@@ -166,7 +182,9 @@ router.get('/banned', (req, res) => {
 });
 
 router.put('/banned', (req, res) => {
-  const { reportId, targetUserId, actionFlag, reason } = req.body;
+  const {
+    reportId, targetUserId, actionFlag, reason,
+  } = req.body;
 
   Database.execute(
     (database) => database.query(
@@ -180,39 +198,38 @@ router.put('/banned', (req, res) => {
       .then(() => {
         if (actionFlag === 'CANCEL') {
           return database.query(
-            UPDATE_REPORT_CANCEL,
+            DELETE_USER_REPORT,
             {
-              ID: reportId,
+              TARGET_USER_ID: targetUserId,
             },
           );
         }
-        return database.query(
-          UPDATE_REPORT_DATE,
-          {
-            ID: reportId,
-          },
-        );
+        return true;
       })
+      .then(() => database.query(
+        UPDATE_REPORT_DATE,
+        {
+          ID: reportId,
+        },
+      ))
       .then(() => {
         res.json({
           success: true,
           code: 1,
           message: actionFlag === 'BAN' ? '😊 해당 유저를 밴 처리 하였습니다.' : '😊 해당 유저의 밴 처리를 취소 하였습니다.',
         });
+      })
+      .catch(() => {
+        res.json({
+          success: false,
+          code: 1,
+          message: '😳 그토 닉네임을 변경한지 30일이 되지 않았습니다.',
+        });
       }),
   ).then(() => {
     info('[UPDATE, PUT /api/user/banned] 신고 유저 밴 처리');
   });
 });
-
-const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
-  SELECT
-  IF(count(*) = 0, 1, 0) AS isCanChange
-  FROM GTC_USER_GT_NICKNAME
-  WHERE
-    USER_ID = :USER_ID
-    AND CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(), INTERVAL -30 DAY), '%Y-%m-%d %H:%i:%s');
-`;
 
 router.delete('/withdrawal', (req, res) => {
   const { userId } = req.body;

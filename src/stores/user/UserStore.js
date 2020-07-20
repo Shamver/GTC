@@ -477,6 +477,7 @@ class UserStore {
   };
 
   @action userBanned = async (reportId, targetUserId, actionFlag, reason) => {
+    console.log(actionFlag)
     axios.put('/api/user/banned', {
       reportId, targetUserId, actionFlag, reason,
     })

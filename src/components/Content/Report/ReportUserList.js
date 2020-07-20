@@ -10,7 +10,6 @@ const ReportUserList = ({ data }) => {
   const {
     userId, userEmail, userName, userNickName, GTName,
   } = data;
-
   return (
     <tr>
       <TdCenter>{userId}</TdCenter>
@@ -19,7 +18,7 @@ const ReportUserList = ({ data }) => {
       <td>{GTName}</td>
       <td>{userEmail}</td>
       <td>
-        <Button color="danger" size="sm" onClick={() => userBanned(userId, 'CANCEL')}>
+        <Button color="danger" size="sm" onClick={() => userBanned(userId, userId, 'CANCEL', '')}>
           정지 해제
         </Button>
       </td>
