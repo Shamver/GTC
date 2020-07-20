@@ -62,14 +62,14 @@ const INSERT_CODE = `
 
 const SELECT_CODE = `
   SELECT
-    CODEGROUP_ID AS codeGroup
-    , CODE AS code
-    , NAME AS codeName
-    , \`DESC\` AS codeDesc
-    , CAST(\`ORDER\` AS CHAR) AS codeOrder
-    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = USE_FL) AS useYN
-  FROM GTC_CODE
-  WHERE CODEGROUP_ID = ':CODEGROUP_ID'
+    GC.CODEGROUP_ID AS codeGroup
+    , GC.CODE AS code
+    , GC.NAME AS codeName
+    , GC.\`DESC\` AS codeDesc
+    , CAST(GC.\`ORDER\` AS CHAR) AS codeOrder
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GC.USE_FL) AS useYN
+  FROM GTC_CODE GC
+  WHERE GC.CODEGROUP_ID = ':CODEGROUP_ID'
 `;
 
 const UPDATE_CODE = `

@@ -269,9 +269,21 @@ class CodeStore {
     }
     this.isAddCode = value;
     this.codeEditModeId = null;
+    this.codeClear();
 
     return true;
   };
+
+  @action codeClear = () => {
+    this.code = {
+      ...this.code,
+      id: '',
+      name: '',
+      order: '',
+      desc: '',
+      useYN: 1,
+    };
+  }
 
   @action setGroupEditModeId = (value) => {
     this.groupEditModeId = value.id;

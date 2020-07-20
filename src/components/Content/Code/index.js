@@ -23,7 +23,7 @@ const Code = () => {
       () => getCodeComponent('YN_FLAG'),
       getCodeGroupList,
     ]);
-  }, [loadingProcess, getCodeGroupList]);
+  }, [loadingProcess, getCodeGroupList, getCodeComponent]);
 
   return (
     <BoardWrapper>
