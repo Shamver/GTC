@@ -18,9 +18,10 @@ const CodeRow = ({ data }) => {
 
   const {
     code, codeGroup, codeName, codeOrder, codeDesc, useYN: codeUseYN,
+    useFl: codeUseFl,
   } = data;
   const {
-    name, order, desc, useYN,
+    name, order, desc, useFl,
   } = codeObject;
 
   if (code === codeEditModeId) {
@@ -37,7 +38,7 @@ const CodeRow = ({ data }) => {
           <Input bsSize="sm" onChange={onChangeCode} value={desc} name="desc" />
         </td>
         <td>
-          <Input type="select" bsSize="sm" onChange={onChangeCode} name="useYN" value={useYN}>
+          <Input type="select" bsSize="sm" onChange={onChangeCode} name="useFl" value={useFl}>
             <CodeFlag />
           </Input>
         </td>
@@ -52,7 +53,6 @@ const CodeRow = ({ data }) => {
             color="danger"
             onClick={() => setCodeEditModeId({
               id: '',
-              group: '',
               name: '',
               order: '',
               desc: '',
@@ -83,7 +83,7 @@ const CodeRow = ({ data }) => {
             name: codeName,
             order: codeOrder,
             desc: codeDesc,
-            useYN: codeUseYN,
+            useFl: codeUseFl,
           })}
         >
           <FontAwesomeIcon icon={faEdit} />

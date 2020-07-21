@@ -27,7 +27,7 @@ class CodeStore {
     name: '',
     order: '',
     desc: '',
-    useYN: 1,
+    useFl: 1,
   };
 
   @observable setCodeList = [];
@@ -292,9 +292,13 @@ class CodeStore {
   };
 
   @action setCodeEditModeId = (value) => {
+    console.log(value);
     this.codeEditModeId = value.id;
     this.isAddCode = false;
-    this.code = value;
+    this.code = {
+      ...this.code,
+      ...value,
+    };
   };
 
   @action onChangeCodeGroup = (event) => {

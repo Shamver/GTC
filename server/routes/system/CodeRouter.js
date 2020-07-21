@@ -68,6 +68,7 @@ const SELECT_CODE = `
     , GC.\`DESC\` AS codeDesc
     , CAST(GC.\`ORDER\` AS CHAR) AS codeOrder
     , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GC.USE_FL) AS useYN
+    , GC.USE_FL AS useFl
   FROM GTC_CODE GC
   WHERE GC.CODEGROUP_ID = ':CODEGROUP_ID'
 `;
@@ -95,6 +96,7 @@ const SELECT_TEMP = `
   SELECT *
   FROM GTC_CODE
   WHERE CODEGROUP_ID = ':TMP'
+    AND USE_FL <> 0
 `;
 
 
@@ -240,7 +242,7 @@ router.get('/', (req, res) => {
 router.put('/', (req, res) => {
   const {
     id, group, name, order,
-    desc, useYN,
+    desc, useFl,
   } = req.body;
   Database.execute(
     (database) => database.query(
@@ -251,7 +253,7 @@ router.put('/', (req, res) => {
         NAME: name,
         ORDER: order,
         DESC: desc,
-        USE_FL: useYN,
+        USE_FL: useFl,
       },
     )
       .then(() => {
