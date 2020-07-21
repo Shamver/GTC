@@ -33,6 +33,29 @@ class BoardStore {
     name: '질문 & 답변',
   }];
 
+  @observable categories = {
+    BFC01: {
+      name: '자유',
+      path: 'freedom',
+    },
+    BFC02: {
+      name: '잡담',
+      path: 'talk',
+    },
+    BFC03: {
+      name: '토론',
+      path: 'toron',
+    },
+    BFC04: {
+      name: '건의',
+      path: 'gunhee',
+    },
+    BNC01: {
+      name: '이벤트',
+      path: 'event',
+    },
+  };
+
   @observable tempData = [];
 
   @observable currentBoardPath = '';
