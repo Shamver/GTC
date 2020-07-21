@@ -54,6 +54,10 @@ class BoardStore {
       name: '이벤트',
       path: 'event',
     },
+    BQC01: {
+      name: '시세질문',
+      path: 'sease',
+    },
   };
 
   @observable tempData = [];
@@ -119,18 +123,7 @@ class BoardStore {
   @action getBoardName = (path) => this.boardKinds[path];
 
   @action getBoardCategory = async () => {
-    // 후에 코드성 게시판 목록 완성되면 마저 코드로 엮기
-    let codeGroupId = '';
-    switch (this.currentBoardPath) {
-      case 'notice':
-        codeGroupId = 'BOARD_NOTICE_CATEGORY';
-        break;
-      case 'free':
-        codeGroupId = 'BOARD_FREE_CATEGORY';
-        break;
-      default:
-        codeGroupId = 'BOARD_FREE_CATEGORY';
-    }
+    const codeGroupId = `BOARD_${this.currentBoardPath.toUpperCase()}_CATEGORY`;
 
     await axios.get('/api/system/code', { params: { codeGroup: codeGroupId } })
       .then((response) => {
