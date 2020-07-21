@@ -6,7 +6,7 @@ import useStores from '../../../stores/useStores';
 
 const ReportUserList = ({ data }) => {
   const { UserStore } = useStores();
-  const { userBanned } = UserStore;
+  const { userBanCancel } = UserStore;
   const {
     userId, userEmail, userName, userNickName, GTName,
   } = data;
@@ -18,7 +18,7 @@ const ReportUserList = ({ data }) => {
       <td>{GTName}</td>
       <td>{userEmail}</td>
       <td>
-        <Button color="danger" size="sm" onClick={() => userBanned(userId, userId, 'CANCEL', '')}>
+        <Button color="danger" size="sm" onClick={() => userBanCancel(userId)}>
           정지 해제
         </Button>
       </td>

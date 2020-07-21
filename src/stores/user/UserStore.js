@@ -458,7 +458,7 @@ class UserStore {
   }
 
   @action getUserBanned = async () => {
-    axios.get('/api/user/banned')
+    await axios.get('/api/user/banned')
       .then((response) => {
         const { data } = response;
         if (data.success) {
@@ -478,7 +478,7 @@ class UserStore {
 
   @action userBanned = async (reportId, targetUserId, actionFlag, reason) => {
     console.log(actionFlag)
-    axios.put('/api/user/banned', {
+    await axios.put('/api/user/banned', {
       reportId, targetUserId, actionFlag, reason,
     })
       .then((response) => {
@@ -502,6 +502,27 @@ class UserStore {
 
     return true;
   };
+
+  @action userBanCancel = async (userId) => {
+    await axios.put('/api/user/cancel', {
+      userId,
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            this.root.BoardReportStore.getReportList();
+            this.getUserBanned();
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  }
 }
 
 export default UserStore;

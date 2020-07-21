@@ -2,7 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 
-
 const { upload, uploadHandler } = require('../../middleware/photoUpload');
 
 const async = require('../../middleware/async');
@@ -120,25 +119,27 @@ const SELECT_USER_BANNED = `
   WHERE U.BANNED_FL = 1
 `;
 
-const UPDATE_USER_BANNED = `
+const UPDATE_USER_BAN = `
   UPDATE GTC_USER
   SET
-    BANNED_FL =
-      CASE WHEN ':ACTION' = 'BAN' THEN 1
-      WHEN ':ACTION' = 'CANCEL' THEN 0 END,
-    BAN_REASON =
-      CASE WHEN ':ACTION' = 'BAN' THEN ':REASON'
-      WHEN ':ACTION' = 'CANCEL' THEN '' END
+    BANNED_FL = 1,
+    BAN_REASON = ':REASON'
   WHERE ID = :USER_ID;
 `;
 
-const UPDATE_REPORT_CANCEL = `
-  UPDATE GTC_REPORT
-  SET
-    REJECT_FL = 1,
-    MFY_DTTM = SYSDATE()
-  WHERE ID = :ID;
+const UPDATE_USER_BAN_CANCEL = `
+  UPDATE GTC_USER
+  SET BANNED_FL = 0
+  WHERE ID = :USER_ID;
 `;
+
+// const UPDATE_REPORT_CANCEL = `
+//   UPDATE GTC_REPORT
+//   SET
+//     REJECT_FL = 1,
+//     MFY_DTTM = SYSDATE()
+//   WHERE ID = :ID;
+// `;
 
 const UPDATE_REPORT_DATE = `
   UPDATE GTC_REPORT
@@ -147,12 +148,10 @@ const UPDATE_REPORT_DATE = `
   WHERE ID = :ID;
 `;
 
-const DELETE_USER_REPORT = `
-  DELETE FROM GTC_REPORT
-  WHERE CASE WHEN ':TYPE_CD' = 'RT01' THEN TARGET_ID IN ((SELECT P.ID FROM GTC_POST P WHERE P.USER_ID = :TARGET_USER_ID))
-    WHEN ':TYPE_CD' = 'RT02' THEN TARGET_ID IN ((SELECT P.ID FROM GTC_COMMENT P WHERE P.USER_ID = :TARGET_USER_ID))
-    WHEN ':TYPE_CD' = 'RT03' THEN TARGET_ID IN ((SELECT P.ID FROM GTC_USER P WHERE P.ID = :TARGET_USER_ID)) END
-`;
+// const DELETE_USER_REPORT = `
+//   DELETE FROM GTC_REPORT
+//   WHERE TARGET_ID IN (SELECT ID FROM GTC_POST WHERE USER_ID=1) AND REJECT_FL = 0;
+// `;
 
 const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
   SELECT
@@ -188,24 +187,13 @@ router.put('/banned', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      UPDATE_USER_BANNED,
+      UPDATE_USER_BAN,
       {
         USER_ID: targetUserId,
         ACTION: actionFlag,
         REASON: reason,
       },
     )
-      .then(() => {
-        if (actionFlag === 'CANCEL') {
-          return database.query(
-            DELETE_USER_REPORT,
-            {
-              TARGET_USER_ID: targetUserId,
-            },
-          );
-        }
-        return true;
-      })
       .then(() => database.query(
         UPDATE_REPORT_DATE,
         {
@@ -216,18 +204,40 @@ router.put('/banned', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          message: actionFlag === 'BAN' ? '😊 해당 유저를 밴 처리 하였습니다.' : '😊 해당 유저의 밴 처리를 취소 하였습니다.',
+          message: '😊 해당 유저를 밴 처리 하였습니다.',
         });
       })
       .catch(() => {
         res.json({
           success: false,
           code: 1,
-          message: '😳 그토 닉네임을 변경한지 30일이 되지 않았습니다.',
+          message: '요청을 실패하였습니다.',
         });
       }),
   ).then(() => {
     info('[UPDATE, PUT /api/user/banned] 신고 유저 밴 처리');
+  });
+});
+
+router.put('/cancel', (req, res) => {
+  const { userId } = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      UPDATE_USER_BAN_CANCEL,
+      {
+        USER_ID: userId,
+      },
+    )
+      .then(() => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '😊 해당 유저의 밴 처리를 취소 하였습니다.',
+        });
+      }),
+  ).then(() => {
+    info('[UPDATE, PUT /api/user/cancel] 신고 유저 밴 취소 처리');
   });
 });
 
