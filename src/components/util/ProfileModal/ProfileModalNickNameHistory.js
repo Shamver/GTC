@@ -2,14 +2,15 @@ import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import { Row, Col } from 'reactstrap';
 import styled from 'styled-components';
+import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import ProfileModalNickName from './ProfileModalNickName';
 import ModalPagination from './ProfilePageNation';
 
-const ProfileModalNickNameHistory = () => {
+const ProfileModalNickNameHistory = ({ profileInfo }) => {
   const { UserStore, UtilStore } = useStores();
-  const { profileData, getNickNameList, userData } = UserStore;
-  const { gtName } = userData;
+  const { profileData, getNickNameList } = UserStore;
+  const { GTName } = profileInfo;
   const {
     pageIndex, rows,
   } = UtilStore;
@@ -25,7 +26,7 @@ const ProfileModalNickNameHistory = () => {
     <>
       <TableBox xs="12">
         <TableHeader>
-          <Col xs="9">닉네임 <SmallSpan>(사용중 GT닉네임: {gtName})</SmallSpan></Col>
+          <Col xs="9">닉네임 <SmallSpan>(사용중 GT닉네임: {GTName})</SmallSpan></Col>
           <Col xs="3">마지막 사용일</Col>
         </TableHeader>
         { nicknameList.length > 0
@@ -35,6 +36,12 @@ const ProfileModalNickNameHistory = () => {
       <ModalPagination rows={nickNameRows} pageIndex={nickNameIndex} req={getNickNameList} />
     </>
   );
+};
+
+ProfileModalNickNameHistory.propTypes = {
+  profileInfo: Proptypes.shape({
+    GTName: Proptypes.string,
+  }).isRequired,
 };
 
 const TableBox = styled(Col)`

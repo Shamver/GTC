@@ -56,7 +56,7 @@ ModalPagination.propTypes = {
 };
 
 ModalPagination.defaultProps = {
-  rows: 0,
+  rows: 1,
   pageIndex: 1,
   req: 'req(1)',
 };
