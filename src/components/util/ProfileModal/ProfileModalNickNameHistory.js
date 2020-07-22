@@ -33,7 +33,9 @@ const ProfileModalNickNameHistory = ({ profileInfo }) => {
           ? nicknameList
           : <NoPost>변경 이력이 없습니다.</NoPost>}
       </TableBox>
-      <ModalPagination rows={nickNameRows} pageIndex={nickNameIndex} req={getNickNameList} />
+      { nicknameList.length > 0
+        ? <ModalPagination rows={nickNameRows} pageIndex={nickNameIndex} req={getNickNameList} />
+        : ''}
     </>
   );
 };

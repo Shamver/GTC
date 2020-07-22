@@ -30,7 +30,9 @@ const ProfileModalPostList = () => {
           ? postList
           : <NoPost>등록된 글이 없습니다.</NoPost>}
       </TableBox>
-      <ModalPagination rows={postRows} pageIndex={postIndex} req={getPostList} />
+      { postList.length > 0
+        ? <ModalPagination rows={postRows} pageIndex={postIndex} req={getPostList} />
+        : ''}
     </>
   );
 };
