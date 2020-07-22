@@ -31,12 +31,13 @@ const Reply = ({ data, index }) => {
   const dropdownKey = index.toString();
   const hash = replyLockerHash.split('#')[1];
   const { id } = data;
+  const { adminYN, operatorYN } = userData;
 
   const ReplyContentText = (!data.secretFl
     || (data.secretFl && data.idPostWriter === data.idWriter))
     && renderHTML(`${data.content}`);
 
-  // 하나하나 로우 드롭다운이 생성될때마다 그에 대한 드롭다운 객체 생성;
+  // 하나 하나 로우 드롭 다운이 생성될 때마다 그에 대한 드롭 다운 객체 생성;
   useLayoutEffect(() => {
     onSet(dropdownKey);
   }, [onSet, dropdownKey]);
@@ -77,10 +78,15 @@ const Reply = ({ data, index }) => {
                     <>
                       <SpanLikeLink onClick={() => modifyMode(data.id)}>수정</SpanLikeLink>
                       &nbsp;·&nbsp;
-                      <SpanLikeLink onClick={() => toggleConfirmAlert('정말 삭제 하시겠습니까?', () => deleteReply(data.id))}>삭제</SpanLikeLink>
-                      &nbsp;·&nbsp;
                     </>
                   )}
+                { ((userData && userData.id === data.idWriter) || adminYN || operatorYN)
+                && (
+                  <>
+                    <SpanLikeLink onClick={() => toggleConfirmAlert('정말 삭제 하시겠습니까?', () => deleteReply(data.id))}>삭제</SpanLikeLink>
+                    &nbsp;·&nbsp;
+                  </>
+                )}
                 <SpanLikeLink onClick={() => likeReply(data.id)}>
                   {!data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
                 </SpanLikeLink>
@@ -98,7 +104,7 @@ const Reply = ({ data, index }) => {
         <ReplyInContent hash={hash} commentId={id}>
           {/* 수정의 경우의 수 */}
           { !!data.secretFl
-            && (<><SecretReply><FontAwesomeIcon icon={faLock} />비밀 댓글</SecretReply><br /></>)}
+            && (<><SecretReply><FontAwesomeIcon icon={faLock} /> 비밀 댓글</SecretReply><br /></>)}
           <SpanLikeLink>
             {(data.commentReplyName && data.commentReplyName !== 'DELETED') && (
               <>@{data.commentReplyName}<br /></>)}

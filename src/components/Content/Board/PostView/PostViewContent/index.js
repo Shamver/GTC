@@ -55,7 +55,7 @@ const PostViewContent = () => {
                 <FontAwesomeIcon icon={faBars} /> 목록
               </GreyButton>
             </StylessLink>
-            {!!isMyPost && (
+            {!isMyPost && (
               <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'RP01', title, writerName)}>
                 <FontAwesomeIcon icon={faBellSlash} /> 신고
               </Button>
@@ -65,7 +65,7 @@ const PostViewContent = () => {
             <GreyButton outline={!isFavorite} color="secondary" size="sm" onClick={() => judgeFavorite(isFavorite, id)}>
               <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} /> 즐겨찾기
             </GreyButton>
-            { !!isMyPost && <PostOption />}
+            <PostOption />
           </RightSpan>
           <ClearFix />
         </ContentFooter>

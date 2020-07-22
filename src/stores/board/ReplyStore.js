@@ -178,13 +178,12 @@ class ReplyStore {
           if (data.code === 1) {
             toast.success(data.message);
             this.reply.text = '';
-            this.getReply(this.reply.bpId).then();
             this.setReplyEditId(0);
             this.modifyModeId = 0;
           } else {
             toast.info(data.message);
           }
-          this.getReply(this.reply.bpId).then();
+          this.getReply(this.root.BoardPostStore.postView.id).then();
           this.setReplyEditId(0);
           this.modifyModeId = 0;
         } else {
