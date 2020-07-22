@@ -9,19 +9,51 @@ import { observer } from 'mobx-react';
 import PostList from './Post/PostList';
 import useStores from '../../../stores/useStores';
 
+const CategoryLink = ({
+  currentBoardPath,
+  categories,
+  category,
+}) => {
+  const { name, path } = categories[category.code];
+  return (<NavLink activeClassName="active" to={`/${currentBoardPath}/${path}`}>{name}</NavLink>);
+};
+
+CategoryLink.propTypes = {
+  currentBoardPath: Proptypes.string,
+  categories: Proptypes.shape({
+    name: Proptypes.string,
+    path: Proptypes.string,
+  }).isRequired,
+  category: Proptypes.string,
+};
+
+CategoryLink.defaultProps = {
+  currentBoardPath: 'free',
+  category: 'freedom',
+};
+
 const BoardContent = ({ isFooter }) => {
   const { BoardStore } = useStores();
-  const { currentBoardPath } = BoardStore;
+  const { currentBoardPath, categories, currentBoardCategories } = BoardStore;
+
+  const categoryLinks = currentBoardCategories.map(
+    (v) => (
+      <CategoryLink
+        currentBoardPath={currentBoardPath}
+        categories={categories}
+        category={v}
+        key={v}
+      />
+    ),
+  );
+
   return (
     <>
       <HeaderDiv>
         <NavLink activeClassName="active" to={`/${currentBoardPath}`}>
           <FontAwesomeIcon icon={faHome} />
         </NavLink>
-        <NavLink activeClassName="active" to={`/${currentBoardPath}/freedom`}>자유</NavLink>
-        <NavLink activeClassName="active" to={`/${currentBoardPath}/talk`}>잡담</NavLink>
-        <NavLink activeClassName="active" to={`/${currentBoardPath}/toron`}>토론</NavLink>
-        <NavLink activeClassName="active" to={`/${currentBoardPath}/gunhee`}>건의</NavLink>
+        { categoryLinks }
       </HeaderDiv>
       <ManginessTable bordered hover size="sm">
         <tbody>

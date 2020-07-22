@@ -33,11 +33,40 @@ class BoardStore {
     name: '질문 & 답변',
   }];
 
+  @observable categories = {
+    BFC01: {
+      name: '자유',
+      path: 'freedom',
+    },
+    BFC02: {
+      name: '잡담',
+      path: 'talk',
+    },
+    BFC03: {
+      name: '토론',
+      path: 'toron',
+    },
+    BFC04: {
+      name: '건의',
+      path: 'gunhee',
+    },
+    BNC01: {
+      name: '이벤트',
+      path: 'event',
+    },
+    BQC01: {
+      name: '시세질문',
+      path: 'sease',
+    },
+  };
+
   @observable tempData = [];
 
   @observable currentBoardPath = '';
 
   @observable currentBoardName = '';
+
+  @observable currentBoardCategories = [];
 
   @observable bestFilterMode = false;
 
@@ -92,6 +121,23 @@ class BoardStore {
   };
 
   @action getBoardName = (path) => this.boardKinds[path];
+
+  @action getBoardCategory = async () => {
+    const codeGroupId = `BOARD_${this.currentBoardPath.toUpperCase()}_CATEGORY`;
+
+    await axios.get('/api/system/code', { params: { codeGroup: codeGroupId } })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.currentBoardCategories = data.result;
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  };
 
   @action moveBoard = (path) => {
     this.root.UtilRouteStore.history.setCurrentBoardToId('/'.concat(path.toLowerCase()));
