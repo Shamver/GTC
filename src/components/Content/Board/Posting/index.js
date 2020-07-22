@@ -31,13 +31,20 @@ const Posting = ({ match, isModify }) => {
   useLayoutEffect(() => {
     loadingProcess([
       setPostClear,
-      () => getCodeComponent(`BOARD_${board.toUpperCase()}_CATEGORY`),
       () => setPostBoard(board),
       () => getModifyPost(id, isModify),
     ]);
   }, [
     loadingProcess, setPostClear, setPostBoard, board, getModifyPost,
-    isModify, id, getCodeComponent,
+    isModify, id,
+  ]);
+
+  useLayoutEffect(() => {
+    loadingProcess([
+      () => getCodeComponent(`BOARD_${post.board.toUpperCase()}_CATEGORY`),
+    ]);
+  }, [
+    loadingProcess, post.board, getCodeComponent,
   ]);
 
   return (
