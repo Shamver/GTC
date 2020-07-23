@@ -36,6 +36,7 @@ const SELECT_POST_LIST = `
     AND P.USER_ID NOT IN
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
     AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+    :query
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -84,6 +85,7 @@ const SELECT_POST_LIST_ALL = `
     AND P.USER_ID NOT IN 
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
     AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+    :query
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -346,11 +348,22 @@ const SELECT_POST_LIST_BOARD_SEARCH = `
 `;
 
 router.get('/', (req, res) => {
-  let { currentPage } = req.query;
-  const { board, isHome, recommend } = req.query;
+  let { currentPage, currentCategory } = req.query;
+  const {
+    board, isHome, recommend,
+  } = req.query;
   let { userId } = req.query;
   currentPage = currentPage || 1;
+  currentCategory = currentCategory || '';
   if (!userId) userId = null;
+
+  let query = '';
+
+  if (currentCategory !== '') {
+    query = `
+      AND P.CATEGORY_CD = '${currentCategory}'
+    `;
+  }
 
   Database.execute(
     (database) => database.query(
@@ -361,6 +374,7 @@ router.get('/', (req, res) => {
         USER_ID: userId,
         PER_PAGE: isHome ? 9 : 25,
         LIKES: Number(recommend) ? 1 : 0,
+        query,
       },
     )
       .then((rows) => {
