@@ -6,6 +6,7 @@ import {
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
+import levelAdmin from '../../../../../resources/images/level/levelAdmin.png';
 
 const WriterDropdown = ({
   data, index, isNotice, isMobile,
@@ -17,7 +18,7 @@ const WriterDropdown = ({
   const { toggleConfirmAlert } = UtilAlertStore;
   const { userData, getProfile } = UserStore;
   const { addIgnore } = UserIgnoreStore;
-  const { writerName, writerId } = data;
+  const { writerName, writerId, isWriterAdmin } = data;
   const dropdownKey = isNotice ? `notice_${index}` : index.toString();
   const lastKey = isMobile ? 'mobile_'.concat(dropdownKey) : dropdownKey;
 
@@ -28,7 +29,10 @@ const WriterDropdown = ({
 
   return (
     <WriterDropdownIn isOpen={dropdown[lastKey]} toggle={(e) => onActive(lastKey, e)}>
-      <WriterDropdownToggle>{writerName}</WriterDropdownToggle>
+      <WriterDropdownToggle>
+        { !!isWriterAdmin && (<LevelImage src={levelAdmin} alt="" />)}
+        {writerName}
+      </WriterDropdownToggle>
       <WriterDropdownMenu>
         <WriterDropdownItem onClick={() => getProfile(writerId)}>프로필</WriterDropdownItem>
         {!(!userData || userData.id === writerId) && (
@@ -45,6 +49,7 @@ WriterDropdown.propTypes = {
   data: Proptypes.shape({
     writerName: Proptypes.string,
     writerId: Proptypes.number,
+    isWriterAdmin: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
   isNotice: Proptypes.bool.isRequired,
@@ -54,6 +59,12 @@ WriterDropdown.propTypes = {
 WriterDropdown.defaultProps = {
   isMobile: false,
 };
+
+const LevelImage = styled.img`
+  height: 15px;
+  margin-right: 3px;
+  vertical-align: text-bottom;
+`;
 
 const WriterDropdownIn = styled(Dropdown)`
   display : block;

@@ -5,11 +5,13 @@ import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import useStores from '../../../../../stores/useStores';
+import levelAdmin from '../../../../../resources/images/level/levelAdmin.png';
 
 const ResponsivePostRow = ({ data, isNotice }) => {
   const {
     id, recommendCount, categoryName, commentCount,
     type, title, boardName, isImage, writerName,
+    isWriterAdmin,
   } = data;
   const { ComponentPostStore, BoardStore } = useStores();
   const { isVisited } = ComponentPostStore;
@@ -32,7 +34,10 @@ const ResponsivePostRow = ({ data, isNotice }) => {
           {commentCount > 0 && (<RedBoldSpan>&nbsp;[{commentCount}]</RedBoldSpan>)}
         </PostTitle>
         <br />
-        <RedSpan>{writerName}</RedSpan>
+        <RedSpan>
+          { !!isWriterAdmin && (<LevelImage src={levelAdmin} alt="" />)}
+          {writerName}
+        </RedSpan>
         &nbsp;
         {!isNotice && (type !== 'notice' && (<TextSpan>{categoryName}</TextSpan>))}
         &nbsp;
@@ -53,9 +58,16 @@ ResponsivePostRow.propTypes = {
     boardName: Proptypes.string,
     isImage: Proptypes.number,
     writerName: Proptypes.string,
+    isWriterAdmin: Proptypes.number,
   }).isRequired,
   isNotice: Proptypes.bool.isRequired,
 };
+
+const LevelImage = styled.img`
+  height: 15px;
+  margin-right: 5px;
+  vertical-align: text-bottom;
+`;
 
 const MiddleSpan = styled.span`
   display : block;
