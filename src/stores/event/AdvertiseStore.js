@@ -76,6 +76,13 @@ class AdvertiseStore {
   };
 
   @action getAdPostList = () => {
+    const { userData, guestAuthor } = this.root.UserStore;
+
+    if (userData === null) {
+      guestAuthor();
+      return false;
+    }
+
     axios.get('/api/event/advertise')
       .then((response) => {
         const { data } = response;
@@ -90,6 +97,8 @@ class AdvertiseStore {
         }
       })
       .catch((response) => toast.error(response.message));
+
+    return true;
   };
 
   @action getAdPostListNow = () => {

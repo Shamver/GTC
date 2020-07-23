@@ -33,7 +33,13 @@ class DailyStore {
   };
 
   @action getDailyLast = async () => {
-    const { userData } = this.root.UserStore;
+    const { userData, guestAuthor } = this.root.UserStore;
+
+    if (userData === null) {
+      guestAuthor();
+      return false;
+    }
+
     await axios.get('/api/event/daily/last', {
       params: {
         userId: userData.id,

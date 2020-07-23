@@ -28,7 +28,7 @@ const Header = () => {
     onActive, dropdown, searchOpen, openSearch,
   } = ComponentHeaderStore;
   const { favoriteList, getFavorite, deleteFavorite } = UserFavoriteStore;
-  const { userData } = UserStore;
+  const { userData, guestAuthor } = UserStore;
   const { latelyList, getLately, deleteLately } = CookieLatelyStore;
   const {
     onChange, searchText, onSubmit, onSearch,
@@ -116,10 +116,10 @@ const Header = () => {
                   <FontAwesomeIcon icon={faSmile} />
                 </DropdownToggleC>
                 <DropdownMenu>
-                  <LinkNoDeco to="/daily">
+                  <LinkNoDeco onClick={userData === null ? guestAuthor : ''} to="/daily">
                     <DropdownItem30>출석체크</DropdownItem30>
                   </LinkNoDeco>
-                  <LinkNoDeco to="/advertise">
+                  <LinkNoDeco onClick={userData === null ? guestAuthor : ''} to="/advertise">
                     <DropdownItem30>포스팅 광고</DropdownItem30>
                   </LinkNoDeco>
                 </DropdownMenu>

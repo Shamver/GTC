@@ -453,6 +453,19 @@ class UserStore {
       })
       .catch((response) => { toast.error(response.message); });
   }
+
+  @action guestAuthor = (e) => {
+    const { history } = this.root.UtilRouteStore;
+
+    if (e) {
+      e.preventDefault();
+    } else {
+      history.push('/');
+    }
+
+    toast.error('😳 로그인 후 이용해주세요.');
+    return false;
+  }
 }
 
 export default UserStore;

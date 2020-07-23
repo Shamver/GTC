@@ -21,8 +21,8 @@ const SwitchList = () => {
       <AuthRouter exact Component={Contents.Setting} level={1} path="/setting" />
       <AuthRouter exact Component={Contents.NewAlert} level={1} path="/newalert" />
       <AuthRouter exact Component={Contents.MyAccount} level={1} path="/myaccount" />
-      <AuthRouter exact Component={Contents.Daily} level={1} path="/daily" />
-      <AuthRouter exact Component={Contents.Advertise} level={1} path="/advertise" />
+      <AuthRouter exact Component={Contents.Daily} level={0} path="/daily" />
+      <AuthRouter exact Component={Contents.Advertise} level={0} path="/advertise" />
       <AuthRouter exact Component={Contents.PostView} level={1} path="/post/:id" />
       <AuthRouter exact Component={Contents.Code} level={3} path="/code" />
       <AuthRouter exact Component={Contents.Test} level={3} path="/test" />

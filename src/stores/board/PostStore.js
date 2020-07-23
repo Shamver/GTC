@@ -449,7 +449,6 @@ class PostStore {
       .catch((response) => { toast.error(response.message); });
   };
 
-
   postValidationCheck = () => {
     // board
     if (!this.post.board) {
