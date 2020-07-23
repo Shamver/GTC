@@ -14,9 +14,10 @@ const Board = ({ parentProps, location, match }) => {
   const { board } = params;
 
   let { isPagination } = parentProps;
-  let { currentPage } = params;
+  let { currentPage, currentCategory } = params;
   isPagination = !!isPagination;
   currentPage = currentPage || '1';
+  currentCategory = currentCategory || '';
 
   const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
@@ -35,14 +36,14 @@ const Board = ({ parentProps, location, match }) => {
       () => setCurrentBoardPage(currentPage),
       () => setIsPagination(isPagination),
       () => getBoardPostNoticeList(board, currentPage),
-      () => getBoardPostList(board, currentPage),
+      () => getBoardPostList(board, currentPage, currentCategory),
       getBoardCategory,
       setClearPostView,
     ]);
   }, [
     loadingProcess, setCurrentBoardPath, board, judgeFilterMode, getBoardCategory,
     query, setCurrentBoardPage, currentPage, setIsPagination, isPagination,
-    getBoardPostNoticeList, getBoardPostList, setClearPostView, boardPathCheck,
+    getBoardPostNoticeList, getBoardPostList, setClearPostView, boardPathCheck, currentCategory,
   ]);
 
   return (
@@ -61,6 +62,7 @@ Board.propTypes = {
     params: Proptypes.shape({
       board: Proptypes.string,
       currentPage: Proptypes.string,
+      currentCategory: Proptypes.string,
     }).isRequired,
   }).isRequired,
   parentProps: Proptypes.shape({
