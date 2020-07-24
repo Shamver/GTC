@@ -317,11 +317,12 @@ class PostStore {
   @action getPost = async (id) => {
     const { getLately } = this.root.CookieLatelyStore;
     const { userData } = this.root.UserStore;
+    const userDataId = userData ? userData.id : '';
     const that = this;
 
     await axios.get(`/api/board/post/${id}`, {
       params: {
-        userId: userData.id,
+        userId: userDataId,
       },
     })
       .then((response) => {
@@ -392,9 +393,11 @@ class PostStore {
   @action getPostUpperLower = async (id) => {
     const that = this;
     const { userData } = this.root.UserStore;
+    const userDataId = userData ? userData.id : '';
+
     await axios.get(`/api/board/post/${id}/upperLower`, {
       params: {
-        userId: userData.id,
+        userId: userDataId,
       },
     })
       .then((response) => {

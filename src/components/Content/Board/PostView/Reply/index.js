@@ -23,7 +23,7 @@ const Reply = ({ data, index }) => {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
   } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
-  const { userData, getProfile } = UserStore;
+  const { userData, getProfile, guestAuthor } = UserStore;
   const { dropdown, onActive, onSet } = ComponentReplyStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { addIgnore } = UserIgnoreStore;
@@ -81,11 +81,12 @@ const Reply = ({ data, index }) => {
                       &nbsp;·&nbsp;
                     </>
                   )}
-                <SpanLikeLink onClick={() => likeReply(data.id)}>
+                <SpanLikeLink onClick={userData ? () => likeReply(data.id) : guestAuthor}>
                   {!data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
                 </SpanLikeLink>
                 &nbsp;·&nbsp;
-                <SpanLikeLink onClick={() => setReplyEditId(data.id)}>대댓글</SpanLikeLink>
+                {/* eslint-disable-next-line max-len */}
+                <SpanLikeLink onClick={userData ? () => setReplyEditId(data.id) : guestAuthor}>대댓글</SpanLikeLink>
                 &nbsp;·&nbsp;
                 { data.updateDate ? data.updateDate : data.date}
                 &nbsp;
