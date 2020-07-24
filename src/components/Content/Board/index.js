@@ -50,8 +50,8 @@ const Board = ({ parentProps, location, match }) => {
     <BoardWrapper>
       <TableWrapper>
         <BoardHeader />
-        <BoardContent />
-        <BoardFooter />
+        <BoardContent currentPage={currentPage} />
+        <BoardFooter currentCategory={currentCategory} />
       </TableWrapper>
     </BoardWrapper>
   );
