@@ -11,7 +11,7 @@ const BoardHeader = () => {
 
   return (
     <TableHead>
-      <BoardLink to={currentBoardPath}>
+      <BoardLink to={`/${currentBoardPath}`}>
         <h4>{currentBoardName}</h4>
       </BoardLink>
     </TableHead>

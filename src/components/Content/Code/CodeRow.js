@@ -105,7 +105,8 @@ CodeRow.propTypes = {
     codeName: Proptypes.string,
     codeOrder: Proptypes.string,
     codeDesc: Proptypes.string,
-    useYN: Proptypes.number,
+    useYN: Proptypes.string,
+    useFl: Proptypes.number,
   }).isRequired,
 };
 
