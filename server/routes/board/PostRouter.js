@@ -28,6 +28,7 @@ const SELECT_POST_LIST = `
         AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = PT.ID AND TYPE_CD = 'R01') >= :LIKES
       ) AS pageCount
     , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
+    , (SELECT U.ADMIN_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterAdmin
   FROM 
     GTC_POST P
     , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP

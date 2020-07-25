@@ -4,29 +4,38 @@ import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
+import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 
 const PostOption = () => {
-  const { UtilAlertStore, BoardPostStore, BoardStore } = useStores();
+  const {
+    UtilAlertStore, BoardPostStore, BoardStore, UserStore,
+  } = useStores();
   const { currentBoardPath } = BoardStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { deletePost, postView } = BoardPostStore;
-  const { id } = postView;
+  const { id, isMyPost } = postView;
+  const { userData } = UserStore;
+  const { adminYN, operatorYN } = userData;
 
   return (
     <>
-      <RightSpan>
-        <Button color="secondary" size="sm" outline onClick={() => toggleConfirmAlert('해당 포스트를 삭제하시겠습니까?', () => deletePost(id))}>
-          <FontAwesomeIcon icon={faTrash} /> 삭제
-        </Button>
-      </RightSpan>
-      <RightSpan>
-        <Link to={`/${currentBoardPath}/modify/${id}`}>
-          <Button color="secondary" size="sm" outline>
-            <FontAwesomeIcon icon={faPen} /> 수정
+      {(!!isMyPost || !!adminYN || !!operatorYN) && (
+        <RightSpan>
+          <Button color="secondary" size="sm" outline onClick={() => toggleConfirmAlert('해당 포스트를 삭제하시겠습니까?', () => deletePost(id))}>
+            <FontAwesomeIcon icon={faTrash} /> 삭제
           </Button>
-        </Link>
-      </RightSpan>
+        </RightSpan>
+      )}
+      {!!isMyPost && (
+        <RightSpan>
+          <Link to={`/${currentBoardPath}/modify/${id}`}>
+            <Button color="secondary" size="sm" outline>
+              <FontAwesomeIcon icon={faPen} /> 수정
+            </Button>
+          </Link>
+        </RightSpan>
+      )}
     </>
   );
 };
@@ -50,4 +59,4 @@ const RightSpan = styled.span`
   }
 `;
 
-export default memo(PostOption);
+export default memo(observer(PostOption));

@@ -154,7 +154,7 @@ router.post('/login', (req, res) => {
                 subject: 'userInfo',
               }, (err2, token) => {
                 if (err2) throw (err2);
-                  res.cookie('authToken', token, { httpOnly: true });
+                res.cookie('authToken', token, { httpOnly: true });
                 res.json({
                   success: true,
                   code: 1,

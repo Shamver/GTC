@@ -32,7 +32,7 @@ const MainContainer = styled(Container)`
 `;
 
 const Description = styled.div`
-  & p{
+  & p {
     font-weight: 300;
     font-size: 15px;
   }

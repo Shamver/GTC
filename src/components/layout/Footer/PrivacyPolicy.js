@@ -1,7 +1,5 @@
 import React, { memo } from 'react';
-import {
-  Modal, ModalBody, ModalHeader,
-} from 'reactstrap';
+import { Modal, ModalBody, ModalHeader } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
