@@ -18,6 +18,7 @@ const BoardFooter = ({ currentCategory }) => {
     searchKeyword, onSubmit, onChange, onSearch, searchTarget,
     onChangeTarget,
   } = BoardStore;
+
   const filterQs = '?filter_mode=true';
   const pageUrl = Number(currentBoardPage) > 1 ? `/${currentBoardPath}/page/${currentBoardPage}` : `/${currentBoardPath}`;
   const bestFilterUrl = bestFilterMode ? pageUrl : pageUrl.concat(filterQs);
