@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
-import {
-  Badge, Container,
-} from 'reactstrap';
+import React, { memo, useEffect } from 'react';
+import { Badge, Container } from 'reactstrap';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
@@ -71,4 +69,4 @@ const TextContainer = styled(Container)`
   }
 `;
 
-export default observer(HeaderNoticeView);
+export default memo(observer(HeaderNoticeView));

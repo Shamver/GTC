@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import {
   Modal, ModalHeader, ModalBody, FormText, Input,
@@ -166,4 +166,4 @@ const AccentText = styled.span`
   color : red !important;
 `;
 
-export default observer(Sign);
+export default memo(observer(Sign));

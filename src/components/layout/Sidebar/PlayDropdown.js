@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSmile } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -76,4 +76,4 @@ const DropdownToggleC = styled(DropdownToggle)`
   }
 `;
 
-export default observer(PlayDropdown);
+export default memo(observer(PlayDropdown));

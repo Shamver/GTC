@@ -6,7 +6,7 @@ import {
 } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import styled from 'styled-components';
 import avatarImg from '../../../resources/images/takagi.jpg';
 import KakaoSign from './KakaoSign';
@@ -204,4 +204,4 @@ const NewAlertCountSpan = styled.span`
 `;
 
 
-export default observer(HeaderInProfile);
+export default memo(observer(HeaderInProfile));

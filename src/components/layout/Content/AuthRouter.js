@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import * as Proptypes from 'prop-types';
 import { Route } from 'react-router';
 import useStores from '../../../stores/useStores';
@@ -33,4 +33,4 @@ AuthRouter.propTypes = {
   exact: Proptypes.bool.isRequired,
 };
 
-export default AuthRouter;
+export default memo(AuthRouter);

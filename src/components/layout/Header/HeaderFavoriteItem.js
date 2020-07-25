@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
-import {
-  DropdownItem,
-} from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -81,4 +79,4 @@ const Icon = styled(FontAwesomeIcon)`
   color: #aaa;
 `;
 
-export default HeaderFavoriteItem;
+export default memo(HeaderFavoriteItem);

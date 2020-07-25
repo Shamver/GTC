@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { css } from '@emotion/core';
 import { SyncLoader } from 'react-spinners';
 
@@ -19,4 +19,4 @@ const Loading = () => (
 );
 
 
-export default Loading;
+export default memo(Loading);

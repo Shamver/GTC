@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -71,4 +71,4 @@ const DropdownToggleC = styled(DropdownToggle)`
   }
 `;
 
-export default observer(LatelyDropdown);
+export default memo(observer(LatelyDropdown));
