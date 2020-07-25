@@ -7,7 +7,8 @@ import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
 
 const PostVote = () => {
-  const { BoardPostStore } = useStores();
+  const { BoardPostStore, UserStore } = useStores();
+  const { userData, guestAuthor } = UserStore;
   const { recommendPost, postView } = BoardPostStore;
   const {
     id, recommendCount, notRecommendCount, recommendCheck,
@@ -15,11 +16,11 @@ const PostVote = () => {
 
   return (
     <VoteWrapper>
-      <Button outline={recommendCheck !== 'R01'} color="success" onClick={() => recommendPost(id, 'R01')}>
+      <Button outline={recommendCheck !== 'R01'} color="success" onClick={() => (userData ? recommendPost(id, 'R01') : guestAuthor)}>
         <FontAwesomeIcon icon={faThumbsUp} />
         추천 {recommendCount}
       </Button>
-      <Button outline={recommendCheck !== 'R02'} color="primary" onClick={() => recommendPost(id, 'R02')}>
+      <Button outline={recommendCheck !== 'R02'} color="primary" onClick={() => (userData ? recommendPost(id, 'R02') : guestAuthor)}>
         <FontAwesomeIcon icon={faThumbsDown} />
         비추천 {notRecommendCount}
       </Button>

@@ -30,15 +30,17 @@ const Posting = ({ match, isModify }) => {
   const { board, id } = params;
 
   useLayoutEffect(() => {
+    if (userData === null) {
+      guestAuthor();
+    }
     loadingProcess([
-      userData ? '' : guestAuthor,
       setPostClear,
       () => setPostBoard(board),
       () => getModifyPost(id, isModify),
     ]);
   }, [
     loadingProcess, setPostClear, setPostBoard, board, getModifyPost,
-    isModify, id,
+    isModify, id, guestAuthor, userData,
   ]);
 
   useLayoutEffect(() => {
