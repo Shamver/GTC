@@ -26,7 +26,7 @@ const PostRow = ({ data, index, isNotice }) => {
     <>
       {currentBoardPath === 'all' && (<CenterTd width={6}>{!isNotice && boardName}</CenterTd>)}
       {!isNotice && (<CenterTd width={5} colSpan={1}>{type !== 'notice' && categoryName}</CenterTd>)}
-      <MiddleTd width={40} colSpan={isNotice ? 10 : weight}>
+      <MiddleTd width={37} colSpan={isNotice ? 10 : weight}>
         <MiddleSpan>
           <PostTitle className={isVisited(id) && 'color-gray'} onClick={() => onClickPost(id)}>
             {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
@@ -39,7 +39,7 @@ const PostRow = ({ data, index, isNotice }) => {
           </PostTitle>
         </MiddleSpan>
       </MiddleTd>
-      <CenterTdWriter width={6}>
+      <CenterTdWriter width={9}>
         <WriterDropdown data={data} index={index} isNotice={isNotice} />
       </CenterTdWriter>
     </>
