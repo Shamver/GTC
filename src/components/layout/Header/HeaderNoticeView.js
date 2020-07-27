@@ -31,7 +31,7 @@ const HeaderNoticeView = () => {
         </TextContainer>
       ) : (
         <TextContainer>
-          <Badge color="primary">광고</Badge>
+          <Badge color="danger">광고</Badge>
           &nbsp;
           { showingHeader ? (showingHeader.url
             ? (
