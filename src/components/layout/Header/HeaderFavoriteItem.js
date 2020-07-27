@@ -1,28 +1,36 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
-import {
-  DropdownItem,
-} from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
 
-const HeaderFavoriteItem = (data, onClick) => {
+const HeaderFavoriteItem = ({ data }) => {
+  const { UserFavoriteStore } = useStores();
   const { postId, postTitle } = data;
+  const { deleteFavorite } = UserFavoriteStore;
 
   return (
-    <CustomLink to={`/post/${postId}`} key={`HeaderFavoriteItem${postId}`}>
+    <CustomLink to={`/post/${postId}`}>
       <DropdownItem30>
-        <Text>
-          {postTitle}
-        </Text>
-        <IconSpan onClick={(e) => onClick(postId, 'post', e)}>
+        <Text>{postTitle}</Text>
+        <IconSpan onClick={(e) => deleteFavorite(postId, 'post', e)}>
           <Icon icon={faTimes} />
         </IconSpan>
       </DropdownItem30>
     </CustomLink>
   );
 };
+
+HeaderFavoriteItem.propTypes = {
+  data: Proptypes.shape({
+    postId: Proptypes.number,
+    postTitle: Proptypes.string,
+  }).isRequired,
+};
+
 
 const Text = styled.span`
   max-width: 130px;
@@ -81,4 +89,4 @@ const Icon = styled(FontAwesomeIcon)`
   color: #aaa;
 `;
 
-export default HeaderFavoriteItem;
+export default memo(HeaderFavoriteItem);

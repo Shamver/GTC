@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Row, Col } from 'reactstrap';
 import useStores from '../../../stores/useStores';
@@ -52,4 +52,4 @@ const NoPost = styled.div`
   font-size: 13px;
 `;
 
-export default ProfileModalPostList;
+export default memo(ProfileModalPostList);

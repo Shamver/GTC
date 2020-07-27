@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import {
   Button, Modal, ModalHeader, ModalBody, ModalFooter,
@@ -34,4 +34,4 @@ const ConfirmAlert = () => {
   );
 };
 
-export default observer(ConfirmAlert);
+export default memo(observer(ConfirmAlert));

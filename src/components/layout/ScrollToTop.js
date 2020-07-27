@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, memo } from 'react';
 import { withRouter } from 'react-router-dom';
 
 const ScrollToTop = ({ history }) => {
@@ -14,4 +14,4 @@ const ScrollToTop = ({ history }) => {
   return null;
 };
 
-export default withRouter(ScrollToTop);
+export default withRouter(memo(ScrollToTop));

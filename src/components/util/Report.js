@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import {
   Modal, ModalHeader, ModalBody, ModalFooter, Button,
@@ -77,4 +77,4 @@ const ModalHeaderBack = styled(ModalHeader)`
   border-bottom: 4px solid #DC3545 !important;
 `;
 
-export default observer(Report);
+export default memo(observer(Report));

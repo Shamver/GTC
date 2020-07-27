@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 
-const ProfilePaginationList = observer(({ rows, index, req }) => {
+const ProfilePaginationList = ({ rows, index, req }) => {
   const min = Math.floor((index - 1) / 5) * 5 + 1;
   let max = min + 5 - 1;
   max = max > rows ? rows : max;
@@ -41,7 +41,7 @@ const ProfilePaginationList = observer(({ rows, index, req }) => {
   }
 
   return arr;
-});
+};
 
 const ModalPagination = ({ rows, pageIndex, req }) => (
   <PaginationListWrap>
@@ -95,4 +95,4 @@ const CustomLink = styled.span`
   text-decoration: none;
 `;
 
-export default memo(ModalPagination);
+export default memo(observer(ModalPagination));

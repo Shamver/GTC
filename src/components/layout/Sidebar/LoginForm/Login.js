@@ -1,6 +1,6 @@
 import KakaoLogin from 'react-kakao-login';
 import * as Proptypes from 'prop-types';
-import React from 'react';
+import React, { memo } from 'react';
 import { toast } from 'react-toastify';
 import useStores from '../../../../stores/useStores';
 import { jsKey } from '../../../../config/kakao-config.json';
@@ -26,4 +26,4 @@ Login.propTypes = {
   isRegister: Proptypes.bool.isRequired,
 };
 
-export default Login;
+export default memo(Login);

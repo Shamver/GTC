@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import {
@@ -13,7 +13,7 @@ const FavoriteDropdown = () => {
   const { UserStore, ComponentSidebarStore, UserFavoriteStore } = useStores();
   const { userData } = UserStore;
   const { onActive, dropdown } = ComponentSidebarStore;
-  const { favoriteList, getFavorite, deleteFavorite } = UserFavoriteStore;
+  const { favoriteList, getFavorite } = UserFavoriteStore;
 
   useEffect(() => {
     if (userData) getFavorite();
@@ -21,7 +21,7 @@ const FavoriteDropdown = () => {
 
   const FavoriteData = favoriteList.length === 0
     ? (<DropdownItem30 disabled>즐겨찾기한 게시물이 없습니다.</DropdownItem30>)
-    : favoriteList.map((v) => HeaderFavoriteItem(v, deleteFavorite));
+    : favoriteList.map((v) => <HeaderFavoriteItem data={v} key={v.postId} />);
 
   return (
     <DropdownIn isOpen={dropdown.favorite} toggle={(e) => onActive('favorite', e)}>
@@ -72,4 +72,4 @@ const DropdownToggleC = styled(DropdownToggle)`
   }
 `;
 
-export default observer(FavoriteDropdown);
+export default memo(observer(FavoriteDropdown));

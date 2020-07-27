@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import useStores from '../../../stores/useStores';
 
 const SuspenseLoading = () => {
@@ -11,4 +11,4 @@ const SuspenseLoading = () => {
   return (<></>);
 };
 
-export default SuspenseLoading;
+export default memo(SuspenseLoading);

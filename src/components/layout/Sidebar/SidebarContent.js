@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
@@ -160,4 +160,4 @@ const HeaderWrapper = styled.div`
   padding : 10px;
 `;
 
-export default observer(SidebarContent);
+export default memo(observer(SidebarContent));

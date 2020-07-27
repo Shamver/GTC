@@ -1,25 +1,35 @@
-import React from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
-import {
-  DropdownItem,
-} from 'reactstrap';
+import { DropdownItem } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
 
-const HeaderLatelyItem = (data, onClick) => {
+
+const HeaderLatelyItem = ({ data }) => {
   const { id, title } = data;
+  const { CookieLatelyStore } = useStores();
+  const { deleteLately } = CookieLatelyStore;
 
   return (
-    <CustomLink to={`/post/${id}`} key={`HeaderLatelyItem_${id}`}>
+    <CustomLink to={`/post/${id}`}>
       <DropdownItem30>
         <Text>{title}</Text>
-        <IconSpan onClick={(e) => { onClick(e, id); }}>
+        <IconSpan onClick={(e) => deleteLately(e, id)}>
           <Icon icon={faTimes} />
         </IconSpan>
       </DropdownItem30>
     </CustomLink>
   );
+};
+
+HeaderLatelyItem.propTypes = {
+  data: Proptypes.shape({
+    id: Proptypes.number,
+    title: Proptypes.string,
+  }).isRequired,
 };
 
 const DropdownItem30 = styled(DropdownItem)`
@@ -90,4 +100,4 @@ const Icon = styled(FontAwesomeIcon)`
   color: #aaa;
 `;
 
-export default HeaderLatelyItem;
+export default memo(HeaderLatelyItem);

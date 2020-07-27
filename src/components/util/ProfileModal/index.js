@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import {
   Modal, ModalHeader, ModalBody, TabContent,
@@ -163,4 +163,4 @@ const NavItemTitle = styled(NavLink)`
   cursor: pointer;
 `;
 
-export default observer(ProfileModal);
+export default memo(observer(ProfileModal));

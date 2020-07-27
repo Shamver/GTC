@@ -1,6 +1,6 @@
 import KakaoLogin from 'react-kakao-login';
 import * as Proptypes from 'prop-types';
-import React from 'react';
+import React, { memo } from 'react';
 import useStores from '../../../stores/useStores';
 import { jsKey } from '../../../config/kakao-config';
 import KakaoSignForm from './KakaoSignForm';
@@ -26,4 +26,4 @@ KakaoSign.propTypes = {
   isRegister: Proptypes.bool.isRequired,
 };
 
-export default KakaoSign;
+export default memo(KakaoSign);

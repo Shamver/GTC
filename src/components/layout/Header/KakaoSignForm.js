@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignInAlt, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import React from 'react';
+import React, { memo } from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
@@ -34,4 +34,4 @@ const LoginButton = styled(Button)`
   }
 `;
 
-export default KakaoSignForm;
+export default memo(KakaoSignForm);
