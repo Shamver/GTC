@@ -1,10 +1,7 @@
-import React from 'react';
-import {
-  TabPane, Table,
-} from 'reactstrap';
+import React, { memo } from 'react';
+import { TabPane, Table } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-
 import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import PostLockerMyReplyTable from './PostLockerMyReplyTable';
@@ -77,4 +74,4 @@ PostLockerMyReply.defaultProps = {
   noPagination: false,
 };
 
-export default observer(PostLockerMyReply);
+export default memo(observer(PostLockerMyReply));

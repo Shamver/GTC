@@ -27,9 +27,9 @@ const Header = () => {
   const {
     onActive, dropdown, searchOpen, openSearch,
   } = ComponentHeaderStore;
-  const { favoriteList, getFavorite, deleteFavorite } = UserFavoriteStore;
+  const { favoriteList, getFavorite } = UserFavoriteStore;
   const { userData } = UserStore;
-  const { latelyList, getLately, deleteLately } = CookieLatelyStore;
+  const { latelyList, getLately } = CookieLatelyStore;
   const {
     onChange, searchText, onSubmit, onSearch,
   } = BoardSearchStore;
@@ -46,10 +46,10 @@ const Header = () => {
 
   const FavoriteData = favoriteList.length === 0
     ? (<DropdownItem30 disabled>즐겨찾기한 게시물이 없습니다.</DropdownItem30>)
-    : favoriteList.map((v) => HeaderFavoriteItem(v, deleteFavorite));
+    : favoriteList.map((v) => <HeaderFavoriteItem data={v} key={v.postId} />);
   const LatelyData = latelyList.length === 0
     ? (<DropdownItem30 disabled>최근 본 게시물이 없습니다.</DropdownItem30>)
-    : latelyList.map((v) => HeaderLatelyItem(v, deleteLately));
+    : latelyList.map((v) => <HeaderLatelyItem data={v} key={v.id} />);
 
   return (
     <HeaderWrapper>

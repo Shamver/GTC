@@ -7,7 +7,6 @@ import useStores from '../../../stores/useStores';
 
 const HeaderNoticeView = () => {
   const { EventAdvertiseStore, ComponentHeaderStore } = useStores();
-
   const { AdvertisePostListNow } = EventAdvertiseStore;
   const {
     showIndex, showMode, doCycleAds, showingHeader,

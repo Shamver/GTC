@@ -11,7 +11,7 @@ import useStores from '../../../stores/useStores';
 
 const LatelyDropdown = () => {
   const { CookieLatelyStore, ComponentSidebarStore } = useStores();
-  const { latelyList, getLately, deleteLately } = CookieLatelyStore;
+  const { latelyList, getLately } = CookieLatelyStore;
   const { onActive, dropdown } = ComponentSidebarStore;
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const LatelyDropdown = () => {
 
   const LatelyData = latelyList.length === 0
     ? (<DropdownItem30 disabled>최근 본 게시물이 없습니다.</DropdownItem30>)
-    : latelyList.map((v) => HeaderLatelyItem(v, deleteLately));
+    : latelyList.map((v) => <HeaderLatelyItem data={v} key={v.id} />);
 
   return (
     <DropdownIn isOpen={dropdown.lately} toggle={(e) => onActive('lately', e)}>
