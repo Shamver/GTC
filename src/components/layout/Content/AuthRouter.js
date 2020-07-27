@@ -1,10 +1,12 @@
 import React, { memo } from 'react';
 import * as Proptypes from 'prop-types';
 import { Route } from 'react-router';
+import { toast } from 'react-toastify';
 import useStores from '../../../stores/useStores';
 
 const AuthRouter = (props) => {
-  const { UserStore } = useStores();
+  const { UserStore, UtilRouteStore } = useStores();
+  const { history } = UtilRouteStore;
   const { RouterAuthCheck } = UserStore;
   const {
     level, Component, path, exact,
@@ -12,6 +14,8 @@ const AuthRouter = (props) => {
 
   // 0: 비회원, 1: 회원, 2: 운영자, 3:관리자
   if (!RouterAuthCheck(level)) {
+    toast.error('😳 로그인 후 이용해주세요.');
+    history.push('/');
     return null;
   }
 

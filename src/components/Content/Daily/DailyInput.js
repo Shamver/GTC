@@ -9,7 +9,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useStores from '../../../stores/useStores';
 
 const DailyInput = () => {
-  const { EventDailyStore } = useStores();
+  const { EventDailyStore, UserStore } = useStores();
+  const { userData, guestAuthor } = UserStore;
   const {
     message, onChangeValue, addDaily, dailyLast,
   } = EventDailyStore;
@@ -30,7 +31,7 @@ const DailyInput = () => {
         onChange={onChangeValue}
         disabled={isDoneToday}
       />
-      <Button type="button" color="primary" onClick={addDaily} disabled={isDoneToday}>
+      <Button type="button" color="primary" onClick={userData === null ? guestAuthor : addDaily} disabled={isDoneToday}>
         <FontAwesomeIcon icon={faPencilAlt} /> 출석체크 하기
       </Button>
     </>

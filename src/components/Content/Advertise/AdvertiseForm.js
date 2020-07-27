@@ -7,7 +7,8 @@ import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 
 const AdvertiseForm = () => {
-  const { EventAdvertiseStore } = useStores();
+  const { EventAdvertiseStore, UserStore } = useStores();
+  const { userData, guestAuthor } = UserStore;
   const { onChangeAdvertise, AdvertisePost, AddAdPostList } = EventAdvertiseStore;
   const { message, url, hours } = AdvertisePost;
   return (
@@ -33,7 +34,7 @@ const AdvertiseForm = () => {
         <span>시간 당 100포인트. 등록 시점으로부터 최대 48시간까지 올릴 수 있어요.</span>
         <br />
       </SetDiv>
-      <Button size="sm" color="danger" onClick={AddAdPostList}>
+      <Button size="sm" color="danger" onClick={userData === null ? guestAuthor : AddAdPostList}>
         <FontAwesomeIcon icon={faPen} />
         &nbsp; 광고하기
       </Button>

@@ -12,7 +12,8 @@ import BoardPagination from './Pagination';
 import useStores from '../../../stores/useStores';
 
 const BoardFooter = ({ currentCategory }) => {
-  const { BoardStore } = useStores();
+  const { BoardStore, UserStore } = useStores();
+  const { userData, guestAuthor } = UserStore;
   const {
     currentBoardPath, bestFilterMode, currentBoardPage,
     searchKeyword, onSubmit, onChange, onSearch, searchTarget,
@@ -22,7 +23,6 @@ const BoardFooter = ({ currentCategory }) => {
   const filterQs = '?filter_mode=true';
   const pageUrl = Number(currentBoardPage) > 1 ? `/${currentBoardPath}/page/${currentBoardPage}` : `/${currentBoardPath}`;
   const bestFilterUrl = bestFilterMode ? pageUrl : pageUrl.concat(filterQs);
-
   return (
     <FooterWrapper>
       <AbsolDiv>
@@ -32,7 +32,7 @@ const BoardFooter = ({ currentCategory }) => {
             &nbsp;&nbsp;인기 글
           </Button>
         </AbsoluteLeftLink>
-        <AbsoluteRightLink to={`/${currentBoardPath}/post`}>
+        <AbsoluteRightLink onClick={userData ? '' : guestAuthor} to={`/${currentBoardPath}/post`}>
           <Button color="danger" size="sm">
             <FontAwesomeIcon icon={faPen} />
               &nbsp;&nbsp;글 쓰기

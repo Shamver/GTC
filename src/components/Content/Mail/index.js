@@ -7,7 +7,9 @@ import MailNav from './MailNav';
 import MailTabContent from './MailTabContent';
 
 const Setting = () => {
-  const { ComponentMailStore, UtilLoadingStore, UserMailStore } = useStores();
+  const {
+    ComponentMailStore, UtilLoadingStore, UserMailStore,
+  } = useStores();
   const { activeTab } = ComponentMailStore;
   const { loadingProcess } = UtilLoadingStore;
   const { getMail, getSentMail } = UserMailStore;

@@ -134,6 +134,8 @@ class ReplyStore {
         }
       })
       .catch((response) => { toast.error(response.message); });
+
+    return true;
   };
 
   @action modifyReply = () => {

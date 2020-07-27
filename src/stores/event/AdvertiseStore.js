@@ -90,6 +90,8 @@ class AdvertiseStore {
         }
       })
       .catch((response) => toast.error(response.message));
+
+    return true;
   };
 
   @action getAdPostListNow = () => {

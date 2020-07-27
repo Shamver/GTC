@@ -109,13 +109,13 @@ router.get('/', (req, res) => {
 });
 
 router.get('/last', (req, res) => {
-  const { userId } = req.query;
+  const { userDataId } = req.query;
 
   Database.execute(
     (database) => database.query(
-      SELECT_ATTENDANCE_LAST,
+      userDataId ? SELECT_ATTENDANCE_LAST : '',
       {
-        USER_ID: userId,
+        USER_ID: userDataId,
       },
     )
       .then((rows) => {
@@ -124,6 +124,12 @@ router.get('/last', (req, res) => {
           code: 1,
           message: '출석체크 마지막 한 날 조회',
           result: rows,
+        });
+      }, () => {
+        res.json({
+          success: true,
+          code: 2,
+          message: '로그인 후 이용해 주세요.',
         });
       }),
   ).then(() => {

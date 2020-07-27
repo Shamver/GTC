@@ -91,11 +91,14 @@ const Reply = ({ data, index }) => {
                   {!data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
                 </SpanLikeLink>
                 &nbsp;·&nbsp;
-                <SpanLikeLink onClick={() => setReplyEditId(data.id)}>대댓글</SpanLikeLink>
+                {/* eslint-disable-next-line max-len */}
+                <SpanLikeLink onClick={setReplyEditId(data.id)}>대댓글</SpanLikeLink>
                 &nbsp;·&nbsp;
                 { data.updateDate ? data.updateDate : data.date}
                 &nbsp;
-                { userData.id === data.idWriter ? '' : (<SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>·&nbsp;신고 #</SpanLikeLink>)}
+                {userData.id === data.idWriter
+                  ? ''
+                  : (<SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>·&nbsp;신고 #</SpanLikeLink>)}
               </>
             ) : (<>{data.updateDate ? data.updateDate : data.date}</>)}
           </span>
@@ -151,6 +154,12 @@ Reply.propTypes = {
     deleteFl: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
+};
+
+Reply.defaltpropTypes = {
+  data: Proptypes.shape({
+    id: '',
+  }),
 };
 
 const ClearFix = styled.div`

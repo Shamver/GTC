@@ -16,8 +16,9 @@ import BoardCategoryOptionList from './BoardCategoryOptionList';
 const Posting = ({ match, isModify }) => {
   const {
     BoardPostStore, UtilRouteStore, UtilLoadingStore,
-    SystemCodeStore,
+    SystemCodeStore, UserStore,
   } = useStores();
+  const { userData, guestAuthor } = UserStore;
   const {
     post, setPostBoard, onChangeValue, addPost,
     getModifyPost, modifyPost, setPostClear,
@@ -29,6 +30,9 @@ const Posting = ({ match, isModify }) => {
   const { board, id } = params;
 
   useLayoutEffect(() => {
+    if (userData === null) {
+      guestAuthor();
+    }
     loadingProcess([
       setPostClear,
       () => setPostBoard(board),
@@ -36,7 +40,7 @@ const Posting = ({ match, isModify }) => {
     ]);
   }, [
     loadingProcess, setPostClear, setPostBoard, board, getModifyPost,
-    isModify, id,
+    isModify, id, guestAuthor, userData,
   ]);
 
   useLayoutEffect(() => {

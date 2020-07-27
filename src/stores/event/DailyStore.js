@@ -34,9 +34,11 @@ class DailyStore {
 
   @action getDailyLast = async () => {
     const { userData } = this.root.UserStore;
+    const userDataId = userData === null ? '' : userData.id;
+
     await axios.get('/api/event/daily/last', {
       params: {
-        userId: userData.id,
+        userId: userDataId,
       },
     })
       .then((response) => {
@@ -46,6 +48,8 @@ class DailyStore {
             this.dailyLast = {
               ...data.result[0],
             };
+          } else if (data.code === 2) {
+            this.dailyLast = '';
           } else {
             toast.info(data.message);
           }
