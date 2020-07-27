@@ -28,7 +28,9 @@ const ProfileModalCommentList = () => {
           ? commentList
           : <NoPost>작성한 댓글이 없습니다.</NoPost>}
       </TableBox>
-      <ModalPagination rows={commentRows} pageIndex={commentIndex} req={getCommentList} />
+      { commentList.length > 0
+        ? <ModalPagination rows={commentRows} pageIndex={commentIndex} req={getCommentList} />
+        : ''}
     </>
   );
 };

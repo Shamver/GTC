@@ -104,7 +104,7 @@ const ProfileModal = () => {
               <ProfileModalCommentList profileInfo={profileInfo} />
             </TabPane>
             <TabPane tabId="3">
-              <ProfileModalNickNameHistory />
+              <ProfileModalNickNameHistory profileInfo={profileInfo} />
             </TabPane>
           </TabContent>
         </div>
