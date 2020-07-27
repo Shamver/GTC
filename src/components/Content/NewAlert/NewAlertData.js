@@ -17,7 +17,7 @@ const NewAlertData = ({ data }) => {
   } = data;
 
   return (
-    <AlertWrapper className={isRead === 'Y' ? '' : 'noRead'}>
+    <AlertWrapper className={isRead ? '' : 'noRead'}>
       <AlertBox>
         <LinkA to={`/post/${postId}#${replyId}`} name={`${id}`} onClick={onClickAlert}>
           <StrongSpan>{replyName}</StrongSpan>님이 <StrongSpan>{postTitle}</StrongSpan>

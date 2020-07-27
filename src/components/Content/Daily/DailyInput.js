@@ -24,13 +24,13 @@ const DailyInput = () => {
       )}
       <CustomInput
         type="text"
-        placeholder={isDoneToday === 'Y' ? '오늘 출석체크를 완료하셨습니다.' : '여기에 한마디를 입력해주세요.'}
+        placeholder={isDoneToday ? '오늘 출석체크를 완료하셨습니다.' : '여기에 한마디를 입력해주세요.'}
         maxLength={20}
         value={message}
         onChange={onChangeValue}
-        disabled={isDoneToday === 'Y'}
+        disabled={isDoneToday}
       />
-      <Button type="button" color="primary" onClick={addDaily} disabled={isDoneToday === 'Y'}>
+      <Button type="button" color="primary" onClick={addDaily} disabled={isDoneToday}>
         <FontAwesomeIcon icon={faPencilAlt} /> 출석체크 하기
       </Button>
     </>
