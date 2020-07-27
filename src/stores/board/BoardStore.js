@@ -126,8 +126,7 @@ class BoardStore {
     let codeGroupId = `BOARD_${this.currentBoardPath.toUpperCase()}_CATEGORY`;
 
     if (this.currentBoardPath === 'all') {
-      const categoryCodeList = ['ALL', 'FREE', 'TRADE', 'QNA', 'NOTICE'];
-      codeGroupId = categoryCodeList.map((v) => `BOARD_${v}_CATEGORY`);
+      codeGroupId = '';
     }
 
     await axios.get('/api/system/code', { params: { codeGroup: codeGroupId } })

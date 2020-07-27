@@ -52,10 +52,14 @@ const BoardContent = ({ isFooter, currentPage }) => {
   return (
     <>
       <HeaderDiv>
-        <NavLink activeClassName="active" to={`/${currentBoardPath}`}>
-          <FontAwesomeIcon icon={faHome} />
-        </NavLink>
-        { categoryLinks }
+        { currentBoardPath !== 'all' && (
+          <>
+            <NavLink activeClassName="active" to={`/${currentBoardPath}`}>
+              <FontAwesomeIcon icon={faHome} />
+            </NavLink>
+            { categoryLinks }
+          </>
+        )}
       </HeaderDiv>
       <ManginessTable bordered hover size="sm">
         <tbody>
