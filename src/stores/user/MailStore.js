@@ -82,10 +82,10 @@ class MailStore {
     })
       .then((response) => {
         const { data } = response;
-        this.mailForm.mailText = '';
         this.mailForm.mailTo = '';
         if (data.success) {
           if (data.code === 1) {
+            this.mailForm.mailText = '';
             toast.success(data.message);
           } else {
             toast.info(data.message);
