@@ -23,7 +23,7 @@ const Reply = ({ data, index }) => {
     modifyMode, modifyModeId, deleteReply, setReplyEditId, likeReply, replyEditId,
   } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
-  const { userData, getProfile, guestAuthor } = UserStore;
+  const { userData, getProfile } = UserStore;
   const { dropdown, onActive, onSet } = ComponentReplyStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { addIgnore } = UserIgnoreStore;
@@ -81,23 +81,18 @@ const Reply = ({ data, index }) => {
                       &nbsp;·&nbsp;
                     </>
                   )}
-                { userData
-                  ? (
-                    <>
-                      <SpanLikeLink onClick={likeReply(data.id)}>
-                        {!data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
-                      </SpanLikeLink>
-                      &nbsp;·&nbsp;
-                      {/* eslint-disable-next-line max-len */}
-                      <SpanLikeLink onClick={setReplyEditId(data.id)}>대댓글</SpanLikeLink>
-                      &nbsp;·&nbsp;
-                      { data.updateDate ? data.updateDate : data.date}
-                      &nbsp;
-                      {userData.id === data.idWriter
-                        ? ''
-                        : (<SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>·&nbsp;신고 #</SpanLikeLink>)}
-                    </>
-                  ) : ''}
+                <SpanLikeLink onClick={likeReply(data.id)}>
+                  {!data.likeCount ? '좋아요' : (<><FontAwesomeIcon icon={faThumbsUp} />&nbsp;&nbsp;{data.likeCount}</>)}
+                </SpanLikeLink>
+                &nbsp;·&nbsp;
+                {/* eslint-disable-next-line max-len */}
+                <SpanLikeLink onClick={setReplyEditId(data.id)}>대댓글</SpanLikeLink>
+                &nbsp;·&nbsp;
+                { data.updateDate ? data.updateDate : data.date}
+                &nbsp;
+                {userData.id === data.idWriter
+                  ? ''
+                  : (<SpanLikeLink onClick={() => toggleReport(data.id, 'RP02', renderHTML(`${data.content}`), data.writer)}>·&nbsp;신고 #</SpanLikeLink>)}
               </>
             ) : (<>{data.updateDate ? data.updateDate : data.date}</>)}
           </span>

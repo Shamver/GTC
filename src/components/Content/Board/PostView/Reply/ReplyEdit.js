@@ -9,8 +9,7 @@ import styled from 'styled-components';
 import useStores from '../../../../../stores/useStores';
 
 const ReplyEdit = () => {
-  const { BoardReplyStore, BoardPostStore, UserStore } = useStores();
-  const { userData, guestAuthor } = UserStore;
+  const { BoardReplyStore, BoardPostStore } = useStores();
   const {
     onChangeValue, reply, setReplyEditId, addReply, replyEditId, modifyModeId,
   } = BoardReplyStore;
@@ -33,7 +32,7 @@ const ReplyEdit = () => {
       {!(replyEditId === 0 && modifyModeId === 0) && (
         <Button size="sm" outline onClick={() => setReplyEditId(0)}>취소</Button>
       )}
-      <RightButton size="sm" color="info" onClick={userData ? addReply : guestAuthor}>
+      <RightButton size="sm" color="info" onClick={addReply}>
         <FontAwesomeIcon icon={faPen} />
         &nbsp; 댓글 쓰기
       </RightButton>

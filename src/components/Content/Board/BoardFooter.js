@@ -30,7 +30,7 @@ const BoardFooter = () => {
             &nbsp;&nbsp;인기 글
           </Button>
         </AbsoluteLeftLink>
-        <AbsoluteRightLink onClick={userData === null ? guestAuthor : ''} to={`/${currentBoardPath}/post`}>
+        <AbsoluteRightLink onClick={userData ? '' : guestAuthor} to={`/${currentBoardPath}/post`}>
           <Button color="danger" size="sm">
             <FontAwesomeIcon icon={faPen} />
               &nbsp;&nbsp;글 쓰기

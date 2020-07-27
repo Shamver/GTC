@@ -199,12 +199,10 @@ class ReplyStore {
   };
 
   @action likeReply = (replyId) => {
-    const { userData } = this.root.UserStore;
     const { getReply } = this;
-
     axios.post('/api/board/reply/like', {
       id: replyId,
-      uId: userData.id,
+      uId: this.root.UserStore.userData.id,
     })
       .then((response) => {
         const { data } = response;
@@ -220,8 +218,6 @@ class ReplyStore {
         }
       })
       .catch((response) => { toast.error(response.message); });
-
-    return true;
   };
 
   @action onChangeValue = (event) => {
