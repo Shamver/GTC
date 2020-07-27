@@ -2,7 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 
-
 const { upload, uploadHandler } = require('../../middleware/photoUpload');
 
 const async = require('../../middleware/async');
@@ -36,7 +35,6 @@ const INSERT_USER_GT_NICKNAME = `
   ) VALUES (
     :USER_ID
     , ':PREV_GT_NICKNAME'
-    , SYSDATE()
   )
 `;
 

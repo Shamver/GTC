@@ -50,12 +50,10 @@ const INSERT_USER_MAIL = `
     USER_ID
     , USER_ID_TARGET
     , MESSAGE
-    , CRT_DTTM
   ) VALUES (
     :USER_ID
     , :USER_ID_TARGET
     , ':MESSAGE'
-    , SYSDATE()
   )
 `;
 
