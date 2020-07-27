@@ -24,14 +24,14 @@ const HeaderNoticeView = () => {
     <>
       { showMode === 0 ? (
         <TextContainer>
-          <Badge color="danger">공지사항</Badge>
+          <HeaderBadge color="danger">공지사항</HeaderBadge>
           &nbsp;
           최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
           최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
         </TextContainer>
       ) : (
         <TextContainer>
-          <Badge color="danger">광고</Badge>
+          <HeaderBadge color="danger">광고</HeaderBadge>
           &nbsp;
           { showingHeader ? (showingHeader.url
             ? (
@@ -52,6 +52,10 @@ const HeaderNoticeView = () => {
     </>
   );
 };
+
+const HeaderBadge = styled(Badge)`
+  padding-top: .45em !important;
+`;
 
 const Span = styled.span`
   color: black;
