@@ -7,16 +7,18 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import * as Proptypes from 'prop-types';
 import BoardPagination from './Pagination';
 import useStores from '../../../stores/useStores';
 
-const BoardFooter = () => {
+const BoardFooter = ({ currentCategory }) => {
   const { BoardStore } = useStores();
   const {
     currentBoardPath, bestFilterMode, currentBoardPage,
     searchKeyword, onSubmit, onChange, onSearch, searchTarget,
     onChangeTarget,
   } = BoardStore;
+
   const filterQs = '?filter_mode=true';
   const pageUrl = Number(currentBoardPage) > 1 ? `/${currentBoardPath}/page/${currentBoardPage}` : `/${currentBoardPath}`;
   const bestFilterUrl = bestFilterMode ? pageUrl : pageUrl.concat(filterQs);
@@ -37,7 +39,7 @@ const BoardFooter = () => {
           </Button>
         </AbsoluteRightLink>
       </AbsolDiv>
-      <BoardPagination />
+      <BoardPagination currentCategory={currentCategory} />
       <InputGroupWrapper>
         <InputGroupWidth>
           <InputGroupAddon addonType="prepend">
@@ -59,11 +61,15 @@ const BoardFooter = () => {
   );
 };
 
+BoardFooter.propTypes = {
+  currentCategory: Proptypes.string.isRequired,
+};
+
 const FooterWrapper = styled.div`
   @media (max-width: 992px) {
     margin: 10px;
   }
-`
+`;
 
 const RightNoRadiusSelect = styled(Input)`
   border-bottom-right-radius: 0px !important;

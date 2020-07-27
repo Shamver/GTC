@@ -123,7 +123,11 @@ class BoardStore {
   @action getBoardName = (path) => this.boardKinds[path];
 
   @action getBoardCategory = async () => {
-    const codeGroupId = `BOARD_${this.currentBoardPath.toUpperCase()}_CATEGORY`;
+    let codeGroupId = `BOARD_${this.currentBoardPath.toUpperCase()}_CATEGORY`;
+
+    if (this.currentBoardPath === 'all') {
+      codeGroupId = '';
+    }
 
     await axios.get('/api/system/code', { params: { codeGroup: codeGroupId } })
       .then((response) => {

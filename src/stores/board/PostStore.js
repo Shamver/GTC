@@ -161,16 +161,31 @@ class PostStore {
     return true;
   };
 
-  @action getBoardPostList = async (board, currentPage) => {
+  @action getBoardPostList = async (board, currentPage, currentCategory) => {
     const { userData } = this.root.UserStore;
-    const { searchMode, searchKeyword, searchTarget } = this.root.BoardStore;
+    const {
+      searchMode, searchKeyword, searchTarget, categories,
+    } = this.root.BoardStore;
     const userId = userData ? userData.id : null;
+
+    let filterCategory = currentCategory;
+
+    if (currentCategory !== '') {
+      const keys = Object.keys(categories);
+      keys.map((v) => {
+        if (categories[v].path === currentCategory) {
+          filterCategory = v;
+        }
+        return true;
+      });
+    }
 
     if (searchMode) {
       await axios.get('/api/board/post/search', {
         params: {
           board,
           currentPage,
+          currentCategory: filterCategory,
           userId,
           recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
           keyword: searchKeyword,
@@ -206,6 +221,7 @@ class PostStore {
         params: {
           board,
           currentPage,
+          currentCategory: filterCategory,
           userId,
           recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
         },

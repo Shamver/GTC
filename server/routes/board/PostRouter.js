@@ -22,10 +22,11 @@ const SELECT_POST_LIST = `
     , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) AS commentCount
-    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST PT WHERE PT.BOARD_CD = ':BOARD_CD' 
-        AND PT.USER_ID NOT IN
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST P WHERE P.BOARD_CD = ':BOARD_CD' 
+        AND P.USER_ID NOT IN
         (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
-        AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = PT.ID AND TYPE_CD = 'R01') >= :LIKES
+        AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+        :query
       ) AS pageCount
     , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
     , (SELECT U.ADMIN_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterAdmin
@@ -37,6 +38,7 @@ const SELECT_POST_LIST = `
     AND P.USER_ID NOT IN
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
     AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+    :query
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -76,7 +78,7 @@ const SELECT_POST_LIST_ALL = `
     , IF(DATE_FORMAT(SYSDATE(), '%Y%m%d') = DATE_FORMAT(P.CRT_DTTM, '%Y%m%d'), DATE_FORMAT(P.CRT_DTTM, '%H:%i'), DATE_FORMAT(P.CRT_DTTM, '%m-%d')) AS date
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
     , (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) as commentCount
-    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST WHERE BOARD_CD NOT IN ('qna','faq','consult','crime')) AS pageCount
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST P WHERE P.BOARD_CD NOT IN ('qna','faq','consult','crime') :query) AS pageCount
   FROM 
     GTC_POST P
     , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
@@ -85,6 +87,7 @@ const SELECT_POST_LIST_ALL = `
     AND P.USER_ID NOT IN 
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
     AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+    :query
   ORDER BY ID DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -347,11 +350,22 @@ const SELECT_POST_LIST_BOARD_SEARCH = `
 `;
 
 router.get('/', (req, res) => {
-  let { currentPage } = req.query;
-  const { board, isHome, recommend } = req.query;
+  let { currentPage, currentCategory } = req.query;
+  const {
+    board, isHome, recommend,
+  } = req.query;
   let { userId } = req.query;
   currentPage = currentPage || 1;
+  currentCategory = currentCategory || '';
   if (!userId) userId = null;
+
+  let query = '';
+
+  if (currentCategory !== '') {
+    query = `
+      AND P.CATEGORY_CD = '${currentCategory}'
+    `;
+  }
 
   Database.execute(
     (database) => database.query(
@@ -362,6 +376,7 @@ router.get('/', (req, res) => {
         USER_ID: userId,
         PER_PAGE: isHome ? 9 : 25,
         LIKES: Number(recommend) ? 1 : 0,
+        query,
       },
     )
       .then((rows) => {

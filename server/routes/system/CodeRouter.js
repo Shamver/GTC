@@ -70,7 +70,7 @@ const SELECT_CODE = `
     , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GC.USE_FL) AS useYN
     , GC.USE_FL AS useFl
   FROM GTC_CODE GC
-  WHERE GC.CODEGROUP_ID = ':CODEGROUP_ID'
+  WHERE GC.CODEGROUP_ID IN (:CODEGROUP_ID)
 `;
 
 const UPDATE_CODE = `
@@ -217,7 +217,13 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  const { codeGroup } = req.query;
+  let { codeGroup } = req.query;
+
+  if (typeof codeGroup === 'string') {
+    codeGroup = `'${codeGroup}'`;
+  } else {
+    codeGroup = codeGroup.map((v) => `'${v}'`);
+  }
 
   Database.execute(
     (database) => database.query(

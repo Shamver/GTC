@@ -3,9 +3,10 @@ import { PaginationItem } from 'reactstrap';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 
-const PaginationList = () => {
+const PaginationList = ({ currentCategory }) => {
   const { BoardPostStore, BoardStore } = useStores();
   const { currentBoardMaxPage } = BoardPostStore;
   const {
@@ -21,6 +22,8 @@ const PaginationList = () => {
   const url = `/${currentBoardPath}/page/`;
   let filterUrl;
 
+  const category = currentCategory !== '' ? `/${currentCategory}` : '';
+
   if (bestFilterMode && searchMode) {
     filterUrl = `?filter_mode=true&search=${searchKeyword}&search_target=${searchTarget}`;
   } else if (searchMode) {
@@ -35,7 +38,7 @@ const PaginationList = () => {
   if (currentPageNum > 1) {
     array.push(
       <PaginationItem key={0}>
-        <CustomLink className="page-link" activeClassName="active" to={`${url}${currentPageNum - 1}${filterUrl}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`${url}${currentPageNum - 1}${category}${filterUrl}`}>
           ＜
         </CustomLink>
       </PaginationItem>,
@@ -46,7 +49,7 @@ const PaginationList = () => {
   for (let i = min; i <= max; i += 1) {
     array.push(
       <PaginationItem active={(i === 1 && !isPagination) || currentPageNum === i} key={i}>
-        <CustomLink className="page-link" activeClassName="active" to={`${url}${i}${filterUrl}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`${url}${i}${category}${filterUrl}`}>
           {i}
         </CustomLink>
       </PaginationItem>,
@@ -57,7 +60,7 @@ const PaginationList = () => {
   if (currentPageNum < currentBoardMaxPage) {
     array.push(
       <PaginationItem key={-1}>
-        <CustomLink className="page-link" activeClassName="active" to={`${url}${currentPageNum + 1}${filterUrl}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`${url}${currentPageNum + 1}${category}${filterUrl}`}>
           ＞
         </CustomLink>
       </PaginationItem>,
@@ -81,5 +84,9 @@ const CustomLink = styled(NavLink)`
     border-color: #DC3545;
   } 
 `;
+
+PaginationList.propTypes = {
+  currentCategory: Proptypes.string.isRequired,
+};
 
 export default memo(observer(PaginationList));
