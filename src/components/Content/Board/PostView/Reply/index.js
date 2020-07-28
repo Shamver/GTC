@@ -13,6 +13,7 @@ import avatar from '../../../../../resources/images/anonymous.png';
 import useStores from '../../../../../stores/useStores';
 import ReplyModify from './ReplyModify';
 import ReplyEdit from './ReplyEdit';
+import levelAdmin from '../../../../../resources/images/level/levelAdmin.png';
 
 const Reply = ({ data, index }) => {
   const {
@@ -42,6 +43,9 @@ const Reply = ({ data, index }) => {
     onSet(dropdownKey);
   }, [onSet, dropdownKey]);
 
+  const str = '(글쓴이)';
+  const WriterTag = (<Writer>{str}</Writer>);
+
   return (
     <ReplyLayout>
       {!!data.tabFl && (
@@ -54,7 +58,10 @@ const Reply = ({ data, index }) => {
           <ReplyProfileWrapper>
             <AvatarImg src={data.writerProfile || avatar} />
             <WriterDropdown isOpen={dropdown[dropdownKey]} toggle={(e) => onActive(dropdownKey, e)}>
-              <WriterDropdownToggle>{data.writer}</WriterDropdownToggle>
+              <WriterDropdownToggle>
+                {(data.isWriterAdmin || data.isWriterOperator) && (<LevelImage src={levelAdmin} alt="" />)}
+                {data.writer}
+              </WriterDropdownToggle>
               <WriterDropdownMenu>
                 <WriterDropdownItem onClick={() => getProfile(data.idWriter)}>
                   프로필
@@ -68,7 +75,7 @@ const Reply = ({ data, index }) => {
                 )}
               </WriterDropdownMenu>
             </WriterDropdown>
-            { data.idPostWriter === data.idWriter && (<Writer>(글쓴이)</Writer>)}
+            {(data.idPostWriter === data.idWriter) && WriterTag}
           </ReplyProfileWrapper>
           <span className="replyOption">
             { !data.deleteFl ? (
@@ -152,6 +159,8 @@ Reply.propTypes = {
     updateDate: Proptypes.string,
     secretFl: Proptypes.number,
     deleteFl: Proptypes.number,
+    isWriterAdmin: Proptypes.number,
+    isWriterOperator: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
 };
@@ -161,6 +170,12 @@ Reply.defaltpropTypes = {
     id: '',
   }),
 };
+
+const LevelImage = styled.img`
+  height: 15px;
+  margin-right: 3px;
+  vertical-align: text-bottom;
+`;
 
 const ClearFix = styled.div`
   clear: both;

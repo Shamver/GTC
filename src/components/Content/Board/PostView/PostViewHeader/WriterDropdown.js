@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../../../stores/useStores';
+import levelAdmin from '../../../../../resources/images/level/levelAdmin.png';
 
 const WriterDropdown = () => {
   const {
@@ -12,7 +13,9 @@ const WriterDropdown = () => {
     BoardPostStore,
   } = useStores();
   const { postView } = BoardPostStore;
-  const { writerId, writerName } = postView;
+  const {
+    writerId, writerName, isWriterAdmin, isWriterOperator,
+  } = postView;
   const { dropdown, onActive, onSet } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { userData, getProfile } = UserStore;
@@ -25,7 +28,10 @@ const WriterDropdown = () => {
 
   return (
     <WriterDropdownIn isOpen={dropdown.profile} toggle={(e) => onActive('profile', e)}>
-      <WriterDropdownToggle><b>{writerName}</b>님</WriterDropdownToggle>
+      <WriterDropdownToggle>
+        {(isWriterAdmin || isWriterOperator) && (<LevelImage src={levelAdmin} alt="" />)}
+        <b>{writerName}</b>님
+      </WriterDropdownToggle>
       <WriterDropdownMenu>
         <WriterDropdownItem onClick={() => getProfile(writerId)}>프로필</WriterDropdownItem>
         {!(!userData || userData.id === writerId) && (
@@ -37,6 +43,12 @@ const WriterDropdown = () => {
     </WriterDropdownIn>
   );
 };
+
+const LevelImage = styled.img`
+  height: 15px;
+  margin-right: 3px;
+  vertical-align: text-bottom;
+`;
 
 const WriterDropdownIn = styled(Dropdown)`
   display : inline-block;

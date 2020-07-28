@@ -18,7 +18,9 @@ const WriterDropdown = ({
   const { toggleConfirmAlert } = UtilAlertStore;
   const { userData, getProfile } = UserStore;
   const { addIgnore } = UserIgnoreStore;
-  const { writerName, writerId, isWriterAdmin } = data;
+  const {
+    writerName, writerId, isWriterAdmin, isWriterOperator,
+  } = data;
   const dropdownKey = isNotice ? `notice_${index}` : index.toString();
   const lastKey = isMobile ? 'mobile_'.concat(dropdownKey) : dropdownKey;
 
@@ -30,7 +32,7 @@ const WriterDropdown = ({
   return (
     <WriterDropdownIn isOpen={dropdown[lastKey]} toggle={(e) => onActive(lastKey, e)}>
       <WriterDropdownToggle>
-        { !!isWriterAdmin && (<LevelImage src={levelAdmin} alt="" />)}
+        {(isWriterAdmin || isWriterOperator) && (<LevelImage src={levelAdmin} alt="" />)}
         {writerName}
       </WriterDropdownToggle>
       <WriterDropdownMenu>
@@ -50,6 +52,7 @@ WriterDropdown.propTypes = {
     writerName: Proptypes.string,
     writerId: Proptypes.number,
     isWriterAdmin: Proptypes.number,
+    isWriterOperator: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
   isNotice: Proptypes.bool.isRequired,
