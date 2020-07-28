@@ -3,6 +3,8 @@ import {
   FormText, Col, CustomInput, Input,
 } from 'reactstrap';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { observer } from 'mobx-react';
 import avatarImg from '../../../resources/images/anonymous.png';
 import useStores from '../../../stores/useStores';
@@ -24,24 +26,51 @@ const MyAccountEditForm = () => {
             <h4>수정 가능한 정보</h4>
             <FormTextLeft>
               그로우토피아 닉네임&nbsp;&nbsp;
-              <AccentText>{isCanChangeGtNickname ? (!gtNicknameValidation.status && `❌${gtNicknameValidation.message}`)
-                : '❌변경한 지 30일이 지나지 않아 변경할 수 없습니다.'}
+              <AccentText>{isCanChangeGtNickname ? (!gtNicknameValidation.status && (
+                <>
+                  <FontAwesomeIcon icon={faTimes} />
+                  { gtNicknameValidation.message }
+                </>
+              ))
+                : (
+                  <>
+                    <FontAwesomeIcon icon={faExclamationTriangle} /> 변경한 지 30일이 지나지 않아 변경할 수 없습니다.
+                  </>
+                )}
               </AccentText>
             </FormTextLeft>
             <FormInput readOnly={!isCanChangeGtNickname} disabled={!isCanChangeGtNickname} type="text" name="gtName" value={gtName} onChange={onChangeValue} />
             <FormTextLeft>
               닉네임&nbsp;&nbsp;
-              <AccentText>{!nicknameValidation.status && `❌${nicknameValidation.message}`}</AccentText>
+              <AccentText>{!nicknameValidation.status && (
+                <>
+                  <FontAwesomeIcon icon={faTimes} />
+                  &nbsp;{ nicknameValidation.message }
+                </>
+              )}
+              </AccentText>
             </FormTextLeft>
             <FormInput type="text" name="nickname" value={nickname} onChange={onChangeValue} />
             <FormTextLeft>
               생년월일&nbsp;&nbsp;
-              <AccentText>{!birthValidation.status && `❌${birthValidation.message}`}</AccentText>
+              <AccentText>{!birthValidation.status && (
+                <>
+                  <FontAwesomeIcon icon={faTimes} />
+                  &nbsp;{ gtNicknameValidation.message }
+                </>
+              )`❌${birthValidation.message}`}
+              </AccentText>
             </FormTextLeft>
             <FormInput type="date" name="birth" value={birth} onChange={onChangeValue} />
             <FormTextLeft>
               성별&nbsp;&nbsp;
-              <AccentText>{!genderValidation.status && `❌${genderValidation.message}`}</AccentText>
+              <AccentText>{!genderValidation.status && (
+                <>
+                  <FontAwesomeIcon icon={faTimes} />
+                  &nbsp;{ genderValidation.message }
+                </>
+              )}
+              </AccentText>
             </FormTextLeft>
             <FormSelect id="genderSelect" type="select" name="gender" value={gender} onChange={onChangeValue}>
               <option value="">성별 선택</option>
