@@ -62,7 +62,7 @@ class AdvertiseStore {
       .then((response) => {
         const { data } = response;
         if (data.success) {
-          if (data.code === 0) {
+          if (data.code === 1) {
             toast.success(data.message);
             this.getAdPostListNow();
           } else {

@@ -59,7 +59,7 @@ router.post('/', (req, res) => {
       },
     )
       .then((rows) => {
-        if (rows.length !== 0 && !rows[0].postId) {
+        if (rows.length === 0) {
           return Promise.reject();
         }
         return database.query(
@@ -81,14 +81,14 @@ router.post('/', (req, res) => {
       .then(() => {
         res.json({
           success: true,
-          code: 0,
+          code: 1,
           message: '😊 포스팅이 성공적으로 광고 목록에 삽입되었습니다.',
         });
       })
       .catch(() => {
         res.json({
           success: false,
-          code: 1,
+          code: 2,
           message: '😳 존재하지 않는 게시물 입니다.',
         });
       }),
