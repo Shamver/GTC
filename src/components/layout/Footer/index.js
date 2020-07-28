@@ -40,7 +40,6 @@ const LinkButton = styled(Button)`
   }
 `;
 
-
 const LayoutFooter = styled.div`
   text-align : center;
   padding : 20px 40px 20px;

@@ -12,8 +12,7 @@ import BoardPagination from './Pagination';
 import useStores from '../../../stores/useStores';
 
 const BoardFooter = ({ currentCategory }) => {
-  const { BoardStore, UserStore } = useStores();
-  const { userData, guestAuthor } = UserStore;
+  const { BoardStore } = useStores();
   const {
     currentBoardPath, bestFilterMode, currentBoardPage,
     searchKeyword, onSubmit, onChange, onSearch, searchTarget,
@@ -32,7 +31,7 @@ const BoardFooter = ({ currentCategory }) => {
             &nbsp;&nbsp;인기 글
           </Button>
         </AbsoluteLeftLink>
-        <AbsoluteRightLink onClick={userData ? '' : guestAuthor} to={`/${currentBoardPath}/post`}>
+        <AbsoluteRightLink to={`/${currentBoardPath}/post`}>
           <Button color="danger" size="sm">
             <FontAwesomeIcon icon={faPen} />
               &nbsp;&nbsp;글 쓰기
