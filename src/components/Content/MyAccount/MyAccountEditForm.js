@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import {
-  FormText, Input, Col, CustomInput,
+  FormText, Col, CustomInput, Input,
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
@@ -43,7 +43,7 @@ const MyAccountEditForm = () => {
               성별&nbsp;&nbsp;
               <AccentText>{!genderValidation.status && `❌${genderValidation.message}`}</AccentText>
             </FormTextLeft>
-            <FormSelect type="select" name="gender" value={gender} onChange={onChangeValue}>
+            <FormSelect id="genderSelect" type="select" name="gender" value={gender} onChange={onChangeValue}>
               <option value="">성별 선택</option>
               <option value="M">남자</option>
               <option value="F">여자</option>
@@ -92,9 +92,9 @@ const FormInput = styled.input`
   color: ${(props) => (props.readOnly ? 'gray' : 'black')}
 `;
 
-const FormSelect = styled(Input)`
+const FormSelect = styled(CustomInput)`
   outline: 0 !important;
-  background: #f2f2f2 !important;
+  background-color: #f2f2f2 !important;
   width: 100% !important;
   border: 0 !important;
   margin: 0 0 15px !important;
@@ -102,6 +102,11 @@ const FormSelect = styled(Input)`
   padding: 15px !important;
   box-sizing: border-box !important;
   font-size: 14px !important;
+  
+  background-position:
+    calc(100% - 21px) 1.5em,
+    calc(100% - 20px) 1em,
+    100% 0 !important;
   
   &:focus {
     outline: 0 !important;
