@@ -68,15 +68,9 @@ const ListTable = styled(Table)`
 `;
 
 PostLockerFavorite.propTypes = {
-  currentPage: Proptypes.string,
-  currentTab: Proptypes.string,
-  noPagination: Proptypes.bool,
-};
-
-PostLockerFavorite.defaultProps = {
-  currentPage: '1',
-  currentTab: 'myPost',
-  noPagination: false,
+  currentPage: Proptypes.string.isRequired,
+  currentTab: Proptypes.string.isRequired,
+  noPagination: Proptypes.bool.isRequired,
 };
 
 export default memo(observer(PostLockerFavorite));

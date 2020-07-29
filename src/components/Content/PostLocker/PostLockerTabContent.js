@@ -27,15 +27,9 @@ const PostLockerTabContent = ({ currentPage, noPagination, currentTab }) => (
 );
 
 PostLockerTabContent.propTypes = {
-  currentPage: Proptypes.number,
-  currentTab: Proptypes.string,
-  noPagination: Proptypes.bool,
-};
-
-PostLockerTabContent.defaultProps = {
-  currentPage: 1,
-  currentTab: 'myPost',
-  noPagination: false,
+  currentPage: Proptypes.string.isRequired,
+  currentTab: Proptypes.string.isRequired,
+  noPagination: Proptypes.bool.isRequired,
 };
 
 export default memo(observer(PostLockerTabContent));
