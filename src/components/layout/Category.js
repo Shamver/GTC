@@ -24,7 +24,7 @@ const Category = () => {
         <MenuRowTop>
           <MenuDivTop>
             <TopIcon icon={faBars} className="fa-fw" />&nbsp;&nbsp;
-            <TopText>GTC 전체 메뉴</TopText>
+            {/*<TopSpan>GTC 전체 메뉴</TopSpan>*/}
           </MenuDivTop>
         </MenuRowTop>
         <MenuLink to="/notice" onClick={searchOff} activeClassName="active">
@@ -137,7 +137,7 @@ const MenuDiv = styled.div`
 
 const MenuRowTop = styled(MenuRow)`
   background-color: #DC3545;
-  padding : 2.5px 0px !important;
+  height: 35px;
   margin : 0px !important;
   margin-bottom: 0px !important;
   &:hover {
@@ -146,22 +146,25 @@ const MenuRowTop = styled(MenuRow)`
   }
 `;
 
-const MenuDivTop = styled(MenuDiv)`
+const MenuDivTop = styled.div`
   font-weight: bold; 
   color: white;
-  height : 32px;
+  line-height: 1px;
+  height: 35px;
+`;
+
+const TopSpan = styled.span`
+  line-height: 35px
+  vertical-align: middle;
 `;
 
 const FaiPink = styled(FontAwesomeIcon)`
   color: #f57c73;
 `;
 
-const TopText = styled.span`
-  vertical-align : text-top;
-`;
-
 const TopIcon = styled(FontAwesomeIcon)`
-  vertical-align : text-bottom;
+  line-height: 35px
+  vertical-align: middle;
 `;
 
 
