@@ -356,6 +356,7 @@ class CodeStore {
       },
     })
       .then((response) => {
+        console.log(response.data);
         if (response.data) {
           this.setCodeList = response.data;
         }

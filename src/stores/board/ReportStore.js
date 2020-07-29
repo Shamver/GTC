@@ -64,6 +64,7 @@ class ReportStore {
   };
 
   @action toggleReport = (targetId, type, content, writer) => {
+    this.root.SystemCodeStore.getCodeComponent('REPORT_CATEGORY', '');
     if (targetId) {
       this.reportData = {
         targetId,

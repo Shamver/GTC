@@ -189,7 +189,7 @@ router.post('/', authMiddleware, (req, res) => {
       })
       .then((rows) => {
         const { ID } = rows[0];
-        point('addReply', 'REPLY', { ...data, replyId: rows[0].replyId });
+        point('addReply', 'R02', { ...data, replyId: rows[0].replyId });
         return alertMiddleware(database, ID);
       }, () => {})
       .then(() => {
@@ -274,7 +274,7 @@ router.delete('/', authMiddleware, (req, res) => {
         );
       })
       .then(() => {
-        point('deleteReply', 'REPLY', data);
+        point('deleteReply', 'R02', data);
         res.json({
           success: true,
           code: 1,

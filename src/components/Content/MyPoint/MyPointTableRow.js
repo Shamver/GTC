@@ -4,26 +4,8 @@ import * as Proptypes from 'prop-types';
 
 const MyPointTableRow = ({ data }) => {
   const {
-    type, point, date, postId,
+    point, pointType, date, postId,
   } = data;
-
-  let desc;
-  const isEtc = !['POST', 'REPLY'].includes(type);
-
-  if (type === 'POST' && point > 0) {
-    desc = '글 작성';
-  } else if (type === 'POST' && point < 0) {
-    desc = '글 삭제';
-  } else if (type === 'REPLY' && point > 0) {
-    desc = '댓글 작성';
-  } else if (type === 'REPLY' && point < 0) {
-    desc = '댓글 삭제';
-  } else if (type === 'DAILY') {
-    desc = '출석체크 이벤트';
-  } else if (type === 'ADVERTISE') {
-    desc = '광고 게시';
-  }
-
   return (
     <tr>
       <TableTh scope="row">
@@ -33,7 +15,7 @@ const MyPointTableRow = ({ data }) => {
         { point } 점
       </TableTd>
       <TableTd>
-        { desc } {isEtc ? '' : `(# ${postId})` }
+        { pointType } (#{ postId })
       </TableTd>
     </tr>
   );
@@ -45,6 +27,7 @@ MyPointTableRow.propTypes = {
     point: Proptypes.number,
     date: Proptypes.string,
     postId: Proptypes.number,
+    pointType: Proptypes.string,
   }).isRequired,
 };
 
