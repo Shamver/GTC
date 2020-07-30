@@ -58,7 +58,7 @@ PaginationList.propTypes = {
 };
 
 PaginationList.defaultProps = {
-  noPagination: false,
+  noPagination: true,
   currentPage: '1',
 };
 
@@ -66,12 +66,14 @@ PaginationList.defaultProps = {
 const PostLockerPagination = ({
   noPagination, currentPage, maxPage, path,
 }) => {
-  const { UserPointStore } = useStores();
-  const { currentPointMaxPage } = UserPointStore;
+  const { BoardReplyStore, BoardPostStore, UserFavoriteStore } = useStores();
+  const { favoriteMaxPage } = UserFavoriteStore;
+  const { postMineMaxPage } = BoardPostStore;
+  const { replyMineMaxPage } = BoardReplyStore;
 
   useEffect(() => {
 
-  }, [currentPointMaxPage]);
+  }, [favoriteMaxPage, postMineMaxPage, replyMineMaxPage, currentPage]);
 
   return (
     <PaginationCustom>
@@ -85,17 +87,10 @@ const PostLockerPagination = ({
   );
 };
 PostLockerPagination.propTypes = {
-  noPagination: Proptypes.bool,
-  currentPage: Proptypes.string,
-  maxPage: Proptypes.number,
-  path: Proptypes.string,
-};
-
-PostLockerPagination.defaultProps = {
-  noPagination: false,
-  currentPage: '1',
-  maxPage: 1,
-  path: 'myPost',
+  currentPage: Proptypes.string.isRequired,
+  noPagination: Proptypes.bool.isRequired,
+  maxPage: Proptypes.number.isRequired,
+  path: Proptypes.string.isRequired,
 };
 
 const SmallSpan = styled.span`
