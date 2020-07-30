@@ -201,16 +201,14 @@ const Avatar = styled.img`
 
 const NewAlertCountSpan = styled.span`
   margin-right: 5px;
-
   border-radius: 100px;
   padding: 3.4px 7px;
+  padding-top: 4px;
   background: #d80a0a;
-  
-  display: inline-block;
+  display: inline;
   min-width: 20px;
   font-size: 0.9rem !important;
   font-weight: 700;
-  line-height: 1;
   color: #fff;
   text-align: center;
   white-space: nowrap;
