@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import {
   Modal, ModalHeader, ModalBody, FormText, Input,
@@ -6,31 +6,17 @@ import {
 import styled from 'styled-components';
 import useStores from '../../stores/useStores';
 
-/* const GenderCode = () => {
-  const { SystemCodeStore } = useStores();
-  const { setCodeList } = SystemCodeStore;
-
-  return setCodeList.map((data) => (
-    <option id value={data.CODE} key={data.CODE}>{data.NAME}</option>
-  ));
-}; */
-
 const Sign = () => {
-  const { UtilStore, UserStore, SystemCodeStore } = useStores();
-  const { getCodeComponent, setCodeList } = SystemCodeStore;
-  const { signToggle, toggleSign } = UtilStore;
+  const { UtilStore, UserStore } = useStores();
+  const { signToggle, toggleSign, userGenderCodeList } = UtilStore;
   const { onRegisterChangeValue, registerData, registerCheck } = UserStore;
   const {
     email, nickname, birth, gender,
   } = registerData;
 
-  const GenderCode = setCodeList.map((data) => (
-    <option value={data.CODE} key={data.CODE}>{data.NAME}</option>
+  const GenderCode = userGenderCodeList.map((data) => (
+    <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
   ));
-
-  useEffect(() => {
-    getCodeComponent('GENDER_CODE', '');
-  }, []);
 
   return (
     <Modal isOpen={signToggle} toggle={toggleSign}>

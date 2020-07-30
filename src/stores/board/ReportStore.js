@@ -14,6 +14,8 @@ class ReportStore {
     description: '',
   };
 
+  @observable reportCodeList = [];
+
   constructor(root) {
     this.root = root;
   }
@@ -31,8 +33,8 @@ class ReportStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            //rp01
-            //rp02
+            // rp01
+            // rp02
             this.toggleReport();
           } else {
             toast.info(data.message);
@@ -63,8 +65,12 @@ class ReportStore {
     };
   };
 
+  @action setCodeList = (code) => {
+    this.reportCodeList = code;
+  }
+
   @action toggleReport = (targetId, type, content, writer) => {
-    this.root.SystemCodeStore.getCodeComponent('REPORT_CATEGORY', '');
+    this.root.SystemCodeStore.getCodeComponent('REPORT_CATEGORY', this.setCodeList);
     if (targetId) {
       this.reportData = {
         targetId,

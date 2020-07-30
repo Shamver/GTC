@@ -80,6 +80,8 @@ class BoardStore {
 
   @observable searchTarget = 'title';
 
+  @observable boardCategoryCodeList = [];
+
   constructor(root) {
     this.root = root;
   }
@@ -122,26 +124,9 @@ class BoardStore {
 
   @action getBoardName = (path) => this.boardKinds[path];
 
-  @action getBoardCategory = async () => {
-    let codeGroupId = `BOARD_${this.currentBoardPath.toUpperCase()}_CATEGORY`;
-
-    if (this.currentBoardPath === 'all') {
-      codeGroupId = '';
-    }
-
-    await axios.get('/api/system/code', { params: { codeGroup: codeGroupId } })
-      .then((response) => {
-        const { data } = response;
-        if (data.success) {
-          if (data.code === 1) {
-            this.currentBoardCategories = data.result;
-          }
-        } else {
-          toast.error(data.message);
-        }
-      })
-      .catch((response) => { toast.error(response.message); });
-  };
+  @action setCategoryCodeList = (code) => {
+    this.currentBoardCategories = code;
+  }
 
   @action moveBoard = (path) => {
     this.root.UtilRouteStore.history.setCurrentBoardToId('/'.concat(path.toLowerCase()));

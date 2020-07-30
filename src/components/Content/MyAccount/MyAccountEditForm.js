@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo } from 'react';
 import {
   FormText, Input, Col, CustomInput,
 } from 'reactstrap';
@@ -7,32 +7,21 @@ import { observer } from 'mobx-react';
 import avatarImg from '../../../resources/images/anonymous.png';
 import useStores from '../../../stores/useStores';
 
-/* const GenderCode = () => {
-  const { SystemCodeStore } = useStores();
-  const { setCodeList } = SystemCodeStore;
-
-  return setCodeList.map((data) => (
-    <option id value={data.CODE} key={data.CODE}>{data.NAME}</option>
-  ));
-}; */
-
 const MyAccountEditForm = () => {
   const { ComponentMyAccountStore, SystemCodeStore } = useStores();
-  const { getCodeComponent, setCodeList } = SystemCodeStore;
+  const { getCodeComponent } = SystemCodeStore;
   const {
-    profileYN, onChangeProfile, gender, nickname, birth,
+    profileYN, onChangeProfile, gender, nickname, birth, setUserGenderCodeList, userGenderCodeList,
     onChangeValue, nicknameValidation, birthValidation, genderValidation,
     profile, onChangeProfileImage, uploadImagePreview, gtName, gtNicknameValidation,
     isCanChangeGtNickname,
   } = ComponentMyAccountStore;
 
-  const GenderCode = setCodeList.map((data) => (
-    <option value={data.CODE} key={data.CODE}>{data.NAME}</option>
+  const GenderCode = userGenderCodeList.map((data) => (
+    <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
   ));
 
-  useEffect(() => {
-    getCodeComponent('GENDER_CODE', '');
-  }, []);
+  getCodeComponent('GENDER_CODE', setUserGenderCodeList);
 
   return (
     <Col xs="12" sm="6">

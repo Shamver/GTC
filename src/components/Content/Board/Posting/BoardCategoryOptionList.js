@@ -3,19 +3,18 @@ import { observer } from 'mobx-react';
 import useStores from '../../../../stores/useStores';
 
 const BoardCategoryOptionList = () => {
-  const { SystemCodeStore } = useStores();
-  const { setCodeList } = SystemCodeStore;
-
+  const { BoardPostStore } = useStores();
+  const { categoryCodeList } = BoardPostStore;
   const categoryArr = [];
   categoryArr.push(<option key={0}>선택</option>);
 
-  setCodeList.map((data) => (
+  categoryCodeList.map((data) => (
     categoryArr.push(
       <option
-        value={data.CODE}
-        key={data.CODE}
+        value={data.code}
+        key={data.code}
       >
-        {data.NAME}
+        {data.codeName}
       </option>,
     )
   ));

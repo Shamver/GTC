@@ -6,6 +6,7 @@ const MyPointTableRow = ({ data }) => {
   const {
     point, pointType, date, postId,
   } = data;
+
   return (
     <tr>
       <TableTh scope="row">

@@ -67,7 +67,9 @@ class PostStore {
 
   @observable replyLockerHash;
 
-  @observable isSearch = false;
+  @observable isSearch = false
+
+  @observable categoryCodeList = [];
 
   constructor(root) {
     this.root = root;
@@ -595,6 +597,10 @@ class PostStore {
 
   @action getHash = (hash) => {
     this.replyLockerHash = hash;
+  }
+
+  @action setCategoryCodeList = (code) => {
+    this.categoryCodeList = code;
   }
 }
 

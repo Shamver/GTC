@@ -21,7 +21,7 @@ const Posting = ({ match, isModify }) => {
   const { userData, guestAuthor } = UserStore;
   const {
     post, setPostBoard, onChangeValue, addPost,
-    getModifyPost, modifyPost, setPostClear,
+    getModifyPost, modifyPost, setPostClear, setCategoryCodeList,
   } = BoardPostStore;
   const { goBack } = UtilRouteStore;
   const { getCodeComponent } = SystemCodeStore;
@@ -45,10 +45,10 @@ const Posting = ({ match, isModify }) => {
 
   useLayoutEffect(() => {
     loadingProcess([
-      () => getCodeComponent(`BOARD_${post.board.toUpperCase()}_CATEGORY`),
+      () => getCodeComponent(`BOARD_${post.board.toUpperCase()}_CATEGORY`, setCategoryCodeList),
     ]);
   }, [
-    loadingProcess, post.board, getCodeComponent,
+    loadingProcess, post.board, getCodeComponent, setCategoryCodeList,
   ]);
 
   return (

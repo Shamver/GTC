@@ -8,17 +8,16 @@ import styled from 'styled-components';
 import useStores from '../../stores/useStores';
 
 const Report = () => {
-  const { BoardReportStore, SystemCodeStore } = useStores();
+  const { BoardReportStore } = useStores();
   const {
-    reportToggle, toggleReport, reportData, report, onChangeValue,
+    reportToggle, toggleReport, reportData, report, onChangeValue, reportCodeList,
   } = BoardReportStore;
-  const { setCodeList } = SystemCodeStore;
   const {
     content, writer, description, type,
   } = reportData;
 
-  const reportCode = setCodeList.map((data) => (
-    <CustomInput type="radio" id={data.CODE} key={data.CODE} value={data.CODE} onChange={onChangeValue} name="reason" label={data.NAME} />
+  const reportCode = reportCodeList.map((data) => (
+    <CustomInput type="radio" id={data.code} key={data.codeOrder} value={data.code} onChange={onChangeValue} name="reason" label={data.codeName} />
   ));
 
   return (
