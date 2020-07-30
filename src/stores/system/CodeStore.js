@@ -292,7 +292,6 @@ class CodeStore {
   };
 
   @action setCodeEditModeId = (value) => {
-    console.log(value);
     this.codeEditModeId = value.id;
     this.isAddCode = false;
     this.code = {
@@ -356,7 +355,6 @@ class CodeStore {
       },
     })
       .then((response) => {
-        console.log(response.data);
         if (response.data) {
           this.setCodeList = response.data;
         }
