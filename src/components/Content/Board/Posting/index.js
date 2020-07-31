@@ -13,7 +13,7 @@ import useStores from '../../../../stores/useStores';
 import BoardOptionList from './BoardOptionList';
 import BoardCategoryOptionList from './BoardCategoryOptionList';
 
-const Posting = ({ match, isModify }) => {
+const Posting = ({ match, parentProps }) => {
   const {
     BoardPostStore, UtilRouteStore, UtilLoadingStore,
     SystemCodeStore, UserStore,
@@ -26,6 +26,7 @@ const Posting = ({ match, isModify }) => {
   const { goBack } = UtilRouteStore;
   const { getCodeComponent } = SystemCodeStore;
   const { loadingProcess } = UtilLoadingStore;
+  const { isModify } = parentProps;
   const { params } = match;
   const { board, id } = params;
 
@@ -111,11 +112,15 @@ Posting.propTypes = {
       id: PropTypes.string,
     }),
   }).isRequired,
-  isModify: PropTypes.bool,
+  parentProps: PropTypes.shape({
+    isModify: PropTypes.bool.isRequired,
+  }),
 };
 
 Posting.defaultProps = {
-  isModify: false,
+  parentProps: PropTypes.shape({
+    isModify: false,
+  }),
 };
 
 const RightMarginlessCol = styled(Col)`
