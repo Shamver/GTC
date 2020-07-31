@@ -143,6 +143,10 @@ const RightSpan = styled.span`
 
 const ContentMain = styled.div`
   padding: 14px;
+  
+  & img {
+    max-width: 100%;
+  }
 `;
 
 export default memo(observer(PostViewContent));
