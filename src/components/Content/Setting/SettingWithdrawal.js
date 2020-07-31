@@ -48,10 +48,10 @@ const SettingWithdrawal = () => {
         <br />
         <Button
           color="danger"
+          disabled={!withdrawalIsChecked}
           onClick={() => {
             isCheckedWithdrawal(() => toggleConfirmAlert('정말 삭제하시겠어요?', () => withdrawal()));
           }}
-          outline={!withdrawalIsChecked}
         >
           <FontAwesomeIcon icon={faTrashAlt} /> 회원탈퇴
         </Button>
