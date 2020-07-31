@@ -17,6 +17,8 @@ const PostRow = ({ data, index, isNotice }) => {
   const { onClickPost, isVisited } = ComponentPostStore;
   const { currentBoardPath } = BoardStore;
 
+  console.log(isImage);
+
   const isImageComponent = isImage
     ? (<FontAwesomeIcon icon={faImage} />)
     : (<BottomIcon icon={faCommentDots} />);
