@@ -44,7 +44,8 @@ const Board = ({ parentProps, location, match }) => {
   }, [
     loadingProcess, setCurrentBoardPath, board, judgeFilterMode, query, setCurrentBoardPage,
     currentPage, setIsPagination, isPagination, getBoardPostNoticeList, getBoardPostList,
-    setClearPostView, boardPathCheck, currentCategory, currentBoardPath, setCategoryCodeList,
+    setClearPostView, boardPathCheck, currentCategory, getCodeComponent, currentBoardPath,
+    setCategoryCodeList,
   ]);
 
   return (
