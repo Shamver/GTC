@@ -15,6 +15,7 @@ const Advertise = lazy(() => import('./Advertise'));
 const Home = lazy(() => import('./Home'));
 const Test = lazy(() => import('./Test'));
 const Posting = lazy(() => import('./Board/Posting'));
+const ConsultUser = lazy(() => import('./Consult/User'));
 export default {
   Board,
   Setting,
@@ -31,4 +32,5 @@ export default {
   Home,
   Test,
   Posting,
+  ConsultUser,
 };

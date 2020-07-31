@@ -9,7 +9,9 @@ import BoardFooter from './BoardFooter';
 import useStores from '../../../stores/useStores';
 
 const Board = ({ parentProps, location, match }) => {
-  const { BoardPostStore, UtilLoadingStore, BoardStore, SystemCodeStore } = useStores();
+  const {
+    BoardPostStore, UtilLoadingStore, BoardStore, SystemCodeStore,
+  } = useStores();
   const { params } = match;
   const { board } = params;
 
