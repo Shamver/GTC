@@ -28,13 +28,20 @@ class UtilStore {
 
   @observable privacyToggle = false;
 
+  @observable userGenderCodeList = [];
+
   constructor(root) {
     this.root = root;
+  }
+
+  @action setUserGenderCodeList = (code) => {
+    this.userGenderCodeList = code;
   }
 
   @action toggleSign = (result) => {
     if (result && result.profile) {
       this.root.UserStore.setRegisterData(result);
+      this.root.SystemCodeStore.getCodeComponent('GENDER_CODE', this.setUserGenderCodeList);
     }
 
     this.signToggle = !this.signToggle;

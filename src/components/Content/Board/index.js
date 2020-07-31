@@ -9,7 +9,7 @@ import BoardFooter from './BoardFooter';
 import useStores from '../../../stores/useStores';
 
 const Board = ({ parentProps, location, match }) => {
-  const { BoardPostStore, UtilLoadingStore, BoardStore } = useStores();
+  const { BoardPostStore, UtilLoadingStore, BoardStore, SystemCodeStore } = useStores();
   const { params } = match;
   const { board } = params;
 
@@ -19,11 +19,12 @@ const Board = ({ parentProps, location, match }) => {
   currentPage = currentPage || '1';
   currentCategory = currentCategory || '';
 
+  const { getCodeComponent } = SystemCodeStore;
   const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
   const {
-    setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage,
-    setIsPagination, boardPathCheck, getBoardCategory,
+    setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage, currentBoardPath,
+    setIsPagination, boardPathCheck, setCategoryCodeList,
   } = BoardStore;
   const query = qs.parse(location.search);
 
@@ -37,13 +38,14 @@ const Board = ({ parentProps, location, match }) => {
       () => setIsPagination(isPagination),
       () => getBoardPostNoticeList(board, currentPage),
       () => getBoardPostList(board, currentPage, currentCategory),
-      getBoardCategory,
+      () => getCodeComponent(`BOARD_${currentBoardPath.toUpperCase()}_CATEGORY`, setCategoryCodeList),
       setClearPostView,
     ]);
   }, [
-    loadingProcess, setCurrentBoardPath, board, judgeFilterMode, getBoardCategory,
-    query, setCurrentBoardPage, currentPage, setIsPagination, isPagination,
-    getBoardPostNoticeList, getBoardPostList, setClearPostView, boardPathCheck, currentCategory,
+    loadingProcess, setCurrentBoardPath, board, judgeFilterMode, query, setCurrentBoardPage,
+    currentPage, setIsPagination, isPagination, getBoardPostNoticeList, getBoardPostList,
+    setClearPostView, boardPathCheck, currentCategory, getCodeComponent, currentBoardPath,
+    setCategoryCodeList,
   ]);
 
   return (

@@ -82,9 +82,16 @@ const SELECT_POST_LIST_ALL = `
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') as recommendCount
     , ((SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0) - 
       (SELECT COUNT(*) AS count FROM GTC_COMMENT WHERE POST_ID = P.ID AND DELETE_FL = 0 AND USER_ID = (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID) )) as commentCount
-    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST P WHERE P.BOARD_CD NOT IN ('qna','faq','consult','crime') :query) AS pageCount
+    , (SELECT CEIL(COUNT(*)/25) FROM GTC_POST P
+      WHERE P.BOARD_CD NOT IN ('qna','faq','consult','crime')
+      AND P.USER_ID NOT IN 
+      (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+      AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+      :query) AS pageCount
+    , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
     , (SELECT U.ADMIN_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterAdmin
     , (SELECT U.OPERATOR_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterOperator
+>>>>>>> 128104d758bbe3db1c1edde977d13e151066ea5a
   FROM 
     GTC_POST P
     , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
@@ -551,7 +558,7 @@ router.post('/', authMiddleware, (req, res) => {
           bpId: rows[0].id,
         };
 
-        point('addPost', 'POST', postData);
+        point('addPost', 'R01', postData);
         res.json({
           success: true,
           code: 1,
@@ -624,7 +631,7 @@ router.delete('/', authMiddleware, (req, res) => {
       },
     )
       .then(() => {
-        point('deletePost', 'POST', {
+        point('deletePost', 'R01', {
           bpId: data.id,
           writer: data.writer,
         });

@@ -7,6 +7,8 @@ class CodeStore {
 
   @observable codeList = [];
 
+  @observable codeYnList = [];
+
   @observable isAddCodeGroup = false;
 
   @observable isAddCode = false;
@@ -29,8 +31,6 @@ class CodeStore {
     desc: '',
     useFl: 1,
   };
-
-  @observable setCodeList = [];
 
   constructor(root) {
     this.root = root;
@@ -292,7 +292,6 @@ class CodeStore {
   };
 
   @action setCodeEditModeId = (value) => {
-    console.log(value);
     this.codeEditModeId = value.id;
     this.isAddCode = false;
     this.code = {
@@ -349,15 +348,20 @@ class CodeStore {
     return true;
   }
 
-  @action getCodeComponent = async (getCodeGroup, temp) => {
-    await axios.get('/api/system/code/temp', {
+  @action setCodeList = (code) => {
+    this.codeYnList = code;
+  }
+
+  @action getCodeComponent = (codeGroup, setCodeList) => {
+    axios.get('/api/system/code', {
       params: {
-        getCodeGroup, temp,
+        codeGroup,
       },
     })
       .then((response) => {
-        if (response.data) {
-          this.setCodeList = response.data;
+        const { data } = response;
+        if (data.result) {
+          setCodeList(data.result);
         }
       })
       .catch((response) => {

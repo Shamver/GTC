@@ -3,14 +3,14 @@ import useStores from '../../../stores/useStores';
 
 const CodeFlag = () => {
   const { SystemCodeStore } = useStores();
-  const { setCodeList } = SystemCodeStore;
+  const { codeYnList } = SystemCodeStore;
 
-  return setCodeList.map((data) => (
+  return codeYnList.map((data) => (
     <option
-      value={data.CODE}
-      key={data.CODE}
+      value={data.code}
+      key={data.code}
     >
-      {data.NAME}
+      {data.codeName}
     </option>
   ));
 };

@@ -7,7 +7,7 @@ import useStores from '../../../stores/useStores';
 import PostLockerNav from './PostLockerNav';
 import PostLockerTabContent from './PostLockerTabContent';
 
-const PostLocker = ({ match, noPagination }) => {
+const PostLocker = ({ match, parentProps }) => {
   const {
     BoardPostStore, BoardReplyStore, UserFavoriteStore,
     UtilLoadingStore,
@@ -18,7 +18,11 @@ const PostLocker = ({ match, noPagination }) => {
   const { getMyFavorite } = UserFavoriteStore;
   const { loadingProcess } = UtilLoadingStore;
 
-  const { currentPage = 1, currentTab = 'myPost' } = match.params;
+  let { noPagination } = parentProps;
+
+  noPagination = noPagination !== undefined;
+
+  const { currentPage = '1', currentTab = 'myPost' } = match.params;
 
   useLayoutEffect(() => {
     loadingProcess([
@@ -56,11 +60,9 @@ PostLocker.propTypes = {
       currentTab: Proptypes.string,
     }).isRequired,
   }).isRequired,
-  noPagination: Proptypes.bool,
-};
-
-PostLocker.defaultProps = {
-  noPagination: false,
+  parentProps: Proptypes.shape({
+    noPagination: Proptypes.bool,
+  }).isRequired,
 };
 
 export default memo(observer(PostLocker));
