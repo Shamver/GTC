@@ -1,9 +1,9 @@
 import React, { useLayoutEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import styled from 'styled-components';
+import { Button, Table } from 'reactstrap';
 import useStores from '../../../stores/useStores';
-import styled from "styled-components";
-import {Button, Table} from "reactstrap";
 
 const BoardSetting = () => {
   const { UtilLoadingStore } = useStores();
@@ -28,11 +28,13 @@ const BoardSetting = () => {
             <CodeTable bordered hover>
               <thead>
                 <tr>
-                  <th>코드그룹</th>
-                  <th>코드그룹명</th>
-                  <th>코드그룹 설명</th>
-                  <CenterTh>수정</CenterTh>
-                  <CenterTh>삭제</CenterTh>
+                  <th>게시판</th>
+                  <th>이름</th>
+                  <th>경로</th>
+                  <th>순서</th>
+                  <th>사용 여부</th>
+                  <th>권한</th>
+                  <th>설명</th>
                 </tr>
               </thead>
               <tbody>
