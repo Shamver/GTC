@@ -56,7 +56,7 @@ class MyAccountStore {
 
   @action setUserGenderCodeList = (code) => {
     this.userGenderCodeList = code;
-  }
+  };
 
   @action onChangeProfile = (() => {
     if (this.profileYN) {

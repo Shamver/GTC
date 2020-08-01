@@ -10,10 +10,9 @@ import avatarImg from '../../../resources/images/anonymous.png';
 import useStores from '../../../stores/useStores';
 
 const MyAccountEditForm = () => {
-  const { ComponentMyAccountStore, SystemCodeStore } = useStores();
-  const { getCodeComponent } = SystemCodeStore;
+  const { ComponentMyAccountStore } = useStores();
   const {
-    profileYN, onChangeProfile, gender, nickname, birth, setUserGenderCodeList, userGenderCodeList,
+    profileYN, onChangeProfile, gender, nickname, birth, userGenderCodeList,
     onChangeValue, nicknameValidation, birthValidation, genderValidation,
     profile, onChangeProfileImage, uploadImagePreview, gtName, gtNicknameValidation,
     isCanChangeGtNickname,
@@ -22,8 +21,6 @@ const MyAccountEditForm = () => {
   const GenderCode = userGenderCodeList.map((data) => (
     <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
   ));
-
-  getCodeComponent('GENDER_CODE', setUserGenderCodeList);
 
   return (
     <Col xs="12" sm="6">
