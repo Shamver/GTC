@@ -279,13 +279,13 @@ class UserStore {
       .catch((response) => toast.error(response.message));
   };
 
-  @action getIsCanChangeGtNickname = () => {
+  @action getIsCanChangeGtNickname = async () => {
     const { userData } = this;
     const { id } = userData;
 
     const { setIsCanChangeGtNickname } = this.root.ComponentMyAccountStore;
 
-    axios.get(`/api/user/gtnickname/${id}`)
+    await axios.get(`/api/user/gtnickname/${id}`)
       .then((response) => {
         const { data } = response;
         if (data.success) {
@@ -299,7 +299,7 @@ class UserStore {
         }
       })
       .catch((response) => toast.error(response.message));
-  }
+  };
 
   @action getProfile = (writerId) => {
     const that = this;

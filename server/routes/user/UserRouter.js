@@ -111,6 +111,7 @@ const GET_USER_COMMENT_LIST = `
 const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
   SELECT
   IF(count(*) = 0, 1, 0) AS isCanChange
+  , (SELECT U.GT_NICKNAME FROM GTC_USER U WHERE U.ID = :USER_ID) as originGtNickname
   FROM GTC_USER_GT_NICKNAME
   WHERE
     USER_ID = :USER_ID
@@ -154,10 +155,10 @@ router.put('/info', upload.fields([{ name: 'images' }]), uploadHandler, async(as
       },
     )
       .then((rows) => {
-        const { isCanChange } = rows[0];
+        const { isCanChange, originGtNickname } = rows[0];
 
-        if (isCanChange) {
-          return database.query(
+        if (isCanChange || originGtNickname === gtNickname) {
+          database.query(
             UPDATE_USER_INFO,
             {
               USER_ID: userId,
@@ -169,16 +170,25 @@ router.put('/info', upload.fields([{ name: 'images' }]), uploadHandler, async(as
               GT_NICKNAME: gtNickname,
             },
           );
+          return Promise.resolve({
+            isCanChange,
+            originGtNickname,
+          });
         }
         return Promise.reject();
       })
-      .then(() => database.query(
-        INSERT_USER_GT_NICKNAME,
-        {
-          USER_ID: userId,
-          PREV_GT_NICKNAME: prevGtNickname,
-        },
-      ))
+      .then((rows) => {
+        if (rows.originGtNickname !== gtNickname) {
+          return database.query(
+            INSERT_USER_GT_NICKNAME,
+            {
+              USER_ID: userId,
+              PREV_GT_NICKNAME: prevGtNickname,
+            },
+          );
+        }
+        return Promise.resolve();
+      })
       .then(() => {
         res.json({
           success: true,

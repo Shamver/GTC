@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Container, Row } from 'reactstrap';
 import {
   faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock,
-  faComments, faCode,
+  faComments, faCode, faAt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
@@ -56,6 +56,11 @@ const Category = () => {
             <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
           </MenuDiv>
         </MenuLink>
+        <MenuLink to="/consult" activeClassName="active">
+          <MenuDiv>
+            <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
+          </MenuDiv>
+        </MenuLink>
         {/*
           <MenuLink to="/crime"  activeClassName="active">
             <MenuDiv>
@@ -67,11 +72,6 @@ const Category = () => {
           <FaiPink icon={faQuestion} className="fa-fw" />&nbsp;&nbsp; 자주 묻는 질문
           </MenuDiv>
           </MenuLink>
-        <MenuLink to="/consult" activeClassName="active">
-          <MenuDiv>
-            <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의
-          </MenuDiv>
-        </MenuLink>
         */}
         { RouterAuthCheck(3) && (
           <MenuLink to="/code" activeClassName="active">

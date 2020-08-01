@@ -10,6 +10,7 @@ class BoardStore {
     cash: '월드락 거래',
     crime: '신고게시판',
     qna: '질문 & 답변',
+    consult: '1:1 문의',
     all: '전체 글 보기',
   };
 
@@ -31,6 +32,9 @@ class BoardStore {
   }, {
     value: 'QNA',
     name: '질문 & 답변',
+  }, {
+    value: 'CONSULT',
+    name: '1:1 문의',
   }];
 
   @observable categories = {
