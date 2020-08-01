@@ -24,6 +24,8 @@ class ReportStore {
 
   @observable reportCodeList = [];
 
+  @observable reportDisposeSelect;
+
   constructor(root) {
     this.root = root;
   }
@@ -71,7 +73,6 @@ class ReportStore {
     return true;
   };
 
-
   @action onChangeValue = (event) => {
     this.reportData = {
       ...this.reportData,
@@ -79,12 +80,15 @@ class ReportStore {
     };
   };
 
+  @action onDisposeChangeValue = (event) => {
+    this.reportDisposeSelect = event.target.value;
+  }
+
   @action setCodeList = (code) => {
     this.reportCodeList = code;
   }
 
   @action toggleReport = (targetId, type, content, writer) => {
-    console.log(targetId, type, content, writer);
     this.root.SystemCodeStore.getCodeComponent('REPORT_CATEGORY', this.setCodeList);
     if (targetId) {
       this.reportData = {
@@ -149,6 +153,13 @@ class ReportStore {
 
     return true;
   };
+
+  @action reportTakeOn = (type) => {
+    if (type === 'ban') {
+      this.root.UserStore.userBanned(reportId, targetUserId, 'BAN', description);
+      return true;
+    }
+  }
 
   @action reportReject = async (reportId) => {
     axios.put('/api/board/Report/reject', {

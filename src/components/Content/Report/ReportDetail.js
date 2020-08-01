@@ -2,22 +2,21 @@ import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import {
-  Button, Input, Modal, ModalBody, ModalHeader,
+  Button, Input, Modal, ModalBody, ModalHeader, FormGroup, Label,
 } from 'reactstrap';
 import { observer } from 'mobx-react';
 import renderHTML from 'react-render-html';
 import useStores from '../../../stores/useStores';
 
 const ReportDetail = () => {
-  const { BoardReportStore, UserStore } = useStores();
+  const { BoardReportStore } = useStores();
   const {
-    reportDetailToggle, toggleDetailReport, reportDetailData,
-    reportReject, onChangeValue, reportData,
+    reportDetailToggle, toggleDetailReport, reportDetailData, reportTakeOn,
+    reportReject, onChangeValue, reportData, onDisposeChangeValue, reportDisposeSelect,
   } = BoardReportStore;
-  const { userBanned } = UserStore;
   const {
     reportId, reportDate, userId, reason, reasonDetail, targetContentsLink,
-    targetContents, typeCode, targetContentsId, targetUserName, targetUserId,
+    targetContents, typeCode, targetContentsId, targetUserName,
   } = reportDetailData;
   const { description } = reportData;
   const ContentText = typeCode === 'RT02' ? renderHTML(`${targetContents}`) : targetContents;
@@ -59,22 +58,51 @@ const ReportDetail = () => {
                 </ReportInfoLink>
               </ReportInfoRow2>
             )}
+          {reasonDetail
+            ? (
+              <ReportInfoRow2>
+                <ReportInfoLabel>상세 사유</ReportInfoLabel>
+                <ReportInfoDesc>{reasonDetail}</ReportInfoDesc>
+              </ReportInfoRow2>
+            )
+            : ''}
           <ReportInfoRow2>
-            <ReportInfoLabel>상세 사유</ReportInfoLabel>
-            <ReportInfoDesc>{reasonDetail}</ReportInfoDesc>
-          </ReportInfoRow2>
-          <ReportInfoRow2>
-            <ReportInfoLabel>정지 사유 입력</ReportInfoLabel>
+            <ReportInfoLabel>처벌 사유 입력</ReportInfoLabel>
             <ReportInfoDesc>
               <Input type="textarea" onChange={onChangeValue} value={description} name="description" placeholder="정지 사유 입력" maxlength="200" />
             </ReportInfoDesc>
           </ReportInfoRow2>
+          <ReportInfoRow2>
+            <ReportInfoLabel for="exampleSelect">처벌 종류 선택</ReportInfoLabel>
+            <ReportInfoDesc>
+              <FormGroup check>
+                <Label check>
+                  <Input type="radio" name="ban" value="ban" onChange={onDisposeChangeValue} />{' '}
+                  영구 정지
+                </Label>
+              </FormGroup>
+              <FormGroup check>
+                <Label check>
+                  <Input type="radio" name="ban" value="ban2" onChange={onDisposeChangeValue} />{' '}
+                  기간 정지
+                </Label>
+              </FormGroup>
+              <FormGroup>
+                <Input
+                  type="date"
+                  name="date"
+                  placeholder="연도-월-일"
+                  disabled={reportDisposeSelect !== 'ban2'}
+                />
+              </FormGroup>
+            </ReportInfoDesc>
+          </ReportInfoRow2>
           <ReportInfoRow>
-            <ButtonCustom color="danger" size="sm" onClick={() => userBanned(reportId, targetUserId, 'BAN', description)}>
-              영구 정지
+            <ButtonCustom color="danger" size="sm" onClick={reportTakeOn}>
+              처리
             </ButtonCustom>
             <ButtonCustom color="secondary" size="sm" onClick={() => reportReject(reportId)}>
-              반려 처리
+              반려
             </ButtonCustom>
           </ReportInfoRow>
         </ReportInfoWrap>
@@ -107,6 +135,10 @@ const ReportInfoRow = styled.div`
 
 const ReportInfoRow2 = styled.div`
   margin-bottom: 10px;
+  
+  &  > div {
+    margin-bottom: 5px;
+  }
 `;
 
 const ReportInfoLabel = styled.div`
