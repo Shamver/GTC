@@ -73,6 +73,14 @@ class ReportStore {
     return true;
   };
 
+  ReportTakeOnValidationCheck = () => {
+    if (!this.reportDisposeSelect) {
+      toast.error('처벌을 선택해주세요.');
+      return false;
+    }
+    return true;
+  };
+
   @action onChangeValue = (event) => {
     this.reportData = {
       ...this.reportData,
@@ -155,11 +163,19 @@ class ReportStore {
   };
 
   @action reportTakeOn = (type) => {
+    const { reportId, targetUserId, description } = this.reportDetailData;
+    if (!this.ReportTakeOnValidationCheck()) {
+      return false;
+    }
+
     if (type === 'ban') {
       this.root.UserStore.userBanned(reportId, targetUserId, 'BAN', description);
-      return true;
+    } else {
+      this.root.UserStore.userBanned(reportId, targetUserId, 'BAN2', description);
     }
-  }
+
+    return true;
+  };
 
   @action reportReject = async (reportId) => {
     axios.put('/api/board/Report/reject', {

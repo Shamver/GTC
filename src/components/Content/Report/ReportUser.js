@@ -49,6 +49,7 @@ const CodeTable = styled(Table)`
 
 const ThCenter = styled.td`
   text-align: center;
+  font-weight: 600;
 `;
 
 export default memo(observer(ReportUser));

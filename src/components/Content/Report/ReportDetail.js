@@ -69,11 +69,11 @@ const ReportDetail = () => {
           <ReportInfoRow2>
             <ReportInfoLabel>처벌 사유 입력</ReportInfoLabel>
             <ReportInfoDesc>
-              <Input type="textarea" onChange={onChangeValue} value={description} name="description" placeholder="정지 사유 입력" maxlength="200" />
+              <Input type="textarea" onChange={onChangeValue} value={description} name="description" placeholder="정지 사유 입력" maxLength="200" />
             </ReportInfoDesc>
           </ReportInfoRow2>
           <ReportInfoRow2>
-            <ReportInfoLabel for="exampleSelect">처벌 종류 선택</ReportInfoLabel>
+            <ReportInfoLabel>처벌 종류 선택</ReportInfoLabel>
             <ReportInfoDesc>
               <FormGroup check>
                 <Label check>
