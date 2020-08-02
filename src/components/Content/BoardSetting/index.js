@@ -4,9 +4,11 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Button, Table } from 'reactstrap';
 import useStores from '../../../stores/useStores';
+import NewCodeGroup from "../Code/NewCodeGroup";
+
 
 const BoardSetting = () => {
-  const { UtilLoadingStore } = useStores();
+  const { UtilLoadingStore, SystemBoardStore } = useStores();
   const { stopLoading } = UtilLoadingStore;
   useLayoutEffect(() => {
     stopLoading();
@@ -19,7 +21,7 @@ const BoardSetting = () => {
         <CodeTableWrapper>
           <CodeCol>
             <PaddedDiv>
-              <RightButton size="sm" color="danger">
+              <RightButton size="sm" color="danger" onClick={() => setIsAddBoard(true)}>
                 <FontAwesomeIcon icon={faPlus} />
                 &nbsp;
                 게시판 추가
@@ -38,6 +40,8 @@ const BoardSetting = () => {
                 </tr>
               </thead>
               <tbody>
+                { isAddCodeGroup ? (<NewCodeGroup />) : null}
+                <CenterTd colSpan={7}>게시판이 존재하지 않습니다.</CenterTd>
               </tbody>
             </CodeTable>
           </CodeCol>
@@ -62,6 +66,7 @@ const BoardSetting = () => {
                 </tr>
               </thead>
               <tbody>
+                <CenterTd colSpan={7}>해당 게시판에 대한 카테고리가 존재하지 않습니다.</CenterTd>
               </tbody>
             </CodeTable>
           </CodeCol>
@@ -70,6 +75,10 @@ const BoardSetting = () => {
     </BoardWrapper>
   );
 };
+
+const CenterTd = styled.td`
+  text-align: center;
+`;
 
 const PaddedDiv = styled.div`
   padding-bottom : 10px;
