@@ -4,6 +4,7 @@ import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import useStores from '../../../../stores/useStores';
 import ConsultNav from './ConsultNav';
+import ConsultContent from './ConsultContent';
 
 const ConsultUser = () => {
   const {
@@ -20,6 +21,7 @@ const ConsultUser = () => {
     <ConsultWrapper>
       <h4>1:1 문의</h4>
       <ConsultNav />
+      <ConsultContent />
     </ConsultWrapper>
   );
 };
