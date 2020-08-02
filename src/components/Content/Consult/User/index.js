@@ -6,10 +6,18 @@ import useStores from '../../../../stores/useStores';
 import ConsultNav from './ConsultNav';
 import ConsultContent from './ConsultContent';
 
-const ConsultUser = () => {
+const ConsultUser = ({ match }) => {
   const {
     UtilLoadingStore,
   } = useStores();
+
+  const { params } = match;
+  let { noPagination } = match;
+  let { currentPage, currentTab } = params;
+
+  currentTab = currentTab || 'send';
+  currentPage = currentPage || '1';
+  noPagination = noPagination !== undefined;
 
   const { loadingProcess } = UtilLoadingStore;
 
@@ -20,8 +28,12 @@ const ConsultUser = () => {
   return (
     <ConsultWrapper>
       <h4>1:1 문의</h4>
-      <ConsultNav />
-      <ConsultContent />
+      <ConsultNav currentTab={currentTab} />
+      <ConsultContent
+        currentTab={currentTab}
+        currentPage={currentPage}
+        noPagination={noPagination}
+      />
     </ConsultWrapper>
   );
 };
@@ -31,8 +43,9 @@ ConsultUser.propTypes = {
     params: Proptypes.shape({
       board: Proptypes.string,
       currentPage: Proptypes.string,
-      currentCategory: Proptypes.string,
+      currentTab: Proptypes.string,
     }).isRequired,
+    noPagination: Proptypes.bool.isRequired,
   }).isRequired,
   parentProps: Proptypes.shape({
     isPagination: Proptypes.bool,

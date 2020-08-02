@@ -25,6 +25,7 @@ ReactDOM.render((
     ComponentPostStore={stores.ComponentPostStore}
     ComponentMailStore={stores.ComponentMailStore}
     ComponentSidebarStore={stores.ComponentSidebarStore}
+    ComponentConsultStore={stores.ComponentConsultStore}
 
     UtilStore={stores.UtilStore}
     UtilRouteStore={stores.UtilRouteStore}
