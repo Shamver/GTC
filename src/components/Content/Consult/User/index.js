@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import useStores from '../../../../stores/useStores';
+import ConsultNav from './ConsultNav';
 
 const ConsultUser = () => {
   const {
@@ -17,7 +18,8 @@ const ConsultUser = () => {
 
   return (
     <ConsultWrapper>
-      gd
+      <h4>1:1 문의</h4>
+      <ConsultNav />
     </ConsultWrapper>
   );
 };
@@ -42,6 +44,7 @@ const ConsultWrapper = styled.div`
   border-bottom: 2px solid #ebeae8;
   border-right: 2px solid #ebeae8;
   background-color : white;
+  padding: 14px !important;
 `;
 
 export default memo(observer(ConsultUser));
