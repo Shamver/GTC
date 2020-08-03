@@ -3,12 +3,14 @@ import { TabContent } from 'reactstrap';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import ConsultSend from './ConsultSend';
+import ConsultSent from './ConsultSent';
 
 const ConsultContent = ({
   currentTab, currentPage, noPagination,
 }) => (
   <TabContent activeTab={currentTab}>
     <ConsultSend />
+    <ConsultSent />
   </TabContent>
 );
 
