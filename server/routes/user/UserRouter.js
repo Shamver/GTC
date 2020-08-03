@@ -120,6 +120,13 @@ const SELECT_USER_BANNED = `
 `;
 
 const UPDATE_USER_BAN = `
+  CREATE EVENT EV_GTC_USER_BAN
+  ON SCHEDULE
+      AT CURRENT_TIMESTAMP + INTERVAL :DATE MINUTE
+  DO CALL SP_GTC_USER_BAN(:USER_ID)
+`;
+
+const UPDATE_USER_BAN1 = `
   UPDATE GTC_USER
   SET
     BANNED_FL = 1,
@@ -195,9 +202,14 @@ router.put('/banned', (req, res) => {
       },
     )
       .then(() => database.query(
-        UPDATE_REPORT_DATE,
+        // UPDATE_REPORT_DATE,
+        // {
+        //   ID: reportId,
+        // },
+        UPDATE_USER_BAN1,
         {
-          ID: reportId,
+          USER_ID: targetUserId,
+          DATE: 1,
         },
       ))
       .then(() => {
