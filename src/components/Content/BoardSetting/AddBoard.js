@@ -8,20 +8,20 @@ import useStores from '../../../stores/useStores';
 import BoardUseFlag from './BoardUseFlag';
 
 const AddBoard = () => {
-  const { BoardStore, SystemCodeStore } = useStores();
+  const { SystemBoardStore, SystemCodeStore } = useStores();
   const {
-    setIsAddBoard, Board, onChangeBoard, addBoard,
+    setIsAddBoard, board, onChangeBoard, addBoard,
     setUseFlagList,
-  } = BoardStore;
+  } = SystemBoardStore;
   const { getCodeComponent } = SystemCodeStore;
   const {
     id, name, desc, path,
     order, useFl, permissionLevel,
-  } = Board;
+  } = board;
 
   useLayoutEffect(() => {
-    getCodeComponent(setUseFlagList);
-  }, [setUseFlagList]);
+    getCodeComponent('YN_FLAG', setUseFlagList);
+  }, [getCodeComponent, setUseFlagList]);
 
   return (
     <tr>
@@ -48,7 +48,6 @@ const AddBoard = () => {
       <td>
         <Input bsSize="sm" onChange={onChangeBoard} name="desc" value={desc} placeholder="설명" />
       </td>
-
       <CenterPaddingTd>
         <Button size="sm" color="danger" onClick={addBoard}>
           <FontAwesomeIcon icon={faSave} />

@@ -1,15 +1,19 @@
-import React, { useLayoutEffect } from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Button, Table } from 'reactstrap';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
-import NewCodeGroup from "../Code/NewCodeGroup";
+import AddBoard from './AddBoard';
+import BoardAddModal from './BoardAddModal';
 
 
 const BoardSetting = () => {
   const { UtilLoadingStore, SystemBoardStore } = useStores();
+  const { toggleBoardAdd, isAddBoard } = SystemBoardStore;
   const { stopLoading } = UtilLoadingStore;
+
   useLayoutEffect(() => {
     stopLoading();
   });
@@ -21,7 +25,7 @@ const BoardSetting = () => {
         <CodeTableWrapper>
           <CodeCol>
             <PaddedDiv>
-              <RightButton size="sm" color="danger" onClick={() => setIsAddBoard(true)}>
+              <RightButton size="sm" color="danger" onClick={toggleBoardAdd}>
                 <FontAwesomeIcon icon={faPlus} />
                 &nbsp;
                 게시판 추가
@@ -33,15 +37,19 @@ const BoardSetting = () => {
                   <th>게시판</th>
                   <th>이름</th>
                   <th>경로</th>
-                  <th>순서</th>
-                  <th>사용 여부</th>
+                  <th width="50">순서</th>
+                  <th width="100">사용</th>
                   <th>권한</th>
                   <th>설명</th>
+                  <CenterTh width="50">수정</CenterTh>
+                  <CenterTh width="50">삭제</CenterTh>
                 </tr>
               </thead>
               <tbody>
-                { isAddCodeGroup ? (<NewCodeGroup />) : null}
-                <CenterTd colSpan={7}>게시판이 존재하지 않습니다.</CenterTd>
+                { isAddBoard ? (<AddBoard />) : null}
+                <tr>
+                  <CenterTd colSpan={9}>게시판이 존재하지 않습니다.</CenterTd>
+                </tr>
               </tbody>
             </CodeTable>
           </CodeCol>
@@ -66,11 +74,14 @@ const BoardSetting = () => {
                 </tr>
               </thead>
               <tbody>
-                <CenterTd colSpan={7}>해당 게시판에 대한 카테고리가 존재하지 않습니다.</CenterTd>
+                <tr>
+                  <CenterTd colSpan={7}>해당 게시판에 대한 카테고리가 존재하지 않습니다.</CenterTd>
+                </tr>
               </tbody>
             </CodeTable>
           </CodeCol>
         </CodeTableWrapper>
+        <BoardAddModal />
       </TableWrapper>
     </BoardWrapper>
   );
@@ -121,4 +132,4 @@ const TableWrapper = styled.div`
   font-size : 13px !important;
 `;
 
-export default BoardSetting;
+export default memo(observer(BoardSetting));

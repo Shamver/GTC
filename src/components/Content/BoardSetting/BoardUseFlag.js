@@ -1,4 +1,5 @@
 import React, { memo } from 'react';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const BoardUseFlag = () => {
@@ -15,4 +16,4 @@ const BoardUseFlag = () => {
   ));
 };
 
-export default memo(BoardUseFlag);
+export default memo(observer(BoardUseFlag));

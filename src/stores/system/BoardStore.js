@@ -15,14 +15,14 @@ class BoardStore {
 
   @observable useFlagList = [];
 
-  @observable isAddBoard = false;
+  @observable isBoardAddToggle = false;
 
   constructor(root) {
     this.root = root;
   }
 
-  @action setIsAddBoard = (flag) => {
-    this.isAddBoard = flag;
+  @action toggleBoardAdd = () => {
+    this.isBoardAddToggle = !this.isBoardAddToggle;
   }
 
   @action setUseFlagList = (value) => {
