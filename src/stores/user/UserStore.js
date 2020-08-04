@@ -458,7 +458,7 @@ class UserStore {
   }
 
   @action getUserBanned = async () => {
-    await axios.get('/api/user/banned')
+    await axios.get('/api/user/ban')
       .then((response) => {
         const { data } = response;
         if (data.success) {
@@ -476,16 +476,16 @@ class UserStore {
     return true;
   };
 
-  @action userBanned = async (reportId, targetUserId, actionFlag, reason) => {
-    await axios.put('/api/user/banned', {
-      reportId, targetUserId, actionFlag, reason,
+  @action userBan = async (reportId, targetUserId, actionType, reason, term) => {
+    await axios.post('/api/user/ban', {
+      reportId, targetUserId, actionType, reason, term,
     })
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            if (actionFlag === 'BAN') {
+            if (actionType === 'BAN' || actionType === 'BAN2') {
               this.root.BoardReportStore.toggleDetailReport();
             }
             this.root.BoardReportStore.getReportList();

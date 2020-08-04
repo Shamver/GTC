@@ -119,14 +119,23 @@ const SELECT_USER_BANNED = `
   WHERE U.BANNED_FL = 1
 `;
 
-const UPDATE_USER_BAN = `
-  CREATE EVENT EV_GTC_USER_BAN
-  ON SCHEDULE
-      AT CURRENT_TIMESTAMP + INTERVAL 1 MINUTE
-  DO CALL SP_GTC_USER_BAN(:USER_ID)
+const INSERT_USER_BAN = `
+  INSERT INTO GTC_USER_BAN (
+    USER_ID
+    , SUSPEND_BAN_FL
+    , TEMP_BAN_FL
+    , BAN_TERM
+    , BAN_REASON
+  ) VALUES (
+    :USER_ID
+    , IF(':ACTION_TYPE' = 'BAN', 1, 0)
+    , IF(':ACTION_TYPE' = 'BAN2', 1, 0)
+    , ':BAN_TERM'
+    , ':BAN_REASON'
+  )
 `;
 
-const UPDATE_USER_BAN1 = `
+const UPDATE_USER_BAN = `
   UPDATE GTC_USER
   SET
     BANNED_FL = 1,
@@ -169,7 +178,7 @@ const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
     AND CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(), INTERVAL -30 DAY), '%Y-%m-%d %H:%i:%s');
 `;
 
-router.get('/banned', (req, res) => {
+router.get('/ban', (req, res) => {
   Database.execute(
     (database) => database.query(
       SELECT_USER_BANNED,
@@ -187,31 +196,27 @@ router.get('/banned', (req, res) => {
   });
 });
 
-router.put('/banned', (req, res) => {
+router.post('/ban', (req, res) => {
   const {
-    reportId, targetUserId, actionFlag, reason,
+    reportId, targetUserId, actionType, reason, term,
   } = req.body;
 
   Database.execute(
     (database) => database.query(
-      UPDATE_USER_BAN,
+      INSERT_USER_BAN,
       {
         USER_ID: targetUserId,
-        ACTION: actionFlag,
-        REASON: reason,
+        ACTION_TYPE: actionType,
+        BAN_TERM: term,
+        BAN_REASON: reason,
       },
     )
-      .then(() => database.query(
-        // UPDATE_REPORT_DATE,
-        // {
-        //   ID: reportId,
-        // },
-        UPDATE_USER_BAN1,
-        {
-          USER_ID: targetUserId,
-          // DATE: 1,
-        },
-      ))
+      // .then(() => database.query(
+      //   UPDATE_REPORT_DATE,
+      //   {
+      //     ID: reportId,
+      //   },
+      // ))
       .then(() => {
         res.json({
           success: true,

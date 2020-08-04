@@ -80,6 +80,14 @@ class ReportStore {
       toast.error('처벌을 선택해주세요.');
       return false;
     }
+
+    if (this.reportDisposeSelect === 'ban2') {
+      if (!this.reportTerm) {
+        toast.error('기간을 선택해주세요.');
+        return false;
+      }
+    }
+
     return true;
   };
 
@@ -176,9 +184,9 @@ class ReportStore {
     }
 
     if (type === 'ban') {
-      this.root.UserStore.userBanned(reportId, targetUserId, 'BAN', description);
+      this.root.UserStore.userBan(reportId, targetUserId, 'BAN', description);
     } else {
-      this.root.UserStore.userBanned(reportId, targetUserId, 'BAN2', description);
+      this.root.UserStore.userBan(reportId, targetUserId, 'BAN2', description, this.reportTerm);
     }
 
     return true;
