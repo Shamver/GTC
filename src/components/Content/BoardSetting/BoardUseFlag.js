@@ -1,10 +1,15 @@
-import React, { memo } from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
-const BoardUseFlag = () => {
-  const { SystemBoardStore } = useStores();
-  const { useFlagList } = SystemBoardStore;
+const BoardSettingCode = ({ code }) => {
+  const { SystemBoardStore, SystemCodeStore } = useStores();
+  const { useFlagList, setUseFlagList } = SystemBoardStore;
+  const { getCodeComponent } = SystemCodeStore;
+
+  useLayoutEffect(() => {
+    getCodeComponent(code, setUseFlagList);
+  }, [getCodeComponent, code, setUseFlagList]);
 
   return useFlagList.map((data) => (
     <option
@@ -16,4 +21,4 @@ const BoardUseFlag = () => {
   ));
 };
 
-export default memo(observer(BoardUseFlag));
+export default memo(observer(BoardSettingCode));

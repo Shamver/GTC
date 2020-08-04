@@ -6,7 +6,7 @@ import { Button, Table } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import AddBoard from './AddBoard';
-import BoardAddModal from './BoardAddModal';
+import BoardDetailModal from './BoardDetailModal';
 
 
 const BoardSetting = () => {
@@ -37,12 +37,9 @@ const BoardSetting = () => {
                   <th>게시판</th>
                   <th>이름</th>
                   <th>경로</th>
-                  <th width="50">순서</th>
-                  <th width="100">사용</th>
+                  <th>순서</th>
+                  <th>사용</th>
                   <th>권한</th>
-                  <th>설명</th>
-                  <CenterTh width="50">수정</CenterTh>
-                  <CenterTh width="50">삭제</CenterTh>
                 </tr>
               </thead>
               <tbody>
@@ -66,11 +63,9 @@ const BoardSetting = () => {
                 <tr>
                   <th>코드</th>
                   <th>코드명</th>
-                  <CenterTh width="50">순서</CenterTh>
+                  <CenterTh>순서</CenterTh>
                   <th>코드 설명</th>
-                  <CenterTh width="80">사용 여부</CenterTh>
-                  <CenterTh width="66">수정</CenterTh>
-                  <CenterTh width="66">삭제</CenterTh>
+                  <CenterTh>사용 여부</CenterTh>
                 </tr>
               </thead>
               <tbody>
@@ -81,7 +76,7 @@ const BoardSetting = () => {
             </CodeTable>
           </CodeCol>
         </CodeTableWrapper>
-        <BoardAddModal />
+        <BoardDetailModal />
       </TableWrapper>
     </BoardWrapper>
   );
