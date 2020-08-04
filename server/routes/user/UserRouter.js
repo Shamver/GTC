@@ -122,7 +122,7 @@ const SELECT_USER_BANNED = `
 const UPDATE_USER_BAN = `
   CREATE EVENT EV_GTC_USER_BAN
   ON SCHEDULE
-      AT CURRENT_TIMESTAMP + INTERVAL :DATE MINUTE
+      AT CURRENT_TIMESTAMP + INTERVAL 1 MINUTE
   DO CALL SP_GTC_USER_BAN(:USER_ID)
 `;
 
@@ -209,7 +209,7 @@ router.put('/banned', (req, res) => {
         UPDATE_USER_BAN1,
         {
           USER_ID: targetUserId,
-          DATE: 1,
+          // DATE: 1,
         },
       ))
       .then(() => {

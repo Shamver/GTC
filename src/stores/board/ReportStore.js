@@ -20,11 +20,13 @@ class ReportStore {
 
   @observable reportDataList = [];
 
-  @observable reportDetailData = '';
+  @observable reportDetailData = [];
 
-  @observable reportCodeList = [];
+  @observable reportTerm = '';
 
   @observable reportDisposeSelect;
+
+  @observable reportCodeList = [];
 
   constructor(root) {
     this.root = root;
@@ -88,6 +90,10 @@ class ReportStore {
     };
   };
 
+  @action onChangeDetailValue = (event) => {
+    this.reportTerm = event.target.value;
+  };
+
   @action onDisposeChangeValue = (event) => {
     this.reportDisposeSelect = event.target.value;
   }
@@ -123,9 +129,10 @@ class ReportStore {
     })
       .then((response) => {
         const { data } = response;
+        const { result } = data;
         if (data.success) {
           if (data.code === 1) {
-            this.reportDetailData = data.result;
+            this.reportDetailData = result;
           } else {
             toast.info(data.message);
           }

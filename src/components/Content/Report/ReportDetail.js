@@ -11,14 +11,13 @@ import useStores from '../../../stores/useStores';
 const ReportDetail = () => {
   const { BoardReportStore } = useStores();
   const {
-    reportDetailToggle, toggleDetailReport, reportDetailData, reportTakeOn,
-    reportReject, onChangeValue, reportData, onDisposeChangeValue, reportDisposeSelect,
+    reportDetailToggle, toggleDetailReport, reportDetailData, reportTakeOn, nowDate,
+    reportReject, onChangeDetailValue, onDisposeChangeValue, reportDisposeSelect,
   } = BoardReportStore;
   const {
     reportId, reportDate, userId, reason, reasonDetail, targetContentsLink,
     targetContents, typeCode, targetContentsId, targetUserName,
   } = reportDetailData;
-  const { description } = reportData;
   const ContentText = typeCode === 'RT02' ? renderHTML(`${targetContents}`) : targetContents;
 
   return (
@@ -69,7 +68,7 @@ const ReportDetail = () => {
           <ReportInfoRow2>
             <ReportInfoLabel>처벌 사유 입력</ReportInfoLabel>
             <ReportInfoDesc>
-              <Input type="textarea" onChange={onChangeValue} value={description} name="description" placeholder="정지 사유 입력" maxLength="200" />
+              <Input type="textarea" onChange={onChangeDetailValue} value={reason} name="description" placeholder="정지 사유 입력" maxLength="200" />
             </ReportInfoDesc>
           </ReportInfoRow2>
           <ReportInfoRow2>
@@ -91,8 +90,9 @@ const ReportDetail = () => {
                 <Input
                   type="date"
                   name="date"
-                  placeholder="연도-월-일"
+                  value={nowDate}
                   disabled={reportDisposeSelect !== 'ban2'}
+                  onChange={onChangeDetailValue}
                 />
               </FormGroup>
             </ReportInfoDesc>
