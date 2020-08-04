@@ -60,7 +60,6 @@ const SELECT_USER_FROM_EMAIL = `
     , ADMIN_FL AS adminYN
     , PROFILE AS profile
     , BANNED_FL AS banned
-    , BAN_REASON AS banReason
   FROM GTC_USER
   WHERE EMAIL = ':EMAIL'
 `;
