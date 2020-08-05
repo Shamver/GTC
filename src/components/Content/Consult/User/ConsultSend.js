@@ -4,26 +4,46 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
+import useStores from '../../../../stores/useStores';
 
 const ConsultSend = () => {
+  const { ConsultStore } = useStores();
+
+  const {
+    consultCategoryCodeList, currentCategory, onChangeCategory,
+    subject, text, onChangeValue, isDisabled, addConsult,
+  } = ConsultStore;
+
+  const categories = consultCategoryCodeList.map((v) => <option value={v.code}>{v.codeName}</option>);
+
   return (
     <TabPane tabId="send">
       <Wrapper>
         <Form>
           <FormGroup>
             <Label for="consultCategory">문의 종류</Label>
-            <CustomInput type="select" id="consultCategory" name="customSelect">
+            <CustomInput
+              type="select"
+              id="consultCategory"
+              value={currentCategory}
+              onChange={onChangeCategory}
+              name="customSelect"
+            >
               <option value="">선택</option>
-              <option>버그 관련</option>
-              <option>유저 관련</option>
-              <option>게시글 관련</option>
-              <option>포인트 관련</option>
-              <option>기타</option>
+              { categories }
             </CustomInput>
           </FormGroup>
           <FormGroup>
             <Label for="consultSubject">제목</Label>
-            <Input type="text" id="consultSubject" name="customSelect" placeHolder="제목" />
+            <Input
+              type="text"
+              id="consultSubject"
+              value={subject}
+              name="subject"
+              placeHolder="제목"
+              maxLength={199}
+              onChange={onChangeValue}
+            />
           </FormGroup>
           <FormGroup>
             <Label for="consultText">내용</Label>
@@ -31,13 +51,15 @@ const ConsultSend = () => {
               className="text-area"
               type="textarea"
               id="consultText"
-              name="customSelect"
+              name="text"
+              value={text}
               placeHolder="내용"
+              onChange={onChangeValue}
             />
           </FormGroup>
         </Form>
         <div>
-          <Button color="primary">등록</Button>
+          <Button disabled={isDisabled} color="primary" onClick={addConsult}>등록</Button>
         </div>
       </Wrapper>
     </TabPane>

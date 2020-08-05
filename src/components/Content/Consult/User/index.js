@@ -8,7 +8,7 @@ import ConsultContent from './ConsultContent';
 
 const ConsultUser = ({ match }) => {
   const {
-    UtilLoadingStore,
+    UtilLoadingStore, SystemCodeStore, ConsultStore,
   } = useStores();
 
   const { params } = match;
@@ -20,9 +20,13 @@ const ConsultUser = ({ match }) => {
   noPagination = noPagination !== undefined;
 
   const { loadingProcess } = UtilLoadingStore;
+  const { getCodeComponent } = SystemCodeStore;
+  const { setCategoryCodeList } = ConsultStore;
 
   useLayoutEffect(() => {
-    loadingProcess([]);
+    loadingProcess([
+      () => getCodeComponent('CONSULT_CATEGORY', setCategoryCodeList),
+    ]);
   }, []);
 
   return (

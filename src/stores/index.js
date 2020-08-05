@@ -26,6 +26,8 @@ import BoardReplyStore from './board/ReplyStore';
 import BoardReportStore from './board/ReportStore';
 import BoardSearchStore from './board/SearchStore';
 
+import ConsultStore from './consult/ConsultStore';
+
 import CookieLatelyStore from './cookie/LatelyStore';
 
 import EventDailyStore from './event/DailyStore';
@@ -62,6 +64,8 @@ class RootStore {
     this.BoardReplyStore = new BoardReplyStore(this);
     this.BoardReportStore = new BoardReportStore(this);
     this.BoardSearchStore = new BoardSearchStore(this);
+
+    this.ConsultStore = new ConsultStore(this);
 
     this.CookieLatelyStore = new CookieLatelyStore(this);
 

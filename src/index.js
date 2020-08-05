@@ -38,6 +38,8 @@ ReactDOM.render((
     BoardReportStore={stores.BoardReportStore}
     BoardSearchStore={stores.BoardSearchStore}
 
+    ConsultStore={stores.ConsultStore}
+
     CookieLatelyStore={stores.CookieLatelyStore}
 
     EventDailyStore={stores.EventDailyStore}
