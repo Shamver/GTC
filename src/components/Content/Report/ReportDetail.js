@@ -98,7 +98,7 @@ const ReportDetail = () => {
             </ReportInfoDesc>
           </ReportInfoRow2>
           <ReportInfoRow>
-            <ButtonCustom color="danger" size="sm" onClick={reportTakeOn}>
+            <ButtonCustom color="danger" size="sm" onClick={() => reportTakeOn(reportDisposeSelect)}>
               처리
             </ButtonCustom>
             <ButtonCustom color="secondary" size="sm" onClick={() => reportReject(reportId)}>

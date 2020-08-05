@@ -108,15 +108,26 @@ const GET_USER_COMMENT_LIST = `
   LIMIT :INDEX, 5
 `;
 
-const SELECT_USER_BANNED = `
+const SELECT_ALL_USER_BANNED = `
   SELECT U.ID AS userId
     , U.EMAIL AS userEmail
     , U.NAME AS userName
     , U.NICKNAME as userNickName
     , U.GT_NICKNAME as GTName
-    , U.BANNED_FL as userBanned
-  FROM GTC_USER U
-  WHERE U.BANNED_FL = 1
+    , B.SUSPEND_BAN_FL as suspendBanFl
+    , B.TEMP_BAN_FL as tempBanFl
+    , B.BAN_REASON as reason
+    , B.BAN_TERM as banTerm
+    , B.CRT_DTTM as banDate
+  FROM GTC_USER AS U
+  JOIN GTC_USER_BAN AS B
+  ON U.ID = B.USER_ID;
+`;
+
+const SELECT_USER_BANNED = `
+  SELECT *
+  FROM GTC_USER_BAN
+  WHERE USER_ID = :USER_ID;
 `;
 
 const INSERT_USER_BAN = `
@@ -133,14 +144,6 @@ const INSERT_USER_BAN = `
     , ':BAN_TERM'
     , ':BAN_REASON'
   )
-`;
-
-const UPDATE_USER_BAN = `
-  UPDATE GTC_USER
-  SET
-    BANNED_FL = 1,
-    BAN_REASON = ':REASON'
-  WHERE ID = :USER_ID;
 `;
 
 const UPDATE_USER_BAN_CANCEL = `
@@ -181,7 +184,7 @@ const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
 router.get('/ban', (req, res) => {
   Database.execute(
     (database) => database.query(
-      SELECT_USER_BANNED,
+      SELECT_ALL_USER_BANNED,
     )
       .then((rows) => {
         res.json({
@@ -203,14 +206,32 @@ router.post('/ban', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_USER_BAN,
+      SELECT_USER_BANNED,
       {
         USER_ID: targetUserId,
-        ACTION_TYPE: actionType,
-        BAN_TERM: term,
-        BAN_REASON: reason,
       },
     )
+      .then((rows) => {
+        if (rows.length > 0) {
+        console.log(rows);
+          res.json({
+            success: true,
+            code: 2,
+            message: '😳 이미 해당 유저는 정지 상태입니다.',
+          });
+          throw new Error('이미 정지 상태입니다.');
+        } else {
+          return database.query(
+            INSERT_USER_BAN,
+            {
+              USER_ID: targetUserId,
+              ACTION_TYPE: actionType,
+              BAN_TERM: term,
+              BAN_REASON: reason,
+            },
+          );
+        }
+      })
       // .then(() => database.query(
       //   UPDATE_REPORT_DATE,
       //   {
@@ -232,7 +253,7 @@ router.post('/ban', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[UPDATE, PUT /api/user/banned] 신고 유저 밴 처리');
+    info('[INSERT, POST /api/user/banned] 신고 유저 밴 처리');
   });
 });
 

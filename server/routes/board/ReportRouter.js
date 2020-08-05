@@ -117,7 +117,6 @@ const UPDATE_REPORT_REJECT = `
   WHERE ID = :REPORT_ID;
 `;
 
-
 router.post('/', (req, res) => {
   const {
     targetId, writerId, type, reason, description,
