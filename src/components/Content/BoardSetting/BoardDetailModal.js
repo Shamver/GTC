@@ -6,13 +6,13 @@ import {
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
+import CodeOption from '../../util/CodeOption';
 
 const BoardDetailModal = () => {
   const { SystemBoardStore } = useStores();
   const { isBoardAddToggle, toggleBoardAdd } = SystemBoardStore;
   const {
     setIsAddBoard, board, onChangeBoard, addBoard,
-    setUseFlagList,
   } = SystemBoardStore;
   const { getCodeComponent } = SystemCodeStore;
   const {
@@ -58,7 +58,9 @@ const BoardDetailModal = () => {
           <InputGroupAddon addonType="prepend">
             <InputGroupText>권한 레벨</InputGroupText>
           </InputGroupAddon>
-          <Input type="select" placeholder="권한 레벨" />
+          <Input type="select" placeholder="권한 레벨">
+            <CodeOption code="" setArrayMethod={} array={} />
+          </Input>
         </InputGroupMb>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
