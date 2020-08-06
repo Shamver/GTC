@@ -213,7 +213,6 @@ router.post('/ban', (req, res) => {
     )
       .then((rows) => {
         if (rows.length > 0) {
-        console.log(rows);
           res.json({
             success: true,
             code: 2,

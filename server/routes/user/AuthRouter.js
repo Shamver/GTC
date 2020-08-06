@@ -64,6 +64,18 @@ const SELECT_USER_FROM_EMAIL = `
   WHERE EMAIL = ':EMAIL'
 `;
 
+const SELECT_USER_BAN_CHECK = `
+  SELECT
+    ID AS id
+    , USER_ID AS userId
+    , SUSPEND_BAN_FL AS suspendBan
+    , TEMP_BAN_FL AS tempBan
+    , DATE_FORMAT(BAN_TERM, '%Y-%m-%d') AS banTerm
+    , BAN_REASON AS banReason  
+  FROM GTC_USER_BAN
+  WHERE USER_ID = :USER_ID
+`;
+
 router.post('/register', (req, res) => {
   const {
     tel, email, nickname, name, birth, gender, gtNickname,
@@ -130,46 +142,56 @@ router.post('/login', (req, res) => {
           const {
             id, nickname, gtNickname, deletedDate,
             email, tel, birth, gender, profileYN, name,
-            operatorYN, adminYN, profile, banned, banReason,
+            operatorYN, adminYN, profile,
           } = resultData;
           if (deletedDate === null) {
-            if (banned === 1) {
-              res.json({
-                success: true,
-                code: 2,
-                message: banReason,
-              });
-            }
-            jwt.sign(
+            database.query(
+              SELECT_USER_BAN_CHECK,
               {
-                id,
-                name,
-                username: nickname,
-                gtName: gtNickname,
-                email,
-                tel,
-                birth,
-                gender,
-                profileYN,
-                operatorYN,
-                adminYN,
-                profile,
+                USER_ID: id,
               },
-              secret,
-              {
-                expiresIn: '1d',
-                issuer: 'GTC',
-                subject: 'userInfo',
-              }, (err2, token) => {
-                if (err2) throw (err2);
-                res.cookie('authToken', token, { httpOnly: true });
+            ).then((row) => {
+              if (row.length === 1) {
+                const { banReason } = row[0];
                 res.json({
                   success: true,
-                  code: 1,
-                  message: '😊 로그인 완료!',
+                  code: 2,
+                  message: banReason,
+                  result: row[0],
                 });
-              },
-            );
+              } else {
+                jwt.sign(
+                  {
+                    id,
+                    name,
+                    username: nickname,
+                    gtName: gtNickname,
+                    email,
+                    tel,
+                    birth,
+                    gender,
+                    profileYN,
+                    operatorYN,
+                    adminYN,
+                    profile,
+                  },
+                  secret,
+                  {
+                    expiresIn: '1d',
+                    issuer: 'GTC',
+                    subject: 'userInfo',
+                  }, (err2, token) => {
+                    if (err2) throw (err2);
+                    res.cookie('authToken', token, { httpOnly: true });
+                    res.json({
+                      success: true,
+                      code: 1,
+                      message: '😊 로그인 완료!',
+                    });
+                  },
+                );
+              }
+            });
           } else {
             res.json({
               success: true,

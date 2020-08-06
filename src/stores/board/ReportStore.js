@@ -22,9 +22,11 @@ class ReportStore {
 
   @observable reportDetailData = [];
 
-  @observable reportTerm = '';
-
-  @observable reportDisposeSelect;
+  @observable reportTakeOnData = {
+    takeReason: '',
+    banType: '',
+    banTerm: '',
+  }
 
   @observable reportCodeList = [];
 
@@ -76,13 +78,13 @@ class ReportStore {
   };
 
   ReportTakeOnValidationCheck = () => {
-    if (!this.reportDisposeSelect) {
+    if (!this.reportTakeOnData.banType) {
       toast.error('처벌을 선택해주세요.');
       return false;
     }
 
-    if (this.reportDisposeSelect === 'ban2') {
-      if (!this.reportTerm) {
+    if (this.reportTakeOnData.banType === 'ban2') {
+      if (!this.reportTakeOnData.banTerm) {
         toast.error('기간을 선택해주세요.');
         return false;
       }
@@ -99,12 +101,11 @@ class ReportStore {
   };
 
   @action onChangeDetailValue = (event) => {
-    this.reportTerm = event.target.value;
+    this.reportTakeOnData = {
+      ...this.reportTakeOnData,
+      [event.target.name]: event.target.value,
+    };
   };
-
-  @action onDisposeChangeValue = (event) => {
-    this.reportDisposeSelect = event.target.value;
-  }
 
   @action setCodeList = (code) => {
     this.reportCodeList = code;
@@ -179,14 +180,15 @@ class ReportStore {
 
   @action reportTakeOn = (type) => {
     const { reportId, targetUserId, description } = this.reportDetailData;
+    const { takeReason, banType, banTerm } = this.reportTakeOnData;
     if (!this.ReportTakeOnValidationCheck()) {
       return false;
     }
 
     if (type === 'ban') {
-      this.root.UserStore.userBan(reportId, targetUserId, 'BAN', description);
+      this.root.UserStore.userBan(reportId, targetUserId, 'BAN', takeReason);
     } else {
-      this.root.UserStore.userBan(reportId, targetUserId, 'BAN2', description, this.reportTerm);
+      this.root.UserStore.userBan(reportId, targetUserId, 'BAN2', takeReason, banTerm);
     }
 
     return true;

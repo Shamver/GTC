@@ -11,9 +11,10 @@ import useStores from '../../../stores/useStores';
 const ReportDetail = () => {
   const { BoardReportStore } = useStores();
   const {
-    reportDetailToggle, toggleDetailReport, reportDetailData, reportTakeOn, nowDate,
-    reportReject, onChangeDetailValue, onDisposeChangeValue, reportDisposeSelect,
+    reportDetailToggle, toggleDetailReport, reportDetailData, reportTakeOn,
+    reportReject, onChangeDetailValue, reportTakeOnData,
   } = BoardReportStore;
+  const { takeReason, banType, banTerm } = reportTakeOnData;
   const {
     reportId, reportDate, userId, reason, reasonDetail, targetContentsLink,
     targetContents, typeCode, targetContentsId, targetUserName,
@@ -68,7 +69,7 @@ const ReportDetail = () => {
           <ReportInfoRow2>
             <ReportInfoLabel>처벌 사유 입력</ReportInfoLabel>
             <ReportInfoDesc>
-              <Input type="textarea" onChange={onChangeDetailValue} value={reason} name="description" placeholder="정지 사유 입력" maxLength="200" />
+              <Input type="textarea" onChange={onChangeDetailValue} value={takeReason} name="takeReason" placeholder="정지 사유 입력" maxLength="200" />
             </ReportInfoDesc>
           </ReportInfoRow2>
           <ReportInfoRow2>
@@ -76,29 +77,29 @@ const ReportDetail = () => {
             <ReportInfoDesc>
               <FormGroup check>
                 <Label check>
-                  <Input type="radio" name="ban" value="ban" onChange={onDisposeChangeValue} />{' '}
+                  <Input type="radio" name="banType" value="ban" onChange={onChangeDetailValue} />{' '}
                   영구 정지
                 </Label>
               </FormGroup>
               <FormGroup check>
                 <Label check>
-                  <Input type="radio" name="ban" value="ban2" onChange={onDisposeChangeValue} />{' '}
+                  <Input type="radio" name="banType" value="ban2" onChange={onChangeDetailValue} />{' '}
                   기간 정지
                 </Label>
               </FormGroup>
               <FormGroup>
                 <Input
                   type="date"
-                  name="date"
-                  value={nowDate}
-                  disabled={reportDisposeSelect !== 'ban2'}
+                  name="banTerm"
+                  value={banTerm}
+                  disabled={banType !== 'ban2'}
                   onChange={onChangeDetailValue}
                 />
               </FormGroup>
             </ReportInfoDesc>
           </ReportInfoRow2>
           <ReportInfoRow>
-            <ButtonCustom color="danger" size="sm" onClick={() => reportTakeOn(reportDisposeSelect)}>
+            <ButtonCustom color="danger" size="sm" onClick={() => reportTakeOn(banType)}>
               처리
             </ButtonCustom>
             <ButtonCustom color="secondary" size="sm" onClick={() => reportReject(reportId)}>
