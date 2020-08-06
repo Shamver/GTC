@@ -6,15 +6,14 @@ import {
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
-import CodeOption from '../../util/CodeOption';
+import CodeOptionList from '../../util/CodeOptionList';
 
 const BoardDetailModal = () => {
   const { SystemBoardStore } = useStores();
-  const { isBoardAddToggle, toggleBoardAdd } = SystemBoardStore;
   const {
-    setIsAddBoard, board, onChangeBoard, addBoard,
+    isBoardAddToggle, toggleBoardAdd, board, useFlagList,
+    permissionLevelList, setPermissionLevelList, setUseFlagList,
   } = SystemBoardStore;
-  const { getCodeComponent } = SystemCodeStore;
   const {
     id, name, desc, path,
     order, useFl, permissionLevel,
@@ -52,14 +51,16 @@ const BoardDetailModal = () => {
           <InputGroupAddon addonType="prepend">
             <InputGroupText>사용 여부</InputGroupText>
           </InputGroupAddon>
-          <Input type="select" placeholder="사용 여부" />
+          <Input type="select" placeholder="사용 여부">
+            <CodeOptionList codeGroup="YN_FLAG" array={useFlagList} setArrayMethod={setUseFlagList} />
+          </Input>
         </InputGroupMb>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
             <InputGroupText>권한 레벨</InputGroupText>
           </InputGroupAddon>
           <Input type="select" placeholder="권한 레벨">
-            <CodeOption code="" setArrayMethod={} array={} />
+            <CodeOptionList codeGroup="PERMISSION_LEVEL" array={permissionLevelList} setArrayMethod={setPermissionLevelList} />
           </Input>
         </InputGroupMb>
         <InputGroupMb>
@@ -88,4 +89,4 @@ const ModalHeaderBack = styled(ModalHeader)`
 `;
 
 
-export default memo(observer(BoardAddModal));
+export default memo(observer(BoardDetailModal));

@@ -2,13 +2,13 @@ import React, { memo, useLayoutEffect } from 'react';
 import { observer } from 'mobx-react';
 import useStores from '../../stores/useStores';
 
-const CodeOption = ({ code, setArrayMethod, array }) => {
+const CodeOptionList = ({ codeGroup, setArrayMethod, array }) => {
   const { SystemCodeStore } = useStores();
   const { getCodeComponent } = SystemCodeStore;
 
   useLayoutEffect(() => {
-    getCodeComponent(code, setArrayMethod);
-  }, [getCodeComponent, code, setArrayMethod]);
+    getCodeComponent(codeGroup, setArrayMethod);
+  }, [getCodeComponent, codeGroup, setArrayMethod]);
 
   return array.map((data) => (
     <option
@@ -20,4 +20,4 @@ const CodeOption = ({ code, setArrayMethod, array }) => {
   ));
 };
 
-export default memo(observer(CodeOption));
+export default memo(observer(CodeOptionList));
