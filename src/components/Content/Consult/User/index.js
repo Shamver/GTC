@@ -21,13 +21,16 @@ const ConsultUser = ({ match }) => {
 
   const { loadingProcess } = UtilLoadingStore;
   const { getCodeComponent } = SystemCodeStore;
-  const { setCategoryCodeList } = ConsultStore;
+  const { setCategoryCodeList, getConsultList } = ConsultStore;
 
   useLayoutEffect(() => {
     loadingProcess([
       () => getCodeComponent('CONSULT_CATEGORY', setCategoryCodeList),
+      () => getConsultList(currentPage),
     ]);
-  }, []);
+  }, [
+    getCodeComponent, setCategoryCodeList, getConsultList, currentPage,
+  ]);
 
   return (
     <ConsultWrapper>

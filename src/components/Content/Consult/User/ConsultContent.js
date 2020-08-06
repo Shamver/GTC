@@ -9,7 +9,7 @@ const ConsultContent = ({
   currentTab, currentPage, noPagination,
 }) => (
   <TabContent activeTab={currentTab}>
-    <ConsultSend />
+    <ConsultSend currentPage={currentPage} />
     <ConsultSent />
   </TabContent>
 );

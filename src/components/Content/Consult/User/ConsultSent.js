@@ -10,14 +10,19 @@ import useStores from '../../../../stores/useStores';
 
 const ConsultSentRow = (props) => {
   const { onClickRow, isOpen, data, userData } = props;
-  const { subject, date, answerFl, text, answerText } = data;
+  const {
+    subject, date, answerFl, consultDesc, answerDesc, category,
+  } = data;
   const { username } = userData;
 
   return (
     <>
       <ColItem onClick={() => onClickRow(data.id)} className={isOpen ? 'col-sm-12 head active' : 'col-sm-12 head'}>
         <Row>
-          <ColItem className="col-sm-8">
+          <ColItem className="col-sm-2">
+            {category}
+          </ColItem>
+          <ColItem className="col-sm-6">
             {subject}
           </ColItem>
           <ColItem className="col-sm-2">
@@ -35,17 +40,17 @@ const ConsultSentRow = (props) => {
             { username }
             <Card>
               <CardBody className="bg-ask">
-                {text}
+                {consultDesc}
               </CardBody>
             </Card>
           </Div>
           <Div className="answer" answerFl={answerFl}>
             운영자
             <Card>
-              <CardBody className="bg-answer">
+              <CardBody className="bg-answer new-line">
                 {
                   answerFl
-                    ? answerText
+                    ? answerDesc
                     : (<Span className="color-gray">아직 답변을 받지 않은 문의 입니다.</Span>)
                 }
               </CardBody>
@@ -58,32 +63,14 @@ const ConsultSentRow = (props) => {
 };
 
 const ConsultSent = () => {
-  const { UserStore } = useStores();
+  const { UserStore, ConsultStore } = useStores();
   const { userData } = UserStore;
-
-  const data = [
-    {
-      id: 1,
-      subject: 's',
-      text: 'ss',
-      date: '2020-02-02',
-      answerFl: 0,
-      answerText: null,
-    },
-    {
-      id: 2,
-      subject: 's2',
-      text: 'ss2',
-      date: '2020-02-03',
-      answerFl: 1,
-      answerText: '이게 답변이다 임마',
-    }
-  ];
+  const { myConsultList } = ConsultStore;
   const [openId, setOpenId] = useState(null);
 
   const onClickRow = (id) => id === openId ? setOpenId(null) : setOpenId(id);
 
-  const test = data.map((v) =>
+  const test = myConsultList.map((v) =>
     <ConsultSentRow
       data={v}
       isOpen={v.id === openId}
@@ -98,7 +85,10 @@ const ConsultSent = () => {
         <Row>
           <Col className="col-sm-12 content-header">
             <Row>
-              <ColItem className="col-sm-8">
+              <ColItem className="col-sm-2">
+                종류
+              </ColItem>
+              <ColItem className="col-sm-6">
                 제목
               </ColItem>
               <ColItem className="col-sm-2">
@@ -173,6 +163,10 @@ const Div = styled.div`
   
   & .bg-answer {
     background-color: ${(props) => props.answerFl ? '#deffec' : '#ffdede'};
+  }
+  
+  & .new-line {
+    white-space: pre;
   }
 `;
 

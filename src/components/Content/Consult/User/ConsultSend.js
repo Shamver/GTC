@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import useStores from '../../../../stores/useStores';
 
-const ConsultSend = () => {
+const ConsultSend = ({ currentPage }) => {
   const { ConsultStore } = useStores();
 
   const {
@@ -59,7 +59,7 @@ const ConsultSend = () => {
           </FormGroup>
         </Form>
         <div>
-          <Button disabled={isDisabled} color="primary" onClick={addConsult}>등록</Button>
+          <Button disabled={isDisabled} color="primary" onClick={() => addConsult(currentPage)}>등록</Button>
         </div>
       </Wrapper>
     </TabPane>

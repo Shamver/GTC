@@ -5,6 +5,10 @@ import { toast } from 'react-toastify';
 class ConsultStore {
   @observable consultCategoryCodeList = [];
 
+  @observable myConsultList = [];
+
+  @observable maxPage = 0;
+
   @observable currentCategory = '';
 
   @observable subject = '';
@@ -63,7 +67,38 @@ class ConsultStore {
       || text.length > 200;
   };
 
-  @action addConsult = () => {
+  @action getConsultList = async (currentPage) => {
+    const { userData } = this.root.UserStore;
+    const { id } = userData;
+
+    await axios.get('/api/consult', {
+      params: {
+        currentPage,
+        userId: id,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.myConsultList = data.result;
+            if (data.result.length === 0) {
+              this.maxPage = 0;
+            } else {
+              const { pageCount } = data.result[0];
+              this.maxPage = pageCount;
+            }
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  };
+
+  @action addConsult = async (currentPage) => {
     if (this.isDisabled) {
       toast.error('비활성화 상태입니다.');
       return;
@@ -83,6 +118,7 @@ class ConsultStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
+            this.getConsultList(currentPage);
             this.setConsultClear();
           } else {
             toast.info(data.message);
