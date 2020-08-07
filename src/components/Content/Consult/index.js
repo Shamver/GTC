@@ -2,11 +2,11 @@ import React, { useLayoutEffect, memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
-import useStores from '../../../../stores/useStores';
+import useStores from '../../../stores/useStores';
 import ConsultNav from './ConsultNav';
 import ConsultContent from './ConsultContent';
 
-const ConsultUser = ({ match, parentProps }) => {
+const Consult = ({ match, parentProps }) => {
   const {
     UtilLoadingStore, SystemCodeStore, ConsultStore,
   } = useStores();
@@ -45,7 +45,7 @@ const ConsultUser = ({ match, parentProps }) => {
   );
 };
 
-ConsultUser.propTypes = {
+Consult.propTypes = {
   match: Proptypes.shape({
     params: Proptypes.shape({
       board: Proptypes.string,
@@ -69,4 +69,4 @@ const ConsultWrapper = styled.div`
   padding: 20px;
 `;
 
-export default memo(observer(ConsultUser));
+export default memo(observer(Consult));
