@@ -146,6 +146,13 @@ const INSERT_USER_BAN = `
   )
 `;
 
+const UPDATE_USER_BAN_FL = `
+  UPDATE GTC_USER
+  SET
+    BANNED_FL = 1
+  WHERE ID = :USER_ID
+`;
+
 const UPDATE_USER_BAN_CANCEL = `
   DELETE FROM GTC_USER_BAN
   WHERE USER_ID = :USER_ID
@@ -230,12 +237,18 @@ router.post('/ban', (req, res) => {
           );
         }
       })
-      // .then(() => database.query(
-      //   UPDATE_REPORT_DATE,
-      //   {
-      //     ID: reportId,
-      //   },
-      // ))
+      .then(() => database.query(
+        UPDATE_REPORT_DATE,
+        {
+          ID: reportId,
+        },
+      ))
+      .then(() => database.query(
+        UPDATE_USER_BAN_FL,
+        {
+          USER_ID: targetUserId,
+        },
+      ))
       .then(() => {
         res.json({
           success: true,
