@@ -11,11 +11,13 @@ import BoardDetailModal from './BoardDetailModal';
 
 const BoardSetting = () => {
   const { UtilLoadingStore, SystemBoardStore } = useStores();
-  const { toggleBoardAdd, isAddBoard } = SystemBoardStore;
-  const { stopLoading } = UtilLoadingStore;
+  const { toggleBoardAdd, isAddBoard, getBoard } = SystemBoardStore;
+  const { loadingProcess } = UtilLoadingStore;
 
   useLayoutEffect(() => {
-    stopLoading();
+    loadingProcess([
+      getBoard,
+    ]);
   });
 
   return (

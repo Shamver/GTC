@@ -4,29 +4,50 @@ const router = express.Router();
 const { info } = require('../../log-config');
 const Database = require('../../Database');
 
-const INSERT_CODEGROUP = `
+const INSERT_BOARD = `
   INSERT INTO GTC_BOARD (
-    ID
-    , NAME
-    , \`DESC\`
+      BOARD
+      , NAME
+      , PATH
+      , \`DESC\`
+      , \`ORDER\`
+      , USE_FL
+      , PERMISSION_LEVEL
   ) VALUES (
-    ':CODEGROUP_ID'
-    , ':NAME'
-    , ':DESC'
+      ':BOARD'
+      , ':NAME'
+      , ':PATH'
+      , ':DESC'
+      , :ORDER
+      , :USE_FL
+      , :PERMISSION_LEVEL
   )
+`;
+
+const SELECT_BOARD = `
+  SELECT 
+    BOARD
+    , NAME
+    , PATH
+    , \`DESC\`
+    , \`ORDER\`
+    , USE_FL
+    , PERMISSION_LEVEL
+    , CRT_DTTM
+   FROM GTC_BOARD
 `;
 
 router.post('/', (req, res) => {
   const {
     id, name, desc, path,
-    order, useFl, permissionLevel
+    order, useFl, permissionLevel,
   } = req.body;
 
   Database.execute(
     (database) => database.query(
-      INSERT_CODEGROUP,
+      INSERT_BOARD,
       {
-        ID: id,
+        BOARD: id,
         NAME: name,
         DESC: desc,
         PATH: path,
@@ -44,6 +65,24 @@ router.post('/', (req, res) => {
       }),
   ).then(() => {
     info('[INSERT, GET /api/system/board] 시스템 게시판 추가');
+  });
+});
+
+router.get('/', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD,
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '게시판 조회 완료',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/system/board] 시스템 게시판 조회');
   });
 });
 

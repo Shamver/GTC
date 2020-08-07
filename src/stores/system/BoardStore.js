@@ -6,12 +6,14 @@ class BoardStore {
   @observable board = {
     id: '',
     name: '',
-    desc: '',
     path: '',
     order: '',
     useFl: 1,
     permissionLevel: '',
+    desc: '',
   };
+
+  @observable boardList = [];
 
   @observable permissionLevelList = [];
 
@@ -23,19 +25,17 @@ class BoardStore {
     this.root = root;
   }
 
-  @action addPost = () => {
-    if (!this.postValidationCheck()) {
+  @action addBoard = () => {
+    if (!this.boardValidationCheck()) {
       return false;
     }
 
-    axios.post('/api/board/post', this.board)
+    axios.post('/api/system/board', this.board)
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            this.root.UtilRouteStore.goBack();
             toast.success(data.message);
-            this.setPostClear();
           } else {
             toast.info(data.message);
           }
@@ -44,6 +44,54 @@ class BoardStore {
         }
       })
       .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
+  @action getBoard = () => {
+    axios.get('/api/system/board')
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.boardList = data.result;
+            console.log(data.result);
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
+  @action boardValidationCheck = () => {
+    // id
+    if (!this.board.id.trim()) {
+      toast.error('게시판을 입력해주세요.');
+      return false;
+    }
+
+    // name
+    if (!this.board.name.trim()) {
+      toast.error('이름을 입력해주세요.');
+      return false;
+    }
+
+    // path
+    if (!this.board.path.trim()) {
+      toast.error('경로를 입력해주세요.');
+      return false;
+    }
+
+    // order
+    if (!this.board.order.trim()) {
+      toast.error('순서를 제대로 입력해주세요.');
+      return false;
+    }
 
     return true;
   };
