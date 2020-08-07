@@ -77,13 +77,13 @@ const ReportDetail = () => {
             <ReportInfoDesc>
               <FormGroup check>
                 <Label check>
-                  <Input type="radio" name="banType" value="ban" onChange={onChangeDetailValue} />{' '}
+                  <Input type="radio" name="banType" value="BAN" onChange={onChangeDetailValue} />{' '}
                   영구 정지
                 </Label>
               </FormGroup>
               <FormGroup check>
                 <Label check>
-                  <Input type="radio" name="banType" value="ban2" onChange={onChangeDetailValue} />{' '}
+                  <Input type="radio" name="banType" value="BAN2" onChange={onChangeDetailValue} />{' '}
                   기간 정지
                 </Label>
               </FormGroup>
@@ -92,7 +92,7 @@ const ReportDetail = () => {
                   type="date"
                   name="banTerm"
                   value={banTerm}
-                  disabled={banType !== 'ban2'}
+                  disabled={banType !== 'BAN2'}
                   onChange={onChangeDetailValue}
                 />
               </FormGroup>
