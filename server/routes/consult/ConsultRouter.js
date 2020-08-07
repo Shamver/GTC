@@ -76,8 +76,8 @@ router.get('/', (req, res) => {
       SELECT_CONSULT_MINE,
       {
         USER_ID: userId,
-        CURRENT_PAGE: ((currentPage - 1) * 25),
-        PER_PAGE: 15,
+        CURRENT_PAGE: ((currentPage - 1) * 10),
+        PER_PAGE: 10,
       },
     )
       .then((rows) => {

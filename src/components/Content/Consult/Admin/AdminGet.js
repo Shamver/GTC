@@ -10,7 +10,7 @@ import useStores from '../../../../stores/useStores';
 import * as Proptypes from 'prop-types';
 import Pagination from '../Pagination';
 
-const ConsultSentRow = (props) => {
+const ConsultGetRow = (props) => {
   const { onClickRow, isOpen, data, userData } = props;
   const {
     subject, date, answerFl, consultDesc, answerDesc, category,
@@ -64,7 +64,7 @@ const ConsultSentRow = (props) => {
   )
 };
 
-const ConsultSent = ({
+const ConsultGet = ({
  currentTab, currentPage, noPagination,
 }) => {
   const { UserStore, ConsultStore } = useStores();
@@ -75,7 +75,7 @@ const ConsultSent = ({
   const onClickRow = (id) => id === openId ? setOpenId(null) : setOpenId(id);
 
   const test = myConsultList.map((v) =>
-    <ConsultSentRow
+    <ConsultGetRow
       data={v}
       isOpen={v.id === openId}
       onClickRow={onClickRow}
@@ -84,7 +84,7 @@ const ConsultSent = ({
   );
 
   return (
-    <TabPane tabId="sent">
+    <TabPane tabId="get">
       <Wrapper>
         <Row>
           <Col className="col-sm-12 content-header">
@@ -116,7 +116,7 @@ const ConsultSent = ({
   );
 };
 
-ConsultSent.propTypes = {
+ConsultGet.propTypes = {
   currentPage: Proptypes.string.isRequired,
   currentTab: Proptypes.string.isRequired,
   noPagination: Proptypes.bool.isRequired,
@@ -186,4 +186,4 @@ const Div = styled.div`
   }
 `;
 
-export default memo(observer(ConsultSent));
+export default memo(observer(ConsultGet));

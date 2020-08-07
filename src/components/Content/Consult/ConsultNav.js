@@ -3,12 +3,14 @@ import { Nav, NavItem, NavLink } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
-import useStores from '../../../../stores/useStores';
+import useStores from '../../../stores/useStores';
 
 const ConsultNav = ({ currentTab }) => {
   const {
-    ComponentConsultStore,
+    ComponentConsultStore, UserStore,
   } = useStores();
+
+  const { userData } = UserStore;
 
   const { onClick } = ComponentConsultStore;
 
@@ -24,6 +26,13 @@ const ConsultNav = ({ currentTab }) => {
           문의 내역
         </NavLinkBtn>
       </NavItem>
+      { userData && (userData.adminYN || userData.operatorYN) && (
+        <NavItem>
+          <NavLinkBtn className={currentTab === 'get' ? 'active' : ''} onClick={onClick} name="get">
+            유저 문의 관리
+          </NavLinkBtn>
+        </NavItem>
+      )}
     </Nav>
   );
 };

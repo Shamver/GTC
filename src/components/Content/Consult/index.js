@@ -6,13 +6,13 @@ import useStores from '../../../../stores/useStores';
 import ConsultNav from './ConsultNav';
 import ConsultContent from './ConsultContent';
 
-const ConsultUser = ({ match }) => {
+const ConsultUser = ({ match, parentProps }) => {
   const {
     UtilLoadingStore, SystemCodeStore, ConsultStore,
   } = useStores();
 
   const { params } = match;
-  let { noPagination } = match;
+  let { noPagination } = parentProps;
   let { currentPage, currentTab } = params;
 
   currentTab = currentTab || 'send';

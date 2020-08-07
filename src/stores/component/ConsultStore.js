@@ -9,7 +9,7 @@ class ConsultStore {
     const { name } = e.target;
     const { history } = this.root.UtilRouteStore;
 
-    history.push(`/consult/${name}/page/1`);
+    history.push(`/consult/${name}`);
   });
 
   @action setTab = ((v, to = null) => {

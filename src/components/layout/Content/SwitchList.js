@@ -27,6 +27,9 @@ const SwitchList = () => {
       <AuthRouter exact Component={Contents.Code} level={3} path="/code" />
       <AuthRouter exact Component={Contents.Test} level={3} path="/test" />
 
+      {/* ---------------------------- ConsultAdmin Router Component --------------------------- */}
+      <AuthRouter exact={false} Component={Router.ConsultAdminRouter} level={1} path="/consult/get" />
+
       {/* ---------------------------- Consult Router Component --------------------------- */}
       <AuthRouter exact={false} Component={Router.ConsultRouter} level={1} path="/consult" />
 
