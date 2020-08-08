@@ -158,13 +158,13 @@ const UPDATE_USER_BAN_CANCEL = `
   WHERE USER_ID = :USER_ID
 `;
 
-// const UPDATE_REPORT_CANCEL = `
-//   UPDATE GTC_REPORT
-//   SET
-//     REJECT_FL = 1,
-//     MFY_DTTM = SYSDATE()
-//   WHERE ID = :ID;
-// `;
+const UPDATE_REPORT_CANCEL = `
+  UPDATE GTC_REPORT
+  SET
+    REJECT_FL = 1,
+    MFY_DTTM = SYSDATE()
+  WHERE ID = :ID;
+`;
 
 const UPDATE_REPORT_DATE = `
   UPDATE GTC_REPORT
@@ -172,11 +172,6 @@ const UPDATE_REPORT_DATE = `
     MFY_DTTM = SYSDATE()
   WHERE ID = :ID;
 `;
-
-// const DELETE_USER_REPORT = `
-//   DELETE FROM GTC_REPORT
-//   WHERE TARGET_ID IN (SELECT ID FROM GTC_POST WHERE USER_ID=1) AND REJECT_FL = 0;
-// `;
 
 const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
   SELECT
@@ -286,6 +281,12 @@ router.put('/cancel', (req, res) => {
           USER_ID: userId,
         },
       ))
+      // .then(() => database.query(
+      //   UPDATE_REPORT_CANCEL,
+      //   {
+      //     USER_ID: userId,
+      //   },
+      // ))
       .then(() => {
         res.json({
           success: true,

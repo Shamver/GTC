@@ -83,7 +83,28 @@ class ReportStore {
       return false;
     }
 
-    if (this.reportTakeOnData.banType === 'ban2') {
+    if (this.reportTakeOnData.banType === 'BAN2') {
+      const banTerm = this.reportTakeOnData.banTerm.split('-');
+      const date = new Date();
+      const year = date.getFullYear();
+      let month = (date.getMonth() + 1);
+      let day = date.getDate();
+
+      if (String(day).length < 2) {
+        day = `0${day}`;
+      }
+      if (String(month).length < 2) {
+        month = `0${month}`;
+      }
+
+      const getDate = String(year) + month + day;
+      const getBanTerm = banTerm[0] + banTerm[1] + banTerm[2];
+
+      if (parseInt(getBanTerm, 10) < parseInt(getDate, 10)) {
+        toast.error('정지 기간을 이전 날짜로 지정할 수 없습니다.');
+        return false;
+      }
+
       if (!this.reportTakeOnData.banTerm) {
         toast.error('기간을 선택해주세요.');
         return false;
