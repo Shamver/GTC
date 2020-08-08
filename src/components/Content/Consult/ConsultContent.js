@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import ConsultSend from './User/ConsultSend';
 import ConsultSent from './User/ConsultSent';
+import ConsultGet from './Admin/AdminGet';
 
 const ConsultContent = ({
   currentTab, currentPage, noPagination,
@@ -11,6 +12,11 @@ const ConsultContent = ({
   <TabContent activeTab={currentTab}>
     <ConsultSend currentPage={currentPage} />
     <ConsultSent
+      currentPage={currentPage}
+      noPagination={noPagination}
+      currentTab={currentTab}
+    />
+    <ConsultGet
       currentPage={currentPage}
       noPagination={noPagination}
       currentTab={currentTab}

@@ -1,6 +1,6 @@
 import React, { memo, useState } from 'react';
 import {
-  TabPane, Row, Col, Collapse, Card, CardBody,
+  TabPane, Row, Col, Collapse, Card, CardBody, Input, Button,
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
@@ -11,11 +11,11 @@ import * as Proptypes from 'prop-types';
 import Pagination from '../Pagination';
 
 const ConsultGetRow = (props) => {
-  const { onClickRow, isOpen, data, userData } = props;
+  const { onClickRow, isOpen, data } = props;
   const {
     subject, date, answerFl, consultDesc, answerDesc, category,
+    userName,
   } = data;
-  const { username } = userData;
 
   return (
     <>
@@ -24,22 +24,24 @@ const ConsultGetRow = (props) => {
           <ColItem className="col-sm-2">
             {category}
           </ColItem>
-          <ColItem className="col-sm-6">
+          <ColItem className="col-sm-5">
             {subject}
+          </ColItem>
+          <ColItem className="col-sm-2">
+            {userName}
           </ColItem>
           <ColItem className="col-sm-2">
             {date}
           </ColItem>
-          <ColItem className="col-sm-2">
+          <ColItem className="col-sm-1">
             <CustomFontAwesome icon={answerFl ? faCheckCircle : faTimesCircle} color={answerFl ? 'green' : 'red'} />
-            &nbsp;<Span className={answerFl ? 'color-green' : 'color-red'}>{answerFl ? '답변 완료' : '답변 대기'}</Span>
           </ColItem>
         </Row>
       </ColItem>
       <ColItem className={isOpen ? 'col-sm-12 collapse-active' : 'col-sm-12 collapse-non-active'}>
         <Collapse isOpen={isOpen}>
           <Div>
-            { username }
+            { userName }
             <Card>
               <CardBody className="bg-ask">
                 {consultDesc}
@@ -53,7 +55,12 @@ const ConsultGetRow = (props) => {
                 {
                   answerFl
                     ? answerDesc
-                    : (<Span className="color-gray">아직 답변을 받지 않은 문의 입니다.</Span>)
+                    : (
+                      <>
+                        <Input type="textarea" className="text-area" placeHolder="답변을 입력해주세요." />
+                        <Button className="mt-3 btn-sm" color="primary">답변 등록</Button>
+                      </>
+                      )
                 }
               </CardBody>
             </Card>
@@ -67,19 +74,17 @@ const ConsultGetRow = (props) => {
 const ConsultGet = ({
  currentTab, currentPage, noPagination,
 }) => {
-  const { UserStore, ConsultStore } = useStores();
-  const { userData } = UserStore;
-  const { myConsultList, maxPage } = ConsultStore;
+  const { ConsultStore } = useStores();
+  const { consultList, adminMaxPage } = ConsultStore;
   const [openId, setOpenId] = useState(null);
 
   const onClickRow = (id) => id === openId ? setOpenId(null) : setOpenId(id);
 
-  const test = myConsultList.map((v) =>
+  const test = consultList.map((v) =>
     <ConsultGetRow
       data={v}
       isOpen={v.id === openId}
       onClickRow={onClickRow}
-      userData={userData}
     />
   );
 
@@ -92,14 +97,17 @@ const ConsultGet = ({
               <ColItem className="col-sm-2">
                 종류
               </ColItem>
-              <ColItem className="col-sm-6">
+              <ColItem className="col-sm-5">
                 제목
+              </ColItem>
+              <ColItem className="col-sm-2">
+                닉네임
               </ColItem>
               <ColItem className="col-sm-2">
                 날짜
               </ColItem>
-              <ColItem className="col-sm-2">
-                답변 여부
+              <ColItem className="col-sm-1">
+                답변
               </ColItem>
             </Row>
           </Col>
@@ -109,7 +117,7 @@ const ConsultGet = ({
           currentPage={currentPage}
           noPagination={noPagination}
           path={currentTab}
-          maxPage={maxPage}
+          maxPage={adminMaxPage}
         />
       </Wrapper>
     </TabPane>
@@ -152,18 +160,6 @@ const CustomFontAwesome = styled(FontAwesomeIcon)`
   padding-top: 2px;
 `;
 
-const Span = styled.span`
-  &.color-red {
-    color: red;
-  }
-  &.color-green {
-    color: green;
-  }
-  &.color-gray {
-    color: gray;
-  }
-`;
-
 const Div = styled.div`
   padding: 1rem;
   width: 70%;
@@ -183,6 +179,11 @@ const Div = styled.div`
   
   & .new-line {
     white-space: pre;
+  }
+  
+  & .text-area {
+    height: 100px;
+    resize: none;
   }
 `;
 

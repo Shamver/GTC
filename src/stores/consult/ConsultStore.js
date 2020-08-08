@@ -7,7 +7,11 @@ class ConsultStore {
 
   @observable myConsultList = [];
 
+  @observable consultList = [];
+
   @observable maxPage = 0;
+
+  @observable adminMaxPage = 0;
 
   @observable currentCategory = '';
 
@@ -67,7 +71,7 @@ class ConsultStore {
       || text.length > 200;
   };
 
-  @action getConsultList = async (currentPage) => {
+  @action getMyConsultList = async (currentPage) => {
     const { userData } = this.root.UserStore;
     const { id } = userData;
 
@@ -87,6 +91,38 @@ class ConsultStore {
             } else {
               const { pageCount } = data.result[0];
               this.maxPage = pageCount;
+            }
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  };
+
+  @action getConsultList = async (currentPage) => {
+    const { userData } = this.root.UserStore;
+    const { adminYN } = userData;
+
+    if (!adminYN) return;
+
+    await axios.get('/api/consult/admin', {
+      params: {
+        currentPage,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.consultList = data.result;
+            if (data.result.length === 0) {
+              this.adminMaxPage = 0;
+            } else {
+              const { pageCount } = data.result[0];
+              this.adminMaxPage = pageCount;
             }
           } else {
             toast.info(data.message);

@@ -21,15 +21,19 @@ const Consult = ({ match, parentProps }) => {
 
   const { loadingProcess } = UtilLoadingStore;
   const { getCodeComponent } = SystemCodeStore;
-  const { setCategoryCodeList, getConsultList } = ConsultStore;
+  const {
+    setCategoryCodeList, getMyConsultList, getConsultList,
+  } = ConsultStore;
 
   useLayoutEffect(() => {
     loadingProcess([
       () => getCodeComponent('CONSULT_CATEGORY', setCategoryCodeList),
+      () => getMyConsultList(currentPage),
       () => getConsultList(currentPage),
     ]);
   }, [
-    getCodeComponent, setCategoryCodeList, getConsultList, currentPage,
+    getCodeComponent, setCategoryCodeList, getMyConsultList,
+    currentPage, getConsultList,
   ]);
 
   return (
