@@ -5,18 +5,18 @@ import styled from 'styled-components';
 import { Button, Table } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
-import AddBoard from './AddBoard';
 import BoardDetailModal from './BoardDetailModal';
+import BoardList from './BoardList';
 
 
 const BoardSetting = () => {
   const { UtilLoadingStore, SystemBoardStore } = useStores();
-  const { toggleBoardAdd, isAddBoard, getBoard } = SystemBoardStore;
+  const { toggleBoardModal, getBoardList } = SystemBoardStore;
   const { loadingProcess } = UtilLoadingStore;
 
   useLayoutEffect(() => {
     loadingProcess([
-      getBoard,
+      getBoardList,
     ]);
   });
 
@@ -27,7 +27,7 @@ const BoardSetting = () => {
         <CodeTableWrapper>
           <CodeCol>
             <PaddedDiv>
-              <RightButton size="sm" color="danger" onClick={toggleBoardAdd}>
+              <RightButton size="sm" color="danger" onClick={toggleBoardModal}>
                 <FontAwesomeIcon icon={faPlus} />
                 &nbsp;
                 게시판 추가
@@ -39,16 +39,12 @@ const BoardSetting = () => {
                   <th>게시판</th>
                   <th>이름</th>
                   <th>경로</th>
-                  <th>순서</th>
                   <th>사용</th>
-                  <th>권한</th>
                 </tr>
               </thead>
               <tbody>
-                { isAddBoard ? (<AddBoard />) : null}
-                <tr>
-                  <CenterTd colSpan={9}>게시판이 존재하지 않습니다.</CenterTd>
-                </tr>
+                <BoardList />
+                <CenterTd colSpan={4}>게시판이 존재하지 않습니다.</CenterTd>
               </tbody>
             </CodeTable>
           </CodeCol>

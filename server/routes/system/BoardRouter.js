@@ -25,16 +25,30 @@ const INSERT_BOARD = `
 `;
 
 const SELECT_BOARD = `
-  SELECT 
-    BOARD
-    , NAME
-    , PATH
-    , \`DESC\`
-    , \`ORDER\`
-    , USE_FL
-    , PERMISSION_LEVEL
-    , CRT_DTTM
-   FROM GTC_BOARD
+  SELECT
+    GB.BOARD as id
+    , GB.NAME as name
+    , GB.PATH as path
+    , GB.\`DESC\` as \`desc\`
+    , GB.\`ORDER\` as \`order\`
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GB.USE_FL) AS useFl
+    , GB.PERMISSION_LEVEL as permissionLevel
+    , GB.CRT_DTTM as crtDttm
+   FROM GTC_BOARD GB
+   WHERE GB_BOARD = :BOARD
+`;
+
+const SELECT_BOARD_ALL = `
+  SELECT
+    GB.BOARD as board
+    , GB.NAME as name
+    , GB.PATH as path
+    , GB.\`DESC\` as \`desc\`
+    , GB.\`ORDER\` as \`order\`
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GB.USE_FL) AS useFl
+    , GB.PERMISSION_LEVEL as permissionLevel
+    , GB.CRT_DTTM as crtDttm
+   FROM GTC_BOARD GB
 `;
 
 router.post('/', (req, res) => {
@@ -69,9 +83,13 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
+  const { board } = req.body;
   Database.execute(
     (database) => database.query(
       SELECT_BOARD,
+      {
+        BOARD: board,
+      },
     )
       .then((rows) => {
         res.json({
@@ -83,6 +101,24 @@ router.get('/', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, GET /api/system/board] 시스템 게시판 조회');
+  });
+});
+
+router.get('/all', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_ALL,
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '게시판 전체 조회 완료',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/system/board] 시스템 게시판 전체 조회');
   });
 });
 

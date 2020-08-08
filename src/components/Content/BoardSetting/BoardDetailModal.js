@@ -11,7 +11,7 @@ import CodeOptionList from '../../util/CodeOptionList';
 const BoardDetailModal = () => {
   const { SystemBoardStore } = useStores();
   const {
-    isBoardAddToggle, toggleBoardAdd, board, useFlagList,
+    isBoardModalToggle, toggleBoardModal, board, useFlagList,
     permissionLevelList, setPermissionLevelList, setUseFlagList,
     onChangeBoard, addBoard,
   } = SystemBoardStore;
@@ -21,8 +21,8 @@ const BoardDetailModal = () => {
   } = board;
 
   return (
-    <Modal isOpen={isBoardAddToggle} toggle={toggleBoardAdd}>
-      <ModalHeaderBack toggle={toggleBoardAdd}>게시판 추가</ModalHeaderBack>
+    <Modal isOpen={isBoardModalToggle} toggle={toggleBoardModal}>
+      <ModalHeaderBack toggle={toggleBoardModal}>게시판 추가</ModalHeaderBack>
       <ModalBody>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
@@ -73,9 +73,9 @@ const BoardDetailModal = () => {
       </ModalBody>
       <ModalFooter>
         <Button color="danger" onClick={addBoard}>추가</Button>{' '}
-        <Button color="danger" onClick={toggleBoardAdd}>수정</Button>{' '}
-        <Button color="warning" onClick={toggleBoardAdd}>삭제</Button>{' '}
-        <Button color="secondary" onClick={toggleBoardAdd}>취소</Button>
+        <Button color="danger" onClick={toggleBoardModal}>수정</Button>{' '}
+        <Button color="warning" onClick={toggleBoardModal}>삭제</Button>{' '}
+        <Button color="secondary" onClick={toggleBoardModal}>취소</Button>
       </ModalFooter>
     </Modal>
   );

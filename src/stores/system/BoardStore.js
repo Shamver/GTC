@@ -19,11 +19,30 @@ class BoardStore {
 
   @observable useFlagList = [];
 
-  @observable isBoardAddToggle = false;
+  @observable isBoardModalToggle = false;
 
   constructor(root) {
     this.root = root;
   }
+
+  @action getBoardList = async () => {
+    await axios.get('/api/system/board/all')
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.boardList = data.result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
 
   @action addBoard = () => {
     if (!this.boardValidationCheck()) {
@@ -48,14 +67,18 @@ class BoardStore {
     return true;
   };
 
-  @action getBoard = () => {
-    axios.get('/api/system/board')
+  @action getBoard = (board) => {
+    axios.get('/api/system/board', {
+      params: {
+        board,
+      },
+    })
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            this.boardList = data.result;
-            console.log(data.result);
+            this.board = board;
+            toast.success(data.message);
           } else {
             toast.info(data.message);
           }
@@ -66,6 +89,13 @@ class BoardStore {
       .catch((response) => { toast.error(response.message); });
 
     return true;
+  };
+
+
+  @action toggleDetailBoard = (board) => {
+    console.log(board);
+    this.toggleBoardModal();
+    this.getBoard(board);
   };
 
   @action boardValidationCheck = () => {
@@ -100,8 +130,8 @@ class BoardStore {
     this.permissionLevelList = value;
   };
 
-  @action toggleBoardAdd = () => {
-    this.isBoardAddToggle = !this.isBoardAddToggle;
+  @action toggleBoardModal = () => {
+    this.isBoardModalToggle = !this.isBoardModalToggle;
   }
 
   @action setUseFlagList = (value) => {
