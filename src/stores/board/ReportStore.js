@@ -179,13 +179,13 @@ class ReportStore {
   };
 
   @action reportTakeOn = (type) => {
-    const { reportId, targetUserId, description } = this.reportDetailData;
+    const { reportId, targetUserId, reason } = this.reportDetailData;
     const { takeReason, banTerm } = this.reportTakeOnData;
     if (!this.ReportTakeOnValidationCheck()) {
       return false;
     }
 
-    this.root.UserStore.userBan(reportId, targetUserId, type, takeReason || description, banTerm);
+    this.root.UserStore.userBan(reportId, targetUserId, type, takeReason || reason, banTerm);
 
     return true;
   };

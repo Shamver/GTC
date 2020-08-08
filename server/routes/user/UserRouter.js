@@ -149,7 +149,7 @@ const INSERT_USER_BAN = `
 const UPDATE_USER_BAN_FL = `
   UPDATE GTC_USER
   SET
-    BANNED_FL = 1
+    BANNED_FL = :BAN_FL
   WHERE ID = :USER_ID
 `;
 
@@ -246,6 +246,7 @@ router.post('/ban', (req, res) => {
       .then(() => database.query(
         UPDATE_USER_BAN_FL,
         {
+          BAN_FL: 1,
           USER_ID: targetUserId,
         },
       ))
@@ -278,6 +279,13 @@ router.put('/cancel', (req, res) => {
         USER_ID: userId,
       },
     )
+      .then(() => database.query(
+        UPDATE_USER_BAN_FL,
+        {
+          BAN_FL: 0,
+          USER_ID: userId,
+        },
+      ))
       .then(() => {
         res.json({
           success: true,
