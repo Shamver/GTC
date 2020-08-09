@@ -4,6 +4,7 @@ import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
 import ReportList from './ReportList';
 import useStores from '../../../stores/useStores';
+import ReportBottom from './ReportBottom';
 
 const ReportTable = () => {
   const { BoardReportStore } = useStores();
@@ -17,8 +18,9 @@ const ReportTable = () => {
       <CodeTable bordered hover>
         <thead>
           <tr>
+            <ThCenter width="5%" />
             <ThCenter width="7%">신고ID</ThCenter>
-            <th width="30%">신고 사유</th>
+            <th width="25%">신고 사유</th>
             <th width="15%">신고자</th>
             <th width="15%">피신고자</th>
             <th width="10%">컨텐츠</th>
@@ -29,6 +31,7 @@ const ReportTable = () => {
           { reportList }
         </tbody>
       </CodeTable>
+      <ReportBottom />
     </TabPane>
   );
 };

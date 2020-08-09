@@ -1,20 +1,26 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
+import { Label, Input } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const ReportList = ({ data }) => {
   const { BoardReportStore } = useStores();
-  const { getDetailReport } = BoardReportStore;
+  const { getDetailReport, onChangeCheck } = BoardReportStore;
   const {
     userId, reason, reportId, reportDate, targetName, contents,
   } = data;
 
   return (
-    <tr onClick={() => getDetailReport(reportId)}>
+    <tr>
+      <TdCenter>
+        <Label check>
+          <Input type="checkbox" onChange={onChangeCheck} value={reportId} />
+        </Label>
+      </TdCenter>
       <TdCenter>{reportId}</TdCenter>
-      <td>{reason}</td>
+      <td onClick={() => getDetailReport(reportId)}>{reason}</td>
       <td>{userId}</td>
       <td>{targetName}</td>
       <td>{contents}</td>
@@ -37,6 +43,14 @@ ReportList.propTypes = {
 
 const TdCenter = styled.td`
   text-align: center;
+  
+  label {
+    margin-bottom: .5rem;
+  }
+  
+  input {
+    margin: 0 auto;
+  }
 `;
 
 export default memo(observer(ReportList));

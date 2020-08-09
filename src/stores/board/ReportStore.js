@@ -22,6 +22,8 @@ class ReportStore {
 
   @observable reportDetailData = [];
 
+  @observable reportBatchList = [];
+
   @observable reportTakeOnData = {
     takeReason: '',
     banType: '',
@@ -120,6 +122,11 @@ class ReportStore {
       [event.target.name]: event.target.value,
     };
   };
+
+  @action onChangeCheck = (event) => {
+    this.reportBatchList.push(event.target.value);
+    console.log(this.reportBatchList);
+  }
 
   @action onChangeDetailValue = (event) => {
     this.reportTakeOnData = {
