@@ -16,7 +16,7 @@ const ConsultGetRow = (props) => {
   } = props;
   const {
     subject, date, answerFl, consultDesc, answerDesc, category,
-    userName, id,
+    userName, id, adminName,
   } = data;
 
   return (
@@ -43,7 +43,7 @@ const ConsultGetRow = (props) => {
       <ColItem className={isOpen ? 'col-sm-12 collapse-active' : 'col-sm-12 collapse-non-active'}>
         <Collapse isOpen={isOpen}>
           <Div>
-            { userName }
+            문의자: { userName }
             <Card>
               <CardBody className="bg-ask">
                 {consultDesc}
@@ -51,7 +51,7 @@ const ConsultGetRow = (props) => {
             </Card>
           </Div>
           <Div className="answer" answerFl={answerFl}>
-            운영자
+            답변자: { adminName || '(미답변 상태입니다.)' }
             <Card>
               <CardBody className="bg-answer new-line">
                 {
