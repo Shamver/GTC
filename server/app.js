@@ -33,6 +33,7 @@ const eventDailyApi = require('./routes/event/DailyRouter');
 const eventAdvertiseApi = require('./routes/event/AdvertiseRouter');
 const systemCodeApi = require('./routes/system/CodeRouter');
 const fileApi = require('./routes/util/FileRouter');
+const consultApi = require('./routes/consult/ConsultRouter');
 
 app.use(cookieParser());
 app.use(bodyParser.json());
@@ -52,6 +53,9 @@ app.use('/api/user/ignore', userIgnoreApi);
 app.use('/api/user/favorite', userFavoriteApi);
 app.use('/api/user/point', userPointApi);
 app.use('/api/user/mail', userMailApi);
+
+// consult
+app.use('/api/consult', consultApi);
 
 // post
 // 안에서 authMiddleWare 처리

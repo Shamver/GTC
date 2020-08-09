@@ -147,18 +147,20 @@ class UserStore {
   };
 
   @action RouterAuthCheck = (level) => {
-    // 0: 비회원, 1: 회원, 2: 운영자, 3:관리자
+    // 0: 비회원, 1: 회원(로그인시), 2: 운영자 이상, 3: 관리자급
+    const { userData } = this;
+
     if (level === 0) {
       return true;
     }
     if (level === 1) {
-      return this.userData;
+      return userData;
     }
     if (level === 2) {
-      return (this.userData && this.userData.operatorYN === 1);
+      return (userData && (userData.operatorYN === 1 || userData.adminYN === 1));
     }
     if (level === 3) {
-      return (this.userData && this.userData.adminYN === 1);
+      return (userData && userData.adminYN === 1);
     }
     return false;
   };
