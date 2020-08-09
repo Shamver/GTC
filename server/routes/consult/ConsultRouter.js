@@ -67,6 +67,16 @@ const SELECT_CONSULT_ADMIN = `
     LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
 
+const UPDATE_CONSULT_ADMIN = `
+  UPDATE GTC_CONSULT 
+  SET 
+    ANSWER_DESC = ':ANSWER'
+    , ANSWER_USER_ID = :USER_ID
+    , ANSWER_FL = 1
+    , MFY_DTTM = SYSDATE()
+   WHERE ID = :ID 
+`;
+
 router.post('/', (req, res) => {
   const { userId, subject, text, currentCategory } = req.body;
 
@@ -138,6 +148,30 @@ router.get('/admin', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, GET /api/consult/admin] 관리자 1:1 문의 내역 조회');
+  });
+});
+
+router.put('/admin', (req, res) => {
+  const { id, answer, userId } = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      UPDATE_CONSULT_ADMIN,
+      {
+        ID: id,
+        ANSWER: answer,
+        userId: userId,
+      },
+    )
+      .then(() => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '관리자 1:1 문의 답변 등록',
+        });
+      }),
+  ).then(() => {
+    info('[UPDATE, PUT /api/consult/admin] 관리자 1:1 문의 답변 등록');
   });
 });
 
