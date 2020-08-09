@@ -19,6 +19,8 @@ class ConsultStore {
 
   @observable text = '';
 
+  @observable answer = '';
+
   @observable isDisabled = true;
 
   @observable timer;
@@ -134,7 +136,7 @@ class ConsultStore {
       .catch((response) => { toast.error(response.message); });
   };
 
-  @action addConsult = async (currentPage) => {
+  @action addConsult = async () => {
     if (this.isDisabled) {
       toast.error('비활성화 상태입니다.');
       return;
@@ -154,8 +156,33 @@ class ConsultStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.getConsultList(currentPage);
+            this.getConsultList(1);
             this.setConsultClear();
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  };
+
+  @action addConsultAnswer = async (id, currentPage) => {
+    const { userData } = this.root.UserStore;
+    const { answer } = this;
+
+    axios.put('/api/consult/admin', {
+      userId: userData.id,
+      answer,
+      id,
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            this.getConsultList(currentPage);
           } else {
             toast.info(data.message);
           }

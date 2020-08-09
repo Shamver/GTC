@@ -11,15 +11,17 @@ import * as Proptypes from 'prop-types';
 import Pagination from '../Pagination';
 
 const ConsultGetRow = (props) => {
-  const { onClickRow, isOpen, data } = props;
+  const {
+    onClickRow, isOpen, data, addAnswer, onChangeValue, currentPage,
+  } = props;
   const {
     subject, date, answerFl, consultDesc, answerDesc, category,
-    userName,
+    userName, id,
   } = data;
 
   return (
     <>
-      <ColItem onClick={() => onClickRow(data.id)} className={isOpen ? 'col-sm-12 head active' : 'col-sm-12 head'}>
+      <ColItem onClick={() => onClickRow(id)} className={isOpen ? 'col-sm-12 head active' : 'col-sm-12 head'}>
         <Row>
           <ColItem className="col-sm-2">
             {category}
@@ -57,8 +59,20 @@ const ConsultGetRow = (props) => {
                     ? answerDesc
                     : (
                       <>
-                        <Input type="textarea" className="text-area" placeHolder="답변을 입력해주세요." />
-                        <Button className="mt-3 btn-sm" color="primary">답변 등록</Button>
+                        <Input
+                          type="textarea"
+                          className="text-area"
+                          placeholder="답변을 입력해주세요."
+                          name="answer"
+                          onChange={onChangeValue}
+                        />
+                        <Button
+                          className="mt-3 btn-sm"
+                          color="primary"
+                          onClick={() => addAnswer(id, currentPage)}
+                        >
+                          답변 등록
+                        </Button>
                       </>
                       )
                 }
@@ -75,16 +89,22 @@ const ConsultGet = ({
  currentTab, currentPage, noPagination,
 }) => {
   const { ConsultStore } = useStores();
-  const { consultList, adminMaxPage } = ConsultStore;
+  const {
+    consultList, adminMaxPage, addConsultAnswer, onChangeValue,
+  } = ConsultStore;
   const [openId, setOpenId] = useState(null);
 
   const onClickRow = (id) => id === openId ? setOpenId(null) : setOpenId(id);
 
   const test = consultList.map((v) =>
     <ConsultGetRow
+      key={v.id}
       data={v}
       isOpen={v.id === openId}
       onClickRow={onClickRow}
+      addAnswer={addConsultAnswer}
+      onChangeValue={onChangeValue}
+      currentPage={currentPage}
     />
   );
 

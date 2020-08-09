@@ -76,6 +76,7 @@ const ConsultSent = ({
 
   const test = myConsultList.map((v) =>
     <ConsultSentRow
+      key={v.id}
       data={v}
       isOpen={v.id === openId}
       onClickRow={onClickRow}

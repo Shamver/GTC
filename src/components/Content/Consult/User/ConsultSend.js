@@ -14,7 +14,9 @@ const ConsultSend = ({ currentPage }) => {
     subject, text, onChangeValue, isDisabled, addConsult,
   } = ConsultStore;
 
-  const categories = consultCategoryCodeList.map((v) => <option value={v.code}>{v.codeName}</option>);
+  const categories = consultCategoryCodeList.map((v) =>
+    <option key={v.code} value={v.code}>{v.codeName}</option>
+  );
 
   return (
     <TabPane tabId="send">
@@ -40,7 +42,7 @@ const ConsultSend = ({ currentPage }) => {
               id="consultSubject"
               value={subject}
               name="subject"
-              placeHolder="제목"
+              placeholder="제목"
               maxLength={199}
               onChange={onChangeValue}
             />
@@ -53,7 +55,7 @@ const ConsultSend = ({ currentPage }) => {
               id="consultText"
               name="text"
               value={text}
-              placeHolder="내용"
+              placeholder="내용"
               onChange={onChangeValue}
             />
           </FormGroup>

@@ -160,7 +160,7 @@ router.put('/admin', (req, res) => {
       {
         ID: id,
         ANSWER: answer,
-        userId: userId,
+        USER_ID: userId,
       },
     )
       .then(() => {
