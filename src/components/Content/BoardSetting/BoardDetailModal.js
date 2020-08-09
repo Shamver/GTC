@@ -15,6 +15,7 @@ const BoardDetailModal = () => {
     permissionLevelList, setPermissionLevelList, setUseFlagList,
     onChangeBoard, addBoard,
   } = SystemBoardStore;
+
   const {
     id, name, desc, path,
     order, useFl, permissionLevel,

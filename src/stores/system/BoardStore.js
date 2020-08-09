@@ -77,8 +77,8 @@ class BoardStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            this.board = board;
-            toast.success(data.message);
+            this.board = data.result;
+            this.toggleBoardModal();
           } else {
             toast.info(data.message);
           }
@@ -89,13 +89,6 @@ class BoardStore {
       .catch((response) => { toast.error(response.message); });
 
     return true;
-  };
-
-
-  @action toggleDetailBoard = (board) => {
-    console.log(board);
-    this.toggleBoardModal();
-    this.getBoard(board);
   };
 
   @action boardValidationCheck = () => {

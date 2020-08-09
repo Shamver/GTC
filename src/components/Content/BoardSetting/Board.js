@@ -1,16 +1,16 @@
 import React, { memo } from 'react';
-import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 
 const Board = ({ data }) => {
   const { SystemBoardStore } = useStores();
-  const { toggleDetailBoard } = SystemBoardStore;
+  const { getBoard } = SystemBoardStore;
   const {
     board, name, path, useFl,
   } = data;
+
   return (
-    <tr onCiick={() => toggleDetailBoard(data.board)}>
+    <tr onClick={() => getBoard(data.board)}>
       <td>{board}</td>
       <td>{name}</td>
       <td>{path}</td>
@@ -24,7 +24,7 @@ Board.propTypes = {
     board: Proptypes.string,
     name: Proptypes.string,
     path: Proptypes.string,
-    useFl: Proptypes.number,
+    useFl: Proptypes.string,
   }).isRequired,
 };
 

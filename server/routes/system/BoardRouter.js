@@ -35,7 +35,7 @@ const SELECT_BOARD = `
     , GB.PERMISSION_LEVEL as permissionLevel
     , GB.CRT_DTTM as crtDttm
    FROM GTC_BOARD GB
-   WHERE GB_BOARD = :BOARD
+   WHERE GB.BOARD = ':BOARD'
 `;
 
 const SELECT_BOARD_ALL = `
@@ -83,7 +83,7 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  const { board } = req.body;
+  const { board } = req.query;
   Database.execute(
     (database) => database.query(
       SELECT_BOARD,
@@ -96,7 +96,7 @@ router.get('/', (req, res) => {
           success: true,
           code: 1,
           message: '게시판 조회 완료',
-          result: rows,
+          result: rows[0],
         });
       }),
   ).then(() => {

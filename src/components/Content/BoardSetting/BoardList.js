@@ -5,8 +5,7 @@ import Board from './Board';
 
 const BoardList = () => {
   const { SystemBoardStore } = useStores();
-  const { boardList, toggleDetailBoard } = SystemBoardStore;
-  console.log( toggleDetailBoard);
+  const { boardList } = SystemBoardStore;
 
   return !!boardList.length && boardList.map(
     (data) => <Board data={data} key={data.board} />,

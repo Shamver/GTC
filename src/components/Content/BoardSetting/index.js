@@ -44,7 +44,9 @@ const BoardSetting = () => {
               </thead>
               <tbody>
                 <BoardList />
-                <CenterTd colSpan={4}>게시판이 존재하지 않습니다.</CenterTd>
+                <tr>
+                  <CenterTd colSpan={4}>게시판이 존재하지 않습니다.</CenterTd>
+                </tr>
               </tbody>
             </CodeTable>
           </CodeCol>
