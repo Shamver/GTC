@@ -76,7 +76,7 @@ const MyAccountEditForm = () => {
               )}
               </AccentText>
             </FormTextLeft>
-            <FormSelect type="select" name="gender" value={gender} onChange={onChangeValue}>
+            <FormSelect id="genderSelect" type="select" name="gender" value={gender} onChange={onChangeValue}>
               {GenderCode}
             </FormSelect>
             <FormSwitch>

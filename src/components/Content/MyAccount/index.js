@@ -21,7 +21,10 @@ const MyAccount = () => {
       getIsCanChangeGtNickname,
       () => getCodeComponent('GENDER_CODE', setUserGenderCodeList),
     ]);
-  }, [loadingProcess, setDefaultValue, getIsCanChangeGtNickname]);
+  }, [
+    loadingProcess, setDefaultValue, getIsCanChangeGtNickname,
+    getCodeComponent, setUserGenderCodeList,
+  ]);
 
   return (
     <MainContainer>
