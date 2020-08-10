@@ -133,12 +133,14 @@ const SELECT_USER_BANNED = `
 const INSERT_USER_BAN = `
   INSERT INTO GTC_USER_BAN (
     USER_ID
+    , REPORT_ID
     , SUSPEND_BAN_FL
     , TEMP_BAN_FL
     , BAN_TERM
     , BAN_REASON
   ) VALUES (
     :USER_ID
+    , :REPORT_ID
     , IF(':ACTION_TYPE' = 'BAN', 1, 0)
     , IF(':ACTION_TYPE' = 'BAN2', 1, 0)
     , ':BAN_TERM'
@@ -161,15 +163,15 @@ const UPDATE_USER_BAN_CANCEL = `
 const UPDATE_REPORT_CANCEL = `
   UPDATE GTC_REPORT
   SET
-    REJECT_FL = 1,
     MFY_DTTM = SYSDATE()
-  WHERE ID = :ID;
+  WHERE ID = (SELECT REPORT_ID FROM GTC_USER_BAN WHERE USER_ID = :USER_ID);
 `;
 
-const UPDATE_REPORT_DATE = `
+const UPDATE_REPORT = `
   UPDATE GTC_REPORT
   SET
-    MFY_DTTM = SYSDATE()
+    MFY_DTTM = SYSDATE(),
+    DISPOSE_FL = 1
   WHERE ID = :ID;
 `;
 
@@ -225,6 +227,7 @@ router.post('/ban', (req, res) => {
             INSERT_USER_BAN,
             {
               USER_ID: targetUserId,
+              REPORT_ID: reportId,
               ACTION_TYPE: actionType,
               BAN_TERM: term,
               BAN_REASON: reason,
@@ -233,7 +236,7 @@ router.post('/ban', (req, res) => {
         }
       })
       .then(() => database.query(
-        UPDATE_REPORT_DATE,
+        UPDATE_REPORT,
         {
           ID: reportId,
         },
@@ -269,7 +272,7 @@ router.put('/cancel', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      UPDATE_USER_BAN_CANCEL,
+      UPDATE_REPORT_CANCEL,
       {
         USER_ID: userId,
       },
@@ -281,12 +284,12 @@ router.put('/cancel', (req, res) => {
           USER_ID: userId,
         },
       ))
-      // .then(() => database.query(
-      //   UPDATE_REPORT_CANCEL,
-      //   {
-      //     USER_ID: userId,
-      //   },
-      // ))
+      .then(() => database.query(
+        UPDATE_USER_BAN_CANCEL,
+        {
+          USER_ID: userId,
+        },
+      ))
       .then(() => {
         res.json({
           success: true,
