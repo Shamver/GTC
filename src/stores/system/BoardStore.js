@@ -21,6 +21,8 @@ class BoardStore {
 
   @observable isBoardModalToggle = false;
 
+  @observable boardModalMode = '';
+
   constructor(root) {
     this.root = root;
   }
@@ -78,7 +80,28 @@ class BoardStore {
         if (data.success) {
           if (data.code === 1) {
             this.board = data.result;
-            this.toggleBoardModal();
+            this.toggleBoardModal('modify');
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
+  @action modifyBoard = () => {
+    axios.put('/api/system/board', this.board)
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            this.getBoardList().then();
+            this.toggleBoardModal('');
           } else {
             toast.info(data.message);
           }
@@ -123,8 +146,24 @@ class BoardStore {
     this.permissionLevelList = value;
   };
 
-  @action toggleBoardModal = () => {
+  @action toggleBoardModal = (mode) => {
+    if (mode === 'add') {
+      this.clearBoard();
+    }
     this.isBoardModalToggle = !this.isBoardModalToggle;
+    this.boardModalMode = mode;
+   }
+
+  @action clearBoard = () => {
+    this.board = {
+      id: '',
+      name: '',
+      path: '',
+      order: '',
+      useFl: 1,
+      permissionLevel: '',
+      desc: '',
+    };
   }
 
   @action setUseFlagList = (value) => {

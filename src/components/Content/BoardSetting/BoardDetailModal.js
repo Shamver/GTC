@@ -13,7 +13,8 @@ const BoardDetailModal = () => {
   const {
     isBoardModalToggle, toggleBoardModal, board, useFlagList,
     permissionLevelList, setPermissionLevelList, setUseFlagList,
-    onChangeBoard, addBoard,
+    onChangeBoard, addBoard, boardModalMode, modifyBoard,
+    deleteBoard,
   } = SystemBoardStore;
 
   const {
@@ -29,7 +30,7 @@ const BoardDetailModal = () => {
           <InputGroupAddon addonType="prepend">
             <InputGroupText>게시판</InputGroupText>
           </InputGroupAddon>
-          <Input placeholder="게시판" name="id" onChange={onChangeBoard} value={id} />
+          <Input placeholder="게시판" name="id" onChange={onChangeBoard} value={id} disabled={boardModalMode === 'modify'} />
         </InputGroupMb>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
@@ -73,9 +74,13 @@ const BoardDetailModal = () => {
         </InputGroupMb>
       </ModalBody>
       <ModalFooter>
-        <Button color="danger" onClick={addBoard}>추가</Button>{' '}
-        <Button color="danger" onClick={toggleBoardModal}>수정</Button>{' '}
-        <Button color="warning" onClick={toggleBoardModal}>삭제</Button>{' '}
+        {boardModalMode === 'modify'
+          ? (
+            <>
+              <Button color="danger" onClick={modifyBoard}>수정</Button>{' '}
+              <Button color="warning" onClick={() => deleteBoard(id)}>삭제</Button>{' '}
+            </>
+          ) : (<Button color="danger" onClick={addBoard}>추가</Button>)}
         <Button color="secondary" onClick={toggleBoardModal}>취소</Button>
       </ModalFooter>
     </Modal>

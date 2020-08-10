@@ -27,7 +27,7 @@ const BoardSetting = () => {
         <CodeTableWrapper>
           <CodeCol>
             <PaddedDiv>
-              <RightButton size="sm" color="danger" onClick={toggleBoardModal}>
+              <RightButton size="sm" color="danger" onClick={() => toggleBoardModal('add')}>
                 <FontAwesomeIcon icon={faPlus} />
                 &nbsp;
                 게시판 추가
@@ -44,9 +44,6 @@ const BoardSetting = () => {
               </thead>
               <tbody>
                 <BoardList />
-                <tr>
-                  <CenterTd colSpan={4}>게시판이 존재하지 않습니다.</CenterTd>
-                </tr>
               </tbody>
             </CodeTable>
           </CodeCol>
