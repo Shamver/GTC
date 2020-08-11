@@ -5,13 +5,14 @@ import { Button } from 'reactstrap';
 import useStores from '../../../stores/useStores';
 
 const ReportUserList = ({ data }) => {
-  const { UserStore } = useStores();
+  const { UserStore, BoardReportStore } = useStores();
+  const { getDetailReport } = BoardReportStore;
   const { userBanCancel } = UserStore;
   const {
     userId, userEmail, userName, userNickName, GTName,
   } = data;
   return (
-    <tr>
+    <tr onClick={() => getDetailReport()}>
       <TdCenter>{userId}</TdCenter>
       <td>{userName}</td>
       <td>{userNickName}</td>

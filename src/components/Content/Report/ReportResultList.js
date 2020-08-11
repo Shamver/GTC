@@ -1,14 +1,17 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
 
 const ReportResultList = ({ data }) => {
+  const { BoardReportStore } = useStores();
+  const { getDetailReport } = BoardReportStore;
   const {
     userId, reason, reportDate, targetName, reportResult, rejectDate, contents, reportId,
   } = data;
 
   return (
-    <tr>
+    <tr onClick={() => getDetailReport(reportId)}>
       <TdCenter>{reportId}</TdCenter>
       <td>{reason}</td>
       <td>{userId}</td>

@@ -4,7 +4,6 @@ import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
 import ReportList from './ReportList';
 import useStores from '../../../stores/useStores';
-import ReportBottom from './ReportBottom';
 
 const ReportTable = () => {
   const { BoardReportStore } = useStores();
@@ -30,7 +29,6 @@ const ReportTable = () => {
           { reportList }
         </tbody>
       </CodeTable>
-      <ReportBottom />
     </TabPane>
   );
 };
