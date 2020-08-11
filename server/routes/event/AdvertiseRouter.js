@@ -59,7 +59,7 @@ router.post('/', (req, res) => {
       },
     )
       .then((rows) => {
-        if (rows.length === 0) {
+        if (rows.length === 0 && postId !== undefined) {
           return Promise.reject();
         }
         return database.query(

@@ -31,7 +31,12 @@ const DailyInput = () => {
         onChange={onChangeValue}
         disabled={isDoneToday}
       />
-      <Button type="button" color="primary" onClick={userData === null ? guestAuthor : addDaily} disabled={isDoneToday}>
+      <Button
+        type="button"
+        color="primary"
+        onClick={userData === null ? guestAuthor : addDaily}
+        disabled={isDoneToday === 1}
+      >
         <FontAwesomeIcon icon={faPencilAlt} /> 출석체크 하기
       </Button>
     </>

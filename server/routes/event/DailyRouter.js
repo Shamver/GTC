@@ -107,13 +107,13 @@ router.get('/', (req, res) => {
 });
 
 router.get('/last', (req, res) => {
-  const { userDataId } = req.query;
+  const { userId } = req.query;
 
   Database.execute(
     (database) => database.query(
-      userDataId ? SELECT_ATTENDANCE_LAST : '',
+      userId ? SELECT_ATTENDANCE_LAST : '',
       {
-        USER_ID: userDataId,
+        USER_ID: userId,
       },
     )
       .then((rows) => {
