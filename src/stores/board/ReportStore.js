@@ -22,8 +22,6 @@ class ReportStore {
 
   @observable reportDetailData = [];
 
-  @observable reportBatchList = [];
-
   @observable reportTakeOnData = {
     takeReason: '',
     banType: '',
@@ -102,8 +100,8 @@ class ReportStore {
       const getDate = String(year) + month + day;
       const getBanTerm = banTerm[0] + banTerm[1] + banTerm[2];
 
-      if (parseInt(getBanTerm, 10) < parseInt(getDate, 10)) {
-        toast.error('정지 기간을 이전 날짜로 지정할 수 없습니다.');
+      if (parseInt(getBanTerm, 10) <= parseInt(getDate, 10)) {
+        toast.error('정지 기간은 현재 날짜로부터 최소 1일 이상이여야 합니다.');
         return false;
       }
 
@@ -122,11 +120,6 @@ class ReportStore {
       [event.target.name]: event.target.value,
     };
   };
-
-  @action onChangeCheck = (event) => {
-    this.reportBatchList.push(event.target.value);
-    console.log(this.reportBatchList);
-  }
 
   @action onChangeDetailValue = (event) => {
     this.reportTakeOnData = {

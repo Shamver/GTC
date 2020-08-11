@@ -18,9 +18,8 @@ const ReportTable = () => {
       <CodeTable bordered hover>
         <thead>
           <tr>
-            <ThCenter width="5%" />
             <ThCenter width="7%">신고ID</ThCenter>
-            <th width="25%">신고 사유</th>
+            <th width="30%">신고 사유</th>
             <th width="15%">신고자</th>
             <th width="15%">피신고자</th>
             <th width="10%">컨텐츠</th>

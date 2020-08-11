@@ -14,6 +14,7 @@ const SELECT_REPORT = `
     TARGET_ID = :TARGET_ID
     AND USER_ID = :USER_ID
     AND TYPE_CD = ':TYPE_CD'
+    NOT IN(CANCEL_FL = 1 OR REJECT_FL = 1)
 `;
 
 const SELECT_ALL_REPORT = `
@@ -38,8 +39,8 @@ const SELECT_ALL_REPORT = `
     , DATE_FORMAT(R.CRT_DTTM, '%Y-%m-%d') AS reportDate
     , DATE_FORMAT(R.MFY_DTTM, '%Y-%m-%d') AS rejectDate
     , CASE
-        WHEN R.DISPOSE_FL = 1 THEN '정지'
-        WHEN R.CANCEL_FL = 1 THEN '정지 취소'
+        WHEN R.CANCEL_FL = 0 AND R.DISPOSE_FL = 1  THEN '정지'
+        WHEN R.CANCEL_FL = 1 AND R.DISPOSE_FL = 1 THEN '정지 취소'
         WHEN R.REJECT_FL = 1 THEN '반려' END AS reportResult
   FROM GTC_REPORT R
   WHERE

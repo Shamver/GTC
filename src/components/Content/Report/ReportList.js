@@ -7,20 +7,15 @@ import useStores from '../../../stores/useStores';
 
 const ReportList = ({ data }) => {
   const { BoardReportStore } = useStores();
-  const { getDetailReport, onChangeCheck } = BoardReportStore;
+  const { getDetailReport } = BoardReportStore;
   const {
     userId, reason, reportId, reportDate, targetName, contents,
   } = data;
 
   return (
-    <tr>
-      <TdCenter>
-        <Label check>
-          <Input type="checkbox" onChange={onChangeCheck} value={reportId} />
-        </Label>
-      </TdCenter>
+    <tr onClick={() => getDetailReport(reportId)}>
       <TdCenter>{reportId}</TdCenter>
-      <td onClick={() => getDetailReport(reportId)}>{reason}</td>
+      <td>{reason}</td>
       <td>{userId}</td>
       <td>{targetName}</td>
       <td>{contents}</td>
