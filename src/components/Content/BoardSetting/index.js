@@ -36,10 +36,10 @@ const BoardSetting = () => {
             <CodeTable bordered hover>
               <thead>
                 <tr>
-                  <th>게시판</th>
                   <th>이름</th>
                   <th>경로</th>
                   <th>사용</th>
+                  <th>상세</th>
                 </tr>
               </thead>
               <tbody>

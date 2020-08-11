@@ -28,9 +28,9 @@ const BoardDetailModal = () => {
       <ModalBody>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
-            <InputGroupText>게시판</InputGroupText>
+            <InputGroupText>ID</InputGroupText>
           </InputGroupAddon>
-          <Input placeholder="게시판" name="id" onChange={onChangeBoard} value={id} disabled={boardModalMode === 'modify'} />
+          <Input placeholder="ID" name="id" onChange={onChangeBoard} value={id} disabled={boardModalMode === 'modify'} />
         </InputGroupMb>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
@@ -78,7 +78,7 @@ const BoardDetailModal = () => {
           ? (
             <>
               <Button color="danger" onClick={modifyBoard}>수정</Button>{' '}
-              <Button color="warning" onClick={() => deleteBoard(id)}>삭제</Button>{' '}
+              <Button color="warning" onClick={deleteBoard}>삭제</Button>{' '}
             </>
           ) : (<Button color="danger" onClick={addBoard}>추가</Button>)}
         <Button color="secondary" onClick={toggleBoardModal}>취소</Button>

@@ -49,6 +49,7 @@ const SELECT_BOARD_ALL = `
     , GB.PERMISSION_LEVEL AS permissionLevel
     , GB.CRT_DTTM AS crtDttm
    FROM GTC_BOARD GB
+   ORDER BY GB.\`ORDER\`
 `;
 
 const UPDATE_BOARD = `
@@ -60,6 +61,11 @@ const UPDATE_BOARD = `
     , \`ORDER\` = :ORDER
     , USE_FL = :USE_FL
     , PERMISSION_LEVEL = :PERMISSION_LEVEL
+  WHERE BOARD = ':BOARD'
+`;
+
+const DELETE_BOARD = `
+  DELETE FROM GTC_BOARD 
   WHERE BOARD = ':BOARD'
 `;
 
@@ -162,6 +168,28 @@ router.put('/', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, PUT /api/system/board] 시스템 게시판 수정');
+  });
+});
+
+router.delete('/', (req, res) => {
+  const { board } = req.query;
+  Database.execute(
+    (database) => database.query(
+      DELETE_BOARD,
+      {
+        BOARD: board,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '😳 게시판이 삭제되었습니다!',
+          result: rows[0],
+        });
+      }),
+  ).then(() => {
+    info('[DELETE, DELETE /api/system/board] 시스템 게시판 삭제');
   });
 });
 

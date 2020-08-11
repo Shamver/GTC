@@ -9,7 +9,7 @@ class BoardStore {
     path: '',
     order: '',
     useFl: 1,
-    permissionLevel: '',
+    permissionLevel: 0,
     desc: '',
   };
 
@@ -57,6 +57,8 @@ class BoardStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
+            this.getBoardList().then();
+            this.toggleBoardModal('');
           } else {
             toast.info(data.message);
           }
@@ -69,7 +71,8 @@ class BoardStore {
     return true;
   };
 
-  @action getBoard = (board) => {
+  @action getBoard = (board, event) => {
+    event.stopPropagation();
     axios.get('/api/system/board', {
       params: {
         board,
@@ -89,12 +92,35 @@ class BoardStore {
         }
       })
       .catch((response) => { toast.error(response.message); });
-
-    return true;
   };
 
   @action modifyBoard = () => {
     axios.put('/api/system/board', this.board)
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            this.getBoardList().then();
+            this.toggleBoardModal('');
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
+  @action deleteBoard = () => {
+    axios.delete('/api/system/board', {
+      params: {
+        board: this.board.id,
+      },
+    })
       .then((response) => {
         const { data } = response;
         if (data.success) {
@@ -152,7 +178,7 @@ class BoardStore {
     }
     this.isBoardModalToggle = !this.isBoardModalToggle;
     this.boardModalMode = mode;
-   }
+  }
 
   @action clearBoard = () => {
     this.board = {
@@ -161,7 +187,7 @@ class BoardStore {
       path: '',
       order: '',
       useFl: 1,
-      permissionLevel: '',
+      permissionLevel: 0,
       desc: '',
     };
   }
