@@ -1,9 +1,10 @@
 import React, { memo } from 'react';
 import * as Proptypes from 'prop-types';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import useStores from '../../../stores/useStores';
 import { Button } from 'reactstrap';
+import styled from 'styled-components';
+import useStores from '../../../stores/useStores';
 
 const Board = ({ data }) => {
   const { SystemBoardStore } = useStores();
@@ -19,7 +20,7 @@ const Board = ({ data }) => {
       <td>{useFl}</td>
       <td>
         <Button size="sm" color="danger" onClick={(event) => getBoard(data.board, event)}>
-          <FontAwesomeIcon icon={faPlus} />
+          <DetailIcon icon={faInfoCircle} />
         </Button>
       </td>
     </tr>
@@ -34,5 +35,9 @@ Board.propTypes = {
     useFl: Proptypes.string,
   }).isRequired,
 };
+
+const DetailIcon = styled(FontAwesomeIcon)`
+  vertical-align: text-top;
+`;
 
 export default memo(Board);
