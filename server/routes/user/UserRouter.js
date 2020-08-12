@@ -112,13 +112,14 @@ const SELECT_ALL_USER_BANNED = `
   SELECT U.ID AS userId
     , U.EMAIL AS userEmail
     , U.NAME AS userName
-    , U.NICKNAME as userNickName
-    , U.GT_NICKNAME as GTName
-    , B.SUSPEND_BAN_FL as suspendBanFl
-    , B.TEMP_BAN_FL as tempBanFl
-    , B.BAN_REASON as reason
-    , B.BAN_TERM as banTerm
-    , B.CRT_DTTM as banDate
+    , U.NICKNAME AS userNickName
+    , U.GT_NICKNAME AS GTName
+    , B.REPORT_ID AS reportId
+    , B.SUSPEND_BAN_FL AS suspendBanFl
+    , B.TEMP_BAN_FL AS tempBanFl
+    , B.BAN_REASON AS reason
+    , DATE_FORMAT(B.BAN_TERM,'%Y-%m-%d') AS banTerm
+    , DATE_FORMAT(B.CRT_DTTM,'%Y-%m-%d') AS banDate
   FROM GTC_USER AS U
   JOIN GTC_USER_BAN AS B
   ON U.ID = B.USER_ID;

@@ -12,7 +12,7 @@ const ReportDetail = () => {
   const { BoardReportStore } = useStores();
   const {
     reportDetailToggle, toggleDetailReport, reportDetailData, reportTakeOn,
-    reportReject, onChangeDetailValue, reportTakeOnData,
+    reportReject, onChangeDetailValue, reportTakeOnData, activeTab,
   } = BoardReportStore;
   const { takeReason, banType, banTerm } = reportTakeOnData;
   const {
@@ -48,6 +48,20 @@ const ReportDetail = () => {
               <ReportInfoDesc>{targetUserName}</ReportInfoDesc>
             </Flex1>
           </ReportInfoRow>
+          {!reasonDetail
+            ? (
+              <ReportInfoRow>
+                <Flex1>
+                  <ReportInfoLabel>처리 날짜</ReportInfoLabel>
+                  <ReportInfoDesc></ReportInfoDesc>
+                </Flex1>
+                <Flex1>
+                  <ReportInfoLabel>정지 기간</ReportInfoLabel>
+                  <ReportInfoDesc></ReportInfoDesc>
+                </Flex1>
+              </ReportInfoRow>
+            )
+            : ''}
           {typeCode === 'RT03' ? ''
             : (
               <ReportInfoRow2>
@@ -66,46 +80,62 @@ const ReportDetail = () => {
               </ReportInfoRow2>
             )
             : ''}
-          <ReportInfoRow2>
-            <ReportInfoLabel>처벌 사유 입력</ReportInfoLabel>
-            <ReportInfoDesc>
-              <Input type="textarea" onChange={onChangeDetailValue} value={takeReason} name="takeReason" placeholder="정지 사유 입력" maxLength="200" />
-            </ReportInfoDesc>
-          </ReportInfoRow2>
-          <ReportInfoRow2>
-            <ReportInfoLabel>처벌 종류 선택</ReportInfoLabel>
-            <ReportInfoDesc>
-              <FormGroup check>
-                <Label check>
-                  <Input type="radio" name="banType" value="BAN" onChange={onChangeDetailValue} />{' '}
-                  영구 정지
-                </Label>
-              </FormGroup>
-              <FormGroup check>
-                <Label check>
-                  <Input type="radio" name="banType" value="BAN2" onChange={onChangeDetailValue} />{' '}
-                  기간 정지
-                </Label>
-              </FormGroup>
-              <FormGroup>
-                <Input
-                  type="date"
-                  name="banTerm"
-                  value={banTerm}
-                  disabled={banType !== 'BAN2'}
-                  onChange={onChangeDetailValue}
-                />
-              </FormGroup>
-            </ReportInfoDesc>
-          </ReportInfoRow2>
-          <ReportInfoRow>
-            <ButtonCustom color="danger" size="sm" onClick={() => reportTakeOn(banType)}>
-              처리
-            </ButtonCustom>
-            <ButtonCustom color="secondary" size="sm" onClick={() => reportReject(reportId)}>
-              반려
-            </ButtonCustom>
-          </ReportInfoRow>
+
+          { activeTab === 'reportTable'
+            ? (
+              <>
+                <ReportInfoRow2>
+                  <ReportInfoLabel>처벌 사유 입력</ReportInfoLabel>
+                  <ReportInfoDesc>
+                    <Input type="textarea" onChange={onChangeDetailValue} value={takeReason} name="takeReason" placeholder="정지 사유 입력" maxLength="200" />
+                  </ReportInfoDesc>
+                </ReportInfoRow2>
+                <ReportInfoRow2>
+                  <ReportInfoLabel>처벌 종류 선택</ReportInfoLabel>
+                  <ReportInfoDesc>
+                    <FormGroup check>
+                      <Label check>
+                        <Input type="radio" name="banType" value="BAN" onChange={onChangeDetailValue} />{' '}
+                        영구 정지
+                      </Label>
+                    </FormGroup>
+                    <FormGroup check>
+                      <Label check>
+                        <Input type="radio" name="banType" value="BAN2" onChange={onChangeDetailValue} />{' '}
+                        기간 정지
+                      </Label>
+                    </FormGroup>
+                    <FormGroup>
+                      <Input
+                        type="date"
+                        name="banTerm"
+                        value={banTerm}
+                        disabled={banType !== 'BAN2'}
+                        onChange={onChangeDetailValue}
+                      />
+                    </FormGroup>
+                  </ReportInfoDesc>
+                </ReportInfoRow2>
+              </>
+            ) : (
+              <ReportInfoRow2>
+                <ReportInfoLabel>정지 사유</ReportInfoLabel>
+                <ReportInfoDesc>
+                  ㅁㄴㅇㅁ야ㅐㅓㅈㅂ야ㅓㅂㅈ얍저야ㅓ뱌어뱌저얍저ㅑ
+                </ReportInfoDesc>
+              </ReportInfoRow2>
+            )}
+          { activeTab === 'reportTable'
+            ? (
+              <ReportInfoRow>
+                <ButtonCustom color="danger" size="sm" onClick={() => reportTakeOn(banType)}>
+                  처리
+                </ButtonCustom>
+                <ButtonCustom color="secondary" size="sm" onClick={() => reportReject(reportId)}>
+                  반려
+                </ButtonCustom>
+              </ReportInfoRow>
+            ) : ''}
         </ReportInfoWrap>
       </ModalBodyBox>
     </Modal>
