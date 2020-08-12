@@ -350,6 +350,7 @@ class PostStore {
             const [post] = data.result;
             that.postView = post;
             getLately();
+            that.postView.content = this.getPostVideoTag(post.content);
             const { currentBoardPage } = this.root.BoardStore.currentBoardPage;
             const { setCurrentBoardPath } = this.root.BoardStore;
             this.getBoardPostList(post.board.toLowerCase(), currentBoardPage).then(() => {
@@ -363,6 +364,27 @@ class PostStore {
         }
       })
       .catch((response) => { toast.error(response.message); });
+  };
+
+  @action getPostVideoTag = (text) => {
+    if (!text) return text;
+
+    const fullReg = /(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([^& \n"><]+)(?:[^ \n"><]+)?/g;
+    const oembedReg = /(?:)<oembed(.+?)<\/oembed>/g;
+
+    let resultHtml = text;
+
+    const oembedMatch = text.match(oembedReg);
+
+    if (oembedMatch && oembedMatch.length > 0) {
+      for (let i=0; i < oembedMatch.length; i++) {
+        let matchParts = oembedMatch[i].split(fullReg);
+        resultHtml = resultHtml.replace(oembedMatch[i],
+          `<iframe width="420" height="345" src="https://www.youtube.com/embed/${matchParts[4]}" frameborder="0" allowfullscreen></iframe><br/>`);
+      }
+    }
+
+    return resultHtml;
   };
 
   @action getModifyPost = (id, isModify) => {
