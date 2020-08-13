@@ -69,6 +69,41 @@ const DELETE_BOARD = `
   WHERE BOARD = ':BOARD'
 `;
 
+const INSERT_BOARD_CATEGORY = `
+  INSERT INTO GTC_BOARD_CATEGORY (
+      BOARD
+      , NAME
+      , PATH
+      , \`DESC\`
+      , \`ORDER\`
+      , USE_FL
+      , PERMISSION_LEVEL
+  ) VALUES (
+      ':BOARD'
+      , ':NAME'
+      , ':PATH'
+      , ':DESC'
+      , :ORDER
+      , :USE_FL
+      , :PERMISSION_LEVEL
+  )
+`;
+
+
+const SELECT_BOARD_CATEGORY_ALL = `
+  SELECT
+    GBC.BOARD AS board
+    , GBC.CATEGORY AS id
+    , GBC.NAME AS name
+    , GBC.PATH AS path
+    , GBC.\`DESC\` as \`desc\`
+    , GBC.\`ORDER\` as \`order\`
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GBC.USE_FL) AS useFl
+    , GBC.CRT_DTTM AS crtDttm
+   FROM GTC_BOARD_CATEGORY GBC
+   ORDER BY GBC.\`ORDER\`
+`;
+
 router.post('/', (req, res) => {
   const {
     id, name, desc, path,
@@ -190,6 +225,24 @@ router.delete('/', (req, res) => {
       }),
   ).then(() => {
     info('[DELETE, DELETE /api/system/board] 시스템 게시판 삭제');
+  });
+});
+
+router.get('/category/all', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_CATEGORY_ALL,
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '게시판 카테고리 전체 조회 완료',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/system/board/category/all] 게시판 카테고리 전체 조회 완료');
   });
 });
 

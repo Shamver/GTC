@@ -6,12 +6,13 @@ import { Button, Table } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import BoardDetailModal from './BoardDetailModal';
+import CategoryDetailModal from './CategoryDetailModal';
 import BoardList from './BoardList';
 
 
 const BoardSetting = () => {
   const { UtilLoadingStore, SystemBoardStore } = useStores();
-  const { toggleBoardModal, getBoardList } = SystemBoardStore;
+  const { toggleBoardModal, toggleCategoryModal, getBoardList } = SystemBoardStore;
   const { loadingProcess } = UtilLoadingStore;
 
   useLayoutEffect(() => {
@@ -49,7 +50,7 @@ const BoardSetting = () => {
           </CodeCol>
           <CodeCol>
             <PaddedDiv>
-              <RightButton size="sm" color="danger">
+              <RightButton size="sm" color="danger" onClick={() => toggleCategoryModal('add')}>
                 <FontAwesomeIcon icon={faPlus} />
                 &nbsp;
                 카테고리 추가
@@ -74,6 +75,7 @@ const BoardSetting = () => {
           </CodeCol>
         </CodeTableWrapper>
         <BoardDetailModal />
+        <CategoryDetailModal />
       </TableWrapper>
     </BoardWrapper>
   );

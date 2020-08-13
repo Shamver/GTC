@@ -8,13 +8,13 @@ import useStores from '../../../stores/useStores';
 
 const Board = ({ data }) => {
   const { SystemBoardStore } = useStores();
-  const { getBoard, getCategory } = SystemBoardStore;
+  const { getBoard, getCategoryList } = SystemBoardStore;
   const {
     name, path, useFl,
   } = data;
 
   return (
-    <tr onClick={() => getCategory(data.board)}>
+    <tr onClick={() => getCategoryList(data.board)}>
       <td>{name}</td>
       <td>{path}</td>
       <td>{useFl}</td>

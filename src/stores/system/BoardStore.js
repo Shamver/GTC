@@ -183,13 +183,14 @@ class BoardStore {
     return true;
   };
 
-  @action getCategoryList = () => {
+  @action getCategoryList = (board) => {
     axios.get('/api/system/board/category/all')
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             this.categoryList = data.result;
+            this.category.board = board;
           } else {
             toast.info(data.message);
           }
@@ -294,11 +295,18 @@ class BoardStore {
   }
 
   @action toggleCategoryModal = (mode) => {
-    if (mode === 'add') {
-      this.clearBoard();
+    if (!this.isCategoryModalToggle && !this.category.board) {
+      toast.warn('😳 먼저 게시판을 선택해주세요.');
+      return false;
     }
-    this.isBoardModalToggle = !this.isBoardModalToggle;
-    this.boardModalMode = mode;
+
+    if (mode === 'add') {
+      this.clearCategory();
+    }
+    this.isCategoryModalToggle = !this.isCategoryModalToggle;
+    this.categoryModalMode = mode;
+
+    return true;
   }
 
   @action clearBoard = () => {
@@ -315,8 +323,8 @@ class BoardStore {
 
   @action clearCategory = () => {
     this.category = {
+      ...this.category,
       id: '',
-      board: '',
       name: '',
       path: '',
       desc: '',
@@ -332,6 +340,13 @@ class BoardStore {
   @action onChangeBoard = (event) => {
     this.board = {
       ...this.board,
+      [event.target.name]: event.target.value,
+    };
+  };
+
+  @action onChangeCategory = (event) => {
+    this.category = {
+      ...this.category,
       [event.target.name]: event.target.value,
     };
   };

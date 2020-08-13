@@ -24,7 +24,9 @@ const BoardDetailModal = () => {
 
   return (
     <Modal isOpen={isBoardModalToggle} toggle={toggleBoardModal}>
-      <ModalHeaderBack toggle={toggleBoardModal}>게시판 추가</ModalHeaderBack>
+      <ModalHeaderBack toggle={toggleBoardModal}>
+        {boardModalMode === 'modify' ? '게시판 상세' : '게시판 추가'}
+      </ModalHeaderBack>
       <ModalBody>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
