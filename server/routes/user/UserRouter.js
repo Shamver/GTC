@@ -126,8 +126,13 @@ const SELECT_ALL_USER_BANNED = `
 `;
 
 const SELECT_USER_BANNED = `
-  SELECT *
-  FROM GTC_USER_BAN
+  SELECT 
+    B.SUSPEND_BAN_FL AS suspendBanFl
+    , B.TEMP_BAN_FL AS tempBanFl
+    , B.BAN_REASON AS tookReason
+    , DATE_FORMAT(B.BAN_TERM,'%Y-%m-%d') AS tookBanTerm
+    , DATE_FORMAT(B.CRT_DTTM,'%Y-%m-%d') AS tookDate
+  FROM GTC_USER_BAN B
   WHERE USER_ID = :USER_ID;
 `;
 
@@ -200,7 +205,7 @@ router.get('/ban', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/user/banned] 밴 유저 목록 조회');
+    info('[SELECT, GET /api/user/ban] 밴 유저 목록 조회');
   });
 });
 
@@ -265,7 +270,30 @@ router.post('/ban', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[INSERT, POST /api/user/banned] 신고 유저 밴 처리');
+    info('[INSERT, POST /api/user/ban] 신고 유저 밴 처리');
+  });
+});
+
+router.get('/ban/detail', (req, res) => {
+  const { userId } = req.query;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_USER_BANNED,
+      {
+        USER_ID: userId,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '밴 결과 상세 조회',
+          result: rows[0],
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/user/ban/detail] 밴 결과 상세 조회');
   });
 });
 

@@ -9,7 +9,9 @@ import renderHTML from 'react-render-html';
 import useStores from '../../../stores/useStores';
 
 const ReportDetail = () => {
-  const { BoardReportStore } = useStores();
+  const { BoardReportStore, UserStore } = useStores();
+  const { detailBanData } = UserStore;
+  const { tookReason, tookBanTerm, tookDate, suspendBanFl } = detailBanData;
   const {
     reportDetailToggle, toggleDetailReport, reportDetailData, reportTakeOn,
     reportReject, onChangeDetailValue, reportTakeOnData, activeTab,
@@ -48,16 +50,16 @@ const ReportDetail = () => {
               <ReportInfoDesc>{targetUserName}</ReportInfoDesc>
             </Flex1>
           </ReportInfoRow>
-          {!reasonDetail
+          {activeTab === 'ReportUser'
             ? (
               <ReportInfoRow>
                 <Flex1>
                   <ReportInfoLabel>처리 날짜</ReportInfoLabel>
-                  <ReportInfoDesc></ReportInfoDesc>
+                  <ReportInfoDesc>{tookDate}</ReportInfoDesc>
                 </Flex1>
                 <Flex1>
                   <ReportInfoLabel>정지 기간</ReportInfoLabel>
-                  <ReportInfoDesc></ReportInfoDesc>
+                  <ReportInfoDesc>{suspendBanFl ? '영구 정지' : `${tookDate} ~ ${tookBanTerm}`}</ReportInfoDesc>
                 </Flex1>
               </ReportInfoRow>
             )
@@ -121,7 +123,7 @@ const ReportDetail = () => {
               <ReportInfoRow2>
                 <ReportInfoLabel>정지 사유</ReportInfoLabel>
                 <ReportInfoDesc>
-                  ㅁㄴㅇㅁ야ㅐㅓㅈㅂ야ㅓㅂㅈ얍저야ㅓ뱌어뱌저얍저ㅑ
+                  {tookReason}
                 </ReportInfoDesc>
               </ReportInfoRow2>
             )}

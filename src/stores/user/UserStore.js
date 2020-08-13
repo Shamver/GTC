@@ -15,6 +15,8 @@ class UserStore {
 
   @observable userData;
 
+  @observable detailBanData = '';
+
   @observable banUserList = [];
 
   @observable cookieChecked = false;
@@ -469,6 +471,30 @@ class UserStore {
         if (data.success) {
           if (data.code === 1) {
             this.banUserList = data.result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
+  @action getBanDetail = async (userId) => {
+    await axios.get('/api/user/ban/detail', {
+      params: {
+        userId,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.detailBanData = data.result;
+            console.log(data.result);
           } else {
             toast.info(data.message);
           }

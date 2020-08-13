@@ -9,7 +9,7 @@ const ReportUserList = ({ data }) => {
   const { getDetailReport } = BoardReportStore;
   const { userBanCancel } = UserStore;
   const {
-    userId, userEmail, userName, userNickName, GTName, banTerm, banDate, reportId,
+    userId, userEmail, userName, userNickName, GTName, banTerm, banDate, reportId, suspendBanFl,
   } = data;
   return (
     <tr onClick={() => getDetailReport(reportId)}>
@@ -18,9 +18,9 @@ const ReportUserList = ({ data }) => {
       <td>{userNickName}</td>
       <td>{GTName}</td>
       <td>{userEmail}</td>
-      <td>{banTerm ? `${banDate} ~ ${banTerm}` : '영구 정지'} </td>
+      <td>{suspendBanFl ? '영구 정지' : `${banDate} ~ ${banTerm}`} </td>
       <td>
-        <Button color="danger" size="sm" onClick={() => userBanCancel(userId)}>
+        <Button color="danger" size="sm" onClick={(e) => { userBanCancel(userId); e.stopPropagation(); }}>
           정지 해제
         </Button>
       </td>
@@ -38,6 +38,7 @@ ReportUserList.propTypes = {
     GTName: Proptypes.string,
     banTerm: Proptypes.string,
     banDate: Proptypes.string,
+    suspendBanFl: Proptypes.number,
   }).isRequired,
 };
 

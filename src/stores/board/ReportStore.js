@@ -170,6 +170,11 @@ class ReportStore {
           toast.error(data.message);
         }
       })
+      .then(() => {
+        if (this.activeTab === 'ReportUser') {
+          this.root.UserStore.getBanDetail(this.reportDetailData.targetUserId);
+        }
+      })
       .then(() => { this.toggleDetailReport(); })
       .catch((response) => { toast.error(response.message); });
 

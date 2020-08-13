@@ -43,6 +43,10 @@ const ReportUser = () => {
 };
 
 const CodeTable = styled(Table)`
+  & > tbody > tr {
+    cursor : pointer;
+  }
+  
   & > tbody > tr > td {
     vertical-align: middle;
   }
