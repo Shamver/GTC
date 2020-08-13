@@ -348,7 +348,10 @@ class PostStore {
         if (data.success) {
           if (data.code === 1) {
             const [post] = data.result;
-            that.postView = post;
+            that.postView = {
+              ...post,
+              content: null,
+            };
             getLately();
             that.postView.content = this.getPostVideoTag(post.content);
             const { currentBoardPage } = this.root.BoardStore.currentBoardPage;
