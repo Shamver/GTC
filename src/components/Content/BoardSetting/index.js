@@ -8,6 +8,7 @@ import useStores from '../../../stores/useStores';
 import BoardDetailModal from './BoardDetailModal';
 import CategoryDetailModal from './CategoryDetailModal';
 import BoardList from './BoardList';
+import CategoryList from './CategoryList';
 
 
 const BoardSetting = () => {
@@ -59,17 +60,13 @@ const BoardSetting = () => {
             <CodeTable bordered hover>
               <thead>
                 <tr>
-                  <th>코드</th>
-                  <th>코드명</th>
-                  <CenterTh>순서</CenterTh>
-                  <th>코드 설명</th>
-                  <CenterTh>사용 여부</CenterTh>
+                  <th>이름</th>
+                  <th>경로</th>
+                  <th>사용</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <CenterTd colSpan={7}>해당 게시판에 대한 카테고리가 존재하지 않습니다.</CenterTd>
-                </tr>
+                <CategoryList />
               </tbody>
             </CodeTable>
           </CodeCol>
@@ -80,10 +77,6 @@ const BoardSetting = () => {
     </BoardWrapper>
   );
 };
-
-const CenterTd = styled.td`
-  text-align: center;
-`;
 
 const PaddedDiv = styled.div`
   padding-bottom : 10px;
@@ -99,10 +92,6 @@ const CodeTableWrapper = styled.div`
 
 const CodeCol = styled.div`
   width : 100%;
-`;
-
-const CenterTh = styled.th`
-  text-align : center;
 `;
 
 const CodeTable = styled(Table)`

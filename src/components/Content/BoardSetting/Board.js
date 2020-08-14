@@ -10,16 +10,16 @@ const Board = ({ data }) => {
   const { SystemBoardStore } = useStores();
   const { getBoard, getCategoryList } = SystemBoardStore;
   const {
-    name, path, useFl,
+    board, name, path, useFl,
   } = data;
 
   return (
-    <tr onClick={() => getCategoryList(data.board)}>
+    <tr onClick={() => getCategoryList(board)}>
       <td>{name}</td>
       <td>{path}</td>
       <td>{useFl}</td>
       <td>
-        <Button size="sm" color="danger" onClick={(event) => getBoard(data.board, event)}>
+        <Button size="sm" color="danger" onClick={(event) => getBoard(board, event)}>
           <DetailIcon icon={faInfoCircle} />
         </Button>
       </td>

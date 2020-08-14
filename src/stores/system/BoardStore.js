@@ -162,15 +162,14 @@ class BoardStore {
     if (!this.categoryValidationCheck()) {
       return false;
     }
-
-    axios.post('/api/system/board/category', this.board)
+    axios.post('/api/system/board/category', this.category)
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.getCategoryList().then();
-            this.toggleBoardModal('');
+            this.getCategoryList();
+            this.toggleCategoryModal('');
           } else {
             toast.info(data.message);
           }
@@ -184,13 +183,16 @@ class BoardStore {
   };
 
   @action getCategoryList = (board) => {
-    axios.get('/api/system/board/category/all')
+    axios.get('/api/system/board/category/all', {
+      params: {
+        board,
+      },
+    })
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             this.categoryList = data.result;
-            this.category.board = board;
           } else {
             toast.info(data.message);
           }
@@ -203,11 +205,11 @@ class BoardStore {
     return true;
   };
 
-  @action getCategory = (board, event) => {
-    event.stopPropagation();
+  @action getCategory = (board, category) => {
     axios.get('/api/system/board/category', {
       params: {
         board,
+        category,
       },
     })
       .then((response) => {
@@ -295,7 +297,7 @@ class BoardStore {
   }
 
   @action toggleCategoryModal = (mode) => {
-    if (!this.isCategoryModalToggle && !this.category.board) {
+    if (!this.isCategoryModalToggle && !this.category.board && mode === 'add') {
       toast.warn('😳 먼저 게시판을 선택해주세요.');
       return false;
     }

@@ -72,21 +72,39 @@ const DELETE_BOARD = `
 const INSERT_BOARD_CATEGORY = `
   INSERT INTO GTC_BOARD_CATEGORY (
       BOARD
+      , CATEGORY
       , NAME
       , PATH
       , \`DESC\`
       , \`ORDER\`
       , USE_FL
-      , PERMISSION_LEVEL
   ) VALUES (
       ':BOARD'
+      , ':CATEGORY'
       , ':NAME'
       , ':PATH'
       , ':DESC'
       , :ORDER
       , :USE_FL
-      , :PERMISSION_LEVEL
   )
+`;
+
+
+const SELECT_BOARD_CATEGORY = `
+  SELECT
+    GBC.BOARD AS board
+    , GBC.CATEGORY AS id
+    , GBC.NAME AS name
+    , GBC.PATH AS path
+    , GBC.\`DESC\` as \`desc\`
+    , GBC.\`ORDER\` as \`order\`
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GBC.USE_FL) AS useFl
+    , GBC.CRT_DTTM AS crtDttm
+   FROM GTC_BOARD_CATEGORY GBC
+   WHERE 
+    GBC.BOARD = ':BOARD'
+    AND GBC.CATEGORY = ':CATEGORY'
+   ORDER BY GBC.\`ORDER\`
 `;
 
 
@@ -101,6 +119,7 @@ const SELECT_BOARD_CATEGORY_ALL = `
     , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GBC.USE_FL) AS useFl
     , GBC.CRT_DTTM AS crtDttm
    FROM GTC_BOARD_CATEGORY GBC
+   WHERE GBC.BOARD = ':BOARD'
    ORDER BY GBC.\`ORDER\`
 `;
 
@@ -131,7 +150,7 @@ router.post('/', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[INSERT, GET /api/system/board] 시스템 게시판 추가');
+    info('[INSERT, POST /api/system/board] 시스템 게시판 추가');
   });
 });
 
@@ -202,7 +221,7 @@ router.put('/', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, PUT /api/system/board] 시스템 게시판 수정');
+    info('[UPDATE, PUT /api/system/board] 시스템 게시판 수정');
   });
 });
 
@@ -228,10 +247,68 @@ router.delete('/', (req, res) => {
   });
 });
 
+router.post('/category', (req, res) => {
+  const {
+    id, board, name, desc, path,
+    order, useFl,
+  } = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      INSERT_BOARD_CATEGORY,
+      {
+        CATEGORY: id,
+        BOARD: board,
+        NAME: name,
+        DESC: desc,
+        PATH: path,
+        ORDER: order,
+        USE_FL: useFl,
+      },
+    )
+      .then(() => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '😳 게시판 카테고리 추가 완료!',
+        });
+      }),
+  ).then(() => {
+    info('[INSERT, POST /api/system/board/category] 시스템 게시판 카테고리 추가');
+  });
+});
+
+router.get('/category', (req, res) => {
+  const { board, category } = req.query;
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD,
+      {
+        BOARD: board,
+        CATEGORY: category,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '게시판 카테고리 조회 완료',
+          result: rows[0],
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/system/board/category] 시스템 게시판 카테고리 조회');
+  });
+});
+
 router.get('/category/all', (req, res) => {
+  const { board } = req.query;
   Database.execute(
     (database) => database.query(
       SELECT_BOARD_CATEGORY_ALL,
+      {
+        BOARD: board,
+      },
     )
       .then((rows) => {
         res.json({
