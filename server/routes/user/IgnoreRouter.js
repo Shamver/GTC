@@ -22,9 +22,11 @@ const INSERT_USER_IGNORE = `
   INSERT INTO GTC_USER_IGNORE (
     USER_ID
     , USER_ID_TARGET
+    , CRT_DTTM
   ) VALUES (
     :USER_ID
     , :USER_ID_TARGET
+    , sysdate()
   )
 `;
 

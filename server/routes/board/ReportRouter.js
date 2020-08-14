@@ -23,12 +23,14 @@ const INSERT_REPORT = `
     , TYPE_CD
     , REASON_CD
     , REASON_DESC
+    , CRT_DTTM
   ) VALUES (
     :TARGET_ID
     , :USER_ID
     , ':TYPE_CD'
     , ':REASON_CD'
     , ':REASON_DESC'
+    , sysdate()
   )
 `;
 

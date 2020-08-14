@@ -34,6 +34,7 @@ const INSERT_COMMENT = `
     , USER_ID
     , CONTENT
     , SECRET_FL
+    , CRT_DTTM
   ) VALUES (
     :POST_ID
     , IFNULL(
@@ -47,6 +48,7 @@ const INSERT_COMMENT = `
     , :USER_ID 
     , ':CONTENT'
     , :SECRET_FL
+    , sysdate()
   );
 `;
 
@@ -143,9 +145,11 @@ const INSERT_COMMENT_LIKE = `
   INSERT INTO GTC_COMMENT_LIKE (
     COMMENT_ID
     , USER_ID
+    , CRT_DTTM
   ) VALUES (
     :COMMENT_ID
     , :USER_ID
+    , sysdate()
   )
 `;
 
@@ -153,7 +157,6 @@ const UPDATE_COMMENT = `
   UPDATE GTC_COMMENT
   SET 
     CONTENT = ':CONTENT'
-    , MFY_DTTM = SYSDATE()
   WHERE ID = :COMMENT_ID
 `;
 

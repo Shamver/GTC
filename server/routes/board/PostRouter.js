@@ -144,10 +144,12 @@ const INSERT_POST_RECOMMEND = `
     POST_ID
     , USER_ID
     , TYPE_CD
+    , CRT_DTTM
   ) VALUES (
     :POST_ID
     , :USER_ID
     , ':TYPE_CD'
+    , sysdate()
   )
 `;
 
@@ -261,7 +263,6 @@ const UPDATE_POST = `
     , SECRET_FL = :SECRET_FL
     , SECRET_COMMENT_ALLOW_FL = :SECRET_COMMENT_ALLOW_FL
     , COMMENT_ALLOW_FL = :COMMENT_ALLOW_FL
-    , MFY_DTTM = SYSDATE()
    WHERE ID = :POST_ID 
 `;
 

@@ -11,12 +11,14 @@ const INSERT_CONSULT_ROW = `
     USER_ID,
     SUBJECT,
     CONSULT_DESC,
-    CONSULT_CD
+    CONSULT_CD,
+    MFY_DTTM
   ) VALUES (
     :USER_ID,
     ':SUBJECT',
     ':CONSULT_DESC',
-    ':CONSULT_CD'
+    ':CONSULT_CD',
+    sysdate()
   );
 `;
 
@@ -76,7 +78,6 @@ const UPDATE_CONSULT_ADMIN = `
     ANSWER_DESC = ':ANSWER'
     , ANSWER_USER_ID = :USER_ID
     , ANSWER_FL = 1
-    , MFY_DTTM = SYSDATE()
    WHERE ID = :ID 
 `;
 

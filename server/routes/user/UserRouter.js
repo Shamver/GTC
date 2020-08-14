@@ -35,6 +35,7 @@ const INSERT_USER_GT_NICKNAME = `
   ) VALUES (
     :USER_ID
     , ':PREV_GT_NICKNAME'
+    , sysdate()
   )
 `;
 

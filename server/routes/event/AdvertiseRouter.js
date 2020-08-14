@@ -32,11 +32,13 @@ const INSERT_POST_ADVERTISE = `
     , URL
     , MESSAGE
     , HOURS
+    , CRT_DTTM
   ) VALUES (
      :USER_ID
      , ':URL'
      , ':MESSAGE'
      , :HOURS
+     , sysdate()
   )
 `;
 
