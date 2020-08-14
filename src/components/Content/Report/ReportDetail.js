@@ -11,7 +11,9 @@ import useStores from '../../../stores/useStores';
 const ReportDetail = () => {
   const { BoardReportStore, UserStore } = useStores();
   const { detailBanData } = UserStore;
-  const { tookReason, tookBanTerm, tookDate, suspendBanFl } = detailBanData;
+  const {
+    tookReason, tookBanTerm, tookDate, suspendBanFl,
+  } = detailBanData;
   const {
     reportDetailToggle, toggleDetailReport, reportDetailData, reportTakeOn,
     reportReject, onChangeDetailValue, reportTakeOnData, activeTab,
@@ -52,16 +54,16 @@ const ReportDetail = () => {
           </ReportInfoRow>
           {activeTab === 'ReportUser'
             ? (
-              <ReportInfoRow>
-                <Flex1>
+              <>
+                <ReportInfoRow>
                   <ReportInfoLabel>처리 날짜</ReportInfoLabel>
                   <ReportInfoDesc>{tookDate}</ReportInfoDesc>
-                </Flex1>
-                <Flex1>
+                </ReportInfoRow>
+                <ReportInfoRow>
                   <ReportInfoLabel>정지 기간</ReportInfoLabel>
                   <ReportInfoDesc>{suspendBanFl ? '영구 정지' : `${tookDate} ~ ${tookBanTerm}`}</ReportInfoDesc>
-                </Flex1>
-              </ReportInfoRow>
+                </ReportInfoRow>
+              </>
             )
             : ''}
           {typeCode === 'RT03' ? ''
