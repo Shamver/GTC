@@ -58,11 +58,6 @@ const SidebarContent = () => {
                   월드락 거래
                 </LinkNoDeco>
               </MarginList>
-              <MarginList>
-                <LinkNoDeco to="/crime">
-                  신고 게시판
-                </LinkNoDeco>
-              </MarginList>
             </StylelessUl>
           </Col>
           <Col xs="6">

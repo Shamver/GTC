@@ -108,6 +108,79 @@ const GET_USER_COMMENT_LIST = `
   LIMIT :INDEX, 5
 `;
 
+const SELECT_ALL_USER_BANNED = `
+  SELECT U.ID AS userId
+    , U.EMAIL AS userEmail
+    , U.NAME AS userName
+    , U.NICKNAME AS userNickName
+    , U.GT_NICKNAME AS GTName
+    , B.REPORT_ID AS reportId
+    , B.SUSPEND_BAN_FL AS suspendBanFl
+    , B.TEMP_BAN_FL AS tempBanFl
+    , B.BAN_REASON AS reason
+    , DATE_FORMAT(B.BAN_TERM,'%Y-%m-%d') AS banTerm
+    , DATE_FORMAT(B.CRT_DTTM,'%Y-%m-%d') AS banDate
+  FROM GTC_USER AS U
+  JOIN GTC_USER_BAN AS B
+  ON U.ID = B.USER_ID;
+`;
+
+const SELECT_USER_BANNED = `
+  SELECT 
+    B.SUSPEND_BAN_FL AS suspendBanFl
+    , B.TEMP_BAN_FL AS tempBanFl
+    , B.BAN_REASON AS tookReason
+    , DATE_FORMAT(B.BAN_TERM,'%Y-%m-%d') AS tookBanTerm
+    , DATE_FORMAT(B.CRT_DTTM,'%Y-%m-%d') AS tookDate
+  FROM GTC_USER_BAN B
+  WHERE USER_ID = :USER_ID;
+`;
+
+const INSERT_USER_BAN = `
+  INSERT INTO GTC_USER_BAN (
+    USER_ID
+    , REPORT_ID
+    , SUSPEND_BAN_FL
+    , TEMP_BAN_FL
+    , BAN_TERM
+    , BAN_REASON
+    , CRT_DTTM
+  ) VALUES (
+    :USER_ID
+    , :REPORT_ID
+    , IF(':ACTION_TYPE' = 'BAN', 1, 0)
+    , IF(':ACTION_TYPE' = 'BAN2', 1, 0)
+    , ':BAN_TERM'
+    , ':BAN_REASON'
+    , SYSDATE()
+  )
+`;
+
+const UPDATE_USER_BAN_FL = `
+  UPDATE GTC_USER
+  SET
+    BANNED_FL = :BAN_FL
+  WHERE ID = :USER_ID
+`;
+
+const UPDATE_USER_BAN_CANCEL = `
+  DELETE FROM GTC_USER_BAN
+  WHERE USER_ID = :USER_ID
+`;
+
+const UPDATE_REPORT_CANCEL = `
+  UPDATE GTC_REPORT
+  SET CANCEL_FL = 1
+  WHERE ID = (SELECT REPORT_ID FROM GTC_USER_BAN WHERE USER_ID = :USER_ID);
+`;
+
+const UPDATE_REPORT = `
+  UPDATE GTC_REPORT
+  SET
+    DISPOSE_FL = 1
+  WHERE ID = :ID;
+`;
+
 const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
   SELECT
   IF(count(*) = 0, 1, 0) AS isCanChange
@@ -117,6 +190,147 @@ const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
     USER_ID = :USER_ID
     AND CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE(), INTERVAL -30 DAY), '%Y-%m-%d %H:%i:%s');
 `;
+
+router.get('/ban', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_ALL_USER_BANNED,
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '밴 유저 목록 조회',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/user/ban] 밴 유저 목록 조회');
+  });
+});
+
+router.post('/ban', (req, res) => {
+  const {
+    reportId, targetUserId, actionType, reason, term,
+  } = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_USER_BANNED,
+      {
+        USER_ID: targetUserId,
+      },
+    )
+      .then((rows) => {
+        if (rows.length > 0) {
+          res.json({
+            success: true,
+            code: 2,
+            message: '😳 이미 해당 유저는 정지 상태입니다.',
+          });
+          throw new Error('이미 정지 상태입니다.');
+        } else {
+          return database.query(
+            INSERT_USER_BAN,
+            {
+              USER_ID: targetUserId,
+              REPORT_ID: reportId,
+              ACTION_TYPE: actionType,
+              BAN_TERM: term,
+              BAN_REASON: reason,
+            },
+          );
+        }
+      })
+      .then(() => database.query(
+        UPDATE_REPORT,
+        {
+          ID: reportId,
+        },
+      ))
+      .then(() => database.query(
+        UPDATE_USER_BAN_FL,
+        {
+          BAN_FL: 1,
+          USER_ID: targetUserId,
+        },
+      ))
+      .then(() => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '😊 해당 유저를 밴 처리 하였습니다.',
+        });
+      })
+      .catch(() => {
+        res.json({
+          success: false,
+          code: 1,
+          message: '요청을 실패하였습니다.',
+        });
+      }),
+  ).then(() => {
+    info('[INSERT, POST /api/user/ban] 신고 유저 밴 처리');
+  });
+});
+
+router.get('/ban/detail', (req, res) => {
+  const { userId } = req.query;
+
+  Database.execute(
+    (database) => database.query(
+      SELECT_USER_BANNED,
+      {
+        USER_ID: userId,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '밴 결과 상세 조회',
+          result: rows[0],
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/user/ban/detail] 밴 결과 상세 조회');
+  });
+});
+
+router.put('/cancel', (req, res) => {
+  const { userId } = req.body;
+
+  Database.execute(
+    (database) => database.query(
+      UPDATE_REPORT_CANCEL,
+      {
+        USER_ID: userId,
+      },
+    )
+      .then(() => database.query(
+        UPDATE_USER_BAN_FL,
+        {
+          BAN_FL: 0,
+          USER_ID: userId,
+        },
+      ))
+      .then(() => database.query(
+        UPDATE_USER_BAN_CANCEL,
+        {
+          USER_ID: userId,
+        },
+      ))
+      .then(() => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '😊 해당 유저의 밴 처리를 취소 하였습니다.',
+        });
+      }),
+  ).then(() => {
+    info('[UPDATE, PUT /api/user/cancel] 신고 유저 밴 취소 처리');
+  });
+});
 
 router.delete('/withdrawal', (req, res) => {
   const { userId } = req.body;

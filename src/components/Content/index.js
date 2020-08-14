@@ -13,6 +13,7 @@ const Daily = lazy(() => import('./Daily'));
 const Code = lazy(() => import('./Code'));
 const Advertise = lazy(() => import('./Advertise'));
 const Home = lazy(() => import('./Home'));
+const Report = lazy(() => import('./Report'));
 const Test = lazy(() => import('./Test'));
 const Posting = lazy(() => import('./Board/Posting'));
 const Consult = lazy(() => import('./Consult'));
@@ -30,6 +31,7 @@ export default {
   Code,
   Advertise,
   Home,
+  Report,
   Test,
   Posting,
   Consult,

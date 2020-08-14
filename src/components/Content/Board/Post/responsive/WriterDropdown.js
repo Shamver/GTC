@@ -12,11 +12,12 @@ const WriterDropdown = ({
   data, index, isNotice, isMobile,
 }) => {
   const {
-    ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
+    ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore, BoardReportStore,
   } = useStores();
   const { dropdown, onActive, onSet } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { userData, getProfile } = UserStore;
+  const { toggleReport } = BoardReportStore;
   const { addIgnore } = UserIgnoreStore;
   const {
     writerName, writerId, isWriterAdmin, isWriterOperator,
@@ -40,7 +41,10 @@ const WriterDropdown = ({
         {!(!userData || userData.id === writerId) && (
           <WriterDropdownItem onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(writerId))}>
             차단하기
-          </WriterDropdownItem>
+          </WriterDropdownItem>,
+            <WriterDropdownItem onClick={() => toggleReport(writerId, 'RT03', '', writerName)}>
+              신고하기
+            </WriterDropdownItem>
         )}
       </WriterDropdownMenu>
     </WriterDropdownIn>

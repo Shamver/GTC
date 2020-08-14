@@ -10,12 +10,13 @@ import levelAdmin from '../../../../../resources/images/level/levelAdmin.png';
 const WriterDropdown = () => {
   const {
     ComponentPostStore, UtilAlertStore, UserStore, UserIgnoreStore,
-    BoardPostStore,
+    BoardPostStore, BoardReportStore,
   } = useStores();
   const { postView } = BoardPostStore;
   const {
     writerId, writerName, isWriterAdmin, isWriterOperator,
   } = postView;
+  const { toggleReport } = BoardReportStore;
   const { dropdown, onActive, onSet } = ComponentPostStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { userData, getProfile } = UserStore;
@@ -37,7 +38,10 @@ const WriterDropdown = () => {
         {!(!userData || userData.id === writerId) && (
           <WriterDropdownItem onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(writerId))}>
             차단하기
-          </WriterDropdownItem>
+          </WriterDropdownItem>,
+            <WriterDropdownItem onClick={() => toggleReport(writerId, 'RT03', '', writerName)}>
+              신고하기
+            </WriterDropdownItem>
         )}
       </WriterDropdownMenu>
     </WriterDropdownIn>

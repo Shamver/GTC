@@ -15,6 +15,10 @@ class UserStore {
 
   @observable userData;
 
+  @observable detailBanData = '';
+
+  @observable banUserList = [];
+
   @observable cookieChecked = false;
 
   @observable profileData = {
@@ -80,6 +84,8 @@ class UserStore {
   };
 
   @action login = (email) => {
+    const { toggleAlert } = this.root.UtilAlertStore;
+
     axios.post('/api/auth/login', { email })
       .then((response) => {
         const { data } = response;
@@ -87,6 +93,13 @@ class UserStore {
           if (data.code === 1) {
             toast.success(data.message);
             this.cookieCheck();
+          } else if (data.code === 2) {
+            const { suspendBan, banTerm } = data.result;
+            if (suspendBan) {
+              toggleAlert(`해당 계정은 ${data.message}의 사유로 영구 정지 처리 되었습니다. 자세한 사항은 운영자에게 문의하세요.`);
+            } else {
+              toggleAlert(`해당 계정은 ${data.message}의 사유로 ${banTerm} 까지 계정 정지 처리 되었습니다. 자세한 사항은 운영자에게 문의하세요.`);
+            }
           } else {
             toast.info(data.message);
           }
@@ -467,6 +480,95 @@ class UserStore {
 
     toast.error('😳 로그인 후 이용해주세요.');
     return false;
+  }
+
+  @action getUserBanned = async () => {
+    await axios.get('/api/user/ban')
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.banUserList = data.result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
+  @action getBanDetail = async (userId) => {
+    await axios.get('/api/user/ban/detail', {
+      params: {
+        userId,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.detailBanData = data.result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
+  @action userBan = async (reportId, targetUserId, actionType, reason, term) => {
+    await axios.post('/api/user/ban', {
+      reportId, targetUserId, actionType, reason, term,
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            if (actionType === 'BAN' || actionType === 'BAN2') {
+              this.root.BoardReportStore.toggleDetailReport();
+            }
+            this.root.BoardReportStore.getReportList();
+            this.getUserBanned();
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
+  @action userBanCancel = async (userId) => {
+    await axios.put('/api/user/cancel', {
+      userId,
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            this.root.BoardReportStore.getReportList();
+            this.getUserBanned();
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
   }
 }
 

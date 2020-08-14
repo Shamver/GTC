@@ -49,18 +49,16 @@ const PostViewContent = () => {
           <PostVote />
         </ContentMain>
         <ContentFooter>
-          <LeftSpan>
-            <StylessLink to={`/${realBoardPath}`}>
-              <GreyButton outline color="secondary" size="sm">
-                <FontAwesomeIcon icon={faBars} /> 목록
-              </GreyButton>
-            </StylessLink>
-            {!isMyPost && (
-              <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'RP01', title, writerName)}>
-                <FontAwesomeIcon icon={faBellSlash} /> 신고
-              </Button>
-            )}
-          </LeftSpan>
+          <StylessLink to={`/${realBoardPath}`}>
+            <GreyButton outline color="secondary" size="sm">
+              <FontAwesomeIcon icon={faBars} /> 목록
+            </GreyButton>
+          </StylessLink>
+          {!isMyPost && (
+            <Button outline color="danger" size="sm" onClick={() => toggleReport(id, 'RT01', title, writerName)}>
+              <FontAwesomeIcon icon={faBellSlash} /> 신고
+            </Button>
+          )}
           <RightSpan>
             <GreyButton outline={!isFavorite} color="secondary" size="sm" onClick={() => judgeFavorite(isFavorite, id)}>
               <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} /> 즐겨찾기
@@ -124,12 +122,6 @@ const ContentWrapper = styled.div`
   border-left: 1px solid #f1f1f1;
   border-right: 1px solid #f1f1f1;
   margin-bottom : 20px;
-`;
-
-const LeftSpan = styled.div`
-  display: inline-block;
-  float : left;
-  margin-bottom: 2.5px;
 `;
 
 const RightSpan = styled.span`
