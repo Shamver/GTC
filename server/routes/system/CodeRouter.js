@@ -18,10 +18,12 @@ const INSERT_CODEGROUP = `
     ID
     , NAME
     , \`DESC\`
+    , CRT_DTTM
   ) VALUES (
     ':CODEGROUP_ID'
     , ':NAME'
     , ':DESC'
+    , sysdate()
   )
 `;
 
@@ -46,6 +48,7 @@ const INSERT_CODE = `
     , \`DESC\`
     , \`ORDER\`
     , USE_FL
+    , CRT_DTTM
   ) VALUES (
     ':CODEGROUP_ID'
     , ':CODE'
@@ -53,6 +56,7 @@ const INSERT_CODE = `
     , ':DESC'
     , :ORDER
     , :USE_FL
+    , sysdate()
   )
 `;
 

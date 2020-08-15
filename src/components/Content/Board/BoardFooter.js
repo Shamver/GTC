@@ -61,7 +61,11 @@ const BoardFooter = ({ currentCategory }) => {
 };
 
 BoardFooter.propTypes = {
-  currentCategory: Proptypes.string.isRequired,
+  currentCategory: Proptypes.string,
+};
+
+BoardFooter.defaultProps = {
+  currentCategory: '',
 };
 
 const FooterWrapper = styled.div`

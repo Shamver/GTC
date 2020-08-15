@@ -1,10 +1,12 @@
 const INSERT_USER_ALERT = `
   INSERT INTO GTC_USER_ALERT (
     COMMENT_ID,
-    SHOW_FL
+    SHOW_FL,
+    CRT_DTTM
   ) VALUES (
     :COMMENT_ID,
-    1
+    1,
+    sysdate()
   )
 `;
 

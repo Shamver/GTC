@@ -77,6 +77,7 @@ const INSERT_EVENT_DAILY = `
     , MESSAGE
     , POINT
     , COMBO
+    , CRT_DTTM
   ) VALUES (
     :USER_ID
     , ':MESSAGE'
@@ -85,6 +86,7 @@ const INSERT_EVENT_DAILY = `
       (SELECT * FROM (SELECT IFNULL(MAX(COMBO), 0) + 1 FROM GTC_ATTENDANCE WHERE (DATE_FORMAT(SYSDATE(),'%Y%m%d000000') > DATE_FORMAT(CRT_DTTM,'%Y%m%d000000')) AND (DATE_FORMAT(CRT_DTTM,'%Y%m%d000000') = DATE_FORMAT(SUBDATE(SYSDATE(), 1), '%Y%m%d000000')) AND USER_ID = :USER_ID) AS C)
       ELSE 1
       END)
+    , sysdate()
   )
 `;
 
@@ -107,13 +109,13 @@ router.get('/', (req, res) => {
 });
 
 router.get('/last', (req, res) => {
-  const { userDataId } = req.query;
+  const { userId } = req.query;
 
   Database.execute(
     (database) => database.query(
-      userDataId ? SELECT_ATTENDANCE_LAST : '',
+      userId ? SELECT_ATTENDANCE_LAST : '',
       {
-        USER_ID: userDataId,
+        USER_ID: userId,
       },
     )
       .then((rows) => {

@@ -33,7 +33,7 @@ const Consult = ({ match, parentProps }) => {
     ]);
   }, [
     getCodeComponent, setCategoryCodeList, getMyConsultList,
-    currentPage, getConsultList,
+    currentPage, getConsultList, loadingProcess,
   ]);
 
   return (

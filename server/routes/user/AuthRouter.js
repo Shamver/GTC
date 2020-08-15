@@ -31,6 +31,7 @@ const INSERT_NEW_USER = `
     , BIRTH_DT
     , GT_NICKNAME
     , GENDER_CD
+    , CRT_DTTM
   ) VALUES (
     ':EMAIL'
     , ':NAME'
@@ -39,6 +40,7 @@ const INSERT_NEW_USER = `
     , ':BIRTH_DT'
     , ':GT_NICKNAME'
     , ':GENDER_CD'
+    , sysdate()
   )
 `;
 

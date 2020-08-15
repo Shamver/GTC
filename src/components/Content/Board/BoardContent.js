@@ -14,7 +14,7 @@ const CategoryLink = ({
   categories,
   category,
 }) => {
-  const { name, path } = categories[category.code];
+  const { name, path } = categories[category];
   const toPath = `/${currentBoardPath}/page/1/${path}`;
   return (<NavLink activeClassName="active" to={toPath}>{name}</NavLink>);
 };
@@ -42,9 +42,9 @@ const BoardContent = ({ isFooter, currentPage }) => {
       <CategoryLink
         currentBoardPath={currentBoardPath}
         categories={categories}
-        category={v}
+        category={v.code}
         currentPage={currentPage}
-        key={v}
+        key={v.code}
       />
     ),
   );
@@ -73,7 +73,7 @@ const BoardContent = ({ isFooter, currentPage }) => {
 
 BoardContent.propTypes = {
   isFooter: Proptypes.bool,
-  currentPage: Proptypes.string.isRequired,
+  currentPage: Proptypes.string,
 };
 
 BoardContent.defaultProps = {

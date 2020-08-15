@@ -91,7 +91,6 @@ const SELECT_POST_LIST_ALL = `
     , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
     , (SELECT U.ADMIN_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterAdmin
     , (SELECT U.OPERATOR_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterOperator
->>>>>>> 128104d758bbe3db1c1edde977d13e151066ea5a
   FROM 
     GTC_POST P
     , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
@@ -116,6 +115,7 @@ const INSERT_POST = `
     , SECRET_FL
     , SECRET_COMMENT_ALLOW_FL
     , COMMENT_ALLOW_FL
+    , CRT_DTTM
   ) VALUES (
     ':BOARD_CD'
     , ':CATEGORY_CD'
@@ -126,6 +126,7 @@ const INSERT_POST = `
     , :SECRET_FL
     , :SECRET_COMMENT_ALLOW_FL
     , :COMMENT_ALLOW_FL
+    , sysdate()
   )
 `;
 
@@ -143,10 +144,12 @@ const INSERT_POST_RECOMMEND = `
     POST_ID
     , USER_ID
     , TYPE_CD
+    , CRT_DTTM
   ) VALUES (
     :POST_ID
     , :USER_ID
     , ':TYPE_CD'
+    , sysdate()
   )
 `;
 
@@ -260,7 +263,6 @@ const UPDATE_POST = `
     , SECRET_FL = :SECRET_FL
     , SECRET_COMMENT_ALLOW_FL = :SECRET_COMMENT_ALLOW_FL
     , COMMENT_ALLOW_FL = :COMMENT_ALLOW_FL
-    , MFY_DTTM = SYSDATE()
    WHERE ID = :POST_ID 
 `;
 
