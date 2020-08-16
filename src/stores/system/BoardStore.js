@@ -168,7 +168,7 @@ class BoardStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.getCategoryList();
+            this.getCategoryList(this.category.board);
             this.toggleCategoryModal('');
           } else {
             toast.info(data.message);
@@ -193,6 +193,7 @@ class BoardStore {
         if (data.success) {
           if (data.code === 1) {
             this.categoryList = data.result;
+            this.category.board = board;
           } else {
             toast.info(data.message);
           }
@@ -226,6 +227,53 @@ class BoardStore {
         }
       })
       .catch((response) => { toast.error(response.message); });
+  };
+
+  @action modifyCategory = () => {
+    axios.put('/api/system/board/category', this.category)
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            this.getCategoryList(this.category.board);
+            this.toggleCategoryModal('');
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
+  @action deleteCategory = () => {
+    axios.delete('/api/system/board/category', {
+      params: {
+        category: this.category.id,
+        board: this.category.board,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            toast.success(data.message);
+            this.getCategoryList(this.category.board);
+            this.toggleCategoryModal('');
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
   };
 
   @action boardValidationCheck = () => {

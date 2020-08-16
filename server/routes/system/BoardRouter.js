@@ -98,7 +98,7 @@ const SELECT_BOARD_CATEGORY = `
     , GBC.PATH AS path
     , GBC.\`DESC\` as \`desc\`
     , GBC.\`ORDER\` as \`order\`
-    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GBC.USE_FL) AS useFl
+    , GBC.USE_FL AS useFl
     , GBC.CRT_DTTM AS crtDttm
    FROM GTC_BOARD_CATEGORY GBC
    WHERE 
@@ -121,6 +121,26 @@ const SELECT_BOARD_CATEGORY_ALL = `
    FROM GTC_BOARD_CATEGORY GBC
    WHERE GBC.BOARD = ':BOARD'
    ORDER BY GBC.\`ORDER\`
+`;
+
+const UPDATE_BOARD_CATEGORY = `
+  UPDATE GTC_BOARD_CATEGORY 
+  SET 
+    NAME = ':NAME'
+    , PATH = ':PATH'
+    , \`DESC\` = ':DESC'
+    , \`ORDER\` = :ORDER
+    , USE_FL = :USE_FL
+  WHERE
+    BOARD = ':BOARD'
+    AND CATEGORY = ':CATEGORY'
+`;
+
+const DELETE_BOARD_CATEGORY = `
+  DELETE FROM GTC_BOARD_CATEGORY
+  WHERE 
+    BOARD = ':BOARD'
+    AND CATEGORY = ':CATEGORY'
 `;
 
 router.post('/', (req, res) => {
@@ -282,7 +302,7 @@ router.get('/category', (req, res) => {
   const { board, category } = req.query;
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD,
+      SELECT_BOARD_CATEGORY,
       {
         BOARD: board,
         CATEGORY: category,
@@ -320,6 +340,60 @@ router.get('/category/all', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, GET /api/system/board/category/all] 게시판 카테고리 전체 조회 완료');
+  });
+});
+
+router.put('/category', (req, res) => {
+  const {
+    board, id, name, desc, path,
+    order, useFl,
+  } = req.body;
+  Database.execute(
+    (database) => database.query(
+      UPDATE_BOARD_CATEGORY,
+      {
+        BOARD: board,
+        CATEGORY: id,
+        NAME: name,
+        DESC: desc,
+        PATH: path,
+        ORDER: order,
+        USE_FL: useFl,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '😳 카테고리가 수정되었습니다!',
+          result: rows[0],
+        });
+      }),
+  ).then(() => {
+    info('[UPDATE, PUT /api/system/board/category] 시스템 게시판 카테고리 수정');
+  });
+});
+
+router.delete('/category', (req, res) => {
+  const { board, category } = req.query;
+  Database.execute(
+    (database) => database.query(
+      DELETE_BOARD_CATEGORY,
+      {
+        BOARD: board,
+        CATEGORY: category,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '😳 카테고리가 삭제되었습니다!',
+          result: rows[0],
+        });
+      }),
+  ).then(() => {
+    info('[DELETE, DELETE /api/system/board/category] 시스템 게시판 카테고리 삭제');
   });
 });
 
