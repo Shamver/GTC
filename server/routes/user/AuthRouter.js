@@ -69,18 +69,6 @@ const SELECT_USER_FROM_EMAIL = `
   WHERE U.EMAIL = ':EMAIL'
 `;
 
-const SELECT_USER_BAN_CHECK = `
-  SELECT
-    ID AS id
-    , USER_ID AS userId
-    , SUSPEND_BAN_FL AS suspendBan
-    , TEMP_BAN_FL AS tempBan
-    , DATE_FORMAT(BAN_TERM, '%Y-%m-%d') AS banTerm
-    , BAN_REASON AS banReason  
-  FROM GTC_USER_BAN
-  WHERE USER_ID = :USER_ID
-`;
-
 router.post('/register', (req, res) => {
   const {
     tel, email, nickname, name, birth, gender, gtNickname,
