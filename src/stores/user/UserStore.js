@@ -96,9 +96,9 @@ class UserStore {
           } else if (data.code === 2) {
             const { suspendBan, banTerm } = data.result;
             if (suspendBan) {
-              toggleAlert(`해당 계정은 ${data.message}의 사유로 영구 정지 처리 되었습니다. 자세한 사항은 운영자에게 문의하세요.`);
+              toggleAlert(`해당 계정은 <b>${data.message}</b>의 사유로 영구 정지 처리 되었습니다. 자세한 사항은 운영자에게 문의하세요.`);
             } else {
-              toggleAlert(`해당 계정은 ${data.message}의 사유로 ${banTerm} 까지 계정 정지 처리 되었습니다. 자세한 사항은 운영자에게 문의하세요.`);
+              toggleAlert(`해당 계정은 <b>${data.message}</b>의 사유로 <b>${banTerm}</b> 까지 계정 정지 처리 되었습니다. 자세한 사항은 운영자에게 문의하세요.`);
             }
           } else {
             toast.info(data.message);
