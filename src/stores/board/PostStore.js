@@ -380,10 +380,13 @@ class PostStore {
     const oembedMatch = text.match(oembedReg);
 
     if (oembedMatch && oembedMatch.length > 0) {
-      for (let i=0; i < oembedMatch.length; i++) {
-        let matchParts = oembedMatch[i].split(fullReg);
+      for (let i = 0; i < oembedMatch.length; i += 1) {
+        const matchParts = oembedMatch[i].split(fullReg);
         resultHtml = resultHtml.replace(oembedMatch[i],
-          `<iframe width="420" height="345" src="https://www.youtube.com/embed/${matchParts[4]}" frameborder="0" allowfullscreen></iframe><br/>`);
+          `<div style="left: 0px; width: 100%; height: 0px; position: relative; padding-bottom: 56.243%;">
+          <iframe src="https://www.youtube.com/embed/${matchParts[4]}" style="top: 0px; left: 0px; width: 100%; height: 100%; position: absolute;">
+          </iframe>
+          </div>`);
       }
     }
 
