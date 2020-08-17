@@ -21,7 +21,7 @@ const ReportDetail = () => {
   const { takeReason, banType, banTerm } = reportTakeOnData;
   const {
     reportId, reportDate, userId, reason, reasonDetail, targetContentsLink,
-    targetContents, typeCode, targetContentsId, targetUserName,
+    targetContents, typeCode, targetContentsId, targetUserName, managerId,
   } = reportDetailData;
   const ContentText = typeCode === 'RT02' ? renderHTML(`${targetContents}`) : targetContents;
 
@@ -35,12 +35,14 @@ const ReportDetail = () => {
       <ModalBodyBox>
         <ReportInfoWrap>
           <ReportInfoRow>
-            <ReportInfoLabel>신고 사유</ReportInfoLabel>
-            <ReportInfoDesc>{reason}</ReportInfoDesc>
-          </ReportInfoRow>
-          <ReportInfoRow>
-            <ReportInfoLabel>신고 날짜</ReportInfoLabel>
-            <ReportInfoDesc>{reportDate}</ReportInfoDesc>
+            <Flex1>
+              <ReportInfoLabel>신고 사유</ReportInfoLabel>
+              <ReportInfoDesc>{reason}</ReportInfoDesc>
+            </Flex1>
+            <Flex1>
+              <ReportInfoLabel>신고 날짜</ReportInfoLabel>
+              <ReportInfoDesc>{reportDate}</ReportInfoDesc>
+            </Flex1>
           </ReportInfoRow>
           <ReportInfoRow>
             <Flex1>
@@ -51,6 +53,10 @@ const ReportDetail = () => {
               <ReportInfoLabel>피신고자</ReportInfoLabel>
               <ReportInfoDesc>{targetUserName}</ReportInfoDesc>
             </Flex1>
+          </ReportInfoRow>
+          <ReportInfoRow>
+            <ReportInfoLabel>처리자</ReportInfoLabel>
+            <ReportInfoDesc>{managerId}</ReportInfoDesc>
           </ReportInfoRow>
           {activeTab === 'ReportUser'
             ? (

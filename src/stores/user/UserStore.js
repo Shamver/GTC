@@ -525,8 +525,10 @@ class UserStore {
   };
 
   @action userBan = async (reportId, targetUserId, actionType, reason, term) => {
+    const managerId = this.userData.id;
+
     await axios.post('/api/user/ban', {
-      reportId, targetUserId, actionType, reason, term,
+      reportId, targetUserId, actionType, reason, term, managerId,
     })
       .then((response) => {
         const { data } = response;
@@ -551,8 +553,10 @@ class UserStore {
   };
 
   @action userBanCancel = async (userId) => {
+    const managerId = this.userData.id;
+
     await axios.put('/api/user/cancel', {
-      userId,
+      userId, managerId,
     })
       .then((response) => {
         const { data } = response;

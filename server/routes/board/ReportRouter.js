@@ -42,6 +42,7 @@ const SELECT_ALL_REPORT = `
         WHEN R.CANCEL_FL = 0 AND R.DISPOSE_FL = 1  THEN '정지'
         WHEN R.CANCEL_FL = 1 AND R.DISPOSE_FL = 1 THEN '정지 취소'
         WHEN R.REJECT_FL = 1 THEN '반려' END AS reportResult
+     , (SELECT NICKNAME FROM GTC_USER WHERE ID = R.MANAGER_ID) AS managerId
   FROM GTC_REPORT R
   WHERE
     CASE
@@ -103,13 +104,16 @@ const SELECT_DEATAIL_REPORT = `
     , (SELECT NAME FROM GTC_CODE WHERE GTC_CODE.CODE = R.REASON_CD) AS reason
     , R.REASON_DESC AS reasonDetail
     , DATE_FORMAT(R.CRT_DTTM, '%Y-%m-%d') AS reportDate
+    , (SELECT NICKNAME FROM GTC_USER WHERE ID = R.MANAGER_ID) AS managerId
   FROM GTC_REPORT R
   WHERE R.ID = :REPORT_ID
 `;
 
 const UPDATE_REPORT_REJECT = `
   UPDATE GTC_REPORT
-  SET REJECT_FL = 1
+  SET 
+    REJECT_FL = 1,
+    MANAGER_ID = :MANAGER_ID
   WHERE ID = :REPORT_ID;
 `;
 
@@ -215,13 +219,14 @@ router.get('/detail', (req, res) => {
 });
 
 router.put('/reject', (req, res) => {
-  const { reportId } = req.body;
+  const { reportId, managerId } = req.body;
 
   Database.execute(
     (database) => database.query(
       UPDATE_REPORT_REJECT,
       {
         REPORT_ID: reportId,
+        MANAGER_ID: managerId,
       },
     )
       .then(() => {

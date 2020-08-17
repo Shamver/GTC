@@ -171,14 +171,16 @@ const UPDATE_USER_BAN_CANCEL = `
 
 const UPDATE_REPORT_CANCEL = `
   UPDATE GTC_REPORT
-  SET CANCEL_FL = 1
+  SET CANCEL_FL = 1,
+    MANAGER_ID = :MANAGER_ID
   WHERE ID = (SELECT REPORT_ID FROM GTC_USER_BAN WHERE USER_ID = :USER_ID);
 `;
 
 const UPDATE_REPORT = `
   UPDATE GTC_REPORT
   SET
-    DISPOSE_FL = 1
+    DISPOSE_FL = 1,
+    MANAGER_ID = :MANAGER_ID
   WHERE ID = :ID;
 `;
 
@@ -212,7 +214,7 @@ router.get('/ban', (req, res) => {
 
 router.post('/ban', (req, res) => {
   const {
-    reportId, targetUserId, actionType, reason, term,
+    reportId, targetUserId, actionType, reason, term, managerId,
   } = req.body;
 
   Database.execute(
@@ -247,6 +249,7 @@ router.post('/ban', (req, res) => {
         UPDATE_REPORT,
         {
           ID: reportId,
+          MANAGER_ID: managerId,
         },
       ))
       .then(() => database.query(
@@ -299,13 +302,14 @@ router.get('/ban/detail', (req, res) => {
 });
 
 router.put('/cancel', (req, res) => {
-  const { userId } = req.body;
+  const { userId, managerId } = req.body;
 
   Database.execute(
     (database) => database.query(
       UPDATE_REPORT_CANCEL,
       {
         USER_ID: userId,
+        MANAGER_ID: managerId,
       },
     )
       .then(() => database.query(

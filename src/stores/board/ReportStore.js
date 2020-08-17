@@ -223,8 +223,10 @@ class ReportStore {
   };
 
   @action reportReject = async (reportId) => {
+    const managerId = this.root.UserStore.userData.id;
+
     axios.put('/api/board/Report/reject', {
-      reportId,
+      reportId, managerId,
     })
       .then((response) => {
         const { data } = response;

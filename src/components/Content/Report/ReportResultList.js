@@ -4,7 +4,7 @@ import * as Proptypes from 'prop-types';
 
 const ReportResultList = ({ data }) => {
   const {
-    userId, reason, reportDate, targetName, reportResult, rejectDate, contents, reportId,
+    userId, reason, reportDate, targetName, reportResult, rejectDate, contents, reportId, managerId
   } = data;
 
   return (
@@ -13,6 +13,7 @@ const ReportResultList = ({ data }) => {
       <td>{reason}</td>
       <td>{userId}</td>
       <td>{targetName}</td>
+      <td>{managerId}</td>
       <td>{contents}</td>
       <td>{reportDate}</td>
       <td>{rejectDate}</td>
