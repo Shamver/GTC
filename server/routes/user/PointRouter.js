@@ -28,10 +28,10 @@ const SELECT_USER_POINT_LIST = `
   LIMIT :ROWNUM, :MAX_COUNT
 `;
 
-const SELECT_USER_POINT_SUM = `
-  SELECT SUM(COST) AS point
-  FROM GTC_USER_POINT
-  WHERE USER_ID = :USER_ID;
+const SELECT_USER_POINT = `
+  SELECT POINT AS point
+  FROM GTC_USER
+  WHERE ID = :USER_ID;
 `;
 
 router.get('/', (req, res) => {
@@ -68,7 +68,7 @@ router.get('/sum', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_USER_POINT_SUM,
+      SELECT_USER_POINT,
       {
         USER_ID: userId,
       },
@@ -79,12 +79,12 @@ router.get('/sum', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          message: '포인트 합계 조회',
+          message: '총 포인트 조회',
           result: point,
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/user/point/sum] 포인트 합계 조회');
+    info('[SELECT, GET /api/user/point/sum] 총 포인트 조회');
   });
 });
 
