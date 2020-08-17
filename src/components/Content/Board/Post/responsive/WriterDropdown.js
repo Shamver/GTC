@@ -70,7 +70,7 @@ WriterDropdown.defaultProps = {
 const LevelImage = styled.img`
   height: 15px;
   margin-right: 3px;
-  vertical-align: text-bottom;
+  vertical-align: middle;
 `;
 
 const WriterDropdownIn = styled(Dropdown)`

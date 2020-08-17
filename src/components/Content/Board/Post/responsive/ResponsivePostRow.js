@@ -66,7 +66,7 @@ ResponsivePostRow.propTypes = {
 const LevelImage = styled.img`
   height: 15px;
   margin-right: 5px;
-  vertical-align: text-bottom;
+  vertical-align: middle;
 `;
 
 const MiddleSpan = styled.span`

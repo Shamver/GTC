@@ -8,7 +8,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
-import useStores from '../../stores/useStores';
+import useStores from '../../../stores/useStores';
 
 const Category = () => {
   const { UserStore, BoardPostStore } = useStores();

@@ -5,7 +5,7 @@ import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import Header from './components/layout/Header';
 import Content from './components/layout/Content';
-import Category from './components/layout/Category';
+import Category from './components/layout/Category/Category';
 import useStores from './stores/useStores';
 import CustomSidebar from './components/layout/Sidebar';
 import Footer from './components/layout/Footer';

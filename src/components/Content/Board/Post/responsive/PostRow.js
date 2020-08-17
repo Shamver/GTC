@@ -18,7 +18,7 @@ const PostRow = ({ data, index, isNotice }) => {
   const { currentBoardPath } = BoardStore;
 
   const isImageComponent = isImage
-    ? (<FontAwesomeIcon icon={faImage} />)
+    ? (<BottomIcon icon={faImage} />)
     : (<BottomIcon icon={faCommentDots} />);
   const IsBestPost = recommendCount >= 10 ? (<Star icon={faStar} />) : isImageComponent;
 
@@ -63,7 +63,7 @@ PostRow.propTypes = {
 };
 
 const BottomIcon = styled(FontAwesomeIcon)`
-  vertical-align : bottom;
+  vertical-align : middle;
 `;
 
 const MiddleSpan = styled.span`

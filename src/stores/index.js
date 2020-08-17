@@ -14,6 +14,7 @@ import ComponentPostStore from './component/PostStore';
 import ComponentMailStore from './component/MailStore';
 import ComponentSidebarStore from './component/SidebarStore';
 import ComponentConsultStore from './component/ConsultStore';
+import ComponentCategoryStore from './component/CategoryStore';
 
 import UtilStore from './util/UtilStore';
 import UtilAlertStore from './util/AlertStore';
@@ -54,6 +55,7 @@ class RootStore {
     this.ComponentMailStore = new ComponentMailStore(this);
     this.ComponentSidebarStore = new ComponentSidebarStore(this);
     this.ComponentConsultStore = new ComponentConsultStore(this);
+    this.ComponentCategoryStore = new ComponentCategoryStore(this);
 
     this.UtilStore = new UtilStore(this);
     this.UtilAlertStore = new UtilAlertStore(this);
