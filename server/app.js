@@ -32,6 +32,7 @@ const cookieLatelyApi = require('./routes/cookie/LatelyRouter');
 const eventDailyApi = require('./routes/event/DailyRouter');
 const eventAdvertiseApi = require('./routes/event/AdvertiseRouter');
 const systemCodeApi = require('./routes/system/CodeRouter');
+const systemBoardApi = require('./routes/system/BoardRouter');
 const fileApi = require('./routes/util/FileRouter');
 const consultApi = require('./routes/consult/ConsultRouter');
 
@@ -77,6 +78,7 @@ app.use('/api/event/daily', eventDailyApi);
 app.use('/api/event/advertise', eventAdvertiseApi);
 
 app.use('/api/system/code', systemCodeApi);
+app.use('/api/system/board', systemBoardApi);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => info(`Listening on port ${port}...`));

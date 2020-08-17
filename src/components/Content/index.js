@@ -17,6 +17,8 @@ const Report = lazy(() => import('./Report'));
 const Test = lazy(() => import('./Test'));
 const Posting = lazy(() => import('./Board/Posting'));
 const Consult = lazy(() => import('./Consult'));
+const BoardSetting = lazy(() => import('./BoardSetting'));
+
 export default {
   Board,
   Setting,
@@ -35,4 +37,5 @@ export default {
   Test,
   Posting,
   Consult,
+  BoardSetting,
 };
