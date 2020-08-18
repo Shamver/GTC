@@ -4,7 +4,7 @@ import * as Proptypes from 'prop-types';
 
 const ReportResultList = ({ data }) => {
   const {
-    userId, reason, reportDate, targetName, reportResult, rejectDate, contents, reportId, managerId
+    userId, reason, reportDate, targetName, reportResult, rejectDate, contents, reportId, managerId,
   } = data;
 
   return (
@@ -25,7 +25,8 @@ const ReportResultList = ({ data }) => {
 ReportResultList.propTypes = {
   data: Proptypes.shape({
     reportId: Proptypes.number,
-    userId: Proptypes.string,
+    userId: Proptypes.number,
+    managerId: Proptypes.number,
     reason: Proptypes.string,
     reasonDetail: Proptypes.string,
     contents: Proptypes.string,
