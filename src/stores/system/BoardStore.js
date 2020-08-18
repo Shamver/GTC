@@ -23,6 +23,8 @@ class BoardStore {
     useFl: 1,
   };
 
+  @observable icon = '';
+
   @observable boardList = [];
 
   @observable categoryList = [];

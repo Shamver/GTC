@@ -1,4 +1,4 @@
-import React, { useEffect, memo } from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Container, Row } from 'reactstrap';
 import {
@@ -9,14 +9,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
 import useStores from '../../../stores/useStores';
+import BoardList from './BoardList';
 
 const Category = () => {
   const { UserStore, BoardPostStore } = useStores();
-  const { userData, RouterAuthCheck } = UserStore;
+  const { RouterAuthCheck } = UserStore;
   const { searchOff } = BoardPostStore;
-
-  useEffect(() => {
-  }, [userData]);
 
   return (
     <MainContainer>
@@ -26,6 +24,7 @@ const Category = () => {
             <TopIcon icon={faBars} className="fa-fw" />&nbsp;&nbsp; GTC 전체 메뉴
           </MenuDivTop>
         </MenuRowTop>
+        <BoardList />
         <MenuLink to="/notice" onClick={searchOff} activeClassName="active">
           <MenuDiv>
             <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항

@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useStores from '../../../stores/useStores';
 import CodeOptionList from '../../util/CodeOptionList';
 
@@ -18,7 +19,7 @@ const BoardDetailModal = () => {
   } = SystemBoardStore;
 
   const {
-    id, name, desc, path,
+    id, name, desc, path, icon,
     order, useFl, permissionLevel,
   } = board;
 
@@ -45,6 +46,18 @@ const BoardDetailModal = () => {
             <InputGroupText>경로</InputGroupText>
           </InputGroupAddon>
           <Input placeholder="경로" name="path" onChange={onChangeBoard} value={path} />
+        </InputGroupMb>
+        <InputGroupMb>
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>아이콘</InputGroupText>
+          </InputGroupAddon>
+          <Input placeholder="아이콘" name="icon" onChange={onChangeBoard} value={icon} />
+          <AppendButton addonType="append">
+            <InputGroupText>
+              미리보기 &nbsp;
+              <FontAwesomeIcon icon={icon} />
+            </InputGroupText>
+          </AppendButton>
         </InputGroupMb>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
@@ -88,6 +101,10 @@ const BoardDetailModal = () => {
     </Modal>
   );
 };
+
+const AppendButton = styled(InputGroupAddon)`
+  cursor: pointer;
+`;
 
 const InputGroupMb = styled(InputGroup)`
   margin-bottom: 10px;

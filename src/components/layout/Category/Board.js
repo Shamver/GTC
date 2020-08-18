@@ -1,22 +1,34 @@
 import React, { memo } from 'react';
-import { faFlag } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as Proptypes from 'prop-types';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
 import useStores from '../../../stores/useStores';
+
+library.add(fas);
 
 const Board = ({ data }) => {
   const { BoardPostStore } = useStores();
   const { searchOff } = BoardPostStore;
-
+  const { name, path, icon } = data;
   return (
-    <MenuLink to="/notice" onClick={searchOff} activeClassName="active">
+    <MenuLink to={path} onClick={searchOff} activeClassName="active">
       <MenuDiv>
-        <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
+        <FaiPink icon={icon} />&nbsp;&nbsp; {name}
       </MenuDiv>
     </MenuLink>
   );
+};
+
+Board.propTypes = {
+  data: Proptypes.shape({
+    icon: Proptypes.string,
+    name: Proptypes.string,
+    path: Proptypes.string,
+  }).isRequired,
 };
 
 const MenuLink = styled(NavLink)`
