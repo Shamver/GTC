@@ -11,9 +11,9 @@ import useStores from '../../../stores/useStores';
 const ReportDetail = () => {
   const { BoardReportStore, UserStore } = useStores();
   const { detailBanData } = UserStore;
-  const {
-    tookReason, tookBanTerm, tookDate, suspendBanFl,
-  } = detailBanData;
+  // const {
+  //   tookReason, tookBanTerm, tookDate, suspendBanFl,
+  // } = detailBanData;
   const {
     reportDetailToggle, toggleDetailReport, reportDetailData, reportTakeOn,
     reportReject, onChangeDetailValue, reportTakeOnData, activeTab,
@@ -58,16 +58,16 @@ const ReportDetail = () => {
             <ReportInfoLabel>처리자</ReportInfoLabel>
             <ReportInfoDesc>{managerId}</ReportInfoDesc>
           </ReportInfoRow>
-          {activeTab === 'ReportUser'
+          {activeTab !== 'reportTable'
             ? (
               <>
                 <ReportInfoRow>
                   <ReportInfoLabel>처리 날짜</ReportInfoLabel>
-                  <ReportInfoDesc>{tookDate}</ReportInfoDesc>
+                  <ReportInfoDesc>{detailBanData.tookDate}</ReportInfoDesc>
                 </ReportInfoRow>
                 <ReportInfoRow>
                   <ReportInfoLabel>정지 기간</ReportInfoLabel>
-                  <ReportInfoDesc>{suspendBanFl ? '영구 정지' : `${tookDate} ~ ${tookBanTerm}`}</ReportInfoDesc>
+                  <ReportInfoDesc>{detailBanData.suspendBanFl ? '영구 정지' : `${detailBanData.tookDate} ~ ${detailBanData.tookBanTerm}`}</ReportInfoDesc>
                 </ReportInfoRow>
               </>
             )
@@ -131,7 +131,7 @@ const ReportDetail = () => {
               <ReportInfoRow2>
                 <ReportInfoLabel>정지 사유</ReportInfoLabel>
                 <ReportInfoDesc>
-                  {tookReason}
+                  {detailBanData.tookReason}
                 </ReportInfoDesc>
               </ReportInfoRow2>
             )}

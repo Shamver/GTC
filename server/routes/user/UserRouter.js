@@ -123,7 +123,8 @@ const SELECT_ALL_USER_BANNED = `
     , DATE_FORMAT(B.CRT_DTTM,'%Y-%m-%d') AS banDate
   FROM GTC_USER AS U
   JOIN GTC_USER_BAN AS B
-  ON U.ID = B.USER_ID;
+  ON U.ID = B.USER_ID
+  NOT IN(B.DELETE_FL = 0);
 `;
 
 const SELECT_USER_BANNED = `
@@ -134,7 +135,8 @@ const SELECT_USER_BANNED = `
     , DATE_FORMAT(B.BAN_TERM,'%Y-%m-%d') AS tookBanTerm
     , DATE_FORMAT(B.CRT_DTTM,'%Y-%m-%d') AS tookDate
   FROM GTC_USER_BAN B
-  WHERE USER_ID = :USER_ID;
+  WHERE USER_ID = :USER_ID
+    AND B.DELETE_FL NOT IN(:DELETE_FL);
 `;
 
 const INSERT_USER_BAN = `
@@ -159,13 +161,13 @@ const INSERT_USER_BAN = `
 
 const UPDATE_USER_BAN_FL = `
   UPDATE GTC_USER
-  SET
-    BANNED_FL = :BAN_FL
+  SET BANNED_FL = :BAN_FL
   WHERE ID = :USER_ID
 `;
 
 const UPDATE_USER_BAN_CANCEL = `
-  DELETE FROM GTC_USER_BAN
+  UPDATE GTC_USER_BAN
+  SET DELETE_FL = 1
   WHERE USER_ID = :USER_ID
 `;
 
@@ -222,6 +224,7 @@ router.post('/ban', (req, res) => {
       SELECT_USER_BANNED,
       {
         USER_ID: targetUserId,
+        DELETE_FL: 0,
       },
     )
       .then((rows) => {
@@ -286,6 +289,7 @@ router.get('/ban/detail', (req, res) => {
       SELECT_USER_BANNED,
       {
         USER_ID: userId,
+        DELETE_FL: 2,
       },
     )
       .then((rows) => {

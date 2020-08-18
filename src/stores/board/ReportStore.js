@@ -177,7 +177,7 @@ class ReportStore {
         }
       })
       .then(() => {
-        if (this.activeTab === 'ReportUser') {
+        if (this.activeTab !== 'ReportTable') {
           this.root.UserStore.getBanDetail(this.reportDetailData.targetUserId);
         }
       })

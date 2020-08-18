@@ -1,19 +1,21 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
+import useStores from '../../../stores/useStores';
 
 const ReportResultList = ({ data }) => {
+  const { BoardReportStore } = useStores();
+  const { getDetailReport } = BoardReportStore;
   const {
-    userId, reason, reportDate, targetName, reportResult, rejectDate, contents, reportId, managerId,
+    userId, reason, reportDate, targetName, reportResult, rejectDate, contents, reportId,
   } = data;
 
   return (
-    <tr>
+    <tr onClick={() => getDetailReport(reportId)}>
       <TdCenter>{reportId}</TdCenter>
       <td>{reason}</td>
       <td>{userId}</td>
       <td>{targetName}</td>
-      <td>{managerId}</td>
       <td>{contents}</td>
       <td>{reportDate}</td>
       <td>{rejectDate}</td>
@@ -25,8 +27,7 @@ const ReportResultList = ({ data }) => {
 ReportResultList.propTypes = {
   data: Proptypes.shape({
     reportId: Proptypes.number,
-    userId: Proptypes.number,
-    managerId: Proptypes.number,
+    userId: Proptypes.string,
     reason: Proptypes.string,
     reasonDetail: Proptypes.string,
     contents: Proptypes.string,
