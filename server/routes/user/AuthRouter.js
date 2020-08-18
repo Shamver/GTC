@@ -18,8 +18,9 @@ const SELECT_USER_FROM_TEL_EMAIL = `
     COUNT(*) AS count
   FROM GTC_USER
   WHERE 
-    TEL_NO = ':TEL_NO'
-    OR EMAIL = ':EMAIL'
+    (TEL_NO = ':TEL_NO'
+    OR EMAIL = ':EMAIL')
+    AND DELETE_FL = 0
 `;
 
 const INSERT_NEW_USER = `
@@ -61,7 +62,7 @@ const SELECT_USER_FROM_EMAIL = `
     , PROFILE AS profile
     , BANNED_FL AS banned
   FROM GTC_USER
-  WHERE EMAIL = ':EMAIL'
+  WHERE EMAIL = ':EMAIL' AND DELETE_FL = 0
 `;
 
 const SELECT_USER_BAN_CHECK = `
