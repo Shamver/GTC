@@ -10,6 +10,7 @@ class BoardStore {
     order: '',
     useFl: 1,
     permissionLevel: 0,
+    icon: '',
     desc: '',
   };
 
@@ -23,7 +24,7 @@ class BoardStore {
     useFl: 1,
   };
 
-  @observable icon = '';
+  @observable boardIcon = '';
 
   @observable boardList = [];
 
@@ -383,6 +384,8 @@ class BoardStore {
       order: '',
       useFl: 1,
     };
+
+    this.boardIcon = '';
   }
 
   @action setUseFlagList = (value) => {
@@ -402,6 +405,10 @@ class BoardStore {
       [event.target.name]: event.target.value,
     };
   };
+
+  @action setBoardIcon = () => {
+    this.boardIcon = this.board.icon;
+  }
 }
 
 export default BoardStore;

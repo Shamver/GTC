@@ -14,10 +14,11 @@ const Board = ({ data }) => {
   const { BoardPostStore } = useStores();
   const { searchOff } = BoardPostStore;
   const { name, path, icon } = data;
+
   return (
     <MenuLink to={path} onClick={searchOff} activeClassName="active">
       <MenuDiv>
-        <FaiPink icon={icon} />&nbsp;&nbsp; {name}
+        <FaiPink icon={icon} className="fa-fw" />&nbsp;&nbsp; {name}
       </MenuDiv>
     </MenuLink>
   );

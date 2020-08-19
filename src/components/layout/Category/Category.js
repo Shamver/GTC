@@ -2,8 +2,7 @@ import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Container, Row } from 'reactstrap';
 import {
-  faBars, faFlag, faList, faGlobeAsia, faTshirt, faLock,
-  faComments, faCode, faTasks, faBellSlash, faAt,
+  faBars, faCode, faTasks, faBellSlash, faAt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
@@ -12,9 +11,8 @@ import useStores from '../../../stores/useStores';
 import BoardList from './BoardList';
 
 const Category = () => {
-  const { UserStore, BoardPostStore } = useStores();
+  const { UserStore } = useStores();
   const { RouterAuthCheck } = UserStore;
-  const { searchOff } = BoardPostStore;
 
   return (
     <MainContainer>
@@ -25,36 +23,6 @@ const Category = () => {
           </MenuDivTop>
         </MenuRowTop>
         <BoardList />
-        <MenuLink to="/notice" onClick={searchOff} activeClassName="active">
-          <MenuDiv>
-            <FaiPink icon={faFlag} className="fa-fw" />&nbsp;&nbsp; 공지사항
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink to="/all" onClick={searchOff} activeClassName="active">
-          <MenuDiv>
-            <FaiPink icon={faList} className="fa-fw" />&nbsp;&nbsp; 전체글 보기
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink to="/free" onClick={searchOff} activeClassName="active">
-          <MenuDiv>
-            <FaiPink icon={faGlobeAsia} className="fa-fw" />&nbsp;&nbsp; 자유 게시판
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink to="/trade" onClick={searchOff} activeClassName="active">
-          <MenuDiv>
-            <FaiPink icon={faTshirt} className="fa-fw" />&nbsp;&nbsp; 아이템 거래
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink to="/cash" onClick={searchOff} activeClassName="active">
-          <MenuDiv>
-            <FaiPink icon={faLock} className="fa-fw" />&nbsp;&nbsp; 월드락 거래
-          </MenuDiv>
-        </MenuLink>
-        <MenuLink to="/qna" onClick={searchOff} activeClassName="active">
-          <MenuDiv>
-            <FaiPink icon={faComments} className="fa-fw" />&nbsp;&nbsp; 질문&답변
-          </MenuDiv>
-        </MenuLink>
         <MenuLink to="/consult" activeClassName="active">
           <MenuDiv>
             <FaiPink icon={faAt} className="fa-fw" />&nbsp;&nbsp; 1:1 문의

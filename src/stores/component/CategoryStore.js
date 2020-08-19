@@ -9,8 +9,8 @@ class CategoryStore {
     this.root = root;
   }
 
-  @action getBoardList = async () => {
-    await axios.get('/api/system/board/all')
+  @action getBoardList = () => {
+    axios.get('/api/system/board/use')
       .then((response) => {
         const { data } = response;
         if (data.success) {

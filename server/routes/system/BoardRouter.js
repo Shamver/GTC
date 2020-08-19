@@ -13,6 +13,7 @@ const INSERT_BOARD = `
       , \`ORDER\`
       , USE_FL
       , PERMISSION_LEVEL
+      , ICON
   ) VALUES (
       ':BOARD'
       , ':NAME'
@@ -21,6 +22,7 @@ const INSERT_BOARD = `
       , :ORDER
       , :USE_FL
       , :PERMISSION_LEVEL
+      , ':ICON'
   )
 `;
 
@@ -31,6 +33,7 @@ const SELECT_BOARD = `
     , GB.PATH AS path
     , GB.\`DESC\` AS \`desc\`
     , GB.\`ORDER\` AS \`order\`
+    , GB.ICON AS icon
     , GB.USE_FL AS useFl
     , GB.PERMISSION_LEVEL AS permissionLevel
     , GB.CRT_DTTM AS crtDttm
@@ -45,10 +48,27 @@ const SELECT_BOARD_ALL = `
     , GB.PATH AS path
     , GB.\`DESC\` as \`desc\`
     , GB.\`ORDER\` as \`order\`
+    , GB.ICON AS icon
     , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GB.USE_FL) AS useFl
     , GB.PERMISSION_LEVEL AS permissionLevel
     , GB.CRT_DTTM AS crtDttm
    FROM GTC_BOARD GB
+   ORDER BY GB.\`ORDER\`
+`;
+
+const SELECT_BOARD_USE_FL_Y = `
+  SELECT
+    GB.BOARD AS board
+    , GB.NAME AS name
+    , GB.PATH AS path
+    , GB.\`DESC\` as \`desc\`
+    , GB.\`ORDER\` as \`order\`
+    , GB.ICON AS icon
+    , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GB.USE_FL) AS useFl
+    , GB.PERMISSION_LEVEL AS permissionLevel
+    , GB.CRT_DTTM AS crtDttm
+   FROM GTC_BOARD GB
+   WHERE GB.USE_FL = 1
    ORDER BY GB.\`ORDER\`
 `;
 
@@ -60,6 +80,7 @@ const UPDATE_BOARD = `
     , \`DESC\` = ':DESC'
     , \`ORDER\` = :ORDER
     , USE_FL = :USE_FL
+    , ICON = ':ICON'
     , PERMISSION_LEVEL = :PERMISSION_LEVEL
   WHERE BOARD = ':BOARD'
 `;
@@ -145,7 +166,7 @@ const DELETE_BOARD_CATEGORY = `
 
 router.post('/', (req, res) => {
   const {
-    id, name, desc, path,
+    id, name, desc, path, icon,
     order, useFl, permissionLevel,
   } = req.body;
 
@@ -160,6 +181,7 @@ router.post('/', (req, res) => {
         ORDER: order,
         USE_FL: useFl,
         PERMISSION_LEVEL: permissionLevel,
+        ICON: icon,
       },
     )
       .then(() => {
@@ -210,13 +232,31 @@ router.get('/all', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/system/board] 시스템 게시판 전체 조회');
+    info('[SELECT, GET /api/system/board/all] 시스템 게시판 전체 조회');
+  });
+});
+
+router.get('/use', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_BOARD_USE_FL_Y,
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '게시판 사용 조회 완료',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/system/board/use] 시스템 게시판 사용 조회');
   });
 });
 
 router.put('/', (req, res) => {
   const {
-    id, name, desc, path,
+    id, name, desc, path, icon,
     order, useFl, permissionLevel,
   } = req.body;
   Database.execute(
@@ -230,6 +270,7 @@ router.put('/', (req, res) => {
         ORDER: order,
         USE_FL: useFl,
         PERMISSION_LEVEL: permissionLevel,
+        ICON: icon,
       },
     )
       .then((rows) => {

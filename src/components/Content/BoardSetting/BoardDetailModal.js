@@ -15,7 +15,7 @@ const BoardDetailModal = () => {
     isBoardModalToggle, toggleBoardModal, board, useFlagList,
     permissionLevelList, setPermissionLevelList, setUseFlagList,
     onChangeBoard, addBoard, boardModalMode, modifyBoard,
-    deleteBoard,
+    deleteBoard, boardIcon, setBoardIcon,
   } = SystemBoardStore;
 
   const {
@@ -52,10 +52,10 @@ const BoardDetailModal = () => {
             <InputGroupText>아이콘</InputGroupText>
           </InputGroupAddon>
           <Input placeholder="아이콘" name="icon" onChange={onChangeBoard} value={icon} />
-          <AppendButton addonType="append">
+          <AppendButton addonType="append" onClick={setBoardIcon}>
             <InputGroupText>
-              미리보기 &nbsp;
-              <FontAwesomeIcon icon={icon} />
+              미리보기
+              { !!boardIcon && (<LeftMarginIcon icon={boardIcon} />)}
             </InputGroupText>
           </AppendButton>
         </InputGroupMb>
@@ -101,6 +101,10 @@ const BoardDetailModal = () => {
     </Modal>
   );
 };
+
+const LeftMarginIcon = styled(FontAwesomeIcon)`
+  margin-left: 5px;
+`;
 
 const AppendButton = styled(InputGroupAddon)`
   cursor: pointer;
