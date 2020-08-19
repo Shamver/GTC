@@ -52,6 +52,7 @@ const HeaderNoticeView = () => {
 
 const HeaderBadge = styled(Badge)`
   padding-top: .45em !important;
+  line-height: 14px;
 `;
 
 const Span = styled.span`
@@ -61,6 +62,8 @@ const Span = styled.span`
 const TextContainer = styled(Container)`
   margin : 0 !important;
   text-align : center;
+  line-height: 26px;
+  vertical-align: middle;
   height : 40px !important;
   overflow : hidden;
   text-overflow : ellipsis;
