@@ -19,7 +19,7 @@ const PostRow = ({ data, index, isNotice }) => {
 
   const isImageComponent = isImage
     ? (<FontAwesomeIcon icon={faImage} />)
-    : (<BottomIcon icon={faCommentDots} />);
+    : (<FontAwesomeIcon icon={faCommentDots} />);
   const IsBestPost = recommendCount >= 10 ? (<Star icon={faStar} />) : isImageComponent;
 
   const weight = currentBoardPath === 'all' ? 8 : 9;
@@ -30,7 +30,7 @@ const PostRow = ({ data, index, isNotice }) => {
       <MiddleTd width={37} colSpan={isNotice ? 10 : weight}>
         <MiddleSpan>
           <PostTitle className={isVisited(id) && 'color-gray'} onClick={userData ? () => onClickPost(id) : guestAuthor}>
-            {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
+            {isNotice ? (<FontAwesomeIcon icon={faInfoCircle} />) : IsBestPost}
             &nbsp;
             {title}
           </PostTitle>
@@ -61,10 +61,6 @@ PostRow.propTypes = {
   index: Proptypes.number.isRequired,
   isNotice: Proptypes.bool.isRequired,
 };
-
-const BottomIcon = styled(FontAwesomeIcon)`
-  vertical-align : bottom;
-`;
 
 const MiddleSpan = styled.span`
   display : block;

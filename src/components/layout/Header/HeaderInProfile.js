@@ -120,6 +120,7 @@ const LinkNoDeco = styled(Link)`
 // 나중에 화면단위별로 위치 변경
 const DropdownMenuLeft = styled(DropdownMenu)`
   left: -92px !important;
+  padding-top: .2rem !important;
 `;
 
 const DropdownItem30 = styled(DropdownItem)`

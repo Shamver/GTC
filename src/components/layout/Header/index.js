@@ -252,7 +252,6 @@ const RowNoP = styled(Row)`
 const ColNoP = styled(Col)`
   padding : 0px !important;
   margin : 0px !important;
-  line-height : 40px;
   
   @media (max-width: 1200px) {
       display : none;
