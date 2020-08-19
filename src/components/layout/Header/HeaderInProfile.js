@@ -141,6 +141,9 @@ const DropdownToggleC = styled(DropdownToggle)`
 
 const AvatarDropdownToggleC = styled(DropdownToggleC)`
   padding : 5px 13px 7px 10px !important;
+  &:after {
+    vertical-align: .1em !important;
+  }
 `;
 
 const DropdownItemTitle = styled.div`
