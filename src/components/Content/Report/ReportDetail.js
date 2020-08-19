@@ -54,21 +54,25 @@ const ReportDetail = () => {
               <ReportInfoDesc>{targetUserName}</ReportInfoDesc>
             </Flex1>
           </ReportInfoRow>
-          <ReportInfoRow>
-            <ReportInfoLabel>처리자</ReportInfoLabel>
-            <ReportInfoDesc>{managerId}</ReportInfoDesc>
-          </ReportInfoRow>
           {activeTab !== 'reportTable'
             ? (
               <>
                 <ReportInfoRow>
+                  <ReportInfoLabel>처리자</ReportInfoLabel>
+                  <ReportInfoDesc>{managerId}</ReportInfoDesc>
+                </ReportInfoRow>
+                <ReportInfoRow>
                   <ReportInfoLabel>처리 날짜</ReportInfoLabel>
                   <ReportInfoDesc>{detailBanData.tookDate}</ReportInfoDesc>
                 </ReportInfoRow>
-                <ReportInfoRow>
-                  <ReportInfoLabel>정지 기간</ReportInfoLabel>
-                  <ReportInfoDesc>{detailBanData.suspendBanFl ? '영구 정지' : `${detailBanData.tookDate} ~ ${detailBanData.tookBanTerm}`}</ReportInfoDesc>
-                </ReportInfoRow>
+
+                {activeTab === 'ReportUser'
+                  ? (
+                    <ReportInfoRow>
+                      <ReportInfoLabel>정지 기간</ReportInfoLabel>
+                      <ReportInfoDesc>{detailBanData.suspendBanFl ? '영구 정지' : `${detailBanData.tookDate} ~ ${detailBanData.tookBanTerm}`}</ReportInfoDesc>
+                    </ReportInfoRow>
+                  ) : ''}
               </>
             )
             : ''}
@@ -126,25 +130,25 @@ const ReportDetail = () => {
                     </FormGroup>
                   </ReportInfoDesc>
                 </ReportInfoRow2>
+                <ReportInfoRow>
+                  <ButtonCustom color="danger" size="sm" onClick={() => reportTakeOn(banType)}>
+                    처리
+                  </ButtonCustom>
+                  <ButtonCustom color="secondary" size="sm" onClick={() => reportReject(reportId)}>
+                    반려
+                  </ButtonCustom>
+                </ReportInfoRow>
               </>
-            ) : (
+            ) : ''}
+
+          {activeTab === 'ReportUser'
+            ? (
               <ReportInfoRow2>
                 <ReportInfoLabel>정지 사유</ReportInfoLabel>
                 <ReportInfoDesc>
                   {detailBanData.tookReason}
                 </ReportInfoDesc>
               </ReportInfoRow2>
-            )}
-          { activeTab === 'reportTable'
-            ? (
-              <ReportInfoRow>
-                <ButtonCustom color="danger" size="sm" onClick={() => reportTakeOn(banType)}>
-                  처리
-                </ButtonCustom>
-                <ButtonCustom color="secondary" size="sm" onClick={() => reportReject(reportId)}>
-                  반려
-                </ButtonCustom>
-              </ReportInfoRow>
             ) : ''}
         </ReportInfoWrap>
       </ModalBodyBox>

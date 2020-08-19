@@ -157,6 +157,33 @@ class ReportStore {
     };
   }
 
+  @action getReportList = async (reportId) => {
+    await axios.get('/api/board/report/list', {
+      params: {
+        reportId,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            console.log(data.result);
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  }
+
+  @action getReportResult
+
+  @action getReportUserBanned
+
   @action getDetailReport = async (reportId) => {
     await axios.get('/api/board/Report/detail', {
       params: {

@@ -77,7 +77,7 @@ const INSERT_REPORT = `
   )
 `;
 
-const SELECT_DEATAIL_REPORT = `
+const SELECT_DETAIL_REPORT = `
  SELECT R.ID AS reportId
     , R.TYPE_CD AS typeCode
     , R.TARGET_ID AS targetContentsId
@@ -200,7 +200,7 @@ router.get('/detail', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_DEATAIL_REPORT,
+      SELECT_DETAIL_REPORT,
       {
         REPORT_ID: reportId,
       },

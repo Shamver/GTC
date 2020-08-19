@@ -10,7 +10,7 @@ const ReportUser = () => {
   const { loadingProcess } = UtilLoadingStore;
   const { getUserBanned, banUserList } = UserStore;
   const BanUserList = banUserList.map(
-    (v, index) => (<ReportUserList data={v} key={v.userId} index={index} />),
+    (v, index) => (<ReportUserList data={v} key={v.reportId} index={index} />),
   );
 
   useEffect(() => {
