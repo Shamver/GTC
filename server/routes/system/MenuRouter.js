@@ -4,9 +4,9 @@ const router = express.Router();
 const { info } = require('../../log-config');
 const Database = require('../../Database');
 
-const INSERT_BOARD = `
-  INSERT INTO GTC_BOARD (
-      BOARD
+const INSERT_MENU = `
+  INSERT INTO GTC_MENU (
+      ID,
       , NAME
       , PATH
       , \`DESC\`
@@ -15,7 +15,7 @@ const INSERT_BOARD = `
       , PERMISSION_LEVEL
       , ICON
   ) VALUES (
-      ':BOARD'
+      ':MENU_ID'
       , ':NAME'
       , ':PATH'
       , ':DESC'
@@ -26,9 +26,9 @@ const INSERT_BOARD = `
   )
 `;
 
-const SELECT_BOARD = `
+const SELECT_MENU = `
   SELECT
-    GB.BOARD AS id
+    GB.ID AS id
     , GB.NAME AS name
     , GB.PATH AS path
     , GB.\`DESC\` AS \`desc\`
@@ -37,8 +37,8 @@ const SELECT_BOARD = `
     , GB.USE_FL AS useFl
     , GB.PERMISSION_LEVEL AS permissionLevel
     , GB.CRT_DTTM AS crtDttm
-   FROM GTC_BOARD GB
-   WHERE GB.BOARD = ':BOARD'
+   FROM GTC_MENU GB
+   WHERE GB.MENU = ':MENU_ID'
 `;
 
 const SELECT_BOARD_ALL = `

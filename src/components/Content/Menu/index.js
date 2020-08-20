@@ -5,10 +5,10 @@ import styled from 'styled-components';
 import { Button, Table } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
-import BoardDetailModal from './BoardDetailModal';
-import CategoryDetailModal from './CategoryDetailModal';
-import BoardList from './BoardList';
-import CategoryList from './CategoryList';
+import BoardDetailModal from './MenuDetailModal';
+import CategoryDetailModal from './MenuCategoryDetailModal';
+import BoardList from './MenuList';
+import CategoryList from './MenuCategoryList';
 
 
 const BoardSetting = () => {

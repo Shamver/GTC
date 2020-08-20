@@ -6,7 +6,7 @@ import { Button } from 'reactstrap';
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 
-const Board = ({ data }) => {
+const Menu = ({ data }) => {
   const { SystemBoardStore } = useStores();
   const { getBoard, getCategoryList } = SystemBoardStore;
   const {
@@ -27,7 +27,7 @@ const Board = ({ data }) => {
   );
 };
 
-Board.propTypes = {
+Menu.propTypes = {
   data: Proptypes.shape({
     board: Proptypes.string,
     name: Proptypes.string,
@@ -40,4 +40,4 @@ const DetailIcon = styled(FontAwesomeIcon)`
   vertical-align: text-top;
 `;
 
-export default memo(Board);
+export default memo(Menu);

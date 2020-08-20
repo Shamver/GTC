@@ -26,7 +26,6 @@ ReactDOM.render((
     ComponentMailStore={stores.ComponentMailStore}
     ComponentSidebarStore={stores.ComponentSidebarStore}
     ComponentConsultStore={stores.ComponentConsultStore}
-    ComponentCategory={stores.ComponentCategoryStore}
 
     UtilStore={stores.UtilStore}
     UtilRouteStore={stores.UtilRouteStore}
@@ -47,7 +46,7 @@ ReactDOM.render((
     EventAdvertiseStore={stores.EventAdvertiseStore}
 
     SystemCodeStore={stores.SystemCodeStore}
-    SystemBoardStore={stores.SystemBoardStore}
+    SystemMenuStore={stores.SystemMenuStore}
   >
     <Router>
       <Route component={App} />

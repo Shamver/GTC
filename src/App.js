@@ -5,10 +5,10 @@ import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import Header from './components/layout/Header';
 import Content from './components/layout/Content';
-import Category from './components/layout/Category/Category';
 import useStores from './stores/useStores';
 import CustomSidebar from './components/layout/Sidebar';
 import Footer from './components/layout/Footer';
+import Menu from './components/layout/Menu';
 
 const App = ({ history }) => {
   const { UtilRouteStore, UserStore } = useStores();
@@ -28,7 +28,7 @@ const App = ({ history }) => {
               <Header />
               <UnderSection>
                 <P5Col>
-                  <Category />
+                  <Menu />
                 </P5Col>
                 <P5Col2>
                   <Content />

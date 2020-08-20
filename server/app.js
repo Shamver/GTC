@@ -32,7 +32,7 @@ const cookieLatelyApi = require('./routes/cookie/LatelyRouter');
 const eventDailyApi = require('./routes/event/DailyRouter');
 const eventAdvertiseApi = require('./routes/event/AdvertiseRouter');
 const systemCodeApi = require('./routes/system/CodeRouter');
-const systemBoardApi = require('./routes/system/BoardRouter');
+const systemBoardApi = require('./routes/system/MenuRouter');
 const fileApi = require('./routes/util/FileRouter');
 const consultApi = require('./routes/consult/ConsultRouter');
 

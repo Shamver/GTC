@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 import CodeOptionList from '../../util/CodeOptionList';
 
-const CategoryDetailModal = () => {
+const MenuCategoryDetailModal = () => {
   const { SystemBoardStore } = useStores();
   const {
     isCategoryModalToggle, toggleCategoryModal, category, useFlagList,
@@ -95,4 +95,4 @@ const ModalHeaderBack = styled(ModalHeader)`
 `;
 
 
-export default memo(observer(CategoryDetailModal));
+export default memo(observer(MenuCategoryDetailModal));

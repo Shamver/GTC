@@ -10,7 +10,7 @@ import useStores from '../../../stores/useStores';
 
 library.add(fas);
 
-const Board = ({ data }) => {
+const MenuRow = ({ data }) => {
   const { BoardPostStore } = useStores();
   const { searchOff } = BoardPostStore;
   const { name, path, icon } = data;
@@ -24,7 +24,7 @@ const Board = ({ data }) => {
   );
 };
 
-Board.propTypes = {
+MenuRow.propTypes = {
   data: Proptypes.shape({
     icon: Proptypes.string,
     name: Proptypes.string,
@@ -60,4 +60,4 @@ const FaiPink = styled(FontAwesomeIcon)`
   color: #f57c73;
 `;
 
-export default memo(observer(Board));
+export default memo(observer(MenuRow));

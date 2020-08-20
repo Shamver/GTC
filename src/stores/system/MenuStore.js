@@ -2,8 +2,8 @@ import { action, observable } from 'mobx';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-class BoardStore {
-  @observable board = {
+class MenuStore {
+  @observable menu = {
     id: '',
     name: '',
     path: '',
@@ -24,9 +24,9 @@ class BoardStore {
     useFl: 1,
   };
 
-  @observable boardIcon = '';
+  @observable menuIcon = '';
 
-  @observable boardList = [];
+  @observable menuList = [];
 
   @observable categoryList = [];
 
@@ -34,9 +34,9 @@ class BoardStore {
 
   @observable useFlagList = [];
 
-  @observable isBoardModalToggle = false;
+  @observable isMenuModalToggle = false;
 
-  @observable boardModalMode = '';
+  @observable menuModalMode = '';
 
   @observable isCategoryModalToggle = false;
 
@@ -46,13 +46,13 @@ class BoardStore {
     this.root = root;
   }
 
-  @action getBoardList = async () => {
-    await axios.get('/api/system/board/all')
+  @action getMenuList = async () => {
+    await axios.get('/api/system/menu/all')
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            this.boardList = data.result;
+            this.menuList = data.result;
           } else {
             toast.info(data.message);
           }
@@ -65,19 +65,19 @@ class BoardStore {
     return true;
   };
 
-  @action addBoard = () => {
+  @action addMenu = () => {
     if (!this.boardValidationCheck()) {
       return false;
     }
 
-    axios.post('/api/system/board', this.board)
+    axios.post('/api/system/menu', this.board)
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.getBoardList().then();
-            this.toggleBoardModal('');
+            this.getMenuList().then();
+            this.toggleMenuModal('');
           } else {
             toast.info(data.message);
           }
@@ -90,19 +90,19 @@ class BoardStore {
     return true;
   };
 
-  @action getBoard = (board, event) => {
+  @action getMenu = (menu, event) => {
     event.stopPropagation();
-    axios.get('/api/system/board', {
+    axios.get('/api/system/menu', {
       params: {
-        board,
+        menu,
       },
     })
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            this.board = data.result;
-            this.toggleBoardModal('modify');
+            this.menu = data.result;
+            this.toggleMenuModal('modify');
           } else {
             toast.info(data.message);
           }
@@ -113,15 +113,15 @@ class BoardStore {
       .catch((response) => { toast.error(response.message); });
   };
 
-  @action modifyBoard = () => {
-    axios.put('/api/system/board', this.board)
+  @action modifyMenu = () => {
+    axios.put('/api/system/menu', this.menu)
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.getBoardList().then();
-            this.toggleBoardModal('');
+            this.getMenuList().then();
+            this.toggleMenuModal('');
           } else {
             toast.info(data.message);
           }
@@ -134,7 +134,7 @@ class BoardStore {
     return true;
   };
 
-  @action deleteBoard = () => {
+  @action deleteMenu = () => {
     axios.delete('/api/system/board', {
       params: {
         board: this.board.id,
@@ -411,4 +411,4 @@ class BoardStore {
   }
 }
 
-export default BoardStore;
+export default MenuStore;

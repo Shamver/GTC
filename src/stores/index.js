@@ -14,7 +14,6 @@ import ComponentPostStore from './component/PostStore';
 import ComponentMailStore from './component/MailStore';
 import ComponentSidebarStore from './component/SidebarStore';
 import ComponentConsultStore from './component/ConsultStore';
-import ComponentCategoryStore from './component/CategoryStore';
 
 import UtilStore from './util/UtilStore';
 import UtilAlertStore from './util/AlertStore';
@@ -35,7 +34,7 @@ import EventDailyStore from './event/DailyStore';
 import EventAdvertiseStore from './event/AdvertiseStore';
 
 import SystemCodeStore from './system/CodeStore';
-import SystemBoardStore from './system/BoardStore';
+import SystemMenuStore from './system/MenuStore';
 
 class RootStore {
   constructor() {
@@ -55,7 +54,6 @@ class RootStore {
     this.ComponentMailStore = new ComponentMailStore(this);
     this.ComponentSidebarStore = new ComponentSidebarStore(this);
     this.ComponentConsultStore = new ComponentConsultStore(this);
-    this.ComponentCategoryStore = new ComponentCategoryStore(this);
 
     this.UtilStore = new UtilStore(this);
     this.UtilAlertStore = new UtilAlertStore(this);
@@ -76,7 +74,7 @@ class RootStore {
     this.EventAdvertiseStore = new EventAdvertiseStore(this);
 
     this.SystemCodeStore = new SystemCodeStore(this);
-    this.SystemBoardStore = new SystemBoardStore(this);
+    this.SystemMenuStore = new SystemMenuStore(this);
   }
 }
 

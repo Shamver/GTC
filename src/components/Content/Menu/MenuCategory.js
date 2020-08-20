@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 
-const Category = ({ data }) => {
+const MenuCategory = ({ data }) => {
   const { SystemBoardStore } = useStores();
   const { getCategory } = SystemBoardStore;
   const {
@@ -18,7 +18,7 @@ const Category = ({ data }) => {
   );
 };
 
-Category.propTypes = {
+MenuCategory.propTypes = {
   data: Proptypes.shape({
     board: Proptypes.string,
     id: Proptypes.string,
@@ -28,4 +28,4 @@ Category.propTypes = {
   }).isRequired,
 };
 
-export default memo(Category);
+export default memo(MenuCategory);

@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useStores from '../../../stores/useStores';
 import CodeOptionList from '../../util/CodeOptionList';
 
-const BoardDetailModal = () => {
+const MenuDetailModal = () => {
   const { SystemBoardStore } = useStores();
   const {
     isBoardModalToggle, toggleBoardModal, board, useFlagList,
@@ -119,4 +119,4 @@ const ModalHeaderBack = styled(ModalHeader)`
 `;
 
 
-export default memo(observer(BoardDetailModal));
+export default memo(observer(MenuDetailModal));

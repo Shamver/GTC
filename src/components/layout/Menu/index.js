@@ -8,9 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { observer } from 'mobx-react';
 import { NavLink } from 'react-router-dom';
 import useStores from '../../../stores/useStores';
-import BoardList from './BoardList';
+import BoardList from './MenuList';
 
-const Category = () => {
+const Menu = () => {
   const { UserStore } = useStores();
   const { RouterAuthCheck } = UserStore;
 
@@ -148,4 +148,4 @@ const TopIcon = styled(FontAwesomeIcon)`
 `;
 
 
-export default memo(observer(Category));
+export default memo(observer(Menu));
