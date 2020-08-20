@@ -105,7 +105,14 @@ const SELECT_DETAIL_REPORT = `
     , R.REASON_DESC AS reasonDetail
     , DATE_FORMAT(R.CRT_DTTM, '%Y-%m-%d') AS reportDate
     , (SELECT NICKNAME FROM GTC_USER WHERE ID = R.MANAGER_ID) AS managerId
+    , U.SUSPEND_BAN_FL AS suspendBanFl
+    , U.TEMP_BAN_FL AS tempBanFl
+    , U.BAN_REASON AS tookReason
+    , DATE_FORMAT(U.BAN_TERM,'%Y-%m-%d') AS tookBanTerm
+    , DATE_FORMAT(U.CRT_DTTM,'%Y-%m-%d') AS tookDate
   FROM GTC_REPORT R
+  LEFT JOIN GTC_USER_BAN U
+  ON U.REPORT_ID = R.ID
   WHERE R.ID = :REPORT_ID
 `;
 

@@ -9,11 +9,7 @@ import renderHTML from 'react-render-html';
 import useStores from '../../../stores/useStores';
 
 const ReportDetail = () => {
-  const { BoardReportStore, UserStore } = useStores();
-  const { detailBanData } = UserStore;
-  // const {
-  //   tookReason, tookBanTerm, tookDate, suspendBanFl,
-  // } = detailBanData;
+  const { BoardReportStore } = useStores();
   const {
     reportDetailToggle, toggleDetailReport, reportDetailData, reportTakeOn,
     reportReject, onChangeDetailValue, reportTakeOnData, activeTab,
@@ -22,6 +18,7 @@ const ReportDetail = () => {
   const {
     reportId, reportDate, userId, reason, reasonDetail, targetContentsLink,
     targetContents, typeCode, targetContentsId, targetUserName, managerId,
+    tookReason, tookBanTerm, tookDate, suspendBanFl,
   } = reportDetailData;
   const ContentText = typeCode === 'RT02' ? renderHTML(`${targetContents}`) : targetContents;
 
@@ -63,14 +60,14 @@ const ReportDetail = () => {
                 </ReportInfoRow>
                 <ReportInfoRow>
                   <ReportInfoLabel>처리 날짜</ReportInfoLabel>
-                  <ReportInfoDesc>{detailBanData.tookDate}</ReportInfoDesc>
+                  <ReportInfoDesc>{tookDate}</ReportInfoDesc>
                 </ReportInfoRow>
 
                 {activeTab === 'ReportUser'
                   ? (
                     <ReportInfoRow>
                       <ReportInfoLabel>정지 기간</ReportInfoLabel>
-                      <ReportInfoDesc>{detailBanData.suspendBanFl ? '영구 정지' : `${detailBanData.tookDate} ~ ${detailBanData.tookBanTerm}`}</ReportInfoDesc>
+                      <ReportInfoDesc>{suspendBanFl ? '영구 정지' : `${tookDate} ~ ${tookBanTerm}`}</ReportInfoDesc>
                     </ReportInfoRow>
                   ) : ''}
               </>
@@ -146,7 +143,7 @@ const ReportDetail = () => {
               <ReportInfoRow2>
                 <ReportInfoLabel>정지 사유</ReportInfoLabel>
                 <ReportInfoDesc>
-                  {detailBanData.tookReason}
+                  {tookReason}
                 </ReportInfoDesc>
               </ReportInfoRow2>
             ) : ''}

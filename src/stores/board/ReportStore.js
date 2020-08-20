@@ -157,17 +157,17 @@ class ReportStore {
     };
   }
 
-  @action getReportList = async (reportId) => {
-    await axios.get('/api/board/report/list', {
+  @action getReportList = async () => {
+    await axios.get('/api/board/Report', {
       params: {
-        reportId,
+        tab: this.activeTab,
       },
     })
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            console.log(data.result);
+            this.reportDataList = data.result;
           } else {
             toast.info(data.message);
           }
@@ -178,13 +178,17 @@ class ReportStore {
       .catch((response) => { toast.error(response.message); });
 
     return true;
-  }
-
-  @action getReportResult
-
-  @action getReportUserBanned
+  };
 
   @action getDetailReport = async (reportId) => {
+    // if (this.activeTab === 'ReportTable') {
+    //   this.getReportListDetail(reportId);
+    // } else if (this.activeTab === 'ReportResult') {
+    //   this.getReportResultDetail();
+    // } else {
+    //   this.getReportUserDetail();
+    // }
+    console.log("Asd");
     await axios.get('/api/board/Report/detail', {
       params: {
         reportId,
@@ -214,17 +218,18 @@ class ReportStore {
     return true;
   }
 
-  @action getReportList = async () => {
-    await axios.get('/api/board/Report', {
+  @action getReportListDetail = async (reportId) => {
+    await axios.get('/api/board/Report/detail', {
       params: {
-        tab: this.activeTab,
+        reportId,
       },
     })
       .then((response) => {
         const { data } = response;
+        const { result } = data;
         if (data.success) {
           if (data.code === 1) {
-            this.reportDataList = data.result;
+            this.reportDetailData = result;
           } else {
             toast.info(data.message);
           }
@@ -232,10 +237,16 @@ class ReportStore {
           toast.error(data.message);
         }
       })
+      .then(() => {
+        if (this.activeTab !== 'ReportTable') {
+          this.root.UserStore.getBanDetail(this.reportDetailData.targetUserId);
+        }
+      })
+      .then(() => { this.toggleDetailReport(); })
       .catch((response) => { toast.error(response.message); });
 
     return true;
-  };
+  }
 
   @action reportTakeOn = (type) => {
     const { reportId, targetUserId, reason } = this.reportDetailData;
