@@ -5,11 +5,11 @@ import useStores from '../../../stores/useStores';
 import Board from './Menu';
 
 const MenuList = () => {
-  const { SystemBoardStore } = useStores();
-  const { boardList } = SystemBoardStore;
+  const { SystemMenuStore } = useStores();
+  const { menuList } = SystemMenuStore;
 
-  return boardList.length ? boardList.map(
-    (data) => <Board data={data} key={data.board} />,
+  return menuList.length ? menuList.map(
+    (data) => <Board data={data} key={data.id} />,
   ) : (<tr><CenterTd colSpan={4}>게시판이 존재하지 않습니다.</CenterTd></tr>);
 };
 

@@ -55,9 +55,9 @@ const Menu = () => {
           </MenuLink>
         )}
         { RouterAuthCheck(3) && (
-          <MenuLink to="/boardsetting" activeClassName="active">
+          <MenuLink to="/menu" activeClassName="active">
             <MenuDiv>
-              <FaiPink icon={faTasks} className="fa-fw" />&nbsp;&nbsp; 게시판 관리
+              <FaiPink icon={faTasks} className="fa-fw" />&nbsp;&nbsp; 메뉴 관리
             </MenuDiv>
           </MenuLink>
         )}

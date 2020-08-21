@@ -12,13 +12,13 @@ import CategoryList from './MenuCategoryList';
 
 
 const BoardSetting = () => {
-  const { UtilLoadingStore, SystemBoardStore } = useStores();
-  const { toggleBoardModal, toggleCategoryModal, getBoardList } = SystemBoardStore;
+  const { UtilLoadingStore, SystemMenuStore } = useStores();
+  const { toggleMenuModal, toggleCategoryModal, getMenuList } = SystemMenuStore;
   const { loadingProcess } = UtilLoadingStore;
 
   useLayoutEffect(() => {
     loadingProcess([
-      getBoardList,
+      getMenuList,
     ]);
   });
 
@@ -29,7 +29,7 @@ const BoardSetting = () => {
         <CodeTableWrapper>
           <CodeCol>
             <PaddedDiv>
-              <RightButton size="sm" color="danger" onClick={() => toggleBoardModal('add')}>
+              <RightButton size="sm" color="danger" onClick={() => toggleMenuModal('add')}>
                 <FontAwesomeIcon icon={faPlus} />
                 &nbsp;
                 게시판 추가

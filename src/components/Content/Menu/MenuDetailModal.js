@@ -10,52 +10,60 @@ import useStores from '../../../stores/useStores';
 import CodeOptionList from '../../util/CodeOptionList';
 
 const MenuDetailModal = () => {
-  const { SystemBoardStore } = useStores();
+  const { SystemMenuStore } = useStores();
   const {
-    isBoardModalToggle, toggleBoardModal, board, useFlagList,
+    isMenuModalToggle, toggleMenuModal, menu, useFlagList,
     permissionLevelList, setPermissionLevelList, setUseFlagList,
-    onChangeBoard, addBoard, boardModalMode, modifyBoard,
-    deleteBoard, boardIcon, setBoardIcon,
-  } = SystemBoardStore;
+    onChangeMenu, addMenu, menuModalMode, modifyMenu,
+    deleteMenu, menuIcon, setMenuIcon,
+  } = SystemMenuStore;
 
   const {
-    id, name, desc, path, icon,
+    id, desc, path, icon,
     order, useFl, permissionLevel,
-  } = board;
+  } = menu;
 
   return (
-    <Modal isOpen={isBoardModalToggle} toggle={toggleBoardModal}>
-      <ModalHeaderBack toggle={toggleBoardModal}>
-        {boardModalMode === 'modify' ? '게시판 상세' : '게시판 추가'}
+    <Modal isOpen={isMenuModalToggle} toggle={toggleMenuModal}>
+      <ModalHeaderBack toggle={toggleMenuModal}>
+        {menuModalMode === 'modify' ? '게시판 상세' : '게시판 추가'}
       </ModalHeaderBack>
       <ModalBody>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
             <InputGroupText>ID</InputGroupText>
           </InputGroupAddon>
-          <Input placeholder="ID" name="id" onChange={onChangeBoard} value={id} disabled={boardModalMode === 'modify'} />
+          <Input placeholder="ID" name="id" onChange={onChangeMenu} value={id} disabled={menuModalMode === 'modify'} />
         </InputGroupMb>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
             <InputGroupText>이름</InputGroupText>
           </InputGroupAddon>
-          <Input placeholder="이름" name="name" onChange={onChangeBoard} value={name} />
+          <Input placeholder="이름" name="name" onChange={onChangeMenu} value={name} />
         </InputGroupMb>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
             <InputGroupText>경로</InputGroupText>
           </InputGroupAddon>
-          <Input placeholder="경로" name="path" onChange={onChangeBoard} value={path} />
+          <Input placeholder="경로" name="path" onChange={onChangeMenu} value={path} />
+        </InputGroupMb>
+        <InputGroupMb>
+          <InputGroupAddon addonType="prepend">
+            <InputGroupText>종류</InputGroupText>
+          </InputGroupAddon>
+          <Input type="select" name="useFl" onChange={onChangeMenu} value={useFl}>
+            <CodeOptionList codeGroup="YN_FLAG" array={useFlagList} setArrayMethod={setUseFlagList} />
+          </Input>
         </InputGroupMb>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
             <InputGroupText>아이콘</InputGroupText>
           </InputGroupAddon>
-          <Input placeholder="아이콘" name="icon" onChange={onChangeBoard} value={icon} />
-          <AppendButton addonType="append" onClick={setBoardIcon}>
+          <Input placeholder="아이콘" name="icon" onChange={onChangeMenu} value={icon} />
+          <AppendButton addonType="append" onClick={setMenuIcon}>
             <InputGroupText>
               미리보기
-              { !!boardIcon && (<LeftMarginIcon icon={boardIcon} />)}
+              { !!menuIcon && (<LeftMarginIcon icon={menuIcon} />)}
             </InputGroupText>
           </AppendButton>
         </InputGroupMb>
@@ -63,13 +71,13 @@ const MenuDetailModal = () => {
           <InputGroupAddon addonType="prepend">
             <InputGroupText>순서</InputGroupText>
           </InputGroupAddon>
-          <Input placeholder="순서" name="order" onChange={onChangeBoard} value={order} />
+          <Input placeholder="순서" name="order" onChange={onChangeMenu} value={order} />
         </InputGroupMb>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
             <InputGroupText>사용 여부</InputGroupText>
           </InputGroupAddon>
-          <Input type="select" placeholder="사용 여부" name="useFl" onChange={onChangeBoard} value={useFl}>
+          <Input type="select" name="useFl" onChange={onChangeMenu} value={useFl}>
             <CodeOptionList codeGroup="YN_FLAG" array={useFlagList} setArrayMethod={setUseFlagList} />
           </Input>
         </InputGroupMb>
@@ -77,7 +85,7 @@ const MenuDetailModal = () => {
           <InputGroupAddon addonType="prepend">
             <InputGroupText>권한 레벨</InputGroupText>
           </InputGroupAddon>
-          <Input type="select" placeholder="권한 레벨" name="permissionLevel" onChange={onChangeBoard} value={permissionLevel}>
+          <Input type="select" placeholder="권한 레벨" name="permissionLevel" onChange={onChangeMenu} value={permissionLevel}>
             <CodeOptionList codeGroup="PERMISSION_LEVEL" array={permissionLevelList} setArrayMethod={setPermissionLevelList} />
           </Input>
         </InputGroupMb>
@@ -85,18 +93,18 @@ const MenuDetailModal = () => {
           <InputGroupAddon addonType="prepend">
             <InputGroupText>설명</InputGroupText>
           </InputGroupAddon>
-          <Input placeholder="설명" name="desc" onChange={onChangeBoard} value={desc} />
+          <Input placeholder="설명" name="desc" onChange={onChangeMenu} value={desc} />
         </InputGroupMb>
       </ModalBody>
       <ModalFooter>
-        {boardModalMode === 'modify'
+        {menuModalMode === 'modify'
           ? (
             <>
-              <Button color="danger" onClick={modifyBoard}>수정</Button>{' '}
-              <Button color="warning" onClick={deleteBoard}>삭제</Button>{' '}
+              <Button color="danger" onClick={modifyMenu}>수정</Button>{' '}
+              <Button color="warning" onClick={deleteMenu}>삭제</Button>{' '}
             </>
-          ) : (<Button color="danger" onClick={addBoard}>추가</Button>)}
-        <Button color="secondary" onClick={toggleBoardModal}>취소</Button>
+          ) : (<Button color="danger" onClick={addMenu}>추가</Button>)}
+        <Button color="secondary" onClick={toggleMenuModal}>취소</Button>
       </ModalFooter>
     </Modal>
   );

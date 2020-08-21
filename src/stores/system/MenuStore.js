@@ -16,7 +16,7 @@ class MenuStore {
 
   @observable category = {
     id: '',
-    board: '',
+    category: '',
     name: '',
     path: '',
     desc: '',
@@ -66,11 +66,11 @@ class MenuStore {
   };
 
   @action addMenu = () => {
-    if (!this.boardValidationCheck()) {
+    if (!this.menuValidationCheck()) {
       return false;
     }
 
-    axios.post('/api/system/menu', this.board)
+    axios.post('/api/system/menu', this.menu)
       .then((response) => {
         const { data } = response;
         if (data.success) {
@@ -135,7 +135,7 @@ class MenuStore {
   };
 
   @action deleteMenu = () => {
-    axios.delete('/api/system/board', {
+    axios.delete('/api/system/menu', {
       params: {
         board: this.board.id,
       },
@@ -165,13 +165,13 @@ class MenuStore {
     if (!this.categoryValidationCheck()) {
       return false;
     }
-    axios.post('/api/system/board/category', this.category)
+    axios.post('/api/system/menu/category', this.category)
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.getCategoryList(this.category.board);
+            this.getCategoryList(this.category.menu);
             this.toggleCategoryModal('');
           } else {
             toast.info(data.message);
@@ -185,10 +185,10 @@ class MenuStore {
     return true;
   };
 
-  @action getCategoryList = (board) => {
-    axios.get('/api/system/board/category/all', {
+  @action getCategoryList = (menu) => {
+    axios.get('/api/system/menu/category/all', {
       params: {
-        board,
+        menu,
       },
     })
       .then((response) => {
@@ -196,7 +196,7 @@ class MenuStore {
         if (data.success) {
           if (data.code === 1) {
             this.categoryList = data.result;
-            this.category.board = board;
+            this.category.menu = menu;
           } else {
             toast.info(data.message);
           }
@@ -209,10 +209,10 @@ class MenuStore {
     return true;
   };
 
-  @action getCategory = (board, category) => {
-    axios.get('/api/system/board/category', {
+  @action getCategory = (menu, category) => {
+    axios.get('/api/system/menu/category', {
       params: {
-        board,
+        menu,
         category,
       },
     })
@@ -233,13 +233,13 @@ class MenuStore {
   };
 
   @action modifyCategory = () => {
-    axios.put('/api/system/board/category', this.category)
+    axios.put('/api/system/menu/category', this.category)
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.getCategoryList(this.category.board);
+            this.getCategoryList(this.category.menu);
             this.toggleCategoryModal('');
           } else {
             toast.info(data.message);
@@ -254,7 +254,7 @@ class MenuStore {
   };
 
   @action deleteCategory = () => {
-    axios.delete('/api/system/board/category', {
+    axios.delete('/api/system/menu/category', {
       params: {
         category: this.category.id,
         board: this.category.board,
@@ -279,27 +279,27 @@ class MenuStore {
     return true;
   };
 
-  @action boardValidationCheck = () => {
+  @action menuValidationCheck = () => {
     // id
-    if (!this.board.id.trim()) {
+    if (!this.menu.id.trim()) {
       toast.error('게시판을 입력해주세요.');
       return false;
     }
 
     // name
-    if (!this.board.name.trim()) {
+    if (!this.menu.name.trim()) {
       toast.error('이름을 입력해주세요.');
       return false;
     }
 
     // path
-    if (!this.board.path.trim()) {
+    if (!this.menu.path.trim()) {
       toast.error('경로를 입력해주세요.');
       return false;
     }
 
     // order
-    if (!this.board.order.trim()) {
+    if (!this.menu.order.trim()) {
       toast.error('순서를 제대로 입력해주세요.');
       return false;
     }
@@ -339,7 +339,7 @@ class MenuStore {
     this.permissionLevelList = value;
   };
 
-  @action toggleBoardModal = (mode) => {
+  @action toggleMenuModal = (mode) => {
     if (mode === 'add') {
       this.clearBoard();
     }
@@ -362,8 +362,8 @@ class MenuStore {
     return true;
   }
 
-  @action clearBoard = () => {
-    this.board = {
+  @action clearMenu = () => {
+    this.menu = {
       id: '',
       name: '',
       path: '',
@@ -385,16 +385,16 @@ class MenuStore {
       useFl: 1,
     };
 
-    this.boardIcon = '';
+    this.menuIcon = '';
   }
 
   @action setUseFlagList = (value) => {
     this.useFlagList = value;
   }
 
-  @action onChangeBoard = (event) => {
-    this.board = {
-      ...this.board,
+  @action onChangeMenu = (event) => {
+    this.menu = {
+      ...this.menu,
       [event.target.name]: event.target.value,
     };
   };
@@ -406,8 +406,8 @@ class MenuStore {
     };
   };
 
-  @action setBoardIcon = () => {
-    this.boardIcon = this.board.icon;
+  @action setMenuIcon = () => {
+    this.menuIcon = this.menu.icon;
   }
 }
 

@@ -65,7 +65,6 @@ class BoardStore {
   };
 
 
-
   @observable tempData = [];
 
   @observable currentBoardPath = '';

@@ -5,8 +5,8 @@ import useStores from '../../../stores/useStores';
 import Category from './MenuCategory';
 
 const BoardList = () => {
-  const { SystemBoardStore } = useStores();
-  const { categoryList } = SystemBoardStore;
+  const { SystemMenuStore } = useStores();
+  const { categoryList } = SystemMenuStore;
 
   return categoryList.length ? categoryList.map(
     (data) => <Category data={data} key={data.id} />,

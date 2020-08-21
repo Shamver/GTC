@@ -1,7 +1,7 @@
 import React, { memo, useLayoutEffect } from 'react';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
-import Board from './MenuRow';
+import Menu from './MenuRow';
 
 const MenuList = () => {
   const { SystemMenuStore, UserStore } = useStores();
@@ -12,7 +12,7 @@ const MenuList = () => {
     getMenuList(userData);
   }, [getMenuList, userData]);
 
-  return menuList.map((data) => <Board data={data} key={data.menu} />);
+  return menuList.map((data) => <Menu data={data} key={data.id} />);
 };
 
 export default memo(observer(MenuList));

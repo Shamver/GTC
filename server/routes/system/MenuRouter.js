@@ -38,12 +38,12 @@ const SELECT_MENU = `
     , GB.PERMISSION_LEVEL AS permissionLevel
     , GB.CRT_DTTM AS crtDttm
    FROM GTC_MENU GB
-   WHERE GB.MENU = ':MENU_ID'
+   WHERE GB.ID = ':MENU_ID'
 `;
 
-const SELECT_BOARD_ALL = `
+const SELECT_MENU_ALL = `
   SELECT
-    GB.BOARD AS board
+    GB.ID AS id
     , GB.NAME AS name
     , GB.PATH AS path
     , GB.\`DESC\` as \`desc\`
@@ -52,13 +52,13 @@ const SELECT_BOARD_ALL = `
     , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GB.USE_FL) AS useFl
     , GB.PERMISSION_LEVEL AS permissionLevel
     , GB.CRT_DTTM AS crtDttm
-   FROM GTC_BOARD GB
+   FROM GTC_MENU GB
    ORDER BY GB.\`ORDER\`
 `;
 
-const SELECT_BOARD_USE_FL_Y = `
+const SELECT_MENU_USE_FL_Y = `
   SELECT
-    GB.BOARD AS board
+    GB.ID AS id
     , GB.NAME AS name
     , GB.PATH AS path
     , GB.\`DESC\` as \`desc\`
@@ -72,8 +72,8 @@ const SELECT_BOARD_USE_FL_Y = `
    ORDER BY GB.\`ORDER\`
 `;
 
-const UPDATE_BOARD = `
-  UPDATE GTC_BOARD 
+const UPDATE_MENU = `
+  UPDATE GTC_MENU 
   SET 
     NAME = ':NAME'
     , PATH = ':PATH'
@@ -82,17 +82,19 @@ const UPDATE_BOARD = `
     , USE_FL = :USE_FL
     , ICON = ':ICON'
     , PERMISSION_LEVEL = :PERMISSION_LEVEL
-  WHERE BOARD = ':BOARD'
+    , TYPE = ':TYPE'
+  WHERE MENU = ':MENU_ID'
 `;
 
-const DELETE_BOARD = `
-  DELETE FROM GTC_BOARD 
-  WHERE BOARD = ':BOARD'
+const DELETE_MENU = `
+  DELETE FROM GTC_MENU
+  WHERE ID = ':MENU_ID'
 `;
 
-const INSERT_BOARD_CATEGORY = `
-  INSERT INTO GTC_BOARD_CATEGORY (
-      BOARD
+const INSERT_MENU_CATEGORY = `
+  INSERT INTO GTC_MENU_CATEGORY (
+      CATEGORY_ID
+      , 
       , CATEGORY
       , NAME
       , PATH
@@ -111,7 +113,7 @@ const INSERT_BOARD_CATEGORY = `
 `;
 
 
-const SELECT_BOARD_CATEGORY = `
+const SELECT_MENU_CATEGORY = `
   SELECT
     GBC.BOARD AS board
     , GBC.CATEGORY AS id
@@ -129,9 +131,9 @@ const SELECT_BOARD_CATEGORY = `
 `;
 
 
-const SELECT_BOARD_CATEGORY_ALL = `
+const SELECT_MENU_CATEGORY_ALL = `
   SELECT
-    GBC.BOARD AS board
+    GBC.MENU AS menu
     , GBC.CATEGORY AS id
     , GBC.NAME AS name
     , GBC.PATH AS path
@@ -144,8 +146,8 @@ const SELECT_BOARD_CATEGORY_ALL = `
    ORDER BY GBC.\`ORDER\`
 `;
 
-const UPDATE_BOARD_CATEGORY = `
-  UPDATE GTC_BOARD_CATEGORY 
+const UPDATE_MENU_CATEGORY = `
+  UPDATE GTC_MENU_CATEGORY 
   SET 
     NAME = ':NAME'
     , PATH = ':PATH'
@@ -157,7 +159,7 @@ const UPDATE_BOARD_CATEGORY = `
     AND CATEGORY = ':CATEGORY'
 `;
 
-const DELETE_BOARD_CATEGORY = `
+const DELETE_MENU_CATEGORY = `
   DELETE FROM GTC_BOARD_CATEGORY
   WHERE 
     BOARD = ':BOARD'
@@ -172,7 +174,7 @@ router.post('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_BOARD,
+      INSERT_MENU,
       {
         BOARD: id,
         NAME: name,
@@ -188,11 +190,11 @@ router.post('/', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          message: '😳 게시판 추가 완료!',
+          message: '😳 메뉴 추가 완료!',
         });
       }),
   ).then(() => {
-    info('[INSERT, POST /api/system/board] 시스템 게시판 추가');
+    info('[INSERT, POST /api/system/menu] 시스템 메뉴 추가');
   });
 });
 
@@ -200,7 +202,7 @@ router.get('/', (req, res) => {
   const { board } = req.query;
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD,
+      SELECT_MENU,
       {
         BOARD: board,
       },
@@ -209,37 +211,37 @@ router.get('/', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          message: '게시판 조회 완료',
+          message: '메뉴 조회 완료',
           result: rows[0],
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/system/board] 시스템 게시판 조회');
+    info('[SELECT, GET /api/system/board] 메뉴 게시판 조회');
   });
 });
 
 router.get('/all', (req, res) => {
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_ALL,
+      SELECT_MENU_ALL,
     )
       .then((rows) => {
         res.json({
           success: true,
           code: 1,
-          message: '게시판 전체 조회 완료',
+          message: '메뉴 전체 조회 완료',
           result: rows,
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/system/board/all] 시스템 게시판 전체 조회');
+    info('[SELECT, GET /api/system/menu/all] 시스템 게시판 전체 조회');
   });
 });
 
 router.get('/use', (req, res) => {
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_USE_FL_Y,
+      SELECT_MENU_USE_FL_Y,
     )
       .then((rows) => {
         res.json({
@@ -250,7 +252,7 @@ router.get('/use', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/system/board/use] 시스템 게시판 사용 조회');
+    info('[SELECT, GET /api/system/menu/use] 시스템 게시판 사용 조회');
   });
 });
 
@@ -261,9 +263,9 @@ router.put('/', (req, res) => {
   } = req.body;
   Database.execute(
     (database) => database.query(
-      UPDATE_BOARD,
+      UPDATE_MENU,
       {
-        BOARD: id,
+        MENU_ID: id,
         NAME: name,
         DESC: desc,
         PATH: path,
@@ -277,22 +279,22 @@ router.put('/', (req, res) => {
         res.json({
           success: true,
           code: 1,
-          message: '😳 게시판이 수정되었습니다!',
+          message: '😳 메뉴 수정되었습니다!',
           result: rows[0],
         });
       }),
   ).then(() => {
-    info('[UPDATE, PUT /api/system/board] 시스템 게시판 수정');
+    info('[UPDATE, PUT /api/system/menu] 시스템 메뉴 수정');
   });
 });
 
 router.delete('/', (req, res) => {
-  const { board } = req.query;
+  const { id } = req.query;
   Database.execute(
     (database) => database.query(
-      DELETE_BOARD,
+      DELETE_MENU,
       {
-        BOARD: board,
+        MENU_ID: id,
       },
     )
       .then((rows) => {
@@ -304,7 +306,7 @@ router.delete('/', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[DELETE, DELETE /api/system/board] 시스템 게시판 삭제');
+    info('[DELETE, DELETE /api/system/menu] 시스템 게시판 삭제');
   });
 });
 
@@ -316,7 +318,7 @@ router.post('/category', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_BOARD_CATEGORY,
+      INSERT_MENU_CATEGORY,
       {
         CATEGORY: id,
         BOARD: board,
@@ -343,7 +345,7 @@ router.get('/category', (req, res) => {
   const { board, category } = req.query;
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_CATEGORY,
+      SELECT_MENU_CATEGORY,
       {
         BOARD: board,
         CATEGORY: category,
@@ -366,7 +368,7 @@ router.get('/category/all', (req, res) => {
   const { board } = req.query;
   Database.execute(
     (database) => database.query(
-      SELECT_BOARD_CATEGORY_ALL,
+      SELECT_MENU_CATEGORY_ALL,
       {
         BOARD: board,
       },
@@ -391,7 +393,7 @@ router.put('/category', (req, res) => {
   } = req.body;
   Database.execute(
     (database) => database.query(
-      UPDATE_BOARD_CATEGORY,
+      UPDATE_MENU_CATEGORY,
       {
         BOARD: board,
         CATEGORY: id,
@@ -419,7 +421,7 @@ router.delete('/category', (req, res) => {
   const { board, category } = req.query;
   Database.execute(
     (database) => database.query(
-      DELETE_BOARD_CATEGORY,
+      DELETE_MENU_CATEGORY,
       {
         BOARD: board,
         CATEGORY: category,

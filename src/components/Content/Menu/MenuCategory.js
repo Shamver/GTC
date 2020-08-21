@@ -3,14 +3,14 @@ import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 
 const MenuCategory = ({ data }) => {
-  const { SystemBoardStore } = useStores();
-  const { getCategory } = SystemBoardStore;
+  const { SystemMenuStore } = useStores();
+  const { getCategory } = SystemMenuStore;
   const {
     id, name, path, useFl,
-    board,
+    menu,
   } = data;
   return (
-    <tr onClick={() => getCategory(board, id)}>
+    <tr onClick={() => getCategory(menu, id)}>
       <td>{name}</td>
       <td>{path}</td>
       <td>{useFl}</td>
@@ -20,7 +20,7 @@ const MenuCategory = ({ data }) => {
 
 MenuCategory.propTypes = {
   data: Proptypes.shape({
-    board: Proptypes.string,
+    menu: Proptypes.string,
     id: Proptypes.string,
     name: Proptypes.string,
     path: Proptypes.string,

@@ -9,12 +9,12 @@ import useStores from '../../../stores/useStores';
 import CodeOptionList from '../../util/CodeOptionList';
 
 const MenuCategoryDetailModal = () => {
-  const { SystemBoardStore } = useStores();
+  const { SystemMenuStore } = useStores();
   const {
     isCategoryModalToggle, toggleCategoryModal, category, useFlagList,
     setUseFlagList, onChangeCategory, addCategory,
     categoryModalMode, modifyCategory, deleteCategory,
-  } = SystemBoardStore;
+  } = SystemMenuStore;
 
   const {
     id, board, name, desc,

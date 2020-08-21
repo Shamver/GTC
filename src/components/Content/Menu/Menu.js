@@ -7,19 +7,19 @@ import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 
 const Menu = ({ data }) => {
-  const { SystemBoardStore } = useStores();
-  const { getBoard, getCategoryList } = SystemBoardStore;
+  const { SystemMenuStore } = useStores();
+  const { getMenu, getCategoryList } = SystemMenuStore;
   const {
-    board, name, path, useFl,
+    menu, name, path, useFl,
   } = data;
 
   return (
-    <tr onClick={() => getCategoryList(board)}>
+    <tr onClick={() => getCategoryList(menu)}>
       <td>{name}</td>
       <td>{path}</td>
       <td>{useFl}</td>
       <td>
-        <Button size="sm" color="danger" onClick={(event) => getBoard(board, event)}>
+        <Button size="sm" color="danger" onClick={(event) => getMenu(menu, event)}>
           <DetailIcon icon={faInfoCircle} />
         </Button>
       </td>
@@ -29,7 +29,7 @@ const Menu = ({ data }) => {
 
 Menu.propTypes = {
   data: Proptypes.shape({
-    board: Proptypes.string,
+    menu: Proptypes.string,
     name: Proptypes.string,
     path: Proptypes.string,
     useFl: Proptypes.string,
