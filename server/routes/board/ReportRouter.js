@@ -103,6 +103,10 @@ const SELECT_DETAIL_REPORT = `
     , R.REASON_CD AS reasonCode
     , (SELECT NAME FROM GTC_CODE WHERE GTC_CODE.CODE = R.REASON_CD) AS reason
     , R.REASON_DESC AS reasonDetail
+    , CASE
+        WHEN R.CANCEL_FL = 0 AND R.DISPOSE_FL = 1  THEN '정지'
+        WHEN R.CANCEL_FL = 1 AND R.DISPOSE_FL = 1 THEN '정지 취소'
+        WHEN R.REJECT_FL = 1 THEN '반려' END AS reportResult
     , DATE_FORMAT(R.CRT_DTTM, '%Y-%m-%d') AS reportDate
     , (SELECT NICKNAME FROM GTC_USER WHERE ID = R.MANAGER_ID) AS managerId
     , U.SUSPEND_BAN_FL AS suspendBanFl
@@ -110,6 +114,9 @@ const SELECT_DETAIL_REPORT = `
     , U.BAN_REASON AS tookReason
     , DATE_FORMAT(U.BAN_TERM,'%Y-%m-%d') AS tookBanTerm
     , DATE_FORMAT(U.CRT_DTTM,'%Y-%m-%d') AS tookDate
+    , CASE
+        WHEN R.REJECT_FL = 1 THEN DATE_FORMAT(R.MFY_DTTM,'%Y-%m-%d') 
+        WHEN R.REJECT_FL = 0 THEN DATE_FORMAT(U.CRT_DTTM,'%Y-%m-%d') END AS tookDate
   FROM GTC_REPORT R
   LEFT JOIN GTC_USER_BAN U
   ON U.REPORT_ID = R.ID
@@ -117,7 +124,7 @@ const SELECT_DETAIL_REPORT = `
 `;
 
 const UPDATE_REPORT_REJECT = `
-  UPDATE GTC_REPORT
+  UPDATE GTC_REPORT R
   SET 
     REJECT_FL = 1,
     MANAGER_ID = :MANAGER_ID

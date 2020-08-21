@@ -18,7 +18,7 @@ const ReportDetail = () => {
   const {
     reportId, reportDate, userId, reason, reasonDetail, targetContentsLink,
     targetContents, typeCode, targetContentsId, targetUserName, managerId,
-    tookReason, tookBanTerm, tookDate, suspendBanFl,
+    tookReason, tookBanTerm, tookDate, suspendBanFl, reportResult,
   } = reportDetailData;
   const ContentText = typeCode === 'RT02' ? renderHTML(`${targetContents}`) : targetContents;
 
@@ -32,15 +32,16 @@ const ReportDetail = () => {
       <ModalBodyBox>
         <ReportInfoWrap>
           <ReportInfoRow>
-            <Flex1>
-              <ReportInfoLabel>신고 사유</ReportInfoLabel>
-              <ReportInfoDesc>{reason}</ReportInfoDesc>
-            </Flex1>
-            <Flex1>
+            <ReportInfoLabel>신고 사유</ReportInfoLabel>
+            <ReportInfoDesc>{reason}</ReportInfoDesc>
+          </ReportInfoRow>
+
+          { activeTab === 'reportTable' ? (
+            <ReportInfoRow>
               <ReportInfoLabel>신고 날짜</ReportInfoLabel>
               <ReportInfoDesc>{reportDate}</ReportInfoDesc>
-            </Flex1>
-          </ReportInfoRow>
+            </ReportInfoRow>
+          ) : '' }
           <ReportInfoRow>
             <Flex1>
               <ReportInfoLabel>신고자</ReportInfoLabel>
@@ -55,12 +56,24 @@ const ReportDetail = () => {
             ? (
               <>
                 <ReportInfoRow>
-                  <ReportInfoLabel>처리자</ReportInfoLabel>
-                  <ReportInfoDesc>{managerId}</ReportInfoDesc>
+                  <Flex1>
+                    <ReportInfoLabel>처리자</ReportInfoLabel>
+                    <ReportInfoDesc>{managerId}</ReportInfoDesc>
+                  </Flex1>
+                  <Flex1>
+                    <ReportInfoLabel>처리 결과</ReportInfoLabel>
+                    <ReportInfoDesc>{reportResult}</ReportInfoDesc>
+                  </Flex1>
                 </ReportInfoRow>
                 <ReportInfoRow>
-                  <ReportInfoLabel>처리 날짜</ReportInfoLabel>
-                  <ReportInfoDesc>{tookDate}</ReportInfoDesc>
+                  <Flex1>
+                    <ReportInfoLabel>신고 날짜</ReportInfoLabel>
+                    <ReportInfoDesc>{reportDate}</ReportInfoDesc>
+                  </Flex1>
+                  <Flex1>
+                    <ReportInfoLabel>처리 날짜</ReportInfoLabel>
+                    <ReportInfoDesc>{tookDate}</ReportInfoDesc>
+                  </Flex1>
                 </ReportInfoRow>
 
                 {activeTab === 'ReportUser'
@@ -138,7 +151,7 @@ const ReportDetail = () => {
               </>
             ) : ''}
 
-          {activeTab === 'ReportUser'
+          {activeTab !== 'reportTable'
             ? (
               <ReportInfoRow2>
                 <ReportInfoLabel>정지 사유</ReportInfoLabel>
