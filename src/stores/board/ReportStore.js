@@ -30,6 +30,8 @@ class ReportStore {
 
   @observable reportCodeList = [];
 
+  @observable currentReportMaxPage = 0;
+
   constructor(root) {
     this.root = root;
   }
@@ -157,10 +159,11 @@ class ReportStore {
     };
   }
 
-  @action getReportList = async () => {
+  @action getReportList = async (currentPage) => {
     await axios.get('/api/board/Report', {
       params: {
         tab: this.activeTab,
+        currentPage,
       },
     })
       .then((response) => {
@@ -168,6 +171,13 @@ class ReportStore {
         if (data.success) {
           if (data.code === 1) {
             this.reportDataList = data.result;
+            if (data.result.length === 0) {
+              this.currentReportMaxPage = 0;
+            } else {
+              const { pageCount } = data.result[0];
+              this.currentReportMaxPage = pageCount;
+            }
+            console.log(this.currentReportMaxPage);
           } else {
             toast.info(data.message);
           }

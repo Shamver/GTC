@@ -18,7 +18,9 @@ const SELECT_REPORT = `
 `;
 
 const SELECT_ALL_REPORT = `
-  SELECT R.ID AS reportId
+  SELECT
+    (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_REPORT) AS pageCount 
+    , R.ID AS reportId
     , R.TYPE_CD AS typeCode
     , R.TARGET_ID AS targetContentsId
     , CASE
@@ -188,12 +190,18 @@ router.post('/', (req, res) => {
 
 router.get('/', (req, res) => {
   const { tab } = req.query;
+  let { currentPage } = req.query;
+  currentPage = currentPage || 1;
+
+  const MaxCount = 3;
 
   Database.execute(
     (database) => database.query(
       SELECT_ALL_REPORT,
       {
+        MAX_COUNT: MaxCount,
         TAB: tab,
+        ROWNUM: (currentPage - 1) * MaxCount,
       },
     )
       .then((rows) => {
