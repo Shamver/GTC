@@ -6,12 +6,13 @@ const Database = require('../../Database');
 
 const INSERT_MENU = `
   INSERT INTO GTC_MENU (
-      ID,
+      ID
       , NAME
       , PATH
       , \`DESC\`
       , \`ORDER\`
       , USE_FL
+      , TYPE
       , PERMISSION_LEVEL
       , ICON
   ) VALUES (
@@ -21,6 +22,7 @@ const INSERT_MENU = `
       , ':DESC'
       , :ORDER
       , :USE_FL
+      , ':TYPE'
       , :PERMISSION_LEVEL
       , ':ICON'
   )
@@ -35,6 +37,7 @@ const SELECT_MENU = `
     , GB.\`ORDER\` AS \`order\`
     , GB.ICON AS icon
     , GB.USE_FL AS useFl
+    , GB.TYPE AS type
     , GB.PERMISSION_LEVEL AS permissionLevel
     , GB.CRT_DTTM AS crtDttm
    FROM GTC_MENU GB
@@ -170,16 +173,18 @@ router.post('/', (req, res) => {
   const {
     id, name, desc, path, icon,
     order, useFl, permissionLevel,
+    type,
   } = req.body;
 
   Database.execute(
     (database) => database.query(
       INSERT_MENU,
       {
-        BOARD: id,
+        MENU_ID: id,
         NAME: name,
         DESC: desc,
         PATH: path,
+        TYPE: type,
         ORDER: order,
         USE_FL: useFl,
         PERMISSION_LEVEL: permissionLevel,
@@ -199,12 +204,12 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  const { board } = req.query;
+  const { id } = req.query;
   Database.execute(
     (database) => database.query(
       SELECT_MENU,
       {
-        BOARD: board,
+        MENU_ID: id,
       },
     )
       .then((rows) => {
@@ -216,7 +221,7 @@ router.get('/', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/system/board] 메뉴 게시판 조회');
+    info('[SELECT, GET /api/system/menu] 메뉴 게시판 조회');
   });
 });
 

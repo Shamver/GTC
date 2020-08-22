@@ -11,7 +11,7 @@ import BoardList from './MenuList';
 import CategoryList from './MenuCategoryList';
 
 
-const BoardSetting = () => {
+const Menu = () => {
   const { UtilLoadingStore, SystemMenuStore } = useStores();
   const { toggleMenuModal, toggleCategoryModal, getMenuList } = SystemMenuStore;
   const { loadingProcess } = UtilLoadingStore;
@@ -115,4 +115,4 @@ const TableWrapper = styled.div`
   font-size : 13px !important;
 `;
 
-export default memo(observer(BoardSetting));
+export default memo(observer(Menu));

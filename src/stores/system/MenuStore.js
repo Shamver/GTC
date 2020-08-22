@@ -12,11 +12,12 @@ class MenuStore {
     permissionLevel: 0,
     icon: '',
     desc: '',
+    type: '',
   };
 
   @observable category = {
     id: '',
-    category: '',
+    menu: '',
     name: '',
     path: '',
     desc: '',
@@ -33,6 +34,8 @@ class MenuStore {
   @observable permissionLevelList = [];
 
   @observable useFlagList = [];
+
+  @observable menuTypeList = [];
 
   @observable isMenuModalToggle = false;
 
@@ -94,7 +97,7 @@ class MenuStore {
     event.stopPropagation();
     axios.get('/api/system/menu', {
       params: {
-        menu,
+        id: menu,
       },
     })
       .then((response) => {
@@ -137,7 +140,7 @@ class MenuStore {
   @action deleteMenu = () => {
     axios.delete('/api/system/menu', {
       params: {
-        board: this.board.id,
+        id: this.menu.id,
       },
     })
       .then((response) => {
@@ -145,8 +148,8 @@ class MenuStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.getBoardList().then();
-            this.toggleBoardModal('');
+            this.getMenuList().then();
+            this.toggleMenuModal('');
           } else {
             toast.info(data.message);
           }
@@ -257,7 +260,7 @@ class MenuStore {
     axios.delete('/api/system/menu/category', {
       params: {
         category: this.category.id,
-        board: this.category.board,
+        menu: this.category.menu,
       },
     })
       .then((response) => {
@@ -265,7 +268,7 @@ class MenuStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.getCategoryList(this.category.board);
+            this.getCategoryList(this.category.menu);
             this.toggleCategoryModal('');
           } else {
             toast.info(data.message);
@@ -339,16 +342,20 @@ class MenuStore {
     this.permissionLevelList = value;
   };
 
+  @action setMenuTypeList = (value) => {
+    this.menuTypeList = value;
+  };
+
   @action toggleMenuModal = (mode) => {
     if (mode === 'add') {
-      this.clearBoard();
+      this.clearMenu();
     }
-    this.isBoardModalToggle = !this.isBoardModalToggle;
-    this.boardModalMode = mode;
+    this.isMenuModalToggle = !this.isMenuModalToggle;
+    this.menuModalMode = mode;
   }
 
   @action toggleCategoryModal = (mode) => {
-    if (!this.isCategoryModalToggle && !this.category.board && mode === 'add') {
+    if (!this.isCategoryModalToggle && !this.category.menu && mode === 'add') {
       toast.warn('😳 먼저 게시판을 선택해주세요.');
       return false;
     }

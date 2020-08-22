@@ -16,17 +16,18 @@ const MenuDetailModal = () => {
     permissionLevelList, setPermissionLevelList, setUseFlagList,
     onChangeMenu, addMenu, menuModalMode, modifyMenu,
     deleteMenu, menuIcon, setMenuIcon,
+    menuTypeList, setMenuTypeList,
   } = SystemMenuStore;
 
   const {
-    id, desc, path, icon,
+    id, desc, path, icon, name, type,
     order, useFl, permissionLevel,
   } = menu;
 
   return (
     <Modal isOpen={isMenuModalToggle} toggle={toggleMenuModal}>
       <ModalHeaderBack toggle={toggleMenuModal}>
-        {menuModalMode === 'modify' ? '게시판 상세' : '게시판 추가'}
+        {menuModalMode === 'modify' ? '메뉴 상세' : '메뉴 추가'}
       </ModalHeaderBack>
       <ModalBody>
         <InputGroupMb>
@@ -51,8 +52,8 @@ const MenuDetailModal = () => {
           <InputGroupAddon addonType="prepend">
             <InputGroupText>종류</InputGroupText>
           </InputGroupAddon>
-          <Input type="select" name="useFl" onChange={onChangeMenu} value={useFl}>
-            <CodeOptionList codeGroup="YN_FLAG" array={useFlagList} setArrayMethod={setUseFlagList} />
+          <Input type="select" name="type" onChange={onChangeMenu} value={type}>
+            <CodeOptionList codeGroup="MENU_TYPE" array={menuTypeList} setArrayMethod={setMenuTypeList} />
           </Input>
         </InputGroupMb>
         <InputGroupMb>
