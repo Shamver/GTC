@@ -374,15 +374,6 @@ const SELECT_POST_LIST_BOARD_SEARCH = `
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
 
-const SELECT_POST_REPLY = `
-  SELECT ID AS id
-  FROM
-    GTC_COMMENT
-  WHERE
-    POST_ID = :POST_ID
-    AND USER_ID = :USER_ID
-`;
-
 router.get('/', (req, res) => {
   let { currentPage, currentCategory } = req.query;
   const {
@@ -656,21 +647,6 @@ router.delete('/', authMiddleware, (req, res) => {
           bpId: data.id,
           writer: data.writer,
         });
-
-        return database.query(
-          SELECT_POST_REPLY,
-          {
-            POST_ID: data.id,
-            USER_ID: data.writer,
-          },
-        );
-      })
-      .then((rows) => {
-        rows.map((v) => point('deleteReply', 'R02', {
-          replyId: v.id,
-          writer: data.writer,
-        }));
-
         res.json({
           success: true,
           code: 1,
