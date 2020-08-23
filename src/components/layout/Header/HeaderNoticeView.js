@@ -21,8 +21,6 @@ const HeaderNoticeView = () => {
     return () => clearInterval(interval);
   }, [AdvertisePostListNow, showIndex, showMode, doCycleAds, showingHeader]);
 
-  console.log(headerNoticeList);
-
   return (
     <>
       { showMode === 0 ? (
@@ -36,7 +34,7 @@ const HeaderNoticeView = () => {
         <TextContainer>
           <HeaderBadge color="danger">광고</HeaderBadge>
           &nbsp;
-          { showingHeader ? (showingHeader.url
+          { showingHeader && (showingHeader.url
             ? (
               <Link to={showingHeader.url}>
                 <Span>
@@ -47,9 +45,7 @@ const HeaderNoticeView = () => {
               <span>
                 {showingHeader.message}
               </span>
-            )) : (
-              <span>&nbsp;</span>
-          )}
+            ))}
         </TextContainer>
       )}
     </>
