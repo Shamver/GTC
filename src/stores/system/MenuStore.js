@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 class MenuStore {
   @observable menu = {
     id: '',
+    type: '',
     name: '',
     path: '',
     order: '',
@@ -12,7 +13,6 @@ class MenuStore {
     permissionLevel: 0,
     icon: '',
     desc: '',
-    type: '',
   };
 
   @observable category = {
@@ -50,6 +50,7 @@ class MenuStore {
   }
 
   @action getMenuList = async () => {
+    const  routerAuthCheck();
     await axios.get('/api/system/menu/all')
       .then((response) => {
         const { data } = response;

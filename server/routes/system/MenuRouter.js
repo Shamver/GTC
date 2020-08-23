@@ -52,6 +52,7 @@ const SELECT_MENU_ALL = `
     , GB.\`DESC\` as \`desc\`
     , GB.\`ORDER\` as \`order\`
     , GB.ICON AS icon
+    , GB.TYPE AS type
     , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GB.USE_FL) AS useFl
     , GB.PERMISSION_LEVEL AS permissionLevel
     , GB.CRT_DTTM AS crtDttm
@@ -67,10 +68,11 @@ const SELECT_MENU_USE_FL_Y = `
     , GB.\`DESC\` as \`desc\`
     , GB.\`ORDER\` as \`order\`
     , GB.ICON AS icon
+    , GB.TYPE AS type
     , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GB.USE_FL) AS useFl
     , GB.PERMISSION_LEVEL AS permissionLevel
     , GB.CRT_DTTM AS crtDttm
-   FROM GTC_BOARD GB
+   FROM GTC_MENU GB
    WHERE GB.USE_FL = 1
    ORDER BY GB.\`ORDER\`
 `;
@@ -86,7 +88,7 @@ const UPDATE_MENU = `
     , ICON = ':ICON'
     , PERMISSION_LEVEL = :PERMISSION_LEVEL
     , TYPE = ':TYPE'
-  WHERE MENU = ':MENU_ID'
+  WHERE ID = ':MENU_ID'
 `;
 
 const DELETE_MENU = `
@@ -96,17 +98,16 @@ const DELETE_MENU = `
 
 const INSERT_MENU_CATEGORY = `
   INSERT INTO GTC_MENU_CATEGORY (
-      CATEGORY_ID
-      , 
-      , CATEGORY
+      ID
+      , MENU_ID
       , NAME
       , PATH
       , \`DESC\`
       , \`ORDER\`
       , USE_FL
   ) VALUES (
-      ':BOARD'
-      , ':CATEGORY'
+      ':CATEGORY_ID'
+      , ':MENU_ID'
       , ':NAME'
       , ':PATH'
       , ':DESC'
@@ -115,37 +116,35 @@ const INSERT_MENU_CATEGORY = `
   )
 `;
 
-
 const SELECT_MENU_CATEGORY = `
   SELECT
-    GBC.BOARD AS board
-    , GBC.CATEGORY AS id
+    GBC.ID AS id
+    , GBC.MENU_ID AS menu
     , GBC.NAME AS name
     , GBC.PATH AS path
     , GBC.\`DESC\` as \`desc\`
     , GBC.\`ORDER\` as \`order\`
     , GBC.USE_FL AS useFl
     , GBC.CRT_DTTM AS crtDttm
-   FROM GTC_BOARD_CATEGORY GBC
+   FROM GTC_MENU_CATEGORY GBC
    WHERE 
-    GBC.BOARD = ':BOARD'
-    AND GBC.CATEGORY = ':CATEGORY'
+    GBC.MENU_ID = ':MENU_ID'
+    AND GBC.ID = ':CATEGORY'
    ORDER BY GBC.\`ORDER\`
 `;
 
-
 const SELECT_MENU_CATEGORY_ALL = `
   SELECT
-    GBC.MENU AS menu
-    , GBC.CATEGORY AS id
+    GBC.ID AS id
+    , GBC.MENU_ID AS menu
     , GBC.NAME AS name
     , GBC.PATH AS path
     , GBC.\`DESC\` as \`desc\`
     , GBC.\`ORDER\` as \`order\`
     , (SELECT NAME FROM GTC_CODE WHERE CODEGROUP_ID = 'YN_FLAG' AND CODE = GBC.USE_FL) AS useFl
     , GBC.CRT_DTTM AS crtDttm
-   FROM GTC_BOARD_CATEGORY GBC
-   WHERE GBC.BOARD = ':BOARD'
+   FROM GTC_MENU_CATEGORY GBC
+   WHERE GBC.MENU_ID = ':MENU_ID'
    ORDER BY GBC.\`ORDER\`
 `;
 
@@ -158,15 +157,15 @@ const UPDATE_MENU_CATEGORY = `
     , \`ORDER\` = :ORDER
     , USE_FL = :USE_FL
   WHERE
-    BOARD = ':BOARD'
-    AND CATEGORY = ':CATEGORY'
+    AND ID = ':CATEGORY_ID'
+    MENU_ID = ':MENU_ID'
 `;
 
 const DELETE_MENU_CATEGORY = `
-  DELETE FROM GTC_BOARD_CATEGORY
+  DELETE FROM GTC_MENU_CATEGORY
   WHERE 
-    BOARD = ':BOARD'
-    AND CATEGORY = ':CATEGORY'
+    MENU_ID = ':MENU_ID'
+    AND CATEGORY = ':CATEGORY_ID'
 `;
 
 router.post('/', (req, res) => {
@@ -265,6 +264,7 @@ router.put('/', (req, res) => {
   const {
     id, name, desc, path, icon,
     order, useFl, permissionLevel,
+    type,
   } = req.body;
   Database.execute(
     (database) => database.query(
@@ -278,6 +278,7 @@ router.put('/', (req, res) => {
         USE_FL: useFl,
         PERMISSION_LEVEL: permissionLevel,
         ICON: icon,
+        TYPE: type,
       },
     )
       .then((rows) => {
@@ -317,7 +318,7 @@ router.delete('/', (req, res) => {
 
 router.post('/category', (req, res) => {
   const {
-    id, board, name, desc, path,
+    id, menu, name, desc, path,
     order, useFl,
   } = req.body;
 
@@ -325,8 +326,8 @@ router.post('/category', (req, res) => {
     (database) => database.query(
       INSERT_MENU_CATEGORY,
       {
-        CATEGORY: id,
-        BOARD: board,
+        CATEGORY_ID: id,
+        MENU_ID: menu,
         NAME: name,
         DESC: desc,
         PATH: path,
@@ -342,18 +343,18 @@ router.post('/category', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[INSERT, POST /api/system/board/category] 시스템 게시판 카테고리 추가');
+    info('[INSERT, POST /api/system/menu/category] 시스템 게시판 카테고리 추가');
   });
 });
 
 router.get('/category', (req, res) => {
-  const { board, category } = req.query;
+  const { menu, category } = req.query;
   Database.execute(
     (database) => database.query(
       SELECT_MENU_CATEGORY,
       {
-        BOARD: board,
-        CATEGORY: category,
+        MENU_ID: menu,
+        CATEGORY_ID: category,
       },
     )
       .then((rows) => {
@@ -365,17 +366,17 @@ router.get('/category', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/system/board/category] 시스템 게시판 카테고리 조회');
+    info('[SELECT, GET /api/system/menu/category] 시스템 게시판 카테고리 조회');
   });
 });
 
 router.get('/category/all', (req, res) => {
-  const { board } = req.query;
+  const { menu } = req.query;
   Database.execute(
     (database) => database.query(
       SELECT_MENU_CATEGORY_ALL,
       {
-        BOARD: board,
+        MENU_ID: menu,
       },
     )
       .then((rows) => {
@@ -387,21 +388,21 @@ router.get('/category/all', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/system/board/category/all] 게시판 카테고리 전체 조회 완료');
+    info('[SELECT, GET /api/system/menu/category/all] 게시판 카테고리 전체 조회 완료');
   });
 });
 
 router.put('/category', (req, res) => {
   const {
-    board, id, name, desc, path,
+    menu, id, name, desc, path,
     order, useFl,
   } = req.body;
   Database.execute(
     (database) => database.query(
       UPDATE_MENU_CATEGORY,
       {
-        BOARD: board,
-        CATEGORY: id,
+        MENU_ID: menu,
+        CATEGORY_ID: id,
         NAME: name,
         DESC: desc,
         PATH: path,
@@ -418,18 +419,18 @@ router.put('/category', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[UPDATE, PUT /api/system/board/category] 시스템 게시판 카테고리 수정');
+    info('[UPDATE, PUT /api/system/menu/category] 시스템 게시판 카테고리 수정');
   });
 });
 
 router.delete('/category', (req, res) => {
-  const { board, category } = req.query;
+  const { menu, category } = req.query;
   Database.execute(
     (database) => database.query(
       DELETE_MENU_CATEGORY,
       {
-        BOARD: board,
-        CATEGORY: category,
+        MENU_ID: menu,
+        CATEGORY_ID: category,
       },
     )
       .then((rows) => {
@@ -441,7 +442,7 @@ router.delete('/category', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[DELETE, DELETE /api/system/board/category] 시스템 게시판 카테고리 삭제');
+    info('[DELETE, DELETE /api/system/menu/category] 시스템 게시판 카테고리 삭제');
   });
 });
 

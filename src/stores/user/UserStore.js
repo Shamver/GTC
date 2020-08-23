@@ -178,6 +178,13 @@ class UserStore {
     return false;
   };
 
+  @action getAuthLevel = () => {
+    const { userData } = this;
+
+
+    return 0;
+  };
+
   @action onRegisterChangeValue = (event) => {
     this.registerData = {
       ...this.registerData,

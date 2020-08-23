@@ -9,7 +9,7 @@ const MenuList = () => {
   const { getMenuList, menuList } = SystemMenuStore;
 
   useLayoutEffect(() => {
-    getMenuList(userData);
+    getMenuList();
   }, [getMenuList, userData]);
 
   return menuList.map((data) => <Menu data={data} key={data.id} />);
