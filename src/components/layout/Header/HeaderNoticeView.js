@@ -6,16 +6,22 @@ import { Link } from 'react-router-dom';
 import useStores from '../../../stores/useStores';
 
 const HeaderNoticeView = () => {
-  const { EventAdvertiseStore, ComponentHeaderStore } = useStores();
+  const {
+    EventAdvertiseStore, ComponentHeaderStore, BoardPostStore,
+  } = useStores();
   const { AdvertisePostListNow } = EventAdvertiseStore;
   const {
     showIndex, showMode, doCycleAds, showingHeader,
   } = ComponentHeaderStore;
 
+  const { headerNoticeList } = BoardPostStore;
+
   useEffect(() => {
     const interval = doCycleAds();
     return () => clearInterval(interval);
   }, [AdvertisePostListNow, showIndex, showMode, doCycleAds, showingHeader]);
+
+  console.log(headerNoticeList);
 
   return (
     <>

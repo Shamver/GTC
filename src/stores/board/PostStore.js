@@ -71,6 +71,8 @@ class PostStore {
 
   @observable categoryCodeList = [];
 
+  @observable headerNoticeList = [];
+
   constructor(root) {
     this.root = root;
   }
@@ -162,6 +164,24 @@ class PostStore {
 
     return true;
   };
+
+  @action getHeaderNoticeList = async () => {
+    await axios.get('/api/board/post/notice/header', {})
+      .then((response) => {
+        const { data } = response;
+
+        if (data.success) {
+          if (data.code === 1) {
+            this.headerNoticeList = data.result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => toast.error(response.message));
+  }
 
   @action getBoardPostList = async (board, currentPage, currentCategory) => {
     const { userData } = this.root.UserStore;
