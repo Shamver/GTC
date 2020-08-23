@@ -66,6 +66,18 @@ const SELECT_POST_NOTICE_LIST = `
   ORDER BY CRT_DTTM DESC
 `;
 
+const SELECT_HEADER_NOTICE = `
+  SELECT
+    P.ID AS id
+    , P.TITLE AS title
+  FROM
+    GTC_POST P
+  WHERE
+    P.NOTICE_FL = 1
+    AND P.DELETE_FL = 0
+  ORDER BY CRT_DTTM DESC
+`;
+
 const SELECT_POST_LIST_ALL = `
   SELECT 
     @ROWNUM := @ROWNUM+1 as rn
@@ -539,6 +551,24 @@ router.get('/notice', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, GET /api/board/post/notice] 공지 게시글 목록 조회');
+  });
+});
+
+router.get('/notice/header', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_HEADER_NOTICE,
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '헤더 공지 게시글 목록 조회',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/board/post/notice/header] 헤더 공지 게시글 목록 조회');
   });
 });
 
