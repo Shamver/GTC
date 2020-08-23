@@ -19,7 +19,8 @@ const SELECT_REPORT = `
 
 const SELECT_ALL_REPORT = `
   SELECT
-    (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_REPORT) AS pageCount 
+    @ROWNUM := @ROWNUM + 1 AS rn
+    , (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_REPORT) AS pageCount 
     , R.ID AS reportId
     , R.TYPE_CD AS typeCode
     , R.TARGET_ID AS targetContentsId
@@ -59,6 +60,7 @@ const SELECT_ALL_REPORT = `
       WHEN ':TAB' = 'reportResult' THEN R.MFY_DTTM
     END
   DESC
+  LIMIT :ROWNUM, :MAX_COUNT
 `;
 
 const INSERT_REPORT = `
@@ -193,7 +195,7 @@ router.get('/', (req, res) => {
   let { currentPage } = req.query;
   currentPage = currentPage || 1;
 
-  const MaxCount = 3;
+  const MaxCount = 30;
 
   Database.execute(
     (database) => database.query(

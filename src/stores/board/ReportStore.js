@@ -177,7 +177,6 @@ class ReportStore {
               const { pageCount } = data.result[0];
               this.currentReportMaxPage = pageCount;
             }
-            console.log(this.currentReportMaxPage);
           } else {
             toast.info(data.message);
           }
@@ -191,14 +190,6 @@ class ReportStore {
   };
 
   @action getDetailReport = async (reportId) => {
-    // if (this.activeTab === 'ReportTable') {
-    //   this.getReportListDetail(reportId);
-    // } else if (this.activeTab === 'ReportResult') {
-    //   this.getReportResultDetail();
-    // } else {
-    //   this.getReportUserDetail();
-    // }
-    console.log("Asd");
     await axios.get('/api/board/Report/detail', {
       params: {
         reportId,

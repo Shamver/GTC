@@ -7,18 +7,19 @@ import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const PaginationList = ({ currentPage, noPagination }) => {
-  const { UserPointStore } = useStores();
-  const { currentPointMaxPage } = UserPointStore;
+  const { BoardReportStore } = useStores();
+  const { activeTab, currentReportMaxPage } = BoardReportStore;
 
   const currentPageNum = parseInt(currentPage, 0);
   const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
-  const max = (currentPageNum + 3) > currentPointMaxPage ? currentPointMaxPage : currentPageNum + 3;
+  // eslint-disable-next-line max-len
+  const max = (currentPageNum + 3) > currentReportMaxPage ? currentReportMaxPage : currentPageNum + 3;
   const array = new Array((max - min) + 1 < 0 ? 0 : (max - min) + 1);
 
   if (currentPage > 1) {
     array.push(
       <PaginationItem key={0}>
-        <CustomLink className="page-link" activeClassName="active" to={`/report/page/${currentPageNum - 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/report/${activeTab}/${currentPageNum - 1}`}>
           <SmallSpan>
             ＜
           </SmallSpan>
@@ -30,17 +31,17 @@ const PaginationList = ({ currentPage, noPagination }) => {
   for (let i = min; i <= max; i += 1) {
     array.push(
       <PaginationItem active={i === 1 && noPagination} key={i}>
-        <CustomLink className="page-link" activeClassName="active" to={`/report/page/${i}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/report/${activeTab}/${i}`}>
           {i}
         </CustomLink>
       </PaginationItem>,
     );
   }
 
-  if (currentPageNum !== currentPointMaxPage) {
+  if (currentPageNum !== currentReportMaxPage) {
     array.push(
       <PaginationItem key={-1}>
-        <CustomLink className="page-link" activeClassName="active" to={`/report/page/${currentPageNum + 1}`}>
+        <CustomLink className="page-link" activeClassName="active" to={`/report/${activeTab}/${currentPageNum + 1}`}>
           <SmallSpan>
             ＞
           </SmallSpan>
@@ -65,12 +66,12 @@ PaginationList.defaultProps = {
 
 
 const ReportPagination = ({ noPagination, currentPage }) => {
-  const { UserPointStore } = useStores();
-  const { currentPointMaxPage } = UserPointStore;
+  const { BoardReportStore } = useStores();
+  const { currentReportMaxPage } = BoardReportStore;
 
   useEffect(() => {
 
-  }, [currentPointMaxPage]);
+  }, [currentReportMaxPage]);
 
   return (
     <PaginationCustom>
@@ -78,6 +79,7 @@ const ReportPagination = ({ noPagination, currentPage }) => {
     </PaginationCustom>
   );
 };
+
 ReportPagination.propTypes = {
   noPagination: Proptypes.bool,
   currentPage: Proptypes.string,
