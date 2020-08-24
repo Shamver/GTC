@@ -7,11 +7,10 @@ import useStores from '../../../stores/useStores';
 
 const HeaderNoticeView = () => {
   const {
-    EventAdvertiseStore, ComponentHeaderStore, BoardPostStore,
+    ComponentHeaderStore, BoardPostStore,
   } = useStores();
-  const { AdvertisePostListNow } = EventAdvertiseStore;
   const {
-    showIndex, showMode, doCycleHeader, showingHeader, settingHeader,
+    showMode, doCycleHeader, showingHeader, settingHeader,
   } = ComponentHeaderStore;
   const { headerNoticeList } = BoardPostStore;
 
@@ -26,7 +25,7 @@ const HeaderNoticeView = () => {
     const interval = doCycleHeader();
     return () => clearInterval(interval);
   }, [
-    AdvertisePostListNow, showIndex, showMode, doCycleHeader, showingHeader,
+    doCycleHeader,
   ]);
 
   return (
