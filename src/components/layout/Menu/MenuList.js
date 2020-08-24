@@ -6,11 +6,11 @@ import Menu from './MenuRow';
 const MenuList = () => {
   const { SystemMenuStore, UserStore } = useStores();
   const { userData } = UserStore;
-  const { getMenuList, menuList } = SystemMenuStore;
+  const { getUsingMenuList, menuList } = SystemMenuStore;
 
   useLayoutEffect(() => {
-    getMenuList();
-  }, [getMenuList, userData]);
+    getUsingMenuList();
+  }, [getUsingMenuList, userData]);
 
   return menuList.map((data) => <Menu data={data} key={data.id} />);
 };

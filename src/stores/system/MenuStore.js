@@ -50,7 +50,6 @@ class MenuStore {
   }
 
   @action getMenuList = async () => {
-    const  routerAuthCheck();
     await axios.get('/api/system/menu/all')
       .then((response) => {
         const { data } = response;
@@ -115,6 +114,31 @@ class MenuStore {
         }
       })
       .catch((response) => { toast.error(response.message); });
+  };
+
+  @action getUsingMenuList = () => {
+    const level = this.root.UserStore.getAuthLevel();
+    axios.get('/api/system/menu/use', {
+      params: {
+        level,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.menuList = data.result;
+            this.root.BoardStore.setBoardKinds(data.result);
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
   };
 
   @action modifyMenu = () => {

@@ -74,6 +74,7 @@ const SELECT_MENU_USE_FL_Y = `
     , GB.CRT_DTTM AS crtDttm
    FROM GTC_MENU GB
    WHERE GB.USE_FL = 1
+   AND GB.PERMISSION_LEVEL <= :PERMISSION_LEVEL
    ORDER BY GB.\`ORDER\`
 `;
 
@@ -243,9 +244,13 @@ router.get('/all', (req, res) => {
 });
 
 router.get('/use', (req, res) => {
+  const { level } = req.query;
   Database.execute(
     (database) => database.query(
       SELECT_MENU_USE_FL_Y,
+      {
+        PERMISSION_LEVEL: level,
+      },
     )
       .then((rows) => {
         res.json({

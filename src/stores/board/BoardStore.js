@@ -3,16 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 class BoardStore {
-  @observable boardKinds = {
-    notice: '공지사항',
-    free: '자유 게시판',
-    trade: '아이템 거래',
-    cash: '월드락 거래',
-    crime: '신고게시판',
-    qna: '질문 & 답변',
-    consult: '1:1 문의',
-    all: '전체 글 보기',
-  };
+  @observable boardKinds = {};
 
   @observable boards = [{
     value: 'NOTICE',
@@ -64,9 +55,6 @@ class BoardStore {
     },
   };
 
-
-  @observable tempData = [];
-
   @observable currentBoardPath = '';
 
   @observable currentBoardName = '';
@@ -89,6 +77,13 @@ class BoardStore {
 
   constructor(root) {
     this.root = root;
+  }
+
+  @action setBoardKinds = (arr) => {
+    this.boardKinds = {};
+    for (let i = 0; i < arr.length; i += 1) {
+      this.boardKinds[arr[i].path.replace('/', '')] = arr[i].name;
+    }
   }
 
   @action setIsPagination = (isPagination) => {
@@ -126,8 +121,6 @@ class BoardStore {
       })
       .catch((response) => { toast.error(response.message); });
   };
-
-  @action getBoardName = (path) => this.boardKinds[path];
 
   @action setCategoryCodeList = (code) => {
     this.currentBoardCategories = code;

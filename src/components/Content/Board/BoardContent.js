@@ -15,7 +15,7 @@ const CategoryLink = ({
   category,
 }) => {
   const { name, path } = categories[category];
-  const toPath = `/${currentBoardPath}/page/1/${path}`;
+  const toPath = `/${currentBoardPath}/${path}/page/1/`;
   return (<NavLink activeClassName="active" to={toPath}>{name}</NavLink>);
 };
 

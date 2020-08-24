@@ -181,6 +181,17 @@ class UserStore {
   @action getAuthLevel = () => {
     const { userData } = this;
 
+    if (userData && userData.adminYN === 1) {
+      return 3;
+    }
+
+    if (userData && (userData.operatorYN === 1 || userData.adminYN === 1)) {
+      return 2;
+    }
+
+    if (userData) {
+      return 1;
+    }
 
     return 0;
   };
