@@ -38,6 +38,9 @@ class ReportStore {
 
   @action onActive = ((e) => {
     const { name } = e.target;
+    const { history } = this.root.UtilRouteStore;
+
+    history.push(`/report/${name}`);
 
     if (this.activeTab !== name) {
       this.activeTab = name;
@@ -239,7 +242,7 @@ class ReportStore {
         }
       })
       .then(() => {
-        if (this.activeTab !== 'ReportTable') {
+        if (this.activeTab === 'ReportUser') {
           this.root.UserStore.getBanDetail(this.reportDetailData.targetUserId);
         }
       })

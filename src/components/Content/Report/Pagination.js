@@ -9,7 +9,6 @@ import useStores from '../../../stores/useStores';
 const PaginationList = ({ currentPage, noPagination }) => {
   const { BoardReportStore } = useStores();
   const { activeTab, currentReportMaxPage } = BoardReportStore;
-
   const currentPageNum = parseInt(currentPage, 0);
   const min = (currentPageNum - 3) <= 0 ? 1 : currentPageNum - 3;
   // eslint-disable-next-line max-len
@@ -67,11 +66,10 @@ PaginationList.defaultProps = {
 
 const ReportPagination = ({ noPagination, currentPage }) => {
   const { BoardReportStore } = useStores();
-  const { currentReportMaxPage } = BoardReportStore;
+  const { activeTab, currentReportMaxPage } = BoardReportStore;
 
   useEffect(() => {
-
-  }, [currentReportMaxPage]);
+  }, [currentReportMaxPage, activeTab]);
 
   return (
     <PaginationCustom>

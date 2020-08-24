@@ -5,23 +5,24 @@ import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import ReportTabContent from './ReportTabContent';
 import ReportNav from './ReportNav';
-import ReportPagination from './Pagination';
 
 const Report = ({ match, parentProps }) => {
-  const { BoardReportStore, UtilLoadingStore } = useStores();
+  const { BoardReportStore, UtilLoadingStore, UserStore } = useStores();
   const { loadingProcess } = UtilLoadingStore;
   const { getReportList } = BoardReportStore;
+  const { getUserBanned } = UserStore;
   const { params } = match;
   let { noPagination } = parentProps;
   let { currentPage } = params;
   noPagination = noPagination !== undefined;
   currentPage = currentPage || '1';
 
-  useLayoutEffect(() => {
-    loadingProcess([
-      () => getReportList(currentPage),
-    ]);
-  }, [loadingProcess, getReportList, currentPage]);
+  // useLayoutEffect(() => {
+  //   loadingProcess([
+  //     () => getReportList(currentPage),
+  //     () => getUserBanned(currentPage),
+  //   ]);
+  // }, [loadingProcess, getReportList, currentPage, getUserBanned]);
 
   return (
     <BoardWrapper>
@@ -29,8 +30,7 @@ const Report = ({ match, parentProps }) => {
         <h3>신고 관리</h3>
         <ReportTableCol>
           <ReportNav />
-          <ReportTabContent />
-          <ReportPagination currentPage={currentPage} noPagination={noPagination} />
+          <ReportTabContent currentPage={currentPage} noPagination={noPagination} />
         </ReportTableCol>
       </TableWrapper>
     </BoardWrapper>

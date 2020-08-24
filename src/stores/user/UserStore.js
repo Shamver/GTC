@@ -482,13 +482,23 @@ class UserStore {
     return false;
   }
 
-  @action getUserBanned = async () => {
-    await axios.get('/api/user/ban')
+  @action getUserBanned = async (currentPage) => {
+    await axios.get('/api/user/ban', {
+      params: {
+        currentPage,
+      },
+    })
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             this.banUserList = data.result;
+            if (data.result.length === 0) {
+              this.root.BoardReportStore.currentReportMaxPage = 0;
+            } else {
+              const { pageCount } = data.result[0];
+              this.root.BoardReportStore.currentReportMaxPage = pageCount;
+            }
           } else {
             toast.info(data.message);
           }

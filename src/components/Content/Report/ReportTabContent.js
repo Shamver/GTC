@@ -6,16 +6,16 @@ import ReportTable from './ReportTable';
 import ReportResult from './ReportResult';
 import ReportUser from './ReportUser';
 
-const ReportTabContent = () => {
+const ReportTabContent = ({currentPage, noPagination}) => {
   const { BoardReportStore } = useStores();
   const { activeTab } = BoardReportStore;
 
   return (
     <>
       <TabContent activeTab={activeTab}>
-        <ReportTable />
-        <ReportResult />
-        <ReportUser />
+        <ReportTable currentPage={currentPage} noPagination={noPagination} />
+        <ReportResult currentPage={currentPage} noPagination={noPagination} />
+        <ReportUser currentPage={currentPage} noPagination={noPagination} />
       </TabContent>
     </>
   );

@@ -1,13 +1,22 @@
-import React, { memo } from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
 import ReportList from './ReportList';
 import useStores from '../../../stores/useStores';
+import ReportPagination from './Pagination';
 
-const ReportTable = () => {
-  const { BoardReportStore } = useStores();
-  const { reportDataList } = BoardReportStore;
+const ReportTable = ({currentPage, noPagination}) => {
+  const { BoardReportStore, UtilLoadingStore } = useStores();
+  const { loadingProcess } = UtilLoadingStore;
+  const { reportDataList, getReportList } = BoardReportStore;
+
+  useLayoutEffect(() => {
+    loadingProcess([
+      () => getReportList(currentPage),
+    ]);
+  }, [loadingProcess, getReportList, currentPage]);
+
   const reportList = reportDataList.map(
     (v, index) => (<ReportList data={v} key={v.reportId} index={index} />),
   );
@@ -29,6 +38,7 @@ const ReportTable = () => {
           { reportList }
         </tbody>
       </CodeTable>
+      <ReportPagination currentPage={currentPage} noPagination={noPagination} />
     </TabPane>
   );
 };

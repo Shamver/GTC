@@ -110,7 +110,10 @@ const GET_USER_COMMENT_LIST = `
 `;
 
 const SELECT_ALL_USER_BANNED = `
-  SELECT U.ID AS userId
+  SELECT
+    @ROWNUM := @ROWNUM + 1 AS rn
+    , (SELECT Ceil(COUNT(*)/:MAX_COUNT)) AS pageCount
+    , U.ID AS userId
     , U.EMAIL AS userEmail
     , U.NAME AS userName
     , U.NICKNAME AS userNickName
@@ -124,7 +127,8 @@ const SELECT_ALL_USER_BANNED = `
   FROM GTC_USER AS U
   JOIN GTC_USER_BAN AS B
   ON U.ID = B.USER_ID
-  WHERE B.DELETE_FL = 0;
+  WHERE B.DELETE_FL = 0
+  LIMIT :ROWNUM, :MAX_COUNT;
 `;
 
 const SELECT_USER_BANNED = `
@@ -196,9 +200,18 @@ const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
 `;
 
 router.get('/ban', (req, res) => {
+  let { currentPage } = req.query;
+  currentPage = currentPage || 1;
+
+  const MaxCount = 30;
+
   Database.execute(
     (database) => database.query(
       SELECT_ALL_USER_BANNED,
+      {
+        MAX_COUNT: MaxCount,
+        ROWNUM: (currentPage - 1) * MaxCount,
+      },
     )
       .then((rows) => {
         res.json({

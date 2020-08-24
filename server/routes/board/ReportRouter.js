@@ -18,9 +18,16 @@ const SELECT_REPORT = `
 `;
 
 const SELECT_ALL_REPORT = `
-  SELECT
+   SELECT
     @ROWNUM := @ROWNUM + 1 AS rn
-    , (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_REPORT) AS pageCount 
+    , (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_REPORT C
+        WHERE
+            CASE
+              WHEN ':TAB' = 'reportTable' THEN
+                C.REJECT_FL = 0 AND C.DISPOSE_FL = 0
+              WHEN ':TAB' = 'reportResult' THEN
+                C.REJECT_FL = 1 OR C.DISPOSE_FL = 1
+            END) AS pageCount
     , R.ID AS reportId
     , R.TYPE_CD AS typeCode
     , R.TARGET_ID AS targetContentsId
