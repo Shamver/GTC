@@ -57,10 +57,10 @@ class HeaderStore {
 
   @action settingHeader = (isFirst = false) => {
     const { headerNoticeList } = this.root.BoardPostStore;
-    const { AdvertisePostListNow } = this.root.EventAdvertiseStore;
+    const { advertisePostListNow } = this.root.EventAdvertiseStore;
 
     const noticeLength = headerNoticeList.length;
-    const adLength = AdvertisePostListNow.length;
+    const adLength = advertisePostListNow.length;
 
     if (isFirst) return;
 
@@ -94,7 +94,7 @@ class HeaderStore {
           message: '등록된 광고가 없습니다. 광고를 등록해보세요!',
         };
       } else {
-        this.showingHeader = AdvertisePostListNow[this.showIndex];
+        this.showingHeader = advertisePostListNow[this.showIndex];
       }
     }
   }

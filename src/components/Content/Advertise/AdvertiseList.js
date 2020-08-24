@@ -5,9 +5,9 @@ import AdvertiseRow from './AdvertiseRow';
 
 const AdvertiseList = () => {
   const { EventAdvertiseStore } = useStores();
-  const { AdvertisePostListNow } = EventAdvertiseStore;
+  const { advertisePostListNow } = EventAdvertiseStore;
 
-  if (AdvertisePostListNow.length === 0) {
+  if (advertisePostListNow.length === 0) {
     return (
       <tr>
         <td colSpan="2">현재 광고중인 게시글이 없습니다.</td>
@@ -15,7 +15,7 @@ const AdvertiseList = () => {
     );
   }
 
-  return AdvertisePostListNow.map((data) => (
+  return advertisePostListNow.map((data) => (
     <AdvertiseRow key={data.id} data={data} />
   ));
 };
