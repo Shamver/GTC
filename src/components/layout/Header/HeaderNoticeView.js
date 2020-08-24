@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Badge, Container } from 'reactstrap';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
@@ -11,15 +11,23 @@ const HeaderNoticeView = () => {
   } = useStores();
   const { AdvertisePostListNow } = EventAdvertiseStore;
   const {
-    showIndex, showMode, doCycleAds, showingHeader,
+    showIndex, showMode, doCycleHeader, showingHeader, settingHeader,
   } = ComponentHeaderStore;
-
   const { headerNoticeList } = BoardPostStore;
 
+  const [isFirst, setIsFirst] = useState(true);
+
   useEffect(() => {
-    const interval = doCycleAds();
+    settingHeader(isFirst);
+    setIsFirst(false);
+  }, [headerNoticeList]);
+
+  useEffect(() => {
+    const interval = doCycleHeader();
     return () => clearInterval(interval);
-  }, [AdvertisePostListNow, showIndex, showMode, doCycleAds, showingHeader]);
+  }, [
+    AdvertisePostListNow, showIndex, showMode, doCycleHeader, showingHeader,
+  ]);
 
   return (
     <>
@@ -27,8 +35,11 @@ const HeaderNoticeView = () => {
         <TextContainer>
           <HeaderBadge color="danger">공지사항</HeaderBadge>
           &nbsp;
-          최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
-          최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
+          <Link to={showingHeader.url}>
+            <Span>
+              {showingHeader.message}
+            </Span>
+          </Link>
         </TextContainer>
       ) : (
         <TextContainer>
