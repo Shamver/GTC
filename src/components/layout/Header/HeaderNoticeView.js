@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Badge, Container } from 'reactstrap';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
@@ -6,16 +6,27 @@ import { Link } from 'react-router-dom';
 import useStores from '../../../stores/useStores';
 
 const HeaderNoticeView = () => {
-  const { EventAdvertiseStore, ComponentHeaderStore } = useStores();
-  const { AdvertisePostListNow } = EventAdvertiseStore;
   const {
-    showIndex, showMode, doCycleAds, showingHeader,
+    ComponentHeaderStore, BoardPostStore,
+  } = useStores();
+  const {
+    showMode, doCycleHeader, showingHeader, settingHeader,
   } = ComponentHeaderStore;
+  const { headerNoticeList } = BoardPostStore;
+
+  const [isFirst, setIsFirst] = useState(true);
 
   useEffect(() => {
-    const interval = doCycleAds();
+    settingHeader(isFirst);
+    setIsFirst(false);
+  }, [headerNoticeList]);
+
+  useEffect(() => {
+    const interval = doCycleHeader();
     return () => clearInterval(interval);
-  }, [AdvertisePostListNow, showIndex, showMode, doCycleAds, showingHeader]);
+  }, [
+    doCycleHeader,
+  ]);
 
   return (
     <>
@@ -23,14 +34,17 @@ const HeaderNoticeView = () => {
         <TextContainer>
           <HeaderBadge color="danger">공지사항</HeaderBadge>
           &nbsp;
-          최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
-          최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자최대글자
+          <Link to={showingHeader.url}>
+            <Span>
+              {showingHeader.message}
+            </Span>
+          </Link>
         </TextContainer>
       ) : (
         <TextContainer>
           <HeaderBadge color="danger">광고</HeaderBadge>
           &nbsp;
-          { showingHeader ? (showingHeader.url
+          { showingHeader && (showingHeader.url
             ? (
               <Link to={showingHeader.url}>
                 <Span>
@@ -41,9 +55,7 @@ const HeaderNoticeView = () => {
               <span>
                 {showingHeader.message}
               </span>
-            )) : (
-              <span>&nbsp;</span>
-          )}
+            ))}
         </TextContainer>
       )}
     </>
@@ -52,6 +64,7 @@ const HeaderNoticeView = () => {
 
 const HeaderBadge = styled(Badge)`
   padding-top: .45em !important;
+  line-height: 14px;
 `;
 
 const Span = styled.span`
@@ -61,6 +74,8 @@ const Span = styled.span`
 const TextContainer = styled(Container)`
   margin : 0 !important;
   text-align : center;
+  line-height: 26px;
+  vertical-align: middle;
   height : 40px !important;
   overflow : hidden;
   text-overflow : ellipsis;

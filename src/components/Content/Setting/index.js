@@ -5,6 +5,7 @@ import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import SettingNav from './SettingNav';
 import SettingTabContent from './SettingTabContent';
+import FontTest from "../../util/FontTest";
 
 const Setting = () => {
   const { UserIgnoreStore, UtilLoadingStore } = useStores();
@@ -19,6 +20,7 @@ const Setting = () => {
 
   return (
     <MainContainer>
+      <FontTest />
       <SettingNav />
       <SettingTabContent />
     </MainContainer>

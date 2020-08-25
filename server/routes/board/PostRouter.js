@@ -40,6 +40,7 @@ const SELECT_POST_LIST = `
     AND P.USER_ID NOT IN
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
     AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+    AND P.DELETE_FL = 0
     :query
   ORDER BY CRT_DTTM DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
@@ -61,6 +62,19 @@ const SELECT_POST_NOTICE_LIST = `
   WHERE 
     BOARD_CD = ':BOARD_CD' 
     AND P.NOTICE_FL = 1
+    AND P.DELETE_FL = 0
+  ORDER BY CRT_DTTM DESC
+`;
+
+const SELECT_HEADER_NOTICE = `
+  SELECT
+    P.ID AS id
+    , P.TITLE AS title
+  FROM
+    GTC_POST P
+  WHERE
+    P.NOTICE_FL = 1
+    AND P.DELETE_FL = 0
   ORDER BY CRT_DTTM DESC
 `;
 
@@ -99,6 +113,7 @@ const SELECT_POST_LIST_ALL = `
     AND P.USER_ID NOT IN 
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
     AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+    AND P.DELETE_FL = 0
     :query
   ORDER BY CRT_DTTM DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
@@ -165,7 +180,7 @@ const SELECT_MINE_POST = `
   FROM
     GTC_POST
     , (SELECT @ROWNUM := :CURRENT_PAGE) AS TEMP
-  WHERE USER_ID = :USER_ID
+  WHERE USER_ID = :USER_ID AND DELETE_FL = 0
   ORDER BY ID DESC
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -224,6 +239,7 @@ const SELECT_POST_UPPER_AND_LOWER = `
     WHERE BOARD_CD = (SELECT BOARD_CD FROM GTC_POST WHERE ID = :POST_ID)
     AND P.USER_ID NOT IN
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+    AND P.DELETE_FL = 0
     ORDER BY ID DESC    
   ) AS B
   WHERE B.RN IN (
@@ -235,6 +251,7 @@ const SELECT_POST_UPPER_AND_LOWER = `
         WHERE P.BOARD_CD = (SELECT BOARD_CD FROM GTC_POST WHERE ID = :POST_ID)
         AND P.USER_ID NOT IN
           (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+        AND P.DELETE_FL = 0
         ORDER BY ID DESC   
       ) AS A
       WHERE A.ID = :POST_ID) + 1),
@@ -246,6 +263,7 @@ const SELECT_POST_UPPER_AND_LOWER = `
             WHERE P.BOARD_CD = (SELECT BOARD_CD FROM GTC_POST WHERE ID = :POST_ID)
             AND P.USER_ID NOT IN
               (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
+            AND P.DELETE_FL = 0
             ORDER BY ID DESC   
       ) AS A
       WHERE A.ID = :POST_ID) - 1
@@ -267,7 +285,9 @@ const UPDATE_POST = `
 `;
 
 const DELETE_POST = `
-  DELETE FROM GTC_POST 
+  UPDATE GTC_POST
+  SET
+    DELETE_FL = 1
   WHERE ID = :POST_ID 
 `;
 
@@ -324,6 +344,7 @@ const SELECT_POST_LIST_SEARCH = `
       OR P.TITLE LIKE '%:KEYWORD%'
       OR GU.NICKNAME LIKE '%:KEYWORD%'
     )
+    AND P.DELETE_FL = 0
   ORDER BY P.CRT_DTTM DESC   
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -359,6 +380,7 @@ const SELECT_POST_LIST_BOARD_SEARCH = `
     AND P.USER_ID NOT IN
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
     AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
+    AND P.DELETE_FL = 0
     :query
   ORDER BY P.CRT_DTTM DESC   
   LIMIT :CURRENT_PAGE, :PER_PAGE
@@ -529,6 +551,24 @@ router.get('/notice', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, GET /api/board/post/notice] 공지 게시글 목록 조회');
+  });
+});
+
+router.get('/notice/header', (req, res) => {
+  Database.execute(
+    (database) => database.query(
+      SELECT_HEADER_NOTICE,
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '헤더 공지 게시글 목록 조회',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/board/post/notice/header] 헤더 공지 게시글 목록 조회');
   });
 });
 

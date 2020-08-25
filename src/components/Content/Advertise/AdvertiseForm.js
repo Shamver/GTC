@@ -9,8 +9,8 @@ import useStores from '../../../stores/useStores';
 const AdvertiseForm = () => {
   const { EventAdvertiseStore, UserStore } = useStores();
   const { userData, guestAuthor } = UserStore;
-  const { onChangeAdvertise, AdvertisePost, AddAdPostList } = EventAdvertiseStore;
-  const { message, url, hours } = AdvertisePost;
+  const { onChangeAdvertise, advertisePost, AddAdPostList } = EventAdvertiseStore;
+  const { message, url, hours } = advertisePost;
   return (
     <>
       <h3>포스팅 광고</h3>

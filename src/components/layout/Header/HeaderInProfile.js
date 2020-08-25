@@ -120,7 +120,6 @@ const LinkNoDeco = styled(Link)`
 // 나중에 화면단위별로 위치 변경
 const DropdownMenuLeft = styled(DropdownMenu)`
   left: -92px !important;
-  padding-top: .2rem !important;
 `;
 
 const DropdownItem30 = styled(DropdownItem)`
@@ -142,11 +141,17 @@ const DropdownToggleC = styled(DropdownToggle)`
 
 const AvatarDropdownToggleC = styled(DropdownToggleC)`
   padding : 5px 13px 7px 10px !important;
+  &:after {
+    vertical-align: .1em !important;
+  }
 `;
 
 const DropdownItemTitle = styled.div`
   display: block;
   width: 100%;
+  height: 30px;
+  line-height: 30px;
+  vertical-align: middle;
   padding: 0 1.5rem;
   clear: both;
   font-weight: 700;
