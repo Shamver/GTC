@@ -1,28 +1,16 @@
-import React, { useLayoutEffect, memo } from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
-import useStores from '../../../stores/useStores';
 import ReportTabContent from './ReportTabContent';
 import ReportNav from './ReportNav';
 
 const Report = ({ match, parentProps }) => {
-  const { BoardReportStore, UtilLoadingStore, UserStore } = useStores();
-  const { loadingProcess } = UtilLoadingStore;
-  const { getReportList } = BoardReportStore;
-  const { getUserBanned } = UserStore;
   const { params } = match;
   let { noPagination } = parentProps;
   let { currentPage } = params;
   noPagination = noPagination !== undefined;
   currentPage = currentPage || '1';
-
-  // useLayoutEffect(() => {
-  //   loadingProcess([
-  //     () => getReportList(currentPage),
-  //     () => getUserBanned(currentPage),
-  //   ]);
-  // }, [loadingProcess, getReportList, currentPage, getUserBanned]);
 
   return (
     <BoardWrapper>

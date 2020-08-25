@@ -1,12 +1,13 @@
 import React, { memo } from 'react';
 import { TabContent } from 'reactstrap';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import ReportTable from './ReportTable';
 import ReportResult from './ReportResult';
 import ReportUser from './ReportUser';
 
-const ReportTabContent = ({currentPage, noPagination}) => {
+const ReportTabContent = ({ currentPage, noPagination }) => {
   const { BoardReportStore } = useStores();
   const { activeTab } = BoardReportStore;
 
@@ -19,6 +20,11 @@ const ReportTabContent = ({currentPage, noPagination}) => {
       </TabContent>
     </>
   );
+};
+
+ReportTabContent.propTypes = {
+  currentPage: Proptypes.string.isRequired,
+  noPagination: Proptypes.bool.isRequired,
 };
 
 export default memo(observer(ReportTabContent));

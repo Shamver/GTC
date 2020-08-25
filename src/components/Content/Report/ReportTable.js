@@ -5,21 +5,22 @@ import { observer } from 'mobx-react';
 import ReportList from './ReportList';
 import useStores from '../../../stores/useStores';
 import ReportPagination from './Pagination';
+import * as Proptypes from 'prop-types';
 
 const ReportTable = ({currentPage, noPagination}) => {
   const { BoardReportStore, UtilLoadingStore } = useStores();
   const { loadingProcess } = UtilLoadingStore;
-  const { reportDataList, getReportList } = BoardReportStore;
+  const { reportDataList, getReportList, activeTab, currentReportMaxPage } = BoardReportStore;
+  const reportList = reportDataList.map(
+    (v, index) => (<ReportList data={v} key={v.reportId} index={index} />),
+  );
 
   useLayoutEffect(() => {
     loadingProcess([
       () => getReportList(currentPage),
     ]);
-  }, [loadingProcess, getReportList, currentPage]);
+  }, [loadingProcess, getReportList, currentPage, activeTab]);
 
-  const reportList = reportDataList.map(
-    (v, index) => (<ReportList data={v} key={v.reportId} index={index} />),
-  );
 
   return (
     <TabPane tabId="reportTable">
@@ -38,9 +39,16 @@ const ReportTable = ({currentPage, noPagination}) => {
           { reportList }
         </tbody>
       </CodeTable>
-      <ReportPagination currentPage={currentPage} noPagination={noPagination} />
+      {currentReportMaxPage !== 0
+        ? (<ReportPagination currentPage={currentPage} noPagination={noPagination} />)
+        : ''}
     </TabPane>
   );
+};
+
+ReportTable.propTypes = {
+  currentPage: Proptypes.string.isRequired,
+  noPagination: Proptypes.bool.isRequired,
 };
 
 const CodeTable = styled(Table)`

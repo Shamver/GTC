@@ -40,10 +40,9 @@ class ReportStore {
     const { name } = e.target;
     const { history } = this.root.UtilRouteStore;
 
-    history.push(`/report/${name}`);
-
     if (this.activeTab !== name) {
       this.activeTab = name;
+      history.push(`/report/${name}`);
     }
   });
 

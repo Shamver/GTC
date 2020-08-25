@@ -1,24 +1,26 @@
-import React, { memo, useEffect } from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import ReportUserList from './ReportUserList';
+import ReportPagination from './Pagination';
+import * as Proptypes from 'prop-types';
 
-const ReportUser = () => {
-  const { UserStore, UtilLoadingStore } = useStores();
+const ReportUser = ({ currentPage, noPagination }) => {
+  const { UserStore, UtilLoadingStore, BoardReportStore } = useStores();
   const { loadingProcess } = UtilLoadingStore;
+  const { activeTab, currentReportMaxPage } = BoardReportStore;
   const { getUserBanned, banUserList } = UserStore;
   const BanUserList = banUserList.map(
     (v, index) => (<ReportUserList data={v} key={v.reportId} index={index} />),
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     loadingProcess([
-      getUserBanned,
+      () => getUserBanned(currentPage),
     ]);
-    getUserBanned();
-  }, [getUserBanned, loadingProcess]);
+  }, [loadingProcess, getUserBanned, currentPage, activeTab]);
 
   return (
     <TabPane tabId="ReportUser">
@@ -38,8 +40,16 @@ const ReportUser = () => {
           {BanUserList}
         </tbody>
       </CodeTable>
+      {currentReportMaxPage !== 0
+        ? (<ReportPagination currentPage={currentPage} noPagination={noPagination} />)
+        : ''}
     </TabPane>
   );
+};
+
+ReportUser.propTypes = {
+  currentPage: Proptypes.string.isRequired,
+  noPagination: Proptypes.bool.isRequired,
 };
 
 const CodeTable = styled(Table)`
