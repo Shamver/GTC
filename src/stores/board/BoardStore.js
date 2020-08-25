@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 class BoardStore {
   @observable boardKinds = {};
 
+  @observable boardList = [];
+
   @observable boards = [{
     value: 'NOTICE',
     name: '공지사항',
@@ -78,6 +80,12 @@ class BoardStore {
   constructor(root) {
     this.root = root;
   }
+
+  @action setBoardList = () => {
+    const { menuList } = this.root.SystemMenuStore;
+    this.boardList = menuList.filter((data) => data.type === 'MT01');
+  }
+
 
   @action setBoardKinds = (arr) => {
     this.boardKinds = {};

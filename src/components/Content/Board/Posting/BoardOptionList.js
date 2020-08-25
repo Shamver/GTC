@@ -1,11 +1,16 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect } from 'react';
+import { observer } from 'mobx-react';
 import useStores from '../../../../stores/useStores';
 
 const BoardOptionList = () => {
   const { BoardStore } = useStores();
-  const { boards } = BoardStore;
+  const { boardList, setBoardList } = BoardStore;
 
-  return boards.map((data) => (
+  useEffect(() => {
+    setBoardList();
+  }, [setBoardList]);
+
+  return boardList.map((data) => (
     <option
       value={data.value}
       key={data.value}
@@ -15,4 +20,4 @@ const BoardOptionList = () => {
   ));
 };
 
-export default memo(BoardOptionList);
+export default memo(observer(BoardOptionList));
