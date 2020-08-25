@@ -22,6 +22,8 @@ class HeaderStore {
     message: '',
   };
 
+  @observable isFirst = true;
+
   constructor(root) {
     this.root = root;
   }
@@ -55,14 +57,17 @@ class HeaderStore {
     return false;
   }, 5000);
 
-  @action settingHeader = (isFirst = false) => {
+  @action settingHeader = () => {
     const { headerNoticeList } = this.root.BoardPostStore;
     const { advertisePostListNow } = this.root.EventAdvertiseStore;
 
     const noticeLength = headerNoticeList.length;
     const adLength = advertisePostListNow.length;
 
-    if (isFirst) return;
+    if (this.isFirst) {
+      this.isFirst = false;
+      return;
+    }
 
     if (this.showMode === 0 && this.showIndex === (noticeLength || 1) - 1) {
       this.showMode = 1;

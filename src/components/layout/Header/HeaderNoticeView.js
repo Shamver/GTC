@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { memo, useEffect } from 'react';
 import { Badge, Container } from 'reactstrap';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
@@ -14,12 +14,9 @@ const HeaderNoticeView = () => {
   } = ComponentHeaderStore;
   const { headerNoticeList } = BoardPostStore;
 
-  const [isFirst, setIsFirst] = useState(true);
-
   useEffect(() => {
-    settingHeader(isFirst);
-    setIsFirst(false);
-  }, [headerNoticeList]);
+    settingHeader();
+  }, [headerNoticeList, settingHeader]);
 
   useEffect(() => {
     const interval = doCycleHeader();
