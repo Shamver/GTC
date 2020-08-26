@@ -57,6 +57,7 @@ const SELECT_USER_FROM_EMAIL = `
     , U.GENDER_CD AS gender
     , U.PROFILE_FL AS profileYN
     , IFNULL(U.DELETE_DTTM, NULL) AS deletedDate
+    , U.DELETE_FL AS deleteFl
     , U.OPERATOR_FL AS operatorYN
     , U.ADMIN_FL AS adminYN
     , U.PROFILE AS profile
@@ -68,6 +69,7 @@ const SELECT_USER_FROM_EMAIL = `
   LEFT JOIN GTC_USER_BAN B
   ON U.ID = B.USER_ID
   WHERE U.EMAIL = ':EMAIL'
+    AND B.DELETE_FL = 0
 `;
 
 router.post('/register', (req, res) => {
@@ -131,12 +133,14 @@ router.post('/login', (req, res) => {
       },
     )
       .then((rows) => {
+        console.log(rows);
         if (rows.length === 1) {
           const resultData = rows[0];
           const {
             id, nickname, gtNickname, deletedDate,
             email, tel, birth, gender, profileYN, name,
             operatorYN, adminYN, profile, banFl, banReason,
+            deleteFl,
           } = resultData;
           if (deletedDate === null) {
             if (banFl === 1) {
@@ -178,7 +182,7 @@ router.post('/login', (req, res) => {
                 },
               );
             }
-          } else {
+          } else if (deleteFl === 0) {
             res.json({
               success: true,
               code: 3,

@@ -387,6 +387,7 @@ const SELECT_POST_LIST_BOARD_SEARCH = `
 `;
 
 router.get('/', (req, res) => {
+  console.log(req.query);
   let { currentPage, currentCategory } = req.query;
   const {
     board, isHome, recommend,
