@@ -1,26 +1,20 @@
-import React, { memo, useLayoutEffect } from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
 import ReportList from './ReportList';
 import useStores from '../../../stores/useStores';
 import ReportPagination from './Pagination';
-import * as Proptypes from 'prop-types';
 
-const ReportTable = ({currentPage, noPagination}) => {
-  const { BoardReportStore, UtilLoadingStore } = useStores();
-  const { loadingProcess } = UtilLoadingStore;
-  const { reportDataList, getReportList, activeTab, currentReportMaxPage } = BoardReportStore;
+const ReportTable = ({ currentPage, noPagination }) => {
+  const { BoardReportStore } = useStores();
+  const {
+    reportDataList, currentReportMaxPage,
+  } = BoardReportStore;
   const reportList = reportDataList.map(
     (v, index) => (<ReportList data={v} key={v.reportId} index={index} />),
   );
-
-  useLayoutEffect(() => {
-    loadingProcess([
-      () => getReportList(currentPage),
-    ]);
-  }, [loadingProcess, getReportList, currentPage, activeTab]);
-
 
   return (
     <TabPane tabId="reportTable">

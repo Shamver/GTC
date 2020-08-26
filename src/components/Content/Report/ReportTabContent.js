@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import { TabContent } from 'reactstrap';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
@@ -8,8 +8,17 @@ import ReportResult from './ReportResult';
 import ReportUser from './ReportUser';
 
 const ReportTabContent = ({ currentPage, noPagination }) => {
-  const { BoardReportStore } = useStores();
-  const { activeTab } = BoardReportStore;
+  const { BoardReportStore, UtilLoadingStore } = useStores();
+  const { loadingProcess } = UtilLoadingStore;
+  const {
+    getReportList, activeTab,
+  } = BoardReportStore;
+
+  useLayoutEffect(() => {
+    loadingProcess([
+      () => getReportList(currentPage),
+    ]);
+  }, [loadingProcess, getReportList, currentPage, activeTab]);
 
   return (
     <>

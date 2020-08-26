@@ -2,10 +2,10 @@ import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import ReportUserList from './ReportUserList';
 import ReportPagination from './Pagination';
-import * as Proptypes from 'prop-types';
 
 const ReportUser = ({ currentPage, noPagination }) => {
   const { UserStore, UtilLoadingStore, BoardReportStore } = useStores();
