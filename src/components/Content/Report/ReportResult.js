@@ -1,23 +1,20 @@
-import React, { memo, useLayoutEffect } from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import ReportResultList from './ReportResultList';
+import ReportPagination from './Pagination';
 
-const ReportResult = () => {
-  const { BoardReportStore, UtilLoadingStore } = useStores();
-  const { loadingProcess } = UtilLoadingStore;
-  const { getReportList, reportDataList, activeTab } = BoardReportStore;
+const ReportResult = ({ currentPage, noPagination }) => {
+  const { BoardReportStore } = useStores();
+  const {
+    reportDataList, currentReportMaxPage,
+  } = BoardReportStore;
   const reportResultList = reportDataList.map(
     (v, index) => (<ReportResultList data={v} key={v.reportId} index={index} />),
   );
-
-  useLayoutEffect(() => {
-    loadingProcess([
-      getReportList,
-    ]);
-  }, [activeTab, getReportList, loadingProcess]);
 
   return (
     <TabPane tabId="ReportResult">
@@ -38,8 +35,16 @@ const ReportResult = () => {
           {reportResultList}
         </tbody>
       </CodeTable>
+      {currentReportMaxPage !== 0
+        ? (<ReportPagination currentPage={currentPage} noPagination={noPagination} />)
+        : ''}
     </TabPane>
   );
+};
+
+ReportResult.propTypes = {
+  currentPage: Proptypes.string.isRequired,
+  noPagination: Proptypes.bool.isRequired,
 };
 
 const CodeTable = styled(Table)`

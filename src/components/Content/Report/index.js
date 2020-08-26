@@ -1,20 +1,16 @@
-import React, { useLayoutEffect, memo } from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import useStores from '../../../stores/useStores';
+import * as Proptypes from 'prop-types';
 import ReportTabContent from './ReportTabContent';
 import ReportNav from './ReportNav';
 
-const Report = () => {
-  const { BoardReportStore, UtilLoadingStore } = useStores();
-  const { loadingProcess } = UtilLoadingStore;
-  const { getReportList } = BoardReportStore;
-
-  useLayoutEffect(() => {
-    loadingProcess([
-      getReportList,
-    ]);
-  }, [loadingProcess, getReportList]);
+const Report = ({ match, parentProps }) => {
+  const { params } = match;
+  let { noPagination } = parentProps;
+  let { currentPage } = params;
+  noPagination = noPagination !== undefined;
+  currentPage = currentPage || '1';
 
   return (
     <BoardWrapper>
@@ -22,11 +18,22 @@ const Report = () => {
         <h3>신고 관리</h3>
         <ReportTableCol>
           <ReportNav />
-          <ReportTabContent />
+          <ReportTabContent currentPage={currentPage} noPagination={noPagination} />
         </ReportTableCol>
       </TableWrapper>
     </BoardWrapper>
   );
+};
+
+Report.propTypes = {
+  match: Proptypes.shape({
+    params: Proptypes.shape({
+      currentPage: Proptypes.string,
+    }).isRequired,
+  }).isRequired,
+  parentProps: Proptypes.shape({
+    noPagination: Proptypes.bool,
+  }).isRequired,
 };
 
 const BoardWrapper = styled.div`

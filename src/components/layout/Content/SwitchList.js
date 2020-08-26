@@ -25,7 +25,6 @@ const SwitchList = () => {
       <AuthRouter exact Component={Contents.NewAlert} level={1} path="/newalert" />
       <AuthRouter exact Component={Contents.MyAccount} level={1} path="/myaccount" />
       <AuthRouter exact Component={Contents.Code} level={3} path="/code" />
-      <AuthRouter exact Component={Contents.Report} level={3} path="/report" />
       <AuthRouter exact Component={Contents.Test} level={3} path="/test" />
       <AuthRouter exact Component={Contents.BoardSetting} level={3} path="/boardsetting" />
 
@@ -43,6 +42,9 @@ const SwitchList = () => {
 
       {/* ---------------------------- Search Router Component --------------------------- */}
       <AuthRouter exact={false} Component={Router.SearchRouter} level={1} path="/search" />
+
+      {/* ---------------------------- Pointer Router Component --------------------------- */}
+      <AuthRouter exact={false} Component={Router.ReportRouter} level={3} path="/report" />
 
       {/* ---------------------------- Board Router Component ---------------------------- */}
       <AuthRouter exact={false} Component={Router.BoardRouter} level={1} path="/:board" />

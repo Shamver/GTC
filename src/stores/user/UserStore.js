@@ -96,9 +96,9 @@ class UserStore {
           } else if (data.code === 2) {
             const { suspendBan, banTerm } = data.result;
             if (suspendBan) {
-              toggleAlert(`해당 계정은 ${data.message}의 사유로 영구 정지 처리 되었습니다. 자세한 사항은 운영자에게 문의하세요.`);
+              toggleAlert(`해당 계정은 <b>${data.message}</b>의 사유로 영구 정지 처리 되었습니다. 자세한 사항은 운영자에게 문의하세요.`);
             } else {
-              toggleAlert(`해당 계정은 ${data.message}의 사유로 ${banTerm} 까지 계정 정지 처리 되었습니다. 자세한 사항은 운영자에게 문의하세요.`);
+              toggleAlert(`해당 계정은 <b>${data.message}</b>의 사유로 <b>${banTerm}</b> 까지 계정 정지 처리 되었습니다. 자세한 사항은 운영자에게 문의하세요.`);
             }
           } else {
             toast.info(data.message);
@@ -482,13 +482,23 @@ class UserStore {
     return false;
   }
 
-  @action getUserBanned = async () => {
-    await axios.get('/api/user/ban')
+  @action getUserBanned = async (currentPage) => {
+    await axios.get('/api/user/ban', {
+      params: {
+        currentPage,
+      },
+    })
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             this.banUserList = data.result;
+            if (data.result.length === 0) {
+              this.root.BoardReportStore.currentReportMaxPage = 0;
+            } else {
+              const { pageCount } = data.result[0];
+              this.root.BoardReportStore.currentReportMaxPage = pageCount;
+            }
           } else {
             toast.info(data.message);
           }
@@ -525,8 +535,10 @@ class UserStore {
   };
 
   @action userBan = async (reportId, targetUserId, actionType, reason, term) => {
+    const managerId = this.userData.id;
+
     await axios.post('/api/user/ban', {
-      reportId, targetUserId, actionType, reason, term,
+      reportId, targetUserId, actionType, reason, term, managerId,
     })
       .then((response) => {
         const { data } = response;
@@ -551,8 +563,10 @@ class UserStore {
   };
 
   @action userBanCancel = async (userId) => {
+    const managerId = this.userData.id;
+
     await axios.put('/api/user/cancel', {
-      userId,
+      userId, managerId,
     })
       .then((response) => {
         const { data } = response;

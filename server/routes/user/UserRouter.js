@@ -110,7 +110,10 @@ const GET_USER_COMMENT_LIST = `
 `;
 
 const SELECT_ALL_USER_BANNED = `
-  SELECT U.ID AS userId
+  SELECT
+    @ROWNUM := @ROWNUM + 1 AS rn
+    , (SELECT Ceil(COUNT(*)/:MAX_COUNT)) AS pageCount
+    , U.ID AS userId
     , U.EMAIL AS userEmail
     , U.NAME AS userName
     , U.NICKNAME AS userNickName
@@ -123,7 +126,9 @@ const SELECT_ALL_USER_BANNED = `
     , DATE_FORMAT(B.CRT_DTTM,'%Y-%m-%d') AS banDate
   FROM GTC_USER AS U
   JOIN GTC_USER_BAN AS B
-  ON U.ID = B.USER_ID;
+  ON U.ID = B.USER_ID
+  WHERE B.DELETE_FL = 0
+  LIMIT :ROWNUM, :MAX_COUNT;
 `;
 
 const SELECT_USER_BANNED = `
@@ -134,7 +139,7 @@ const SELECT_USER_BANNED = `
     , DATE_FORMAT(B.BAN_TERM,'%Y-%m-%d') AS tookBanTerm
     , DATE_FORMAT(B.CRT_DTTM,'%Y-%m-%d') AS tookDate
   FROM GTC_USER_BAN B
-  WHERE USER_ID = :USER_ID;
+  WHERE USER_ID = :USER_ID AND B.DELETE_FL = :DELETE_FL;
 `;
 
 const INSERT_USER_BAN = `
@@ -159,26 +164,28 @@ const INSERT_USER_BAN = `
 
 const UPDATE_USER_BAN_FL = `
   UPDATE GTC_USER
-  SET
-    BANNED_FL = :BAN_FL
+  SET BANNED_FL = :BAN_FL
   WHERE ID = :USER_ID
 `;
 
 const UPDATE_USER_BAN_CANCEL = `
-  DELETE FROM GTC_USER_BAN
-  WHERE USER_ID = :USER_ID
+  UPDATE GTC_USER_BAN
+  SET DELETE_FL = 1
+  WHERE USER_ID = :USER_ID AND DELETE_FL = 0;
 `;
 
 const UPDATE_REPORT_CANCEL = `
   UPDATE GTC_REPORT
-  SET CANCEL_FL = 1
-  WHERE ID = (SELECT REPORT_ID FROM GTC_USER_BAN WHERE USER_ID = :USER_ID);
+  SET CANCEL_FL = 1,
+    MANAGER_ID = :MANAGER_ID
+  WHERE ID = (SELECT REPORT_ID FROM GTC_USER_BAN WHERE USER_ID = :USER_ID AND DELETE_FL = 0);
 `;
 
 const UPDATE_REPORT = `
   UPDATE GTC_REPORT
   SET
-    DISPOSE_FL = 1
+    DISPOSE_FL = 1,
+    MANAGER_ID = :MANAGER_ID
   WHERE ID = :ID;
 `;
 
@@ -193,9 +200,18 @@ const SELECT_USER_CAN_CHANGE_GT_NICKNAME = `
 `;
 
 router.get('/ban', (req, res) => {
+  let { currentPage } = req.query;
+  currentPage = currentPage || 1;
+
+  const MaxCount = 30;
+
   Database.execute(
     (database) => database.query(
       SELECT_ALL_USER_BANNED,
+      {
+        MAX_COUNT: MaxCount,
+        ROWNUM: (currentPage - 1) * MaxCount,
+      },
     )
       .then((rows) => {
         res.json({
@@ -212,7 +228,7 @@ router.get('/ban', (req, res) => {
 
 router.post('/ban', (req, res) => {
   const {
-    reportId, targetUserId, actionType, reason, term,
+    reportId, targetUserId, actionType, reason, term, managerId,
   } = req.body;
 
   Database.execute(
@@ -220,6 +236,7 @@ router.post('/ban', (req, res) => {
       SELECT_USER_BANNED,
       {
         USER_ID: targetUserId,
+        DELETE_FL: 0,
       },
     )
       .then((rows) => {
@@ -247,6 +264,7 @@ router.post('/ban', (req, res) => {
         UPDATE_REPORT,
         {
           ID: reportId,
+          MANAGER_ID: managerId,
         },
       ))
       .then(() => database.query(
@@ -283,6 +301,7 @@ router.get('/ban/detail', (req, res) => {
       SELECT_USER_BANNED,
       {
         USER_ID: userId,
+        DELETE_FL: 0,
       },
     )
       .then((rows) => {
@@ -299,13 +318,14 @@ router.get('/ban/detail', (req, res) => {
 });
 
 router.put('/cancel', (req, res) => {
-  const { userId } = req.body;
+  const { userId, managerId } = req.body;
 
   Database.execute(
     (database) => database.query(
       UPDATE_REPORT_CANCEL,
       {
         USER_ID: userId,
+        MANAGER_ID: managerId,
       },
     )
       .then(() => database.query(

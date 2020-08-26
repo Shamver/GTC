@@ -4,6 +4,7 @@ import SearchRouter from './SearchRouter';
 import PostLockerRouter from './PostlockerRouter';
 import ConsultRouter from './ConsultRouter';
 import ConsultAdminRouter from './ConsultAdminRouter';
+import ReportRouter from './ReportRouter';
 
 export default {
   PointRouter,
@@ -12,4 +13,5 @@ export default {
   PostLockerRouter,
   ConsultRouter,
   ConsultAdminRouter,
+  ReportRouter,
 };

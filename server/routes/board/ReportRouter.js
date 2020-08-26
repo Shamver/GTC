@@ -18,7 +18,17 @@ const SELECT_REPORT = `
 `;
 
 const SELECT_ALL_REPORT = `
-  SELECT R.ID AS reportId
+   SELECT
+    @ROWNUM := @ROWNUM + 1 AS rn
+    , (SELECT Ceil(COUNT(*)/:MAX_COUNT) FROM GTC_REPORT C
+        WHERE
+            CASE
+              WHEN ':TAB' = 'reportTable' THEN
+                C.REJECT_FL = 0 AND C.DISPOSE_FL = 0
+              WHEN ':TAB' = 'reportResult' THEN
+                C.REJECT_FL = 1 OR C.DISPOSE_FL = 1
+            END) AS pageCount
+    , R.ID AS reportId
     , R.TYPE_CD AS typeCode
     , R.TARGET_ID AS targetContentsId
     , CASE
@@ -42,6 +52,7 @@ const SELECT_ALL_REPORT = `
         WHEN R.CANCEL_FL = 0 AND R.DISPOSE_FL = 1  THEN '정지'
         WHEN R.CANCEL_FL = 1 AND R.DISPOSE_FL = 1 THEN '정지 취소'
         WHEN R.REJECT_FL = 1 THEN '반려' END AS reportResult
+     , (SELECT NICKNAME FROM GTC_USER WHERE ID = R.MANAGER_ID) AS managerId
   FROM GTC_REPORT R
   WHERE
     CASE
@@ -56,6 +67,7 @@ const SELECT_ALL_REPORT = `
       WHEN ':TAB' = 'reportResult' THEN R.MFY_DTTM
     END
   DESC
+  LIMIT :ROWNUM, :MAX_COUNT
 `;
 
 const INSERT_REPORT = `
@@ -76,7 +88,7 @@ const INSERT_REPORT = `
   )
 `;
 
-const SELECT_DEATAIL_REPORT = `
+const SELECT_DETAIL_REPORT = `
  SELECT R.ID AS reportId
     , R.TYPE_CD AS typeCode
     , R.TARGET_ID AS targetContentsId
@@ -102,14 +114,31 @@ const SELECT_DEATAIL_REPORT = `
     , R.REASON_CD AS reasonCode
     , (SELECT NAME FROM GTC_CODE WHERE GTC_CODE.CODE = R.REASON_CD) AS reason
     , R.REASON_DESC AS reasonDetail
+    , CASE
+        WHEN R.CANCEL_FL = 0 AND R.DISPOSE_FL = 1  THEN '정지'
+        WHEN R.CANCEL_FL = 1 AND R.DISPOSE_FL = 1 THEN '정지 취소'
+        WHEN R.REJECT_FL = 1 THEN '반려' END AS reportResult
     , DATE_FORMAT(R.CRT_DTTM, '%Y-%m-%d') AS reportDate
+    , (SELECT NICKNAME FROM GTC_USER WHERE ID = R.MANAGER_ID) AS managerId
+    , U.SUSPEND_BAN_FL AS suspendBanFl
+    , U.TEMP_BAN_FL AS tempBanFl
+    , U.BAN_REASON AS tookReason
+    , DATE_FORMAT(U.BAN_TERM,'%Y-%m-%d') AS tookBanTerm
+    , DATE_FORMAT(U.CRT_DTTM,'%Y-%m-%d') AS tookDate
+    , CASE
+        WHEN R.REJECT_FL = 1 THEN DATE_FORMAT(R.MFY_DTTM,'%Y-%m-%d') 
+        WHEN R.REJECT_FL = 0 THEN DATE_FORMAT(U.CRT_DTTM,'%Y-%m-%d') END AS tookDate
   FROM GTC_REPORT R
+  LEFT JOIN GTC_USER_BAN U
+  ON U.REPORT_ID = R.ID
   WHERE R.ID = :REPORT_ID
 `;
 
 const UPDATE_REPORT_REJECT = `
-  UPDATE GTC_REPORT
-  SET REJECT_FL = 1
+  UPDATE GTC_REPORT R
+  SET 
+    REJECT_FL = 1,
+    MANAGER_ID = :MANAGER_ID
   WHERE ID = :REPORT_ID;
 `;
 
@@ -170,12 +199,18 @@ router.post('/', (req, res) => {
 
 router.get('/', (req, res) => {
   const { tab } = req.query;
+  let { currentPage } = req.query;
+  currentPage = currentPage || 1;
+
+  const MaxCount = 30;
 
   Database.execute(
     (database) => database.query(
       SELECT_ALL_REPORT,
       {
+        MAX_COUNT: MaxCount,
         TAB: tab,
+        ROWNUM: (currentPage - 1) * MaxCount,
       },
     )
       .then((rows) => {
@@ -196,7 +231,7 @@ router.get('/detail', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      SELECT_DEATAIL_REPORT,
+      SELECT_DETAIL_REPORT,
       {
         REPORT_ID: reportId,
       },
@@ -215,13 +250,14 @@ router.get('/detail', (req, res) => {
 });
 
 router.put('/reject', (req, res) => {
-  const { reportId } = req.body;
+  const { reportId, managerId } = req.body;
 
   Database.execute(
     (database) => database.query(
       UPDATE_REPORT_REJECT,
       {
         REPORT_ID: reportId,
+        MANAGER_ID: managerId,
       },
     )
       .then(() => {

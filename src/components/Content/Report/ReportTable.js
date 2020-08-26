@@ -2,12 +2,16 @@ import React, { memo } from 'react';
 import styled from 'styled-components';
 import { Table, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
 import ReportList from './ReportList';
 import useStores from '../../../stores/useStores';
+import ReportPagination from './Pagination';
 
-const ReportTable = () => {
+const ReportTable = ({ currentPage, noPagination }) => {
   const { BoardReportStore } = useStores();
-  const { reportDataList } = BoardReportStore;
+  const {
+    reportDataList, currentReportMaxPage,
+  } = BoardReportStore;
   const reportList = reportDataList.map(
     (v, index) => (<ReportList data={v} key={v.reportId} index={index} />),
   );
@@ -29,8 +33,16 @@ const ReportTable = () => {
           { reportList }
         </tbody>
       </CodeTable>
+      {currentReportMaxPage !== 0
+        ? (<ReportPagination currentPage={currentPage} noPagination={noPagination} />)
+        : ''}
     </TabPane>
   );
+};
+
+ReportTable.propTypes = {
+  currentPage: Proptypes.string.isRequired,
+  noPagination: Proptypes.bool.isRequired,
 };
 
 const CodeTable = styled(Table)`

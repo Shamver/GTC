@@ -30,15 +30,19 @@ class ReportStore {
 
   @observable reportCodeList = [];
 
+  @observable currentReportMaxPage = 0;
+
   constructor(root) {
     this.root = root;
   }
 
   @action onActive = ((e) => {
     const { name } = e.target;
+    const { history } = this.root.UtilRouteStore;
 
     if (this.activeTab !== name) {
       this.activeTab = name;
+      history.push(`/report/${name}`);
     }
   });
 
@@ -157,7 +161,67 @@ class ReportStore {
     };
   }
 
+  @action getReportList = async (currentPage) => {
+    await axios.get('/api/board/Report', {
+      params: {
+        tab: this.activeTab,
+        currentPage,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.reportDataList = data.result;
+            if (data.result.length === 0) {
+              this.currentReportMaxPage = 0;
+            } else {
+              const { pageCount } = data.result[0];
+              this.currentReportMaxPage = pageCount;
+            }
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  };
+
   @action getDetailReport = async (reportId) => {
+    await axios.get('/api/board/Report/detail', {
+      params: {
+        reportId,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        const { result } = data;
+        if (data.success) {
+          if (data.code === 1) {
+            this.reportDetailData = result;
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .then(() => {
+        if (this.activeTab !== 'ReportTable') {
+          this.root.UserStore.getBanDetail(this.reportDetailData.targetUserId);
+        }
+      })
+      .then(() => { this.toggleDetailReport(); })
+      .catch((response) => { toast.error(response.message); });
+
+    return true;
+  }
+
+  @action getReportListDetail = async (reportId) => {
     await axios.get('/api/board/Report/detail', {
       params: {
         reportId,
@@ -187,29 +251,6 @@ class ReportStore {
     return true;
   }
 
-  @action getReportList = async () => {
-    await axios.get('/api/board/Report', {
-      params: {
-        tab: this.activeTab,
-      },
-    })
-      .then((response) => {
-        const { data } = response;
-        if (data.success) {
-          if (data.code === 1) {
-            this.reportDataList = data.result;
-          } else {
-            toast.info(data.message);
-          }
-        } else {
-          toast.error(data.message);
-        }
-      })
-      .catch((response) => { toast.error(response.message); });
-
-    return true;
-  };
-
   @action reportTakeOn = (type) => {
     const { reportId, targetUserId, reason } = this.reportDetailData;
     const { takeReason, banTerm } = this.reportTakeOnData;
@@ -223,8 +264,10 @@ class ReportStore {
   };
 
   @action reportReject = async (reportId) => {
+    const managerId = this.root.UserStore.userData.id;
+
     axios.put('/api/board/Report/reject', {
-      reportId,
+      reportId, managerId,
     })
       .then((response) => {
         const { data } = response;
