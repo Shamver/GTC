@@ -44,9 +44,9 @@ const Menu = () => {
                   <th>상세</th>
                 </tr>
               </thead>
-              <tbody>
+              <ScrollTbody>
                 <BoardList />
-              </tbody>
+              </ScrollTbody>
             </CodeTable>
           </CodeCol>
           <CodeCol>
@@ -78,6 +78,12 @@ const Menu = () => {
   );
 };
 
+const ScrollTbody = styled.tbody`
+  display: block;
+  height: 200px;
+  overflow: auto;
+`;
+
 const PaddedDiv = styled.div`
   padding-bottom : 10px;
   height : 40px;
@@ -91,10 +97,21 @@ const CodeTableWrapper = styled.div`
 `;
 
 const CodeCol = styled.div`
-  width : 100%;
+  width: 100%;
 `;
 
 const CodeTable = styled(Table)`
+  display: block;
+  width: 100%;
+  border-collapse: collapse;
+  border: 2px solid #000;
+  & th:nth-of-type(1), & td:nth-of-type(1) { width: 20%; } 
+  & th:nth-of-type(2), & td:nth-of-type(2) { width: 20%; } 
+  & th:nth-of-type(3), & td:nth-of-type(3) { width: 30%; } 
+  & th:last-child { width: 120%; }
+  & td:last-child { width: 120%; } 
+
+
   & > tbody > tr {
     cursor : pointer;
   }

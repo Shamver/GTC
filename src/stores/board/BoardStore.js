@@ -83,7 +83,7 @@ class BoardStore {
 
   @action setBoardList = () => {
     const { menuList } = this.root.SystemMenuStore;
-    this.boardList = menuList.filter((data) => data.type === 'MT01');
+    this.boardList = menuList.filter((data) => (data.type === 'MT01' && data.id !== 'ALL'));
   }
 
 
