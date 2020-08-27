@@ -47,7 +47,7 @@ const SwitchList = () => {
       <AuthRouter exact={false} Component={Router.ReportRouter} level={3} path="/report" />
 
       {/* ---------------------------- Board Router Component ---------------------------- */}
-      <AuthRouter exact={false} Component={Router.BoardRouter} level={1} path="/:board" />
+      <AuthRouter exact={false} Component={Router.BoardRouter} level={0} path="/:board" />
     </Switch>
   );
 };

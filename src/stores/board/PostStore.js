@@ -414,12 +414,17 @@ class PostStore {
   };
 
   @action getModifyPost = (id, isModify) => {
+    const { userData } = this.root.UserStore;
+    const { history } = this.root.UtilRouteStore;
+
     if (!isModify) {
       return;
     }
 
-    const { userData } = this.root.UserStore;
-    const { history } = this.root.UtilRouteStore;
+    if (!userData) {
+      return;
+    }
+
     axios.get(`/api/board/post/${id}`, {
       params: {
         userId: userData.id,
