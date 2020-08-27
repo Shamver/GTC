@@ -477,6 +477,7 @@ const ModalBodyBox = styled(ModalBody)`
   padding: 1rem !important;
   height: 700px;
   overflow: auto;
+  margin-bottom: 1rem;
   
   h6{
     font-size:14px;
