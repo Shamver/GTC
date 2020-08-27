@@ -317,6 +317,11 @@ class UserStore {
   };
 
   @action getProfile = (writerId) => {
+    if (!this.userData) {
+      this.guestAuthor();
+      return;
+    }
+
     const that = this;
     const { pageIndex } = this.root.UtilStore;
     const { postIndex, commentIndex, nickNameIndex } = pageIndex;
