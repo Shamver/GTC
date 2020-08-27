@@ -30,6 +30,7 @@ const SELECT_POST_LIST = `
         :query
       ) AS pageCount
     , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
+    , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="media">%' AND ID = P.ID) AS isMedia
     , (SELECT U.ADMIN_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterAdmin
     , (SELECT U.OPERATOR_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterOperator
   FROM 

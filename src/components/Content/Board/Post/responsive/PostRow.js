@@ -1,6 +1,6 @@
 import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faStar, faImage } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faStar, faImage, faFilm } from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
@@ -10,16 +10,19 @@ import useStores from '../../../../../stores/useStores';
 const PostRow = ({ data, index, isNotice }) => {
   const {
     id, recommendCount, categoryName, commentCount,
-    type, title, boardName, isImage,
+    type, title, boardName, isImage, isMedia,
   } = data;
   const { ComponentPostStore, BoardStore, UserStore } = useStores();
   const { userData, guestAuthor } = UserStore;
   const { onClickPost, isVisited } = ComponentPostStore;
   const { currentBoardPath } = BoardStore;
 
+  const isMediaComponent = isMedia
+    ? (<FontAwesomeIcon icon={faFilm} />)
+    : (<FontAwesomeIcon icon={faCommentDots} />);
   const isImageComponent = isImage
     ? (<FontAwesomeIcon icon={faImage} />)
-    : (<FontAwesomeIcon icon={faCommentDots} />);
+    : isMediaComponent;
   const IsBestPost = recommendCount >= 10 ? (<Star icon={faStar} />) : isImageComponent;
 
   const weight = currentBoardPath === 'all' ? 8 : 9;
@@ -57,6 +60,7 @@ PostRow.propTypes = {
     type: Proptypes.string,
     boardName: Proptypes.string,
     isImage: Proptypes.number,
+    isMedia: Proptypes.number,
   }).isRequired,
   index: Proptypes.number.isRequired,
   isNotice: Proptypes.bool.isRequired,
