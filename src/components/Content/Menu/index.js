@@ -2,12 +2,12 @@ import React, { memo, useLayoutEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import { Button, Table } from 'reactstrap';
+import { Button, Row, Col, Table } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import BoardDetailModal from './MenuDetailModal';
 import CategoryDetailModal from './MenuCategoryDetailModal';
-import BoardList from './MenuList';
+import MenuList from './MenuList';
 import CategoryList from './MenuCategoryList';
 
 
@@ -35,18 +35,16 @@ const Menu = () => {
                 게시판 추가
               </RightButton>
             </PaddedDiv>
-            <CodeTable bordered hover>
-              <thead>
-                <tr>
-                  <th>이름</th>
-                  <th>경로</th>
-                  <th>사용</th>
-                  <th>상세</th>
-                </tr>
-              </thead>
-              <ScrollTbody>
-                <BoardList />
-              </ScrollTbody>
+            <CodeTable>
+              <MarginlessRow>
+                <HeadCol xs="3">이름</HeadCol>
+                <HeadCol xs="3">경로</HeadCol>
+                <HeadCol xs="3">사용</HeadCol>
+                <HeadCol xs="3">상세</HeadCol>
+              </MarginlessRow>
+              <ScrollDiv>
+                <MenuList />
+              </ScrollDiv>
             </CodeTable>
           </CodeCol>
           <CodeCol>
@@ -57,7 +55,7 @@ const Menu = () => {
                 카테고리 추가
               </RightButton>
             </PaddedDiv>
-            <CodeTable bordered hover>
+            <Table bordered hover>
               <thead>
                 <tr>
                   <th>이름</th>
@@ -68,7 +66,7 @@ const Menu = () => {
               <tbody>
                 <CategoryList />
               </tbody>
-            </CodeTable>
+            </Table>
           </CodeCol>
         </CodeTableWrapper>
         <BoardDetailModal />
@@ -78,10 +76,28 @@ const Menu = () => {
   );
 };
 
-const ScrollTbody = styled.tbody`
-  display: block;
+const ScrollDiv = styled.div`
   height: 200px;
   overflow: auto;
+`;
+
+const MarginlessRow = styled(Row)`
+  margin: 0 !important;
+  
+  & > .col-3 {
+    border-top: 1px solid #dee2e6;
+    border-bottom: 2px solid #dee2e6;
+    border-left: 1px solid #dee2e6;
+  }
+  
+  & > .col-3:last-child {
+    border-right: 1px solid #dee2e6;
+  }
+`;
+
+const HeadCol = styled(Col)`
+  padding: .75rem;
+  font-weight: bold;
 `;
 
 const PaddedDiv = styled.div`
@@ -100,25 +116,10 @@ const CodeCol = styled.div`
   width: 100%;
 `;
 
-const CodeTable = styled(Table)`
-  display: block;
+const CodeTable = styled.div`
   width: 100%;
   border-collapse: collapse;
-  border: 2px solid #000;
-  & th:nth-of-type(1), & td:nth-of-type(1) { width: 20%; } 
-  & th:nth-of-type(2), & td:nth-of-type(2) { width: 20%; } 
-  & th:nth-of-type(3), & td:nth-of-type(3) { width: 30%; } 
-  & th:last-child { width: 120%; }
-  & td:last-child { width: 120%; } 
-
-
-  & > tbody > tr {
-    cursor : pointer;
-  }
-  
-  & > tbody > tr > td {
-    vertical-align: middle;
-  }
+  display: table;
 `;
 
 const BoardWrapper = styled.div`

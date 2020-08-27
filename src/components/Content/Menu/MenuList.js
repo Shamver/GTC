@@ -3,6 +3,7 @@ import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
 import MenuRow from './MenuRow';
+import { Row, Col } from 'reactstrap';
 
 const MenuList = () => {
   const { SystemMenuStore } = useStores();
@@ -10,10 +11,10 @@ const MenuList = () => {
 
   return menuList.length ? menuList.map(
     (data) => <MenuRow data={data} key={data.id} />,
-  ) : (<tr><CenterTd colSpan={4}>게시판이 존재하지 않습니다.</CenterTd></tr>);
+  ) : (<Row><CenterCol xs="12">게시판이 존재하지 않습니다.</CenterCol></Row>);
 };
 
-const CenterTd = styled.td`
+const CenterCol = styled(Col)`
   text-align: center;
 `;
 
