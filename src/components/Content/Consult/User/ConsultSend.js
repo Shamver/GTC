@@ -14,9 +14,8 @@ const ConsultSend = ({ currentPage }) => {
     subject, text, onChangeValue, isDisabled, addConsult,
   } = ConsultStore;
 
-  const categories = consultCategoryCodeList.map((v) =>
-    <option key={v.code} value={v.code}>{v.codeName}</option>
-  );
+  // eslint-disable-next-line max-len
+  const categories = consultCategoryCodeList.map((v) => <option key={v.code} value={v.code}>{v.codeName}</option>);
 
   return (
     <TabPane tabId="send">

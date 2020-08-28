@@ -61,20 +61,20 @@ const ConsultSentRow = (props) => {
         </Collapse>
       </ColItem>
     </>
-  )
+  );
 };
 
 const ConsultSent = ({
- currentTab, currentPage, noPagination,
+  currentTab, currentPage, noPagination,
 }) => {
   const { UserStore, ConsultStore } = useStores();
   const { userData } = UserStore;
   const { myConsultList, maxPage } = ConsultStore;
   const [openId, setOpenId] = useState(null);
 
-  const onClickRow = (id) => id === openId ? setOpenId(null) : setOpenId(id);
+  const onClickRow = (id) => (id === openId ? setOpenId(null) : setOpenId(id));
 
-  const test = myConsultList.map((v) =>
+  const test = myConsultList.map((v) => (
     <ConsultSentRow
       key={v.id}
       data={v}
@@ -82,7 +82,7 @@ const ConsultSent = ({
       onClickRow={onClickRow}
       userData={userData}
     />
-  );
+  ));
 
   return (
     <TabPane tabId="sent">
@@ -179,7 +179,7 @@ const Div = styled.div`
   }
   
   & .bg-answer {
-    background-color: ${(props) => props.answerFl ? '#deffec' : '#ffdede'};
+    background-color: ${(props) => (props.answerFl ? '#deffec' : '#ffdede')};
   }
   
   & .new-line {
