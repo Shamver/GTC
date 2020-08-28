@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import useStores from '../../../../stores/useStores';
 import * as Proptypes from 'prop-types';
+import useStores from '../../../../stores/useStores';
 import Pagination from '../Pagination';
 
 const ConsultGetRow = (props) => {
@@ -74,7 +74,7 @@ const ConsultGetRow = (props) => {
                           답변 등록
                         </Button>
                       </>
-                      )
+                    )
                 }
               </CardBody>
             </Card>
@@ -82,11 +82,11 @@ const ConsultGetRow = (props) => {
         </Collapse>
       </ColItem>
     </>
-  )
+  );
 };
 
 const ConsultGet = ({
- currentTab, currentPage, noPagination,
+  currentTab, currentPage, noPagination,
 }) => {
   const { ConsultStore } = useStores();
   const {
@@ -94,9 +94,9 @@ const ConsultGet = ({
   } = ConsultStore;
   const [openId, setOpenId] = useState(null);
 
-  const onClickRow = (id) => id === openId ? setOpenId(null) : setOpenId(id);
+  const onClickRow = (id) => (id === openId ? setOpenId(null) : setOpenId(id));
 
-  const test = consultList.map((v) =>
+  const test = consultList.map((v) => (
     <ConsultGetRow
       key={v.id}
       data={v}
@@ -106,7 +106,7 @@ const ConsultGet = ({
       onChangeValue={onChangeValue}
       currentPage={currentPage}
     />
-  );
+  ));
 
   return (
     <TabPane tabId="get">
@@ -194,7 +194,7 @@ const Div = styled.div`
   }
   
   & .bg-answer {
-    background-color: ${(props) => props.answerFl ? '#deffec' : '#ffdede'};
+    background-color: ${(props) => (props.answerFl ? '#deffec' : '#ffdede')};
   }
   
   & .new-line {
