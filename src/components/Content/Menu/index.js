@@ -2,13 +2,15 @@ import React, { memo, useLayoutEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
-import { Button, Row, Col, Table } from 'reactstrap';
+import {
+  Button, Row, Col, Table,
+} from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import BoardDetailModal from './MenuDetailModal';
 import CategoryDetailModal from './MenuCategoryDetailModal';
 import MenuList from './MenuList';
-import CategoryList from './MenuCategoryList';
+import MenuCategoryList from './MenuCategoryList';
 
 
 const Menu = () => {
@@ -55,18 +57,16 @@ const Menu = () => {
                 카테고리 추가
               </RightButton>
             </PaddedDiv>
-            <Table bordered hover>
-              <thead>
-                <tr>
-                  <th>이름</th>
-                  <th>경로</th>
-                  <th>사용</th>
-                </tr>
-              </thead>
-              <tbody>
-                <CategoryList />
-              </tbody>
-            </Table>
+            <CodeTable>
+              <MarginlessRow>
+                <HeadCol xs="4">이름</HeadCol>
+                <HeadCol xs="4">경로</HeadCol>
+                <HeadCol xs="4">사용</HeadCol>
+              </MarginlessRow>
+              <ScrollDiv>
+                <MenuCategoryList />
+              </ScrollDiv>
+            </CodeTable>
           </CodeCol>
         </CodeTableWrapper>
         <BoardDetailModal />
@@ -77,8 +77,13 @@ const Menu = () => {
 };
 
 const ScrollDiv = styled.div`
-  height: 200px;
+  height: 224px;
   overflow: auto;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    position: fixed;
+    display: none;
+  }
 `;
 
 const MarginlessRow = styled(Row)`
@@ -91,6 +96,16 @@ const MarginlessRow = styled(Row)`
   }
   
   & > .col-3:last-child {
+    border-right: 1px solid #dee2e6;
+  }
+  
+    & > .col-4 {
+    border-top: 1px solid #dee2e6;
+    border-bottom: 2px solid #dee2e6;
+    border-left: 1px solid #dee2e6;
+  }
+  
+  & > .col-4:last-child {
     border-right: 1px solid #dee2e6;
   }
 `;
@@ -114,12 +129,12 @@ const CodeTableWrapper = styled.div`
 
 const CodeCol = styled.div`
   width: 100%;
+  margin-bottom: 10px;
 `;
 
 const CodeTable = styled.div`
   width: 100%;
   border-collapse: collapse;
-  display: table;
 `;
 
 const BoardWrapper = styled.div`

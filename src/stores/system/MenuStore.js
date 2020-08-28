@@ -25,6 +25,8 @@ class MenuStore {
     useFl: 1,
   };
 
+  @observable currentMenuType = '';
+
   @observable menuIcon = '';
 
   @observable menuList = [];
@@ -213,7 +215,7 @@ class MenuStore {
     return true;
   };
 
-  @action getCategoryList = (menu) => {
+  @action getCategoryList = (menu, type) => {
     axios.get('/api/system/menu/category/all', {
       params: {
         menu,
@@ -225,6 +227,7 @@ class MenuStore {
           if (data.code === 1) {
             this.categoryList = data.result;
             this.category.menu = menu;
+            this.currentMenuType = type;
           } else {
             toast.info(data.message);
           }
@@ -441,6 +444,7 @@ class MenuStore {
   @action setMenuIcon = () => {
     this.menuIcon = this.menu.icon;
   }
+
 }
 
 export default MenuStore;

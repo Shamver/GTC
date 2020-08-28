@@ -10,11 +10,11 @@ const MenuRow = ({ data }) => {
   const { SystemMenuStore } = useStores();
   const { getMenu, getCategoryList } = SystemMenuStore;
   const {
-    id, name, path, useFl,
+    id, name, path, useFl, type
   } = data;
 
   return (
-    <MarginlessRow onClick={() => getCategoryList(id)}>
+    <MarginlessRow onClick={() => getCategoryList(id, type)}>
       <PaddingCol xs="3">{name}</PaddingCol>
       <PaddingCol xs="3">{path}</PaddingCol>
       <PaddingCol xs="3">{useFl}</PaddingCol>
@@ -33,11 +33,18 @@ MenuRow.propTypes = {
     name: Proptypes.string,
     path: Proptypes.string,
     useFl: Proptypes.string,
+    type: Proptypes.string,
   }).isRequired,
 };
 
 const MarginlessRow = styled(Row)`
   margin: 0 !important;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: #ffd7d4;
+  }
+  
   & > .col-3 {
     border-bottom: 1px solid #dee2e6;
     border-left: 1px solid #dee2e6;
