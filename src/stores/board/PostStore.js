@@ -374,7 +374,7 @@ class PostStore {
             };
             getLately();
             that.postView.content = this.getPostVideoTag(post.content);
-            const { currentBoardPage } = this.root.BoardStore.currentBoardPage;
+            const { currentBoardPage } = this.root.BoardStore;
             const { setCurrentBoardPath } = this.root.BoardStore;
             this.getBoardPostList(post.board.toLowerCase(), currentBoardPage).then(() => {
               setCurrentBoardPath(post.board.toLowerCase());

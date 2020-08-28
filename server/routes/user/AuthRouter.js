@@ -57,16 +57,15 @@ const SELECT_USER_FROM_EMAIL = `
     , U.GENDER_CD AS gender
     , U.PROFILE_FL AS profileYN
     , IFNULL(U.DELETE_DTTM, NULL) AS deletedDate
+    , U.DELETE_FL AS deleteFl
     , U.OPERATOR_FL AS operatorYN
     , U.ADMIN_FL AS adminYN
     , U.PROFILE AS profile
     , U.BANNED_FL AS banFl
-    , B.BAN_REASON AS banReason
-    , B.SUSPEND_BAN_FL AS suspendBan
-    , B.BAN_TERM AS banTerm
+    , (SELECT BAN_REASON FROM GTC_USER_BAN B WHERE B.USER_ID = U.ID AND DELETE_FL = 0) AS banReason
+    , (SELECT SUSPEND_BAN_FL FROM GTC_USER_BAN B WHERE B.USER_ID = U.ID AND DELETE_FL = 0) AS suspendBanFl
+    , (SELECT DATE_FORMAT(BAN_TERM, '%Y-%m-%d') FROM GTC_USER_BAN B WHERE B.USER_ID = U.ID AND DELETE_FL = 0) AS banTerm
   FROM GTC_USER U
-  LEFT JOIN GTC_USER_BAN B
-  ON U.ID = B.USER_ID
   WHERE U.EMAIL = ':EMAIL'
 `;
 
@@ -131,22 +130,18 @@ router.post('/login', (req, res) => {
       },
     )
       .then((rows) => {
-        if (rows.length === 1) {
-          const resultData = rows[0];
+        const resultData = rows.filter(
+          ({ deleteFl, deletedDate }) => deleteFl === 0 && deletedDate === null,
+        );
+        if (resultData.length === 1) {
           const {
             id, nickname, gtNickname, deletedDate,
             email, tel, birth, gender, profileYN, name,
-            operatorYN, adminYN, profile, banFl, banReason,
-          } = resultData;
+            operatorYN, adminYN, profile, banFl, deleteFl,
+            banReason,
+          } = resultData[0];
           if (deletedDate === null) {
-            if (banFl === 1) {
-              res.json({
-                success: true,
-                code: 2,
-                message: banReason,
-                result: rows[0],
-              });
-            } else {
+            if (banFl !== 1) {
               jwt.sign(
                 {
                   id,
@@ -177,8 +172,15 @@ router.post('/login', (req, res) => {
                   });
                 },
               );
+            } else {
+              res.json({
+                success: true,
+                code: 2,
+                message: banReason,
+                result: resultData[0],
+              });
             }
-          } else {
+          } else if (deleteFl === 0) {
             res.json({
               success: true,
               code: 3,
