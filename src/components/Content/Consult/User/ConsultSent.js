@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
-import useStores from '../../../../stores/useStores';
 import * as Proptypes from 'prop-types';
+import useStores from '../../../../stores/useStores';
 import Pagination from '../Pagination';
 
 const ConsultSentRow = (props) => {
@@ -74,7 +74,7 @@ const ConsultSent = ({
 
   const onClickRow = (id) => (id === openId ? setOpenId(null) : setOpenId(id));
 
-  const test = myConsultList.map((v) => (
+  const consultList = myConsultList.map((v) => (
     <ConsultSentRow
       key={v.id}
       data={v}
@@ -83,6 +83,8 @@ const ConsultSent = ({
       userData={userData}
     />
   ));
+
+  console.log(consultList);
 
   return (
     <TabPane tabId="sent">
@@ -104,14 +106,16 @@ const ConsultSent = ({
               </ColItem>
             </Row>
           </Col>
-          { test }
+          { consultList }
         </Row>
-        <Pagination
-          currentPage={currentPage}
-          noPagination={noPagination}
-          path={currentTab}
-          maxPage={maxPage}
-        />
+        { consultList.length ? (
+          <Pagination
+            currentPage={currentPage}
+            noPagination={noPagination}
+            path={currentTab}
+            maxPage={maxPage}
+          />
+        ) : ''}
       </Wrapper>
     </TabPane>
   );
