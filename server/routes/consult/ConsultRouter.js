@@ -82,7 +82,9 @@ const UPDATE_CONSULT_ADMIN = `
 `;
 
 router.post('/', (req, res) => {
-  const { userId, subject, text, currentCategory } = req.body;
+  const {
+    userId, subject, text, currentCategory,
+  } = req.body;
 
   Database.execute(
     (database) => database.query(

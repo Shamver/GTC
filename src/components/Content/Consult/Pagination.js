@@ -56,7 +56,6 @@ PaginationList.propTypes = {
   noPagination: Proptypes.bool.isRequired,
 };
 
-
 const ConsultPagination = ({
   noPagination, currentPage, maxPage, path,
 }) => (
@@ -94,7 +93,6 @@ const CustomLink = styled(NavLink)`
     border-color: #DC3545;
   } 
 `;
-
 
 const PaginationCustom = styled(Pagination)`
   color : #DC3545;

@@ -56,10 +56,10 @@ Consult.propTypes = {
       currentPage: Proptypes.string,
       currentTab: Proptypes.string,
     }).isRequired,
-    noPagination: Proptypes.bool,
   }).isRequired,
   parentProps: Proptypes.shape({
     isPagination: Proptypes.bool,
+    noPagination: Proptypes.bool,
   }).isRequired,
   location: Proptypes.shape({
     search: Proptypes.string,

@@ -4,6 +4,7 @@ import {
 } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
+import * as Proptypes from 'prop-types';
 import useStores from '../../../../stores/useStores';
 
 const ConsultSend = ({ currentPage }) => {
@@ -65,6 +66,10 @@ const ConsultSend = ({ currentPage }) => {
       </Wrapper>
     </TabPane>
   );
+};
+
+ConsultSend.propTypes = {
+  currentPage: Proptypes.string.isRequired,
 };
 
 const Wrapper = styled.div`

@@ -11,7 +11,9 @@ import useStores from '../../../../stores/useStores';
 import Pagination from '../Pagination';
 
 const ConsultSentRow = (props) => {
-  const { onClickRow, isOpen, data, userData } = props;
+  const {
+    onClickRow, isOpen, data, userData,
+  } = props;
   const {
     subject, date, answerFl, consultDesc, answerDesc, category,
   } = data;
@@ -84,8 +86,6 @@ const ConsultSent = ({
     />
   ));
 
-  console.log(consultList);
-
   return (
     <TabPane tabId="sent">
       <Wrapper>
@@ -119,6 +119,24 @@ const ConsultSent = ({
       </Wrapper>
     </TabPane>
   );
+};
+
+ConsultSentRow.propTypes = {
+  onClickRow: Proptypes.func.isRequired,
+  isOpen: Proptypes.bool.isRequired,
+  subject: Proptypes.string.isRequired,
+  data: Proptypes.shape({
+    id: Proptypes.number,
+    subject: Proptypes.string,
+    date: Proptypes.string,
+    answerFl: Proptypes.number,
+    consultDesc: Proptypes.string,
+    answerDesc: Proptypes.string,
+    category: Proptypes.string,
+  }).isRequired,
+  userData: Proptypes.shape({
+    username: Proptypes.string,
+  }).isRequired,
 };
 
 ConsultSent.propTypes = {

@@ -144,6 +144,25 @@ const ConsultGet = ({
   );
 };
 
+ConsultGetRow.propTypes = {
+  addAnswer: Proptypes.func.isRequired,
+  onChangeValue: Proptypes.func.isRequired,
+  currentPage: Proptypes.string.isRequired,
+  onClickRow: Proptypes.func.isRequired,
+  isOpen: Proptypes.bool.isRequired,
+  data: Proptypes.shape({
+    id: Proptypes.number,
+    subject: Proptypes.string,
+    date: Proptypes.string,
+    answerFl: Proptypes.number,
+    consultDesc: Proptypes.string,
+    answerDesc: Proptypes.string,
+    category: Proptypes.string,
+    adminName: Proptypes.string,
+    userName: Proptypes.string,
+  }).isRequired,
+};
+
 ConsultGet.propTypes = {
   currentPage: Proptypes.string.isRequired,
   currentTab: Proptypes.string.isRequired,

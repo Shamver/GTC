@@ -27,7 +27,7 @@ class ConsultStore {
 
   constructor(root) {
     this.root = root;
-  };
+  }
 
   @action setCategoryCodeList = (code) => {
     this.consultCategoryCodeList = code;
