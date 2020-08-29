@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 import ProfileModalNickName from './ProfileModalNickName';
-import ModalPagination from './ProfilePageNation';
+import ModalPagination from './ProfilePagination';
 
 const ProfileModalNickNameHistory = ({ profileInfo }) => {
   const { UserStore, UtilStore } = useStores();

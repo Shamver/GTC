@@ -1,9 +1,10 @@
 import React, { memo } from 'react';
 import { Row, Col } from 'reactstrap';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 import ProfileModalComment from './ProfileModalComment';
-import ModalPagination from './ProfilePageNation';
+import ModalPagination from './ProfilePagination';
 
 const ProfileModalCommentList = () => {
   const { UtilStore, UserStore } = useStores();
@@ -52,4 +53,4 @@ const NoPost = styled.div`
   font-size: 13px;
 `;
 
-export default memo(ProfileModalCommentList);
+export default memo(observer(ProfileModalCommentList));
