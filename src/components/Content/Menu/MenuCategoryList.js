@@ -5,7 +5,7 @@ import { Col, Row } from 'reactstrap';
 import useStores from '../../../stores/useStores';
 import Category from './MenuCategory';
 
-const BoardList = () => {
+const MenuCategoryList = () => {
   const { SystemMenuStore } = useStores();
   const { categoryList, currentMenuType } = SystemMenuStore;
 
@@ -34,4 +34,4 @@ const MarginlessRow = styled(Row)`
   }
 `;
 
-export default memo(observer(BoardList));
+export default memo(observer(MenuCategoryList));

@@ -130,7 +130,7 @@ const SELECT_MENU_CATEGORY = `
    FROM GTC_MENU_CATEGORY GBC
    WHERE 
     GBC.MENU_ID = ':MENU_ID'
-    AND GBC.ID = ':CATEGORY'
+    AND GBC.ID = ':CATEGORY_ID'
    ORDER BY GBC.\`ORDER\`
 `;
 
@@ -158,15 +158,15 @@ const UPDATE_MENU_CATEGORY = `
     , \`ORDER\` = :ORDER
     , USE_FL = :USE_FL
   WHERE
-    AND ID = ':CATEGORY_ID'
-    MENU_ID = ':MENU_ID'
+    ID = ':CATEGORY_ID'
+    AND MENU_ID = ':MENU_ID'
 `;
 
 const DELETE_MENU_CATEGORY = `
   DELETE FROM GTC_MENU_CATEGORY
   WHERE 
     MENU_ID = ':MENU_ID'
-    AND CATEGORY = ':CATEGORY_ID'
+    AND ID = ':CATEGORY_ID'
 `;
 
 router.post('/', (req, res) => {

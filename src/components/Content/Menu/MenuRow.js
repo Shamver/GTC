@@ -4,17 +4,19 @@ import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Row, Col } from 'reactstrap';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
 const MenuRow = ({ data }) => {
   const { SystemMenuStore } = useStores();
-  const { getMenu, getCategoryList } = SystemMenuStore;
+  const { getMenu, getCategoryList, category } = SystemMenuStore;
+  const { menu } = category;
   const {
-    id, name, path, useFl, type
+    id, name, path, useFl, type,
   } = data;
 
   return (
-    <MarginlessRow onClick={() => getCategoryList(id, type)}>
+    <MarginlessRow onClick={() => getCategoryList(id, type)} active={id === menu ? 'true' : 'false'}>
       <PaddingCol xs="3">{name}</PaddingCol>
       <PaddingCol xs="3">{path}</PaddingCol>
       <PaddingCol xs="3">{useFl}</PaddingCol>
@@ -40,6 +42,7 @@ MenuRow.propTypes = {
 const MarginlessRow = styled(Row)`
   margin: 0 !important;
   cursor: pointer;
+  background-color: ${(props) => (props.active === 'true' ? '#ffd7d4' : 'white')};
   
   &:hover {
     background-color: #ffd7d4;
@@ -63,4 +66,4 @@ const DetailIcon = styled(FontAwesomeIcon)`
   vertical-align: text-top;
 `;
 
-export default memo(MenuRow);
+export default memo(observer(MenuRow));

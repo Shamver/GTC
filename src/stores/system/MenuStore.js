@@ -444,7 +444,6 @@ class MenuStore {
   @action setMenuIcon = () => {
     this.menuIcon = this.menu.icon;
   }
-
 }
 
 export default MenuStore;

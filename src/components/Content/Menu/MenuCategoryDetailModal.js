@@ -17,7 +17,7 @@ const MenuCategoryDetailModal = () => {
   } = SystemMenuStore;
 
   const {
-    id, board, name, desc,
+    id, menu, name, desc,
     path, order, useFl,
   } = category;
 
@@ -29,9 +29,9 @@ const MenuCategoryDetailModal = () => {
       <ModalBody>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">
-            <InputGroupText>BOARD</InputGroupText>
+            <InputGroupText>MENU</InputGroupText>
           </InputGroupAddon>
-          <Input name="board" value={board} disabled />
+          <Input name="menu" value={menu} disabled />
         </InputGroupMb>
         <InputGroupMb>
           <InputGroupAddon addonType="prepend">

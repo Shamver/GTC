@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
+import { Row, Col } from 'reactstrap';
 import useStores from '../../../stores/useStores';
 import MenuRow from './MenuRow';
-import { Row, Col } from 'reactstrap';
 
 const MenuList = () => {
   const { SystemMenuStore } = useStores();

@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import {
-  Button, Row, Col, Table,
+  Button, Row, Col,
 } from 'reactstrap';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
@@ -17,12 +17,13 @@ const Menu = () => {
   const { UtilLoadingStore, SystemMenuStore } = useStores();
   const { toggleMenuModal, toggleCategoryModal, getMenuList } = SystemMenuStore;
   const { loadingProcess } = UtilLoadingStore;
+  const { currentMenuType } = SystemMenuStore;
 
   useLayoutEffect(() => {
     loadingProcess([
       getMenuList,
     ]);
-  });
+  }, [loadingProcess, getMenuList]);
 
   return (
     <BoardWrapper>
@@ -51,7 +52,7 @@ const Menu = () => {
           </CodeCol>
           <CodeCol>
             <PaddedDiv>
-              <RightButton size="sm" color="danger" onClick={() => toggleCategoryModal('add')}>
+              <RightButton size="sm" color="danger" onClick={() => toggleCategoryModal('add')} disabled={currentMenuType !== 'MT01'}>
                 <FontAwesomeIcon icon={faPlus} />
                 &nbsp;
                 카테고리 추가
@@ -77,7 +78,7 @@ const Menu = () => {
 };
 
 const ScrollDiv = styled.div`
-  height: 224px;
+  max-height: 224px;
   overflow: auto;
   -ms-overflow-style: none;
   &::-webkit-scrollbar {
