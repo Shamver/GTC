@@ -27,7 +27,7 @@ const Consult = ({ match, parentProps }) => {
 
   useLayoutEffect(() => {
     loadingProcess([
-      () => getCodeComponent('CONSULT_CATEGORY', setCategoryCodeList),
+      () => getCodeComponent('CONSULT_TYPE', setCategoryCodeList),
       () => getMyConsultList(currentPage),
       () => getConsultList(currentPage),
     ]);

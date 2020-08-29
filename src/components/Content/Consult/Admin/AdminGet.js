@@ -22,23 +22,23 @@ const ConsultGetRow = (props) => {
   return (
     <>
       <ColItem onClick={() => onClickRow(id)} className={isOpen ? 'col-sm-12 head active' : 'col-sm-12 head'}>
-        <Row>
-          <ColItem className="col-sm-2">
+        <TableRow>
+          <ColCell className="col-sm-2">
             {category}
-          </ColItem>
-          <ColItem className="col-sm-5">
+          </ColCell>
+          <ColCell className="col-sm-5">
             {subject}
-          </ColItem>
-          <ColItem className="col-sm-2">
+          </ColCell>
+          <ColCell className="col-sm-2">
             {userName}
-          </ColItem>
-          <ColItem className="col-sm-2">
+          </ColCell>
+          <ColCell className="col-sm-2">
             {date}
-          </ColItem>
-          <ColItem className="col-sm-1">
+          </ColCell>
+          <ColCell className="col-sm-1">
             <CustomFontAwesome icon={answerFl ? faCheckCircle : faTimesCircle} color={answerFl ? 'green' : 'red'} />
-          </ColItem>
-        </Row>
+          </ColCell>
+        </TableRow>
       </ColItem>
       <ColItem className={isOpen ? 'col-sm-12 collapse-active' : 'col-sm-12 collapse-non-active'}>
         <Collapse isOpen={isOpen}>
@@ -113,23 +113,23 @@ const ConsultGet = ({
       <Wrapper>
         <Row>
           <Col className="col-sm-12 content-header">
-            <Row>
-              <ColItem className="col-sm-2">
+            <TableHeader>
+              <ColCell className="col-sm-2">
                 종류
-              </ColItem>
-              <ColItem className="col-sm-5">
+              </ColCell>
+              <ColCell className="col-sm-5">
                 제목
-              </ColItem>
-              <ColItem className="col-sm-2">
+              </ColCell>
+              <ColCell className="col-sm-2">
                 닉네임
-              </ColItem>
-              <ColItem className="col-sm-2">
+              </ColCell>
+              <ColCell className="col-sm-2">
                 날짜
-              </ColItem>
-              <ColItem className="col-sm-1">
+              </ColCell>
+              <ColCell className="col-sm-1">
                 답변
-              </ColItem>
-            </Row>
+              </ColCell>
+            </TableHeader>
           </Col>
           { test }
         </Row>
@@ -170,21 +170,53 @@ ConsultGet.propTypes = {
 };
 
 const Wrapper = styled.div`
-  padding: 6px 1rem;
+  padding: 0px 1rem;
   
   & .content-header {
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #dee2e6;
   }
 `;
 
-const ColItem = styled(Col)`
-  border: 1px solid;
+const TableHeader = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+`;
+
+const TableRow = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  
+  &:last-child {
+    border-bottom: 1px solid #dee2e6 !important;
+  }
+`;
+
+const ColCell = styled(Col)`
+  padding: 6px;
   
   &.head, &.collapse-non-active {
     border: none;
   }
   &.collapse-active {
-    border: 1px solid;
+    border: 1px solid #dee2e6;
+  }
+  &.active {
+    background-color: #d9d9d9;
+  }
+  &.head:hover {
+    background-color: #d9d9d9;
+    cursor: pointer;
+  }
+`;
+
+const ColItem = styled(Col)`
+  border: 1px solid #dee2e6;
+  
+  &.head, &.collapse-non-active {
+    border: none;
+  }
+  &.collapse-active {
+    border: 1px solid #dee2e6;
   }
   &.active {
     background-color: #d9d9d9;

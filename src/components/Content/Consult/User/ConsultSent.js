@@ -22,21 +22,21 @@ const ConsultSentRow = (props) => {
   return (
     <>
       <ColItem onClick={() => onClickRow(data.id)} className={isOpen ? 'col-sm-12 head active' : 'col-sm-12 head'}>
-        <Row>
-          <ColItem className="col-sm-2">
+        <TableRow>
+          <ColCell className="col-sm-2">
             {category}
-          </ColItem>
-          <ColItem className="col-sm-6">
+          </ColCell>
+          <ColCell className="col-sm-6">
             {subject}
-          </ColItem>
-          <ColItem className="col-sm-2">
+          </ColCell>
+          <ColCell className="col-sm-2">
             {date}
-          </ColItem>
-          <ColItem className="col-sm-2">
+          </ColCell>
+          <ColCell className="col-sm-2">
             <CustomFontAwesome icon={answerFl ? faCheckCircle : faTimesCircle} color={answerFl ? 'green' : 'red'} />
             &nbsp;<Span className={answerFl ? 'color-green' : 'color-red'}>{answerFl ? '답변 완료' : '답변 대기'}</Span>
-          </ColItem>
-        </Row>
+          </ColCell>
+        </TableRow>
       </ColItem>
       <ColItem className={isOpen ? 'col-sm-12 collapse-active' : 'col-sm-12 collapse-non-active'}>
         <Collapse isOpen={isOpen}>
@@ -91,20 +91,20 @@ const ConsultSent = ({
       <Wrapper>
         <Row>
           <Col className="col-sm-12 content-header">
-            <Row>
-              <ColItem className="col-sm-2">
+            <TableHeader>
+              <ColCell className="col-sm-2">
                 종류
-              </ColItem>
-              <ColItem className="col-sm-6">
+              </ColCell>
+              <ColCell className="col-sm-6">
                 제목
-              </ColItem>
-              <ColItem className="col-sm-2">
+              </ColCell>
+              <ColCell className="col-sm-2">
                 날짜
-              </ColItem>
-              <ColItem className="col-sm-2">
+              </ColCell>
+              <ColCell className="col-sm-2">
                 답변 여부
-              </ColItem>
-            </Row>
+              </ColCell>
+            </TableHeader>
           </Col>
           { consultList }
         </Row>
@@ -146,15 +146,47 @@ ConsultSent.propTypes = {
 };
 
 const Wrapper = styled.div`
-  padding: 6px 1rem;
+  padding: 0px 1rem;
   
   & .content-header {
-    border-bottom: 1px solid;
+    border-bottom: 1px solid #dee2e6;
+  }
+`;
+
+const TableHeader = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+`;
+
+const TableRow = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  
+  &:last-child {
+    border-bottom: 1px solid #dee2e6 !important;
+  }
+`;
+
+const ColCell = styled(Col)`
+  padding: 6px;
+  
+  &.head, &.collapse-non-active {
+    border: none;
+  }
+  &.collapse-active {
+    border: 1px solid;
+  }
+  &.active {
+    background-color: #d9d9d9;
+  }
+  &.head:hover {
+    background-color: #d9d9d9;
+    cursor: pointer;
   }
 `;
 
 const ColItem = styled(Col)`
-  border: 1px solid;
+  border: 1px solid #dee2e6;
   
   &.head, &.collapse-non-active {
     border: none;
