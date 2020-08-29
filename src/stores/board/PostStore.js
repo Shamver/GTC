@@ -620,16 +620,6 @@ class PostStore {
       });
   };
 
-  @action getEmbedMedia = async () => {
-    await axios.get('iframe.ly/api/oembed?url=https://www.youtube.com/watch?v=iMTblJbmam4&api_key=0037428c3f77431216045c')
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((response) => {
-        toast.error(response.message);
-      });
-  }
-
   @action setPostClear = () => {
     this.post = {
       board: '',
