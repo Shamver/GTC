@@ -14,13 +14,13 @@ import useStores from '../../../stores/useStores';
 const BoardFooter = ({ currentCategory }) => {
   const { BoardStore } = useStores();
   const {
-    currentBoardPath, bestFilterMode, currentBoardPage,
+    currentBoardPath, bestFilterMode,
     searchKeyword, onSubmit, onChange, onSearch, searchTarget,
     onChangeTarget,
   } = BoardStore;
 
   const filterQs = '?filter_mode=true';
-  const pageUrl = Number(currentBoardPage) > 1 ? `/${currentBoardPath}/page/${currentBoardPage}` : `/${currentBoardPath}`;
+  const pageUrl = `/${currentBoardPath}`;
   const bestFilterUrl = bestFilterMode ? pageUrl : pageUrl.concat(filterQs);
   return (
     <FooterWrapper>
