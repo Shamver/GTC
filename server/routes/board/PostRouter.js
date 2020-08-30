@@ -201,7 +201,7 @@ const SELECT_POST_SINGLE = `
     , (SELECT U.PROFILE FROM GTC_USER U WHERE U.ID = P.USER_ID) AS writerProfile
     , IF(P.USER_ID = :USER_ID, 1, 0) AS isMyPost
     , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') AS recommendCount
-    , (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R02') AS notRecommendCount
+    , (SELECT COUNT(*) AS count FROM  GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R02') AS notRecommendCount
     , (SELECT GTC_POST_RECOMMEND.TYPE_CD FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND USER_ID = :USER_ID) AS recommendCheck
     , CASE WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 MINUTE),'%Y-%m-%d %H:%i:%s') THEN '몇초 전'
            WHEN CRT_DTTM > DATE_FORMAT(DATE_ADD(SYSDATE() ,INTERVAL -1 HOUR),'%Y-%m-%d %H:%i:%s') THEN CONCAT(TIMESTAMPDIFF(MINUTE, CRT_DTTM, SYSDATE()), '분 전')
@@ -217,6 +217,7 @@ const SELECT_POST_SINGLE = `
     , P.COMMENT_ALLOW_FL AS commentAllowFl
     , (SELECT U.ADMIN_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterAdmin
     , (SELECT U.OPERATOR_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterOperator
+    , P.DELETE_FL AS deleteFl
   FROM GTC_POST P 
   WHERE ID = :POST_ID
 `;
@@ -774,6 +775,10 @@ router.get('/:id', (req, res) => {
     )
       .then((rows) => {
         postItem = rows;
+        if (rows[0].deleteFl) {
+          return Promise.reject();
+        }
+
         return database.query(
           UPDATE_POST_VIEW_CNT,
           {
@@ -791,6 +796,13 @@ router.get('/:id', (req, res) => {
           code: 1,
           message: '게시글 조회',
           result: postItem,
+        });
+      })
+      .catch(() => {
+        res.json({
+          success: true,
+          code: 2,
+          message: '😳 해당 게시물은 삭제된 게시물 입니다.',
         });
       }),
   ).then(() => {

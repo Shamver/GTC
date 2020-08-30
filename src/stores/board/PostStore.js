@@ -367,6 +367,7 @@ class PostStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
+            console.log("ASd");
             const [post] = data.result;
             that.postView = {
               ...post,
@@ -379,6 +380,9 @@ class PostStore {
             this.getBoardPostList(post.board.toLowerCase(), currentBoardPage).then(() => {
               setCurrentBoardPath(post.board.toLowerCase());
             });
+          } else if (data.code === 2) {
+            this.root.UtilRouteStore.history.push('/');
+            toast.info(data.message);
           } else {
             toast.info(data.message);
           }
