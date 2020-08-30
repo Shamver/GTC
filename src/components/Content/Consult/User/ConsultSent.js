@@ -124,7 +124,6 @@ const ConsultSent = ({
 ConsultSentRow.propTypes = {
   onClickRow: Proptypes.func.isRequired,
   isOpen: Proptypes.bool.isRequired,
-  subject: Proptypes.string.isRequired,
   data: Proptypes.shape({
     id: Proptypes.number,
     subject: Proptypes.string,
