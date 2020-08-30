@@ -333,6 +333,7 @@ const SELECT_POST_LIST_SEARCH = `
       ) AS count
     , P.CONTENT AS content
     , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
+    , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="media">%' AND ID = P.ID) AS isMedia
   FROM 
     GTC_POST P
     LEFT JOIN GTC_USER GU
@@ -372,6 +373,7 @@ const SELECT_POST_LIST_BOARD_SEARCH = `
       ) AS pageCount
     :ALL_QUERY
     , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
+    , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="media">%' AND ID = P.ID) AS isMedia
   FROM 
     GTC_POST P
     LEFT JOIN GTC_USER GU

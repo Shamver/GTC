@@ -66,7 +66,17 @@ class SearchStore {
       .then((response) => {
         const { data } = response;
         if (data.success) {
-          this.foundList = data.result;
+          this.foundList = data.result.map((item) => {
+            let result = item;
+            if (item.isMedia) {
+              const thumbnail = this.getPostVideoThumbnailUrl(item.content);
+              result = {
+                ...result,
+                thumbnail,
+              };
+            }
+            return result;
+          });
           if (data.result.length > 0) {
             this.foundMaxPage = data.result[0].pageCount;
             this.foundCount = data.result[0].count;
@@ -79,6 +89,25 @@ class SearchStore {
         }
       })
       .catch((response) => { toast.error(response.message); });
+  };
+
+
+  @action getPostVideoThumbnailUrl = (text) => {
+    if (!text) return text;
+
+    const fullReg = /(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)([^& \n"><]+)(?:[^ \n"><]+)?/g;
+    const oembedReg = /(?:)<oembed(.+?)<\/oembed>/g;
+
+    let resultUrl = text;
+
+    const oembedMatch = text.match(oembedReg);
+
+    if (oembedMatch && oembedMatch.length > 0) {
+      const matchParts = oembedMatch[0].split(fullReg);
+      resultUrl = `https://img.youtube.com/vi/${matchParts[4]}/0.jpg`;
+    }
+
+    return resultUrl;
   };
 
   @action onChange = (e) => {

@@ -7,12 +7,16 @@ import renderHTML from 'react-render-html';
 
 const SearchContentItem = ({ data }) => {
   const {
-    id, title, writerName, date, commentCount, isImage,
+    id, title, writerName, date, commentCount, isImage, isMedia, thumbnail,
   } = data;
 
   let { content } = data;
 
-  const src = !isImage ? null : content.split('<figure class="image"><img src="')[1].split('"></figure>')[0];
+  let src = !isImage ? null : content.split('<figure class="image"><img src="')[1].split('"></figure>')[0];
+
+  if (isMedia) {
+    src = thumbnail;
+  }
 
   const contentArr = content.split('<figure class="image"><img src="');
 
@@ -21,11 +25,11 @@ const SearchContentItem = ({ data }) => {
   return (
     <Item sm={12}>
       <TableRow>
-        {!isImage ? '' : (
+        {isImage || isMedia ? (
           <TableCell img>
             <Img src={src} alt="a" />
           </TableCell>
-        )}
+        ) : ''}
         <TableCell>
           <div>
             <Link to={`/post/${id}`}>
@@ -54,6 +58,8 @@ SearchContentItem.propTypes = {
     date: Proptypes.string,
     commentCount: Proptypes.number,
     isImage: Proptypes.number,
+    isMedia: Proptypes.number,
+    thumbnail: Proptypes.string,
   }).isRequired,
 };
 
