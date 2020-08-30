@@ -1,6 +1,8 @@
 import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faStar, faImage, faFilm } from '@fortawesome/free-solid-svg-icons';
+import {
+  faInfoCircle, faStar, faImage, faFilm,
+} from '@fortawesome/free-solid-svg-icons';
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
