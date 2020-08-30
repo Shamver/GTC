@@ -191,7 +191,7 @@ const ColItem = styled(Col)`
     border: none;
   }
   &.collapse-active {
-    border: 1px solid;
+    border: 1px solid #dee2e6;
   }
   &.active {
     background-color: #d9d9d9;
