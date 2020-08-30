@@ -156,7 +156,6 @@ class ConsultStore {
         if (data.success) {
           if (data.code === 1) {
             toast.success(data.message);
-            this.getConsultList(1);
             this.setConsultClear();
           } else {
             toast.info(data.message);
@@ -164,6 +163,9 @@ class ConsultStore {
         } else {
           toast.error(data.message);
         }
+      }).then(() => {
+        this.getConsultList(1);
+        this.getMyConsultList(1);
       })
       .catch((response) => { toast.error(response.message); });
   };
@@ -171,6 +173,11 @@ class ConsultStore {
   @action addConsultAnswer = async (id, currentPage) => {
     const { userData } = this.root.UserStore;
     const { answer } = this;
+
+    if (answer === '') {
+      toast.error('내용을 입력해주세요.');
+      return false;
+    }
 
     axios.put('/api/consult/admin', {
       userId: userData.id,

@@ -12,7 +12,7 @@ const INSERT_CONSULT_ROW = `
     SUBJECT,
     CONSULT_DESC,
     CONSULT_CD,
-    MFY_DTTM
+    CRT_DTTM
   ) VALUES (
     :USER_ID,
     ':SUBJECT',
