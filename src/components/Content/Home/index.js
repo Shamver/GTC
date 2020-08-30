@@ -29,7 +29,7 @@ const Home = () => {
       <NoRightPadding lg="6" xs="12">
         <TextH5>
           <NoStyleLink to="/free">
-            커뮤니티 자유게시판 <ArrowIcon icon={faChevronRight} />
+            자유 게시판 <ArrowIcon icon={faChevronRight} />
           </NoStyleLink>
         </TextH5>
         <PostList>
@@ -39,7 +39,11 @@ const Home = () => {
         </PostList>
       </NoRightPadding>
       <NoRightPadding lg="6" xs="12">
-        <TextH5>현금 거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
+        <TextH5>
+          <NoStyleLink to="/cash">
+            월드락 거래 <ArrowIcon icon={faChevronRight} />
+          </NoStyleLink>
+        </TextH5>
         <PostList>
           <ul>
             <HomePostList board="cash" />
@@ -47,7 +51,11 @@ const Home = () => {
         </PostList>
       </NoRightPadding>
       <NoRightPadding lg="12">
-        <TextH5>공지사항 <ArrowIcon icon={faChevronRight} /></TextH5>
+        <TextH5>
+          <NoStyleLink to="/notice">
+            공지사항 <ArrowIcon icon={faChevronRight} />
+          </NoStyleLink>
+        </TextH5>
         <MiddlePostList>
           <ul>
             <HomePostList board="notice" />
@@ -55,7 +63,11 @@ const Home = () => {
         </MiddlePostList>
       </NoRightPadding>
       <NoRightPadding lg="6" xs="12">
-        <TextH5>거래 게시판 <ArrowIcon icon={faChevronRight} /></TextH5>
+        <TextH5>
+          <NoStyleLink to="/trade">
+            아이템 거래 <ArrowIcon icon={faChevronRight} />
+          </NoStyleLink>
+        </TextH5>
         <PostList>
           <ul>
             <HomePostList board="trade" />
@@ -63,7 +75,11 @@ const Home = () => {
         </PostList>
       </NoRightPadding>
       <NoRightPadding lg="6" xs="12">
-        <TextH5>질문 & 답변 <ArrowIcon icon={faChevronRight} /></TextH5>
+        <TextH5>
+          <NoStyleLink to="/qna">
+            질문 & 답변 <ArrowIcon icon={faChevronRight} />
+          </NoStyleLink>
+        </TextH5>
         <PostList>
           <ul>
             <HomePostList board="qna" />
