@@ -9,11 +9,10 @@ const BoardOptionList = () => {
   useEffect(() => {
     setBoardList();
   }, [setBoardList]);
-
   return boardList.map((data) => (
     <option
-      value={data.value}
-      key={data.value}
+      value={data.id}
+      key={data.id}
     >
       {data.name}
     </option>

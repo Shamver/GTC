@@ -16,19 +16,19 @@ import BoardCategoryOptionList from './BoardCategoryOptionList';
 const Posting = ({ match, parentProps }) => {
   const {
     BoardPostStore, UtilRouteStore, UtilLoadingStore,
-    SystemCodeStore, UserStore,
+    UserStore, BoardStore,
   } = useStores();
   const { userData, guestAuthor } = UserStore;
   const {
     post, setPostBoard, onChangeValue, addPost,
-    getModifyPost, modifyPost, setPostClear, setCategoryCodeList,
+    getModifyPost, modifyPost, setPostClear,
   } = BoardPostStore;
   const { goBack } = UtilRouteStore;
-  const { getCodeComponent } = SystemCodeStore;
   const { loadingProcess } = UtilLoadingStore;
   const { isModify } = parentProps;
   const { params } = match;
   const { board, id } = params;
+  const { getBoardCategoryList } = BoardStore;
 
   useLayoutEffect(() => {
     if (userData === null) {
@@ -43,14 +43,12 @@ const Posting = ({ match, parentProps }) => {
     loadingProcess, setPostClear, setPostBoard, board, getModifyPost,
     isModify, id, guestAuthor, userData,
   ]);
-
+  console.log(post.board.toUpperCase());
   useLayoutEffect(() => {
     loadingProcess([
-      () => getCodeComponent(`BOARD_${post.board.toUpperCase()}_CATEGORY`, setCategoryCodeList),
+      () => getBoardCategoryList(post.board.toUpperCase()),
     ]);
-  }, [
-    loadingProcess, post.board, getCodeComponent, setCategoryCodeList,
-  ]);
+  }, [loadingProcess, getBoardCategoryList, post.board]);
 
   return (
     <PostingWrapper>

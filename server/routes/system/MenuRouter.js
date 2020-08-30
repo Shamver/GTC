@@ -134,6 +134,23 @@ const SELECT_MENU_CATEGORY = `
    ORDER BY GBC.\`ORDER\`
 `;
 
+const SELECT_MENU_CATEGORY_USE = `
+  SELECT
+    GBC.ID AS id
+    , GBC.MENU_ID AS menu
+    , GBC.NAME AS name
+    , GBC.PATH AS path
+    , GBC.\`DESC\` as \`desc\`
+    , GBC.\`ORDER\` as \`order\`
+    , GBC.USE_FL AS useFl
+    , GBC.CRT_DTTM AS crtDttm
+   FROM GTC_MENU_CATEGORY GBC
+   WHERE 
+    GBC.MENU_ID = ':MENU_ID'
+    AND GBC.USE_FL = 1
+   ORDER BY GBC.\`ORDER\`
+`;
+
 const SELECT_MENU_CATEGORY_ALL = `
   SELECT
     GBC.ID AS id
@@ -394,6 +411,28 @@ router.get('/category/all', (req, res) => {
       }),
   ).then(() => {
     info('[SELECT, GET /api/system/menu/category/all] 게시판 카테고리 전체 조회 완료');
+  });
+});
+
+router.get('/category/use', (req, res) => {
+  const { board } = req.query;
+  Database.execute(
+    (database) => database.query(
+      SELECT_MENU_CATEGORY_USE,
+      {
+        MENU_ID: board,
+      },
+    )
+      .then((rows) => {
+        res.json({
+          success: true,
+          code: 1,
+          message: '카테고리 사용 조회 완료',
+          result: rows,
+        });
+      }),
+  ).then(() => {
+    info('[SELECT, GET /api/system/category/use] 시스템 카테고리 사용 조회');
   });
 });
 

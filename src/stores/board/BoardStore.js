@@ -7,28 +7,7 @@ class BoardStore {
 
   @observable boardList = [];
 
-  @observable boards = [{
-    value: 'NOTICE',
-    name: '공지사항',
-  }, {
-    value: 'FREE',
-    name: '자유 게시판',
-  }, {
-    value: 'TRADE',
-    name: '아이템 거래',
-  }, {
-    value: 'CASH',
-    name: '월드락 거래',
-  }, {
-    value: 'CRIME',
-    name: '신고 게시판',
-  }, {
-    value: 'QNA',
-    name: '질문 & 답변',
-  }, {
-    value: 'CONSULT',
-    name: '1:1 문의',
-  }];
+  @observable boardCategoryList = [];
 
   @observable categories = {
     BFC01: {
@@ -122,6 +101,25 @@ class BoardStore {
         if (data.success) {
           if (data.code === 1) {
             this.currentBoard = data.result;
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  };
+
+  @action getBoardCategoryList = (board) => {
+    axios.get('/api/system/menu/category/use', {
+      params: {
+        board,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.boardCategoryList = data.result;
           }
         } else {
           toast.error(data.message);

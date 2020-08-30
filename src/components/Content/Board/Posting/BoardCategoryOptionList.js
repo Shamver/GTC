@@ -3,18 +3,18 @@ import { observer } from 'mobx-react';
 import useStores from '../../../../stores/useStores';
 
 const BoardCategoryOptionList = () => {
-  const { BoardPostStore } = useStores();
-  const { categoryCodeList } = BoardPostStore;
+  const { BoardStore } = useStores();
+  const { boardCategoryList } = BoardStore;
 
-  const categoryArr = JSON.parse(JSON.stringify(categoryCodeList));
-  categoryArr.unshift({ code: '', codeName: '선택' });
+  const categoryArr = JSON.parse(JSON.stringify(boardCategoryList));
+  categoryArr.unshift({ id: '', name: '선택' });
 
   return categoryArr.map((data) => (
     <option
-      value={data.code}
-      key={data.code}
+      value={data.id}
+      key={data.id}
     >
-      {data.codeName}
+      {data.name}
     </option>
   ));
 };
