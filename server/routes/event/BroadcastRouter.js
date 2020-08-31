@@ -95,7 +95,7 @@ router.post('/', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[INSERT, POST /api/event/advertise] 광고 신청');
+    info('[INSERT, POST /api/event/broadcast] 광고 신청');
   });
 });
 
@@ -113,11 +113,10 @@ router.get('/', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/event/advertise] 광고중인 목록 조회');
+    info('[SELECT, GET /api/event/broadcast] 광고중인 목록 조회');
   });
 });
 
-// 이 라우팅을 애드블락이 막음
 router.get('/now', (req, res) => {
   Database.execute(
     (database) => database.query(
@@ -132,7 +131,7 @@ router.get('/now', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/event/advertise/now] 현재 광고중인 목록 조회');
+    info('[SELECT, GET /api/event/broadcast/now] 현재 광고중인 목록 조회');
   });
 });
 

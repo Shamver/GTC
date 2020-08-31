@@ -54,7 +54,7 @@ class AdvertiseStore {
       return;
     }
 
-    axios.post('/api/event/advertise', {
+    axios.post('/api/event/broadcast', {
       ...this.advertisePost,
       userId: userData.id,
       postId: linkUrl[1],
@@ -76,7 +76,7 @@ class AdvertiseStore {
   };
 
   @action getAdPostList = () => {
-    axios.get('/api/event/advertise')
+    axios.get('/api/event/broadcast')
       .then((response) => {
         const { data } = response;
         if (data.success) {
@@ -95,7 +95,7 @@ class AdvertiseStore {
   };
 
   @action getAdPostListNow = () => {
-    axios.get('/api/event/advertise/now')
+    axios.get('/api/event/broadcast/now')
       .then((response) => {
         const { data } = response;
         if (data.success) {
