@@ -14,11 +14,11 @@ const ReportTabContent = ({ currentPage, noPagination }) => {
     getReportList, activeTab,
   } = BoardReportStore;
 
-  useLayoutEffect(() => {
-    loadingProcess([
-      () => getReportList(currentPage),
-    ]);
-  }, [loadingProcess, getReportList, currentPage, activeTab]);
+  // useLayoutEffect(() => {
+  //   loadingProcess([
+  //     () => getReportList(currentPage),
+  //   ]);
+  // }, [loadingProcess, getReportList, currentPage, activeTab]);
 
   return (
     <>
