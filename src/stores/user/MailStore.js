@@ -30,6 +30,7 @@ class MailStore {
         if (data.success) {
           if (data.code === 1) {
             this.sentMailList = data.result;
+            console.log(data.result);
           } else {
             toast.info(data.message);
           }

@@ -17,9 +17,13 @@ const MailNav = () => {
       <NavItem>
         <NavLinkBtn className={activeTab === 'get' ? 'active' : ''} onClick={onActive} name="get">
           받은 쪽지 &nbsp;
-          {!getCount && (
+          {getCount ? (
             <CountSpan>
               {getCount}
+            </CountSpan>
+          ) : (
+            <CountSpan>
+              0
             </CountSpan>
           )}
         </NavLinkBtn>
@@ -27,9 +31,13 @@ const MailNav = () => {
       <NavItem>
         <NavLinkBtn className={activeTab === 'sent' ? 'active' : ''} onClick={onActive} name="sent">
           보낸 쪽지 &nbsp;
-          {!sentCount && (
+          {sentCount ? (
             <CountSpan>
               {sentCount}
+            </CountSpan>
+          ) : (
+            <CountSpan>
+              0
             </CountSpan>
           )}
         </NavLinkBtn>
