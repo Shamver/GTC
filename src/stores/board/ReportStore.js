@@ -50,7 +50,7 @@ class ReportStore {
     if (!this.ReportValidationCheck()) {
       return false;
     }
-    axios.post('/api/board/Report', {
+    axios.post('/api/board/report', {
       ...this.reportData,
       writerId: this.root.UserStore.userData.id,
     })
@@ -162,7 +162,7 @@ class ReportStore {
   }
 
   @action getReportList = async (currentPage) => {
-    await axios.get('/api/board/Report', {
+    await axios.get('/api/board/report', {
       params: {
         tab: this.activeTab,
         currentPage,
@@ -192,7 +192,7 @@ class ReportStore {
   };
 
   @action getDetailReport = async (reportId) => {
-    await axios.get('/api/board/Report/detail', {
+    await axios.get('/api/board/report/detail', {
       params: {
         reportId,
       },
@@ -222,7 +222,7 @@ class ReportStore {
   }
 
   @action getReportListDetail = async (reportId) => {
-    await axios.get('/api/board/Report/detail', {
+    await axios.get('/api/board/report/detail', {
       params: {
         reportId,
       },
@@ -266,7 +266,7 @@ class ReportStore {
   @action reportReject = async (reportId) => {
     const managerId = this.root.UserStore.userData.id;
 
-    axios.put('/api/board/Report/reject', {
+    axios.put('/api/board/report/reject', {
       reportId, managerId,
     })
       .then((response) => {

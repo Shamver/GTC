@@ -193,7 +193,7 @@ router.post('/', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[INSERT, POST /api/board/Report] 게시글 신고');
+    info('[INSERT, POST /api/board/report] 게시글 신고');
   });
 });
 
@@ -222,7 +222,7 @@ router.get('/', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/board/Report] 신고 이력 조회');
+    info('[SELECT, GET /api/board/report] 신고 이력 조회');
   });
 });
 
@@ -245,7 +245,7 @@ router.get('/detail', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[SELECT, GET /api/board/Report/detail] 신고 이력 상세 조회');
+    info('[SELECT, GET /api/board/report/detail] 신고 이력 상세 조회');
   });
 });
 
@@ -268,7 +268,7 @@ router.put('/reject', (req, res) => {
         });
       }),
   ).then(() => {
-    info('[UPDATE, PUT /api/board/Report/detail] 해당 신고 반려 처리');
+    info('[UPDATE, PUT /api/board/report/detail] 해당 신고 반려 처리');
   });
 });
 
