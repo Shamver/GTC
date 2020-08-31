@@ -17,13 +17,19 @@ const MenuRow = ({ data }) => {
 
   return (
     <MarginlessRow onClick={() => getCategoryList(id, type)} active={id === menu ? 'true' : 'false'}>
-      <PaddingCol xs="3">{name}</PaddingCol>
-      <PaddingCol xs="3">{path}</PaddingCol>
-      <PaddingCol xs="3">{useFl}</PaddingCol>
       <PaddingCol xs="3">
-        <Button size="sm" color="danger" onClick={(event) => getMenu(id, event)}>
+        <InnerP>{name}</InnerP>
+      </PaddingCol>
+      <PaddingCol xs="3">
+        <InnerP>{path}</InnerP>
+      </PaddingCol>
+      <PaddingCol xs="3">
+        <InnerP>{useFl}</InnerP>
+      </PaddingCol>
+      <PaddingCol xs="3">
+        <InnerP onClick={(event) => getMenu(id, event)}>
           <DetailIcon icon={faInfoCircle} />
-        </Button>
+        </InnerP>
       </PaddingCol>
     </MarginlessRow>
   );
@@ -38,6 +44,10 @@ MenuRow.propTypes = {
     type: Proptypes.string,
   }).isRequired,
 };
+
+const InnerP = styled.p`
+  margin: revert;
+`;
 
 const MarginlessRow = styled(Row)`
   margin: 0 !important;
@@ -59,11 +69,17 @@ const MarginlessRow = styled(Row)`
 `;
 
 const PaddingCol = styled(Col)`
-  padding: .75rem;
+  vertical-align: middle;
 `;
 
 const DetailIcon = styled(FontAwesomeIcon)`
-  vertical-align: text-top;
+  font-size: 20px;
+  color: #dc3545;
+  vertical-align: middle;
+  
+  &:hover {
+    color: red;
+  }
 `;
 
 export default memo(observer(MenuRow));
