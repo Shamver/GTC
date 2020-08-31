@@ -70,9 +70,11 @@ class SearchStore {
             let result = item;
             if (item.isMedia) {
               const thumbnail = this.getPostVideoThumbnailUrl(item.content);
+              const newContent = this.replaceVideoTags(item.content);
               result = {
                 ...result,
                 thumbnail,
+                content: newContent,
               };
             }
             return result;
@@ -91,6 +93,23 @@ class SearchStore {
       .catch((response) => { toast.error(response.message); });
   };
 
+  @action replaceVideoTags = (text) => {
+    if (!text) return text;
+
+    const oembedReg = /(?:)<oembed(.+?)<\/oembed>/g;
+
+    let resultHtml = text;
+
+    const oembedMatch = text.match(oembedReg);
+
+    if (oembedMatch && oembedMatch.length > 0) {
+      for (let i = 0; i < oembedMatch.length; i += 1) {
+        resultHtml = resultHtml.replace(oembedMatch[i], '');
+      }
+    }
+
+    return resultHtml;
+  };
 
   @action getPostVideoThumbnailUrl = (text) => {
     if (!text) return text;
