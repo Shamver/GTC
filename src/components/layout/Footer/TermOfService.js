@@ -475,9 +475,6 @@ const ModalHeaderBack = styled(ModalHeader)`
 
 const ModalBodyBox = styled(ModalBody)`
   padding: 1rem !important;
-  height: 700px;
-  overflow: auto;
-  margin-bottom: 1rem;
   
   h6{
     font-size:14px;
@@ -499,7 +496,6 @@ const ModalBodyBox = styled(ModalBody)`
   p {
     font-size: 13px;
   }
-  
 `;
 
 export default memo(observer(TermOfService));
