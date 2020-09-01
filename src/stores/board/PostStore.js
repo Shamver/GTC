@@ -367,7 +367,6 @@ class PostStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            console.log("ASd");
             const [post] = data.result;
             that.postView = {
               ...post,
