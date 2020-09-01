@@ -380,8 +380,8 @@ class PostStore {
     const oembedMatch = text.match(oembedReg);
 
     if (oembedMatch && oembedMatch.length > 0) {
-      for (let i=0; i < oembedMatch.length; i++) {
-        let matchParts = oembedMatch[i].split(fullReg);
+      for (let i = 0; i < oembedMatch.length; i += 1) {
+        const matchParts = oembedMatch[i].split(fullReg);
         resultHtml = resultHtml.replace(oembedMatch[i],
           `<iframe width="420" height="345" src="https://www.youtube.com/embed/${matchParts[4]}" frameborder="0" allowfullscreen></iframe><br/>`);
       }
@@ -391,7 +391,9 @@ class PostStore {
   };
 
   @action getModifyPost = (id, isModify) => {
+    console.log(isModify);
     if (!isModify) {
+      this.setPostClear();
       return;
     }
 

@@ -9,6 +9,7 @@ const BoardCategoryOptionList = () => {
   const categoryArr = JSON.parse(JSON.stringify(boardCategoryList));
   categoryArr.unshift({ id: '', name: '선택' });
 
+  console.log('BoardCategory Render')
   return categoryArr.map((data) => (
     <option
       value={data.id}

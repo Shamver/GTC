@@ -102,7 +102,7 @@ const Reply = ({ data, index }) => {
                 </SpanLikeLink>
                 &nbsp;·&nbsp;
                 {/* eslint-disable-next-line max-len */}
-                <SpanLikeLink onClick={setReplyEditId(data.id)}>대댓글</SpanLikeLink>
+                <SpanLikeLink onClick={() => setReplyEditId(data.id)}>대댓글</SpanLikeLink>
                 &nbsp;·&nbsp;
                 { data.updateDate ? data.updateDate : data.date}
                 &nbsp;

@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import * as Proptypes from 'prop-types';
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Row, Col } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';

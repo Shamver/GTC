@@ -31,11 +31,16 @@ const Posting = ({ match, parentProps }) => {
   const { getBoardCategoryList } = BoardStore;
 
   useLayoutEffect(() => {
+    loadingProcess([
+      () => getBoardCategoryList(post.board.toUpperCase()),
+    ]);
+  }, [loadingProcess, getBoardCategoryList, post.board]);
+
+  useLayoutEffect(() => {
     if (userData === null) {
       guestAuthor();
     }
     loadingProcess([
-      setPostClear,
       () => setPostBoard(board),
       () => getModifyPost(id, isModify),
     ]);
@@ -43,12 +48,6 @@ const Posting = ({ match, parentProps }) => {
     loadingProcess, setPostClear, setPostBoard, board, getModifyPost,
     isModify, id, guestAuthor, userData,
   ]);
-  console.log(post.board.toUpperCase());
-  useLayoutEffect(() => {
-    loadingProcess([
-      () => getBoardCategoryList(post.board.toUpperCase()),
-    ]);
-  }, [loadingProcess, getBoardCategoryList, post.board]);
 
   return (
     <PostingWrapper>

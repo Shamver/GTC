@@ -7,13 +7,12 @@ import useStores from '../../../../../stores/useStores';
 import anonymous from '../../../../../resources/images/anonymous.png';
 import WriterDropdown from './WriterDropdown';
 
-const Index = () => {
+const PostViewHeader = () => {
   const { BoardPostStore } = useStores();
   const { postView } = BoardPostStore;
   const {
     board, boardName, categoryName, title, writerProfile,
   } = postView;
-
   const link = !!board && board.toLowerCase();
   return (
     <>
@@ -97,4 +96,4 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-export default memo(observer(Index));
+export default memo(observer(PostViewHeader));
