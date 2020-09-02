@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
+import {observer} from "mobx-react";
 
 const PostLockerFavoriteTable = ({ data }) => {
   const { UserFavoriteStore } = useStores();
@@ -62,4 +63,4 @@ const DeleteBtn = styled(Button)`
   margin: -5px 0 !important;
 `;
 
-export default memo(PostLockerFavoriteTable);
+export default memo(observer(PostLockerFavoriteTable));

@@ -258,6 +258,7 @@ class UserStore {
   };
 
   @action updateInfo = () => {
+    console.log("ASd");
     const {
       nickname, birth, gender, profileYN, uploadImage, gtName, prevGtNickname,
     } = this.root.ComponentMyAccountStore;

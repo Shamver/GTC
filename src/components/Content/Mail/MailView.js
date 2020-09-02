@@ -17,6 +17,7 @@ const MailView = () => {
   if (viewMail.id === undefined) {
     setTab('get');
   }
+
   const {
     id, message, targetName, date, readDate, fromName,
   } = viewMail;

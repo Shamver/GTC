@@ -117,7 +117,6 @@ class FavoriteStore {
             if (type === 'post') {
               getPost(id).then();
             }
-            this.getFavorite().then();
             toast.success(data.message);
           } else {
             toast.info(data.message);
@@ -125,6 +124,8 @@ class FavoriteStore {
         } else {
           toast.error(data.message);
         }
+      }).then(() => {
+        this.getMyFavorite(1);
       })
       .catch((response) => { toast.error(response.message); });
   });
