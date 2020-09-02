@@ -16,37 +16,28 @@ import BoardCategoryOptionList from './BoardCategoryOptionList';
 const Posting = ({ match, parentProps }) => {
   const {
     BoardPostStore, UtilRouteStore, UtilLoadingStore,
-    UserStore, BoardStore,
+    UserStore,
   } = useStores();
   const { userData, guestAuthor } = UserStore;
   const {
-    post, setPostBoard, onChangeValue, addPost,
+    post, onChangeValue, addPost,
     getModifyPost, modifyPost, setPostClear,
   } = BoardPostStore;
   const { goBack } = UtilRouteStore;
   const { loadingProcess } = UtilLoadingStore;
   const { isModify } = parentProps;
+  const realIsModify = isModify || false;
   const { params } = match;
   const { board, id } = params;
-  const { getBoardCategoryList } = BoardStore;
 
   useLayoutEffect(() => {
     loadingProcess([
-      () => getBoardCategoryList(post.board.toUpperCase()),
-    ]);
-  }, [loadingProcess, getBoardCategoryList, post.board]);
-
-  useLayoutEffect(() => {
-    if (userData === null) {
-      guestAuthor();
-    }
-    loadingProcess([
-      () => setPostBoard(board),
-      () => getModifyPost(id, isModify),
+      () => guestAuthor(),
+      () => getModifyPost(id, realIsModify),
     ]);
   }, [
-    loadingProcess, setPostClear, setPostBoard, board, getModifyPost,
-    isModify, id, guestAuthor, userData,
+    loadingProcess, setPostClear, getModifyPost,
+    realIsModify, id, guestAuthor, userData,
   ]);
 
   return (
@@ -54,7 +45,7 @@ const Posting = ({ match, parentProps }) => {
       <PostingHeader>
         <Col xs="12">
           <SelectInput type="select" name="board" value={post.board} onChange={onChangeValue}>
-            <BoardOptionList />
+            <BoardOptionList board={board} />
           </SelectInput>
         </Col>
         <RightMarginlessCol xs="3">
@@ -111,13 +102,7 @@ Posting.propTypes = {
   }).isRequired,
   parentProps: PropTypes.shape({
     isModify: PropTypes.bool.isRequired,
-  }),
-};
-
-Posting.defaultProps = {
-  parentProps: PropTypes.shape({
-    isModify: false,
-  }),
+  }).isRequired,
 };
 
 const RightMarginlessCol = styled(Col)`

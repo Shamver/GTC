@@ -488,6 +488,10 @@ class UserStore {
   }
 
   @action guestAuthor = (e) => {
+    if (this.userData === null) {
+      return true;
+    }
+
     const { history } = this.root.UtilRouteStore;
 
     if (e) {
