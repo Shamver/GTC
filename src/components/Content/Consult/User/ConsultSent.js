@@ -236,7 +236,8 @@ const Div = styled.div`
   }
   
   & .new-line {
-    white-space: pre;
+    white-space: normal;
+    text-align: left;
   }
 `;
 
