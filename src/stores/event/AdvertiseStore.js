@@ -30,7 +30,7 @@ class AdvertiseStore {
       toast.error('로그인 후 이용 가능합니다.');
       return;
     }
-    if (this.advertisePost.message === '') {
+    if (!this.advertisePost.message.trim()) {
       toast.error('메시지는 공백이 될 수 없습니다.');
       return;
     }

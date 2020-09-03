@@ -67,8 +67,8 @@ class ConsultStore {
       subject, text, currentCategory,
     } = this;
 
-    this.isDisabled = subject === ''
-      || text === ''
+    this.isDisabled = !subject.trim()
+      || !text.trim()
       || currentCategory === ''
       || text.length > 200;
   };

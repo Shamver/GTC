@@ -47,6 +47,11 @@ class SearchStore {
       toast.error('❗ 검색어는 2자 이상 입력해주세요.');
       return;
     }
+
+    if (!this.searchText.trim()) {
+      toast.error('❗ 메세지를 입력해주세요.');
+      return;
+    }
     this.foundText = this.searchText;
 
     history.push(`/search?search=${this.foundText}`);

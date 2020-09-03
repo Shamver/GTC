@@ -65,6 +65,11 @@ class DailyStore {
   @action addDaily = (() => {
     const { userData, cookieCheck } = this.root.UserStore;
 
+    if (!this.message.trim()) {
+      toast.error('메세지를 입력해주세요.');
+      return false;
+    }
+
     if (userData) {
       axios.post('/api/event/daily', {
         params: {
@@ -92,6 +97,8 @@ class DailyStore {
           toast.error(response.message);
         });
     }
+
+    return true;
   });
 
   @action onChangeValue = ((e) => {
