@@ -66,8 +66,12 @@ class MailStore {
     const { userData } = this.root.UserStore;
     const { mailTo, mailText } = this.mailForm;
 
-    if (!mailTo.trim() || !mailText) {
+    if (!mailTo.trim()) {
       toast.error('공란이 있으므로 실패하였습니다.');
+      return;
+    }
+    if (!mailText.trim()) {
+      toast.error('메시지를 입력해주세요.');
       return;
     }
     if (mailText.length > 499) {

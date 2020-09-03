@@ -174,7 +174,7 @@ class ConsultStore {
     const { userData } = this.root.UserStore;
     const { answer } = this;
 
-    if (answer === '') {
+    if (!answer.trim()) {
       toast.error('내용을 입력해주세요.');
       return false;
     }
