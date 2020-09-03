@@ -126,6 +126,7 @@ class FavoriteStore {
         }
       }).then(() => {
         this.getMyFavorite(1);
+        this.getFavorite();
       })
       .catch((response) => { toast.error(response.message); });
   });
