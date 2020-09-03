@@ -1,96 +1,22 @@
-import React, { useLayoutEffect, memo } from 'react';
+import React, { memo } from 'react';
 import styled from 'styled-components';
-import {
-  CustomInput, Button, Input, Row, Col,
-} from 'reactstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons';
 import { observer } from 'mobx-react';
 import * as PropTypes from 'prop-types';
-import CKEditor from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import useStores from '../../../../stores/useStores';
-import BoardOptionList from './BoardOptionList';
-import BoardCategoryOptionList from './BoardCategoryOptionList';
+import PostingHeader from './PostingHeader';
+import PostingContent from './PostingContent';
+import PostingFooter from './PostingFooter';
 
 const Posting = ({ match, parentProps }) => {
-  const {
-    BoardPostStore, UtilRouteStore, UtilLoadingStore,
-    UserStore,
-  } = useStores();
-  const { userData, guestAuthor } = UserStore;
-  const {
-    post, onChangeValue, addPost,
-    getModifyPost, modifyPost, setPostClear,
-  } = BoardPostStore;
-  const { goBack } = UtilRouteStore;
-  const { loadingProcess } = UtilLoadingStore;
-  const { isModify } = parentProps;
-  const realIsModify = isModify || false;
   const { params } = match;
   const { board, id } = params;
 
-  useLayoutEffect(() => {
-    loadingProcess([
-      () => guestAuthor(),
-      () => getModifyPost(id, realIsModify),
-    ]);
-  }, [
-    loadingProcess, setPostClear, getModifyPost,
-    realIsModify, id, guestAuthor, userData,
-  ]);
 
-  return (
-    <PostingWrapper>
-      <PostingHeader>
-        <Col xs="12">
-          <SelectInput type="select" name="board" value={post.board} onChange={onChangeValue}>
-            <BoardOptionList board={board} />
-          </SelectInput>
-        </Col>
-        <RightMarginlessCol xs="3">
-          <SelectInput type="select" name="category" value={post.category} onChange={onChangeValue}>
-            <BoardCategoryOptionList />
-          </SelectInput>
-        </RightMarginlessCol>
-        <Col>
-          <Input value={post.title} name="title" placeholder="제목을 입력해주세요..." onChange={onChangeValue} />
-        </Col>
-      </PostingHeader>
-      <CKEditor
-        editor={ClassicEditor}
-        data={post.text}
-        onChange={(event, editor) => onChangeValue(editor.getData())}
-        config={
-          {
-            ckfinder: {
-              uploadUrl: '/api/util/file/images',
-            },
-          }
-        }
-      />
-      <PostingFooter>
-        <CustomCheckbox type="checkbox" id="replyAllow" name="commentAllowFl" label="댓글 허용" value={post.commentAllowFl} onChange={onChangeValue} checked={post.commentAllowFl} />
-        <CustomCheckbox type="checkbox" id="secret" name="secretFl" label="비밀글" value={post.secretFl} onChange={onChangeValue} checked={post.secretFl} disabled />
-        <CustomCheckbox type="checkbox" id="secretReplyAllow" name="secretCommentAllowFl" value={post.secretCommentAllowFl} label="비밀 댓글 허용" onChange={onChangeValue} checked={post.secretCommentAllowFl} />
-        <CustomCheckbox type="checkbox" id="noticeFl" name="noticeFl" value={post.noticeFl} label="공지 여부" onChange={onChangeValue} checked={post.noticeFl} />
-      </PostingFooter>
-      <PostingFooter>
-        <MarginButton onClick={goBack} color="secondary">작성취소</MarginButton>
-        {!isModify ? (
-          <RightButton color="danger" onClick={() => addPost(match)}>
-            <FontAwesomeIcon icon={faPen} />
-            &nbsp;쓰기
-          </RightButton>
-        ) : (
-          <RightButton color="danger" onClick={() => modifyPost(match)}>
-            <FontAwesomeIcon icon={faPen} />
-            &nbsp;수정하기
-          </RightButton>
-        )}
-      </PostingFooter>
-    </PostingWrapper>
-  );
+
+  <PostingWrapper>
+    <PostingHeader/>
+    <PostingContent/>
+    <PostingFooter/>
+  </PostingWrapper>
 };
 
 Posting.propTypes = {
@@ -105,10 +31,6 @@ Posting.propTypes = {
   }).isRequired,
 };
 
-const RightMarginlessCol = styled(Col)`
-  padding-right: 0 !important;
-`;
-
 const PostingWrapper = styled.div`
   border-bottom: 2px solid #ebeae8;
   border-right: 2px solid #ebeae8;
@@ -117,33 +39,8 @@ const PostingWrapper = styled.div`
   
   & .ck-content {
     height : 500px;
-    font-family: 'Jeju Gothic', sans-serif !important;
+    font-family: inherit;
   }
-`;
-
-const CustomCheckbox = styled(CustomInput)`
-  display : inline-block !important;
-  margin-right : 10px;
-`;
-
-const MarginButton = styled(Button)`
-  margin-right : 5px;
-`;
-
-const RightButton = styled(Button)`
-  float : right;
-`;
-
-const PostingFooter = styled.div`
-  margin-top : 15px;
-`;
-
-const PostingHeader = styled(Row)`
-  padding : 10px 0px;
-`;
-
-const SelectInput = styled(Input)`
-  margin-bottom : 10px;
 `;
 
 export default memo(observer(Posting));
