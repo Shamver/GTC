@@ -8,15 +8,16 @@ import PostingFooter from './PostingFooter';
 
 const Posting = ({ match, parentProps }) => {
   const { params } = match;
+  const { isModify } = parentProps;
   const { board, id } = params;
 
-
-
-  <PostingWrapper>
-    <PostingHeader/>
-    <PostingContent/>
-    <PostingFooter/>
-  </PostingWrapper>
+  return (
+    <PostingWrapper>
+      <PostingHeader />
+      <PostingContent />
+      <PostingFooter isModify={isModify} />
+    </PostingWrapper>
+  );
 };
 
 Posting.propTypes = {

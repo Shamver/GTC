@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { memo } from 'react';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { observer } from 'mobx-react';
 import useStores from '../../../../stores/useStores';
 
 const PostingContent = () => {
-  const { UtilLoadingStore } = useStores();
+  const { BoardPostStore } = useStores();
+  const { post, onChangeValue } = BoardPostStore;
+  const { text } = post;
+
   return (
     <CKEditor
       editor={ClassicEditor}
-      data={post.text}
+      data={text}
       onChange={(event, editor) => onChangeValue(editor.getData())}
       config={
         {
@@ -21,4 +25,4 @@ const PostingContent = () => {
   );
 };
 
-export default PostingContent;
+export default memo(observer(PostingContent));

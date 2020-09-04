@@ -6,21 +6,25 @@ import BoardCategoryOptionList from './BoardCategoryOptionList';
 import useStores from '../../../../stores/useStores';
 
 const PostingHeader = () => {
-  const { LoadingStore } = useStores();
+  const { BoardPostStore } = useStores();
+  const { post, onChangeValue } = BoardPostStore;
+  const { board, category, title } = post;
+
+
   return (
     <PostingHeaderRow>
       <Col xs="12">
-        <SelectInput type="select" name="board" value={post.board} onChange={onChangeValue}>
-          <BoardOptionList board={board} />
+        <SelectInput type="select" name="board" value={board} onChange={onChangeValue}>
+          <BoardOptionList board={board?} />
         </SelectInput>
       </Col>
       <RightMarginlessCol xs="3">
-        <SelectInput type="select" name="category" value={post.category} onChange={onChangeValue}>
+        <SelectInput type="select" name="category" value={category} onChange={onChangeValue}>
           <BoardCategoryOptionList />
         </SelectInput>
       </RightMarginlessCol>
       <Col>
-        <Input value={post.title} name="title" placeholder="제목을 입력해주세요..." onChange={onChangeValue} />
+        <Input value={title} name="title" placeholder="제목을 입력해주세요..." onChange={onChangeValue} />
       </Col>
     </PostingHeaderRow>
   );
