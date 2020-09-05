@@ -21,30 +21,36 @@ const ConsultGetRow = (props) => {
 
   return (
     <>
-      <ColItem onClick={() => onClickRow(id)} className={isOpen ? 'col-sm-12 head active' : 'col-sm-12 head'}>
-        <TableRow>
-          <ColCell className="col-sm-2">
-            {category}
-          </ColCell>
-          <ColCell className="col-sm-5">
-            {subject}
-          </ColCell>
-          <ColCell className="col-sm-2">
-            {userName}
-          </ColCell>
-          <ColCell className="col-sm-2">
-            {date}
-          </ColCell>
-          <ColCell className="col-sm-1">
-            <CustomFontAwesome icon={answerFl ? faCheckCircle : faTimesCircle} color={answerFl ? 'green' : 'red'} />
-          </ColCell>
-        </TableRow>
-      </ColItem>
+      <Row>
+        <ColItem onClick={() => onClickRow(id)} className={isOpen ? 'col-sm-12 head active' : 'col-sm-12 head'}>
+          <TableRow className="table-row">
+            <div className="responsive-wrap">
+              <ColCell className="col-sm-2 category">
+                {category}
+              </ColCell>
+              <ColCell className="col-sm-5 subject">
+                {subject}
+              </ColCell>
+              <ColCell className="col-sm-2 nickname">
+                {userName}
+              </ColCell>
+            </div>
+            <div className="responsive-wrap">
+              <ColCell className="col-sm-2 date">
+                {date}
+              </ColCell>
+              <ColCell className="col-sm-1 result">
+                <CustomFontAwesome icon={answerFl ? faCheckCircle : faTimesCircle} color={answerFl ? 'green' : 'red'} />
+              </ColCell>
+            </div>
+          </TableRow>
+        </ColItem>
+      </Row>
       <ColItem className={isOpen ? 'col-sm-12 collapse-active' : 'col-sm-12 collapse-non-active'}>
         <Collapse isOpen={isOpen}>
           <Div>
             문의자: { userName }
-            <Card>
+            <Card className="card-ask">
               <CardBody className="bg-ask">
                 {consultDesc}
               </CardBody>
@@ -52,7 +58,7 @@ const ConsultGetRow = (props) => {
           </Div>
           <Div className="answer" answerFl={answerFl}>
             답변자: { adminName || '(미답변 상태입니다.)' }
-            <Card>
+            <Card className="card-answer">
               <CardBody className="bg-answer new-line">
                 {
                   answerFl
@@ -131,8 +137,8 @@ const ConsultGet = ({
               </ColCell>
             </TableHeader>
           </Col>
-          { test }
         </Row>
+        { test }
         <Pagination
           currentPage={currentPage}
           noPagination={noPagination}
@@ -175,6 +181,55 @@ const Wrapper = styled.div`
   & .content-header {
     border-bottom: 1px solid #dee2e6;
   }
+  
+  @media (max-width: 578px) {
+    & .content-header {
+      display: none;
+    }
+    
+    & .content-body {
+      display: block;
+    }
+    
+    & .table-row {
+      flex-direction: column;
+    }
+    
+    .category {
+      flex: 2;
+      color: #999999;
+      padding-right: 0;
+      line-height: 26px;
+    }
+    
+    .subject {
+      flex: 2;
+      padding: 0;
+    }
+    
+    .nickname {
+      flex: 1;
+      padding-left: 0;
+    }
+    
+    .date {
+      flex: 2;
+      padding: 0 0 0 15px;
+      color: #999999;
+      line-height: 26px;
+    }
+    
+    .result {
+      flex: 4;
+      padding: 0 15px 0 0;
+    }
+    
+    .col {
+      max-width: 100%;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
 `;
 
 const TableHeader = styled(Row)`
@@ -188,6 +243,19 @@ const TableRow = styled(Row)`
   
   &:last-child {
     border-bottom: 1px solid #dee2e6 !important;
+  }
+  
+  & .responsive-wrap {
+    display: contents;
+  }
+  
+  @media (max-width: 578px) {
+    & .responsive-wrap {
+      display: flex;
+      flex: 0 0 50%;
+      font-size: 14px;
+      align-items: center;
+    }
   }
 `;
 
@@ -206,6 +274,12 @@ const ColCell = styled(Col)`
   &.head:hover {
     background-color: #d9d9d9;
     cursor: pointer;
+  }
+  
+  @media (max-width: 578px) {
+    &{
+      height: 40px;
+    }
   }
 `;
 
@@ -233,11 +307,18 @@ const CustomFontAwesome = styled(FontAwesomeIcon)`
 
 const Div = styled.div`
   padding: 1rem;
-  width: 70%;
+  width: 100%;
   
   &.answer {
-    float: right;
     text-align: right;
+  }
+  
+  & .card-ask {
+    margin-right: 20%;
+  }
+  
+  & .card-answer {
+    margin-left: 20%;
   }
   
   & .bg-ask {
