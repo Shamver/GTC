@@ -1,19 +1,29 @@
-import React, { memo } from 'react';
+import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
-import { observer } from 'mobx-react';
 import * as PropTypes from 'prop-types';
 import PostingHeader from './PostingHeader';
 import PostingContent from './PostingContent';
 import PostingFooter from './PostingFooter';
+import useStores from '../../../../stores/useStores';
 
 const Posting = ({ match, parentProps }) => {
+  const { UtilLoadingStore, BoardPostStore } = useStores();
+  const { loadingProcess } = UtilLoadingStore;
+  const { getModifyPost } = BoardPostStore;
   const { params } = match;
   const { isModify } = parentProps;
   const { board, id } = params;
 
+  console.log(isModify);
+  useLayoutEffect(() => {
+    loadingProcess([
+      () => getModifyPost(id, isModify),
+    ]);
+  }, [loadingProcess, getModifyPost, id, isModify]);
+
   return (
     <PostingWrapper>
-      <PostingHeader />
+      <PostingHeader board={board} />
       <PostingContent />
       <PostingFooter isModify={isModify} />
     </PostingWrapper>
@@ -44,4 +54,4 @@ const PostingWrapper = styled.div`
   }
 `;
 
-export default memo(observer(Posting));
+export default memo(Posting);

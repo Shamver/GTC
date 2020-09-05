@@ -1,17 +1,18 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Button, CustomInput } from 'reactstrap';
 import * as Proptypes from 'prop-types';
+import { observer } from 'mobx-react';
 import useStores from '../../../../stores/useStores';
 
 const PostingFooter = ({ isModify }) => {
-  const { BoardPostStore, RouteStore } = useStores();
+  const { BoardPostStore, UtilRouteStore } = useStores();
   const {
     post, addPost, modifyPost, onChangeValue,
   } = BoardPostStore;
-  const { goBack } = RouteStore;
+  const { goBack } = UtilRouteStore;
   const {
     commentAllowFl, secretFl, secretCommentAllowFl,
     noticeFl,
@@ -59,4 +60,4 @@ const PostingFooterDiv = styled.div`
   margin-top : 15px;
 `;
 
-export default PostingFooter;
+export default memo(observer(PostingFooter));

@@ -1,26 +1,27 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Col, Input, Row } from 'reactstrap';
 import styled from 'styled-components';
+import * as Proptypes from 'prop-types';
+import { observer } from 'mobx-react';
 import BoardOptionList from './BoardOptionList';
 import BoardCategoryOptionList from './BoardCategoryOptionList';
 import useStores from '../../../../stores/useStores';
 
-const PostingHeader = () => {
+const PostingHeader = ({ board }) => {
   const { BoardPostStore } = useStores();
   const { post, onChangeValue } = BoardPostStore;
-  const { board, category, title } = post;
-
+  const { board: postBoard, category, title } = post;
 
   return (
     <PostingHeaderRow>
       <Col xs="12">
-        <SelectInput type="select" name="board" value={board} onChange={onChangeValue}>
-          <BoardOptionList board={board?} />
+        <SelectInput type="select" name="board" value={postBoard} onChange={onChangeValue}>
+          <BoardOptionList board={board} />
         </SelectInput>
       </Col>
       <RightMarginlessCol xs="3">
         <SelectInput type="select" name="category" value={category} onChange={onChangeValue}>
-          <BoardCategoryOptionList />
+          <BoardCategoryOptionList board={postBoard} />
         </SelectInput>
       </RightMarginlessCol>
       <Col>
@@ -28,6 +29,10 @@ const PostingHeader = () => {
       </Col>
     </PostingHeaderRow>
   );
+};
+
+PostingHeader.propTypes = {
+  board: Proptypes.string.isRequired,
 };
 
 const RightMarginlessCol = styled(Col)`
@@ -42,4 +47,4 @@ const SelectInput = styled(Input)`
   margin-bottom : 10px;
 `;
 
-export default PostingHeader;
+export default memo(observer(PostingHeader));

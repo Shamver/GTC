@@ -6,11 +6,10 @@ import useStores from '../../../../stores/useStores';
 const BoardCategoryOptionList = ({ board }) => {
   const { BoardStore } = useStores();
   const { boardCategoryList, getBoardCategoryList } = BoardStore;
-  const boardValue = board || '';
 
   useEffect(() => {
-    getBoardCategoryList(boardValue.toUpperCase());
-  }, [getBoardCategoryList, boardValue]);
+    getBoardCategoryList(board.toUpperCase());
+  }, [getBoardCategoryList, board]);
 
   const categoryArr = JSON.parse(JSON.stringify(boardCategoryList));
   categoryArr.unshift({ id: '', name: '선택' });
