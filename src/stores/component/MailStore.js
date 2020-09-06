@@ -10,6 +10,8 @@ class MailStore {
   @action onActive = ((e) => {
     const { name } = e.target;
 
+    if (!name) return;
+
     if (this.activeTab !== name) {
       this.activeTab = name;
     }
