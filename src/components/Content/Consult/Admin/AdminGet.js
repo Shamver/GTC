@@ -31,11 +31,11 @@ const ConsultGetRow = (props) => {
               <ColCell className="col-sm-5 subject">
                 {subject}
               </ColCell>
+            </div>
+            <div className="responsive-wrap">
               <ColCell className="col-sm-2 nickname">
                 {userName}
               </ColCell>
-            </div>
-            <div className="responsive-wrap">
               <ColCell className="col-sm-2 date">
                 {date}
               </ColCell>
@@ -195,33 +195,8 @@ const Wrapper = styled.div`
       flex-direction: column;
     }
     
-    .category {
-      flex: 2;
+    .category, .nickname, .date {
       color: #999999;
-      padding-right: 0;
-      line-height: 26px;
-    }
-    
-    .subject {
-      flex: 2;
-      padding: 0;
-    }
-    
-    .nickname {
-      flex: 1;
-      padding-left: 0;
-    }
-    
-    .date {
-      flex: 2;
-      padding: 0 0 0 15px;
-      color: #999999;
-      line-height: 26px;
-    }
-    
-    .result {
-      flex: 4;
-      padding: 0 15px 0 0;
     }
     
     .col {
@@ -251,10 +226,14 @@ const TableRow = styled(Row)`
   
   @media (max-width: 578px) {
     & .responsive-wrap {
-      display: flex;
-      flex: 0 0 50%;
+      display: block;
       font-size: 14px;
-      align-items: center;
+    }
+    
+    & .responsive-wrap > div {
+      display: inline;
+      padding-right: 0;
+      line-height: 28px;
     }
   }
 `;

@@ -170,28 +170,8 @@ const Wrapper = styled.div`
       flex-direction: column;
     }
     
-    .category {
-      flex: 2;
+    .category, .date {
       color: #999999;
-      padding-right: 0;
-      line-height: 26px;
-    }
-    
-    .subject {
-      flex: 4;
-      padding-left: 0;
-    }
-    
-    .date {
-      flex: 2;
-      padding: 0 0 0 15px;
-      color: #999999;
-      line-height: 26px;
-    }
-    
-    .result {
-      flex: 4;
-      padding: 0 15px 0 0;
     }
     
     .col {
@@ -221,10 +201,14 @@ const TableRow = styled(Row)`
   
   @media (max-width: 578px) {
     & .responsive-wrap {
-      display: flex;
-      flex: 0 0 50%;
+      display: block;
+    }
+    
+    & .responsive-wrap > div {
+      display: inline;
+      padding-right: 0;
+      line-height: 28px;
       font-size: 14px;
-      align-items: center;
     }
   }
 `;
