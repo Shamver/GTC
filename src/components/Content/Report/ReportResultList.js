@@ -1,6 +1,7 @@
 import React, { memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
+import { Col, Row } from 'reactstrap';
 import useStores from '../../../stores/useStores';
 
 const ReportResultList = ({ data }) => {
@@ -11,16 +12,38 @@ const ReportResultList = ({ data }) => {
   } = data;
 
   return (
-    <tr onClick={() => getDetailReport(reportId)}>
-      <TdCenter>{reportId}</TdCenter>
-      <td>{reason}</td>
-      <td>{userId}</td>
-      <td>{targetName}</td>
-      <td>{contents}</td>
-      <td>{reportDate}</td>
-      <td>{rejectDate}</td>
-      <td>{reportResult}</td>
-    </tr>
+    <TableBody onClick={() => getDetailReport(reportId)}>
+      <div className="responsive-wrap">
+        <ColCell className="col-1 id">
+          {reportId}
+        </ColCell>
+        <ColCell className="col-3 reason">
+          {reason}
+        </ColCell>
+        <ColCell className="col-1 contents">
+          {contents}
+        </ColCell>
+      </div>
+      <div className="responsive-wrap info">
+        <ColCell className="col-1">
+          {userId}
+        </ColCell>
+        <ColCell className="col-1">
+          {targetName}
+        </ColCell>
+        <ColCell className="col-2">
+          {reportDate}
+        </ColCell>
+      </div>
+      <div className="responsive-wrap info">
+        <ColCell className="col-1">
+          {reportResult}
+        </ColCell>
+        <ColCell className="col-2">
+          {rejectDate}
+        </ColCell>
+      </div>
+    </TableBody>
   );
 };
 
@@ -38,8 +61,55 @@ ReportResultList.propTypes = {
   }).isRequired,
 };
 
-const TdCenter = styled.td`
-  text-align: center;
+const TableBody = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  cursor: pointer;
+  
+  :hover {    
+    color: #212529;
+    background-color: rgba(0,0,0,.075);
+  }
+  
+  & .responsive-wrap {
+    display: contents;
+  }
+  
+  @media (max-width: 578px) {
+    & .responsive-wrap {
+      width: 100%;
+      display: block;
+      line-height: 32px;
+      font-size: 14px;
+    }
+    
+    & .responsive-wrap > div {
+      display: inline;
+      padding-right: 0;
+      vertical-align: middle;
+    }
+    
+    .id {    
+      font-size: 16px;
+      color: #dc3545;
+      font-weight: 600;
+    }
+    
+    .contents {        
+      color: #5a7989;
+      font-size: 12px;
+    }
+    
+    .info {
+      color: #989898;
+      font-size: 13px;
+      line-height: 24px;
+    }
+  }
+`;
+
+const ColCell = styled(Col)`
+  padding: 12px 6px;
 `;
 
 export default memo(ReportResultList);

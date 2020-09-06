@@ -1,6 +1,6 @@
 import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
-import { Table, TabPane } from 'reactstrap';
+import {Col, Row, Table, TabPane} from 'reactstrap';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import ReportList from './ReportList';
@@ -25,21 +25,33 @@ const ReportTable = ({ currentPage, noPagination }) => {
 
   return (
     <TabPane tabId="reportTable">
-      <CodeTable bordered hover>
-        <thead>
-          <tr>
-            <ThCenter width="7%">신고ID</ThCenter>
-            <th width="30%">신고 사유</th>
-            <th width="15%">신고자</th>
-            <th width="15%">피신고자</th>
-            <th width="10%">컨텐츠</th>
-            <th width="13%">신고 날짜</th>
-          </tr>
-        </thead>
-        <tbody>
-          { reportList }
-        </tbody>
-      </CodeTable>
+      <Wrapper size="sm">
+        <Row className="content-header">
+          <Col className="col-sm-12">
+            <TableHeader>
+              <ColCell className="col-1">
+                신고ID
+              </ColCell>
+              <ColCell className="col-3">
+                신고 사유
+              </ColCell>
+              <ColCell className="col-2">
+                컨텐츠
+              </ColCell>
+              <ColCell className="col-2">
+                신고자
+              </ColCell>
+              <ColCell className="col-2">
+                피신고자
+              </ColCell>
+              <ColCell className="col-2">
+                신고 날짜
+              </ColCell>
+            </TableHeader>
+          </Col>
+        </Row>
+        { reportList }
+      </Wrapper>
       {currentReportMaxPage !== 0
         ? (<ReportPagination currentPage={currentPage} noPagination={noPagination} />)
         : ''}
@@ -52,19 +64,37 @@ ReportTable.propTypes = {
   noPagination: Proptypes.bool.isRequired,
 };
 
-const CodeTable = styled(Table)`
-  & > tbody > tr {
-    cursor : pointer;
+const Wrapper = styled.div`
+  padding: 0px 1rem;
+  border-bottom: 1px solid #dee2e6;
+  
+  & .content-header {
+    border-bottom: 1px solid #dee2e6;
   }
   
-  & > tbody > tr > td {
-    vertical-align: middle;
+  @media (max-width: 578px) {
+    & .content-header {
+      display: none;
+    }
+    
+    & .content-body {
+      display: block;
+    }
+    
+    .col {
+      max-width: 100%;
+    }
   }
 `;
 
-const ThCenter = styled.td`
-  text-align: center;
-  font-weight: 600;
+const TableHeader = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  
+`;
+
+const ColCell = styled(Col)`
+  padding: 12px 6px;
 `;
 
 export default memo(observer(ReportTable));
