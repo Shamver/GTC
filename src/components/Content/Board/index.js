@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, memo } from 'react';
+import React, { useLayoutEffect, useEffect, memo } from 'react';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import qs from 'query-string';
@@ -10,7 +10,8 @@ import useStores from '../../../stores/useStores';
 
 const Board = ({ parentProps, location, match }) => {
   const {
-    BoardPostStore, UtilLoadingStore, BoardStore, SystemCodeStore,
+    BoardStore, BoardPostStore, UtilLoadingStore,
+    SystemCodeStore,
   } = useStores();
   const { params } = match;
   const { board } = params;
@@ -26,28 +27,31 @@ const Board = ({ parentProps, location, match }) => {
   const { loadingProcess } = UtilLoadingStore;
   const {
     setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage, currentBoardPath,
-    setIsPagination, boardPathCheck, setCategoryCodeList,
+    setIsPagination, boardPathCheck, getBoardCategoryList,
   } = BoardStore;
   const query = qs.parse(location.search);
+
+  useEffect(() => {
+    boardPathCheck(board);
+    setCurrentBoardPath(board);
+    judgeFilterMode(query);
+    setCurrentBoardPage(currentPage);
+    setIsPagination(isPagination);
+    setClearPostView();
+  }, [boardPathCheck, setCurrentBoardPath, judgeFilterMode, board]);
 
   // 차단목록?
   useLayoutEffect(() => {
     loadingProcess([
-      () => boardPathCheck(board),
-      () => setCurrentBoardPath(board),
-      () => judgeFilterMode(query),
-      () => setCurrentBoardPage(currentPage),
-      () => setIsPagination(isPagination),
+      () => getBoardCategoryList(board),
       () => getBoardPostNoticeList(board, currentPage),
       () => getBoardPostList(board, currentPage, currentCategory),
-      () => getCodeComponent(`BOARD_${currentBoardPath.toUpperCase()}_CATEGORY`, setCategoryCodeList),
       setClearPostView,
     ]);
   }, [
     loadingProcess, setCurrentBoardPath, board, judgeFilterMode, query, setCurrentBoardPage,
     currentPage, setIsPagination, isPagination, getBoardPostNoticeList, getBoardPostList,
     setClearPostView, boardPathCheck, currentCategory, getCodeComponent, currentBoardPath,
-    setCategoryCodeList,
   ]);
 
   return (

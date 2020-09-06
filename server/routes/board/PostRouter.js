@@ -198,6 +198,7 @@ const SELECT_POST_SINGLE = `
     , P.SECRET_FL AS secretFl
     , P.SECRET_COMMENT_ALLOW_FL AS secretCommentAllowFl
     , P.COMMENT_ALLOW_FL AS commentAllowFl
+    , P.NOTICE_FL AS noticeFl
     , (SELECT U.ADMIN_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterAdmin
     , (SELECT U.OPERATOR_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterOperator
   FROM GTC_POST P 
@@ -601,6 +602,7 @@ router.put('/', authMiddleware, (req, res) => {
             SECRET_FL: data.secret,
             SECRET_COMMENT_ALLOW_FL: data.secretReplyAllow,
             COMMENT_ALLOW_FL: data.replyAllow,
+            NOTICE_FL: data.noticeFl,
           },
         );
       })

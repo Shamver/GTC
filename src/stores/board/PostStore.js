@@ -126,6 +126,7 @@ class PostStore {
       secret: this.post.secretFl,
       replyAllow: this.post.commentAllowFl,
       secretReplyAllow: this.post.secretCommentAllowFl,
+      noticeFl: this.post.noticeFl,
       userId: userData.id,
     })
       .then((response) => {
@@ -391,7 +392,6 @@ class PostStore {
   };
 
   @action getModifyPost = (id, isModify) => {
-    console.log(isModify);
     if (!isModify) {
       this.setPostClear();
       return;
@@ -410,6 +410,7 @@ class PostStore {
           const {
             board, category, title, content,
             secretFl, commentAllowFl, secretCommentAllowFl, isMyPost,
+            noticeFl,
           } = data.result[0];
 
           if (!isMyPost) {
@@ -426,6 +427,7 @@ class PostStore {
             secretFl,
             commentAllowFl,
             secretCommentAllowFl,
+            noticeFl,
             text: content,
           };
         } else {

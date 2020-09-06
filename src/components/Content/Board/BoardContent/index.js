@@ -6,48 +6,13 @@ import styled from 'styled-components';
 import { Table } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
-import PostList from './Post/PostList';
-import useStores from '../../../stores/useStores';
+import PostList from '../Post/PostList';
+import useStores from '../../../../stores/useStores';
+import BoardCategoryList from './BoardCategoryList';
 
-const CategoryLink = ({
-  currentBoardPath,
-  categories,
-  category,
-}) => {
-  const { name, path } = categories[category];
-  const toPath = `/${currentBoardPath}/${path}/page/1/`;
-  return (<NavLink activeClassName="active" to={toPath}>{name}</NavLink>);
-};
-
-CategoryLink.propTypes = {
-  currentBoardPath: Proptypes.string,
-  categories: Proptypes.shape({
-    name: Proptypes.string,
-    path: Proptypes.string,
-  }).isRequired,
-  category: Proptypes.string,
-};
-
-CategoryLink.defaultProps = {
-  currentBoardPath: 'free',
-  category: 'freedom',
-};
-
-const BoardContent = ({ isFooter, currentPage }) => {
+const BoardContent = ({ isFooter }) => {
   const { BoardStore } = useStores();
-  const { currentBoardPath, categories, currentBoardCategories } = BoardStore;
-
-  const categoryLinks = currentBoardCategories.map(
-    (v) => (
-      <CategoryLink
-        currentBoardPath={currentBoardPath}
-        categories={categories}
-        category={v.code}
-        currentPage={currentPage}
-        key={v.code}
-      />
-    ),
-  );
+  const { currentBoardPath } = BoardStore;
 
   return (
     <>
@@ -57,7 +22,7 @@ const BoardContent = ({ isFooter, currentPage }) => {
             <NavLink activeClassName="active" to={`/${currentBoardPath}`}>
               <FontAwesomeIcon icon={faHome} />
             </NavLink>
-            { categoryLinks }
+            <BoardCategoryList />
           </>
         )}
       </HeaderDiv>
@@ -78,6 +43,7 @@ BoardContent.propTypes = {
 
 BoardContent.defaultProps = {
   isFooter: false,
+  currentPage: 1,
 };
 
 const ManginessTable = styled(Table)`
