@@ -239,11 +239,11 @@ const ButtonCustom = styled(Button)`
 `;
 
 const InlineLink = styled.span`
-  margin-left: 6px;
+  margin-left: 4px;
   font-size: 8px;
   color: #ffffff;
   background: #dc3545;
-  padding: 2px 4px 2px 4px;
+  padding: 3px 4px 3px 4px;
   border-radius: 23px;
   vertical-align: text-center;
   
