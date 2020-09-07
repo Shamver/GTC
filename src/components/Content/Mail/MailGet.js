@@ -19,7 +19,7 @@ const MailGet = () => {
             <TableTh>보낸 사람</TableTh>
             <TableTh>쪽지 내용</TableTh>
             <TableTh>보낸 시각</TableTh>
-            <TableTh>삭제</TableTh>
+            <TableTh>설정</TableTh>
           </tr>
         </thead>
         <tbody>
