@@ -78,7 +78,7 @@ const Wrapper = styled.div`
     border-bottom: 1px solid #dee2e6;
   }
   
-  @media (max-width: 578px) {
+  @media (max-width: 740px) {
     & .content-header {
       display: none;
     }

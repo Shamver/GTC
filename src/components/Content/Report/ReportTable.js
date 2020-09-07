@@ -1,6 +1,6 @@
 import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
-import {Col, Row, Table, TabPane} from 'reactstrap';
+import { Col, Row, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import ReportList from './ReportList';
@@ -72,7 +72,7 @@ const Wrapper = styled.div`
     border-bottom: 1px solid #dee2e6;
   }
   
-  @media (max-width: 578px) {
+  @media (max-width: 740px) {
     & .content-header {
       display: none;
     }

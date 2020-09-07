@@ -66,7 +66,7 @@ const TableBody = styled(Row)`
     display: contents;
   }
   
-  @media (max-width: 578px) {
+  @media (max-width: 740px) {
     & .responsive-wrap {
       width: 100%;
       display: block;
@@ -101,6 +101,9 @@ const TableBody = styled(Row)`
 
 const ColCell = styled(Col)`
   padding: 12px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default memo(observer(ReportList));

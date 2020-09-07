@@ -1,6 +1,6 @@
 import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
-import { Table, TabPane } from 'reactstrap';
+import { Col, Row, TabPane } from 'reactstrap';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
@@ -24,22 +24,36 @@ const ReportUser = ({ currentPage, noPagination }) => {
 
   return (
     <TabPane tabId="ReportUser">
-      <CodeTable bordered hover>
-        <thead>
-          <tr>
-            <ThCenter width="7%">유저ID</ThCenter>
-            <th width="15%">이름</th>
-            <th width="15%">닉네임</th>
-            <th width="15%">게임 닉네임</th>
-            <th width="20%">이메일</th>
-            <th width="15%">정지 기간</th>
-            <th width="15%">처리</th>
-          </tr>
-        </thead>
-        <tbody>
-          {BanUserList}
-        </tbody>
-      </CodeTable>
+      <Wrapper size="sm">
+        <Row className="content-header">
+          <Col className="col-sm-12">
+            <TableHeader>
+              <ColCell className="col-1">
+                유저ID
+              </ColCell>
+              <ColCell className="col-1">
+                이름
+              </ColCell>
+              <ColCell className="col-2">
+                닉네임
+              </ColCell>
+              <ColCell className="col-2">
+                게임 닉네임
+              </ColCell>
+              <ColCell className="col-2">
+                이메일
+              </ColCell>
+              <ColCell className="col-2">
+                정지 기간
+              </ColCell>
+              <ColCell className="col-2">
+                처리
+              </ColCell>
+            </TableHeader>
+          </Col>
+        </Row>
+        {BanUserList}
+      </Wrapper>
       {currentReportMaxPage !== 0
         ? (<ReportPagination currentPage={currentPage} noPagination={noPagination} />)
         : ''}
@@ -52,19 +66,37 @@ ReportUser.propTypes = {
   noPagination: Proptypes.bool.isRequired,
 };
 
-const CodeTable = styled(Table)`
-  & > tbody > tr {
-    cursor : pointer;
+const Wrapper = styled.div`
+  padding: 0px 1rem;
+  border-bottom: 1px solid #dee2e6;
+  
+  & .content-header {
+    border-bottom: 1px solid #dee2e6;
   }
   
-  & > tbody > tr > td {
-    vertical-align: middle;
+  @media (max-width: 740px) {
+    & .content-header {
+      display: none;
+    }
+    
+    & .content-body {
+      display: block;
+    }
+    
+    .col {
+      max-width: 100%;
+    }
   }
 `;
 
-const ThCenter = styled.td`
-  text-align: center;
-  font-weight: 600;
+const TableHeader = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  
+`;
+
+const ColCell = styled(Col)`
+  padding: 12px 6px;
 `;
 
 export default memo(observer(ReportUser));

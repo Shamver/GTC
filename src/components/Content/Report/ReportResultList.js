@@ -36,7 +36,7 @@ const ReportResultList = ({ data }) => {
         </ColCell>
       </div>
       <div className="responsive-wrap info">
-        <ColCell className="col-1">
+        <ColCell className="col-1 result">
           {reportResult}
         </ColCell>
         <ColCell className="col-2">
@@ -75,7 +75,7 @@ const TableBody = styled(Row)`
     display: contents;
   }
   
-  @media (max-width: 578px) {
+  @media (max-width: 740px) {
     & .responsive-wrap {
       width: 100%;
       display: block;
@@ -105,11 +105,19 @@ const TableBody = styled(Row)`
       font-size: 13px;
       line-height: 24px;
     }
+    
+    .result {
+      color: #dc3545;
+      font-weight: 600;
+    }
   }
 `;
 
 const ColCell = styled(Col)`
   padding: 12px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default memo(ReportResultList);
