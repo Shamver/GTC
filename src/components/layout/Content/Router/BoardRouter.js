@@ -10,6 +10,8 @@ const BoardRouter = () => (
 
     <AuthRouter exact Component={Contents.Posting} level={1} path="/:board/post" isModify={false} />
     <AuthRouter exact Component={Contents.Posting} level={1} path="/:board/modify/:id" isModify />
+
+    <AuthRouter exact Component={Contents.Board} level={0} path="/:board/:category" />
   </>
 );
 

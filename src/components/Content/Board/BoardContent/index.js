@@ -38,12 +38,11 @@ const BoardContent = ({ isFooter }) => {
 
 BoardContent.propTypes = {
   isFooter: Proptypes.bool,
-  currentPage: Proptypes.string,
 };
 
 BoardContent.defaultProps = {
   isFooter: false,
-  currentPage: 1,
+  currentPage: '1',
 };
 
 const ManginessTable = styled(Table)`

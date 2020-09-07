@@ -7,34 +7,9 @@ class BoardStore {
 
   @observable boardList = [];
 
-  @observable boardCategoryList = [];
+  @observable boardCategoryKinds = {};
 
-  @observable categories = {
-    BFC01: {
-      name: '자유',
-      path: 'freedom',
-    },
-    BFC02: {
-      name: '잡담',
-      path: 'talk',
-    },
-    BFC03: {
-      name: '토론',
-      path: 'toron',
-    },
-    BFC04: {
-      name: '건의',
-      path: 'gunhee',
-    },
-    BNC01: {
-      name: '이벤트',
-      path: 'event',
-    },
-    BQC01: {
-      name: '시세질문',
-      path: 'sease',
-    },
-  };
+  @observable boardCategoryList = [];
 
   @observable currentBoardPath = '';
 
@@ -70,6 +45,13 @@ class BoardStore {
     this.boardKinds = {};
     for (let i = 0; i < arr.length; i += 1) {
       this.boardKinds[arr[i].path.replace('/', '')] = arr[i].name;
+    }
+  }
+
+  @action setBoardCategoryKinds = (arr) => {
+    this.boardCategoryKinds = {};
+    for (let i = 0; i < arr.length; i += 1) {
+      this.boardCategoryKinds[arr[i].path.replace('/', '')] = arr[i].name;
     }
   }
 
@@ -120,6 +102,7 @@ class BoardStore {
         if (data.success) {
           if (data.code === 1) {
             this.boardCategoryList = data.result;
+            this.setBoardCategoryKinds(data.result);
           }
         } else {
           toast.error(data.message);
@@ -136,11 +119,15 @@ class BoardStore {
     this.root.UtilRouteStore.history.setCurrentBoardToId('/'.concat(path.toLowerCase()));
   };
 
-  @action boardPathCheck = (path) => {
-    const { boardPostList } = this.root.BoardPostStore;
+  @action boardPathCheck = (board, category) => {
     const { history } = this.root.UtilRouteStore;
-    if (!boardPostList[path]) {
+    if (!this.boardKinds[board]) {
       toast.warn('😳 존재하지 않는 게시판입니다.');
+      history.push('/');
+    }
+
+    if (category && !this.boardCategoryKinds[category]) {
+      toast.warn('😳 존재하지 않는 게시판 카테고리입니다.');
       history.push('/');
     }
   };

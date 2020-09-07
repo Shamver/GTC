@@ -9,49 +9,45 @@ import BoardFooter from './BoardFooter';
 import useStores from '../../../stores/useStores';
 
 const Board = ({ parentProps, location, match }) => {
-  const {
-    BoardStore, BoardPostStore, UtilLoadingStore,
-    SystemCodeStore,
-  } = useStores();
+  const { BoardStore, BoardPostStore, UtilLoadingStore } = useStores();
   const { params } = match;
-  const { board } = params;
+  const { board, category } = params;
+  let { currentPage } = params;
 
   let { isPagination } = parentProps;
-  let { currentPage, currentCategory } = params;
   isPagination = !!isPagination;
   currentPage = currentPage || '1';
-  currentCategory = currentCategory || '';
 
-  const { getCodeComponent } = SystemCodeStore;
   const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
   const {
-    setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage, currentBoardPath,
+    setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage,
     setIsPagination, boardPathCheck, getBoardCategoryList,
   } = BoardStore;
   const query = qs.parse(location.search);
 
   useEffect(() => {
-    boardPathCheck(board);
+    boardPathCheck(board, category);
     setCurrentBoardPath(board);
     judgeFilterMode(query);
     setCurrentBoardPage(currentPage);
     setIsPagination(isPagination);
     setClearPostView();
-  }, [boardPathCheck, setCurrentBoardPath, judgeFilterMode, board]);
+  }, [
+    boardPathCheck, setCurrentBoardPath, judgeFilterMode, query,
+    setCurrentBoardPage, setIsPagination, setClearPostView, board,
+    currentPage, isPagination,
+  ]);
 
-  // 차단목록?
   useLayoutEffect(() => {
     loadingProcess([
       () => getBoardCategoryList(board),
       () => getBoardPostNoticeList(board, currentPage),
-      () => getBoardPostList(board, currentPage, currentCategory),
-      setClearPostView,
+      () => getBoardPostList(board, currentPage, category),
     ]);
   }, [
-    loadingProcess, setCurrentBoardPath, board, judgeFilterMode, query, setCurrentBoardPage,
-    currentPage, setIsPagination, isPagination, getBoardPostNoticeList, getBoardPostList,
-    setClearPostView, boardPathCheck, currentCategory, getCodeComponent, currentBoardPath,
+    getBoardCategoryList, getBoardPostNoticeList, getBoardPostList,
+    board, currentPage, category, loadingProcess,
   ]);
 
   return (
@@ -59,7 +55,7 @@ const Board = ({ parentProps, location, match }) => {
       <TableWrapper>
         <BoardHeader />
         <BoardContent />
-        <BoardFooter currentCategory={currentCategory} />
+        <BoardFooter currentCategory={category} />
       </TableWrapper>
     </BoardWrapper>
   );
@@ -69,8 +65,8 @@ Board.propTypes = {
   match: Proptypes.shape({
     params: Proptypes.shape({
       board: Proptypes.string,
+      category: Proptypes.string,
       currentPage: Proptypes.string,
-      currentCategory: Proptypes.string,
     }).isRequired,
   }).isRequired,
   parentProps: Proptypes.shape({

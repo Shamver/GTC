@@ -6,18 +6,18 @@ import Post from '.';
 
 const PostList = ({ isNotice }) => {
   const { BoardStore, BoardPostStore } = useStores();
-  const { currentBoardPath, currentBoardPage } = BoardStore;
-  const { boardPostList, boardPostNoticeList } = BoardPostStore;
+  const { currentBoardPage } = BoardStore;
+  const { postList, postNoticeList } = BoardPostStore;
 
   if (isNotice && Number(currentBoardPage) === 1) {
-    return boardPostNoticeList[currentBoardPath].map((data, index) => (
+    return postNoticeList.map((data, index) => (
       <Post key={data.id} data={data} index={index} isNotice />
     ));
   } if (isNotice) {
     return null;
   }
 
-  return boardPostList[currentBoardPath].map((data, index) => (
+  return postList.map((data, index) => (
     <Post key={data.id} data={data} index={index} />
   ));
 };
