@@ -24,7 +24,7 @@ const PostLockerFavorite = ({ currentPage, noPagination, currentTab }) => {
             <TableTh width={55}>제목</TableTh>
             <TableTh width={20}>작성일</TableTh>
             <TableTh width={10}>조회수</TableTh>
-            <TableTh width={5}>삭제</TableTh>
+            <TableTh width={5}>관리</TableTh>
           </tr>
         </thead>
         <tbody>
