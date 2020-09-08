@@ -31,11 +31,11 @@ const MailTable = ({ data }) => {
       <TableTd width={20}>
         {date}
       </TableTd>
-      <TableTd width={10}>
+      <TableTd width={10} className="text-center">
         {!readDate && (
-          <DeleteBtn color="danger" size="sm" onClick={() => deleteMail(id)}>
+          <Button color="danger" size="sm" onClick={() => deleteMail(id)}>
             <FontAwesomeIcon icon={faTrash} /> 삭제
-          </DeleteBtn>
+          </Button>
         )}
       </TableTd>
     </TableTr>
@@ -87,10 +87,6 @@ const MessageBtn = styled(Button)`
   &:focus {
     box-shadow: none !important;
   }
-`;
-
-const DeleteBtn = styled(Button)`
-  margin: -5px 0 !important;
 `;
 
 export default memo(MailTable);

@@ -220,7 +220,7 @@ const WriterDropdownMenu = styled(DropdownMenu)`
 
 const WriterDropdownToggle = styled(DropdownToggle)`
   color : #DC3545 !important;
-  font-weight : bold;
+  font-weight : bold !important;
   font-size : 14px !important;
   padding: 0 6px !important;
   background-color: transparent !important;
@@ -275,6 +275,7 @@ const ReplyDepthIcon = styled(FontAwesomeIcon)`
 
 const SpanLikeLink = styled.span`
   color: rgb(51, 122, 183);
+  font-weight: bold !important;
   cursor: pointer;
   &:hover {
     color: #23527c;

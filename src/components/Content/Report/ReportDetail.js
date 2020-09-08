@@ -213,7 +213,7 @@ const ReportInfoLink = styled(Link)`
   color: #212529 !important;
   text-decoration: none !important;
   
-  & :hover {
+  &:hover {
     opacity: 0.7;
     text-decoration: none !important;
   }
@@ -239,13 +239,13 @@ const ButtonCustom = styled(Button)`
 `;
 
 const InlineLink = styled.span`
-  margin-left: 6px;
+  margin-left: 4px;
   font-size: 8px;
   color: #ffffff;
   background: #dc3545;
-  padding: 2px 2px 1px 3px;
+  padding: 3px 4px 3px 4px;
   border-radius: 23px;
-  vertical-align: text-top;
+  vertical-align: text-center;
   
 `;
 

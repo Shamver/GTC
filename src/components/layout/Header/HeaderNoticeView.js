@@ -71,7 +71,7 @@ const Span = styled.span`
 const TextContainer = styled(Container)`
   margin : 0 !important;
   text-align : center;
-  line-height: 26px;
+  line-height: 27px;
   vertical-align: middle;
   height : 40px !important;
   overflow : hidden;

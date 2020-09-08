@@ -98,7 +98,7 @@ const Header = () => {
             <ColNoP>
               <DropdownIn isOpen={dropdown.lately} toggle={(e) => onActive('lately', e)}>
                 <DropdownToggleC caret>
-                  <FontAwesomeIcon icon={faClock} /> 최근
+                  <FontAwesomeIcon icon={faClock} className="icon" /> 최근
                 </DropdownToggleC>
                 <DropdownMenu>
                   {LatelyData}
@@ -106,7 +106,7 @@ const Header = () => {
               </DropdownIn>
               <DropdownIn isOpen={dropdown.favorite} toggle={(e) => onActive('favorite', e)}>
                 <DropdownToggleC caret>
-                  <FontAwesomeIcon icon={faStar} /> 즐겨찾기
+                  <FontAwesomeIcon icon={faStar} className="icon" /> 즐겨찾기
                 </DropdownToggleC>
                 <DropdownMenu>
                   {userData ? FavoriteData
@@ -115,7 +115,7 @@ const Header = () => {
               </DropdownIn>
               <DropdownIn isOpen={dropdown.play} toggle={(e) => onActive('play', e)}>
                 <DropdownToggleC caret>
-                  <FontAwesomeIcon icon={faSmile} />
+                  <FontAwesomeIcon icon={faSmile} className="icon" />
                 </DropdownToggleC>
                 <DropdownMenu>
                   <LinkNoDeco to="/daily">
@@ -272,11 +272,20 @@ const ColCenter = styled(Col)`
 
 const DropdownToggleC = styled(DropdownToggle)`
   background-color: transparent !important;
+  padding-top: 0.3rem !important;
   color : black !important;
   border : 0 !important;
   height : 100%;
   &:focus {
     box-shadow : none !important;
+  }
+  
+  & .icon {
+    height: .9em;
+  }
+  
+  &::after {
+    vertical-align: .1em !important;
   }
 `;
 

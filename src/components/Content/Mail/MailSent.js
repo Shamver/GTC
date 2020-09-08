@@ -15,11 +15,11 @@ const MailSent = () => {
       <ListTable size="sm" bordered>
         <thead>
           <tr>
-            <TableTh>New</TableTh>
+            <TableTh>Read</TableTh>
             <TableTh>받는 사람</TableTh>
             <TableTh>쪽지 내용</TableTh>
             <TableTh>보낸 시각</TableTh>
-            <TableTh>삭제</TableTh>
+            <TableTh>관리</TableTh>
           </tr>
         </thead>
         <tbody>
