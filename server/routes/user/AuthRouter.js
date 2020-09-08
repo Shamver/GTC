@@ -16,12 +16,12 @@ const async = require('../../middleware/async');
 const SELECT_USER_FROM_TEL_EMAIL = `
   SELECT 
     COUNT(*) AS count
+    , DELETE_DTTM AS deleteDate
   FROM GTC_USER
   WHERE 
     (TEL_NO = ':TEL_NO'
     OR EMAIL = ':EMAIL')
     AND DELETE_FL = 0
-    AND DELETE_DTTM = null
 `;
 
 const INSERT_NEW_USER = `
@@ -84,8 +84,10 @@ router.post('/register', (req, res) => {
       },
     )
       .then((rows) => {
+        const deleteRows = rows.filter(({ deleteDate }) => deleteDate !== null);
         if (rows[0].count && rows[0].count >= 1) {
-          const rejectReason = { rows };
+          const isDeleted = deleteRows.length !== 0;
+          const rejectReason = { code: isDeleted ? 3 : 2, rows };
           return Promise.reject(rejectReason);
         }
         return database.query(
@@ -109,10 +111,13 @@ router.post('/register', (req, res) => {
         });
       })
       .catch((e) => {
+        const message = e.code === 2
+          ? '동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.'
+          : '해당 계정은 탈퇴 예정인 계정이므로 아직 가입이 불가능합니다.'
         res.json({
           success: true,
-          code: 2,
-          message: '동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.',
+          code: e.code,
+          message,
           result: e.rows,
         });
       }),
