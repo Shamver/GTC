@@ -21,6 +21,7 @@ const SELECT_USER_FROM_TEL_EMAIL = `
     (TEL_NO = ':TEL_NO'
     OR EMAIL = ':EMAIL')
     AND DELETE_FL = 0
+    AND DELETE_DTTM = null
 `;
 
 const INSERT_NEW_USER = `
