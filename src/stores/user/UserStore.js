@@ -36,7 +36,7 @@ class UserStore {
     const userData = data.profile.kakao_account;
     this.registerData.nickname = userData.profile.nickname;
     if (userData.has_email) { this.registerData.email = userData.email; }
-    if (userData.has_birthday) { this.registerData.birth = `1000-${userData.birthday.substring(0, 2)}-${userData.birthday.substring(2)}`; }
+    if (userData.has_birthday) { this.registerData.birth = `1900-${userData.birthday.substring(0, 2)}-${userData.birthday.substring(2)}`; }
     if (userData.has_gender) { this.registerData.gender = userData.gender; }
     if (userData.has_email) { this.registerData.email = userData.email; }
   };
@@ -210,7 +210,7 @@ class UserStore {
       return false;
     }
 
-    if (this.registerData.birth.substring(0, 4) === '1000') {
+    if (this.registerData.birth.substring(0, 4) === '1900') {
       toast.error('생년월일을 제대로 입력해주세요.');
       return false;
     }
