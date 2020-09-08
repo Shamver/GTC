@@ -84,33 +84,35 @@ router.post('/register', (req, res) => {
     )
       .then((rows) => {
         if (rows[0].count && rows[0].count >= 1) {
-          res.json({
-            success: true,
-            code: 2,
-            message: '동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.',
-            result: rows,
-          });
-          throw new Error('동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.');
-        } else {
-          return database.query(
-            INSERT_NEW_USER,
-            {
-              TEL_NO: tel,
-              EMAIL: email,
-              NICKNAME: nickname,
-              NAME: name,
-              BIRTH_DT: birth,
-              GENDER_CD: gender.toUpperCase(),
-              GT_NICKNAME: gtNickname,
-            },
-          );
+          const rejectReason = { rows };
+          return Promise.reject(rejectReason);
         }
+        return database.query(
+          INSERT_NEW_USER,
+          {
+            TEL_NO: tel,
+            EMAIL: email,
+            NICKNAME: nickname,
+            NAME: name,
+            BIRTH_DT: birth,
+            GENDER_CD: gender.toUpperCase(),
+            GT_NICKNAME: gtNickname,
+          },
+        );
       })
       .then(() => {
         res.json({
           success: true,
           code: 1,
           message: '가입이 완료되었습니다.',
+        });
+      })
+      .catch((e) => {
+        res.json({
+          success: true,
+          code: 2,
+          message: '동일한 명의나 카카오 계정으로 이미 계정이 생성되어있습니다.',
+          result: e.rows,
         });
       }),
   ).then(() => {
