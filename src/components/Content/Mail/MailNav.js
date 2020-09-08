@@ -67,6 +67,11 @@ const NavLinkBtn = styled(NavLink)`
     border: 1px solid #c9c9c9 !important;
     border-bottom-color: transparent !important;
   }
+  
+  @media (max-width: 740px) {
+    font-size: 14px;
+    padding: 7px 12px !important;
+  }
 `;
 
 const CountSpan = styled.span`
@@ -81,6 +86,11 @@ const CountSpan = styled.span`
   line-height: 1;
   display: inline;
   color: #fff;
+  
+  @media (max-width: 740px) {
+    font-size: 12px;
+    padding: .2rem .4rem .1rem;
+  }
 `;
 
 export default memo(observer(MailNav));
