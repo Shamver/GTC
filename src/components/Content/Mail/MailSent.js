@@ -25,10 +25,10 @@ const MailSent = () => {
               <ColCell className="col-2">
                 받는 사람
               </ColCell>
-              <ColCell className="col-3">
+              <ColCell className="col-2">
                 보낸 시각
               </ColCell>
-              <ColCell className="col-1 center">
+              <ColCell className="col-2 center">
                 관리
               </ColCell>
             </TableHeader>
