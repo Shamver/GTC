@@ -22,26 +22,26 @@ const Board = ({ parentProps, location, match }) => {
   const { loadingProcess } = UtilLoadingStore;
   const {
     setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage,
-    setIsPagination, boardPathCheck, getBoardCategoryList,
+    setIsPagination, getBoardCategoryList,
   } = BoardStore;
   const query = qs.parse(location.search);
 
+  console.log('Board!');
   useEffect(() => {
-    boardPathCheck(board, category);
     setCurrentBoardPath(board);
     judgeFilterMode(query);
     setCurrentBoardPage(currentPage);
     setIsPagination(isPagination);
     setClearPostView();
   }, [
-    boardPathCheck, setCurrentBoardPath, judgeFilterMode, query,
+    setCurrentBoardPath, judgeFilterMode, query,
     setCurrentBoardPage, setIsPagination, setClearPostView, board,
     currentPage, isPagination,
   ]);
 
   useLayoutEffect(() => {
     loadingProcess([
-      () => getBoardCategoryList(board),
+      () => getBoardCategoryList(board, category),
       () => getBoardPostNoticeList(board, currentPage),
       () => getBoardPostList(board, currentPage, category),
     ]);

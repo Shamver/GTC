@@ -14,7 +14,7 @@ const Posting = ({ match, parentProps }) => {
   const { isModify } = parentProps;
   const { board, id } = params;
 
-  console.log(isModify);
+  console.log('Posting!');
   useLayoutEffect(() => {
     loadingProcess([
       () => getModifyPost(id, isModify),

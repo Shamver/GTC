@@ -136,19 +136,23 @@ const SELECT_MENU_CATEGORY = `
 
 const SELECT_MENU_CATEGORY_USE = `
   SELECT
-    GBC.ID AS id
-    , GBC.MENU_ID AS menu
-    , GBC.NAME AS name
-    , GBC.PATH AS path
-    , GBC.\`DESC\` as \`desc\`
-    , GBC.\`ORDER\` as \`order\`
-    , GBC.USE_FL AS useFl
-    , GBC.CRT_DTTM AS crtDttm
-   FROM GTC_MENU_CATEGORY GBC
+    GMC.ID AS id
+    , GMC.MENU_ID AS menu
+    , GMC.NAME AS name
+    , GMC.PATH AS path
+    , CONCAT(GM.PATH, GMC.PATH) AS fullpath
+    , GMC.\`DESC\` as \`desc\`
+    , GMC.\`ORDER\` as \`order\`
+    , GMC.USE_FL AS useFl
+    , GMC.CRT_DTTM AS crtDttm
+   FROM 
+    GTC_MENU_CATEGORY GMC,
+    GTC_MENU GM
    WHERE 
-    GBC.MENU_ID = ':MENU_ID'
-    AND GBC.USE_FL = 1
-   ORDER BY GBC.\`ORDER\`
+    GMC.MENU_ID = ':MENU_ID'
+    AND GM.ID = ':MENU_ID'
+    AND GMC.USE_FL = 1
+   ORDER BY GMC.\`ORDER\`
 `;
 
 const SELECT_MENU_CATEGORY_ALL = `

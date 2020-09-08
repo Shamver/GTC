@@ -91,7 +91,7 @@ class BoardStore {
       .catch((response) => { toast.error(response.message); });
   };
 
-  @action getBoardCategoryList = (board) => {
+  @action getBoardCategoryList = (board, category) => {
     axios.get('/api/system/menu/category/use', {
       params: {
         board,
@@ -103,6 +103,12 @@ class BoardStore {
           if (data.code === 1) {
             this.boardCategoryList = data.result;
             this.setBoardCategoryKinds(data.result);
+
+            // Posting에서 카테고리를 조회하기 때문에 해당 메소드는 게시판에서 카테고리 로드시에만 사용.
+            console.log(category);
+            if (category) {
+              this.boardPathCheck(board, category);
+            }
           }
         } else {
           toast.error(data.message);

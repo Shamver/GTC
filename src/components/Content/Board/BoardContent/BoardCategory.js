@@ -3,15 +3,18 @@ import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 
 const BoardCategory = ({ data }) => {
+  const { name, fullpath } = data;
   return (
-    <Link to={"chat"}>
-      {data.name}
+    <Link to={fullpath}>
+      {name}
     </Link>
   );
 };
 
 BoardCategory.propTypes = {
   data: Proptypes.shape({
+    name: Proptypes.string,
+    fullpath: Proptypes.string,
   }).isRequired,
 };
 
