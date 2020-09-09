@@ -16,8 +16,11 @@ const SwitchList = () => {
   return (
     <Switch>
       <AuthRouter exact Component={Contents.Home} level={0} path="/" />
-      <AuthRouter exact Component={Contents.Daily} level={0} path="/daily" />
-      <AuthRouter exact Component={Contents.Advertise} level={0} path="/advertise" />
+      <AuthRouter exact Component={Contents.Daily} level={1} path="/daily" />
+      <AuthRouter exact Component={Contents.Advertise} level={1} path="/advertise" />
+
+      {/* ---------------------------- Posting Router Component --------------------------- */}
+      <AuthRouter exact Component={Router.PostingRouter} level={1} path="/post" />
 
       <AuthRouter exact Component={Contents.PostView} level={1} path="/post/:id" />
       <AuthRouter exact Component={Contents.Mail} level={1} path="/mail" />
@@ -26,8 +29,8 @@ const SwitchList = () => {
       <AuthRouter exact Component={Contents.MyAccount} level={1} path="/myaccount" />
       <AuthRouter exact Component={Contents.Code} level={3} path="/code" />
       <AuthRouter exact Component={Contents.Report} level={3} path="/report" />
-      <AuthRouter exact Component={Contents.Test} level={3} path="/test" />
       <AuthRouter exact Component={Contents.Menu} level={3} path="/menu" />
+      <AuthRouter exact Component={Contents.Test} level={3} path="/test" />
 
       {/* ---------------------------- ConsultAdmin Router Component --------------------------- */}
       <AuthRouter exact={false} Component={Router.ConsultAdminRouter} level={1} path="/consult/get" />

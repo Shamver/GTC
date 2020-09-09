@@ -31,7 +31,7 @@ const BoardFooter = ({ currentCategory }) => {
             &nbsp;&nbsp;인기 글
           </Button>
         </AbsoluteLeftLink>
-        <AbsoluteRightLink to={`/${currentBoardPath}/post`}>
+        <AbsoluteRightLink to="/post">
           <Button color="danger" size="sm">
             <FontAwesomeIcon icon={faPen} />
               &nbsp;&nbsp;글 쓰기

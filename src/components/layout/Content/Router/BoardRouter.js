@@ -1,18 +1,14 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Contents from '../../../Content';
 import AuthRouter from '../AuthRouter';
 
 const BoardRouter = () => (
   <>
     <AuthRouter exact Component={Contents.Board} level={0} path="/:board" />
-    <AuthRouter exact Component={Contents.Board} level={0} path="/:board/page/:currentPage" isPagination />
-    <AuthRouter exact Component={Contents.Board} level={0} path="/:board/page/:currentPage/:currentCategory" isPagination />
-
-    <AuthRouter exact Component={Contents.Posting} level={1} path="/:board/post" isModify={false} />
-    <AuthRouter exact Component={Contents.Posting} level={1} path="/:board/modify/:id" isModify />
-
-    <AuthRouter exact Component={Contents.Board} level={0} path="/:board/:category" />
+    <AuthRouter exact Component={Contents.Board} level={0} path="/:board/page/:page" isPagination />
+    <AuthRouter exact Component={Contents.Board} level={0} path="/:board/:category" isPagination />
+    <AuthRouter exact Component={Contents.Board} level={0} path="/:board/:category/page/:page" isPagination />
   </>
 );
 
-export default BoardRouter;
+export default memo(BoardRouter);

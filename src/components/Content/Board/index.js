@@ -12,11 +12,11 @@ const Board = ({ parentProps, location, match }) => {
   const { BoardStore, BoardPostStore, UtilLoadingStore } = useStores();
   const { params } = match;
   const { board, category } = params;
-  let { currentPage } = params;
+  let { page } = params;
 
   let { isPagination } = parentProps;
   isPagination = !!isPagination;
-  currentPage = currentPage || '1';
+  page = page || '1';
 
   const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
@@ -30,24 +30,24 @@ const Board = ({ parentProps, location, match }) => {
   useEffect(() => {
     setCurrentBoardPath(board);
     judgeFilterMode(query);
-    setCurrentBoardPage(currentPage);
+    setCurrentBoardPage(page);
     setIsPagination(isPagination);
     setClearPostView();
   }, [
     setCurrentBoardPath, judgeFilterMode, query,
     setCurrentBoardPage, setIsPagination, setClearPostView, board,
-    currentPage, isPagination,
+    page, isPagination,
   ]);
 
   useLayoutEffect(() => {
     loadingProcess([
       () => getBoardCategoryList(board, category),
-      () => getBoardPostNoticeList(board, currentPage),
-      () => getBoardPostList(board, currentPage, category),
+      () => getBoardPostNoticeList(board, page),
+      () => getBoardPostList(board, page, category),
     ]);
   }, [
     getBoardCategoryList, getBoardPostNoticeList, getBoardPostList,
-    board, currentPage, category, loadingProcess,
+    board, page, category, loadingProcess,
   ]);
 
   return (
@@ -66,7 +66,7 @@ Board.propTypes = {
     params: Proptypes.shape({
       board: Proptypes.string,
       category: Proptypes.string,
-      currentPage: Proptypes.string,
+      page: Proptypes.string,
     }).isRequired,
   }).isRequired,
   parentProps: Proptypes.shape({

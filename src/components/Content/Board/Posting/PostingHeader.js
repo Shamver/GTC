@@ -1,27 +1,26 @@
 import React, { memo } from 'react';
 import { Col, Input, Row } from 'reactstrap';
 import styled from 'styled-components';
-import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
 import BoardOptionList from './BoardOptionList';
 import BoardCategoryOptionList from './BoardCategoryOptionList';
 import useStores from '../../../../stores/useStores';
 
-const PostingHeader = ({ board }) => {
+const PostingHeader = () => {
   const { BoardPostStore } = useStores();
   const { post, onChangeValue } = BoardPostStore;
-  const { board: postBoard, category, title } = post;
+  const { board, category, title } = post;
 
   return (
     <PostingHeaderRow>
       <Col xs="12">
-        <SelectInput type="select" name="board" value={postBoard} onChange={onChangeValue}>
-          <BoardOptionList board={board} />
+        <SelectInput type="select" name="board" value={board} onChange={onChangeValue}>
+          <BoardOptionList />
         </SelectInput>
       </Col>
       <RightMarginlessCol xs="3">
         <SelectInput type="select" name="category" value={category} onChange={onChangeValue}>
-          <BoardCategoryOptionList board={postBoard} />
+          <BoardCategoryOptionList />
         </SelectInput>
       </RightMarginlessCol>
       <Col>
@@ -29,10 +28,6 @@ const PostingHeader = ({ board }) => {
       </Col>
     </PostingHeaderRow>
   );
-};
-
-PostingHeader.propTypes = {
-  board: Proptypes.string.isRequired,
 };
 
 const RightMarginlessCol = styled(Col)`

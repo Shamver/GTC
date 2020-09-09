@@ -1,11 +1,12 @@
 import React, { memo, useEffect } from 'react';
 import { observer } from 'mobx-react';
-import * as Proptypes from 'prop-types';
 import useStores from '../../../../stores/useStores';
 
-const BoardCategoryOptionList = ({ board }) => {
-  const { BoardStore } = useStores();
+const BoardCategoryOptionList = () => {
+  const { BoardStore, BoardPostStore } = useStores();
   const { boardCategoryList, getBoardCategoryList } = BoardStore;
+  const { post } = BoardPostStore;
+  const { board } = post;
 
   useEffect(() => {
     getBoardCategoryList(board.toUpperCase());
@@ -22,10 +23,6 @@ const BoardCategoryOptionList = ({ board }) => {
       {data.name}
     </option>
   ));
-};
-
-BoardCategoryOptionList.propTypes = {
-  board: Proptypes.string.isRequired,
 };
 
 export default memo(observer(BoardCategoryOptionList));

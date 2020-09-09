@@ -12,7 +12,7 @@ const Posting = ({ match, parentProps }) => {
   const { getModifyPost } = BoardPostStore;
   const { params } = match;
   const { isModify } = parentProps;
-  const { board, id } = params;
+  const { id } = params;
 
   console.log('Posting!');
   useLayoutEffect(() => {
@@ -23,7 +23,7 @@ const Posting = ({ match, parentProps }) => {
 
   return (
     <PostingWrapper>
-      <PostingHeader board={board} />
+      <PostingHeader />
       <PostingContent />
       <PostingFooter isModify={isModify} />
     </PostingWrapper>
