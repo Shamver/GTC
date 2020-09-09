@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import {TabPane, Table, Row, Col} from 'reactstrap';
+import { TabPane, Row, Col } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import MailTable from './MailTable';
@@ -41,10 +41,6 @@ const MailSent = () => {
     </TabPane>
   );
 };
-
-const ListTable = styled(Table)`
-  border: 1px solid #c9c9c9 !important;
-`;
 
 const Wrapper = styled.div`
   padding: 0px 1rem;

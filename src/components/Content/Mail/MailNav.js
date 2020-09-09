@@ -68,9 +68,9 @@ const NavLinkBtn = styled(NavLink)`
     border-bottom-color: transparent !important;
   }
   
-  @media (max-width: 740px) {
-    font-size: 14px;
-    padding: 7px 12px !important;
+  @media (max-width: 740px) {    
+    font-size: 12px;
+    padding: 5px 8px !important;
   }
 `;
 

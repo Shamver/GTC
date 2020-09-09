@@ -1,5 +1,7 @@
 import React, { memo } from 'react';
-import { Button, Table, TabPane } from 'reactstrap';
+import {
+  Button, Col, Row, TabPane,
+} from 'reactstrap';
 import styled from 'styled-components';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { faTelegramPlane } from '@fortawesome/free-brands-svg-icons';
@@ -24,46 +26,68 @@ const MailView = () => {
 
   return (
     <TabPane tabId="view">
-      <ListTable size="sm" bordered>
-        <tbody>
-          <TableTr>
-            <TableTh width={20}>보낸 사람</TableTh>
-            <TableTd width={80}>{fromName || userData.username}</TableTd>
-          </TableTr>
-          <TableTr>
-            <TableTh width={20}>받는 사람</TableTh>
-            <TableTd width={80}>{targetName || userData.username}</TableTd>
-          </TableTr>
-          <TableTr>
-            <TableTh width={20}>쪽지 내용</TableTh>
-            <TableTd width={80} message>{message}</TableTd>
-          </TableTr>
-          <TableTr>
-            <TableTh width={20}>보낸 시간</TableTh>
-            <TableTd width={80}>{date}</TableTd>
-          </TableTr>
-          <TableTr>
-            <TableTh width={20}>읽은 시간</TableTh>
-            <TableTd width={80}>{readDate || '-'}</TableTd>
-          </TableTr>
-          <TableTr>
-            <TableTh width={20}>Action</TableTh>
-            <TableTd width={80}>
-              {!targetName && (
-                <CustomBtn color="primary" size="sm" onClick={() => setTab('send', fromName)}>
-                  <FontAwesomeIcon icon={faTelegramPlane} size="lg" /> 답장하기
-                </CustomBtn>
-              )}
-              &nbsp;
-              {!(readDate || fromName) && (
-                <CustomBtn outline color="danger" size="sm" onClick={() => deleteMail(id)}>
-                  <FontAwesomeIcon icon={faTrash} /> 삭제하기
-                </CustomBtn>
-              )}
-            </TableTd>
-          </TableTr>
-        </tbody>
-      </ListTable>
+      <Wrapper size="sm">
+        <Row className="content">
+          <Col className="col-sm-12">
+            <RowContent>
+              <ColDiv className="col-6">
+                <span className="title">
+                  보낸 사람
+                </span>
+                <span>
+                  {fromName || userData.username}
+                </span>
+              </ColDiv>
+              <ColDiv className="col-6">
+                <span className="title">
+                  받는 사람
+                </span>
+                <span>
+                  {targetName || userData.username}
+                </span>
+              </ColDiv>
+            </RowContent>
+            <RowContent>
+              <ColDiv className="col-6">
+                <span className="title">
+                  보낸 시간
+                </span>
+                <span>
+                  {date}
+                </span>
+              </ColDiv>
+              <ColDiv className="col-6">
+                <span className="title">
+                  읽은 시간
+                </span>
+                <span>
+                  {readDate || '-'}
+                </span>
+              </ColDiv>
+            </RowContent>
+            <RowContent>
+              <ColDiv className="col-12 message">
+                {message}
+              </ColDiv>
+            </RowContent>
+            <RowContent>
+              <ColDiv className="col-12 func">
+                {!targetName && (
+                  <CustomBtn color="primary" size="sm" onClick={() => setTab('send', fromName)}>
+                    <FontAwesomeIcon icon={faTelegramPlane} size="lg" /> 답장하기
+                  </CustomBtn>
+                )}
+                &nbsp;
+                {!(readDate || fromName) && (
+                  <CustomBtn outline color="danger" size="sm" onClick={() => deleteMail(id)}>
+                    <FontAwesomeIcon icon={faTrash} /> 삭제하기
+                  </CustomBtn>
+                )}
+              </ColDiv>
+            </RowContent>
+          </Col>
+        </Row>
+      </Wrapper>
     </TabPane>
   );
 };
@@ -76,29 +100,50 @@ MailView.propTypes = {
   }),
 };
 
-const TableTd = styled.td`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  overflow: hidden;
-  padding: 8px !important;
-`;
-
-const TableTr = styled.tr`
-  height: 30px;
-`;
-
-const TableTh = styled.th`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  padding: 8px !important;
-`;
-
-const ListTable = styled(Table)`
-  border: 1px solid #c9c9c9 !important;
-`;
-
 const CustomBtn = styled(Button)`
   margin: -5px 0 !important;
+`;
+
+const Wrapper = styled.div`
+  padding: 0px 1rem;
+  border: 1px solid #dee2e6;
+  
+  & .title {    
+    color: #fff;
+    background: #dc3545;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-right: 12px;
+    font-size: 12px;
+  }
+  
+  & .col {
+    font-size: 14px;
+    display: inline;
+  }
+  
+  & .content {
+    padding: 12px 0;
+  }
+  
+  & .message {
+    border-top: 1px solid #dee2e6;
+    padding-top: 12px;
+  }
+  
+  & .func {
+    margin-top: 20px;
+  }
+  
+  @media (max-width: 740px) {
+  }
+`;
+
+const RowContent = styled(Row)`
+  margin-bottom: 12px;
+`;
+
+const ColDiv = styled(Col)`
 `;
 
 MailView.defaultProps = {

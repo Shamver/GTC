@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import {Button, Col, Row} from 'reactstrap';
+import { Button, Col, Row } from 'reactstrap';
 import styled from 'styled-components';
 import { faEnvelope, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -20,12 +20,8 @@ const MailTable = ({ data }) => {
           <ColCell className="col-1 center">
             {!readDate && (<FontAwesomeIcon icon={faEnvelope} />)}
           </ColCell>
-          <ColCell className="col-5">
-            <MessageBtn onClick={() => onView(data)}>
-              <Text>
-                {message}
-              </Text>
-            </MessageBtn>
+          <ColCell className="col-5 message" onClick={() => onView(data)}>
+            {message}
           </ColCell>
         </div>
         <div className="responsive-wrap info">
@@ -61,37 +57,15 @@ MailTable.propTypes = {
   }).isRequired,
 };
 
-const Text = styled.span`
-  max-width: 550px;
-  line-height: auto;
-  display: inline-block;
-  vertical-align: middle !important;
-`;
-
-const MessageBtn = styled(Button)`
-  padding: 0px !important;
-  border: none !important;
-  background: none !important;
-  color: #337ab7 !important;
-  
-  &:hover {
-    color: #23527c !important;
-    background: none !important;
-    text-decoration: underline !important;
-  }
-  
-  &:focus {
-    box-shadow: none !important;
-  }
-`;
-
-
 const TableBody = styled(Row)`
   border: 1px solid #dee2e6;
   border-bottom: 0;
   cursor: pointer;
   align-items: center;
   font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   
   :hover {    
     color: #212529;
@@ -102,6 +76,20 @@ const TableBody = styled(Row)`
     text-align: center;
   }
   
+  & .message {
+    color: #337ab7 !important;
+    
+    &:hover {
+      color: #23527c !important;
+      background: none !important;
+      text-decoration: underline !important;
+    }
+    
+    &:focus {
+      box-shadow: none !important;
+    }
+  }
+  
   & .responsive-wrap, .responsive-wrap-column {
     display: contents;
   }
@@ -110,8 +98,8 @@ const TableBody = styled(Row)`
     & .responsive-wrap {
       width: 100%;
       display: block;
-      line-height: 32px;
-      font-size: 14px;
+      line-height: 26px;
+      font-size: 13px;
       flex: 1;
     }
     
@@ -125,12 +113,18 @@ const TableBody = styled(Row)`
       display: inline;
       padding-right: 0;
       vertical-align: middle;
+      padding-left: 10px;
     }
     
     .info {
       color: #989898;
-      font-size: 13px;
+      font-size: 11px;
       line-height: 24px;
+    }
+    
+    .btn {
+      font-size: 12px;
+      padding: .1em 0.45em;
     }
   }
 `;
