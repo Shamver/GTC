@@ -13,6 +13,7 @@ const Sign = () => {
   const {
     email, nickname, birth, gender,
   } = registerData;
+  const { year, month, day } = birth;
 
   const GenderCode = userGenderCodeList.map((data) => (
     <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
@@ -46,10 +47,16 @@ const Sign = () => {
                 GTC는 한 전화번호 명의로 하나의 계정만 생성할 수 있습니다. <br />
                 -를 빼고 입력해주세요. ex) 01012345678
               </FormTextLeft>
-              <FormInputWithText type="date" onChange={onRegisterChangeValue} name="birth" value={birth} />
-              <FormTextLeft>
-                생년월일을 입력해주세요.
-              </FormTextLeft>
+              <div style={{ display: 'inline-block' }}>
+                <div style={{ display: 'flex' }}>
+                  <FormInputWithText type="number" onChange={onRegisterChangeValue} name="year" value={year} placeholder="생년" />
+                  <FormInputWithText type="text" name="month" value={month} disabled />
+                  <FormInputWithText type="text" name="day" value={day} disabled />
+                </div>
+                <FormTextLeft>
+                  생년을 입력해주세요.
+                </FormTextLeft>
+              </div>
               <FormSelect type="select" onChange={onRegisterChangeValue} name="gender" value={gender}>
                 {GenderCode}
               </FormSelect>
