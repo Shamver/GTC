@@ -224,7 +224,7 @@ class UserStore {
     }
 
     // birth
-    if (!this.registerData.birth.year) {
+    if (!this.registerData.birth.year || this.registerData.birth === '') {
       toast.error('생년을 입력해주세요.');
       return false;
     }
@@ -285,9 +285,11 @@ class UserStore {
 
     const formData = new FormData();
 
+    const formBirth = `${birth.year}-${birth.month}-${birth.day}`;
+
     formData.append('nickname', nickname.trim());
     formData.append('prevGtNickname', prevGtNickname.trim());
-    formData.append('birth', birth);
+    formData.append('birth', formBirth);
     formData.append('gender', gender);
     formData.append('profileYN', profileYN);
     formData.append('userId', userData.id);
