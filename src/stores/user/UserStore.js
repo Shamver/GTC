@@ -192,7 +192,7 @@ class UserStore {
         ...this.registerData,
         birth: {
           ...this.registerData.birth,
-          year: event.target.value
+          year: event.target.value.slice(0, 4)
         },
       };
     } else {

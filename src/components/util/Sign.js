@@ -49,7 +49,13 @@ const Sign = () => {
               </FormTextLeft>
               <div style={{ display: 'inline-block' }}>
                 <div style={{ display: 'flex' }}>
-                  <FormInputWithText type="number" onChange={onRegisterChangeValue} name="year" value={year} placeholder="생년" />
+                  <FormInputWithText
+                    type="number"
+                    onChange={onRegisterChangeValue}
+                    name="year"
+                    value={year}
+                    placeholder="생년"
+                  />
                   <FormInputWithText type="text" name="month" value={month} disabled />
                   <FormInputWithText type="text" name="day" value={day} disabled />
                 </div>
