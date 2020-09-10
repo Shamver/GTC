@@ -187,10 +187,20 @@ class UserStore {
   };
 
   @action onRegisterChangeValue = (event) => {
-    this.registerData = {
-      ...this.registerData,
-      [event.target.name]: event.target.value,
-    };
+    if (event?.target?.name === 'year') {
+      this.registerData = {
+        ...this.registerData,
+        birth: {
+          ...this.registerData.birth,
+          year: event.target.value
+        },
+      };
+    } else {
+      this.registerData = {
+        ...this.registerData,
+        [event.target.name]: event.target.value,
+      };
+    }
   };
 
   registerValidationCheck = () => {
