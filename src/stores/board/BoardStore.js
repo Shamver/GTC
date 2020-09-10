@@ -105,9 +105,7 @@ class BoardStore {
             this.setBoardCategoryKinds(data.result);
 
             // Posting에서 카테고리를 조회하기 때문에 해당 메소드는 게시판에서 카테고리 로드시에만 사용.
-
             if (category) {
-              console.log('pathCheck!');
               this.boardPathCheck(board, category);
             }
           }

@@ -4,7 +4,7 @@ import * as PropTypes from 'prop-types';
 import PostingHeader from './PostingHeader';
 import PostingContent from './PostingContent';
 import PostingFooter from './PostingFooter';
-import useStores from '../../../../stores/useStores';
+import useStores from '../../../stores/useStores';
 
 const Posting = ({ match, parentProps }) => {
   const { UtilLoadingStore, BoardPostStore } = useStores();
@@ -14,7 +14,6 @@ const Posting = ({ match, parentProps }) => {
   const { isModify } = parentProps;
   const { id } = params;
 
-  console.log('Posting!');
   useLayoutEffect(() => {
     loadingProcess([
       () => getModifyPost(id, isModify),

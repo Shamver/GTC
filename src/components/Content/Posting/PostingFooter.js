@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { Button, CustomInput } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
-import useStores from '../../../../stores/useStores';
+import useStores from '../../../stores/useStores';
 
 const PostingFooter = ({ isModify }) => {
   const { BoardPostStore, UtilRouteStore } = useStores();

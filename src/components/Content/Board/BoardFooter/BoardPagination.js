@@ -3,16 +3,16 @@ import styled from 'styled-components';
 import { Pagination } from 'reactstrap';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
-import PaginationList from './PaginationList';
+import PaginationList from './BoardPaginationList';
 
-const BoardPagination = ({ currentCategory }) => (
+const BoardPagination = ({ category }) => (
   <PaginationCustom>
-    <PaginationList currentCategory={currentCategory} />
+    <PaginationList category={category} />
   </PaginationCustom>
 );
 
 BoardPagination.propTypes = {
-  currentCategory: Proptypes.string.isRequired,
+  category: Proptypes.string.isRequired,
 };
 
 const PaginationCustom = styled(Pagination)`

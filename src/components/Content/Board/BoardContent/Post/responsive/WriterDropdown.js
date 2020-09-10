@@ -5,8 +5,8 @@ import {
 } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
-import useStores from '../../../../../stores/useStores';
-import levelAdmin from '../../../../../resources/images/level/levelAdmin.png';
+import useStores from '../../../../../../stores/useStores';
+import levelAdmin from '../../../../../../resources/images/level/levelAdmin.png';
 
 const WriterDropdown = ({
   data, index, isNotice, isMobile,

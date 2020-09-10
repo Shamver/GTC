@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import CKEditor from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { observer } from 'mobx-react';
-import useStores from '../../../../stores/useStores';
+import useStores from '../../../stores/useStores';
 
 const PostingContent = () => {
   const { BoardPostStore } = useStores();

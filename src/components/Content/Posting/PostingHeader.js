@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import BoardOptionList from './BoardOptionList';
 import BoardCategoryOptionList from './BoardCategoryOptionList';
-import useStores from '../../../../stores/useStores';
+import useStores from '../../../stores/useStores';
 
 const PostingHeader = () => {
   const { BoardPostStore } = useStores();

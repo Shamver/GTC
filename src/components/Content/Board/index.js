@@ -5,16 +5,17 @@ import qs from 'query-string';
 import { observer } from 'mobx-react';
 import BoardHeader from './BoardHeader';
 import BoardContent from './BoardContent';
-import BoardFooter from './BoardFooter';
+import BoardFooter from './BoardFooter/BoardFooter';
 import useStores from '../../../stores/useStores';
 
 const Board = ({ parentProps, location, match }) => {
   const { BoardStore, BoardPostStore, UtilLoadingStore } = useStores();
   const { params } = match;
-  const { board, category } = params;
-  let { page } = params;
-
+  const { board } = params;
+  let { page, category } = params;
   let { isPagination } = parentProps;
+
+  category = category || '';
   isPagination = !!isPagination;
   page = page || '1';
 
@@ -26,7 +27,6 @@ const Board = ({ parentProps, location, match }) => {
   } = BoardStore;
   const query = qs.parse(location.search);
 
-  console.log('Board!');
   useEffect(() => {
     setCurrentBoardPath(board);
     judgeFilterMode(query);
@@ -55,7 +55,7 @@ const Board = ({ parentProps, location, match }) => {
       <TableWrapper>
         <BoardHeader />
         <BoardContent />
-        <BoardFooter currentCategory={category} />
+        <BoardFooter category={category} />
       </TableWrapper>
     </BoardWrapper>
   );

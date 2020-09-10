@@ -8,10 +8,10 @@ import { faPen, faSearch, faStar } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
-import BoardPagination from './Pagination';
-import useStores from '../../../stores/useStores';
+import BoardPagination from './BoardPagination';
+import useStores from '../../../../stores/useStores';
 
-const BoardFooter = ({ currentCategory }) => {
+const BoardFooter = ({ category }) => {
   const { BoardStore } = useStores();
   const {
     currentBoardPath, bestFilterMode, currentBoardPage,
@@ -20,8 +20,10 @@ const BoardFooter = ({ currentCategory }) => {
   } = BoardStore;
 
   const filterQs = '?filter_mode=true';
-  const pageUrl = Number(currentBoardPage) > 1 ? `/${currentBoardPath}/page/${currentBoardPage}` : `/${currentBoardPath}`;
-  const bestFilterUrl = bestFilterMode ? pageUrl : pageUrl.concat(filterQs);
+  const categoryPageUrl = category ? `/${currentBoardPath}/${category}` : `/${currentBoardPath}`;
+  const finalpageUrl = Number(currentBoardPage) > 1 ? `/${categoryPageUrl}/page/${currentBoardPage}` : `/${currentBoardPath}`;
+
+  const bestFilterUrl = bestFilterMode ? finalpageUrl : finalpageUrl.concat(filterQs);
   return (
     <FooterWrapper>
       <AbsolDiv>
@@ -38,7 +40,7 @@ const BoardFooter = ({ currentCategory }) => {
           </Button>
         </AbsoluteRightLink>
       </AbsolDiv>
-      <BoardPagination currentCategory={currentCategory} />
+      <BoardPagination category={category} />
       <InputGroupWrapper>
         <InputGroupWidth>
           <InputGroupAddon addonType="prepend">
@@ -61,11 +63,7 @@ const BoardFooter = ({ currentCategory }) => {
 };
 
 BoardFooter.propTypes = {
-  currentCategory: Proptypes.string,
-};
-
-BoardFooter.defaultProps = {
-  currentCategory: '',
+  category: Proptypes.string.isRequired,
 };
 
 const FooterWrapper = styled.div`

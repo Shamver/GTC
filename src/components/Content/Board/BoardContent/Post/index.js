@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import useStores from '../../../../stores/useStores';
+import useStores from '../../../../../stores/useStores';
 import PostRow from './responsive/PostRow';
 import ResponsivePostRow from './responsive/ResponsivePostRow';
 

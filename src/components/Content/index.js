@@ -2,7 +2,7 @@ import { lazy } from 'react';
 
 const Setting = lazy(() => import('./Setting'));
 const Board = lazy(() => import('./Board'));
-const PostView = lazy(() => import('./Board/PostView'));
+const PostView = lazy(() => import('./PostView'));
 const PostLocker = lazy(() => import('./PostLocker'));
 const NewAlert = lazy(() => import('./NewAlert'));
 const MyAccount = lazy(() => import('./MyAccount'));
@@ -15,7 +15,7 @@ const Advertise = lazy(() => import('./Advertise'));
 const Home = lazy(() => import('./Home'));
 const Report = lazy(() => import('./Report'));
 const Test = lazy(() => import('./Test'));
-const Posting = lazy(() => import('./Board/Posting'));
+const Posting = lazy(() => import('./Posting'));
 const Consult = lazy(() => import('./Consult'));
 const Menu = lazy(() => import('./Menu'));
 

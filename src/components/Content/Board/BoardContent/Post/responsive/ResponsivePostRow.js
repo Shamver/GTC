@@ -4,8 +4,8 @@ import { faInfoCircle, faStar, faImage } from '@fortawesome/free-solid-svg-icons
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
-import useStores from '../../../../../stores/useStores';
-import levelAdmin from '../../../../../resources/images/level/levelAdmin.png';
+import useStores from '../../../../../../stores/useStores';
+import levelAdmin from '../../../../../../resources/images/level/levelAdmin.png';
 
 const ResponsivePostRow = ({ data, isNotice }) => {
   const {

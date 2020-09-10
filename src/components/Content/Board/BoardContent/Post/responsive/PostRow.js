@@ -5,7 +5,7 @@ import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
 import WriterDropdown from './WriterDropdown';
-import useStores from '../../../../../stores/useStores';
+import useStores from '../../../../../../stores/useStores';
 
 const PostRow = ({ data, index, isNotice }) => {
   const {

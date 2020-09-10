@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { Table } from 'reactstrap';
 import * as Proptypes from 'prop-types';
 import { observer } from 'mobx-react';
-import PostList from '../Post/PostList';
+import PostList from './Post/PostList';
 import useStores from '../../../../stores/useStores';
 import BoardCategoryList from './BoardCategoryList';
 
