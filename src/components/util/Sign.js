@@ -56,20 +56,12 @@ const Sign = () => {
                     value={year}
                     placeholder="생년"
                   />
-                  <div style={{ display: 'block', backgroundColor: '#f2f2f2', height: '51px', lineHeight: '51px', fontSize: '14px' }}>
-                    년
-                  </div>
-                  <FormInputWithText type="text" name="month" value={month} disabled />
-                  <div style={{ display: 'block', backgroundColor: '#f2f2f2', height: '51px', lineHeight: '51px', fontSize: '14px' }}>
-                    월
-                  </div>
-                  <FormInputWithText type="text" name="day" value={day} disabled />
-                  <div style={{ display: 'block', backgroundColor: '#f2f2f2', height: '51px', lineHeight: '51px', fontSize: '14px' }}>
-                    일
-                  </div>
-                  <div style={{ backgroundColor: '#f2f2f2', width: '300%' }}>
-                    &nbsp;
-                  </div>
+                  <BirthWord>년</BirthWord>
+                  <FormInputWithText type="text" name="month" value={month} width={50} disabled />
+                  <BirthWord>월</BirthWord>
+                  <FormInputWithText type="text" name="day" value={day} width={50} disabled />
+                  <BirthWord>일</BirthWord>
+                  <FormInputWithText type="text" width={300} disabled />
                 </div>
                 <FormTextLeft>
                   생년 4자리를 입력해주세요. ex) 2000
@@ -122,7 +114,6 @@ const FormInput = styled.input`
 const FormSelect = styled(Input)`
   outline: 0 !important;
   background: #f2f2f2 !important;
-  width: 100% !important;
   border : 0 !important;
   margin : 0 0 15px !important;
   height : auto !important;
@@ -135,8 +126,17 @@ const FormSelect = styled(Input)`
   }
 `;
 
+const BirthWord = styled.div`
+  display: block;
+  background-color: #f2f2f2;
+  height: 51px !important;
+  line-height: 51px !important;
+  font-size: 14px;
+`;
+
 const FormInputWithText = styled(FormInput)`
   margin : 0;
+  width: ${({ width }) => width ? `${width}%` : '100%'} !important;
 `;
 
 const FormButton = styled.button`
