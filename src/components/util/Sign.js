@@ -60,7 +60,7 @@ const Sign = () => {
                   <FormInputWithText type="text" name="day" value={day} disabled />
                 </div>
                 <FormTextLeft>
-                  생년을 입력해주세요.
+                  생년 4자리를 입력해주세요. ex) 2000
                 </FormTextLeft>
               </div>
               <FormSelect type="select" onChange={onRegisterChangeValue} name="gender" value={gender}>

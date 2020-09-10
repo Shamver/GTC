@@ -42,8 +42,8 @@ class UserStore {
     if (userData.has_email) { this.registerData.email = userData.email; }
     if (userData.has_birthday) {
       const { birthday } = userData;
-      this.registerData.birth.month = birthday.substring(0, 1);
-      this.registerData.birth.day = birthday.substring(2, 3);
+      this.registerData.birth.month = birthday.substring(0, 2);
+      this.registerData.birth.day = birthday.substring(2, 4);
     }
     if (userData.has_gender) { this.registerData.gender = userData.gender; }
     if (userData.has_email) { this.registerData.email = userData.email; }
@@ -187,6 +187,7 @@ class UserStore {
   };
 
   @action onRegisterChangeValue = (event) => {
+    console.log(this.registerData);
     if (event?.target?.name === 'year') {
       this.registerData = {
         ...this.registerData,
