@@ -109,12 +109,11 @@ const Wrapper = styled.div`
   border: 1px solid #dee2e6;
   
   & .title {    
-    color: #fff;
-    background: #dc3545;
+    color: #dc3545;
     padding: 2px 8px;
     border-radius: 12px;
     margin-right: 12px;
-    font-size: 12px;
+    font-size: 14px;
   }
   
   & .col {

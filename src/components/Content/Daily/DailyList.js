@@ -1,6 +1,8 @@
 import React, { memo } from 'react';
 import {
-  Table,
+  Col,
+  Row,
+  Table, TabPane,
 } from 'reactstrap';
 import styled from 'styled-components';
 
@@ -18,40 +20,76 @@ const DailyList = () => {
 
   return (
     <>
-      <ListTable size="sm" bordered>
-        <thead>
-          <tr>
-            <TableTh width={5}>#</TableTh>
-            <TableTh width={15}>닉네임</TableTh>
-            <TableTh width={60}>한마디</TableTh>
-            <TableTh width={7}>포인트</TableTh>
-            <TableTh width={7}>콤보</TableTh>
-            <TableTh width={6}>시간</TableTh>
-          </tr>
-        </thead>
-        <tbody>
-          {DailyListData.length === 0 ? (
-            <tr key={0}>
-              <td colSpan={6}>
-                출석체크한 유저가 없습니다.
-              </td>
-            </tr>
-          ) : DailyListData}
-
-        </tbody>
-      </ListTable>
+      <Wrapper size="sm">
+        <Row className="content-header">
+          <Col className="col-sm-12">
+            <TableHeader>
+              <ColCell className="col-1 center">
+                #
+              </ColCell>
+              <ColCell className="col-2">
+                닉네임
+              </ColCell>
+              <ColCell className="col-4">
+                한마디
+              </ColCell>
+              <ColCell className="col-2">
+                포인트
+              </ColCell>
+              <ColCell className="col-1">
+                콤보
+              </ColCell>
+              <ColCell className="col-2">
+                시간
+              </ColCell>
+            </TableHeader>
+          </Col>
+        </Row>
+        {DailyListData.length === 0 ? (
+          '출석체크한 유저가 없습니다.'
+        ) : DailyListData}
+      </Wrapper>
     </>
   );
 };
 
-const TableTh = styled.th`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  padding: 8px !important;
+const Wrapper = styled.div`
+  padding: 0px 1rem;
+  border-bottom: 1px solid #dee2e6;
+  
+  & .content-header {
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  & .center {
+    text-align: center;
+  }
+  
+  @media (max-width: 740px) {
+    & .content-header {
+      display: none;
+    }
+    
+    & .content-body {
+      display: block;
+    }
+    
+    .col {
+      max-width: 100%;
+    }
+  }
 `;
 
-const ListTable = styled(Table)`
-  border: 1px solid #c9c9c9 !important;
+const TableHeader = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  
 `;
+
+const ColCell = styled(Col)`
+  padding: 12px 6px;
+`;
+
+
 
 export default memo(observer(DailyList));

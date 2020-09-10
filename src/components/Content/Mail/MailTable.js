@@ -33,7 +33,7 @@ const MailTable = ({ data }) => {
           </ColCell>
         </div>
       </div>
-      <div className="responsive-wrap">
+      <div className="responsive-wrap center">
         <ColCell className="col-2 center">
           {!readDate && (
             <Button color="danger" size="sm" onClick={() => deleteMail(id)}>
