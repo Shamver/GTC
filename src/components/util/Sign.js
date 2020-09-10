@@ -56,8 +56,20 @@ const Sign = () => {
                     value={year}
                     placeholder="생년"
                   />
+                  <div style={{ display: 'block', backgroundColor: '#f2f2f2', height: '51px', lineHeight: '51px', fontSize: '14px' }}>
+                    년
+                  </div>
                   <FormInputWithText type="text" name="month" value={month} disabled />
+                  <div style={{ display: 'block', backgroundColor: '#f2f2f2', height: '51px', lineHeight: '51px', fontSize: '14px' }}>
+                    월
+                  </div>
                   <FormInputWithText type="text" name="day" value={day} disabled />
+                  <div style={{ display: 'block', backgroundColor: '#f2f2f2', height: '51px', lineHeight: '51px', fontSize: '14px' }}>
+                    일
+                  </div>
+                  <div style={{ backgroundColor: '#f2f2f2', width: '300%' }}>
+                    &nbsp;
+                  </div>
                 </div>
                 <FormTextLeft>
                   생년 4자리를 입력해주세요. ex) 2000
