@@ -187,7 +187,6 @@ class UserStore {
   };
 
   @action onRegisterChangeValue = (event) => {
-    console.log(this.registerData);
     if (event?.target?.name === 'year') {
       this.registerData = {
         ...this.registerData,
