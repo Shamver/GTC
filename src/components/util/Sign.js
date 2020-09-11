@@ -13,6 +13,7 @@ const Sign = () => {
   const {
     email, nickname, birth, gender,
   } = registerData;
+  const { year, month, day } = birth;
 
   const GenderCode = userGenderCodeList.map((data) => (
     <option value={data.code} key={data.codeOrder}>{data.codeName}</option>
@@ -46,10 +47,26 @@ const Sign = () => {
                 GTC는 한 전화번호 명의로 하나의 계정만 생성할 수 있습니다. <br />
                 -를 빼고 입력해주세요. ex) 01012345678
               </FormTextLeft>
-              <FormInputWithText type="date" onChange={onRegisterChangeValue} name="birth" value={birth} />
-              <FormTextLeft>
-                생년월일을 입력해주세요.
-              </FormTextLeft>
+              <div style={{ display: 'inline-block' }}>
+                <div style={{ display: 'flex' }}>
+                  <FormInputWithText
+                    type="number"
+                    onChange={onRegisterChangeValue}
+                    name="year"
+                    value={year}
+                    placeholder="생년"
+                  />
+                  <BirthWord>년</BirthWord>
+                  <FormInputWithText type="text" name="month" value={month} width={50} disabled />
+                  <BirthWord>월</BirthWord>
+                  <FormInputWithText type="text" name="day" value={day} width={50} disabled />
+                  <BirthWord>일</BirthWord>
+                  <FormInputWithText type="text" width={300} disabled />
+                </div>
+                <FormTextLeft>
+                  생년 4자리를 입력해주세요. ex) 2000
+                </FormTextLeft>
+              </div>
               <FormSelect type="select" onChange={onRegisterChangeValue} name="gender" value={gender}>
                 {GenderCode}
               </FormSelect>
@@ -97,7 +114,6 @@ const FormInput = styled.input`
 const FormSelect = styled(Input)`
   outline: 0 !important;
   background: #f2f2f2 !important;
-  width: 100% !important;
   border : 0 !important;
   margin : 0 0 15px !important;
   height : auto !important;
@@ -110,8 +126,17 @@ const FormSelect = styled(Input)`
   }
 `;
 
+const BirthWord = styled.div`
+  display: block;
+  background-color: #f2f2f2;
+  height: 51px !important;
+  line-height: 51px !important;
+  font-size: 14px;
+`;
+
 const FormInputWithText = styled(FormInput)`
   margin : 0;
+  width: ${({ width }) => width ? `${width}%` : '100%'} !important;
 `;
 
 const FormButton = styled.button`

@@ -8,7 +8,11 @@ class UserStore {
     name: '',
     nickname: '',
     tel: '',
-    birth: '',
+    birth: {
+      year: '',
+      month: '',
+      day: '',
+    },
     gender: '',
     gtNickname: '',
   };
@@ -36,7 +40,11 @@ class UserStore {
     const userData = data.profile.kakao_account;
     this.registerData.nickname = userData.profile.nickname;
     if (userData.has_email) { this.registerData.email = userData.email; }
-    if (userData.has_birthday) { this.registerData.birth = `1000-${userData.birthday.substring(0, 2)}-${userData.birthday.substring(2)}`; }
+    if (userData.has_birthday) {
+      const { birthday } = userData;
+      this.registerData.birth.month = birthday.substring(0, 2);
+      this.registerData.birth.day = birthday.substring(2, 4);
+    }
     if (userData.has_gender) { this.registerData.gender = userData.gender; }
     if (userData.has_email) { this.registerData.email = userData.email; }
   };
@@ -179,10 +187,20 @@ class UserStore {
   };
 
   @action onRegisterChangeValue = (event) => {
-    this.registerData = {
-      ...this.registerData,
-      [event.target.name]: event.target.value,
-    };
+    if (event?.target?.name === 'year') {
+      this.registerData = {
+        ...this.registerData,
+        birth: {
+          ...this.registerData.birth,
+          year: event.target.value.slice(0, 4)
+        },
+      };
+    } else {
+      this.registerData = {
+        ...this.registerData,
+        [event.target.name]: event.target.value,
+      };
+    }
   };
 
   registerValidationCheck = () => {
@@ -205,13 +223,13 @@ class UserStore {
     }
 
     // birth
-    if (!this.registerData.birth) {
-      toast.error('생년월일을 입력해주세요.');
+    if (!this.registerData.birth.year || this.registerData.birth === '') {
+      toast.error('생년을 입력해주세요.');
       return false;
     }
 
-    if (this.registerData.birth.substring(0, 4) === '1000') {
-      toast.error('생년월일을 제대로 입력해주세요.');
+    if (this.registerData.birth.year === '') {
+      toast.error('생년을 제대로 입력해주세요.');
       return false;
     }
 
@@ -258,7 +276,6 @@ class UserStore {
   };
 
   @action updateInfo = () => {
-    console.log("ASd");
     const {
       nickname, birth, gender, profileYN, uploadImage, gtName, prevGtNickname,
     } = this.root.ComponentMyAccountStore;
@@ -267,9 +284,11 @@ class UserStore {
 
     const formData = new FormData();
 
+    const formBirth = `${birth.year}-${birth.month}-${birth.day}`;
+
     formData.append('nickname', nickname.trim());
     formData.append('prevGtNickname', prevGtNickname.trim());
-    formData.append('birth', birth);
+    formData.append('birth', formBirth);
     formData.append('gender', gender);
     formData.append('profileYN', profileYN);
     formData.append('userId', userData.id);
