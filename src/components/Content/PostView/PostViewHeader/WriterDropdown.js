@@ -4,8 +4,8 @@ import {
   Dropdown, DropdownItem, DropdownMenu, DropdownToggle,
 } from 'reactstrap';
 import { observer } from 'mobx-react';
-import useStores from '../../../../../stores/useStores';
-import levelAdmin from '../../../../../resources/images/level/levelAdmin.png';
+import useStores from '../../../../stores/useStores';
+import levelAdmin from '../../../../resources/images/level/levelAdmin.png';
 
 const WriterDropdown = () => {
   const {
@@ -36,12 +36,14 @@ const WriterDropdown = () => {
       <WriterDropdownMenu>
         <WriterDropdownItem onClick={() => getProfile(writerId)}>프로필</WriterDropdownItem>
         {!(!userData || userData.id === writerId) && (
-          <WriterDropdownItem onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(writerId))}>
-            차단하기
-          </WriterDropdownItem>,
+          <>
+            <WriterDropdownItem onClick={() => toggleConfirmAlert('정말 차단하시겠습니까?', () => addIgnore(writerId))}>
+              차단하기
+            </WriterDropdownItem>
             <WriterDropdownItem onClick={() => toggleReport(writerId, 'RT03', '', writerName)}>
               신고하기
             </WriterDropdownItem>
+          </>
         )}
       </WriterDropdownMenu>
     </WriterDropdownIn>

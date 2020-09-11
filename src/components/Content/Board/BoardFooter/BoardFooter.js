@@ -21,9 +21,8 @@ const BoardFooter = ({ category }) => {
 
   const filterQs = '?filter_mode=true';
   const categoryPageUrl = category ? `/${currentBoardPath}/${category}` : `/${currentBoardPath}`;
-  const finalpageUrl = Number(currentBoardPage) > 1 ? `/${categoryPageUrl}/page/${currentBoardPage}` : `/${currentBoardPath}`;
-
-  const bestFilterUrl = bestFilterMode ? finalpageUrl : finalpageUrl.concat(filterQs);
+  const finalPageUrl = Number(currentBoardPage) > 1 ? `${categoryPageUrl}/page/${currentBoardPage}` : `${categoryPageUrl}`;
+  const bestFilterUrl = bestFilterMode ? finalPageUrl : finalPageUrl.concat(filterQs);
   return (
     <FooterWrapper>
       <AbsolDiv>

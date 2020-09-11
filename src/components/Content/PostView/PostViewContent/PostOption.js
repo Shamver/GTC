@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
 import { observer } from 'mobx-react';
-import useStores from '../../../../../stores/useStores';
+import useStores from '../../../../stores/useStores';
 
 const PostOption = () => {
   const {

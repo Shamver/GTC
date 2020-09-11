@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { Col, Row } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
-import useStores from '../../../../../stores/useStores';
-import anonymous from '../../../../../resources/images/anonymous.png';
+import useStores from '../../../../stores/useStores';
+import anonymous from '../../../../resources/images/anonymous.png';
 import WriterDropdown from './WriterDropdown';
 
 const PostViewHeader = () => {

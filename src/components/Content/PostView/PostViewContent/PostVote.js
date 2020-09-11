@@ -4,7 +4,7 @@ import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { Button } from 'reactstrap';
 import { observer } from 'mobx-react';
-import useStores from '../../../../../stores/useStores';
+import useStores from '../../../../stores/useStores';
 
 const PostVote = () => {
   const { BoardPostStore } = useStores();

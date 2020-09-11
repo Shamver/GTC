@@ -19,6 +19,7 @@ const Board = ({ parentProps, location, match }) => {
   isPagination = !!isPagination;
   page = page || '1';
 
+  console.log(location.search);
   const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
   const {
@@ -47,7 +48,7 @@ const Board = ({ parentProps, location, match }) => {
     ]);
   }, [
     getBoardCategoryList, getBoardPostNoticeList, getBoardPostList,
-    board, page, category, loadingProcess,
+    board, page, category, loadingProcess, query,
   ]);
 
   return (

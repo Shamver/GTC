@@ -3,7 +3,7 @@ import {
   faBellSlash, faClock, faEye, faStar as farStar,
 } from '@fortawesome/free-regular-svg-icons';
 import {
-  faBars, faCommentDots, faHeart, faStar as fasStar,
+  faBars, faCommentDots, faHeart, faStar,
 } from '@fortawesome/free-solid-svg-icons';
 import renderHTML from 'react-render-html';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,7 +11,7 @@ import { Button, Container } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import useStores from '../../../../../stores/useStores';
+import useStores from '../../../../stores/useStores';
 import PostVote from './PostVote';
 import PostOption from './PostOption';
 
@@ -61,7 +61,7 @@ const PostViewContent = () => {
           )}
           <RightSpan>
             <GreyButton outline={!isFavorite} color="secondary" size="sm" onClick={() => judgeFavorite(isFavorite, id)}>
-              <FontAwesomeIcon icon={isFavorite ? fasStar : farStar} /> 즐겨찾기
+              <FontAwesomeIcon icon={isFavorite ? faStar : farStar} /> 즐겨찾기
             </GreyButton>
             <PostOption />
           </RightSpan>

@@ -9,11 +9,11 @@ import { observer } from 'mobx-react';
 import {
   DropdownToggle, DropdownMenu, DropdownItem, Dropdown,
 } from 'reactstrap';
-import avatar from '../../../../../resources/images/anonymous.png';
-import useStores from '../../../../../stores/useStores';
+import avatar from '../../../../resources/images/anonymous.png';
+import useStores from '../../../../stores/useStores';
 import ReplyModify from './ReplyModify';
 import ReplyEdit from './ReplyEdit';
-import levelAdmin from '../../../../../resources/images/level/levelAdmin.png';
+import levelAdmin from '../../../../resources/images/level/levelAdmin.png';
 
 const Reply = ({ data, index }) => {
   const {

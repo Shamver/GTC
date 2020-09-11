@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCommentDots } from '@fortawesome/free-solid-svg-icons';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import useStores from '../../../../../stores/useStores';
+import useStores from '../../../../stores/useStores';
 import ReplyList from './ReplyList';
 import ReplyEdit from './ReplyEdit';
 
