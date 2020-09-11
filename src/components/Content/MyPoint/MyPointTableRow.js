@@ -39,7 +39,7 @@ MyPointTableRow.propTypes = {
 
 const TableBody = styled(Row)`
   border: 1px solid #dee2e6;
-  border-bottom: 0;
+  border-top: 0;
   
   & .responsive-wrap {
     display: contents;
