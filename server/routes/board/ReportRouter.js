@@ -166,30 +166,32 @@ router.post('/', (req, res) => {
     )
       .then((rows) => {
         if (rows[0].count === 1) {
-          res.json({
-            success: true,
-            code: 2,
-            message: '😳 이미 해당 대상에 신고가 완료된 상태입니다!',
-          });
-          throw new Error('이미 신고한 사람입니다.');
-        } else {
-          return database.query(
-            INSERT_REPORT,
-            {
-              TARGET_ID: targetId,
-              USER_ID: writerId,
-              TYPE_CD: type,
-              REASON_CD: reason,
-              REASON_DESC: description,
-            },
-          );
+          return Promise.reject();
         }
+
+        return database.query(
+          INSERT_REPORT,
+          {
+            TARGET_ID: targetId,
+            USER_ID: writerId,
+            TYPE_CD: type,
+            REASON_CD: reason,
+            REASON_DESC: description,
+          },
+        );
       })
       .then(() => {
         res.json({
           success: true,
           code: 1,
           message: msg,
+        });
+      })
+      .catch(() => {
+        res.json({
+          success: true,
+          code: 2,
+          message: '😳 이미 해당 대상에 신고가 완료된 상태입니다!',
         });
       }),
   ).then(() => {

@@ -241,24 +241,20 @@ router.post('/ban', (req, res) => {
     )
       .then((rows) => {
         if (rows.length > 0) {
-          res.json({
-            success: true,
-            code: 2,
-            message: '😳 이미 해당 유저는 정지 상태입니다.',
-          });
-          throw new Error('이미 정지 상태입니다.');
-        } else {
-          return database.query(
-            INSERT_USER_BAN,
-            {
-              USER_ID: targetUserId,
-              REPORT_ID: reportId,
-              ACTION_TYPE: actionType,
-              BAN_TERM: term,
-              BAN_REASON: reason,
-            },
-          );
+          const rejectReason = { code: 2 };
+          return Promise.reject(rejectReason);
         }
+
+        return database.query(
+          INSERT_USER_BAN,
+          {
+            USER_ID: targetUserId,
+            REPORT_ID: reportId,
+            ACTION_TYPE: actionType,
+            BAN_TERM: term,
+            BAN_REASON: reason,
+          },
+        );
       })
       .then(() => database.query(
         UPDATE_REPORT,
@@ -281,12 +277,20 @@ router.post('/ban', (req, res) => {
           message: '😊 해당 유저를 밴 처리 하였습니다.',
         });
       })
-      .catch(() => {
-        res.json({
-          success: false,
-          code: 1,
-          message: '요청을 실패하였습니다.',
-        });
+      .catch((e) => {
+        if (e.code === 2) {
+          res.json({
+            success: true,
+            code: 2,
+            message: '😳 이미 해당 유저는 정지 상태입니다.',
+          });
+        } else {
+          res.json({
+            success: false,
+            code: 1,
+            message: '요청을 실패하였습니다.',
+          });
+        }
       }),
   ).then(() => {
     info('[INSERT, POST /api/user/ban] 신고 유저 밴 처리');

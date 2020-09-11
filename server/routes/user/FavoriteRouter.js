@@ -108,27 +108,29 @@ router.post('/', (req, res) => {
     )
       .then((rows) => {
         if (rows.length >= 1) {
-          res.json({
-            success: true,
-            code: 2,
-            message: '😓 이미 즐겨찾기된 게시물입니다.',
-          });
-          throw new Error('이미 즐겨찾기된 게시물입니다.');
-        } else {
-          return database.query(
-            INSERT_USER_FAVORITE,
-            {
-              USER_ID: userId,
-              POST_ID: parseInt(bpId, 10),
-            },
-          );
+          return Promise.reject();
         }
+
+        return database.query(
+          INSERT_USER_FAVORITE,
+          {
+            USER_ID: userId,
+            POST_ID: parseInt(bpId, 10),
+          },
+        );
       })
       .then(() => {
         res.json({
           success: true,
           code: 1,
           message: '😊 즐겨찾기에 해당 게시물이 추가되었습니다.',
+        });
+      })
+      .catch(() => {
+        res.json({
+          success: true,
+          code: 2,
+          message: '😓 이미 즐겨찾기된 게시물입니다.',
         });
       }),
   ).then(() => {
