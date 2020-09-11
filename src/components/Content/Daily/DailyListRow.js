@@ -70,6 +70,20 @@ const TableBody = styled(Row)`
     text-align: center;
   }
   
+  & .message {
+    color: #337ab7 !important;
+    
+    &:hover {
+      color: #23527c !important;
+      background: none !important;
+      text-decoration: underline !important;
+    }
+    
+    &:focus {
+      box-shadow: none !important;
+    }
+  }
+  
   & .point, .combo {
     display: none;
   }

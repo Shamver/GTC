@@ -29,7 +29,7 @@ const MailView = () => {
       <Wrapper size="sm">
         <Row className="content">
           <Col className="col-sm-12">
-            <RowContent>
+            <RowContent className="mail-info">
               <ColDiv className="col-6">
                 <span className="title">
                   보낸 사람
@@ -47,8 +47,8 @@ const MailView = () => {
                 </span>
               </ColDiv>
             </RowContent>
-            <RowContent>
-              <ColDiv className="col-6">
+            <RowContent class="mail-info">
+              <ColDiv className="col-6 date">
                 <span className="title">
                   보낸 시간
                 </span>
@@ -56,7 +56,7 @@ const MailView = () => {
                   {date}
                 </span>
               </ColDiv>
-              <ColDiv className="col-6">
+              <ColDiv className="col-6 date">
                 <span className="title">
                   읽은 시간
                 </span>
@@ -132,6 +132,23 @@ const Wrapper = styled.div`
   
   & .func {
     margin-top: 20px;
+  }
+  
+  @media (max-width: 740px) {
+    & .title {    
+      padding: 0;
+      margin-right: 4px;
+    }
+    
+    & .date {    
+      flex: 0 0 100%;
+      max-width: 100%;
+      margin-bottom: 5px;
+    }
+    
+    & .mail-info {
+      margin-bottom: 5px !important;
+    }
   }
 `;
 

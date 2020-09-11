@@ -51,10 +51,18 @@ const LastDailyDiv = styled.div`
   margin-bottom: 20px;
   border: 1px solid transparent;
   border-radius: 4px;
+  
+  @media (max-width: 740px) {
+    font-size: 14px;
+  }
 `;
 
 const CustomInput = styled(Input)`
   margin-bottom: 1rem;
+  
+  @media (max-width: 740px) {
+    font-size: 14px !important;
+  }
 `;
 
 export default memo(observer(DailyInput));
