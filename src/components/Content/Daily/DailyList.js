@@ -27,11 +27,11 @@ const DailyList = () => {
               <ColCell className="col-1 center">
                 #
               </ColCell>
-              <ColCell className="col-2">
-                닉네임
-              </ColCell>
               <ColCell className="col-4">
                 한마디
+              </ColCell>
+              <ColCell className="col-2">
+                닉네임
               </ColCell>
               <ColCell className="col-2">
                 포인트
@@ -89,7 +89,6 @@ const TableHeader = styled(Row)`
 const ColCell = styled(Col)`
   padding: 12px 6px;
 `;
-
 
 
 export default memo(observer(DailyList));

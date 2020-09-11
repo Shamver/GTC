@@ -10,26 +10,26 @@ const DailyListRow = ({ data, index }) => {
 
   return (
     <TableBody>
-      <div className="responsive-wrap">
+      <div className="responsive-wrap center">
         <ColCell className="col-1 center index">
           {index + 1} 등
         </ColCell>
       </div>
       <div className="responsive-wrap-column">
         <div className="responsive-wrap">
-          <ColCell className="col-2">
-            {nickname}
-          </ColCell>
           <ColCell className="col-4">
             {message}
           </ColCell>
         </div>
         <div className="responsive-wrap info">
           <ColCell className="col-2">
-            {point}
+            {nickname}
+          </ColCell>
+          <ColCell className="col-2">
+            {point}<span className="point"> 포인트</span>
           </ColCell>
           <ColCell className="col-1">
-            {combo}
+            {combo}<span className="combo"> 콤보</span>
           </ColCell>
           <ColCell className="col-2">
             {time}
@@ -70,18 +70,8 @@ const TableBody = styled(Row)`
     text-align: center;
   }
   
-  & .message {
-    color: #337ab7 !important;
-    
-    &:hover {
-      color: #23527c !important;
-      background: none !important;
-      text-decoration: underline !important;
-    }
-    
-    &:focus {
-      box-shadow: none !important;
-    }
+  & .point, .combo {
+    display: none;
   }
   
   & .responsive-wrap, .responsive-wrap-column {
@@ -100,7 +90,7 @@ const TableBody = styled(Row)`
     & .responsive-wrap-column {
       display: flex;
       flex-direction: column;
-      flex: 3;
+      flex: 5;
     }
     
     & .responsive-wrap > div {
@@ -110,15 +100,21 @@ const TableBody = styled(Row)`
       padding-left: 10px;
     }
     
+    .index {    
+      color: #dc3545;
+      font-size: 14px;    
+      font-weight: 600;
+      padding-left: 0;
+    }
+    
     .info {
       color: #989898;
       font-size: 11px;
       line-height: 24px;
     }
     
-    .btn {
-      font-size: 12px;
-      padding: .1em 0.45em;
+    .point, .combo {
+      display: inline;
     }
   }
 `;

@@ -133,9 +133,6 @@ const Wrapper = styled.div`
   & .func {
     margin-top: 20px;
   }
-  
-  @media (max-width: 740px) {
-  }
 `;
 
 const RowContent = styled(Row)`
