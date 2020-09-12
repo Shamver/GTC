@@ -367,13 +367,11 @@ const SELECT_POST_LIST_BOARD_SEARCH = `
 `;
 
 router.get('/', (req, res) => {
-  let { currentPage, currentCategory } = req.query;
+  let { page, category } = req.query;
   const {
     board, isHome, recommend,
   } = req.query;
   let { userId } = req.query;
-  currentPage = currentPage || 1;
-  currentCategory = currentCategory || '';
   if (!userId) userId = null;
 
   let query = '';
@@ -410,13 +408,10 @@ router.get('/', (req, res) => {
 });
 
 router.get('/search', (req, res) => {
-  let { currentPage } = req.query;
   const {
-    target, keyword, board, recommend,
+    board, category, page, recommend,
+    target, keyword, userId,
   } = req.query;
-  let { userId } = req.query;
-  currentPage = currentPage || 1;
-  if (!userId) userId = null;
 
   let query;
 

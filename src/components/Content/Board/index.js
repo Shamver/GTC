@@ -10,45 +10,45 @@ import useStores from '../../../stores/useStores';
 
 const Board = ({ parentProps, location, match }) => {
   const { BoardStore, BoardPostStore, UtilLoadingStore } = useStores();
+
+  const {
+    setCurrentBoardPath, setCurrentBoardPage, setIsPagination,
+    getBoardCategoryList,
+  } = BoardStore;
+  const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
+  const { loadingProcess } = UtilLoadingStore;
+
   const { params } = match;
   const { board } = params;
   let { page, category } = params;
   let { isPagination } = parentProps;
+  const query = qs.parse(location.search);
+  const isBestFilter = !!query.filer_mode;
 
   category = category || '';
   isPagination = !!isPagination;
   page = page || '1';
 
-  console.log(location.search);
-  const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
-  const { loadingProcess } = UtilLoadingStore;
-  const {
-    setCurrentBoardPath, judgeFilterMode, setCurrentBoardPage,
-    setIsPagination, getBoardCategoryList,
-  } = BoardStore;
-  const query = qs.parse(location.search);
-
   useEffect(() => {
     setCurrentBoardPath(board);
-    judgeFilterMode(query);
     setCurrentBoardPage(page);
     setIsPagination(isPagination);
     setClearPostView();
   }, [
-    setCurrentBoardPath, judgeFilterMode, query,
-    setCurrentBoardPage, setIsPagination, setClearPostView, board,
-    page, isPagination,
+    setCurrentBoardPath, setCurrentBoardPage, setIsPagination,
+    setClearPostView, board, page, isPagination,
   ]);
 
   useLayoutEffect(() => {
     loadingProcess([
       () => getBoardCategoryList(board, category),
       () => getBoardPostNoticeList(board, page),
-      () => getBoardPostList(board, page, category),
+      () => getBoardPostList(board, category, page, isBestFilter, isSearchMode),
     ]);
   }, [
     getBoardCategoryList, getBoardPostNoticeList, getBoardPostList,
-    board, page, category, loadingProcess, query,
+    board, page, category, loadingProcess, query, isBestFilter,
+    isSearchMode,
   ]);
 
   return (

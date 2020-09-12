@@ -63,14 +63,6 @@ class BoardStore {
     this.currentBoardPage = currentBoardPage;
   };
 
-  @observable judgeFilterMode = (query) => {
-    const { filter_mode: filterMode, search, search_target: searchTarget } = query;
-    this.bestFilterMode = !!(query && filterMode && filterMode === 'true');
-    this.searchMode = !!(query && search);
-    this.searchKeyword = query && search ? search : '';
-    this.searchTarget = query && searchTarget ? searchTarget : 'title';
-  };
-
   @action setCurrentBoardPath = (path) => {
     this.currentBoardPath = path;
     this.currentBoardName = this.boardKinds[path];
