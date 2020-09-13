@@ -43,12 +43,11 @@ const Board = ({ parentProps, location, match }) => {
     loadingProcess([
       () => getBoardCategoryList(board, category),
       () => getBoardPostNoticeList(board, page),
-      () => getBoardPostList(board, category, page, isBestFilter, isSearchMode),
+      () => getBoardPostList(board, category, page, isBestFilter),
     ]);
   }, [
     getBoardCategoryList, getBoardPostNoticeList, getBoardPostList,
     board, page, category, loadingProcess, query, isBestFilter,
-    isSearchMode,
   ]);
 
   return (

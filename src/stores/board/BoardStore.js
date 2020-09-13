@@ -17,19 +17,15 @@ class BoardStore {
 
   @observable currentBoardCategories = [];
 
-  @observable bestFilterMode = false;
-
-  @observable searchMode = false;
-
   @observable currentBoardPage = 1;
 
   @observable isPagination = false;
 
-  @observable searchKeyword = '';
-
-  @observable searchTarget = 'title';
-
-  @observable boardCategoryCodeList = [];
+  @observable searchInfo = {
+    isSearch: false,
+    target: '',
+    keyword: '',
+  };
 
   constructor(root) {
     this.root = root;

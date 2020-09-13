@@ -47,8 +47,6 @@ class PostStore {
 
   @observable replyLockerHash;
 
-  @observable isSearch = false;
-
   constructor(root) {
     this.root = root;
   }
@@ -142,19 +140,24 @@ class PostStore {
     return true;
   };
 
-  @action getBoardPostList = async (board, category, page, isBestFilter, isSearchMode) => {
+  @action getBoardPostList = async (board, category, page, isBestFilter) => {
     const { userData } = this.root.UserStore;
+    const { searchInfo } = this.root.BoardStore;
+    const { isSearch } = searchInfo;
     const userId = userData ? userData.id : null;
 
-    if (isSearchMode) {
+    if (isSearch) {
       await this.requestSearchPostList(board, category, page, userId, isBestFilter);
     } else {
-      await this.requestPostList();
+      await this.requestPostList(board, category, page, userId, isBestFilter);
     }
   };
 
   @action requestSearchPostList = async (board, category, page, userId, isBestFilter) => {
-    const { searchKeyword, searchTarget } = this.root.BoardStore;
+    const {
+      searchKeyword: keyword,
+      searchTarget: target,
+    } = this.root.BoardStore;
 
     await axios.get('/api/board/post/search', {
       params: {
@@ -163,8 +166,8 @@ class PostStore {
         category,
         userId,
         recommend: isBestFilter ? 1 : 0,
-        keyword: searchKeyword,
-        target: searchTarget,
+        keyword,
+        target,
       },
     })
       .then((response) => {
@@ -190,12 +193,13 @@ class PostStore {
       .catch((response) => { toast.error(response.message); });
   }
 
-  @action requestPostList = async () => {
+  @action requestPostList = async (board, category, page, userId, isBestFilter) => {
+    console.log(category);
     await axios.get('/api/board/post', {
       params: {
         board,
-        currentPage,
-        currentCategory: category,
+        category,
+        page,
         userId,
         recommend: isBestFilter ? 1 : 0,
       },
@@ -221,7 +225,7 @@ class PostStore {
       })
       .catch((response) => {
         toast.error(response.message);
-    });
+      });
   }
 
   @action search = () => {
@@ -260,7 +264,12 @@ class PostStore {
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
 
-    await axios.get('/api/board/post/notice', { params: { board, userId } })
+    await axios.get('/api/board/post/notice', {
+      params: {
+        board,
+        userId,
+      },
+    })
       .then((response) => {
         const { data } = response;
         if (data.success) {
@@ -284,7 +293,7 @@ class PostStore {
       params: {
         board,
         userId,
-        currentPage: 1,
+        page: 1,
         isHome: true,
       },
     })
@@ -296,7 +305,9 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { toast.error(response.message); });
+      .catch((response) => {
+        toast.error(response.message);
+      });
   };
 
   @action getPost = async (id) => {
