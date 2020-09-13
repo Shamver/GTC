@@ -46,7 +46,13 @@ const DailyList = () => {
           </Col>
         </Row>
         {DailyListData.length === 0 ? (
-          '출석체크한 유저가 없습니다.'
+          <TableBody>
+            <div className="responsive-wrap center">
+              <ColCell className="col-2 center">
+                출석체크한 유저가 없습니다.
+              </ColCell>
+            </div>
+          </TableBody>
         ) : DailyListData}
       </Wrapper>
     </>
@@ -90,5 +96,15 @@ const ColCell = styled(Col)`
   padding: 12px 6px;
 `;
 
+const TableBody = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  cursor: pointer;
+  align-items: center;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
 
 export default memo(observer(DailyList));

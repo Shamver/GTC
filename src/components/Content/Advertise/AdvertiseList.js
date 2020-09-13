@@ -1,9 +1,9 @@
 import React, { memo } from 'react';
 import { observer } from 'mobx-react';
+import styled from 'styled-components';
+import { Col, Row } from 'reactstrap';
 import useStores from '../../../stores/useStores';
 import AdvertiseRow from './AdvertiseRow';
-import styled from "styled-components";
-import {Col, Row} from "reactstrap";
 
 const AdvertiseList = () => {
   const { EventAdvertiseStore } = useStores();

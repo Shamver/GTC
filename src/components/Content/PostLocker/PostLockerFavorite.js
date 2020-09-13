@@ -1,5 +1,7 @@
 import React, { memo } from 'react';
-import { TabPane, Table } from 'reactstrap';
+import {
+  TabPane, Row, Col,
+} from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 
@@ -17,54 +19,95 @@ const PostLockerFavorite = ({ currentPage, noPagination, currentTab }) => {
 
   return (
     <TabPane tabId="favorite">
-      <ListTable size="sm" bordered>
-        <thead>
-          <tr>
-            <TableTh width={10}>번호</TableTh>
-            <TableTh width={55}>제목</TableTh>
-            <TableTh width={20}>작성일</TableTh>
-            <TableTh width={10}>조회수</TableTh>
-            <TableTh width={5}>관리</TableTh>
-          </tr>
-        </thead>
-        <tbody>
-          {FavoriteTableData.length === 0 ? (
-            <tr>
-              <TableTd colSpan={5}>
+      <Wrapper size="sm">
+        <Row className="content-header">
+          <Col className="col-sm-12">
+            <TableHeader>
+              <ColCell className="col-1 center">
+                번호
+              </ColCell>
+              <ColCell className="col-4 center">
+                제목
+              </ColCell>
+              <ColCell className="col-2 center">
+                작성일
+              </ColCell>
+              <ColCell className="col-1 center">
+                조회수
+              </ColCell>
+              <ColCell className="col-2 center">
+                관리
+              </ColCell>
+            </TableHeader>
+          </Col>
+        </Row>
+
+        {FavoriteTableData.length === 0 ? (
+          <TableBody>
+            <div className="center">
+              <ColCell className="col-12">
                 즐겨찾기한 게시물이 없습니다.
-              </TableTd>
-            </tr>
-          ) : FavoriteTableData}
-        </tbody>
-      </ListTable>
-      {favoriteMaxPage !== 0
-        ? (
-          <Pagination
-            currentPage={currentPage}
-            noPagination={noPagination}
-            path={currentTab}
-            maxPage={favoriteMaxPage}
-          />
-        ) : null}
+              </ColCell>
+            </div>
+          </TableBody>
+        ) : FavoriteTableData}
+
+        {favoriteMaxPage !== 0
+          ? (
+            <Pagination
+              currentPage={currentPage}
+              noPagination={noPagination}
+              path={currentTab}
+              maxPage={favoriteMaxPage}
+            />
+          ) : null}
+      </Wrapper>
     </TabPane>
   );
 };
 
-const TableTh = styled.th`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  padding: 8px !important;
+const Wrapper = styled.div`
+  padding: 0px 1rem;
+  border-bottom: 1px solid #dee2e6;
+  
+  & .content-header {
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  & .center {
+    text-align: center;
+  }
+  
+  @media (max-width: 740px) {
+    & .content-header {
+      display: none;
+    }
+    
+    & .content-body {
+      display: block;
+    }
+    
+    .col {
+      max-width: 100%;
+    }
+  }
 `;
 
-const TableTd = styled.td`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  overflow: hidden;
-  padding: 8px !important;
+const TableHeader = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  
 `;
 
-const ListTable = styled(Table)`
-  border: 1px solid #c9c9c9 !important;
+const ColCell = styled(Col)`
+  padding: 12px 6px;
+`;
+
+const TableBody = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  align-items: center;
+  font-size: 14px;
 `;
 
 PostLockerFavorite.propTypes = {
