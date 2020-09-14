@@ -5,7 +5,7 @@ import qs from 'query-string';
 import { observer } from 'mobx-react';
 import BoardHeader from './BoardHeader';
 import BoardContent from './BoardContent';
-import BoardFooter from './BoardFooter/BoardFooter';
+import BoardFooter from './BoardFooter';
 import useStores from '../../../stores/useStores';
 
 const Board = ({ parentProps, location, match }) => {

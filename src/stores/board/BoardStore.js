@@ -15,8 +15,6 @@ class BoardStore {
 
   @observable currentBoardName = '';
 
-  @observable currentBoardCategories = [];
-
   @observable currentBoardPage = 1;
 
   @observable isPagination = false;
@@ -29,6 +27,10 @@ class BoardStore {
 
   constructor(root) {
     this.root = root;
+  }
+
+  @action goPost = () => {
+    const
   }
 
   @action setBoardList = () => {
@@ -103,10 +105,6 @@ class BoardStore {
       })
       .catch((response) => { toast.error(response.message); });
   };
-
-  @action setCategoryCodeList = (code) => {
-    this.currentBoardCategories = code;
-  }
 
   @action moveBoard = (path) => {
     this.root.UtilRouteStore.history.setCurrentBoardToId('/'.concat(path.toLowerCase()));

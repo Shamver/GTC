@@ -16,7 +16,7 @@ const BoardFooter = ({ category }) => {
   const {
     currentBoardPath, bestFilterMode, currentBoardPage,
     searchKeyword, onSubmit, onChange, onSearch, searchTarget,
-    onChangeTarget,
+    onChangeTarget, goPost,
   } = BoardStore;
 
   const filterQs = '?filter_mode=true';
@@ -32,7 +32,7 @@ const BoardFooter = ({ category }) => {
             &nbsp;&nbsp;인기 글
           </Button>
         </AbsoluteLeftLink>
-        <AbsoluteRightLink to="/post">
+        <AbsoluteRightLink onClick={() => goPost(currentBoardPath.toUpperCase(), category)}>
           <Button color="danger" size="sm">
             <FontAwesomeIcon icon={faPen} />
               &nbsp;&nbsp;글 쓰기

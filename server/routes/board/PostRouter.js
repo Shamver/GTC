@@ -27,7 +27,7 @@ const SELECT_POST_LIST = `
         AND P.USER_ID NOT IN
         (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
         AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
-        AND 
+        AND P.CATEGORY_CD LIKE '%:CATEGORY%' 
       ) AS pageCount
     , (SELECT COUNT(*) AS count FROM GTC_POST WHERE CONTENT LIKE '%<figure class="image">%' AND ID = P.ID) AS isImage
     , (SELECT U.ADMIN_FL FROM GTC_USER U WHERE U.ID = P.USER_ID) AS isWriterAdmin
@@ -40,7 +40,7 @@ const SELECT_POST_LIST = `
     AND P.USER_ID NOT IN
       (SELECT USER_ID_TARGET FROM GTC_USER_IGNORE WHERE USER_ID = :USER_ID)
     AND (SELECT COUNT(*) AS count FROM GTC_POST_RECOMMEND WHERE POST_ID = P.ID AND TYPE_CD = 'R01') >= :LIKES
-    :CATEGORY
+    AND P.CATEGORY_CD LIKE '%:CATEGORY%'
   ORDER BY CRT_DTTM DESC    
   LIMIT :CURRENT_PAGE, :PER_PAGE
 `;
@@ -332,22 +332,25 @@ const SELECT_POST_LIST_SEARCH = `
 
 router.get('/', (req, res) => {
   const {
-    board, category, page,
-    recommend, isHome, userId,
+    board, page, category,
+    recommend, isHome,
   } = req.query;
 
-  const query = category ? `AND P.CATEGORY_CD = '${category}'` : '';
+  // Store -> Router null 이 자동으로 undefined 처리 되기 때문에
+  // 예외 경우로 router 에서 null 처리
+  let { userId } = req.query;
+  userId = userId || null;
 
   Database.execute(
     (database) => database.query(
       board !== 'all' ? SELECT_POST_LIST : SELECT_POST_LIST_ALL,
       {
         BOARD_CD: board.toUpperCase(),
-        CATEGORY: null,
+        CATEGORY: category,
         CURRENT_PAGE: ((page - 1) * 25),
         PER_PAGE: isHome ? 9 : 25,
         USER_ID: userId,
-        LIKES: Number(recommend) ? 1 : 0,
+        LIKES: recommend || 0,
       },
     )
       .then((rows) => {

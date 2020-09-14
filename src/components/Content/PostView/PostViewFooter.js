@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import ReplyForm from './Reply/ReplyForm';
 import BoardContent from '../Board/BoardContent';
-import BoardFooter from '../Board/BoardFooter/BoardFooter';
+import BoardFooter from '../Board/BoardFooter';
 import useStores from '../../../stores/useStores';
 
 const PostViewFooter = () => {

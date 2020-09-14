@@ -194,7 +194,6 @@ class PostStore {
   }
 
   @action requestPostList = async (board, category, page, userId, isBestFilter) => {
-    console.log(category);
     await axios.get('/api/board/post', {
       params: {
         board,
@@ -287,13 +286,14 @@ class PostStore {
 
   @action getHomePostList = async (board) => {
     const { userData } = this.root.UserStore;
-    const userId = userData ? userData.id : null;
+    const userId = userData && userData.id;
 
     await axios.get('/api/board/post', {
       params: {
         board,
-        userId,
+        category: '',
         page: 1,
+        userId,
         isHome: true,
       },
     })
@@ -603,10 +603,6 @@ class PostStore {
 
   @action getHash = (hash) => {
     this.replyLockerHash = hash;
-  }
-
-  @action setCategoryCodeList = (code) => {
-    this.categoryCodeList = code;
   }
 }
 
