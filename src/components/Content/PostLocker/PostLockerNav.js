@@ -58,6 +58,11 @@ const NavLinkBtn = styled(NavLink)`
     border: 1px solid #c9c9c9 !important;
     border-bottom-color: transparent !important;
   }
+  
+  @media (max-width: 800px) {    
+    font-size: 12px;
+    padding: 5px 8px !important;
+  }
 `;
 
 PostLockerNav.propTypes = {

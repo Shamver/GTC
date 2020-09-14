@@ -16,28 +16,30 @@ const PostLockerFavoriteTable = ({ data }) => {
 
   return (
     <TableBody>
-      <div className="responsive-wrap center">
-        <ColCell className="col-1 center index">
-          {postId}
-        </ColCell>
-        <ColCell className="col-4">
-          <Link to={`/post/${postId}`}>
-            <Text>{postTitle}</Text>
-          </Link>
-        </ColCell>
-        <ColCell className="col-2">
-          {postDate}
-        </ColCell>
-        <ColCell className="col-1">
-          {postViews}
-        </ColCell>
-        <ColCell className="col-2">
-          <DeleteBtn color="danger" size="sm" onClick={() => deleteFavorite(postId, 'postLocker')}>삭제</DeleteBtn>
-        </ColCell>
-      </div>
       <div className="responsive-wrap-column">
         <div className="responsive-wrap">
+          <ColCell className="col-1 center id">
+            {postId}
+          </ColCell>
+          <ColCell className="col-5">
+            <Link to={`/post/${postId}`}>
+              <Text>{postTitle}</Text>
+            </Link>
+          </ColCell>
         </div>
+        <div className="responsive-wrap info">
+          <ColCell className="col-3">
+            {postDate}
+          </ColCell>
+          <ColCell className="col-2">
+            <span className="view">조회수</span> {postViews}
+          </ColCell>
+        </div>
+      </div>
+      <div className="responsive-wrap center">
+        <ColCell className="col-1 center">
+          <DeleteBtn color="danger" size="sm" onClick={() => deleteFavorite(postId, 'postLocker')}>삭제</DeleteBtn>
+        </ColCell>
       </div>
     </TableBody>
   );
@@ -53,60 +55,72 @@ PostLockerFavoriteTable.propTypes = {
 };
 
 const Text = styled.span`
-  max-width: 490px;
-  line-height: 21px;
-  display: inline-block;
-  overflow: hidden;
 `;
 
 const DeleteBtn = styled(Button)`
-  margin: -5px 0 !important;
 `;
-
 
 const TableBody = styled(Row)`
   border: 1px solid #dee2e6;
   border-bottom: 0;
   cursor: pointer;
   align-items: center;
-  font-size: 14px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   
   :hover {    
     color: #212529;
     background-color: rgba(0,0,0,.075);
-  }
-  }
-  
-  & .point, .combo {
-    display: none;
   }
   
   & .responsive-wrap, .responsive-wrap-column {
     display: contents;
   }
   
-  @media (max-width: 740px) {
+  & .view {
+    display: none;
+  }
+  
+  @media (max-width: 800px) {
     & .responsive-wrap {
       width: 100%;
       display: block;
-      line-height: 26px;
-      font-size: 13px;
+      line-height: 32px;
+      font-size: 14px;
       flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     
     & .responsive-wrap-column {
       display: flex;
       flex-direction: column;
-      flex: 5;
+      flex: 3;
     }
     
     & .responsive-wrap > div {
       display: inline;
       padding-right: 0;
-      padding-left: 10px;
+      vertical-align: middle;
+    }
+    
+    .id {    
+      font-size: 16px;
+      color: #dc3545;
+      font-weight: 600;
+    }
+    
+    .contents {        
+      color: #5a7989;
+      font-size: 12px;
+    }
+    
+    .info {
+      color: #989898;
+      font-size: 13px;
+      line-height: 24px;
+    }
+    .view {
+      display: inline;
     }
   }
 `;

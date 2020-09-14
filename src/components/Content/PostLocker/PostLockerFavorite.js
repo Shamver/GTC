@@ -26,16 +26,16 @@ const PostLockerFavorite = ({ currentPage, noPagination, currentTab }) => {
               <ColCell className="col-1 center">
                 번호
               </ColCell>
-              <ColCell className="col-4 center">
+              <ColCell className="col-5">
                 제목
               </ColCell>
-              <ColCell className="col-2 center">
+              <ColCell className="col-3">
                 작성일
               </ColCell>
-              <ColCell className="col-1 center">
+              <ColCell className="col-2">
                 조회수
               </ColCell>
-              <ColCell className="col-2 center">
+              <ColCell className="col-1 center">
                 관리
               </ColCell>
             </TableHeader>
@@ -51,17 +51,16 @@ const PostLockerFavorite = ({ currentPage, noPagination, currentTab }) => {
             </div>
           </TableBody>
         ) : FavoriteTableData}
-
-        {favoriteMaxPage !== 0
-          ? (
-            <Pagination
-              currentPage={currentPage}
-              noPagination={noPagination}
-              path={currentTab}
-              maxPage={favoriteMaxPage}
-            />
-          ) : null}
       </Wrapper>
+      {favoriteMaxPage !== 0
+        ? (
+          <Pagination
+            currentPage={currentPage}
+            noPagination={noPagination}
+            path={currentTab}
+            maxPage={favoriteMaxPage}
+          />
+        ) : null}
     </TabPane>
   );
 };
@@ -78,7 +77,7 @@ const Wrapper = styled.div`
     text-align: center;
   }
   
-  @media (max-width: 740px) {
+  @media (max-width: 800px) {
     & .content-header {
       display: none;
     }

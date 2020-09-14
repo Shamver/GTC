@@ -26,13 +26,13 @@ const PostLockerMyPost = ({ currentPage, noPagination, currentTab }) => {
               <ColCell className="col-1 center">
                 번호
               </ColCell>
-              <ColCell className="col-5 center">
+              <ColCell className="col-6">
                 제목
               </ColCell>
-              <ColCell className="col-2 center">
+              <ColCell className="col-3">
                 작성일
               </ColCell>
-              <ColCell className="col-3 center">
+              <ColCell className="col-2 center">
                 조회수
               </ColCell>
             </TableHeader>
