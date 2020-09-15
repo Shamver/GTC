@@ -61,7 +61,6 @@ const PostLockerMyPost = ({ currentPage, noPagination, currentTab }) => {
   );
 };
 
-
 const Wrapper = styled.div`
   padding: 0px 1rem;
   border-bottom: 1px solid #dee2e6;

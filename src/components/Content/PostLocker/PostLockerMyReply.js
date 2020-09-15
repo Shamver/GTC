@@ -1,5 +1,5 @@
 import React, { memo } from 'react';
-import { TabPane, Table } from 'reactstrap';
+import { TabPane, Row, Col } from 'reactstrap';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import * as Proptypes from 'prop-types';
@@ -16,22 +16,32 @@ const PostLockerMyReply = ({ currentPage, noPagination, currentTab }) => {
 
   return (
     <TabPane tabId="myReply">
-      <ListTable size="sm" bordered>
-        <thead>
-          <tr>
-            <TableTh width={20}>글 제목</TableTh>
-            <TableTh width={60} classname="col-8">댓글 내용</TableTh>
-            <TableTh width={20} classname="col-2">작성일</TableTh>
-          </tr>
-        </thead>
-        <tbody>
-          {MyReplyTableData.length === 0 ? (
-            <tr>
-              <TableTd colSpan={3}>작성한 댓글이 없습니다.</TableTd>
-            </tr>
-          ) : MyReplyTableData}
-        </tbody>
-      </ListTable>
+      <Wrapper size="sm">
+        <Row className="content-header">
+          <Col className="col-sm-12">
+            <TableHeader>
+              <ColCell className="col-1 center">
+                글 제목
+              </ColCell>
+              <ColCell className="col-1">
+                댓글 내용
+              </ColCell>
+              <ColCell className="col-1">
+                작성일
+              </ColCell>
+            </TableHeader>
+          </Col>
+        </Row>
+        {MyReplyTableData.length === 0 ? (
+          <TableBody>
+            <div className="center">
+              <ColCell className="col-12">
+                작성한 댓글이 없습니다.
+              </ColCell>
+            </div>
+          </TableBody>
+        ) : MyReplyTableData}
+      </Wrapper>
       {replyMineMaxPage !== 0
         ? (
           <Pagination
@@ -45,21 +55,48 @@ const PostLockerMyReply = ({ currentPage, noPagination, currentTab }) => {
   );
 };
 
-const TableTh = styled.th`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  padding: 8px !important;
+const Wrapper = styled.div`
+  padding: 0px 1rem;
+  border-bottom: 1px solid #dee2e6;
+  
+  & .content-header {
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  & .center {
+    text-align: center;
+  }
+  
+  @media (max-width: 740px) {
+    & .content-header {
+      display: none;
+    }
+    
+    & .content-body {
+      display: block;
+    }
+    
+    .col {
+      max-width: 100%;
+    }
+  }
 `;
 
-const TableTd = styled.td`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  overflow: hidden;
-  padding: 8px !important;
+const TableHeader = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  
 `;
 
-const ListTable = styled(Table)`
-  border: 1px solid #c9c9c9 !important;
+const ColCell = styled(Col)`
+  padding: 12px 6px;
+`;
+
+const TableBody = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  align-items: center;
+  font-size: 14px;
 `;
 
 PostLockerMyReply.propTypes = {
