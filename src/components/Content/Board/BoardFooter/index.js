@@ -16,13 +16,14 @@ const BoardFooter = ({ category }) => {
   const {
     currentBoardPath, bestFilterMode, currentBoardPage,
     searchKeyword, onSubmit, onChange, onSearch, searchTarget,
-    onChangeTarget, goPost,
+    onChangeTarget, setBoardAndCategory,
   } = BoardStore;
 
   const filterQs = '?filter_mode=true';
   const categoryPageUrl = category ? `/${currentBoardPath}/${category}` : `/${currentBoardPath}`;
   const finalPageUrl = Number(currentBoardPage) > 1 ? `${categoryPageUrl}/page/${currentBoardPage}` : `${categoryPageUrl}`;
   const bestFilterUrl = bestFilterMode ? finalPageUrl : finalPageUrl.concat(filterQs);
+
   return (
     <FooterWrapper>
       <AbsolDiv>
@@ -32,7 +33,7 @@ const BoardFooter = ({ category }) => {
             &nbsp;&nbsp;인기 글
           </Button>
         </AbsoluteLeftLink>
-        <AbsoluteRightLink onClick={() => goPost(currentBoardPath.toUpperCase(), category)}>
+        <AbsoluteRightLink to="/post" onClick={() => setBoardAndCategory(currentBoardPath.toUpperCase(), category.toUpperCase())}>
           <Button color="danger" size="sm">
             <FontAwesomeIcon icon={faPen} />
               &nbsp;&nbsp;글 쓰기

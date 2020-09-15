@@ -73,7 +73,6 @@ class PostStore {
           if (data.code === 1) {
             this.root.UtilRouteStore.goBack();
             toast.success(data.message);
-            this.setPostClear();
           } else {
             toast.info(data.message);
           }
@@ -81,7 +80,9 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { toast.error(response.message); });
+      .catch((response) => {
+        toast.error(response.message);
+      });
 
     return true;
   };
@@ -511,6 +512,7 @@ class PostStore {
         ...this.post,
         text: event,
       };
+      console.log('ㅎㅇ');
       return;
     }
 
@@ -573,20 +575,11 @@ class PostStore {
       });
   };
 
-  @action getEmbedMedia = async () => {
-    await axios.get('iframe.ly/api/oembed?url=https://www.youtube.com/watch?v=iMTblJbmam4&api_key=0037428c3f77431216045c')
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((response) => {
-        toast.error(response.message);
-      });
-  }
-
   @action setPostClear = () => {
+    // 초기화의 경우
+    // 게시판 및 카테고리 빼고 모두 초기화 한다.
     this.post = {
-      board: '',
-      category: '',
+      ...this.post,
       title: '',
       text: '',
       depth: '',

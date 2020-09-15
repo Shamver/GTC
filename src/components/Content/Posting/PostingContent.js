@@ -8,12 +8,12 @@ const PostingContent = () => {
   const { BoardPostStore } = useStores();
   const { post, onChangeValue } = BoardPostStore;
   const { text } = post;
-
   return (
     <CKEditor
       editor={ClassicEditor}
       data={text}
       onChange={(event, editor) => onChangeValue(editor.getData())}
+      onInit={(editor) => editor.setData(text)}
       config={
         {
           ckfinder: {

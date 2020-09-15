@@ -29,8 +29,10 @@ class BoardStore {
     this.root = root;
   }
 
-  @action goPost = () => {
-    const
+  @action setBoardAndCategory = (board, category) => {
+    const { post } = this.root.BoardPostStore;
+    post.board = board;
+    post.category = category;
   }
 
   @action setBoardList = () => {
