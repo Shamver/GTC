@@ -20,13 +20,13 @@ const PostLockerMyReply = ({ currentPage, noPagination, currentTab }) => {
         <Row className="content-header">
           <Col className="col-sm-12">
             <TableHeader>
-              <ColCell className="col-1 center">
+              <ColCell className="col-4">
                 글 제목
               </ColCell>
-              <ColCell className="col-1">
+              <ColCell className="col-5">
                 댓글 내용
               </ColCell>
-              <ColCell className="col-1">
+              <ColCell className="col-3">
                 작성일
               </ColCell>
             </TableHeader>

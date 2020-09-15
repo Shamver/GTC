@@ -65,6 +65,7 @@ const TableBody = styled(Row)`
   border-bottom: 0;
   cursor: pointer;
   align-items: center;
+  font-size: 14px;
   
   :hover {    
     color: #212529;
