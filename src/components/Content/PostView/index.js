@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, memo } from 'react';
+import React, { useEffect, useLayoutEffect, memo } from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
 import useStores from '../../../stores/useStores';
@@ -8,21 +8,25 @@ import PostViewFooter from './PostViewFooter';
 
 const PostView = ({ match, location }) => {
   const { BoardPostStore, UtilLoadingStore, BoardReplyStore } = useStores();
-  const { getPost, getPostUpperLower, getHash } = BoardPostStore;
+  const { getPost, getPostUpperLower, setHash } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
   const { getReply } = BoardReplyStore;
   const { params } = match;
   const { id } = params;
   const { hash } = location;
 
+  useEffect(() => {
+    setHash(hash);
+  }, [setHash, hash]);
+
   useLayoutEffect(() => {
     loadingProcess([
-      () => getHash(hash),
       () => getPost(id),
       () => getPostUpperLower(id),
       () => getReply(id),
     ]);
-  }, [loadingProcess, getPost, getPostUpperLower, getReply, id, hash, getHash]);
+  }, [loadingProcess, getPost, getPostUpperLower, getReply, id]);
+
   return (
     <PostWrapper>
       <ViewWrapper>

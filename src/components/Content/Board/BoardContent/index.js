@@ -19,7 +19,7 @@ const BoardContent = ({ isFooter }) => {
       <HeaderDiv>
         { currentBoardPath !== 'all' && (
           <>
-            <NavLink activeClassName="active" to={`/${currentBoardPath}`}>
+            <NavLink exact to={'/'.concat(currentBoardPath)}>
               <FontAwesomeIcon icon={faHome} />
             </NavLink>
             <BoardCategoryList />
@@ -42,7 +42,6 @@ BoardContent.propTypes = {
 
 BoardContent.defaultProps = {
   isFooter: false,
-  currentPage: '1',
 };
 
 const ManginessTable = styled(Table)`

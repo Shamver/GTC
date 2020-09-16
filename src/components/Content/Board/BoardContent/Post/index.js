@@ -12,9 +12,9 @@ const Post = ({ data, index, isNotice }) => {
   const { onClickPost } = ComponentPostStore;
   const { id: currentPostId } = postView;
   const { id, date, recommendCount } = data;
-  const RecommentComponent = recommendCount > 0
+  const RecommendComponent = recommendCount > 0
     && (<LikeCountSpan>{recommendCount}</LikeCountSpan>);
-  const NoticeComponent = isNotice ? (<span>공지</span>) : RecommentComponent;
+  const NoticeComponent = isNotice ? (<span>공지</span>) : RecommendComponent;
   const noticeStyle = isNotice ? '#ffd7d4' : '#ffffff';
 
   return (
@@ -24,9 +24,7 @@ const Post = ({ data, index, isNotice }) => {
         <CenterTd width={3}>
           {currentPostId === id ? '>>' : NoticeComponent}
         </CenterTd>
-        {/* 데스크톱 화면에서의 로우 */ }
         <PostRow data={data} index={index} isNotice={isNotice} />
-        {/* 모바일 화면에서의 로우 */}
         <DateTd width={4}>
           <BlockInner>{date}</BlockInner>
         </DateTd>

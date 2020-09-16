@@ -8,10 +8,7 @@ import { observer } from 'mobx-react';
 import useStores from '../../../../stores/useStores';
 
 const PostOption = () => {
-  const {
-    UtilAlertStore, BoardPostStore, BoardStore, UserStore,
-  } = useStores();
-  const { currentBoardPath } = BoardStore;
+  const { UtilAlertStore, BoardPostStore, UserStore } = useStores();
   const { toggleConfirmAlert } = UtilAlertStore;
   const { deletePost, postView } = BoardPostStore;
   const { id, isMyPost } = postView;
@@ -29,7 +26,7 @@ const PostOption = () => {
       )}
       {!!isMyPost && (
         <RightSpan>
-          <Link to={`/${currentBoardPath}/modify/${id}`}>
+          <Link to={`/post/modify/${id}`}>
             <Button color="secondary" size="sm" outline>
               <FontAwesomeIcon icon={faPen} /> 수정
             </Button>

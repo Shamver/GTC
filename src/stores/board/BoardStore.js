@@ -80,7 +80,9 @@ class BoardStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { toast.error(response.message); });
+      .catch((response) => {
+        toast.error(response.message);
+      });
   };
 
   @action getBoardCategoryList = (board, category) => {
@@ -105,7 +107,9 @@ class BoardStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { toast.error(response.message); });
+      .catch((response) => {
+        toast.error(response.message);
+      });
   };
 
   @action moveBoard = (path) => {

@@ -9,7 +9,8 @@ import useStores from '../../../stores/useStores';
 
 const PostViewFooter = () => {
   const { BoardPostStore } = useStores();
-  const { currentPostUpperLower } = BoardPostStore;
+  const { currentPostUpperLower, postView } = BoardPostStore;
+  const { category } = postView;
 
   const { upper, lower } = currentPostUpperLower;
   const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
@@ -34,8 +35,8 @@ const PostViewFooter = () => {
           </div>
         )}
       </TopBottomWrapper>
-      <BoardContent />
-      <BoardFooter />
+      <BoardContent isFooter />
+      <BoardFooter category={category || ''} />
     </>
   );
 };

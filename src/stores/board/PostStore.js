@@ -146,7 +146,6 @@ class PostStore {
     const { searchInfo } = this.root.BoardStore;
     const { isSearch } = searchInfo;
     const userId = userData ? userData.id : null;
-
     if (isSearch) {
       await this.requestSearchPostList(board, category, page, userId, isBestFilter);
     } else {
@@ -252,7 +251,6 @@ class PostStore {
 
   @action searchOff = () => {
     const { setKeywordDefault } = this.root.BoardStore;
-    this.isSearch = false;
     setKeywordDefault();
   };
 
@@ -512,7 +510,6 @@ class PostStore {
         ...this.post,
         text: event,
       };
-      console.log('ㅎㅇ');
       return;
     }
 
@@ -594,7 +591,7 @@ class PostStore {
     this.postView = {};
   }
 
-  @action getHash = (hash) => {
+  @action setHash = (hash) => {
     this.replyLockerHash = hash;
   }
 }

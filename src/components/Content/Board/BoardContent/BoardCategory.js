@@ -1,13 +1,13 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import * as Proptypes from 'prop-types';
 
 const BoardCategory = ({ data }) => {
   const { name, fullpath } = data;
   return (
-    <Link to={fullpath}>
+    <NavLink to={fullpath} activeClassName="active">
       {name}
-    </Link>
+    </NavLink>
   );
 };
 
