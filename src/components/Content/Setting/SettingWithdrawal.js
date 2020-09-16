@@ -46,7 +46,7 @@ const SettingWithdrawal = () => {
           label="위 내용을 충분히 이해했으며, 회원탈퇴를 진행하겠습니다."
         />
         <br />
-        <Button
+        <CustomButton
           color="danger"
           disabled={!withdrawalIsChecked}
           onClick={() => {
@@ -54,7 +54,7 @@ const SettingWithdrawal = () => {
           }}
         >
           <FontAwesomeIcon icon={faTrashAlt} /> 회원탈퇴
-        </Button>
+        </CustomButton>
       </WithdrawalWrapper>
     </TabPane>
   );
@@ -74,6 +74,10 @@ const Hr = styled.hr`
 
 const P = styled.p`
   color: #c00;
+`;
+
+const CustomButton = styled(Button)`
+  font-size: 14px !important;
 `;
 
 export default memo(observer(SettingWithdrawal));

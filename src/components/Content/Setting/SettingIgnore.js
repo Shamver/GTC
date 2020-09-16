@@ -1,5 +1,7 @@
 import React, { memo } from 'react';
-import { TabPane, Table, Button } from 'reactstrap';
+import {
+  TabPane, Button, Row, Col,
+} from 'reactstrap';
 import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -15,41 +17,88 @@ const SettingIgnore = () => {
 
   return (
     <TabPane tabId="ignore">
-      <ListTable size="sm" bordered>
-        <thead>
-          <tr>
-            <TableTh>선택</TableTh>
-            <TableTh>차단 닉네임</TableTh>
-            <TableTh>차단 일자</TableTh>
-          </tr>
-        </thead>
-        <tbody>
-          {IgnoreTableData.length === 0 ? (
-            <tr>
-              <td colSpan={3}>
-              차단한 유저가 없습니다.
-              </td>
-            </tr>
-          ) : IgnoreTableData}
-        </tbody>
-      </ListTable>
+      <Wrapper size="sm">
+        <Row className="content-header">
+          <Col className="col-sm-12">
+            <TableHeader>
+              <ColCell className="col-2 center">
+                선택
+              </ColCell>
+              <ColCell className="col-5">
+                차단 닉네임
+              </ColCell>
+              <ColCell className="col-5">
+                차단 일자
+              </ColCell>
+            </TableHeader>
+          </Col>
+        </Row>
+        {IgnoreTableData.length === 0 ? (
+          <TableBody>
+            <div className="center">
+              <ColCell className="col-12">
+                차단한 유저가 없습니다.
+              </ColCell>
+            </div>
+          </TableBody>
+        ) : IgnoreTableData}
+      </Wrapper>
       {IgnoreTableData.length === 0 ? '' : (
-        <Button color="danger" onClick={() => toggleConfirmAlert('정말 삭제하시겠어요?', deleteIgnore)}>
+        <CustomButton color="danger" onClick={() => toggleConfirmAlert('정말 삭제하시겠어요?', deleteIgnore)}>
           <FontAwesomeIcon icon={faTrashAlt} />  삭제하기
-        </Button>
+        </CustomButton>
       )}
     </TabPane>
   );
 };
 
-const TableTh = styled.th`
-  vertical-align: middle !important;
-  width: ${(props) => props.width}%;
-  padding: 8px !important;
+const Wrapper = styled.div`
+  padding: 0px 1rem;
+  border-bottom: 1px solid #dee2e6;
+  
+  & .content-header {
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  & .center {
+    text-align: center;
+  }
+  
+  @media (max-width: 800px) {
+    & .content-header {
+      display: none;
+    }
+    
+    & .content-body {
+      display: block;
+    }
+    
+    .col {
+      max-width: 100%;
+    }
+  }
 `;
 
-const ListTable = styled(Table)`
-  border: 1px solid #c9c9c9 !important;
+const TableHeader = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  
+`;
+
+const ColCell = styled(Col)`
+  padding: 12px 6px;
+`;
+
+const TableBody = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  align-items: center;
+  font-size: 14px;
+`;
+
+const CustomButton = styled(Button)`
+  margin-top: 10px;
+  font-size: 14px !important;
 `;
 
 export default memo(observer(SettingIgnore));
