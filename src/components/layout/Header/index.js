@@ -211,7 +211,9 @@ const ResponsiveInputGroupWrapper = styled(InputGroupWrapper)`
 `;
 
 const InputGroupA = styled(InputGroup)`
-  position : absolute;
+  @media (max-width: 600px) {
+    display : absolute;
+  }
 `;
 
 const InH1 = styled.h1`
