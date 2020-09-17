@@ -1,7 +1,7 @@
 import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import { Table, Button } from 'reactstrap';
+import {Table, Button, TabPane, Row, Col} from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import CodeGroupList from './CodeGroupList';
@@ -38,21 +38,31 @@ const Code = () => {
                 코드 그룹 추가
               </RightButton>
             </PaddedDiv>
-            <CodeTable bordered hover>
-              <thead>
-                <tr>
-                  <th>코드그룹</th>
-                  <th>코드그룹명</th>
-                  <th>코드그룹 설명</th>
-                  <CenterTh>수정</CenterTh>
-                  <CenterTh>삭제</CenterTh>
-                </tr>
-              </thead>
-              <tbody>
-                { isAddCodeGroup ? (<NewCodeGroup />) : null}
-                <CodeGroupList />
-              </tbody>
-            </CodeTable>
+            <Wrapper size="sm">
+              <Row className="content-header">
+                <Col className="col-sm-12">
+                  <TableHeader>
+                    <ColCell className="col-4">
+                      코드그룹
+                    </ColCell>
+                    <ColCell className="col-3">
+                      코드그룹명
+                    </ColCell>
+                    <ColCell className="col-3">
+                      코드그룹 설명
+                    </ColCell>
+                    <ColCell className="col-1 center">
+                      수정
+                    </ColCell>
+                    <ColCell className="col-1 center">
+                      삭제
+                    </ColCell>
+                  </TableHeader>
+                </Col>
+              </Row>
+              { isAddCodeGroup ? (<NewCodeGroup />) : null}
+              <CodeGroupList />
+            </Wrapper>
           </CodeCol>
           <CodeCol>
             <PaddedDiv>
@@ -85,6 +95,43 @@ const Code = () => {
     </BoardWrapper>
   );
 };
+
+const Wrapper = styled.div`
+  padding: 0px 1rem;
+  border-bottom: 1px solid #dee2e6;
+  
+  & .content-header {
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  & .center {
+    text-align: center;
+  }
+  
+  @media (max-width: 800px) {
+    & .content-header {
+      display: none;
+    }
+    
+    & .content-body {
+      display: block;
+    }
+    
+    .col {
+      max-width: 100%;
+    }
+  }
+`;
+
+const TableHeader = styled(Row)`
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
+  
+`;
+
+const ColCell = styled(Col)`
+  padding: 12px 6px;
+`;
 
 const PaddedDiv = styled.div`
   padding-bottom : 10px;
