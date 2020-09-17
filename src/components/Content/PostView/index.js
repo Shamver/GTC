@@ -1,6 +1,7 @@
 import React, { useEffect, useLayoutEffect, memo } from 'react';
 import * as Proptypes from 'prop-types';
 import styled from 'styled-components';
+import qs from 'query-string';
 import useStores from '../../../stores/useStores';
 import PostViewHeader from './PostViewHeader';
 import PostViewContent from './PostViewContent';
@@ -13,7 +14,9 @@ const PostView = ({ match, location }) => {
   const { getReply } = BoardReplyStore;
   const { params } = match;
   const { id } = params;
-  const { hash } = location;
+  const { hash, search } = location;
+  const query = qs.parse(search);
+  const isBestFilter = !!query.filer_mode;
 
   useEffect(() => {
     setHash(hash);
@@ -21,11 +24,14 @@ const PostView = ({ match, location }) => {
 
   useLayoutEffect(() => {
     loadingProcess([
-      () => getPost(id),
+      () => getPost(id, isBestFilter),
       () => getPostUpperLower(id),
       () => getReply(id),
     ]);
-  }, [loadingProcess, getPost, getPostUpperLower, getReply, id]);
+  }, [
+    loadingProcess, getPost, getPostUpperLower, getReply, id,
+    isBestFilter,
+  ]);
 
   return (
     <PostWrapper>
@@ -45,6 +51,7 @@ PostView.propTypes = {
     }),
   }).isRequired,
   location: Proptypes.shape({
+    search: Proptypes.string,
     hash: Proptypes.string,
   }).isRequired,
 };

@@ -338,6 +338,7 @@ router.get('/', (req, res) => {
     recommend, isHome,
   } = req.query;
 
+  console.log(req.query);
   // Store -> Router null 이 자동으로 undefined 처리 되기 때문에
   // 예외 경우로 router 에서 null 처리
   let { userId } = req.query;
@@ -348,7 +349,7 @@ router.get('/', (req, res) => {
       board !== 'all' ? SELECT_POST_LIST : SELECT_POST_LIST_ALL,
       {
         BOARD_CD: board.toUpperCase(),
-        CATEGORY: category,
+        CATEGORY: category.toUpperCase(),
         CURRENT_PAGE: ((page - 1) * 25),
         PER_PAGE: isHome ? 9 : 25,
         USER_ID: userId,

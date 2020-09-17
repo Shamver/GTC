@@ -194,6 +194,7 @@ class PostStore {
   }
 
   @action requestPostList = async (board, category, page, userId, isBestFilter) => {
+    console.log(board, category, page, userId, isBestFilter);
     await axios.get('/api/board/post', {
       params: {
         board,
@@ -309,33 +310,30 @@ class PostStore {
       });
   };
 
-  @action getPost = async (id) => {
+  @action getPost = async (id, isBestFilter) => {
     const { getLately } = this.root.CookieLatelyStore;
     const { userData } = this.root.UserStore;
-    const userDataId = userData ? userData.id : '';
+    const userId = userData ? userData.id : '';
     const that = this;
 
     await axios.get(`/api/board/post/${id}`, {
       params: {
-        userId: userDataId,
+        userId,
       },
     })
-      .then((response) => {
+      .then(async (response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             const [post] = data.result;
             that.postView = {
               ...post,
-              content: null,
+              content: that.getPostVideoTag(post.content),
             };
             getLately();
-            that.postView.content = this.getPostVideoTag(post.content);
-            const { currentBoardPage } = this.root.BoardStore.currentBoardPage;
-            const { setCurrentBoardPath } = this.root.BoardStore;
-            this.getBoardPostList(post.board.toLowerCase(), currentBoardPage).then(() => {
-              setCurrentBoardPath(post.board.toLowerCase());
-            });
+
+            // 단일 게시글 조회 화면 하단 게시판 조회
+            await that.getBoardPostInPost(post, userId, isBestFilter);
           } else {
             toast.info(data.message);
           }
@@ -343,8 +341,17 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { toast.error(response.message); });
+      .catch((response) => {
+        toast.error(response.message);
+      });
   };
+
+  @action getBoardPostInPost = async (post, userId, isBestFilter) => {
+    const { currentBoardPage } = this.root.BoardStore;
+    const { board, category } = post;
+
+    await this.getBoardPostList(board, category, currentBoardPage, userId, isBestFilter);
+  }
 
   @action getPostVideoTag = (text) => {
     if (!text) return text;
