@@ -65,7 +65,7 @@ const CodeGroup = ({ data }) => {
             {groupId}
           </ColCell>
         </div>
-        <div className="responsive-wrap">
+        <div className="responsive-wrap info">
           <ColCell className="col-3">
             {groupName}
           </ColCell>
@@ -100,24 +100,6 @@ CodeGroup.propTypes = {
   }).isRequired,
 };
 
-const ActiveTr = styled.tr`
-  &.active {
-    background-color : #ffd7d4;
-  }
-`;
-
-const CenterTd = styled.td`
-  text-align : center;
-`;
-
-const CenterPaddingEditTd = styled(CenterTd)`
-  padding : .8rem !important;
-`;
-
-const CenterPaddingTd = styled(CenterTd)`
-  padding : .4rem !important;
-`;
-
 const TableBody = styled(Row)`
   border: 1px solid #dee2e6;
   border-bottom: 0;
@@ -132,6 +114,13 @@ const TableBody = styled(Row)`
   
   & .responsive-wrap, .responsive-wrap-column {
     display: contents;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  &.active {
+    background-color : #ffd7d4;
   }
   
   @media (max-width: 800px) {

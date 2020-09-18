@@ -1,7 +1,7 @@
 import React, { memo, useLayoutEffect } from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import {Table, Button, TabPane, Row, Col} from 'reactstrap';
+import { Button, Row, Col } from 'reactstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import CodeGroupList from './CodeGroupList';
@@ -72,23 +72,37 @@ const Code = () => {
                 코드 추가
               </RightButton>
             </PaddedDiv>
-            <CodeTable bordered hover>
-              <thead>
-                <tr>
-                  <th>코드</th>
-                  <th>코드명</th>
-                  <CenterTh width="50">순서</CenterTh>
-                  <th>코드 설명</th>
-                  <CenterTh width="80">사용 여부</CenterTh>
-                  <CenterTh width="66">수정</CenterTh>
-                  <CenterTh width="66">삭제</CenterTh>
-                </tr>
-              </thead>
-              <tbody>
-                { isAddCode ? (<NewCodeRow />) : null}
-                <CodeList />
-              </tbody>
-            </CodeTable>
+            <Wrapper size="sm">
+              <Row className="content-header">
+                <Col className="col-sm-12">
+                  <TableHeader>
+                    <ColCell className="col-1 center">
+                      순서
+                    </ColCell>
+                    <ColCell className="col-2">
+                      코드
+                    </ColCell>
+                    <ColCell className="col-3">
+                      코드명
+                    </ColCell>
+                    <ColCell className="col-3">
+                      코드 설명
+                    </ColCell>
+                    <ColCell className="col-1 center">
+                      사용 여부
+                    </ColCell>
+                    <ColCell className="col-1 center">
+                      수정
+                    </ColCell>
+                    <ColCell className="col-1 center">
+                      삭제
+                    </ColCell>
+                  </TableHeader>
+                </Col>
+              </Row>
+              { isAddCode ? (<NewCodeRow />) : null}
+              <CodeList />
+            </Wrapper>
           </CodeCol>
         </CodeTableWrapper>
       </TableWrapper>
@@ -142,20 +156,6 @@ const RightButton = styled(Button)`
   float : right;
 `;
 
-const CenterTh = styled.th`
-  text-align : center;
-`;
-
-const CodeTable = styled(Table)`
-  & > tbody > tr {
-    cursor : pointer;
-  }
-  
-  & > tbody > tr > td {
-    vertical-align: middle;
-  }
-`;
-
 const CodeCol = styled.div`
   width : 100%;
 `;
@@ -171,7 +171,6 @@ const BoardWrapper = styled.div`
 
 const TableWrapper = styled.div`
   padding : 20px;
-  font-size : 13px !important;
 `;
 
 export default memo(observer(Code));
