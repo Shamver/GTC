@@ -7,16 +7,16 @@ import PostRow from './responsive/PostRow';
 import ResponsivePostRow from './responsive/ResponsivePostRow';
 
 const Post = ({ data, index, isNotice }) => {
-  const { BoardPostStore, ComponentPostStore } = useStores();
+  const { BoardPostStore, ComponentPostStore, BoardStore } = useStores();
   const { postView } = BoardPostStore;
   const { onClickPost } = ComponentPostStore;
   const { id: currentPostId } = postView;
+  const { isBestFilter } = BoardStore;
   const { id, date, recommendCount } = data;
   const RecommendComponent = recommendCount > 0
     && (<LikeCountSpan>{recommendCount}</LikeCountSpan>);
   const NoticeComponent = isNotice ? (<span>공지</span>) : RecommendComponent;
   const noticeStyle = isNotice ? '#ffd7d4' : '#ffffff';
-
   return (
     <>
       {/* 데스크톱 화면에서의 로우 */}
@@ -30,7 +30,7 @@ const Post = ({ data, index, isNotice }) => {
         </DateTd>
       </TableRow>
       {/* 모바일 화면에서의 로우 */}
-      <MobileTableRow height="50" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle} onClick={() => onClickPost(id)}>
+      <MobileTableRow height="50" backgroundColor={currentPostId === id ? '#fff9e5' : noticeStyle} onClick={() => onClickPost(id, isBestFilter)}>
         <CenterTd width={5}>
           {currentPostId === id ? '>>' : NoticeComponent}
         </CenterTd>

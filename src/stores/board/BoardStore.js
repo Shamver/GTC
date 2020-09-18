@@ -19,6 +19,8 @@ class BoardStore {
 
   @observable isPagination = false;
 
+  @observable isBestFilter = false;
+
   @observable searchInfo = {
     isSearch: false,
     target: '',
@@ -27,6 +29,10 @@ class BoardStore {
 
   constructor(root) {
     this.root = root;
+  }
+
+  @action setIsBestFilter = (value) => {
+    this.isBestFilter = value;
   }
 
   @action setBoardAndCategory = (board, category) => {

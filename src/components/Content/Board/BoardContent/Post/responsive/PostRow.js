@@ -4,6 +4,7 @@ import { faInfoCircle, faStar, faImage } from '@fortawesome/free-solid-svg-icons
 import { faCommentDots } from '@fortawesome/free-regular-svg-icons';
 import styled from 'styled-components';
 import * as Proptypes from 'prop-types';
+import { observer } from 'mobx-react';
 import WriterDropdown from './WriterDropdown';
 import useStores from '../../../../../../stores/useStores';
 
@@ -15,13 +16,13 @@ const PostRow = ({ data, index, isNotice }) => {
   const { ComponentPostStore, BoardStore, UserStore } = useStores();
   const { userData, guestAuthor } = UserStore;
   const { onClickPost, isVisited } = ComponentPostStore;
-  const { currentBoardPath } = BoardStore;
+  const { currentBoardPath, isBestFilter } = BoardStore;
 
+  console.log(isBestFilter);
   const isImageComponent = isImage
     ? (<BottomIcon icon={faImage} />)
     : (<BottomIcon icon={faCommentDots} />);
   const IsBestPost = recommendCount >= 10 ? (<Star icon={faStar} />) : isImageComponent;
-
   const weight = currentBoardPath === 'all' ? 8 : 9;
   return (
     <>
@@ -29,7 +30,7 @@ const PostRow = ({ data, index, isNotice }) => {
       {!isNotice && (<CenterTd width={5} colSpan={1}>{type !== 'notice' && categoryName}</CenterTd>)}
       <MiddleTd width={37} colSpan={isNotice ? 10 : weight}>
         <MiddleSpan>
-          <PostTitle className={isVisited(id) && 'color-gray'} onClick={userData ? () => onClickPost(id) : guestAuthor}>
+          <PostTitle className={isVisited(id) && 'color-gray'} onClick={userData ? () => onClickPost(id, isBestFilter) : guestAuthor}>
             {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
             &nbsp;
             {title}
@@ -121,4 +122,4 @@ const PostTitle = styled.div`
   }
 `;
 
-export default memo(PostRow);
+export default memo(observer(PostRow));

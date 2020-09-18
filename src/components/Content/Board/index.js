@@ -13,9 +13,9 @@ const Board = ({ parentProps, location, match }) => {
 
   const {
     setCurrentBoardPath, setCurrentBoardPage, setIsPagination,
-    getBoardCategoryList,
+    getBoardCategoryList, setIsBestFilter,
   } = BoardStore;
-  const { setClearPostView, getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
+  const { getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
 
   const { params } = match;
@@ -23,7 +23,7 @@ const Board = ({ parentProps, location, match }) => {
   let { page, category } = params;
   let { isPagination } = parentProps;
   const query = qs.parse(location.search);
-  const isBestFilter = !!query.filer_mode;
+  const isBestFilter = !!query.filter_mode;
 
   category = category || '';
   isPagination = !!isPagination;
@@ -33,10 +33,10 @@ const Board = ({ parentProps, location, match }) => {
     setCurrentBoardPath(board);
     setCurrentBoardPage(page);
     setIsPagination(isPagination);
-    setClearPostView();
+    setIsBestFilter(isBestFilter);
   }, [
     setCurrentBoardPath, setCurrentBoardPage, setIsPagination,
-    setClearPostView, board, page, isPagination,
+    board, page, isPagination, setIsBestFilter, isBestFilter,
   ]);
 
   useLayoutEffect(() => {

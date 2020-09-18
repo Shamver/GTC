@@ -54,14 +54,21 @@ class PostStore {
     }
   };
 
-  @action onClickPost = (id) => {
+  @action onClickPost = (id, isBestFilter) => {
     const { history } = this.root.UtilRouteStore;
     const visited = localStorage.getItem('visited');
     const visitedArray = visited ? visited.split('|') : [];
+
     if (!visitedArray.includes(id.toString())) {
       const inputId = visited ? `${visited}|${id}` : id;
       localStorage.setItem('visited', inputId);
     }
+
+    if(isBestFilter) {
+      history.push(`/post/${id}?filter_mode=true`);
+      return;
+    }
+
     history.push(`/post/${id}`);
   };
 
