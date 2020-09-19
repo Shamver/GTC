@@ -31,7 +31,7 @@ const CodeRow = ({ data }) => {
       <TableBody>
         <div className="responsive-wrap-column flex-1">
           <div className="responsive-wrap">
-            <ColCell className="col-1 center">
+            <ColCell className="col-1 center order">
               <Input bsSize="sm" onChange={onChangeCode} value={order} name="order" />
             </ColCell>
           </div>
@@ -63,8 +63,6 @@ const CodeRow = ({ data }) => {
                 <FontAwesomeIcon icon={faEdit} />
               </Button>
             </ColCell>
-          </div>
-          <div className="responsive-wrap">
             <ColCell className="col-1 center">
               <Button
                 size="sm"
@@ -90,7 +88,7 @@ const CodeRow = ({ data }) => {
     <TableBody>
       <div className="responsive-wrap-column flex-1">
         <div className="responsive-wrap">
-          <ColCell className="col-1 center">
+          <ColCell className="col-1 center order">
             {codeOrder}
           </ColCell>
         </div>
@@ -100,12 +98,12 @@ const CodeRow = ({ data }) => {
           <ColCell className="col-2">
             {code}
           </ColCell>
-          <ColCell className="col-3">
+        </div>
+        <div className="responsive-wrap info">
+          <ColCell className="col-3 info">
             {codeName}
           </ColCell>
-        </div>
-        <div className="responsive-wrap">
-          <ColCell className="col-3">
+          <ColCell className={`col-3 ${codeDesc ? '' : 'desc'}`}>
             {codeDesc}
           </ColCell>
           <ColCell className="col-1 center">
@@ -113,7 +111,7 @@ const CodeRow = ({ data }) => {
           </ColCell>
         </div>
       </div>
-      <div className="responsive-wrap-column flex-4">
+      <div className="responsive-wrap-column button-section flex-2">
         <div className="responsive-wrap">
           <ColCell className="col-1 center">
             <Button
@@ -131,8 +129,6 @@ const CodeRow = ({ data }) => {
               <FontAwesomeIcon icon={faEdit} />
             </Button>
           </ColCell>
-        </div>
-        <div className="responsive-wrap">
           <ColCell className="col-1 center">
             <Button size="sm" color="danger" onClick={() => toggleConfirmAlert('해당 코드 그룹을 정말로 삭제하시겠습니까?', () => deleteCode(codeGroup, code))}>
               <FontAwesomeIcon icon={faTrash} />
@@ -175,6 +171,10 @@ const TableBody = styled(Row)`
     text-overflow: ellipsis;
   }
   
+  & .button-section {
+    text-align: center;
+  }
+  
   &.active {
     background-color : #ffd7d4;
   }
@@ -210,10 +210,31 @@ const TableBody = styled(Row)`
       flex: 2;
     }
     
+    & .button-section {
+      text-align: right;
+      margin-right: 1rem;
+      
+      & .col-1 {
+        padding-left: 0.5rem;
+      }
+      
+      & .btn-sm {
+        padding: .2rem 0.4rem;
+      }
+    }
+    
+    .order {
+      margin: 0 5px;
+    }
+    
     .info {
       color: #989898;
       font-size: 13px;
       line-height: 24px;
+    }
+    
+    .desc {
+      display: none !important;
     }
   }
 `;

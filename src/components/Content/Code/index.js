@@ -113,6 +113,7 @@ const Code = () => {
 const Wrapper = styled.div`
   padding: 0px 1rem;
   border-bottom: 1px solid #dee2e6;
+  margin-bottom: 1.8rem;
   
   & .content-header {
     border-bottom: 1px solid #dee2e6;

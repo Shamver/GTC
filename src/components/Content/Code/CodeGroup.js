@@ -74,7 +74,7 @@ const CodeGroup = ({ data }) => {
           </ColCell>
         </div>
       </div>
-      <div className="responsive-wrap-column center flex-2">
+      <div className="responsive-wrap-column button-section flex-2">
         <div className="responsive-wrap">
           <ColCell className="col-1">
             <Button size="sm" color="danger" onClick={() => setGroupEditModeId({ id: groupId, name: groupName, desc: groupDesc })}>
@@ -119,6 +119,10 @@ const TableBody = styled(Row)`
     text-overflow: ellipsis;
   }
   
+  & .button-section {
+    text-align: center;
+  }
+  
   &.active {
     background-color : #ffd7d4;
   }
@@ -152,6 +156,19 @@ const TableBody = styled(Row)`
     
     & .flex-2 {
       flex: 2;
+    }
+    
+    & .button-section {
+      text-align: right;
+      margin-right: 1rem;
+      
+      & .col-1 {
+        padding-left: 0.5rem;
+      }
+      
+      & .btn-sm {
+        padding: .2rem 0.4rem;
+      }
     }
     
     .info {
