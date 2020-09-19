@@ -14,7 +14,7 @@ import useStores from '../../../../stores/useStores';
 const BoardFooter = ({ category }) => {
   const { BoardStore } = useStores();
   const {
-    currentBoardPath, bestFilterMode, currentBoardPage,
+    currentBoardPath, isBestFilter, currentBoardPage,
     searchKeyword, onSubmit, onChange, onSearch, searchTarget,
     onChangeTarget, setBoardAndCategory,
   } = BoardStore;
@@ -22,13 +22,13 @@ const BoardFooter = ({ category }) => {
   const filterQs = '?filter_mode=true';
   const categoryPageUrl = category ? `/${currentBoardPath}/${category}` : `/${currentBoardPath}`;
   const finalPageUrl = Number(currentBoardPage) > 1 ? `${categoryPageUrl}/page/${currentBoardPage}` : `${categoryPageUrl}`;
-  const bestFilterUrl = bestFilterMode ? finalPageUrl : finalPageUrl.concat(filterQs);
+  const bestFilterUrl = isBestFilter ? finalPageUrl : finalPageUrl.concat(filterQs);
 
   return (
     <FooterWrapper>
       <AbsolDiv>
         <AbsoluteLeftLink to={bestFilterUrl}>
-          <Button outline={!bestFilterMode} color="warning" size="sm">
+          <Button outline={!isBestFilter} color="warning" size="sm">
             <FontAwesomeIcon icon={faStar} />
             &nbsp;&nbsp;인기 글
           </Button>

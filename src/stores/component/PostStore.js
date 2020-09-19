@@ -54,7 +54,7 @@ class PostStore {
     }
   };
 
-  @action onClickPost = (id, isBestFilter) => {
+  @action onClickPost = (id, category, isBestFilter) => {
     const { history } = this.root.UtilRouteStore;
     const visited = localStorage.getItem('visited');
     const visitedArray = visited ? visited.split('|') : [];
@@ -64,12 +64,14 @@ class PostStore {
       localStorage.setItem('visited', inputId);
     }
 
-    if(isBestFilter) {
-      history.push(`/post/${id}?filter_mode=true`);
-      return;
-    }
+    // 단일 게시글 조회 후, 하단에 나오는 게시글 목록을 위하여,
+    // query-string 으로 변환하여 처리할 필요가 있음.
+    let url = `/post/${id}`;
+    url = category ? url.concat(`?category=${category}`) : url;
+    url = category ? url.concat('&') : url.concat('?');
+    url = isBestFilter ? url.concat('filter_mode=true') : url;
 
-    history.push(`/post/${id}`);
+    history.push(url);
   };
 
   @action isVisited = (id) => {

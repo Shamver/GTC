@@ -17,6 +17,8 @@ class BoardStore {
 
   @observable currentBoardPage = 1;
 
+  @observable category;
+
   @observable isPagination = false;
 
   @observable isBestFilter = false;
@@ -30,6 +32,10 @@ class BoardStore {
   constructor(root) {
     this.root = root;
   }
+
+  @action setCategory = (category) => {
+    this.category = category;
+  };
 
   @action setIsBestFilter = (value) => {
     this.isBestFilter = value;

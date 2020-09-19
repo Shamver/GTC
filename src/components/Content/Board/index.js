@@ -13,7 +13,7 @@ const Board = ({ parentProps, location, match }) => {
 
   const {
     setCurrentBoardPath, setCurrentBoardPage, setIsPagination,
-    getBoardCategoryList, setIsBestFilter,
+    getBoardCategoryList, setIsBestFilter, setCategory,
   } = BoardStore;
   const { getBoardPostNoticeList, getBoardPostList } = BoardPostStore;
   const { loadingProcess } = UtilLoadingStore;
@@ -32,11 +32,13 @@ const Board = ({ parentProps, location, match }) => {
   useEffect(() => {
     setCurrentBoardPath(board);
     setCurrentBoardPage(page);
+    setCategory(category);
     setIsPagination(isPagination);
     setIsBestFilter(isBestFilter);
   }, [
     setCurrentBoardPath, setCurrentBoardPage, setIsPagination,
     board, page, isPagination, setIsBestFilter, isBestFilter,
+    setCategory, category,
   ]);
 
   useLayoutEffect(() => {

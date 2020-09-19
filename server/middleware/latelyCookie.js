@@ -10,7 +10,7 @@ module.exports.get = (cookie) => {
 
 module.exports.set = (cookie, id) => {
   if (cookie) {
-    const datas = cookie.split('I');
+    const dataArr = cookie.split('I');
 
     if (id === undefined) {
       return cookie || '';
@@ -18,18 +18,18 @@ module.exports.set = (cookie, id) => {
 
     let returnData = '';
 
-    const count = datas.length < 6 ? datas.length + 1 : maxSize;
+    const count = dataArr.length < 6 ? dataArr.length + 1 : maxSize;
 
     let calc = -1;
 
     for (let i = 0; i < count; i += 1) {
       if (i === 0) {
         returnData += id;
-      } else if (datas[i + calc] === id && count === maxSize) {
-        returnData += `I${datas[i]}`;
+      } else if (dataArr[i + calc] === id && count === maxSize) {
+        returnData += `I${dataArr[i]}`;
         calc = 0;
-      } else if (datas[i + calc] !== id) {
-        returnData += `I${datas[i + calc]}`;
+      } else if (dataArr[i + calc] !== id) {
+        returnData += `I${dataArr[i + calc]}`;
       }
     }
 
@@ -40,18 +40,18 @@ module.exports.set = (cookie, id) => {
 };
 
 module.exports.del = (cookie, id) => {
-  const datas = cookie.split('I');
+  const dataArr = cookie.split('I');
 
   let returnData = '';
 
-  const count = datas.length;
+  const count = dataArr.length;
 
   for (let i = 0; i < count; i += 1) {
-    if (datas[i] !== id) {
+    if (dataArr[i] !== id) {
       if (i !== 0 && returnData !== '') {
         returnData += 'I';
       }
-      returnData += datas[i];
+      returnData += dataArr[i];
     }
   }
 

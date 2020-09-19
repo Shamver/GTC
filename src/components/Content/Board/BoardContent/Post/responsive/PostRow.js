@@ -16,9 +16,8 @@ const PostRow = ({ data, index, isNotice }) => {
   const { ComponentPostStore, BoardStore, UserStore } = useStores();
   const { userData, guestAuthor } = UserStore;
   const { onClickPost, isVisited } = ComponentPostStore;
-  const { currentBoardPath, isBestFilter } = BoardStore;
+  const { currentBoardPath, isBestFilter, category } = BoardStore;
 
-  console.log(isBestFilter);
   const isImageComponent = isImage
     ? (<BottomIcon icon={faImage} />)
     : (<BottomIcon icon={faCommentDots} />);
@@ -30,7 +29,7 @@ const PostRow = ({ data, index, isNotice }) => {
       {!isNotice && (<CenterTd width={5} colSpan={1}>{type !== 'notice' && categoryName}</CenterTd>)}
       <MiddleTd width={37} colSpan={isNotice ? 10 : weight}>
         <MiddleSpan>
-          <PostTitle className={isVisited(id) && 'color-gray'} onClick={userData ? () => onClickPost(id, isBestFilter) : guestAuthor}>
+          <PostTitle className={isVisited(id) && 'color-gray'} onClick={userData ? () => onClickPost(id, category, isBestFilter) : guestAuthor}>
             {isNotice ? (<BottomIcon icon={faInfoCircle} />) : IsBestPost}
             &nbsp;
             {title}
