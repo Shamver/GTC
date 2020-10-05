@@ -429,7 +429,8 @@ router.get('/', (req, res) => {
           result: rows,
         });
       }),
-  ).then(() => {
+  ).then((dat) => {
+    console.log(dat);
     info('[SELECT, GET /api/board/post] 게시글 목록 조회');
   });
 });
