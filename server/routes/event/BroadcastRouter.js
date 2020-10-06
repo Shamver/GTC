@@ -62,7 +62,14 @@ router.post('/', (req, res) => {
     )
       .then((rows) => {
         if (rows.length === 0 && postId !== undefined) {
-          return Promise.reject();
+          return Promise.reject().then()
+            .catch(() => {
+              res.json({
+                success: false,
+                code: 2,
+                message: '😳 존재하지 않는 게시물 입니다.',
+              });
+            });
         }
         return database.query(
           INSERT_POST_ADVERTISE,
@@ -91,7 +98,7 @@ router.post('/', (req, res) => {
         res.json({
           success: false,
           code: 2,
-          message: '😳 존재하지 않는 게시물 입니다.',
+          message: '😳 올바른 시간을 입력해 주세요.',
         });
       }),
   ).then(() => {

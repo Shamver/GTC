@@ -23,18 +23,18 @@ const NewCodeRow = () => {
       <div className="responsive-wrap-column flex-4">
         <div className="responsive-wrap">
           <ColCell className="col-1">
+            <Input bsSize="sm" onChange={onChangeCode} name="order" value={order} placeholder="순서" />
+          </ColCell>
+          <ColCell className="col-2">
             <Input bsSize="sm" onChange={onChangeCode} name="id" value={id} placeholder="공통 코드" />
           </ColCell>
           <ColCell className="col-2">
             <Input bsSize="sm" onChange={onChangeCode} name="name" value={name} placeholder="공통 코드명" />
           </ColCell>
           <ColCell className="col-3">
-            <Input bsSize="sm" onChange={onChangeCode} name="order" value={order} placeholder="순서" />
-          </ColCell>
-          <ColCell className="col-3">
             <Input bsSize="sm" onChange={onChangeCode} name="desc" value={desc} placeholder="공통 그룹 설명" />
           </ColCell>
-          <ColCell className="col-1">
+          <ColCell className="col-2">
             <Input type="select" bsSize="sm" onChange={onChangeCode} name="useYN" value={useYN}>
               <CodeFlag />
             </Input>

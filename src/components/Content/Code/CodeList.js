@@ -12,11 +12,9 @@ const CodeList = () => {
   if (!isAddCode && !codeList.length) {
     return (
       <TableBody>
-        <div className="center">
-          <ColCell className="col-12 center">
-            공통 코드 그룹을 클릭하여 조회하세요!
-          </ColCell>
-        </div>
+        <ColCell className="col-12 center">
+          공통 코드 그룹을 클릭하여 조회하세요!
+        </ColCell>
       </TableBody>
     );
   }
@@ -27,11 +25,8 @@ const TableBody = styled(Row)`
   border: 1px solid #dee2e6;
   border-bottom: 0;
   align-items: center;
+  text-align: center;
   font-size: 14px;
-  
-  .center {
-    text-align: center;
-  }
 `;
 
 const ColCell = styled(Col)`

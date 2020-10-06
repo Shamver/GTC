@@ -41,7 +41,7 @@ const CodeRow = ({ data }) => {
             <ColCell className="col-2">
               {code}
             </ColCell>
-            <ColCell className="col-3">
+            <ColCell className="col-2">
               <Input bsSize="sm" onChange={onChangeCode} value={name} name="name" />
             </ColCell>
           </div>
@@ -49,7 +49,7 @@ const CodeRow = ({ data }) => {
             <ColCell className="col-3">
               <Input bsSize="sm" onChange={onChangeCode} value={desc} name="desc" />
             </ColCell>
-            <ColCell className="col-1 center">
+            <ColCell className="col-2 center">
               <Input type="select" bsSize="sm" onChange={onChangeCode} name="useFl" value={useFl}>
                 <CodeFlag />
               </Input>
@@ -100,13 +100,13 @@ const CodeRow = ({ data }) => {
           </ColCell>
         </div>
         <div className="responsive-wrap info">
-          <ColCell className="col-3 info">
+          <ColCell className="col-2 info">
             {codeName}
           </ColCell>
           <ColCell className={`col-3 ${codeDesc ? '' : 'desc'}`}>
             {codeDesc}
           </ColCell>
-          <ColCell className="col-1 center">
+          <ColCell className="col-2 center">
             {codeUseYN}
           </ColCell>
         </div>

@@ -82,13 +82,13 @@ const Code = () => {
                     <ColCell className="col-2">
                       코드
                     </ColCell>
-                    <ColCell className="col-3">
+                    <ColCell className="col-2">
                       코드명
                     </ColCell>
                     <ColCell className="col-3">
                       코드 설명
                     </ColCell>
-                    <ColCell className="col-1 center">
+                    <ColCell className="col-2 center">
                       사용 여부
                     </ColCell>
                     <ColCell className="col-1 center">
