@@ -22,6 +22,7 @@ const ReplyEdit = () => {
         editor={ClassicEditor}
         data={text}
         config={{
+          plugins: [],
           toolbar: ['heading', '|', 'bold', 'italic', '|', 'undo', 'redo'],
         }}
         onChange={(event, editor) => onChangeValue(editor.getData())}
