@@ -1,9 +1,5 @@
 import React, { memo } from 'react';
-import {
-  Col,
-  Row,
-  Table, TabPane,
-} from 'reactstrap';
+import { Col, Row } from 'reactstrap';
 import styled from 'styled-components';
 
 import { observer } from 'mobx-react';
