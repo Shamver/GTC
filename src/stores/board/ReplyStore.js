@@ -221,11 +221,10 @@ class ReplyStore {
 
   @action onChangeValue = (event) => {
     if (typeof event === 'string') {
-      const temp = event.replace(/<[^>]*?>/g, '');
-      console.log(temp);
+      const plainReply = `<p>${event.replace(/<[^>]*?>/g, '')}</p>`;
       this.reply = {
         ...this.reply,
-        text: temp,
+        text: plainReply,
       };
 
       return;
