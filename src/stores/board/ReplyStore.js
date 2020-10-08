@@ -221,14 +221,15 @@ class ReplyStore {
 
   @action onChangeValue = (event) => {
     if (typeof event === 'string') {
+      const temp = event.replace(/<[^>]*?>/g, '');
+      console.log(temp);
       this.reply = {
         ...this.reply,
-        text: event,
+        text: temp,
       };
 
       return;
     }
-
 
     // Flag 형식의 checkbox 값 변경시
     if (event.target.name.indexOf('Fl') > -1) {
