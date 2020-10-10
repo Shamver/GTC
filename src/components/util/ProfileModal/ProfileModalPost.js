@@ -7,14 +7,14 @@ import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 
 const ProfileModalPost = ({ postData }) => {
-  const { UtilStore } = useStores();
-  const { toggleProfile } = UtilStore;
+  const { ComponentPostStore } = useStores();
+  const { goToPost } = ComponentPostStore;
   const {
     postId, postTitle, postCreated, postCommentCount,
   } = postData;
 
   return (
-    <TableBody to={`/post/${postId}`} onClick={toggleProfile}>
+    <TableBody onClick={() => goToPost(postId)}>
       <Row>
         <ContentsBodyTitle xs="9">
           <ContentsTitle>{postTitle}</ContentsTitle>
@@ -42,7 +42,7 @@ ProfileModalPost.propTypes = {
   }).isRequired,
 };
 
-const TableBody = styled(Link)`
+const TableBody = styled.div`
   display: block;
   padding: 12px 0;
   color: black !important; 

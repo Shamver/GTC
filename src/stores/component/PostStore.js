@@ -70,6 +70,13 @@ class PostStore {
     const visitedArray = visited ? visited.split('|') : [];
     return visitedArray.includes(id.toString());
   }
+
+  @action goToPost = (postId, commentId) => {
+    const { history } = this.root.UtilRouteStore;
+    const { toggleProfile } = this.root.UtilStore;
+    history.push(`/post/${postId}#${commentId || ''}`);
+    toggleProfile();
+  }
 }
 
 export default PostStore;

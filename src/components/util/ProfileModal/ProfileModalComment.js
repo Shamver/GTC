@@ -1,6 +1,5 @@
 import React, { memo } from 'react';
 import { observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { Col, Row } from 'reactstrap';
 import renderHTML from 'react-render-html';
@@ -8,15 +7,15 @@ import * as Proptypes from 'prop-types';
 import useStores from '../../../stores/useStores';
 
 const ProfileModalComment = ({ commentData }) => {
-  const { UtilStore } = useStores();
-  const { toggleProfile } = UtilStore;
+  const { ComponentPostStore } = useStores();
+  const { goToPost } = ComponentPostStore;
   const {
-    postCommentId, commentId, commentContent, commentCreated
+    postCommentId, commentId, commentContent, commentCreated,
   } = commentData;
   const commentContentText = renderHTML(`${commentContent}`);
 
   return (
-    <TableBody to={`/post/${postCommentId}#${commentId}`} onClick={toggleProfile}>
+    <TableBody onClick={() => goToPost(postCommentId, commentId)}>
       <Row>
         <ContentsBodyTitle xs="9">
           <ContentsTitle>{commentContentText}</ContentsTitle>
@@ -36,7 +35,7 @@ ProfileModalComment.propTypes = {
   }).isRequired,
 };
 
-const TableBody = styled(Link)`
+const TableBody = styled.div`
   display: block;
   padding: 12px 0;
   color: black !important; 
