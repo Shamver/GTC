@@ -221,14 +221,14 @@ class ReplyStore {
 
   @action onChangeValue = (event) => {
     if (typeof event === 'string') {
+      const plainReply = `<p>${event.replace(/<[^>]*?>/g, '')}</p>`;
       this.reply = {
         ...this.reply,
-        text: event,
+        text: plainReply,
       };
 
       return;
     }
-
 
     // Flag 형식의 checkbox 값 변경시
     if (event.target.name.indexOf('Fl') > -1) {
