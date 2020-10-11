@@ -192,7 +192,7 @@ class UserStore {
         ...this.registerData,
         birth: {
           ...this.registerData.birth,
-          year: event.target.value.slice(0, 4)
+          year: event.target.value.slice(0, 4),
         },
       };
     } else {
@@ -434,6 +434,7 @@ class UserStore {
 
             if (data.result[0]) {
               const { rowCount } = data.result[0];
+              console.log(rowCount);
               this.root.UtilStore.rows = {
                 ...this.root.UtilStore.rows,
                 commentRows: rowCount,
