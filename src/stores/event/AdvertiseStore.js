@@ -40,10 +40,6 @@ class AdvertiseStore {
       toast.error('할당 시간은 0이거나 48시간을 초과할 수 없습니다.');
       return;
     }
-    if (!this.advertisePost.hours.trim()) {
-      toast.error('올바른 시간을 입력하세요.');
-      return;
-    }
     // 테스트중 주석처리
     if (totalPoint < parseInt(this.advertisePost.hours, 10) * 100) {
       toast.error('포인트가 충분하지 않습니다.');

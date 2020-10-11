@@ -43,7 +43,9 @@ const INSERT_POST_ADVERTISE = `
 `;
 
 const SELECT_URL_VALIDATION = `
-  SELECT ID AS postId
+  SELECT
+    ID AS postId
+    , DELETE_FL AS deleteFl
   FROM GTC_POST
   WHERE ID = :URL;
 `;
@@ -68,6 +70,16 @@ router.post('/', (req, res) => {
                 success: false,
                 code: 2,
                 message: '😳 존재하지 않는 게시물 입니다.',
+              });
+            });
+        }
+        if (rows[0].deleteFl) {
+          return Promise.reject().then()
+            .catch(() => {
+              res.json({
+                success: false,
+                code: 2,
+                message: '😳 삭제된 게시물은 등록할 수 없습니다.',
               });
             });
         }
