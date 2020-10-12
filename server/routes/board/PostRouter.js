@@ -232,6 +232,7 @@ const SELECT_POST_UPPER_AND_LOWER = `
   SELECT 
     *
     , IF(ID > :POST_ID, 1, 0) AS isUpper 
+    , (SELECT COUNT(*) FROM GTC_COMMENT WHERE POST_ID = B.id AND DELETE_FL = 0) AS commentCount
   FROM (
     SELECT
       @ROWNUM := @ROWNUM + 1 AS rn

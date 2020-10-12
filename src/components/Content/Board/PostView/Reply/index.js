@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, memo } from 'react';
+import React, { useEffect, useLayoutEffect, memo } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { faShare, faThumbsUp, faLock } from '@fortawesome/free-solid-svg-icons';
@@ -25,7 +25,9 @@ const Reply = ({ data, index }) => {
   } = BoardReplyStore;
   const { toggleReport } = BoardReportStore;
   const { userData, getProfile } = UserStore;
-  const { dropdown, onActive, onSet } = ComponentReplyStore;
+  const {
+    dropdown, onActive, onSet,
+  } = ComponentReplyStore;
   const { toggleConfirmAlert } = UtilAlertStore;
   const { addIgnore } = UserIgnoreStore;
   const { replyLockerHash } = BoardPostStore;
@@ -47,7 +49,7 @@ const Reply = ({ data, index }) => {
   const WriterTag = (<Writer>{str}</Writer>);
 
   return (
-    <ReplyLayout>
+    <ReplyLayout id={id}>
       {!!data.tabFl && (
         <Link to="/">
           <ReplyDepthIcon icon={faShare} />

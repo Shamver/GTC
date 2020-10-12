@@ -12,8 +12,12 @@ const PostViewFooter = () => {
   const { currentPostUpperLower } = BoardPostStore;
 
   const { upper, lower } = currentPostUpperLower;
-  const { id: upperId, title: upperTitle, writer: upperWriter } = upper;
-  const { id: lowerId, title: lowerTitle, writer: lowerWriter } = lower;
+  const {
+    id: upperId, title: upperTitle, writer: upperWriter, commentCount: upperCommentCount,
+  } = upper;
+  const {
+    id: lowerId, title: lowerTitle, writer: lowerWriter, commentCount: lowerCommentCount,
+  } = lower;
 
   return (
     <>
@@ -22,14 +26,20 @@ const PostViewFooter = () => {
         { !!upper && (
           <div>
             <TopBottomDiv>▲ 윗글</TopBottomDiv>
-            <TopBottomLink to={`${upperId}`}>{upperTitle}</TopBottomLink>
+            <TopBottomLink to={`${upperId}`}>
+              {upperTitle}
+              <span>[{upperCommentCount}]</span>
+            </TopBottomLink>
             <TopBottomWriter>{upperWriter}</TopBottomWriter>
           </div>
         )}
         { !!lower && (
           <div>
             <TopBottomDiv>▼ 아랫글</TopBottomDiv>
-            <TopBottomLink to={`${lowerId}`}>{lowerTitle}</TopBottomLink>
+            <TopBottomLink to={`${lowerId}`}>
+              {lowerTitle}
+              <span>[{lowerCommentCount}]</span>
+            </TopBottomLink>
             <TopBottomWriter>{lowerWriter}</TopBottomWriter>
           </div>
         )}
@@ -51,6 +61,11 @@ const TopBottomLink = styled(Link)`
   text-decoration : none;
   &:hover {
     text-decoration : none !important; 
+  }
+  & span {    
+    color: #DC3545;
+    font-weight: bold;
+    margin-left: 5px;
   }
 `;
 
