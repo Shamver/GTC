@@ -63,6 +63,9 @@ router.post('/', (req, res) => {
       },
     )
       .then((rows) => {
+        if (!url) {
+          return true;
+        }
         if (rows.length === 0 && postId !== undefined) {
           return Promise.reject().then()
             .catch(() => {
@@ -80,6 +83,16 @@ router.post('/', (req, res) => {
                 success: false,
                 code: 2,
                 message: '😳 삭제된 게시물은 등록할 수 없습니다.',
+              });
+            });
+        }
+        if (!Number.isInteger(hours)) {
+          return Promise.reject().then()
+            .catch(() => {
+              res.json({
+                success: false,
+                code: 2,
+                message: '😳 올바른 시간을 입력해 주세요.',
               });
             });
         }
@@ -104,13 +117,6 @@ router.post('/', (req, res) => {
           success: true,
           code: 1,
           message: '😊 포스팅이 성공적으로 광고 목록에 삽입되었습니다.',
-        });
-      })
-      .catch(() => {
-        res.json({
-          success: false,
-          code: 2,
-          message: '😳 올바른 시간을 입력해 주세요.',
         });
       }),
   ).then(() => {

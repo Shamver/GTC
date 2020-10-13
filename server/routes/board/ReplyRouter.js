@@ -372,5 +372,4 @@ router.get('/mine', authMiddleware, (req, res) => {
   });
 });
 
-
 module.exports = router;
