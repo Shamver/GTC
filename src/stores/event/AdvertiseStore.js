@@ -25,6 +25,7 @@ class AdvertiseStore {
     const regexp = /^\d+$/;
     const urlNumValidation = regexp.test(linkUrl[1]);
     const urlValidation = this.advertisePost.url.startsWith('/post/');
+    const hoursValidation = (parseInt(this.advertisePost.hours, 10));
 
     if (!userData) {
       toast.error('로그인 후 이용 가능합니다.');
@@ -32,6 +33,10 @@ class AdvertiseStore {
     }
     if (!this.advertisePost.message.trim()) {
       toast.error('메시지는 공백이 될 수 없습니다.');
+      return;
+    }
+    if (!hoursValidation) {
+      toast.error('올바른 시간을 입력해 주세요');
       return;
     }
     if (

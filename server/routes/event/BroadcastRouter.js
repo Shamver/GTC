@@ -64,7 +64,15 @@ router.post('/', (req, res) => {
     )
       .then((rows) => {
         if (!url) {
-          return true;
+          return database.query(
+            INSERT_POST_ADVERTISE,
+            {
+              USER_ID: userId,
+              MESSAGE: message,
+              URL: url,
+              HOURS: hours,
+            },
+          );
         }
         if (rows.length === 0 && postId !== undefined) {
           return Promise.reject().then()
@@ -83,16 +91,6 @@ router.post('/', (req, res) => {
                 success: false,
                 code: 2,
                 message: '😳 삭제된 게시물은 등록할 수 없습니다.',
-              });
-            });
-        }
-        if (!Number.isInteger(hours)) {
-          return Promise.reject().then()
-            .catch(() => {
-              res.json({
-                success: false,
-                code: 2,
-                message: '😳 올바른 시간을 입력해 주세요.',
               });
             });
         }
