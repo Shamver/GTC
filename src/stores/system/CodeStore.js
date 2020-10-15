@@ -260,6 +260,14 @@ class CodeStore {
   @action setIsAddCodeGroup = (value) => {
     this.isAddCodeGroup = value;
     this.groupEditModeId = null;
+    if (value) {
+      this.codeGroup = {
+        ...this.codeGroup,
+        id: '',
+        name: '',
+        desc: '',
+      };
+    }
   };
 
   @action setIsAddCode = (value) => {
@@ -327,7 +335,6 @@ class CodeStore {
 
     return true;
   };
-
 
   @action codeValidationCheck = () => {
     if (!this.code.id.trim()) {
