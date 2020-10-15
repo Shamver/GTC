@@ -5,6 +5,13 @@ const router = express.Router();
 const { info } = require('../../log-config');
 const Database = require('../../Database');
 
+const VALIDATION_CODEGROUP = `
+  SELECT
+    ID AS groupId
+  FROM GTC_CODEGROUP
+  WHERE ID = ':ID'
+`;
+
 const SELECT_CODEGROUP = `
   SELECT
     ID AS groupId
@@ -38,6 +45,13 @@ const UPDATE_CODEGROUP = `
 const DELETE_CODEGROUP = `
   DELETE FROM GTC_CODEGROUP
   WHERE ID = ':CODEGROUP_ID'
+`;
+
+const VALIDATION_CODE = `
+  SELECT
+    CODE AS code
+  FROM GTC_CODE
+  WHERE CODE = ':CODE'
 `;
 
 const INSERT_CODE = `
@@ -97,13 +111,31 @@ router.post('/group', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_CODEGROUP,
+      VALIDATION_CODEGROUP,
       {
-        CODEGROUP_ID: id,
-        NAME: name,
-        DESC: desc,
+        ID: id,
       },
     )
+      .then((row) => {
+        if (row.length > 0) {
+          return Promise.reject().then()
+            .catch(() => {
+              res.json({
+                success: false,
+                code: 2,
+                message: '😳 중복된 코드 그룹 ID입니다.',
+              });
+            });
+        }
+        return database.query(
+          INSERT_CODEGROUP,
+          {
+            CODEGROUP_ID: id,
+            NAME: name,
+            DESC: desc,
+          },
+        );
+      })
       .then(() => {
         res.json({
           success: true,
@@ -186,16 +218,34 @@ router.post('/', (req, res) => {
 
   Database.execute(
     (database) => database.query(
-      INSERT_CODE,
+      VALIDATION_CODE,
       {
         CODE: id,
-        CODEGROUP_ID: group,
-        NAME: name,
-        DESC: desc,
-        ORDER: order,
-        USE_FL: useYN,
       },
     )
+      .then((row) => {
+        if (row.length > 0) {
+          return Promise.reject().then()
+            .catch(() => {
+              res.json({
+                success: false,
+                code: 2,
+                message: '😳 중복된 코드입니다.',
+              });
+            });
+        }
+        return database.query(
+          INSERT_CODE,
+          {
+            CODE: id,
+            CODEGROUP_ID: group,
+            NAME: name,
+            DESC: desc,
+            ORDER: order,
+            USE_FL: useYN,
+          },
+        );
+      })
       .then(() => {
         res.json({
           success: true,
