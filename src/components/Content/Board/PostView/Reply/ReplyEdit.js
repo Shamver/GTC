@@ -11,7 +11,7 @@ import useStores from '../../../../../stores/useStores';
 const ReplyEdit = () => {
   const { BoardReplyStore, BoardPostStore } = useStores();
   const {
-    onChangeValue, reply, setReplyEditId, addReply, replyEditId, modifyModeId,
+    onChangeValue, reply, setReplyEditId, addReply, replyEditId, modifyModeId, buttonActive,
   } = BoardReplyStore;
   const { postView } = BoardPostStore;
   const { secretCommentAllowFl } = postView;
@@ -32,7 +32,7 @@ const ReplyEdit = () => {
       {!(replyEditId === 0 && modifyModeId === 0) && (
         <Button size="sm" outline onClick={() => setReplyEditId(0)}>취소</Button>
       )}
-      <RightButton size="sm" color="info" onClick={addReply}>
+      <RightButton size="sm" color="info" onClick={addReply} disabled={buttonActive}>
         <FontAwesomeIcon icon={faPen} />
         &nbsp; 댓글 쓰기
       </RightButton>

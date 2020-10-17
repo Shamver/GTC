@@ -18,6 +18,8 @@ class ReplyStore {
 
   @observable replyMineMaxPage = 0;
 
+  @observable buttonActive = false;
+
   @observable CurrentReplyOption = {
     commentAllowFl: '',
     secretCommentAllowFl: '',
@@ -221,7 +223,7 @@ class ReplyStore {
 
   @action onChangeValue = (event) => {
     if (typeof event === 'string') {
-      const plainReply = `<p>${event.replace(/<[^>]*?>/g, '')}</p>`;
+      const plainReply = `${event.replace(/<[^>]*?>/g, '')}`;
       this.reply = {
         ...this.reply,
         text: plainReply,
@@ -258,6 +260,7 @@ class ReplyStore {
       toast.error('댓글 내용을 입력해주세요.');
       return false;
     }
+    this.reply.text = `<p>${this.reply.text}</p>`;
     return true;
   };
 
