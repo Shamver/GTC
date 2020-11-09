@@ -15,29 +15,9 @@ class PostStore {
     noticeFl: 0,
   };
 
-  @observable boardPostList = {
-    '': [],
-    free: [],
-    trade: [],
-    notice: [],
-    cash: [],
-    qna: [],
-    consult: [],
-    crime: [],
-    all: [],
-  };
+  @observable postList = [];
 
-  @observable boardPostNoticeList = {
-    '': [],
-    free: [],
-    trade: [],
-    notice: [],
-    cash: [],
-    qna: [],
-    consult: [],
-    crime: [],
-    all: [],
-  };
+  @observable postNoticeList = [];
 
   @observable homePostList = {
     free: [],
@@ -99,7 +79,6 @@ class PostStore {
           if (data.code === 1) {
             this.root.UtilRouteStore.goBack();
             toast.success(data.message);
-            this.setPostClear();
           } else {
             toast.info(data.message);
           }
@@ -107,7 +86,9 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { toast.error(response.message); });
+      .catch((response) => {
+        toast.error(response.message);
+      });
 
     return true;
   };
@@ -128,6 +109,7 @@ class PostStore {
       secret: this.post.secretFl,
       replyAllow: this.post.commentAllowFl,
       secretReplyAllow: this.post.secretCommentAllowFl,
+      noticeFl: this.post.noticeFl,
       userId: userData.id,
     })
       .then((response) => {
@@ -185,94 +167,90 @@ class PostStore {
 
   @action getBoardPostList = async (board, currentPage, currentCategory) => {
     const { userData } = this.root.UserStore;
-    const {
-      searchMode, searchKeyword, searchTarget, categories,
-    } = this.root.BoardStore;
+    const { searchInfo } = this.root.BoardStore;
+    const { isSearch } = searchInfo;
     const userId = userData ? userData.id : null;
-
-    let filterCategory = currentCategory;
-
-    if (currentCategory !== '') {
-      const keys = Object.keys(categories);
-      keys.map((v) => {
-        if (categories[v].path === currentCategory) {
-          filterCategory = v;
-        }
-        return true;
-      });
-    }
-
-    if (searchMode) {
-      await axios.get('/api/board/post/search', {
-        params: {
-          board,
-          currentPage,
-          currentCategory: filterCategory,
-          userId,
-          recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
-          keyword: searchKeyword,
-          target: searchTarget,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.success) {
-            if (data.code === 1) {
-              const realBoard = board.toLowerCase();
-              this.boardPostList = {
-                ...this.boardPostList,
-                [realBoard]: data.result,
-              };
-              // 게시글 가져올때 MAX 카운트 셋
-              if (data.result.length === 0) {
-                this.currentBoardMaxPage = 0;
-              } else {
-                const { pageCount } = data.result[0];
-                this.currentBoardMaxPage = pageCount;
-              }
-            } else {
-              toast.info(data.message);
-            }
-          } else {
-            toast.error(data.message);
-          }
-        })
-        .catch((response) => { toast.error(response.message); });
+    if (isSearch) {
+      await this.requestSearchPostList(board, category, page, userId, isBestFilter);
     } else {
-      await axios.get('/api/board/post', {
-        params: {
-          board,
-          currentPage,
-          currentCategory: filterCategory,
-          userId,
-          recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
-        },
-      })
-        .then((response) => {
-          const { data } = response;
-          if (data.success) {
-            if (data.code === 1) {
-              this.boardPostList = {
-                ...this.boardPostList,
-                [board]: data.result,
-              };
-              // 게시글 가져올때 MAX 카운트 셋
-              if (data.result.length === 0) {
-                this.currentBoardMaxPage = 0;
-              } else {
-                const { pageCount } = data.result[0];
-                this.currentBoardMaxPage = pageCount;
-              }
-            } else {
-              toast.info(data.message);
-            }
-          } else {
-            toast.error(data.message);
-          }
-        })
-        .catch((response) => { toast.error(response.message); });
+      await this.requestPostList(board, category, page, userId, isBestFilter);
     }
   };
+
+  @action requestSearchPostList = async (board, category, page, userId, isBestFilter) => {
+    const {
+      searchKeyword: keyword,
+      searchTarget: target,
+    } = this.root.BoardStore;
+
+    await axios.get('/api/board/post/search', {
+      params: {
+        board,
+        page,
+        category,
+        userId,
+        recommend: isBestFilter ? 1 : 0,
+        keyword,
+        target,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.postList = data.result;
+
+            // 게시글 가져올때 MAX 카운트 셋
+            if (data.result.length === 0) {
+              this.currentBoardMaxPage = 0;
+            } else {
+              const { pageCount } = data.result[0];
+              this.currentBoardMaxPage = pageCount;
+            }
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => { toast.error(response.message); });
+  }
+
+  @action requestPostList = async (board, category, page, userId, isBestFilter) => {
+    console.log(board, category, page, userId, isBestFilter);
+    await axios.get('/api/board/post', {
+      params: {
+        board,
+        category,
+        page,
+        userId,
+        recommend: isBestFilter ? 1 : 0,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.postList = data.result;
+            // 게시글 가져올때 MAX 카운트 셋
+            if (data.result.length === 0) {
+              this.currentBoardMaxPage = 0;
+            } else {
+              const { pageCount } = data.result[0];
+              this.currentBoardMaxPage = pageCount;
+            }
+          } else {
+            toast.info(data.message);
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        toast.error(response.message);
+      });
+  }
 
   @action search = () => {
     const { history } = this.root.UtilRouteStore;
@@ -298,7 +276,6 @@ class PostStore {
 
   @action searchOff = () => {
     const { setKeywordDefault } = this.root.BoardStore;
-    this.isSearch = false;
     setKeywordDefault();
   };
 
@@ -310,15 +287,17 @@ class PostStore {
     const { userData } = this.root.UserStore;
     const userId = userData ? userData.id : null;
 
-    await axios.get('/api/board/post/notice', { params: { board, userId } })
+    await axios.get('/api/board/post/notice', {
+      params: {
+        board,
+        userId,
+      },
+    })
       .then((response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            this.boardPostNoticeList = {
-              ...this.boardPostNoticeList,
-              [board]: data.result,
-            };
+            this.postNoticeList = data.result;
           } else {
             toast.info(data.message);
           }
@@ -331,13 +310,14 @@ class PostStore {
 
   @action getHomePostList = async (board) => {
     const { userData } = this.root.UserStore;
-    const userId = userData ? userData.id : null;
+    const userId = userData && userData.id;
 
     await axios.get('/api/board/post', {
       params: {
         board,
+        category: '',
+        page: 1,
         userId,
-        currentPage: 1,
         isHome: true,
       },
     })
@@ -349,28 +329,30 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { toast.error(response.message); });
+      .catch((response) => {
+        toast.error(response.message);
+      });
   };
 
-  @action getPost = async (id) => {
+  @action getPost = async (id, isBestFilter) => {
     const { getLately } = this.root.CookieLatelyStore;
     const { userData } = this.root.UserStore;
-    const userDataId = userData ? userData.id : '';
+    const userId = userData ? userData.id : '';
     const that = this;
 
     await axios.get(`/api/board/post/${id}`, {
       params: {
-        userId: userDataId,
+        userId,
       },
     })
-      .then((response) => {
+      .then(async (response) => {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
             const [post] = data.result;
             that.postView = {
               ...post,
-              content: null,
+              content: that.getPostVideoTag(post.content),
             };
             getLately();
             that.postView.content = this.getPostVideoTag(post.content);
@@ -382,6 +364,9 @@ class PostStore {
           } else if (data.code === 2) {
             this.root.UtilRouteStore.history.push('/');
             toast.info(data.message);
+
+            // 단일 게시글 조회 화면 하단 게시판 조회
+            await that.getBoardPostInPost(post, userId, isBestFilter);
           } else {
             toast.info(data.message);
           }
@@ -389,8 +374,17 @@ class PostStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { toast.error(response.message); });
+      .catch((response) => {
+        toast.error(response.message);
+      });
   };
+
+  @action getBoardPostInPost = async (post, userId, isBestFilter) => {
+    const { currentBoardPage } = this.root.BoardStore;
+    const { board, category } = post;
+
+    await this.getBoardPostList(board, category, currentBoardPage, userId, isBestFilter);
+  }
 
   @action getPostVideoTag = (text) => {
     if (!text) return text;
@@ -421,6 +415,7 @@ class PostStore {
     const { history } = this.root.UtilRouteStore;
 
     if (!isModify) {
+      this.setPostClear();
       return;
     }
 
@@ -439,6 +434,7 @@ class PostStore {
           const {
             board, category, title, content,
             secretFl, commentAllowFl, secretCommentAllowFl, isMyPost,
+            noticeFl,
           } = data.result[0];
 
           if (!isMyPost) {
@@ -455,6 +451,7 @@ class PostStore {
             secretFl,
             commentAllowFl,
             secretCommentAllowFl,
+            noticeFl,
             text: content,
           };
         } else {
@@ -624,9 +621,10 @@ class PostStore {
   };
 
   @action setPostClear = () => {
+    // 초기화의 경우
+    // 게시판 및 카테고리 빼고 모두 초기화 한다.
     this.post = {
-      board: '',
-      category: '',
+      ...this.post,
       title: '',
       text: '',
       depth: '',
@@ -641,12 +639,8 @@ class PostStore {
     this.postView = {};
   }
 
-  @action getHash = (hash) => {
+  @action setHash = (hash) => {
     this.replyLockerHash = hash;
-  }
-
-  @action setCategoryCodeList = (code) => {
-    this.categoryCodeList = code;
   }
 }
 

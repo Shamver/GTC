@@ -3,93 +3,68 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 class BoardStore {
-  @observable boardKinds = {
-    notice: '공지사항',
-    free: '자유 게시판',
-    trade: '아이템 거래',
-    cash: '월드락 거래',
-    crime: '신고게시판',
-    qna: '질문 & 답변',
-    consult: '1:1 문의',
-    all: '전체 글 보기',
-  };
+  @observable boardKinds = {};
 
-  @observable boards = [{
-    value: 'NOTICE',
-    name: '공지사항',
-  }, {
-    value: 'FREE',
-    name: '자유 게시판',
-  }, {
-    value: 'TRADE',
-    name: '아이템 거래',
-  }, {
-    value: 'CASH',
-    name: '월드락 거래',
-  }, {
-    value: 'CRIME',
-    name: '신고 게시판',
-  }, {
-    value: 'QNA',
-    name: '질문 & 답변',
-  }, {
-    value: 'CONSULT',
-    name: '1:1 문의',
-  }];
+  @observable boardList = [];
 
-  @observable categories = {
-    BFC01: {
-      name: '자유',
-      path: 'freedom',
-    },
-    BFC02: {
-      name: '잡담',
-      path: 'talk',
-    },
-    BFC03: {
-      name: '토론',
-      path: 'toron',
-    },
-    BFC04: {
-      name: '건의',
-      path: 'gunhee',
-    },
-    BNC01: {
-      name: '이벤트',
-      path: 'event',
-    },
-    BQC01: {
-      name: '시세질문',
-      path: 'sease',
-    },
-  };
+  @observable boardCategoryKinds = {};
 
-
-
-  @observable tempData = [];
+  @observable boardCategoryList = [];
 
   @observable currentBoardPath = '';
 
   @observable currentBoardName = '';
 
-  @observable currentBoardCategories = [];
-
-  @observable bestFilterMode = false;
-
-  @observable searchMode = false;
-
   @observable currentBoardPage = 1;
+
+  @observable category;
 
   @observable isPagination = false;
 
-  @observable searchKeyword = '';
+  @observable isBestFilter = false;
 
-  @observable searchTarget = 'title';
-
-  @observable boardCategoryCodeList = [];
+  @observable searchInfo = {
+    isSearch: false,
+    target: '',
+    keyword: '',
+  };
 
   constructor(root) {
     this.root = root;
+  }
+
+  @action setCategory = (category) => {
+    this.category = category;
+  };
+
+  @action setIsBestFilter = (value) => {
+    this.isBestFilter = value;
+  }
+
+  @action setBoardAndCategory = (board, category) => {
+    const { post } = this.root.BoardPostStore;
+    post.board = board;
+    post.category = category;
+  }
+
+  @action setBoardList = () => {
+    const { menuList } = this.root.SystemMenuStore;
+    this.boardList = menuList.filter((data) => (data.type === 'MT01' && data.id !== 'ALL'));
+  }
+
+
+  @action setBoardKinds = (arr) => {
+    this.boardKinds = {};
+    for (let i = 0; i < arr.length; i += 1) {
+      this.boardKinds[arr[i].path.replace('/', '')] = arr[i].name;
+    }
+  }
+
+  @action setBoardCategoryKinds = (arr) => {
+    this.boardCategoryKinds = {};
+    for (let i = 0; i < arr.length; i += 1) {
+      this.boardCategoryKinds[arr[i].path.replace('/', '')] = arr[i].name;
+    }
   }
 
   @action setIsPagination = (isPagination) => {
@@ -98,14 +73,6 @@ class BoardStore {
 
   @action setCurrentBoardPage = (currentBoardPage) => {
     this.currentBoardPage = currentBoardPage;
-  };
-
-  @observable judgeFilterMode = (query) => {
-    const { filter_mode: filterMode, search, search_target: searchTarget } = query;
-    this.bestFilterMode = !!(query && filterMode && filterMode === 'true');
-    this.searchMode = !!(query && search);
-    this.searchKeyword = query && search ? search : '';
-    this.searchTarget = query && searchTarget ? searchTarget : 'title';
   };
 
   @action setCurrentBoardPath = (path) => {
@@ -125,24 +92,51 @@ class BoardStore {
           toast.error(data.message);
         }
       })
-      .catch((response) => { toast.error(response.message); });
+      .catch((response) => {
+        toast.error(response.message);
+      });
   };
 
-  @action getBoardName = (path) => this.boardKinds[path];
+  @action getBoardCategoryList = (board, category) => {
+    axios.get('/api/system/menu/category/use', {
+      params: {
+        board,
+      },
+    })
+      .then((response) => {
+        const { data } = response;
+        if (data.success) {
+          if (data.code === 1) {
+            this.boardCategoryList = data.result;
+            this.setBoardCategoryKinds(data.result);
 
-  @action setCategoryCodeList = (code) => {
-    this.currentBoardCategories = code;
-  }
+            // Posting에서 카테고리를 조회하기 때문에 해당 메소드는 게시판에서 카테고리 로드시에만 사용.
+            if (category) {
+              this.boardPathCheck(board, category);
+            }
+          }
+        } else {
+          toast.error(data.message);
+        }
+      })
+      .catch((response) => {
+        toast.error(response.message);
+      });
+  };
 
   @action moveBoard = (path) => {
     this.root.UtilRouteStore.history.setCurrentBoardToId('/'.concat(path.toLowerCase()));
   };
 
-  @action boardPathCheck = (path) => {
-    const { boardPostList } = this.root.BoardPostStore;
+  @action boardPathCheck = (board, category) => {
     const { history } = this.root.UtilRouteStore;
-    if (!boardPostList[path]) {
+    if (!this.boardKinds[board]) {
       toast.warn('😳 존재하지 않는 게시판입니다.');
+      history.push('/');
+    }
+
+    if (category && !this.boardCategoryKinds[category]) {
+      toast.warn('😳 존재하지 않는 게시판 카테고리입니다.');
       history.push('/');
     }
   };

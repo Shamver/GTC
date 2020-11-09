@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import AuthRouter from '../AuthRouter';
 import Contents from '../../../Content';
 
@@ -9,4 +9,4 @@ const SearchRouter = () => (
   </>
 );
 
-export default SearchRouter;
+export default memo(SearchRouter);

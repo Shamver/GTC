@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react';
 import useStores from '../../../stores/useStores';
 
-
 const BoardHeader = () => {
   const { BoardStore } = useStores();
   const { currentBoardName, currentBoardPath } = BoardStore;
