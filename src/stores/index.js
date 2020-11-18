@@ -34,7 +34,7 @@ import EventDailyStore from './event/DailyStore';
 import EventAdvertiseStore from './event/AdvertiseStore';
 
 import SystemCodeStore from './system/CodeStore';
-import SystemBoardStore from './system/BoardStore';
+import SystemMenuStore from './system/MenuStore';
 
 class RootStore {
   constructor() {
@@ -74,7 +74,7 @@ class RootStore {
     this.EventAdvertiseStore = new EventAdvertiseStore(this);
 
     this.SystemCodeStore = new SystemCodeStore(this);
-    this.SystemBoardStore = new SystemBoardStore(this);
+    this.SystemMenuStore = new SystemMenuStore(this);
   }
 }
 

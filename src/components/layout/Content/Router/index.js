@@ -5,10 +5,12 @@ import PostLockerRouter from './PostlockerRouter';
 import ConsultRouter from './ConsultRouter';
 import ConsultAdminRouter from './ConsultAdminRouter';
 import ReportRouter from './ReportRouter';
+import PostingRouter from './PostingRouter';
 
 export default {
   PointRouter,
   BoardRouter,
+  PostingRouter,
   SearchRouter,
   PostLockerRouter,
   ConsultRouter,

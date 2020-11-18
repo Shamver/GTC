@@ -15,29 +15,9 @@ class PostStore {
     noticeFl: 0,
   };
 
-  @observable boardPostList = {
-    '': [],
-    free: [],
-    trade: [],
-    notice: [],
-    cash: [],
-    qna: [],
-    consult: [],
-    crime: [],
-    all: [],
-  };
+  @observable postList = [];
 
-  @observable boardPostNoticeList = {
-    '': [],
-    free: [],
-    trade: [],
-    notice: [],
-    cash: [],
-    qna: [],
-    consult: [],
-    crime: [],
-    all: [],
-  };
+  @observable postNoticeList = [];
 
   @observable homePostList = {
     free: [],
@@ -67,9 +47,7 @@ class PostStore {
 
   @observable replyLockerHash;
 
-  @observable isSearch = false
-
-  @observable categoryCodeList = [];
+  @observable isSearch = false;
 
   @observable headerNoticeList = [];
 
@@ -128,6 +106,7 @@ class PostStore {
       secret: this.post.secretFl,
       replyAllow: this.post.commentAllowFl,
       secretReplyAllow: this.post.secretCommentAllowFl,
+      noticeFl: this.post.noticeFl,
       userId: userData.id,
     })
       .then((response) => {
@@ -183,31 +162,17 @@ class PostStore {
       .catch((response) => toast.error(response.message));
   }
 
-  @action getBoardPostList = async (board, currentPage, currentCategory) => {
+  @action getBoardPostList = async (board, currentPage, category) => {
     const { userData } = this.root.UserStore;
-    const {
-      searchMode, searchKeyword, searchTarget, categories,
-    } = this.root.BoardStore;
+    const { searchMode, searchKeyword, searchTarget } = this.root.BoardStore;
     const userId = userData ? userData.id : null;
-
-    let filterCategory = currentCategory;
-
-    if (currentCategory !== '') {
-      const keys = Object.keys(categories);
-      keys.map((v) => {
-        if (categories[v].path === currentCategory) {
-          filterCategory = v;
-        }
-        return true;
-      });
-    }
 
     if (searchMode) {
       await axios.get('/api/board/post/search', {
         params: {
           board,
           currentPage,
-          currentCategory: filterCategory,
+          currentCategory: category,
           userId,
           recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
           keyword: searchKeyword,
@@ -243,7 +208,7 @@ class PostStore {
         params: {
           board,
           currentPage,
-          currentCategory: filterCategory,
+          currentCategory: category,
           userId,
           recommend: this.root.BoardStore.bestFilterMode ? 1 : 0,
         },
@@ -252,10 +217,7 @@ class PostStore {
           const { data } = response;
           if (data.success) {
             if (data.code === 1) {
-              this.boardPostList = {
-                ...this.boardPostList,
-                [board]: data.result,
-              };
+              this.postList = data.result;
               // 게시글 가져올때 MAX 카운트 셋
               if (data.result.length === 0) {
                 this.currentBoardMaxPage = 0;
@@ -315,10 +277,7 @@ class PostStore {
         const { data } = response;
         if (data.success) {
           if (data.code === 1) {
-            this.boardPostNoticeList = {
-              ...this.boardPostNoticeList,
-              [board]: data.result,
-            };
+            this.postNoticeList = data.result;
           } else {
             toast.info(data.message);
           }
@@ -421,6 +380,7 @@ class PostStore {
     const { history } = this.root.UtilRouteStore;
 
     if (!isModify) {
+      this.setPostClear();
       return;
     }
 
@@ -439,6 +399,7 @@ class PostStore {
           const {
             board, category, title, content,
             secretFl, commentAllowFl, secretCommentAllowFl, isMyPost,
+            noticeFl,
           } = data.result[0];
 
           if (!isMyPost) {
@@ -455,6 +416,7 @@ class PostStore {
             secretFl,
             commentAllowFl,
             secretCommentAllowFl,
+            noticeFl,
             text: content,
           };
         } else {

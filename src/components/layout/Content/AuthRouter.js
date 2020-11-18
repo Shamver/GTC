@@ -14,7 +14,7 @@ const AuthRouter = (props) => {
 
   // 0: 비회원, 1: 회원, 2: 운영자, 3:관리자
   if (!RouterAuthCheck(level)) {
-    toast.error('😳 로그인 후 이용해주세요.');
+    toast.error('😳 권한이 없습니다.');
     history.push('/');
     return null;
   }
