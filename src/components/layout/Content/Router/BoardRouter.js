@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import Contents from '../../../Content';
 import AuthRouter from '../AuthRouter';
 
@@ -13,4 +13,4 @@ const BoardRouter = () => (
   </>
 );
 
-export default BoardRouter;
+export default memo(BoardRouter);

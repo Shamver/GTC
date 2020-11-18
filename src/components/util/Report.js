@@ -30,13 +30,12 @@ const Report = () => {
               <th width="100">작성자</th>
               <td>{writer}</td>
             </tr>
-            {type === 'RT03' ? ''
-              : (
-                <tr>
-                  <th>{type === 'RT01' ? '제목' : '댓글'}</th>
-                  <td>{content}</td>
-                </tr>
-              )}
+            {type === 'RT03' && (
+              <tr>
+                <th>{type === 'RT01' ? '제목' : '댓글'}</th>
+                <td>{content}</td>
+              </tr>
+            )}
           </tbody>
         </Table>
         <h5>신고사유 선택</h5>

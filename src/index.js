@@ -46,7 +46,7 @@ ReactDOM.render((
     EventAdvertiseStore={stores.EventAdvertiseStore}
 
     SystemCodeStore={stores.SystemCodeStore}
-    SystemBoardStore={stores.SystemBoardStore}
+    SystemMenuStore={stores.SystemMenuStore}
   >
     <Router>
       <Route component={App} />
